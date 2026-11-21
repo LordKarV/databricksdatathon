@@ -8,7 +8,7 @@ yet: every answer is invented sample data, labelled "(sample)" and `meta.stub = 
 ```
 python3 -m venv .venv-app
 .venv-app/bin/pip install fastapi==0.115.14 uvicorn pytest httpx playwright axe-playwright-python
-cd app && ../.venv-app/bin/uvicorn app:app --reload
+cd app && ../.venv-app/bin/python main.py   # or: ../.venv-app/bin/uvicorn app:app --reload
 ```
 
 Open http://127.0.0.1:8000/. Chrome DevTools > Sensors can fake a GPS point.
@@ -17,9 +17,10 @@ Open http://127.0.0.1:8000/. Chrome DevTools > Sensors can fake a GPS point.
 
 | Path | What |
 | --- | --- |
-| `app.py` | FastAPI: `/`, shell files (allowlist), `/api/ping`, `/api/recommend` |
+| `app.py` | FastAPI: `/`, shell files (allowlist), `/api/ping`, `POST /api/plan`, dev alias `GET /api/recommend` |
+| `main.py` | Entry point: uvicorn on `DATABRICKS_APP_PORT` (default 8000), access log off |
 | `stub_data.py` | Placeholder responses in the proposed contract shape; the lead replaces `recommend_stub` |
-| `app.yaml` | Databricks Apps command (`--no-access-log`, spec section 8) |
+| `app.yaml` | Databricks Apps command: `python main.py` |
 | `static/index.html`, `app.js`, `app.css` | One page, hash routes, no framework |
 | `static/sw.js` | Network first; cached shell on network error or status >= 500; API never cached |
 | `tests/test_api.py` | Contract and input-validation tests |
@@ -28,12 +29,21 @@ Open http://127.0.0.1:8000/. Chrome DevTools > Sensors can fake a GPS point.
 Screens: start (GPS default, change location, 8 tiles, 108 line, danger checklist), GPS searching, change location,
 results (Quick depth), abstention (S3x), why / how / call-ahead (S4, S5, S6 on one page), offline banner.
 
-## `/api/recommend` contract (proposal)
+## `POST /api/plan` contract
 
-`GET /api/recommend?service=<key>&lat=<deg>&lon=<deg>[&accuracy_m=<m>][&source=gps|last_fix|pin|district|manual]`
+`POST /api/plan` with a JSON body:
 
-`service` is one of `emergency_csection, nicu, trauma_emergency, burn_care, dialysis, mri, cardiac_surgery`. The
-server rounds lat/lon to 0.01 degree before use. Out-of-India points or unknown keys return 422.
+```
+{"service": "dialysis", "lat": 26.6, "lon": 85.48, "accuracy_m": 40, "source": "gps", "depth": "quick"}
+```
+
+`service` is one of `emergency_csection, nicu, trauma_emergency, burn_care, dialysis, mri, cardiac_surgery`;
+`source` is `gps | last_fix | pin | district | manual`; `depth` is `quick | compare | area`. The point goes in the
+body because query strings can land in proxy logs we do not control. The server rounds lat/lon to 0.01 degree
+before use. Unknown keys, unknown fields and points outside India return 422.
+`GET /api/recommend?<same fields>` is a dev alias for curl checks; the page never calls it.
+
+Response:
 
 ```
 {
