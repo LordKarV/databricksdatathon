@@ -1,84 +1,352 @@
 {
- "measured_utc": "2026-11-21T19:34:18Z",
- "n_pairs": 2162,
- "n_origins": 233,
- "factor": 1.349,
- "factor_ci95": [
-  1.325,
-  1.38
- ],
- "kmh_free_flow": 65.1,
- "kmh_free_flow_ci95": [
-  63.609,
-  66.705
- ],
- "bands": [
-  {
-   "from_km": 2,
-   "to_km": 10,
-   "mid_km": 5.5,
-   "factor": 1.352,
-   "kmh_free_flow": 50.0,
-   "minutes_ratio_p10_p90": [
-    0.734,
-    1.58
-   ],
-   "n_pairs": 344
-  },
-  {
-   "from_km": 10,
-   "to_km": 25,
-   "mid_km": 18.2,
-   "factor": 1.285,
-   "kmh_free_flow": 58.2,
-   "minutes_ratio_p10_p90": [
-    0.796,
-    1.518
-   ],
-   "n_pairs": 349
-  },
-  {
-   "from_km": 25,
-   "to_km": 50,
-   "mid_km": 35.4,
-   "factor": 1.325,
-   "kmh_free_flow": 64.9,
-   "minutes_ratio_p10_p90": [
-    0.812,
-    1.636
-   ],
-   "n_pairs": 529
-  },
-  {
-   "from_km": 50,
-   "to_km": 100,
-   "mid_km": 72.1,
-   "factor": 1.403,
-   "kmh_free_flow": 72.1,
-   "minutes_ratio_p10_p90": [
-    0.805,
-    1.794
-   ],
-   "n_pairs": 630
-  },
-  {
-   "from_km": 100,
-   "to_km": 150,
-   "mid_km": 110.1,
-   "factor": 1.408,
-   "kmh_free_flow": 73.6,
-   "minutes_ratio_p10_p90": [
-    0.799,
-    1.682
-   ],
-   "n_pairs": 310
-  }
- ],
- "fallback_error": {
-  "mape": 0.208,
-  "median_ape": 0.17,
-  "p90_ape": 0.436,
-  "share_within_20pct": 0.577
+ "version": 2,
+ "built_utc": "2026-11-21T19:42:08Z",
+ "note": "factor = road km / straight-line km; kmh_free_flow = OSRM road km / OSRM hours (no traffic); ratio = OSRM minutes / estimated minutes. Built by geo/fit_travel_constants.py from geo/out/road_factor_pairs.csv; details in geo/out/travel_constants_summary.json.",
+ "national": {
+  "n_pairs": 2162,
+  "n_origins": 233,
+  "factor": 1.349,
+  "factor_ci95": [
+   1.325,
+   1.38
+  ],
+  "kmh_free_flow": 65.1
  },
- "note": "factor = road km / straight-line km; kmh_free_flow = OSRM road km / OSRM hours (no traffic). Built by geo/measure_road_factor.py; details in geo/out/road_factor_summary.json."
+ "hill_states": [
+  "ARUNACHAL PRADESH",
+  "HIMACHAL PRADESH",
+  "LADAKH",
+  "MANIPUR",
+  "MEGHALAYA",
+  "MIZORAM",
+  "NAGALAND",
+  "SIKKIM",
+  "UTTARAKHAND"
+ ],
+ "classes": {
+  "plain": {
+   "n_pairs": 1707,
+   "n_origins": 185,
+   "n_states": 25,
+   "factor": 1.296,
+   "factor_ci95": [
+    1.279,
+    1.315
+   ],
+   "kmh_free_flow": 65.0,
+   "kmh_free_flow_ci95": [
+    63.174,
+    66.58
+   ],
+   "bands": [
+    {
+     "from_km": 2,
+     "to_km": 10,
+     "mid_km": 5.2,
+     "factor": 1.341,
+     "kmh_free_flow": 49.1,
+     "n_pairs": 290,
+     "n_origins": 101,
+     "ratio_p10_p90": [
+      0.752,
+      1.574
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.746,
+        1.578
+       ],
+       "n_pairs": 241
+      },
+      "rural": {
+       "p10_p90": [
+        0.861,
+        1.426
+       ],
+       "n_pairs": 49
+      }
+     }
+    },
+    {
+     "from_km": 10,
+     "to_km": 25,
+     "mid_km": 17.7,
+     "factor": 1.266,
+     "kmh_free_flow": 57.8,
+     "n_pairs": 310,
+     "n_origins": 127,
+     "ratio_p10_p90": [
+      0.754,
+      1.351
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.769,
+        1.317
+       ],
+       "n_pairs": 165
+      },
+      "rural": {
+       "p10_p90": [
+        0.748,
+        1.361
+       ],
+       "n_pairs": 145
+      }
+     }
+    },
+    {
+     "from_km": 25,
+     "to_km": 50,
+     "mid_km": 36.6,
+     "factor": 1.297,
+     "kmh_free_flow": 65.8,
+     "n_pairs": 443,
+     "n_origins": 156,
+     "ratio_p10_p90": [
+      0.818,
+      1.339
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.817,
+        1.297
+       ],
+       "n_pairs": 167
+      },
+      "rural": {
+       "p10_p90": [
+        0.832,
+        1.391
+       ],
+       "n_pairs": 276
+      }
+     }
+    },
+    {
+     "from_km": 50,
+     "to_km": 100,
+     "mid_km": 72.7,
+     "factor": 1.296,
+     "kmh_free_flow": 72.5,
+     "n_pairs": 457,
+     "n_origins": 178,
+     "ratio_p10_p90": [
+      0.845,
+      1.317
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.804,
+        1.22
+       ],
+       "n_pairs": 156
+      },
+      "rural": {
+       "p10_p90": [
+        0.882,
+        1.364
+       ],
+       "n_pairs": 301
+      }
+     }
+    },
+    {
+     "from_km": 100,
+     "to_km": 150,
+     "mid_km": 110.0,
+     "factor": 1.291,
+     "kmh_free_flow": 73.6,
+     "n_pairs": 207,
+     "n_origins": 178,
+     "ratio_p10_p90": [
+      0.841,
+      1.464
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.814,
+        1.364
+       ],
+       "n_pairs": 99
+      },
+      "rural": {
+       "p10_p90": [
+        0.895,
+        1.494
+       ],
+       "n_pairs": 108
+      }
+     }
+    }
+   ]
+  },
+  "hill": {
+   "n_pairs": 1222,
+   "n_origins": 129,
+   "n_states": 9,
+   "factor": 1.787,
+   "factor_ci95": [
+    1.675,
+    1.882
+   ],
+   "kmh_free_flow": 64.4,
+   "kmh_free_flow_ci95": [
+    61.447,
+    67.27
+   ],
+   "bands": [
+    {
+     "from_km": 2,
+     "to_km": 10,
+     "mid_km": 5.4,
+     "factor": 1.45,
+     "kmh_free_flow": 52.1,
+     "n_pairs": 137,
+     "n_origins": 49,
+     "ratio_p10_p90": [
+      0.717,
+      1.6
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.809,
+        1.511
+       ],
+       "n_pairs": 95
+      },
+      "rural": {
+       "p10_p90": [
+        0.669,
+        1.967
+       ],
+       "n_pairs": 42
+      }
+     }
+    },
+    {
+     "from_km": 10,
+     "to_km": 25,
+     "mid_km": 18.9,
+     "factor": 1.768,
+     "kmh_free_flow": 57.1,
+     "n_pairs": 138,
+     "n_origins": 58,
+     "ratio_p10_p90": [
+      0.601,
+      2.302
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.672,
+        1.961
+       ],
+       "n_pairs": 45
+      },
+      "rural": {
+       "p10_p90": [
+        0.59,
+        2.313
+       ],
+       "n_pairs": 93
+      }
+     }
+    },
+    {
+     "from_km": 25,
+     "to_km": 50,
+     "mid_km": 35.5,
+     "factor": 1.787,
+     "kmh_free_flow": 60.4,
+     "n_pairs": 255,
+     "n_origins": 75,
+     "ratio_p10_p90": [
+      0.676,
+      1.878
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.683,
+        1.882
+       ],
+       "n_pairs": 72
+      },
+      "rural": {
+       "p10_p90": [
+        0.675,
+        1.876
+       ],
+       "n_pairs": 183
+      }
+     }
+    },
+    {
+     "from_km": 50,
+     "to_km": 100,
+     "mid_km": 72.1,
+     "factor": 1.856,
+     "kmh_free_flow": 70.2,
+     "n_pairs": 445,
+     "n_origins": 123,
+     "ratio_p10_p90": [
+      0.684,
+      1.808
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.635,
+        1.594
+       ],
+       "n_pairs": 90
+      },
+      "rural": {
+       "p10_p90": [
+        0.771,
+        1.836
+       ],
+       "n_pairs": 355
+      }
+     }
+    },
+    {
+     "from_km": 100,
+     "to_km": 150,
+     "mid_km": 110.1,
+     "factor": 1.875,
+     "kmh_free_flow": 74.6,
+     "n_pairs": 247,
+     "n_origins": 116,
+     "ratio_p10_p90": [
+      0.685,
+      1.668
+     ],
+     "ratio_by_area": {
+      "urban": {
+       "p10_p90": [
+        0.714,
+        1.227
+       ],
+       "n_pairs": 53
+      },
+      "rural": {
+       "p10_p90": [
+        0.675,
+        1.75
+       ],
+       "n_pairs": 194
+      }
+     }
+    }
+   ]
+  }
+ }
 }

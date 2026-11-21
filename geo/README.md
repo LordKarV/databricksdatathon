@@ -6,15 +6,19 @@ One travel-time function for the decision layer, the planner and the app.
 from geo.travel import travel_minutes
 rows = travel_minutes((26.45, 85.95), [(26.365, 86.08), (26.152, 85.897)])
 # [{"minutes": 17, "low": 17, "high": 29, "km": 19.4, "method": "osrm", "cached": False,
-#   "factor": 1.209, "kmh": 68.9, "label": "road route, free flow"}, ...]
+#   "factor": 1.209, "kmh": 68.9, "terrain": None, "label": "road route, free flow, no traffic data"}, ...]
 ```
 
-`travel_minutes(origin, destinations, mode="road", timeout_s=3.0, use_osrm=True) -> list`
+`travel_minutes(origin, destinations, mode="road", timeout_s=3.0, use_osrm=True, state=None, area=None) -> list`
 
 - Points are `(lat, lon)`. One row per destination, in order. Only `mode="road"` exists.
 - `method` is `osrm` (road route) or `haversine_factor` (straight line x road factor / speed).
   `cached` is true when an `osrm` row came from disk. `factor` and `kmh` are what was used, so the
   card can name them. `label` is ready-made wording.
+- `state` (optional): state or union territory of the origin, any case. The nine hill states below
+  get their own factor, speed and range. Without it the plain constants are used, which are 49% too
+  fast there. `terrain` in the row says which constants an estimate used.
+- `area` (optional): `"urban"` or `"rural"` origin. It only changes the range, and only slightly.
 - Order of work: on-disk cache (sqlite, 30 days, key rounded to 4 decimals, about 11 m), then one
   OSRM table request for what is missing (3 s timeout, split above 100 points), then the estimate.
 - It never raises on an OSRM or cache failure. After an OSRM failure it skips OSRM for 60 s.
@@ -23,24 +27,29 @@ rows = travel_minutes((26.45, 85.95), [(26.365, 86.08), (26.152, 85.897)])
 - Standard library only. Environment: `OSRM_URL`, `TRAVEL_CACHE` (sqlite path, or `off`). The
   default cache file is `geo/data/travel_cache.sqlite`, which `.gitignore` already excludes.
 
-`low` and `high`: for `osrm`, low is the free-flow time and high is the same road distance at
-40 km/h. For `haversine_factor`, low and high are the measured 10th and 90th percentile of
-OSRM time / estimate, and high is never below the 40 km/h time. **The 40 km/h slow end is an
-assumption.** OSRM has no traffic data, so nothing here measures congestion.
+`low` and `high`:
+- `haversine_factor`: the measured 10th and 90th percentile of (OSRM minutes / estimate) for that
+  terrain, distance band and area. On held-out origins 78 to 79% of road routes fall inside
+  (target 80%), and about 1 in 9 is above `high`.
+- `osrm`: low = high = minutes. It is one free-flow route. OSRM has no traffic data and nothing
+  here measures how much slower a real journey is, so no spread is claimed. The label says
+  "free flow, no traffic data".
 
 ## Files
 
 | File | What |
 |---|---|
 | `travel.py` | The module |
-| `test_travel.py` | 13 tests, no network: `.venv/bin/python -m pytest geo/test_travel.py -q` |
-| `road_factor.json` | Constants `travel.py` reads for the estimate |
-| `measure_road_factor.py` | Builds the constants. `--offline` re-runs from the cached responses |
-| `out/road_factor_summary.json` | Every number below |
-| `out/road_factor_pairs.csv` | The 2,420 measured pairs |
-| `out/osrm_raw/` | The 242 raw OSRM responses, so a re-run sends nothing |
+| `test_travel.py` | 19 tests, no network: `.venv/bin/python -m pytest geo/test_travel.py -q` |
+| `road_factor.json` | Constants `travel.py` reads for the estimate (version 2: per terrain class) |
+| `measure_road_factor.py` | Sends the OSRM requests. `--offline` re-runs from the cached responses |
+| `fit_travel_constants.py` | Fits the constants from the pairs (run from `geo/`, no network) |
+| `out/road_factor_summary.json` | National numbers below (balanced core sample) |
+| `out/travel_constants_summary.json` | Terrain, range and held-out numbers below |
+| `out/road_factor_pairs.csv` | The 3,790 measured pairs; `core` marks the balanced national sample |
+| `out/osrm_raw/` | The 379 raw OSRM responses, so a re-run sends nothing |
 
-## Measured road factor and speed
+## Measured road factor and speed (national, balanced sample)
 
 Measured 2026-11-21 on the OSRM demo server (car profile, free flow).
 
@@ -88,42 +97,88 @@ Median of (assumed minutes / OSRM minutes) on the 2,162 pairs:
 - The feasibility figure (1.26 at 69 km/h, 50 rural Bihar pairs) is 16% too fast nationally. Bihar
   is flat, and its pairs were mostly 20 to 80 km where speeds are highest.
 
-## What the fallback uses
+## Terrain: hill states
 
-Speed rises with distance (50 km/h under 10 km, 74 km/h past 100 km), so one constant pair is the
-wrong shape. The fallback interpolates factor and speed between the five distance-band medians
-(held flat below 5.5 km and above 110 km; beyond 150 km is extrapolation).
+137 more origins were measured in 12 candidate states (the Himalayan states and the North East,
+up to 12 urban and 12 rural origins each), 379 origins and 3,790 pairs in all, 3,335 usable.
+A candidate is "hill" when its median road factor is 1.5 or more. The cut was chosen after seeing
+the data, so check the table, not the cut.
 
-Error of minutes = straight km x factor / speed against OSRM, constants fitted without the
-held-out origin:
+| State | Pairs | Origins | Road factor, median (95% CI) | Free-flow km/h | Class |
+|---|---|---|---|---|---|
+| Sikkim | 110 | 11 | 2.11 (2.03 to 2.28) | 67.9 | hill |
+| Arunachal Pradesh | 70 | 7 | 2.11 (1.93 to 2.44) | 75.5 | hill |
+| Uttarakhand | 219 | 24 | 1.94 (1.46 to 2.10) | 56.2 | hill |
+| Mizoram | 120 | 12 | 1.90 (1.48 to 2.66) | 78.3 | hill |
+| Nagaland | 109 | 11 | 1.82 (1.64 to 1.99) | 74.8 | hill |
+| Himachal Pradesh | 238 | 24 | 1.78 (1.65 to 1.95) | 51.1 | hill |
+| Ladakh | 20 | 2 | 1.61 (2 origins: no usable interval) | 65.2 | hill |
+| Meghalaya | 176 | 22 | 1.56 (1.48 to 1.66) | 67.6 | hill |
+| Manipur | 160 | 16 | 1.52 (1.39 to 1.73) | 66.3 | hill |
+| Jammu and Kashmir | 195 | 20 | 1.42 (1.30 to 1.56) | 61.2 | plain |
+| Tripura | 204 | 23 | 1.39 (1.32 to 1.55) | 78.4 | plain |
+| Assam | 223 | 23 | 1.32 (1.29 to 1.43) | 72.7 | plain |
 
-| Constants | Median abs. pct. error | 90th pct | Within 20% |
-|---|---|---|---|
-| One national pair (1.35, 65.1) | 19% | 45% | 52% |
-| By urban / rural | 20% | 46% | 51% |
-| By distance band (shipped) | 17% | 44% | 58% |
-| By state | 16% | 44% | 59% |
+| Class | Pairs | Origins | States | Road factor, median (95% CI) | Free-flow km/h (95% CI) |
+|---|---|---|---|---|---|
+| plain | 1,707 | 185 | 25 | 1.30 (1.28 to 1.32) | 65.0 (63.2 to 66.6) |
+| hill | 1,222 | 129 | 9 | 1.79 (1.68 to 1.88) | 64.4 (61.4 to 67.3) |
 
-Ratio of OSRM minutes to the shipped estimate (in sample):
+Plain is the balanced core sample without the nine hill states. Hill-state pairs scored with the
+plain constants come out 49% too fast (median OSRM / estimate 1.49); with the hill constants the
+median ratio is 1.07 on held-out origins.
 
-| Group | Median | 10th to 90th pct | Median abs. pct. error | 90th pct |
-|---|---|---|---|---|
-| All | 1.03 | 0.79 to 1.64 | 17% | 43% |
-| Urban origin | 0.98 | 0.76 to 1.48 | 17% | 40% |
-| Rural origin | 1.08 | 0.83 to 1.84 | 17% | 47% |
+## What the estimate uses
 
-Splitting by urban / rural did not help, so the fallback does not use it. For a single headline
-figure use **1.35 at 65 km/h free flow**, and say "free flow".
+Per terrain class, factor and speed are interpolated between five distance-band medians (held flat
+below about 5 km and above 110 km; beyond 150 km is extrapolation).
+
+| Class | Band | Pairs | Factor | km/h | OSRM / estimate, 10th to 90th pct |
+|---|---|---|---|---|---|
+| plain | 2 to 10 km | 290 | 1.34 | 49.1 | 0.75 to 1.57 |
+| plain | 10 to 25 km | 310 | 1.27 | 57.8 | 0.75 to 1.35 |
+| plain | 25 to 50 km | 443 | 1.30 | 65.8 | 0.82 to 1.34 |
+| plain | 50 to 100 km | 457 | 1.30 | 72.5 | 0.85 to 1.32 |
+| plain | 100 to 150 km | 207 | 1.29 | 73.6 | 0.84 to 1.46 |
+| hill | 2 to 10 km | 137 | 1.45 | 52.1 | 0.72 to 1.60 |
+| hill | 10 to 25 km | 138 | 1.77 | 57.1 | 0.60 to 2.30 |
+| hill | 25 to 50 km | 255 | 1.79 | 60.4 | 0.68 to 1.88 |
+| hill | 50 to 100 km | 445 | 1.86 | 70.2 | 0.68 to 1.81 |
+| hill | 100 to 150 km | 247 | 1.88 | 74.6 | 0.69 to 1.67 |
+
+Urban and rural percentiles are stored per band where at least 30 pairs were measured
+(`ratio_by_area` in `road_factor.json`) and used when `area` is passed.
+
+Held out by origin (10 folds), estimate against OSRM:
+
+| Class | Origin | Pairs | Median abs. pct. error | 90th pct | Inside low to high | Above high |
+|---|---|---|---|---|---|---|
+| plain | all | 1,707 | 14% | 36% | 79% | 10% |
+| plain | urban | 828 | 15% | 37% | 78% | 9% |
+| plain | rural | 879 | 14% | 34% | 81% | 12% |
+| hill | all | 1,222 | 27% | 54% | 78% | 11% |
+| hill | urban | 355 | 28% | 56% | 82% | 6% |
+| hill | rural | 867 | 27% | 53% | 76% | 14% |
+
+Passing `area` moves coverage by about a point either way (plain urban 78%, rural 78%; hill urban
+79%, rural 77%), so it is optional and not worth a lookup on its own.
+
+For a single headline figure use **1.35 at 65 km/h free flow** nationally, or 1.30 for the plains
+and 1.79 for the hill states.
 
 ## Limits
 
-- The estimate is off by more than 44% for one pair in ten, and it is too fast in hill states
-  (the true road factor there is about 1.6 to 2.4). A per-state factor is about as accurate as the
-  distance bands overall; combining the two was not tried. `travel_minutes` takes no state, so
-  this would need a signature change.
-- Free flow only. Real times in cities and on bad roads are longer; the 40 km/h slow end is an
-  assumption with no measurement behind it.
+- The range is the spread of OSRM free-flow routes around the estimate. It is not a range for real
+  journeys: there is no traffic, weather, road-condition or night-time data here. The earlier
+  40 km/h slow end was an assumption and has been removed, not replaced by a measurement.
+- OSRM free flow looks optimistic on mountain roads: its median speed in the hill states is
+  64 km/h, the same as the plains, and a live route from Gangtok towards Darjeeling (38 km straight line,
+  76 km by road) came back as 63 minutes. Hill times from either method should be shown as "at least".
+- Terrain is by state. Hill districts of plain states (Darjeeling, the Western Ghats, hill
+  districts of Jammu and Kashmir and Assam) use the plain constants, and valley towns in hill
+  states use the hill ones. Ladakh rests on 2 origins.
+- The hill class was chosen with a cut picked after seeing the data, from 12 candidates.
 - Pairs under 2 km and over 150 km were not measured.
-- Origins are PIN centroids, not villages. 95 pairs were dropped for snapping more than 2 km from
-  a road, so places far from any mapped road are under-represented.
+- Origins are PIN centroids, not villages. Pairs snapping more than 2 km from a road were dropped,
+  so places far from any mapped road are under-represented.
 - Not run: no comparison against a second routing source, no check against real journey times.

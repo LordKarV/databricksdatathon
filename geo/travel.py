@@ -5,22 +5,33 @@
 
 Each row is a dict:
     minutes   best single number (int)
-    low, high range to show (int minutes)
+    low, high range to show (int minutes); see "Ranges" below
     km        road distance (float), measured or estimated
     method    "osrm" (road route) or "haversine_factor" (straight line x measured road factor
               / measured speed)
     cached    True when an "osrm" row came from the on-disk cache instead of a live request
     factor    road km / straight-line km: measured for this pair ("osrm") or the constant used
     kmh       speed behind `minutes`: OSRM free flow for this pair, or the constant used
+    terrain   "plain" or "hill": which constants an estimate used (None for "osrm" rows)
     label     words for the card, naming the method
+
+Optional arguments, both for the estimate only:
+    state     state or union territory name of the origin, any case. Hill states (listed in
+              geo/road_factor.json) get their own measured factor and speed. Without it the
+              plain constants are used, which is too fast in the hills.
+    area      "urban" or "rural" origin. Narrows the range where enough pairs were measured.
+
+Ranges. For an estimate, low and high are the 10th and 90th percentile of measured
+(OSRM minutes / estimated minutes) for that terrain, distance and area, so about 8 in 10 road
+routes fall inside. For an "osrm" row low = high = minutes: it is one free-flow route with no
+traffic data, and nothing here measures how much slower a real journey is.
 
 Order of work: on-disk cache, then one OSRM table request for what is missing (timeout, default
 3 s), then the estimate for anything still missing. OSRM failures never raise. After a failure
 OSRM is skipped for 60 s so callers do not wait for the timeout on every call.
 
-OSRM durations are free flow (no traffic). The high end of every range uses SLOW_KMH, which is an
-assumption, not a measurement. Constants for the estimate come from geo/road_factor.json, written
-by geo/measure_road_factor.py.
+OSRM durations are free flow (no traffic). Constants for the estimate come from
+geo/road_factor.json, written by geo/fit_travel_constants.py from the measured pairs.
 
 Standard library only. Coordinates are (lat, lon) in degrees.
 Environment: OSRM_URL, TRAVEL_CACHE (path to the sqlite file; "off" disables the cache).
@@ -41,10 +52,11 @@ TIMEOUT_S = 3.0
 MAX_TABLE = 100            # OSRM default max-table-size, origin included
 CACHE_DAYS = 30
 BACKOFF_S = 60.0
-SLOW_KMH = 40.0            # assumption for the pessimistic end (traffic, bad roads); not measured
 ROUND = 4                  # cache key precision: 4 decimals is about 11 m
 
 _CONST = json.loads((HERE / "road_factor.json").read_text())
+_HILL = set(_CONST["hill_states"])
+AREAS = (None, "urban", "rural")
 _osrm_down_until = 0.0
 
 
@@ -55,11 +67,18 @@ def hav_km(a, b):
     return 6371.0 * 2 * math.asin(math.sqrt(h))
 
 
-def _consts(km):
+def terrain_of(state):
+    """"hill" for a state with measured hill constants, else "plain" (also for None or unknown)."""
+    if not state:
+        return "plain"
+    name = " ".join(str(state).upper().replace("&", "AND").split())
+    return "hill" if name in _HILL else "plain"
+
+
+def _consts(km, terrain="plain", area=None):
     """Factor, free-flow speed and 10th/90th percentile minutes ratio for a straight-line distance,
     interpolated between the measured distance bands and held flat outside them."""
-    bands = _CONST["bands"]
-    keys = ("factor", "kmh_free_flow")
+    bands = _CONST["classes"][terrain]["bands"]
     if km <= bands[0]["mid_km"]:
         lo = hi = bands[0]
         t = 0.0
@@ -70,39 +89,44 @@ def _consts(km):
         hi = next(b for b in bands if b["mid_km"] >= km)
         lo = bands[bands.index(hi) - 1]
         t = (km - lo["mid_km"]) / (hi["mid_km"] - lo["mid_km"])
-    mix = lambda x, y: x + (y - x) * t  # noqa: E731
-    return (*(mix(lo[k], hi[k]) for k in keys),
-            mix(lo["minutes_ratio_p10_p90"][0], hi["minutes_ratio_p10_p90"][0]),
-            mix(lo["minutes_ratio_p10_p90"][1], hi["minutes_ratio_p10_p90"][1]))
+
+    def ratio(b):  # the area's own percentiles where enough pairs were measured, else pooled
+        return b["ratio_by_area"].get(area, {}).get("p10_p90", b["ratio_p10_p90"])
+
+    def mix(x, y):
+        return x + (y - x) * t
+    return (mix(lo["factor"], hi["factor"]), mix(lo["kmh_free_flow"], hi["kmh_free_flow"]),
+            mix(ratio(lo)[0], ratio(hi)[0]), mix(ratio(lo)[1], ratio(hi)[1]))
 
 
-def _row(minutes, km, method, straight_km, low=None, high=None, factor=None, kmh=None, cached=False):
+def _row(minutes, km, method, straight_km, low=None, high=None, factor=None, kmh=None, cached=False, terrain=None):
     low = minutes if low is None else low
-    high = max(minutes, km / SLOW_KMH * 60) if high is None else high
+    high = minutes if high is None else high
     if factor is None:
         factor = km / straight_km if straight_km > 0 else None
     if kmh is None:
         kmh = km / minutes * 60 if minutes > 0 else None
     if method == "haversine_factor":
-        label = f"rough estimate: straight line x {factor:.2f} at {kmh:.0f} km/h, no route check"
+        roads = " (hill roads)" if terrain == "hill" else ""
+        label = f"rough estimate: straight line x {factor:.2f} at {kmh:.0f} km/h{roads}, no route check"
     else:
-        label = "road route (saved), free flow" if cached else "road route, free flow"
+        label = "road route (saved), free flow, no traffic data" if cached else "road route, free flow, no traffic data"
     return {"minutes": round(minutes), "low": round(low), "high": round(high), "km": round(km, 1),
             "method": method, "cached": cached,
             "factor": None if factor is None else round(factor, 3), "kmh": None if kmh is None else round(kmh, 1),
-            "label": label}
+            "terrain": terrain, "label": label}
 
 
-def estimate(origin, dest):
-    """Straight line x measured road factor at the measured free-flow speed for that distance.
-    low and high widen the range by the measured 10th to 90th percentile spread, and high is at
-    least the SLOW_KMH time."""
+def estimate(origin, dest, state=None, area=None):
+    """Straight line x measured road factor at the measured free-flow speed for that distance and
+    terrain. low and high are the measured 10th and 90th percentile of OSRM time / this estimate."""
+    terrain = terrain_of(state)
     straight = hav_km(origin, dest)
-    factor, kmh, lo_ratio, hi_ratio = _consts(straight)
+    factor, kmh, lo_ratio, hi_ratio = _consts(straight, terrain, area)
     road = straight * factor
     minutes = road / kmh * 60
-    return _row(minutes, road, "haversine_factor", straight, low=minutes * lo_ratio,
-                high=max(minutes * hi_ratio, road / SLOW_KMH * 60), factor=factor, kmh=kmh)
+    return _row(minutes, road, "haversine_factor", straight, low=min(minutes, minutes * lo_ratio),
+                high=max(minutes, minutes * hi_ratio), factor=factor, kmh=kmh, terrain=terrain)
 
 
 def _key(p):
@@ -183,15 +207,18 @@ def _check(p):
     return lat, lon
 
 
-def travel_minutes(origin, destinations, mode="road", timeout_s=TIMEOUT_S, use_osrm=True):
+def travel_minutes(origin, destinations, mode="road", timeout_s=TIMEOUT_S, use_osrm=True, state=None, area=None):
     """Travel time from origin to each destination. See the module docstring for the row shape.
 
     origin: (lat, lon). destinations: list of (lat, lon). mode: only "road".
     use_osrm=False skips the network (cache and estimate only), for offline packs and bulk scoring.
+    state, area: optional, used only by the estimate (see the module docstring).
     """
     global _osrm_down_until
     if mode != "road":
         raise ValueError(f"unsupported mode {mode!r}; only 'road' is implemented")
+    if area not in AREAS:
+        raise ValueError(f"area must be 'urban', 'rural' or None, got {area!r}")
     origin = _check(origin)
     dests = [_check(d) for d in destinations]
     out: list = [None] * len(dests)
@@ -216,11 +243,11 @@ def travel_minutes(origin, destinations, mode="road", timeout_s=TIMEOUT_S, use_o
     finally:
         if db is not None:
             db.close()
-    return [o or estimate(origin, d) for o, d in zip(out, dests)]
+    return [o or estimate(origin, d, state, area) for o, d in zip(out, dests)]
 
 
 if __name__ == "__main__":
     o = (26.45, 85.95)
     d = [(26.3650, 86.0800), (26.1520, 85.8970)]
     print(json.dumps(travel_minutes(o, d), indent=1))
-    print(json.dumps(travel_minutes(o, d, use_osrm=False), indent=1))
+    print(json.dumps(travel_minutes(o, d, use_osrm=False, state="Sikkim", area="rural"), indent=1))

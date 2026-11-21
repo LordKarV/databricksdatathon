@@ -41,8 +41,9 @@ def test_osrm_result_and_request_shape(monkeypatch):
     r = travel.travel_minutes(O, D)
     assert [x["method"] for x in r] == ["osrm", "osrm"]
     assert r[0]["minutes"] == 30 and r[0]["km"] == 20.0
-    assert r[0]["low"] == 30 and r[0]["high"] == 30      # 20 km at 40 km/h is also 30 min
-    assert r[1]["minutes"] == 60 and r[1]["high"] == 68  # 45 km at 40 km/h
+    assert r[0]["low"] == 30 and r[0]["high"] == 30      # one free-flow route: no measured spread
+    assert r[1]["minutes"] == 60 and r[1]["high"] == 60
+    assert r[0]["terrain"] is None and "no traffic data" in r[0]["label"]
     assert len(calls) == 1
     # OSRM wants lon,lat with the origin first
     assert "/table/v1/driving/85.950000,26.450000;86.080000,26.365000;85.897000,26.152000?" in calls[0]
@@ -76,7 +77,8 @@ def test_falls_back_to_estimate_when_osrm_is_down(monkeypatch):
     for x, d in zip(r, D):
         assert x["low"] <= x["minutes"] <= x["high"]
         assert x["km"] > travel.hav_km(O, d)
-        assert "estimate" in x["label"]
+        assert "estimate" in x["label"] and x["factor"] > 1 and x["kmh"] > 0
+        assert x["low"] < x["minutes"] < x["high"] and x["terrain"] == "plain"
 
 
 def test_osrm_is_skipped_during_backoff(monkeypatch):
@@ -136,6 +138,62 @@ def test_cache_off_and_broken_cache_still_answer(monkeypatch, tmp_path):
 
 def test_estimate_is_monotonic_in_distance():
     mins = [travel.estimate((20.0, 78.0), (20.0 + k / 111.19, 78.0))["minutes"] for k in [x / 4 for x in range(1, 1200)]]
+    assert mins == sorted(mins) and mins[-1] > mins[0] >= 0
+
+
+def test_existing_call_forms_still_work(monkeypatch):
+    monkeypatch.setattr(travel, "_fetch", boom)
+    a = travel.travel_minutes(O, D)
+    monkeypatch.setattr(travel, "_osrm_down_until", 0.0)
+    b = travel.travel_minutes(O, D, "road")
+    c = travel.travel_minutes(O, D, mode="road", timeout_s=1.0, use_osrm=False)
+    assert a == b == c
+    assert set(a[0]) >= {"minutes", "low", "high", "km", "method", "cached", "factor", "kmh", "label"}
+
+
+def test_hill_state_is_slower_than_plain():
+    far = (O[0] + 0.4, O[1])
+    plain = travel.estimate(O, far)
+    hill = travel.estimate(O, far, state="Sikkim")
+    assert plain["terrain"] == "plain" and hill["terrain"] == "hill"
+    assert hill["minutes"] > plain["minutes"] and hill["factor"] > plain["factor"] and hill["kmh"] < plain["kmh"]
+    assert "hill roads" in hill["label"] and "hill roads" not in plain["label"]
+    r = travel.travel_minutes(O, [far], use_osrm=False, state="sikkim")
+    assert r[0] == hill
+
+
+def test_state_names_are_normalised_and_unknown_is_plain():
+    assert travel.terrain_of(None) == travel.terrain_of("") == travel.terrain_of("Bihar") == "plain"
+    assert travel.terrain_of("Nowhere") == "plain"
+    for name in travel._CONST["hill_states"]:
+        assert travel.terrain_of(name.lower()) == travel.terrain_of(f"  {name.title()} ") == "hill"
+    if "JAMMU AND KASHMIR" in travel._CONST["hill_states"]:
+        assert travel.terrain_of("Jammu & Kashmir") == "hill"
+
+
+def test_ranges_come_from_measured_ratios():
+    for terrain, cls in travel._CONST["classes"].items():
+        for b in cls["bands"]:
+            p10, p90 = b["ratio_p10_p90"]
+            assert 0 < p10 < 1 < p90
+            factor, kmh, lo, hi = travel._consts(b["mid_km"], terrain)
+            assert (factor, kmh, lo, hi) == (b["factor"], b["kmh_free_flow"], p10, p90)
+            for area, cell in b["ratio_by_area"].items():
+                assert travel._consts(b["mid_km"], terrain, area)[2:] == tuple(cell["p10_p90"])
+
+
+def test_area_changes_only_the_range():
+    far = (O[0] + 0.4, O[1])
+    base, urban, rural = (travel.estimate(O, far, area=a) for a in (None, "urban", "rural"))
+    assert base["minutes"] == urban["minutes"] == rural["minutes"]
+    assert all(x["low"] <= x["minutes"] <= x["high"] for x in (base, urban, rural))
+    with pytest.raises(ValueError):
+        travel.travel_minutes(O, D, area="suburban")
+
+
+def test_estimate_is_monotonic_in_distance_in_the_hills():
+    mins = [travel.estimate((27.3, 88.6), (27.3 + k / 111.19, 88.6), state="SIKKIM")["minutes"]
+            for k in [x / 4 for x in range(1, 1200)]]
     assert mins == sorted(mins) and mins[-1] > mins[0] >= 0
 
 

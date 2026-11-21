@@ -1,6 +1,7 @@
 """Re-measure the road factor (road km / straight-line km) and road speed on a stratified sample.
 
-Sample: PIN centroids as origins, stratified by state and by an urban / rural proxy, each with 10
+Sample: PIN centroids as origins, stratified by state and by an urban / rural proxy (4 per state
+and stratum, 12 in the candidate hill states), each with 10
 facilities at spread distances (nearest three, then about 5, 10, 20, 35, 50, 75, 110 km).
 One OSRM table request per origin (1 x 10), at most one request per 1.1 s, every response cached
 under geo/out/osrm_raw/ so a re-run sends nothing.
@@ -13,7 +14,8 @@ PIN centroids within 10 km is in the national top quartile. It is a postal-densi
 census class.
 
 Inputs:  derived/v1/pin_gazetteer.parquet, derived/v1/facility_location.parquet
-Outputs: geo/out/road_factor_pairs.csv, geo/out/road_factor_summary.json, geo/road_factor.json
+Outputs: geo/out/road_factor_pairs.csv, geo/out/road_factor_summary.json
+         (then run geo/fit_travel_constants.py, which writes geo/road_factor.json)
 Run:     .venv/bin/python geo/measure_road_factor.py            (sends requests on first run)
          .venv/bin/python geo/measure_road_factor.py --offline  (cache only, never sends)
 """
@@ -36,6 +38,11 @@ BASE = "https://router.project-osrm.org"
 UA = "cmu-datathon-care-finder/0.1"
 SEED = 7
 PER_STRATUM = 4            # origins per (state, urban/rural)
+PER_STRATUM_HILL = 12      # more origins where the road factor is far from the national figure
+# candidate hill states: Himalayan states and the North East. Which of them get the hill constants
+# is decided from the measurement (see terrain_classes in main).
+HILL_CANDIDATES = ["HIMACHAL PRADESH", "UTTARAKHAND", "JAMMU AND KASHMIR", "LADAKH", "SIKKIM", "ARUNACHAL PRADESH",
+                   "NAGALAND", "MANIPUR", "MIZORAM", "MEGHALAYA", "TRIPURA", "ASSAM"]
 TARGETS_KM = [5, 10, 20, 35, 50, 75, 110]
 MAX_KM = 150.0
 MIN_HAV_KM = 2.0           # ratios explode for near-zero straight-line distance
@@ -111,7 +118,9 @@ def sample():
     origins = []
     for (state, stratum), g in pins.groupby(["state", "stratum"]):
         for i in rng.permutation(len(g)):
-            if sum(1 for o in origins if o["state"] == state and o["stratum"] == stratum) >= PER_STRATUM:
+            limit = PER_STRATUM_HILL if state in HILL_CANDIDATES else PER_STRATUM
+            have = sum(1 for o in origins if o["state"] == state and o["stratum"] == stratum)
+            if have >= limit:
                 break
             p = g.iloc[int(i)]
             d = hav_km(p.lat, p.lon, fac.loc_lat.values, fac.loc_lon.values)
@@ -120,7 +129,9 @@ def sample():
             if len(near) < 10:
                 continue
             sel = near[pick_destinations(d[near])]
+            # core = the balanced national sample (first PER_STRATUM per state and stratum)
             origins.append({"pin": int(p.pin), "state": state, "stratum": stratum, "density": int(p.density),
+                            "core": have < PER_STRATUM,
                             "lat": float(p.lat), "lon": float(p.lon),
                             "dests": [(fac.unique_id[j], float(fac.loc_lat[j]), float(fac.loc_lon[j]), float(d[j])) for j in sel]})
     return origins, cut, len(pins), len(fac)
@@ -185,6 +196,7 @@ def main():
         for j, (uid, la, lo, d) in enumerate(o["dests"]):
             dist, dur = b["distances"][0][j + 1], b["durations"][0][j + 1]
             rows.append({"pin": o["pin"], "state": o["state"], "stratum": o["stratum"], "density": o["density"],
+                         "core": o["core"],
                          "o_lat": o["lat"], "o_lon": o["lon"], "o_snap_m": round(b["sources"][0]["distance"]),
                          "facility_id": uid, "f_lat": la, "f_lon": lo, "f_snap_m": round(b["destinations"][j + 1]["distance"]),
                          "hav_km": round(d, 3), "road_km": None if dist is None else round(dist / 1000, 3),
@@ -194,6 +206,10 @@ def main():
     df = pd.DataFrame(rows)
     df.to_csv(OUT / "road_factor_pairs.csv", index=False)
 
+    # the national summary uses the balanced core sample only; the extra hill-state origins are
+    # analysed by geo/fit_travel_constants.py
+    n_all = len(df)
+    df = df[df.core]
     ok = df.dropna(subset=["road_km", "osrm_min"])
     n_unrouted = len(df) - len(ok)
     # a snap of more than 2 km means the point is off the road network (island, forest, bad point)
@@ -223,7 +239,9 @@ def main():
         "source": f"{BASE} table service, car profile, free flow (no traffic)",
         "sampling": {"seed": SEED, "origins_per_state_stratum": PER_STRATUM, "targets_km": TARGETS_KM,
                      "urban_proxy": f"other PIN centroids within {DENSITY_KM:.0f} km >= {cut:.0f} (national 75th percentile)",
-                     "origins_sampled": len(origins), "origins_failed_or_not_cached": failed,
+                     "origins_sampled": len(origins), "origins_core": int(df.pin.nunique()),
+                     "pairs_all_origins": int(n_all), "origins_per_state_stratum_hill_candidates": PER_STRATUM_HILL,
+                     "origins_failed_or_not_cached": failed,
                      "states": int(df.state.nunique()) if len(df) else 0},
         "pairs": {"requested": int(len(df)), "unrouted": int(n_unrouted), "dropped_snap_over_2km": int(far_snap.sum()),
                   "used": int(len(ok)), "min_hav_km": MIN_HAV_KM},
@@ -252,23 +270,6 @@ def main():
     }
     (OUT / "road_factor_summary.json").write_text(json.dumps(summary, indent=1))
 
-    # constants geo/travel.py reads for its fallback
-    bands = []
-    for lo, hi in zip(BANDS[:-1], BANDS[1:]):
-        g = ok[(ok.hav_km >= lo) & (ok.hav_km < hi)]
-        if len(g):
-            bands.append({"from_km": lo, "to_km": hi, "mid_km": round(float(g.hav_km.median()), 1), "factor": round(float(g.factor.median()), 3),
-                          "kmh_free_flow": round(float(g.kmh.median()), 1),
-                          "minutes_ratio_p10_p90": [round(float((g.osrm_min / (g.hav_km * g.factor.median() / g.kmh.median() * 60)).quantile(q)), 3) for q in (.1, .9)],
-                          "n_pairs": int(len(g))})
-    consts = {"measured_utc": summary["measured_utc"], "n_pairs": int(len(ok)), "n_origins": int(ok.pin.nunique()),
-              "factor": summary["all"]["factor_median"], "factor_ci95": summary["all"]["factor_ci95"],
-              "kmh_free_flow": summary["all"]["kmh_median"], "kmh_free_flow_ci95": summary["all"]["kmh_ci95"],
-              "bands": bands,
-              "fallback_error": summary["fallback_error_leave_origin_out"]["by_distance_band"],
-              "note": "factor = road km / straight-line km; kmh_free_flow = OSRM road km / OSRM hours (no traffic). "
-                      "Built by geo/measure_road_factor.py; details in geo/out/road_factor_summary.json."}
-    (GEO / "road_factor.json").write_text(json.dumps(consts, indent=1))
     print(json.dumps({k: summary[k] for k in ("pairs", "all", "weighted_by_state_facility_share",
                                                "fallback_ratio_osrm_over_estimate", "states_highest_factor",
                                                "fallback_error_leave_origin_out")}, indent=1))
