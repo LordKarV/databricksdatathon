@@ -48,6 +48,14 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "slip_english-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "slip_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "start_first_visit-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -84,6 +92,14 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "slip_english-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "slip_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
@@ -117,19 +133,19 @@
     "gzip": 563
    },
    "/app.css": {
-    "raw": 5349,
-    "gzip": 1785
+    "raw": 6247,
+    "gzip": 2082
    },
    "/app.js": {
-    "raw": 25020,
-    "gzip": 8875
+    "raw": 28131,
+    "gzip": 9614
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 11359,
+  "gzip_total": 12395,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

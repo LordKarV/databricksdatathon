@@ -374,6 +374,7 @@ function whyScreen(rank) {
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${esc(o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${o.travel.km} km by road, ${o.travel.low}-${o.travel.high} min (${esc(o.travel.label)}).</p>
     <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">Directions in Google Maps</a>
+    <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
 
     <h2 id="how">How we decided</h2>
     <table><caption>Points for "offers ${esc(label)}"</caption>
@@ -398,9 +399,66 @@ function whyScreen(rank) {
     </div>`;
 }
 function bindWhy() {
-  document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () =>
-    announce(`Noted: ${b.dataset.outcome}. Outcomes are not saved yet in this skeleton.`)));
+  document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
+    // Kept in page memory only, for the slip (#24); never sent or stored.
+    (state.outcomes ||= {})[parseInt(location.hash.split('/')[2], 10)] = {said: b.dataset.outcome, at: Date.now()};
+    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip; nothing is sent.`);
+  }));
   if (location.hash.endsWith('#call')) $('#call')?.focus();
+}
+
+// ---------- referral slip (S8, #24): slip.js loads only on this route ----------
+function slipScreen(rank) {
+  const p = state.plan;
+  const o = p && !p.error && p.options.find(x => x.rank === rank);
+  if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const lang = state.slipLang || 'en';
+  return `<a class="btn no-print" href="#/why/${rank}">&larr; Why this</a>
+    <h1 tabindex="-1" class="no-print">Referral slip</h1>
+    <div class="row no-print" role="group" aria-label="Slip language">
+      <button type="button" data-slip-lang="en" aria-pressed="${lang === 'en'}">English</button>
+      <button type="button" data-slip-lang="hi" aria-pressed="${lang === 'hi'}"><span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span></button>
+    </div>
+    <p class="no-print"><strong>Ask the patient before sending.</strong> No patient name or location goes on the slip.</p>
+    <div id="slip-out"><p>Preparing slip...</p></div>
+    <div class="row no-print">
+      <button type="button" id="slip-big">Show big</button>
+      <button type="button" id="slip-print">Print</button>
+      <a class="btn" id="slip-wa" href="#" rel="noopener noreferrer">Send on WhatsApp</a>
+      <a class="btn" id="slip-sms" href="#">Send by SMS</a>
+    </div>`;
+}
+function loadSlipJs() {
+  if (window.RSSlip) return Promise.resolve();
+  return new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = '/slip.js';
+    s.onload = ok;
+    s.onerror = fail;
+    document.head.appendChild(s);
+  });
+}
+async function bindSlip() {
+  const rank = parseInt(location.hash.split('/')[2], 10);
+  const p = state.plan;
+  const o = p && !p.error && p.options.find(x => x.rank === rank);
+  if (!o) return;
+  try { await loadSlipJs(); } catch { $('#slip-out').innerHTML = '<p role="alert">Could not load the slip. Check the connection.</p>'; return; }
+  const backup = p.options.find(x => x.rank !== rank) || null;
+  const lang = state.slipLang || 'en';
+  const m = RSSlip.slipModel(p, o, backup, (state.outcomes || {})[rank] || null);
+  $('#slip-out').innerHTML = RSSlip.toHtml(m, lang);
+  $('#slip-wa').href = RSSlip.toWhatsApp(m, lang).url;
+  $('#slip-sms').href = RSSlip.toSms(m, lang).url;
+  document.querySelectorAll('[data-slip-lang]').forEach(b => b.addEventListener('click', () => {
+    state.slipLang = b.dataset.slipLang;
+    render();
+  }));
+  $('#slip-big').addEventListener('click', () => {
+    const on = document.body.classList.toggle('slip-big');
+    $('#slip-big').textContent = on ? 'Normal size' : 'Show big';
+  });
+  $('#slip-print').addEventListener('click', () => window.print());
 }
 
 // ---------- router ----------
@@ -411,6 +469,7 @@ function render() {
   else if (h === '#/change') [html, bind] = [changeScreen(), bindChange];
   else if (h === '#/plan') [html, bind] = [planScreen(), bindPlan];
   else if (h.startsWith('#/why/')) [html, bind] = [whyScreen(parseInt(h.split('/')[2], 10)), bindWhy];
+  else if (h.startsWith('#/slip/')) [html, bind] = [slipScreen(parseInt(h.split('/')[2], 10)), bindSlip];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
   renderBar();
@@ -420,7 +479,8 @@ function render() {
   bind();
 }
 window.addEventListener('hashchange', () => {
-  if (location.hash === '#/' || location.hash === '#/change') { state.plan = null; stopWatch(); }
+  if (location.hash === '#/' || location.hash === '#/change') { state.plan = null; state.outcomes = {}; stopWatch(); }
+  document.body.classList.remove('slip-big');
   render();
 });
 function setOnline() { $('#offline').hidden = navigator.onLine; }

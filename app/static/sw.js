@@ -2,9 +2,9 @@
 // (a stopped Databricks App answers with a proxy error page, not a network error). Redirects pass
 // through so an expired session can sign in again. API calls are never cached here, except the
 // offline state packs, which are stored on request (message 'cache-pack') in their own cache.
-const CACHE = 'rs-shell-v3';
+const CACHE = 'rs-shell-v4';
 const PACKS = 'rs-packs-v1';
-const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/manifest.webmanifest'];
+const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/manifest.webmanifest'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));

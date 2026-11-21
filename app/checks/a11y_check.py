@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import os
 import socket
 import subprocess
 import sys
@@ -22,7 +23,7 @@ from playwright.sync_api import Page, sync_playwright
 APP = Path(__file__).resolve().parents[1]
 OUT = APP / "checks"
 SCREENS = OUT / "screens"
-PORT = 8765
+PORT = int(os.environ.get("A11Y_PORT", "8765"))  # override when another check runs in parallel
 BASE = f"http://127.0.0.1:{PORT}"
 AXE_JS = (Path(axe_playwright_python.__file__).parent / "axe.min.js").read_text()
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]  # spec section 7
@@ -174,6 +175,19 @@ OFFLINE_STATES = {
 }
 
 
+def slip_for(lang: str) -> Callable[[Page], None]:
+    def run(page: Page) -> None:
+        plan_for("Emergency C-section")(page)
+        go(page, "#/why/1")
+        page.get_by_role("button", name="Said yes").click()
+        page.get_by_role("link", name="Make referral slip").click()
+        page.locator(".slip").wait_for()
+        if lang == "hi":
+            page.locator("[data-slip-lang=hi]").click()
+            page.locator(".slip[lang=hi]").wait_for()
+    return run
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -184,6 +198,8 @@ STATES: dict[str, Callable[[Page], None]] = {
     "abstention_csection": plan_for("Emergency C-section"),
     "why_and_how": why,
     "call_ahead_trauma": call_ahead,
+    "slip_english": slip_for("en"),
+    "slip_hindi": slip_for("hi"),
 }
 
 

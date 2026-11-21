@@ -35,6 +35,7 @@ SHELL_FILES: dict[str, str] = {
     "sw.js": "text/javascript; charset=utf-8",
     "pack.js": "text/javascript; charset=utf-8",
     "offline.js": "text/javascript; charset=utf-8",
+    "slip.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
