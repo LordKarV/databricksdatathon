@@ -1,0 +1,2450 @@
+{
+ "about": "Per-service sentence patterns for the facility x service knowledge base. A sentence matches a service when 'include' hits, 'exclude' does not, and (where 'exclude_clause' is set) some clause that carries the include hit has no 'exclude_clause' hit; clauses are split on 'clause_split' (after 'strip_before_match' is removed, icu only). Shared non-offer cues remove a match from positive evidence; weakening cues keep it but mark it qualified. 'quantity' extracts counts or sizes (beds, machines, tesla, slices). Patterns of the 8 cleaning/claims services are copied from cleaning/claims/lexicon.py unchanged; the others are new (lexicon_src.py comments give each exclusion's reason).",
+ "regex_flavor": "Python re, case-insensitive, one sentence at a time; uses \\b and (?!...) lookahead (Java/Spark ok, RE2/DuckDB not).",
+ "shared_cues": {
+  "nonoffer": {
+   "negation": "\\bnot (available|offered|provided|present|performed|listed|done|equipped)|\\bdo(es)? not (have|offer|provide|list|perform)|n't (have|offer|provide)|unavailable|\\bno [a-z ]{0,25}(facility|facilities|services?|units?|available|on[- ]?site)\\b|\\bwithout (dialysis|surgery|open|the need|incision|scar|cuts?)|\\bno (burns?|scars?|surgery|cuts?)\\b|non[- ]surgical",
+   "referral": "\\breferred (out |elsewhere )?to\\b|\\brefers? (patients |cases )?(out |elsewhere )?to\\b|\\breferrals? to\\b|transfer(red)? to|shifted to|send(s)? (patients )?to",
+   "future": "\\b(is|are|being) planned|plans? to (start|open|set|launch|add|install)|upcoming|coming soon|\\bproposed\\b|under construction|will be (installed|started|set up|opened|launched|available|commissioned|added)|to be (started|set up|established|launched|opened|commissioned|installed)|in the pipeline|\\bplanned\\b|plans? to (establish|build|develop|set up)",
+   "past": "\\b(shut|closed) down|discontinued|no longer|\\bceased\\b|\\bused to (be|have|offer|provide|run|perform)\\b|\\bdefunct\\b",
+   "camp": "\\bcamps?\\b"
+  },
+  "weakening": {
+   "hedge": "if applicable|\\(if any\\)|\\bpossibly\\b|\\blikely\\b|\\bmay (have|offer|provide|include)\\b|presumabl|not (specified|confirmed|clear)|\\bunclear\\b|as reported by|reportedly|\\bappears to\\b|\\bimplied\\b|\\bassumed\\b|inferred",
+   "third_party": "outsourc|(through|via|by) (a |an )?(partner|third[- ]party|external|tie[- ]?up)|tie[- ]?up with (?!.{0,20}(esic|cghs|insur|tpa|scheme))|arranged (from|through)|(from|through) (the )?(district|government|nearby|nearest) blood (bank|cent\\w*)",
+   "parttime": "\\bvisiting\\b|\\bon[- ]call\\b|once a (week|month)|\\bweekly\\b|(mon|tues|wednes|thurs|fri|satur|sun)days? only"
+  }
+ },
+ "sentence_kinds": {
+  "template": "\\b911\\b|patient portal|board[- ]certified",
+  "research": "\\b(multi-?cent\\w*|published|journal|cohort|retrospective|prospective|randomi[sz]ed|et al|consortium|cross-sectional|case report|case series|we report|was conducted|were included|patients were|study period|(?:study|trial) (?:was|enrolled|recruited|included|documented|population|site))\\b",
+  "directory": "\\blisted (among|on|in|as|under)\\b|\\branked\\b|\\btop \\d+\\b|\\bdirector(y|ies)\\b|justdial|practo|hexahealth|lybrate|\\breviews?\\b|\\brated \\d|\\bnear (me|you)\\b|\\bcashless\\b|\\bempanel",
+  "staff": "\\b(MBBS|MCh|M\\.Ch|DNB|DM|FRCS|MRCP|fellowship|residency|trained (in|at|under)|training (in|at)|years of experience|graduated|alumn\\w*|formerly|previously|worked (at|as|in)|former\\b|ex-)"
+ },
+ "attribute_scope": "Attribute slots for hours and details (review issue 8): what the KB step must fill per (facility, service) and per\nfacility. build_lexicon.py copies the schema into services.json ('attributes') and lexicon.json ('attribute_patterns',\n'facility_attributes') and counts how often each pattern fires (out/attribute_counts.csv).\n\nScope rule: a service attribute is read only from a sentence that matched that service (a hospital's 24x7 pharmacy\nsays nothing about its cath lab). 'from_service' attributes are not text patterns: they are true when the same\nfacility has positive evidence for the named service (blood_on_site <- blood_bank). Facility attributes are read from\nany of the facility's sentences. Patterns are Python re, case-insensitive. A hit is a claim, not a verified fact.",
+ "facility_attributes": {
+  "beds_total": {
+   "type": "int",
+   "note": "hospital size; unit bed counts are service attributes",
+   "pattern": "(\\d{2,4})\\s*\\+?\\s*-?\\s*bed(ded|s)?\\s*(hospital|facility|multi|super|tertiary|capacity)|bed (strength|capacity)\\D{0,10}(\\d{2,4})"
+  },
+  "accreditation": {
+   "type": "enum",
+   "note": "multi-valued; external/nabh_accredited and external/laqshya_master are the stronger sources",
+   "values": {
+    "NABH": "\\bNABH\\b",
+    "NABL": "\\bNABL\\b",
+    "JCI": "\\bJCI\\b|joint commission",
+    "NQAS": "\\bNQAS\\b|national quality assurance",
+    "LaQshya": "laqshya",
+    "Kayakalp": "kayakalp",
+    "ISO": "\\bISO ?9001"
+   }
+  },
+  "empanelment": {
+   "type": "enum",
+   "note": "multi-valued",
+   "values": {
+    "PMJAY": "PM-?JAY|ayushman|pradhan mantri jan arogya|\\bAB-?ArK\\b",
+    "CGHS": "\\bCGHS\\b",
+    "ECHS": "\\bECHS\\b",
+    "ESIC": "\\bESIC?\\b|employees'? state insurance",
+    "state_scheme": "aarogyasri|arogyasri|\\bMJPJAY\\b|jan arogya|\\bCMCHIS\\b|chief minister'?s? (comprehensive )?health insurance|biju swasthya|\\bBSKY\\b|swasthya sathi|\\bKASP\\b|mukhyamantri",
+    "private_insurance": "\\bTPA\\b|cashless|insurance"
+   }
+  },
+  "hours_24x7": {
+   "type": "bool",
+   "note": "any 24x7 statement; per-service hours are in the service attributes",
+   "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+  },
+  "opd_hours": {
+   "type": "text",
+   "note": "",
+   "pattern": "OPD (timings?|hours)|\\b\\d{1,2}(:\\d{2})?\\s*(am|a\\.m\\.)\\s*(to|-|–)\\s*\\d{1,2}(:\\d{2})?\\s*(pm|p\\.m\\.)"
+  },
+  "ownership": {
+   "type": "enum",
+   "note": "text hint only; facility_type and the public lists are the stronger sources",
+   "values": {
+    "government": "\\bgovernment\\b|\\bgovt\\b|district hospital|civil hospital|municipal|\\bAIIMS\\b|\\bESI hospital",
+    "trust_or_mission": "charitable|\\btrust\\b|mission hospital|\\bNGO\\b|non-profit"
+   }
+  },
+  "ambulance": {
+   "type": "bool",
+   "note": "",
+   "pattern": "ambulance|\\b108\\b|\\b102\\b"
+  }
+ },
+ "clause_split": "[;,|\\u2022]|\\s-\\s",
+ "services": {
+  "emergency_24x7": {
+   "include": "\\btrauma (centre|center|unit|ward|bay|icu)|polytrauma (unit|centre|center|ward)|casualty|accident (and|&) emergenc|\\bA ?& ?E\\b|emergency (department|room|ward|service|care|unit|medicine|surg)|(?-i:\\bER\\b)|24 ?(x|/|×|\\*|hours?|hrs?|-hour) ?7?.{0,25}emergenc|emergenc.{0,25}24 ?(x|/|×|\\*|hours?|hrs?)",
+   "exclude": "trauma[- ]informed|childhood trauma|ptsd|training program|affiliated (with|to)|postgraduate|\\bintake\\b|degrees? in|^(?!.*(emergency (department|room|ward|unit|care|services?)|casualty|trauma)).*ambulance",
+   "related": "ambulance|fracture|orthop(a)?edic",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?",
+   "prereqs": {
+    "emergency_24x7": {
+     "text": "(24 ?(x|/|×|\\*|hours?|hrs?|-hour) ?7?|round[- ]the[- ]clock|24-hour|24 hour).{0,40}(emergenc|casualty|trauma)|(emergenc|casualty|trauma).{0,40}(24 ?(x|/|×|\\*|hours?|hrs?)|round[- ]the[- ]clock)",
+     "specialty_tags": []
+    }
+   },
+   "exclude_clause": "\\bdental|dentist|tooth|teeth|\\beye|ocular|ophthalm|psychiatric|emotional|psycholog|veterinar|contracept|maxillofacial trauma|facial trauma|hand (and|&) face trauma|emergency obstetric|obstetric emergenc|emergency cardiac|cardiac emergenc",
+   "specialty_values": [
+    "emergencyMedicine",
+    "pediatricEmergencyMedicine",
+    "accidentAndEmergency",
+    "Emergency Medicine",
+    "emergencyMedicalServices",
+    "Critaical Care & Emergency",
+    "accidentEmergencyMedicine",
+    "addictionEmergencyMedicine",
+    "emergencyMedicineDoctor",
+    "emergencymedicine",
+    "paediatricEmergency"
+   ],
+   "prerequisite_specialty_values": [
+    "forensicMedicineAndToxicology",
+    "medicalToxicologyEM",
+    "preventiveMedicalToxicology",
+    "toxicology",
+    "toxicologyAndOccupationalHealth"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "emergency_beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    },
+    "triage": {
+     "type": "bool",
+     "note": "",
+     "pattern": "triage"
+    },
+    "ambulance": {
+     "type": "bool",
+     "note": "",
+     "pattern": "ambulance|\\b108\\b"
+    }
+   }
+  },
+  "trauma_care": {
+   "include": "\\btrauma|polytrauma|accident(al)? (care|cases?|victims?|ward|surg\\w*|injur\\w*)|road (traffic )?accidents?|\\bRTA\\b|head injur\\w*|golden hour",
+   "exclude": "training program|affiliated (with|to)|mandib|maxill|implant placement",
+   "exclude_clause": "\\bdental|dentist|tooth|teeth|\\beye|ocular|ophthalm|psychiatric|emotional|psycholog|veterinar|maxillofacial|facial trauma|hand (and|&) face trauma|trauma[- ]informed|childhood trauma|ptsd|post[- ]?traumatic stress|birth trauma|acoustic trauma|trauma x-?ray|sports injur|^(?!.*(trauma (cent|unit|ward|care|team|icu|bay)|polytrauma|emergenc|casualty|accident)).*(orthop|joint|fracture|limb|arthroscop|spine|bone)",
+   "related": "fracture|orthop(a)?edic|\\bCT\\b|blood bank|ambulance",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?|level[- ]?(i|ii|iii|1|2|3)\\b.{0,10}trauma",
+   "prereqs": {
+    "emergency_24x7": {
+     "text": "(24 ?(x|/|×|\\*|hours?|hrs?|-hour) ?7?|round[- ]the[- ]clock|24-hour|24 hour).{0,40}(emergenc|casualty|trauma)|(emergenc|casualty|trauma).{0,40}(24 ?(x|/|×|\\*|hours?|hrs?)|round[- ]the[- ]clock)",
+     "specialty_tags": []
+    },
+    "surgery_or_ortho": {
+     "text": "general surg|orthop(a)?edic|trauma surg|laparoscop|operat(ion|ing)[- ]?theat",
+     "specialty_tags": [
+      "generalsurgery",
+      "orthopaedics",
+      "orthopaedicsurgery",
+      "orthopedicsurgery",
+      "orthopedictraumaandfracturesurgery",
+      "polytrauma"
+     ]
+    },
+    "ct": {
+     "text": "\\bCT\\b|computed tomograph|\\bCT[- ]?scan|\\d+[- ]slice",
+     "specialty_tags": []
+    }
+   },
+   "specialty_values": [
+    "polytrauma",
+    "accidentAndTrauma",
+    "polyTrauma",
+    "traumaCare",
+    "traumaSurgery",
+    "traumatology",
+    "Polytrauma",
+    "polyTraumaAndAccidentCare",
+    "neurotrauma",
+    "pediatricNeurosurgeryAndTrauma",
+    "pediatricTrauma",
+    "traumaAndEmergency",
+    "polytraumaAndFracture",
+    "trauma-care-centre",
+    "neuroTrauma",
+    "traumaAnesthesiology",
+    "traumaCentre",
+    "neuroTraumaSurgery",
+    "accidentTraumaCare",
+    "handTraumaSurgery",
+    "complexTrauma",
+    "accidentAndTraumaCare",
+    "Traumatology",
+    "Trauma Surgery",
+    "Trauma Reconstruction",
+    "TRAUMA CARE",
+    "OrthopaedicsTraumaAndSportsMedicine",
+    "Emergency Trauma Care",
+    "Accident & Trauma",
+    "traumaCriticalCare"
+   ],
+   "prerequisite_specialty_values": [
+    "generalSurgery",
+    "General Surgery",
+    "general-surgery",
+    "generalSurgeon"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "level": {
+     "type": "enum",
+     "note": "MoHFW trauma care facility level; external/mohfw_trauma_196 is the stronger source",
+     "values": {
+      "I": "level[- ]?(i|1)\\b(?!i).{0,15}trauma|trauma (centre|center).{0,15}level[- ]?(i|1)\\b(?!i)",
+      "II": "level[- ]?(ii|2)\\b.{0,15}trauma|trauma (centre|center).{0,15}level[- ]?(ii|2)\\b",
+      "III": "level[- ]?(iii|3)\\b.{0,15}trauma|trauma (centre|center).{0,15}level[- ]?(iii|3)\\b"
+     }
+    },
+    "surgery_on_site": {
+     "type": "bool",
+     "note": "",
+     "pattern": "general surg|orthop(a)?edic|operat(ion|ing)[- ]?theat"
+    },
+    "ct_on_site": {
+     "type": "bool",
+     "note": "",
+     "from_service": "ct_scan"
+    },
+    "blood_on_site": {
+     "type": "bool",
+     "note": "",
+     "from_service": "blood_bank"
+    }
+   }
+  },
+  "burn_care": {
+   "include": "\\bburns?\\b",
+   "exclude": "heart ?burn|sun ?burn|burn ?out|burning|razor burn|calorie|\\bfat\\b|burn prevention|post[- ]?burns?|burns? (scar|contracture|reconstruct)|minor burns",
+   "related": "\\bplastic surg|skin graft|reconstructive surg",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?",
+   "prereqs": {
+    "burn_unit_or_plastic_surgery": {
+     "text": "burns? (unit|ward|icu|centre|center|care unit)|\\bplastic surg|plastic (and|&) reconstruct",
+     "specialty_tags": [
+      "burnandtraumaplasticsurgery",
+      "burngeneralsurgery",
+      "burns",
+      "cosmeticandplasticsurgery",
+      "plasticandreconstructivesurgery",
+      "plasticsurgery",
+      "reconstructiveplasticsurgery"
+     ]
+    }
+   },
+   "negation_extra": "no burns?|without burns?",
+   "specialty_values": [
+    "burnAndTraumaPlasticSurgery",
+    "burnGeneralSurgery",
+    "burns",
+    "burnAndPlasticSurgery",
+    "burnsAndPlasticSurgery",
+    "burnsAndTraumaPlasticSurgery",
+    "Burns Management",
+    "burnManagement",
+    "burnUnit",
+    "burnsCenter",
+    "burnsManagement",
+    "burnsSpecialist",
+    "burnsSurgery",
+    "pediatricHeadInjuryAndBurns"
+   ],
+   "prerequisite_specialty_values": [
+    "plasticSurgery",
+    "reconstructivePlasticSurgery",
+    "reconstructiveSurgery",
+    "Plastic Surgery",
+    "plasticAndReconstructiveSurgery",
+    "Plastic & Reconstructive Surgery",
+    "Reconstructive Surgery",
+    "PLASTIC SURGEON",
+    "Plastic & Reconstructive surgery",
+    "neuroplasticPlasticSurgery",
+    "oculoPlasticSurgery",
+    "oculoPlasticsAndReconstructiveOrbitalSurgery",
+    "ophthalmicPlasticAndFacialAestheticSurgery",
+    "paediatricPlasticSurgery",
+    "plasticReconstructiveSurgery",
+    "plasticsurgery"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    },
+    "burn_icu": {
+     "type": "bool",
+     "note": "",
+     "pattern": "burns? (icu|intensive)"
+    }
+   }
+  },
+  "orthopaedic_trauma_surgery": {
+   "include": "fractures?\\b|\\bORIF\\b|(internal|external) fixat|intramedullary|interlocking nail|orthop(a)?edic trauma|trauma (and|&) orthop|fracture surg|limb (salvage|replant)|polytrauma surg",
+   "exclude": "dental|tooth|teeth|root fracture|crown fracture|mandib|maxill|jaw|facial|zygom|nasal|orbital|fracture risk|osteoporo|bone (density|mineral)|DEXA|vertebroplast|kyphoplast",
+   "related": "orthop(a)?edic|plaster|\\bcast\\b|\\bC-?arm|traction|bone setting",
+   "specialty_values": [
+    "orthopedicTraumaAndFractureSurgery",
+    "orthopedicTrauma",
+    "traumaAndOrthopaedics",
+    "traumaAndJointReplacement",
+    "traumaAndFractureSurgery",
+    "polytraumaAndFracture",
+    "orthopedicsAndTraumatology",
+    "orthopedicTraumaCare",
+    "orthopedicTraumaAndComplexFractureSurgery",
+    "orthopaedicsAndTrauma",
+    "maxillaFractureTreatment",
+    "limbReconstruction",
+    "limbLengthening",
+    "fractureTreatment",
+    "fractureAndTraumaClinic",
+    "facialFractureTreatment",
+    "accidentFractureCare",
+    "Trauma & Orthopaedic",
+    "Periarticular Surgeries",
+    "Orthopedics & Traumatology",
+    "Orthopedic Trauma Specialist",
+    "Orthopaedics and Trauma",
+    "Orthopaedic Trauma & Facture Management",
+    "Limb Replantation",
+    "Bone Grafting",
+    "traumaFractureCare"
+   ],
+   "prerequisite_specialty_values": [
+    "orthopedicSurgery",
+    "orthopedicSpineSurgery",
+    "orthopedics",
+    "orthopaedics",
+    "orthopaedicSurgery",
+    "spineSurgery",
+    "Orthopaedics",
+    "Orthopedics",
+    "orthopaedicsAndJointReplacement",
+    "spineCare",
+    "spinalSurgery",
+    "paediatricOrthopaedic",
+    "minimallyInvasiveSpineSurgery",
+    "Orthopaedics & Joint Replacement",
+    "fullEndoscopicSpineSurgery",
+    "spine-surgery",
+    "spinalInfections",
+    "orthopedist",
+    "orthopedicsAndJointReplacementSurgery",
+    "orthopedicsAndJointReplacement",
+    "orthopaedicsAndSportsMedicine",
+    "neuroSpinalSurgery",
+    "neuroAndSpineSurgery",
+    "minimalInvasiveSpineSurgery",
+    "jointReplacementAndSpineSurgery",
+    "PaediatricOrthopedics",
+    "endoscopicAssistedSpineSurgery",
+    "brainSpineSurgery",
+    "boneAndJoint",
+    "arthroscopicAndSpineSurgery",
+    "Spine Surgery",
+    "Spine & Deformity Connections",
+    "Orthopedics & Joint Replacement",
+    "Orthopedic Surgery",
+    "ORTHOPAEDICS",
+    "Neurosciences & Spinal Disorders",
+    "spineEndoscopy"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "c_arm": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bC-?arm|image intensifier"
+    }
+   }
+  },
+  "snakebite_antivenom": {
+   "include": "snake ?bite|snake venom|anti[- ]?snake|\\bASV\\b|anti-?venom|envenom",
+   "exclude": "excluding snake",
+   "related": "poison|bites?\\b",
+   "quantity": "(\\d+)\\s*vials",
+   "specialty_values": [
+    "SNAKE BITE TREATMENT",
+    "poisoningSnakeBite"
+   ],
+   "prerequisite_specialty_values": [
+    "forensicMedicineAndToxicology",
+    "medicalToxicologyEM",
+    "preventiveMedicalToxicology",
+    "toxicology",
+    "toxicologyAndOccupationalHealth"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "asv_stock": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bASV\\b|anti-?(snake )?venom"
+    },
+    "ventilator_on_site": {
+     "type": "bool",
+     "note": "",
+     "from_service": "ventilator_support"
+    }
+   }
+  },
+  "icu": {
+   "include": "\\bICUs?\\b|intensive care|critical care|\\bMICU|\\bSICU|\\bCCU|\\bICCU|\\bCTICU|\\bCVTS ICU|\\bHDU|high dependency",
+   "exclude": "ambulance|icu on wheels|transport",
+   "related": "ventilator|monitor|intensivist",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?|(\\d+)\\s*ventilators?",
+   "strip_before_match": "neonatal intensive care|p(a)?ediatric intensive care|neonatal icu|newborn intensive care|\\bNICCU\\b|p(a)?ediatric icu|\\bPICU\\b|paediatric critical care|pediatric critical care",
+   "prereqs": {
+    "ventilator": {
+     "text": "ventilator|ventilation|\\bBiPAP|\\bCPAP",
+     "specialty_tags": []
+    },
+    "critical_care_or_anaesthesia": {
+     "text": "intensivist|critical care|an(a)?esthe(s|t)",
+     "specialty_tags": [
+      "anaesthesia",
+      "anaesthesiology",
+      "anesthesia",
+      "anesthesiology",
+      "anesthesiologyandcriticalcare",
+      "criticalcare",
+      "criticalcaremedicine",
+      "criticalcaremedicineanesthesiology",
+      "icuandcriticalcare",
+      "intensivecareunit",
+      "neurocriticalcare",
+      "obstetricanesthesiology"
+     ]
+    }
+   },
+   "specialty_values": [
+    "criticalCareMedicine",
+    "neurocriticalCare",
+    "criticalCare",
+    "criticalCareMedicineAnesthesiology",
+    "neurocriticalCareNeurosurgery",
+    "anesthesiologyAndCriticalCare",
+    "intensiveCareUnit",
+    "icuAndCriticalCare",
+    "emergencyCriticalCare",
+    "neurointensiveCare",
+    "internalMedicineAndCriticalCare",
+    "intensiveCareMedicine",
+    "neuroCriticalCare",
+    "anesthesiaAndCriticalCare",
+    "Critical Care",
+    "accidentAndCriticalCare",
+    "Critical Care Medicine",
+    "anaesthesiologyAndCriticalCare",
+    "intensiveCardiacCareCentre",
+    "intensiveCare",
+    "intensiveCarePhysicianAndCriticalCare",
+    "intensivist",
+    "isolationICU",
+    "medicineAndCriticalCare",
+    "neuroIntensiveCare",
+    "neuroCriticalCareNeurosurgery",
+    "neurocriticalCareAnesthesia",
+    "pediatricIntensivist",
+    "pulmonarySciencesAndCriticalCare",
+    "respiratoryMedicineAndCriticalCare",
+    "intensive/critical care",
+    "intensiveAndCriticalCare",
+    "Intensive Care Physician and Critical Care",
+    "generalMedicineAndICU",
+    "criticalIntensiveCare",
+    "criticalCareIntensiveCare",
+    "criticalCareDoctor",
+    "critical-care",
+    "cardiacIntensiveCare",
+    "adultCriticalCareMedicare",
+    "Intensive care",
+    "INTENSIVIST & ANAESTHESIOLOGIST",
+    "ICU & Critical Care",
+    "I.C.U.",
+    "Anaesthesiology & Critical Care",
+    "Anaesthesia & Intensive Care",
+    "Anaesthesia & Critical Care",
+    "traumaCriticalCare"
+   ],
+   "prerequisite_specialty_values": [
+    "anesthesia",
+    "anesthesiology",
+    "pediatricAnesthesiology",
+    "neuroanesthesiology",
+    "anaesthesiology",
+    "ambulatoryAnesthesiology",
+    "Anaesthesiology",
+    "anaesthesia",
+    "neuroAnesthesiology",
+    "regionalAnesthesiologyAndAcutePain",
+    "Anaesthesia",
+    "hospiceAndPalliativeMedicineAnesthesiology",
+    "perioperativeAnesthesia",
+    "pediatricAnesthesia",
+    "oncoanesthesiology",
+    "neuroAnaesthesiology",
+    "Anesthesiology",
+    "departmentOfEndoscopicAnesthesia",
+    "anesthesiologist",
+    "anaesthesiologist",
+    "Anesthesiology Department",
+    "transplantAnesthesiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "beds": {
+     "type": "int",
+     "note": "can be the whole hospital's beds; check the noun the number attaches to",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    },
+    "ventilators": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*ventilators?"
+    },
+    "unit_types": {
+     "type": "enum",
+     "note": "",
+     "values": {
+      "MICU": "\\bMICU",
+      "SICU": "\\bSICU",
+      "CCU": "\\bI?CCU\\b",
+      "neuro_icu": "neuro ?(icu|intensive)",
+      "HDU": "\\bHDU\\b|high dependency"
+     }
+    }
+   }
+  },
+  "picu": {
+   "include": "\\bPICU\\b|p(a)?ediatric (intensive|icu|critical care)|children'?s? (icu|intensive care)|\\bPICCU\\b",
+   "exclude": "ambulance|transport",
+   "related": "p(a)?ediatric|ventilator",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?.{0,15}(PICU|p(a)?ediatric)",
+   "specialty_values": [
+    "pediatricCriticalCareMedicine",
+    "NICU/ PICU/ Neonatology",
+    "paediatricCriticalCareMedicine",
+    "paediatricIntensiveCareUnit",
+    "pediatricIntensiveCare",
+    "pediatricIntensiveCareUnit"
+   ],
+   "prerequisite_specialty_values": [
+    "pediatrics",
+    "paediatrics",
+    "Paediatrics",
+    "paediatric",
+    "Pediatrics",
+    "adolescentPaediatricianCouncillor",
+    "paediatricCare",
+    "paediatricMedicine",
+    "pediatrician"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    },
+    "ventilation": {
+     "type": "bool",
+     "note": "",
+     "pattern": "ventilat"
+    }
+   }
+  },
+  "ventilator_support": {
+   "include": "\\bventilators?\\b|mechanical ventilation|ventilatory support|invasive ventilation|\\bBiPAP\\b|\\bNIV\\b|high[- ]flow nasal|\\bHFNC\\b|life support",
+   "exclude": "ambulance|natural ventilation|air ventilation|well[- ]ventilated|ventilated (rooms|wards|building)|\\bHVAC\\b|basic life support|\\bBLS\\b|advanced (cardiac )?life support (training|course)|\\bACLS\\b|\\bATLS\\b",
+   "related": "\\bICU\\b|intensive care|oxygen",
+   "quantity": "(\\d+)\\s*ventilators?",
+   "negation_extra": "no ventilators?|ventilators? (are )?not",
+   "specialty_values": [
+    "acuteRespiratoryFailureArds"
+   ],
+   "prerequisite_specialty_values": [
+    "pulmonology",
+    "pediatricPulmonology",
+    "pulmonaryMedicine",
+    "respiratoryMedicine",
+    "paediatricPulmonology",
+    "chestMedicine",
+    "pulmonary",
+    "interventionalPulmonology",
+    "chestSurgery",
+    "Pulmonology",
+    "pulmonologist",
+    "pediatricPulmonary",
+    "pulmonologyRespiratoryCare",
+    "pulmonologyPFT",
+    "pulmonologyAndRespiratoryMedicine",
+    "pulmonology-sleep-study",
+    "pulmonaryAndSleepMedicine",
+    "Pulmonologist",
+    "lungTransplantationChestSurgery",
+    "interventionalPulmonologyAndChestMedicine",
+    "chestAndAllergy",
+    "chest medicine",
+    "Pulmonology and Respiratory Medicine",
+    "Chest Medicine",
+    "respiratoryMedicineAndInterventionalPulmonology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "count": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*ventilators?"
+    },
+    "age_group": {
+     "type": "enum",
+     "note": "review: an adult snakebite case must not be matched to a NICU ventilator",
+     "values": {
+      "neonatal": "neonat|newborn|\\bNICU|\\bSNCU",
+      "paediatric": "p(a)?ediatric|\\bPICU|child",
+      "adult": "\\bICU|\\bMICU|\\bSICU|adult|intensive care"
+     }
+    }
+   }
+  },
+  "emergency_csection": {
+   "include": "caesar|cesar|\\bc-? ?section|\\bLSCS\\b|lower segment|\\bCEmONC\\b|comprehensive emergency obstetric",
+   "exclude": "after (c|caes|ces)\\w*[- ]?section|VBAC|scar (endometriosis|ectopic)|cesarean scar|post[- ]?caesarean (wound|scar)",
+   "related": "high[- ]risk (pregnan|obstet|deliver|mother)|labou?r (room|ward|suite)|\\bLDRP?\\b|delivery|maternity|\\bPMSMA\\b|\\bJSSK\\b|\\bJSY\\b|blood bank|birthing|emergency obstetric|\\bB?EmON?C\\b|obstetric emergenc|operative (vaginal )?deliver",
+   "quantity": "(\\d[\\d,]*)\\+?\\s*(deliveries|births|c-?sections|caesareans?|cesareans?|LSCS)",
+   "prereqs": {
+    "obstetrics": {
+     "text": "obstetric|gyn(a)?ecolog|maternity|\\bobg|\\bOB-?GYN",
+     "specialty_tags": [
+      "gynecologyandobstetrics",
+      "maternalandchildhealth",
+      "maternalfetalmedicineorperinatology",
+      "obstetrics",
+      "obstetricsandgynaecology",
+      "obstetricsandgynecology",
+      "obstetricsandmaternitycare",
+      "obstetricsgynaecology"
+     ]
+    },
+    "operating_theatre": {
+     "text": "operat(ion|ing)[- ]?(theat|room|suite)|\\bOTs?\\b|modular (OT|theat)|surgical (theat|suite)",
+     "specialty_tags": []
+    },
+    "anaesthesia": {
+     "text": "an(a)?esthe(s|t)",
+     "specialty_tags": [
+      "anaesthesia",
+      "anaesthesiology",
+      "anesthesia",
+      "anesthesiology",
+      "anesthesiologyandcriticalcare",
+      "criticalcaremedicineanesthesiology",
+      "obstetricanesthesiology"
+     ]
+    }
+   },
+   "specialty_values": [],
+   "prerequisite_specialty_values": [
+    "gynecologyAndObstetrics",
+    "anesthesia",
+    "anesthesiology",
+    "obstetricsAndGynaecology",
+    "obstetricsAndGynecology",
+    "pediatricAnesthesiology",
+    "neuroanesthesiology",
+    "obstetricAnesthesiology",
+    "anaesthesiology",
+    "ambulatoryAnesthesiology",
+    "Anaesthesiology",
+    "Obstetrics & Gynaecology",
+    "anaesthesia",
+    "obstetrics",
+    "regionalAnesthesiologyAndAcutePain",
+    "neuroAnesthesiology",
+    "Anaesthesia",
+    "gynaecologyAndObstetrics",
+    "gynecologistAndObstetrician",
+    "placentalAbruption",
+    "perioperativeAnesthesia",
+    "pediatricAnesthesia",
+    "oncoanesthesiology",
+    "obstetrics_gynecology",
+    "obstetricsAndGynacology",
+    "obstetricAndGynecology",
+    "neuroAnaesthesiology",
+    "hospiceAndPalliativeMedicineAnesthesiology",
+    "gynecologyObstetrics",
+    "gynecologyObstetricSurgery",
+    "gynecologyAndObstetricsSurgery",
+    "OBSTETRICS & GYNAECOLOGY",
+    "gynecologist/obstetrician",
+    "departmentOfEndoscopicAnesthesia",
+    "anesthesiologist",
+    "anaesthesiologist",
+    "Obstetrics&Gynaecology",
+    "Obstetrics and Gynaecology",
+    "Obstetrics And Gynaecology",
+    "Obstetrics & Gynecology",
+    "OBG",
+    "Gynaecology & obstetrics",
+    "Anesthesiology Department",
+    "Anesthesiology",
+    " Obstetrics?",
+    "transplantAnesthesiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "blood_on_site": {
+     "type": "bool",
+     "note": "",
+     "from_service": "blood_bank"
+    },
+    "obstetric_hdu": {
+     "type": "bool",
+     "note": "",
+     "pattern": "obstetric (hdu|icu|high dependency)"
+    },
+    "laqshya": {
+     "type": "bool",
+     "note": "external/laqshya_master is the stronger source",
+     "pattern": "laqshya"
+    }
+   }
+  },
+  "institutional_delivery": {
+   "include": "normal (vaginal )?deliver|vaginal (birth|deliver)|labou?r (room|ward|suite|theatre|unit)|\\bLDRP?\\b|institutional deliver|child ?birth|birthing|painless (labou?r|deliver)|labou?r analgesia|maternity (ward|services|care|unit|home|hospital)|\\d[\\d,]*\\+? deliveries|deliveries (per|a|every|conducted|annually)|deliver(y|ies) (room|ward|suite)|obstetric (care|services)|\\bJSSK\\b|\\bJSY\\b",
+   "exclude": "drug deliver|home deliver|medicine deliver|service deliver|care deliver|healthcare deliver",
+   "related": "antenatal|postnatal|obstetric|maternity|delivery",
+   "quantity": "(\\d[\\d,]*)\\+?\\s*(deliveries|births)|(\\d+)\\s*labou?r (beds|tables|rooms)",
+   "specialty_values": [
+    "obstetricsAndMaternityCare",
+    "antenatalCare",
+    "antenatalAndPostnatalCare",
+    "midwifery",
+    "pregnancyCare"
+   ],
+   "prerequisite_specialty_values": [
+    "gynecologyAndObstetrics",
+    "obstetricsAndGynaecology",
+    "obstetricsAndGynecology",
+    "Obstetrics & Gynaecology",
+    "obstetrics",
+    "gynaecologyAndObstetrics",
+    "gynecologist/obstetrician",
+    "obstetricsAndGynacology",
+    "obstetricAndGynecology",
+    "gynecologyObstetrics",
+    "gynecologyObstetricSurgery",
+    "gynecologyAndObstetricsSurgery",
+    "gynecologistAndObstetrician",
+    "Obstetrics And Gynaecology",
+    "Obstetrics&Gynaecology",
+    "Obstetrics and Gynaecology",
+    "Obstetrics & Gynecology",
+    "OBSTETRICS & GYNAECOLOGY",
+    "OBG",
+    "Gynaecology & obstetrics",
+    " Obstetrics?",
+    "obstetrics_gynecology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "deliveries": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d[\\d,]*)\\+?\\s*(deliveries|births)"
+    },
+    "jssk_jsy": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bJSSK\\b|\\bJSY\\b|janani"
+    }
+   }
+  },
+  "high_risk_pregnancy": {
+   "include": "high[- ]risk (pregnan|obstet|deliver|mother|antenatal|preg)|(maternal|feto)[- ]?(fetal|maternal) medicine|f(o)?etal medicine|\\bMFM\\b|perinatolog|obstetric (icu|hdu|high dependency|intensive)|eclampsia|complicated pregnan",
+   "related": "antenatal|\\bANC\\b|obstetric|pregnan|level (ii|2) (scan|ultrasound)",
+   "specialty_values": [
+    "maternalFetalMedicineOrPerinatology",
+    "foetalMedicine",
+    "fetalMedicineAndRadiology",
+    "highRiskPregnancyAndInfertility",
+    "fetalAndMaternalMedicine",
+    "fetomaternalMedicine",
+    "highRiskPregnancyCare"
+   ],
+   "prerequisite_specialty_values": [
+    "gynecologyAndObstetrics",
+    "obstetricsAndGynaecology",
+    "obstetricsAndGynecology",
+    "Obstetrics & Gynaecology",
+    "obstetrics",
+    "gynaecologyAndObstetrics",
+    "gynecologist/obstetrician",
+    "obstetricsAndGynacology",
+    "obstetricAndGynecology",
+    "gynecologyObstetrics",
+    "gynecologyObstetricSurgery",
+    "gynecologyAndObstetricsSurgery",
+    "gynecologistAndObstetrician",
+    "Obstetrics And Gynaecology",
+    "Obstetrics&Gynaecology",
+    "Obstetrics and Gynaecology",
+    "Obstetrics & Gynecology",
+    "OBSTETRICS & GYNAECOLOGY",
+    "OBG",
+    "Gynaecology & obstetrics",
+    " Obstetrics?",
+    "obstetrics_gynecology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "obstetric_hdu": {
+     "type": "bool",
+     "note": "",
+     "pattern": "obstetric (hdu|icu|high dependency)"
+    }
+   }
+  },
+  "nicu": {
+   "include": "\\bNICU|\\bNICCU|\\bSNCU|neonatal (intensive|icu|critical)|newborn (intensive|icu|care unit)|special newborn care|level[- ]?(ii|iii|2|3)\\b.{0,20}(nicu|neonat)|neonatal ventilat",
+   "exclude": "ambulance|transport",
+   "related": "neonat|newborn|nursery|incubator|radiant warmer|phototherapy|premature|preterm|kangaroo|\\bKMC\\b",
+   "quantity": "(\\d+)\\s*-?\\s*(bed(ded|s)?|incubators?|warmers?|ventilators?|cots?)|level[- ]?(ii|iii|2|3)\\b",
+   "prereqs": {
+    "paeds_or_neonatology": {
+     "text": "p(a)?ediatric|neonatolog|neonatologist|paediatrician|pediatrician",
+     "specialty_tags": [
+      "neonatalperinatal",
+      "neonatalperinatalmedicine",
+      "neonatology",
+      "neonatologyperinatalmedicine",
+      "paediatrics",
+      "paediatricsandneonatology",
+      "pediatriccriticalcaremedicine",
+      "pediatricneonatology",
+      "pediatrics",
+      "pediatricsandneonatology",
+      "pediatricsneonatology"
+     ]
+    },
+    "incubator_warmer_ventilator": {
+     "text": "incubator|radiant warmer|\\bwarmers?\\b|ventilator|\\bCPAP\\b|bubble cpap|phototherapy|ventilation",
+     "specialty_tags": []
+    }
+   },
+   "specialty_values": [
+    "NICU/ PICU/ Neonatology",
+    "neonatalCriticalCare",
+    "neonatalIntensiveCareUnit",
+    "pediatricsNeonatalCriticalCare"
+   ],
+   "prerequisite_specialty_values": [
+    "pediatrics",
+    "neonatologyPerinatalMedicine",
+    "paediatrics",
+    "pediatricsAndNeonatology",
+    "neonatology",
+    "paediatricsAndNeonatology",
+    "neonatalPerinatalMedicine",
+    "Paediatrics",
+    "neonatalPerinatal",
+    "pediatricNeonatology",
+    "pediatricsNeonatology",
+    "paediatricsNeonatology",
+    "paediatric",
+    "neonatalSurgery",
+    "neonatalAndPaediatricSurgery",
+    "pediatrician",
+    "pediatricNeontology",
+    "paediatricNeonatology",
+    "paediatricMedicine",
+    "paediatricCare",
+    "neonatalogyPerinatalMedicine",
+    "neonatalPediatricSurgery",
+    "neonatalCare",
+    "neonatalAndPaediatrics",
+    "PAEDIATRICS & NEONATOLOGY",
+    "adolescentPaediatricianCouncillor",
+    "Pediatrics & Neonatology",
+    "Pediatrics",
+    "Peadiatrics & Neonatology",
+    "Paediatrics & Neonatology",
+    "Paediatrics & Neonatal Care",
+    "NeonatologyPerinatalMedicine",
+    "Neonatology",
+    "Neonatal-Perinatal",
+    "Neonatal and Paediatric Surgery",
+    "pediatricsNeonatalogy"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "level": {
+     "type": "enum",
+     "note": "NBSU = stabilise and refer; SNCU = level II, no ventilation; NICU-III = ventilation",
+     "values": {
+      "NICU-III": "level[- ]?(iii|3)\\b|neonatal ventilat|ventilat\\w*.{0,30}(neonat|newborn|nicu)|(neonat|newborn|nicu).{0,30}ventilat|\\bHFO|surfactant",
+      "SNCU": "\\bSNCU\\b|special newborn care|level[- ]?(ii|2)\\b",
+      "NBSU": "\\bNBSU\\b|newborn stabili[sz]ation"
+     }
+    },
+    "ventilation": {
+     "type": "bool",
+     "note": "",
+     "pattern": "ventilat|\\bCPAP\\b|surfactant|\\bHFO"
+    },
+    "beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    }
+   }
+  },
+  "safe_abortion_mtp": {
+   "include": "\\bMTP\\b|medical termination of pregnancy|termination of pregnancy|safe abortion|abortion (services?|care|facilit\\w*|procedures?)|comprehensive abortion|manual vacuum aspiration|medical (method of )?abortion",
+   "exclude": "MTP joint|metatarsophalang|spontaneous abortion|missed abortion|recurrent (abortion|miscarriage|pregnancy loss)|habitual abortion|threatened abortion",
+   "related": "abortion|\\bD ?& ?C\\b|dilatation and curettage|miscarriage",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "second_trimester": {
+     "type": "bool",
+     "note": "",
+     "pattern": "second trimester|mid[- ]trimester|(20|24) weeks"
+    }
+   }
+  },
+  "cardiac_surgery": {
+   "include": "\\bCABG|bypass (graft|surg)|open[- ]heart|valve (replace|repair|surg)|\\b(AVR|MVR|DVR)\\b|cardiac surg|heart surg|cardio[- ]?thoracic|cardio[- ]vascular (and|&) thoracic|\\bCTVS\\b|\\bCVTS\\b|heart transplant|congenital heart (surg|defect surg)|cardiac (OT|operation theat)",
+   "exclude": "cardio[- ]?thoracic radiolog|cardiac an(a)?esthe(s|t)|cardiothoracic imaging|bariatric|gastric bypass|transcatheter|\\bTAVR|\\bTAVI|\\bTMVR|percutaneous|balloon valv|brain bypass|EC-IC|without surgery|non[- ]surgical|glaucoma|trabeculectomy|neurovascular|neuro[- ]?vascular bypass|peripheral bypass|fem\\w*[- ]?pop\\w* bypass|vascular bypass|limb bypass",
+   "related": "angioplast|cath(eterisation|eterization)? ?lab|\\bPTCA\\b|stent|interventional cardio|angiograph|pacemaker",
+   "quantity": "(\\d[\\d,]*)\\+?\\s*(open[- ]heart|cardiac surg|heart surg|CABG|bypass)",
+   "prereqs": {
+    "cardiothoracic_surgeon_or_dept": {
+     "text": "cardio[- ]?thoracic|\\bCTVS\\b|\\bCVTS\\b|cardiac surgeon|cardiothoracic surgeon|department of cardiac surg",
+     "specialty_tags": [
+      "cardiacsciences",
+      "cardiacsurgery",
+      "cardiothoracicandvascularsurgery",
+      "cardiothoracicsurgery",
+      "cardiovascularsurgery",
+      "pediatriccardiacsurgery"
+     ]
+    },
+    "cathlab_or_heart_lung": {
+     "text": "cath(eterisation|eterization)? ?lab|heart[- ]lung machine|perfusion|\\bIABP\\b|\\bECMO\\b|cardiac (OT|operation theat)|bypass machine",
+     "specialty_tags": []
+    }
+   },
+   "negation_extra": "without (surgery|open|incision)|non[- ]surgical|minimally invasive alternative",
+   "specialty_values": [
+    "cardiacSurgery",
+    "cardiothoracicSurgery",
+    "cardioThoracicSurgery",
+    "Cardio Thoracic Surgery",
+    "cardiovascularSurgery",
+    "heartTransplant",
+    "pediatricCardiacSurgery",
+    "cardiothoracicVascularSurgery",
+    "cardiovascularAndThoracicSurgery",
+    "cardiothoracic",
+    "cardiologyAndCardiothoracicSurgery",
+    "cardioThoracicAndVascularSurgery",
+    "CTVS",
+    "cardiacSurgeon",
+    "heartValveCentre",
+    "ctvs",
+    "cardiothoracicSurgeon",
+    "cardiothoracicAndCardiovascularSurgery",
+    "cardiologyCardiacSurgery",
+    "cardioThoracicVascularSurgery",
+    "Cardio-Thoracic",
+    "cardiacAndCardiothoracicSurgery",
+    "cardiac-surgery",
+    "cardiac surgeon",
+    "Pediatric CVTS - Cardio Vascular and Thoracic Surgery",
+    "Ctvs",
+    "Cardiothoracic Surgery",
+    "CVTS",
+    "valvularHeartSurgery"
+   ],
+   "prerequisite_specialty_values": [
+    "cardiology",
+    "anesthesia",
+    "pediatricCardiology",
+    "anesthesiology",
+    "paediatricCardiology",
+    "pediatricAnesthesiology",
+    "neuroanesthesiology",
+    "Cardiology",
+    "anaesthesiology",
+    "nonInvasiveCardiology",
+    "ambulatoryAnesthesiology",
+    "cardiologist",
+    "preventiveCardiology",
+    "cardiacSciences",
+    "cardiacAndPulmonaryRehabilitation",
+    "Anaesthesiology",
+    "anaesthesia",
+    "cardiacAnesthesia",
+    "cardiacAnesthesiology",
+    "cardiacCare",
+    "neuroAnesthesiology",
+    "nonInvasiveCardiologyCentre",
+    "regionalAnesthesiologyAndAcutePain",
+    "cardiacScience",
+    "paediatricCardiacCentre",
+    "cardiacElectrophysiology",
+    "Non-Invasive Cardiology",
+    "Anaesthesia",
+    "Pediatric Cardiology",
+    "cardiologyAndElectrophysiology",
+    "hospiceAndPalliativeMedicineAnesthesiology",
+    "cardiologyInterventional",
+    "cardiologyTests",
+    "cardiologyThrombolysis",
+    "clinicalCardiologist",
+    "clinicalCardiology",
+    "departmentOfEndoscopicAnesthesia",
+    "diagnosticCardiology",
+    "echocardiologist",
+    "heartFailureClinic",
+    "non-invasiveCardiology",
+    "neuroAnaesthesiology",
+    "non-invasiveCardiologyCentre",
+    "noninvasiveCardiology",
+    "oncoanesthesiology",
+    "paediatricCardiacSciences",
+    "pediatricAnesthesia",
+    "pediatricCardiologist",
+    "perioperativeAnesthesia",
+    "preventiveCardiologist",
+    "transplantAnesthesiology",
+    "cardiologyCare",
+    "Preventive Cardiology",
+    "cardiologyAndCriticalCoronaryCare",
+    "cardiacRehabilitationAndPhysiotherapy",
+    "Anesthesiology",
+    "Anesthesiology Department",
+    "CARDIOLOGY & ENT",
+    "Cardiac Diseases",
+    "Cardiac Electrophysiology",
+    "Cardiac Rehabilitation",
+    "Cardiac Sciences",
+    "Cardiology and Critical Coronary Care",
+    "Non-Interventional Cardiology",
+    "Sports Cardiology",
+    "adultCardiacAnesthesiology",
+    "adultCongenitalCardiologist",
+    "anaesthesiologist",
+    "anesthesiologist",
+    "cardiac",
+    "cardiacAnaesthesiology",
+    "cardiacDiagnostics",
+    "cardiacElectroPhysiologist",
+    "cardiacElectroPhysiology",
+    "cardiacInvasiveProcedures",
+    "cardiacPhysiotherapy",
+    "womensCardiologyCare"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "paediatric": {
+     "type": "bool",
+     "note": "",
+     "pattern": "p(a)?ediatric cardiac|congenital"
+    }
+   }
+  },
+  "cath_lab_angioplasty": {
+   "include": "cath(eteri[sz]ation)?[- ]?lab|angioplast|\\bPTCA\\b|\\bPCI\\b|coronary (stent|intervention|angiograph)|\\bCAG\\b|interventional cardiolog|primary angioplasty|coronary stent",
+   "exclude": "neuro[- ]?(cath|interven)|peripheral angioplast|renal angioplast|carotid|ureteric stent|\\bDJ stent|biliary|ERCP|o?esophageal stent|venous angioplast|fistula angioplast|balloon sinuplast",
+   "related": "angiograph|stent|pacemaker|\\bECG\\b|echocardiograph|\\bTMT\\b|cardiolog",
+   "quantity": "(\\d+)\\s*cath[- ]?labs?|(single|dual|bi)[- ]?plane",
+   "negation_extra": "referred for angioplast|angioplasty (is )?not",
+   "specialty_values": [
+    "interventionalCardiology",
+    "interventionalCardiologyCentre",
+    "Interventional Cardiology",
+    "coronaryAngiography",
+    "Interventional Cardiologist",
+    "Transradial Cardiology",
+    "balloonAngioplasty",
+    "cardiacCatheterisation",
+    "cardiologyAndInterventionalCardiology",
+    "coronaryAngioplasty",
+    "interventional cardiology",
+    "transradialCardiology"
+   ],
+   "prerequisite_specialty_values": [
+    "cardiology",
+    "pediatricCardiology",
+    "paediatricCardiology",
+    "Cardiology",
+    "nonInvasiveCardiology",
+    "cardiacAndPulmonaryRehabilitation",
+    "cardiacSciences",
+    "cardiologist",
+    "preventiveCardiology",
+    "cardiacCare",
+    "nonInvasiveCardiologyCentre",
+    "cardiacScience",
+    "paediatricCardiacCentre",
+    "Pediatric Cardiology",
+    "cardiacElectrophysiology",
+    "Non-Invasive Cardiology",
+    "diagnosticCardiology",
+    "cardiologyCare",
+    "cardiologyInterventional",
+    "cardiologyTests",
+    "cardiologyThrombolysis",
+    "clinicalCardiologist",
+    "clinicalCardiology",
+    "preventiveCardiologist",
+    "echocardiologist",
+    "heartFailureClinic",
+    "non-invasiveCardiology",
+    "non-invasiveCardiologyCentre",
+    "noninvasiveCardiology",
+    "paediatricCardiacSciences",
+    "pediatricCardiologist",
+    "cardiologyAndCriticalCoronaryCare",
+    "cardiologyAndElectrophysiology",
+    "adultCongenitalCardiologist",
+    "cardiacRehabilitationAndPhysiotherapy",
+    "Non-Interventional Cardiology",
+    "CARDIOLOGY & ENT",
+    "Cardiac Diseases",
+    "Cardiac Electrophysiology",
+    "Cardiac Rehabilitation",
+    "Cardiac Sciences",
+    "Cardiology and Critical Coronary Care",
+    "Preventive Cardiology",
+    "cardiacPhysiotherapy",
+    "Sports Cardiology",
+    "cardiac",
+    "cardiacDiagnostics",
+    "cardiacElectroPhysiologist",
+    "cardiacElectroPhysiology",
+    "cardiacInvasiveProcedures",
+    "womensCardiologyCare"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "primary_pci_24x7": {
+     "type": "bool",
+     "note": "",
+     "pattern": "primary (pci|angioplasty|ptca)|(24 ?(x|/) ?7|round[- ]the[- ]clock).{0,40}(cath|angioplast|pci)|(cath|angioplast|pci).{0,40}(24 ?(x|/) ?7|round[- ]the[- ]clock)"
+    },
+    "labs": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*cath[- ]?labs?"
+    }
+   }
+  },
+  "stemi_thrombolysis": {
+   "include": "thromboly\\w*|fibrinoly\\w*|tenecteplase|streptokinase|reteplase|\\bSTEMI\\b|chest pain (unit|clinic|cent\\w*)|heart attack (care|management|treatment)",
+   "exclude": "stroke|brain attack|cerebr|isch(a)?emic brain|pulmonary embol|\\bDVT\\b|deep vein|catheter[- ]directed|peripheral|limb|venous|intra[- ]?arterial",
+   "related": "myocardial infarction|heart attack|\\bECG\\b|\\bMI\\b|cardiac emergenc|\\bI?CCU\\b",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [
+    "cardiology",
+    "pediatricCardiology",
+    "paediatricCardiology",
+    "Cardiology",
+    "nonInvasiveCardiology",
+    "cardiacAndPulmonaryRehabilitation",
+    "cardiacSciences",
+    "cardiologist",
+    "preventiveCardiology",
+    "cardiacCare",
+    "nonInvasiveCardiologyCentre",
+    "cardiacElectrophysiology",
+    "cardiacScience",
+    "Non-Invasive Cardiology",
+    "Pediatric Cardiology",
+    "cardiologyCare",
+    "cardiologyInterventional",
+    "cardiologyTests",
+    "cardiologyThrombolysis",
+    "clinicalCardiologist",
+    "diagnosticCardiology",
+    "clinicalCardiology",
+    "preventiveCardiologist",
+    "echocardiologist",
+    "non-invasiveCardiology",
+    "non-invasiveCardiologyCentre",
+    "noninvasiveCardiology",
+    "paediatricCardiacSciences",
+    "pediatricCardiologist",
+    "cardiologyAndCriticalCoronaryCare",
+    "cardiologyAndElectrophysiology",
+    "adultCongenitalCardiologist",
+    "cardiacRehabilitationAndPhysiotherapy",
+    "Non-Interventional Cardiology",
+    "CARDIOLOGY & ENT",
+    "Cardiac Diseases",
+    "Cardiac Electrophysiology",
+    "Cardiac Rehabilitation",
+    "Cardiac Sciences",
+    "Cardiology and Critical Coronary Care",
+    "Preventive Cardiology",
+    "cardiacPhysiotherapy",
+    "Sports Cardiology",
+    "cardiac",
+    "cardiacDiagnostics",
+    "cardiacElectroPhysiologist",
+    "cardiacElectroPhysiology",
+    "cardiacInvasiveProcedures",
+    "womensCardiologyCare"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "agent": {
+     "type": "enum",
+     "note": "",
+     "values": {
+      "tenecteplase": "tenecteplase",
+      "streptokinase": "streptokinase",
+      "reteplase": "reteplase",
+      "alteplase": "alteplase"
+     }
+    }
+   }
+  },
+  "stroke_care": {
+   "include": "stroke (unit|care|centre|center|ready|management|treatment|thrombolysis|team|clinic|program)|acute (isch(a)?emic )?stroke|(mechanical|endovascular) thrombectomy|brain attack|thromboly\\w*.{0,40}stroke|stroke.{0,40}thromboly",
+   "exclude": "heat ?stroke|sun ?stroke|post[- ]?stroke|stroke rehab|stroke (prevention|risk|awareness)|rehabilitation",
+   "related": "\\bstroke\\b|neurolog|thromboly|\\bt-?PA\\b|alteplase|tenecteplase",
+   "specialty_values": [
+    "vascularNeurology",
+    "neurointerventionalSurgery",
+    "endovascularNeurosurgery",
+    "brainHaemorrhageStroke",
+    "neuroIntervention",
+    "neurointervention",
+    "neurointerventionAndStroke",
+    "neurovascularDisorders",
+    "strokeCentre",
+    "strokeManagement"
+   ],
+   "prerequisite_specialty_values": [
+    "neurology",
+    "pediatricNeurology",
+    "childNeurology",
+    "brainInjuryNeurology",
+    "neurosciences",
+    "paediatricNeurology",
+    "Neurology",
+    "neuroSciences",
+    "neuroscience",
+    "Neuro Sciences",
+    "Neuroscience",
+    "brainInjuryMedicinePMR",
+    "paediatricNeurosciences",
+    "Neurosciences",
+    "Pediatric Neurology",
+    "neuroScience"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "thrombolysis": {
+     "type": "bool",
+     "note": "",
+     "pattern": "thromboly|\\bt-?PA\\b|alteplase|tenecteplase"
+    },
+    "thrombectomy": {
+     "type": "bool",
+     "note": "",
+     "pattern": "thrombectomy"
+    },
+    "ct_on_site": {
+     "type": "bool",
+     "note": "",
+     "from_service": "ct_scan"
+    }
+   }
+  },
+  "neurosurgery": {
+   "include": "neuro[- ]?surg|brain surg|craniotom|craniectom|cranial surg|\\bVP shunt|ventriculo[- ]?peritoneal|brain tumou?r (surg|remov|resect|excis)|neuro[- ]?endoscop|spinal cord (surg|tumou?r)|aneurysm clipp",
+   "exclude": "craniotomy[- ]+(of )?(dead )?f(o)?etus|dead f(o)?etus",
+   "related": "spine surg|spinal surg|neurolog|head injur|\\bEEG\\b",
+   "specialty_values": [
+    "neurosurgery",
+    "spineNeurosurgery",
+    "skullBaseNeurosurgery",
+    "pediatricNeurosurgery",
+    "cerebrovascularNeurosurgery",
+    "functionalNeurosurgery",
+    "peripheralNerveNeurosurgery",
+    "Neurosurgery",
+    "neuroSurgery",
+    "neuroOncologyNeurosurgery",
+    "neurotraumaNeurosurgery",
+    "neurocriticalCareNeurosurgery",
+    "neurovascularSurgery",
+    "vascularNeurosurgery",
+    "neurologyAndNeurosurgery",
+    "neuroEndovascularTherapy",
+    "neurosurgeryAndSpineSurgery",
+    "skullBaseSurgery",
+    "neuroplasticNeurosurgery",
+    "pediatricPlasticSurgeryNeurosurgery",
+    "pediatricPlasticSurgeryAndNeurosurgery",
+    "pediatricNeurosurgeryAndTrauma",
+    "paediatricNeurosurgery",
+    "neurosurgicalPediatrics",
+    "neurosurgerySpineSurgery",
+    "neurosurgeon",
+    "ENT and Skull Base Surgery",
+    "neurology-neuro-surgery",
+    "neuroCriticalCareNeurosurgery",
+    "minimalInvasiveNeurosurgery",
+    "endoscopicNeuroSurgery",
+    "endoscopicMinimallyInvasiveNeurosurgery",
+    "Nerve Tumor Treatment",
+    "Nerve Surgeries",
+    " skullBaseNeurosurgery",
+    "spinalNeurosurgery"
+   ],
+   "prerequisite_specialty_values": [
+    "anesthesia",
+    "anesthesiology",
+    "orthopedicSpineSurgery",
+    "brainInjuryNeurology",
+    "pediatricAnesthesiology",
+    "neuroanesthesiology",
+    "neurosciences",
+    "anaesthesiology",
+    "spineSurgery",
+    "ambulatoryAnesthesiology",
+    "neuroSciences",
+    "neuroscience",
+    "Anaesthesiology",
+    "anaesthesia",
+    "neuroAnesthesiology",
+    "regionalAnesthesiologyAndAcutePain",
+    "spineCare",
+    "Neuroscience",
+    "Neuro Sciences",
+    "Anaesthesia",
+    "brainInjuryMedicinePMR",
+    "minimallyInvasiveSpineSurgery",
+    "paediatricNeurosciences",
+    "spinalSurgery",
+    "oncoanesthesiology",
+    "minimalInvasiveSpineSurgery",
+    "neuroAnaesthesiology",
+    "neuroAndSpineSurgery",
+    "neuroScience",
+    "neuroSpinalSurgery",
+    "spinalInfections",
+    "pediatricAnesthesia",
+    "perioperativeAnesthesia",
+    "hospiceAndPalliativeMedicineAnesthesiology",
+    "spine-surgery",
+    "spineEndoscopy",
+    "jointReplacementAndSpineSurgery",
+    "Anesthesiology Department",
+    "fullEndoscopicSpineSurgery",
+    "endoscopicAssistedSpineSurgery",
+    "departmentOfEndoscopicAnesthesia",
+    "brainSpineSurgery",
+    "arthroscopicAndSpineSurgery",
+    "anesthesiologist",
+    "anaesthesiologist",
+    "Spine Surgery",
+    "Spine & Deformity Connections",
+    "Neurosciences & Spinal Disorders",
+    "Neurosciences",
+    "Anesthesiology",
+    "transplantAnesthesiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "spine_surgery": {
+     "type": "bool",
+     "note": "spine is an attribute, not the service (v1.1)",
+     "pattern": "spin(e|al) surg|discectomy|laminectomy|spinal fusion|spine (cent|unit)"
+    },
+    "emergency_head_injury": {
+     "type": "bool",
+     "note": "",
+     "pattern": "head injur|\\bTBI\\b|traumatic brain|emergency craniotom|extradural|subdural"
+    }
+   }
+  },
+  "dialysis": {
+   "include": "dialy[sz]|haemodialy|hemodialy|\\bCAPD\\b|\\bCRRT\\b|\\bSLED\\b|renal replacement|artificial kidney|\\bPMNDP\\b|national dialysis",
+   "exclude": "dialysis profile|profile test",
+   "related": "nephrolog|nephrologist|kidney (care|centre|center|disease|failure)|renal (care|failure|unit)",
+   "quantity": "(dialysis|haemodialysis|hemodialysis) (machines?|stations?|beds?|chairs?)\\s*[:=-]?\\s*(\\d+)|(\\d+)\\s*-?\\s*(bed(ded|s)?|machines?|stations?|chairs?)",
+   "prereqs": {
+    "nephrology": {
+     "text": "nephrolog",
+     "specialty_tags": [
+      "nephrology",
+      "nephrologyanddialysis",
+      "nephrologyandurology",
+      "nephrologyincludingdialysis",
+      "paediatricnephrology",
+      "pediatricnephrology"
+     ]
+    },
+    "dialysis_unit_or_machine": {
+     "text": "dialy\\w* (machine|station|chair|bed)s?|(machine|station|chair|bed)s? (for|of) (haemo|hemo)?dialy|\\bRO (water|plant|system)|reverse osmosis|fresenius|nipro|b\\.? ?braun|\\bCRRT\\b|ha?emodialysis machine",
+     "specialty_tags": []
+    }
+   },
+   "exclude_clause": "^(?!.*\\b(units?|cent(re|er)s?|machines?|sessions?|shifts?)\\b).*(fistula|permacath|dialysis catheter|line (insertion|management)|dialysis access\\b|access (creation|salvage|surgery))",
+   "negation_extra": "dialysis (is )?not|no dialysis",
+   "specialty_values": [
+    "dialysis",
+    "nephrologyIncludingDialysis",
+    "nephrologyAndDialysis",
+    "pediatricDialysis",
+    "nephrologyWithDialysis",
+    "AV Fistula creation for dialysis",
+    "Nephrology & Dialysis",
+    "acuteChronicKidneyFailureHemodialysis",
+    "haemodialysis",
+    "nephrologyDialysis",
+    "paediatricDialysis"
+   ],
+   "prerequisite_specialty_values": [
+    "nephrology",
+    "pediatricNephrology",
+    "Nephrology",
+    "paediatricNephrology",
+    "nephrologyAndUrology",
+    "renalSciences",
+    "nephrologyAndRenalScience",
+    "urologyAndNephrology",
+    "preventiveNephrology",
+    "nephrologyUrology",
+    "nephrologyTransplantMedicine",
+    "kidneySciences",
+    "nephrology-urology",
+    "nephrology & renal science",
+    "kidneyHealthCentre",
+    "Renal Sciences",
+    "Nephrology and Renal Science",
+    "urologyNephrology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "machines": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*((dialysis|ha?emodialysis) )?(machines?|stations?|chairs?|beds?)"
+    },
+    "shifts": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d|two|three|four)\\s*shifts?"
+    },
+    "hbv_machine": {
+     "type": "bool",
+     "note": "desirable, not confirmed as a PMNDP rule",
+     "pattern": "(hbv|hcv|hepatitis|sero-?positive|isolation).{0,30}(machine|dialy)|separate machine"
+    },
+    "free_under_pmndp": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bPMNDP\\b|pradhan mantri (national )?dialysis|free (of cost )?dialysis|dialysis (is )?free"
+    },
+    "emergency_dialysis": {
+     "type": "bool",
+     "note": "emergency (AKI) dialysis needs an ICU; standalone PPP centres do maintenance only",
+     "pattern": "emergency dialysis|acute (kidney|renal) (injury|failure)|\\bAKI\\b|\\bCRRT\\b|\\bSLED\\b|bedside dialysis|icu dialysis"
+    },
+    "peritoneal": {
+     "type": "bool",
+     "note": "",
+     "pattern": "peritoneal|\\bCAPD\\b"
+    },
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    }
+   }
+  },
+  "kidney_transplant": {
+   "include": "(kidney|renal) transplant|donor nephrectomy|renal allograft|living donor kidney|transplant nephrolog",
+   "exclude": "post[- ]?transplant (care|follow)|transplant (counsel|evaluation) only|transplant follow[- ]?up|follow[- ]?up (clinic )?(for|after) (kidney |renal )?transplant",
+   "related": "nephrolog|dialysis|transplant",
+   "quantity": "(\\d[\\d,]*)\\+?\\s*(kidney|renal) transplants",
+   "specialty_values": [
+    "renalTransplantationUrology",
+    "kidneyTransplantation",
+    "renalTransplantation",
+    "Kidney Transplant",
+    "kidneyTransplantationCentre",
+    "urologyRenalTransplant",
+    "ABO-i Kidney Transplant",
+    "Kidney Transplant Surgery",
+    "RenalTransplantationUrology",
+    "Urology & Renal Transplant Surgery",
+    "kidneyTransplant",
+    "nephrologyAndRenalTransplant",
+    "pediatricKidneyTransplant",
+    "renalSciencesAndKidneyTransplant"
+   ],
+   "prerequisite_specialty_values": [
+    "urology",
+    "nephrology",
+    "transplantSurgery",
+    "pediatricUrology",
+    "pediatricNephrology",
+    "femaleUrology",
+    "Urology",
+    "neuroUrology",
+    "Nephrology",
+    "paediatricNephrology",
+    "organTransplant",
+    "microsurgeryAndTransplantPlasticSurgery",
+    "liverTransplantation",
+    "reconstructiveUrology",
+    "urologyAndAndrology",
+    "organTransplantation",
+    "liverTransplant",
+    "laproscopicUrology",
+    "nephrologyAndUrology",
+    "renalSciences",
+    "lungTransplant",
+    "neurourology",
+    "urologicalSurgery",
+    "liverTransplantationCentre",
+    "hairTransplant",
+    "Liver Transplant",
+    "liverTransplantationAndHepatobiliarySurgery",
+    "lungTransplantation",
+    "multiVisceralAndAbdominalOrganTransplant",
+    "nephrology & renal science",
+    "nephrology-urology",
+    "nephrologyAndRenalScience",
+    "nephrologyTransplantMedicine",
+    "nephrologyUrology",
+    "neuroUrologyAndUrodynamicsCentre",
+    "paediatricSurgeryAndPediatricUrology",
+    "paediatricUrology",
+    "pancreasTransplantation",
+    "pancreaticTransplantationCentre",
+    "pediatricLiverTransplantation",
+    "preventiveNephrology",
+    "roboticUrology",
+    "solidOrganTransplantation",
+    "stemCellTransplant",
+    "surgicalGastroenterologyAndLiverTransplantation",
+    "transplantImmunologyAndImmunogenetics",
+    "transplantImmunologyImmunogenetics",
+    "urologyAndNephrology",
+    "urologyNephrology",
+    "liverTransplantAndHepatobiliarySciences",
+    "liverTransplantAndHepatobiliarySurgery",
+    "cornealTransplantSurgery",
+    "liverTransplantAndGISurgery",
+    "Urology and Andrology",
+    "EndoUrology",
+    "Hair Transplantation",
+    "Heart & Lung Transplant",
+    "Multi-organ Transplant",
+    "Nephrology and Renal Science",
+    "Renal Sciences",
+    "Robotic Urology",
+    "Stem Cell Transplant",
+    "Stem Cell Transplantation",
+    "UROLOGY",
+    "corneaTransplantation",
+    "liverTransplantAndBiliarySciences",
+    "cornealTransplantation",
+    "femaleUrologicalDisease",
+    "femaleUrologyCentre",
+    "hairTransplantSurgeon",
+    "heartAndLungTransplant",
+    "heartAndLungTransplantCentre",
+    "heartAndLungTransplantation",
+    "hematopoieticStemCellTransplant",
+    "kidneyHealthCentre",
+    "kidneySciences",
+    "urologyReconstructiveUroSurgery"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "deceased_donor": {
+     "type": "bool",
+     "note": "",
+     "pattern": "cadaver|deceased donor"
+    },
+    "count": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d[\\d,]*)\\+?\\s*(kidney|renal) transplants"
+    }
+   }
+  },
+  "chemotherapy": {
+   "include": "chemo-?therap|\\bchemo\\b|chemo ?port|medical oncolog|day ?care chemo|immuno-?therapy.{0,30}cancer|cancer.{0,30}immuno-?therapy|targeted therapy|hormon(e|al) therapy.{0,30}cancer|hemato-?oncolog|haemato-?oncolog",
+   "exclude": "chemoprophyla|chemosis|post[- ]?chemo|chemical",
+   "related": "oncolog|cancer|tumou?r board|regional cancer cent",
+   "quantity": "(\\d+)\\s*-?\\s*(bed(ded|s)?|chairs?)\\b.{0,20}(chemo|day ?care)",
+   "specialty_values": [
+    "medicalOncology",
+    "pediatricHematologyOncology",
+    "boneMarrowTransplant",
+    "pediatricOncology",
+    "paediatricOncology",
+    "haematoOncology",
+    "hematoOncology",
+    "paediatricHaematologyOncologyAndBMT",
+    "chemotherapy",
+    "boneMarrowTransplantation",
+    "Medical Oncology",
+    "hematoOncologyAndBMT",
+    "paediatricHematoOncologyAndBMT",
+    "pediatricHematoOncology",
+    "paediatricHaematologyAndBMT",
+    "clinicalHematologyHematoOncology",
+    "haematologyAndBMT",
+    "haematologyAndHaematoOncology",
+    "lumbarPunctureAndIntrathecalChemotherapy",
+    "paediatricBoneMarrowTransplant",
+    "pediatricHemato-oncology",
+    "paediatricHaematologyOncology",
+    "paediatricHematoOncology",
+    "paediatricHematologyOncology",
+    "pediatricHaematologyOncology",
+    "pediatricHemato-Oncology",
+    "carTCell",
+    "carTCellTherapy",
+    "Hematology & Hemato Oncology",
+    "boneMarrowTransplants",
+    "boneMarrowTransplantationUnit",
+    "bone marrow translant",
+    "bone marrow Transplant",
+    "adultAndPaediatricOncology",
+    "Paediatric Hemato Oncology & BMT",
+    "Hemato-Oncology",
+    "Hemato Oncology & BMT",
+    "Hemato Oncology",
+    "Haematology, Haemato-Oncology & Bone Marrow Transplant",
+    "Haematology & Haemato Oncology",
+    "Bone marrow Transplant",
+    "Bone Marrow Transplant",
+    "BONE MARROW TRANSPLANT",
+    "pediatricOncologyAndHematologyCentre"
+   ],
+   "prerequisite_specialty_values": [
+    "pathology",
+    "clinicalPathology",
+    "hematology",
+    "anatomicPathology",
+    "oncology",
+    "haematology",
+    "histopathology",
+    "cytopathology",
+    "histopathologyLaboratory",
+    "Hematology",
+    "Pathology",
+    "cancerCare",
+    "Histopathology",
+    "Oncology",
+    "Haematology",
+    "haematologyLaboratory",
+    "Cytopathology",
+    "haematologyAndHaematoncology",
+    "hematologyOncology",
+    "oncopathology",
+    "histoPathology",
+    "molecularPathology",
+    "histocytopathology",
+    "clinicalHematology",
+    "clinicalHaematology",
+    "Cancer Care",
+    "specialisedPediatricHematologyAndOncologyServices",
+    "pediatricHaematology",
+    "cancerPathology",
+    "clinicalHermatology",
+    "generalPathology",
+    "haematologist",
+    "haematopathology",
+    "headAndNeckCancer",
+    "hematologyLaboratory",
+    "hematopathology",
+    "immunoHaematology",
+    "laboratoryAndOncopathology",
+    "nephropathology",
+    "bioChemistryPathologyAndMicrobiology",
+    "neuroPathology",
+    "oncologicReconstruction",
+    "oncologist",
+    "oncologyAndOncologySurgery",
+    "oncologyNursing",
+    "pathologyAndCytology",
+    "pathologyAndMicrobiology",
+    "breastCancerClinic",
+    "MolecularPathology",
+    "benignAndMalignantHematology",
+    "advancedPathology",
+    "Breast Cancer",
+    "Cytology & Histopathology",
+    "GI Cancer",
+    "Gynecological Cancer",
+    "Head and Neck Cancer",
+    "Hematopathology",
+    "Histopathology & Cytology",
+    "Immunopathology",
+    "Molecular pathology",
+    "Onco Care",
+    "Oncologist/Cancer Specialist",
+    "Oncology & Oncology Surgery",
+    "Pathology Laboratory",
+    "Pathology laboratory",
+    "Prostate Cancer",
+    "Surgical Pathology",
+    "Thoracic Cancer",
+    "Toxicopathology",
+    "Urological Cancer",
+    "surgicalPathology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "day_care": {
+     "type": "bool",
+     "note": "",
+     "pattern": "day ?care"
+    }
+   }
+  },
+  "radiotherapy": {
+   "include": "radio-?therap|radiation (therapy|oncolog|treatment)|\\bLINAC\\b|linear accelerator|brachy-?therap|\\bIMRT\\b|\\bIGRT\\b|\\bSBRT\\b|stereotactic radio|cyber ?knife|tomo-?therapy|gamma ?knife|cobalt[- ]?60|tele-?therapy|\\bVMAT\\b|true ?beam|halcyon",
+   "exclude": "radiation (safety|protection|free|dose|exposure)|without radiation|no radiation|low radiation|radio-?frequency",
+   "related": "oncolog|cancer|regional cancer cent",
+   "quantity": "(\\d+)\\s*(LINACs?|linear accelerators?)",
+   "specialty_values": [
+    "radiationOncology",
+    "radiotherapy",
+    "Radiation Oncology",
+    "radiationOncologist",
+    "radiationTherapy",
+    "stereotacticRadiosurgery"
+   ],
+   "prerequisite_specialty_values": [
+    "oncology",
+    "cancerCare",
+    "Oncology",
+    "Cancer Care",
+    "Thoracic Cancer",
+    "oncologyAndOncologySurgery",
+    "oncologist",
+    "oncologicReconstruction",
+    "headAndNeckCancer",
+    "breastCancerClinic",
+    "Urological Cancer",
+    "Oncology & Oncology Surgery",
+    "Prostate Cancer",
+    "Oncologist/Cancer Specialist",
+    "Onco Care",
+    "Head and Neck Cancer",
+    "Gynecological Cancer",
+    "GI Cancer",
+    "Breast Cancer",
+    "oncologyNursing"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "linacs": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*(LINACs?|linear accelerators?)"
+    },
+    "brachytherapy": {
+     "type": "bool",
+     "note": "",
+     "pattern": "brachy"
+    }
+   }
+  },
+  "surgical_oncology": {
+   "include": "surgical oncolog|onco-?surg|cancer surg|surgery for (\\w+ )?cancer|oncologic(al)? surg|tumou?r (resection|surgery)|mastectomy|whipple|o?esophagectomy|gastrectomy|radical (neck|hysterectomy|prostatectomy|nephrectomy|cystectomy)|commando|\\bHIPEC\\b",
+   "exclude": "brain tumou?r|post[- ]?mastectomy|breast reconstruct|prophylactic|sleeve gastrectomy|bariatric|benign",
+   "related": "oncolog|cancer|biopsy|frozen section|regional cancer cent",
+   "specialty_values": [
+    "surgicalOncology",
+    "gynecologicalOncology",
+    "urologicOncology",
+    "orthopedicOncology",
+    "gynecologicOncology",
+    "orthopaedicOncology",
+    "uroOncology",
+    "headAndNeckOncology",
+    "oncosurgery",
+    "thoracicOncology",
+    "Surgical Oncology",
+    "gynaecologicOncology",
+    "musculoskeletalOncology",
+    "GI Oncology",
+    "headNeckOncology",
+    "cancerSurgery",
+    "gastroIntestinalAndBreastSurgicalOncology",
+    "gastroIntestinalOncosurgery",
+    "generalAndCancerSurgery",
+    "gynaecOncology",
+    "gynaecologicalOncology",
+    "gynaeoncology",
+    "gyneOncology",
+    "gynecologicOncologist",
+    "headAndNeckOncologicSurgery",
+    "headAndNeckSurgicalOncology",
+    "oncologyAndOncosurgery",
+    "interventionalOncology",
+    "oncoSurgery",
+    "oncoSurgeryChemoTherapyUnit",
+    "oncology-oncosurgery",
+    "oncologyAndOncoSurgery",
+    "breastSurgicalOncology",
+    "oncologyOncosurgery",
+    "orthopedicOncologist",
+    "pediatricOncosurgery",
+    "surgicalOncologyAndReconstructiveSurgery",
+    "uroOncoTreatment",
+    "uroOncosurgery",
+    "cancerSurgeries",
+    "Uro-Oncology",
+    "breastOncoSurgery",
+    "brainTumorSurgery",
+    "Bone Tumor Treatment",
+    "Breast Oncology and reconstruction",
+    "Breast and Thoracic Oncology",
+    "Cancer Surgery",
+    "Esophageal & stomach cancer surgeries",
+    "GI & Uro-Oncology",
+    "GI oncology",
+    "Gynae Oncology",
+    "Gynaecologic Oncology",
+    "Head & Neck Oncology",
+    "Head And Neck Oncosurgery",
+    "Head Neck Oncologist",
+    "Head and neck oncology",
+    "HeadAndNeckOncosurgery",
+    "Mastectomy in Breast Cancer",
+    "Onco Surgery",
+    "Orthopaedic Oncology",
+    "Soft tissue sarcoma surgeries",
+    "Surgical Oncologist",
+    "Uro-oncology",
+    "Urological Cancer Surgery",
+    "Urology Oncology",
+    "andrologyAndUroOncology",
+    "urologicalOncology"
+   ],
+   "prerequisite_specialty_values": [
+    "pathology",
+    "clinicalPathology",
+    "anatomicPathology",
+    "oncology",
+    "histopathology",
+    "cytopathology",
+    "histopathologyLaboratory",
+    "Pathology",
+    "Histopathology",
+    "Oncology",
+    "cancerCare",
+    "oncopathology",
+    "Cytopathology",
+    "Cancer Care",
+    "histoPathology",
+    "histocytopathology",
+    "molecularPathology",
+    "laboratoryAndOncopathology",
+    "bioChemistryPathologyAndMicrobiology",
+    "breastCancerClinic",
+    "cancerPathology",
+    "generalPathology",
+    "haematopathology",
+    "headAndNeckCancer",
+    "hematopathology",
+    "pathologyAndMicrobiology",
+    "nephropathology",
+    "neuroPathology",
+    "oncologicReconstruction",
+    "oncologist",
+    "oncologyAndOncologySurgery",
+    "oncologyNursing",
+    "pathologyAndCytology",
+    "Urological Cancer",
+    "advancedPathology",
+    "Onco Care",
+    "Toxicopathology",
+    "Immunopathology",
+    "Breast Cancer",
+    "Cytology & Histopathology",
+    "GI Cancer",
+    "Gynecological Cancer",
+    "Head and Neck Cancer",
+    "Hematopathology",
+    "Histopathology & Cytology",
+    "Molecular pathology",
+    "Thoracic Cancer",
+    "MolecularPathology",
+    "Oncologist/Cancer Specialist",
+    "Oncology & Oncology Surgery",
+    "Pathology Laboratory",
+    "Pathology laboratory",
+    "Prostate Cancer",
+    "Surgical Pathology",
+    "surgicalPathology"
+   ],
+   "in_taxonomy": true
+  },
+  "mri": {
+   "include": "\\bMRIs?\\b|magnetic resonance|\\bMRA\\b|\\bMR (scan|imaging|angio)",
+   "exclude": "MRI[- ]compatible|MRI[- ]guided",
+   "related": "\\bCT\\b|radiolog|imaging",
+   "quantity": "(\\d(\\.\\d)?)\\s*-?\\s*T(esla)?\\b|(\\d+)\\s*channel",
+   "prereqs": {
+    "mri_scanner": {
+     "text": "(MRI|magnetic resonance)\\s*(scanner|machine|system|unit|suite|equipment)|\\d(\\.\\d)?\\s*-?\\s*T(esla)?\\b|\\btesla\\b|\\bsiemens\\b|\\bphilips\\b|\\bGE\\b|magnetom|\\bsigna\\b|ingenia|achieva|open MRI",
+     "specialty_tags": []
+    }
+   },
+   "negation_extra": "no MRI|MRI (is )?not",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [
+    "radiology",
+    "interventionalRadiology",
+    "diagnosticRadiology",
+    "breastImaging",
+    "neuroradiology",
+    "cardiothoracicRadiology",
+    "pediatricRadiology",
+    "Radiology",
+    "radiodiagnosis",
+    "clinicalImagingInterventionalRadiology",
+    "vascularSurgeryAndInterventionalRadiology",
+    "Interventional Radiology",
+    "diagnosticsRadiology",
+    "imagingInterventionalRadiology",
+    "imagingTests",
+    "interventionalNeuroRadiology",
+    "interventionalNeuroradiology",
+    "interventionalRadiology & Imaging Services",
+    "interventionalRadiologyAndImaging",
+    "paediatricRadiology",
+    "pediatricNeuroradiology",
+    "vascularAndInterventionalRadiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "tesla": {
+     "type": "float",
+     "note": "",
+     "pattern": "(\\d(\\.\\d)?)\\s*-?\\s*T(esla)?\\b"
+    },
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    }
+   }
+  },
+  "ct_scan": {
+   "include": "\\bCT\\b|\\bCECT\\b|\\bNCCT\\b|\\bHRCT\\b|\\bMDCT\\b|computed tomograph|\\bCAT scan|\\d+[- ]?slices?\\b|\\bPET[- ]?CT\\b|\\bCT[- ]?(scan|angio)",
+   "exclude": "\\bCT (surg|surgeon|surgery)|\\bCT value|\\bCTVS|\\bCT[- ]?(ratio|count)|cone[- ]beam|\\bCBCT\\b",
+   "related": "radiolog|imaging|diagnostic cent",
+   "quantity": "(\\d{1,3})\\s*-?\\s*slices?\\b",
+   "negation_extra": "no CT\\b|CT (scan )?(is )?not",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [
+    "radiology",
+    "interventionalRadiology",
+    "diagnosticRadiology",
+    "breastImaging",
+    "neuroradiology",
+    "cardiothoracicRadiology",
+    "pediatricRadiology",
+    "Radiology",
+    "radiodiagnosis",
+    "clinicalImagingInterventionalRadiology",
+    "vascularSurgeryAndInterventionalRadiology",
+    "Interventional Radiology",
+    "diagnosticsRadiology",
+    "imagingInterventionalRadiology",
+    "imagingTests",
+    "interventionalNeuroRadiology",
+    "interventionalNeuroradiology",
+    "interventionalRadiology & Imaging Services",
+    "interventionalRadiologyAndImaging",
+    "paediatricRadiology",
+    "pediatricNeuroradiology",
+    "vascularAndInterventionalRadiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    },
+    "slices": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d{1,3})\\s*-?\\s*slices?\\b"
+    }
+   }
+  },
+  "ultrasound": {
+   "include": "ultrasound|ultra-?sonograph|\\bUSG\\b|sonograph|colou?r doppler|doppler (study|scan|ultra)|anomaly scan|\\bNT scan|\\b(3|4|5)D (scan|ultrasound)|obstetric scan|f(o)?etal well[- ]?being (scan|ultrasound|study)|\\bNT[- ]?scan|growth scan|level[- ]?(ii|2) (scan|ultrasound|anomaly)|\\bTIFFA\\b|nuchal translucency",
+   "exclude": "ultrasound therapy|therapeutic ultrasound|\\bHIFU\\b|ultrasonic|ultrasound[- ]guided (nerve|block|injection)|member of|federation|society of",
+   "related": "radiolog|imaging|diagnostic",
+   "specialty_values": [
+    "sonography",
+    "3D-4D Sonography and Ultrasound",
+    "3d_4d_Sonography",
+    "Color Doppler",
+    "Radiology/Ultrasonology",
+    "Sonography",
+    "colorDoppler",
+    "ultrasound"
+   ],
+   "prerequisite_specialty_values": [
+    "radiology",
+    "interventionalRadiology",
+    "diagnosticRadiology",
+    "breastImaging",
+    "neuroradiology",
+    "cardiothoracicRadiology",
+    "pediatricRadiology",
+    "Radiology",
+    "radiodiagnosis",
+    "clinicalImagingInterventionalRadiology",
+    "vascularSurgeryAndInterventionalRadiology",
+    "Interventional Radiology",
+    "diagnosticsRadiology",
+    "imagingInterventionalRadiology",
+    "imagingTests",
+    "interventionalNeuroRadiology",
+    "interventionalNeuroradiology",
+    "interventionalRadiology & Imaging Services",
+    "interventionalRadiologyAndImaging",
+    "paediatricRadiology",
+    "pediatricNeuroradiology",
+    "vascularAndInterventionalRadiology"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "obstetric": {
+     "type": "bool",
+     "note": "",
+     "pattern": "obstetric|anomaly|f(o)?etal|\\bNT\\b|antenatal|pregnan"
+    },
+    "pcpndt_registered": {
+     "type": "bool",
+     "note": "",
+     "pattern": "PC-?PNDT|\\bPNDT"
+    }
+   }
+  },
+  "blood_bank": {
+   "include": "blood (bank|centre|center|storage)|\\bBSU\\b|blood transfusion|transfusion (medicine|service|facilit)|blood component|component (separation|therapy)|apheresis|immuno-?ha?ematolog|\\bBTS\\b",
+   "exclude": "cord blood|stem cell bank|umbilical cord|blood (test|sugar|pressure|glucose)|blood bank (tie|linkage)",
+   "related": "\\btransfusion|platelet|plasma|\\bFFP\\b|\\bPRBC|packed (red )?cell",
+   "quantity": "(\\d[\\d,]*)\\s*(units|bags)\\b",
+   "specialty_values": [
+    "transfusionMedicine",
+    "bloodBank",
+    "Transfusion Medicine",
+    "bloodCentre",
+    "bloodStorageUnit",
+    "bloodTransfusionMedicine",
+    "diagnosticsBloodBank",
+    "immunohematologyAndBloodTransfusion",
+    "immunohematologyBloodTransfusion",
+    "immunohematologyandbloodtransfusion",
+    "transfusionMedicineAndBloodBank",
+    "transfusionMedicineAndBloodCentre",
+    "transfusionMedicineAndCellularTherapy",
+    "transfusionMedicineOrBloodBank",
+    "transfusionTherapy"
+   ],
+   "prerequisite_specialty_values": [
+    "hematology",
+    "haematology",
+    "Hematology",
+    "Haematology",
+    "haematologyLaboratory",
+    "haematologyAndHaematoncology",
+    "hematologyOncology",
+    "clinicalHaematology",
+    "clinicalHematology",
+    "benignAndMalignantHematology",
+    "clinicalHermatology",
+    "haematologist",
+    "hematologyLaboratory",
+    "immunoHaematology",
+    "pediatricHaematology",
+    "specialisedPediatricHematologyAndOncologyServices"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "type": {
+     "type": "enum",
+     "note": "",
+     "values": {
+      "storage_unit": "\\bBSU\\b|blood storage",
+      "blood_centre": "blood (bank|cent)"
+     }
+    },
+    "components": {
+     "type": "bool",
+     "note": "",
+     "pattern": "component"
+    },
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    }
+   }
+  },
+  "psychiatric_care": {
+   "include": "psychiatr\\w* (emergenc|ward|in-?patient|admission|unit|icu|crisis|hospital|rehabilitation|beds?|care unit|department|services|treatment|care)|mental health (unit|ward|in-?patient|emergenc|crisis|hospital|services|care|treatment)|acute psychiatr|psychiatric care|crisis intervention|(department|dept\\.?|division|unit|ward|wing|centre|center|clinic) (of|for) psychiatr",
+   "exclude": "psychiatric (assessment|evaluation) only|tele-?psychiatr|online|counsel(l)?ing only",
+   "related": "psychiatr|mental health|psycholog|counsel",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?.{0,20}psychiatr",
+   "specialty_values": [
+    "psychiatry",
+    "addictionPsychiatry",
+    "neuropsychiatry",
+    "childAndAdolescentPsychiatry",
+    "geriatricPsychiatry",
+    "consultationLiaisonPsychiatry",
+    "perinatalAndReproductivePsychiatry",
+    "communityAndPublicPsychiatry",
+    "emergencyPsychiatry",
+    "forensicPsychiatry",
+    "Psychiatry",
+    "psychotherapy",
+    "psychiatryAndDeaddictionTherapy",
+    "psychiatryAndPsychology",
+    "psychiatryPsychology",
+    "psychiatryAndBehavioralHealth",
+    "psychiatrist",
+    "neuroPsychiatry",
+    "psychiatricSocialWork",
+    "psychiatricMedicineAndPsychology",
+    "pediatricAndAdolescentPsychiatry",
+    "paediatricPsychiatry",
+    "neuropsychiatryAndDrugDeAddiction",
+    "Obsessive Compulsive Disorder (OCD",
+    "militaryPsychiatry",
+    "interventionalPsychiatry",
+    "childAndAdolescentPsychiatrist",
+    "Psychotherapy",
+    "PSYCHIATRY",
+    "Other Neuro-Psychiatric Disorders",
+    "Neuropsychiatry",
+    "Depression",
+    "Anxiety",
+    "womenMentalHealth"
+   ],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "inpatient": {
+     "type": "bool",
+     "note": "",
+     "pattern": "ward|in-?patient|admission|beds?"
+    }
+   }
+  },
+  "de_addiction": {
+   "include": "de-?addiction|addiction (treatment|medicine|psychiatry|centre|center|services|care|recovery)|alcohol (de-?addiction|detox|withdrawal|use disorder)|substance (use|abuse) (disorder|treatment)|opioid substitution|\\bOST\\b|detoxification|\\brehab(ilitation)? cent\\w* for (alcohol|drug)",
+   "exclude": "liver detox|digital detox|detox (diet|juice|tea)|smoking cessation (camp|awareness)|panchakarma|ayurved|rejuvenat|naturopath",
+   "related": "psychiatr|alcohol|tobacco cessation|smoking cessation",
+   "specialty_values": [
+    "addictionPsychiatry",
+    "addictionMedicinePM",
+    "addictionInternalMedicine",
+    "addictionMedicinePMR",
+    "psychiatryAndDeaddictionTherapy",
+    "neuropsychiatryAndDrugDeAddiction",
+    "substanceAbuseAndAddictionTreatment",
+    "substanceUseDisorder"
+   ],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "inpatient": {
+     "type": "bool",
+     "note": "",
+     "pattern": "beds?|in-?patient|admission"
+    }
+   }
+  },
+  "cataract_surgery": {
+   "include": "cataract|phaco|\\bSICS\\b|\\bECCE\\b|intra-?ocular lens|\\bIOLs?\\b|small incision",
+   "exclude": "cataract (screening|awareness|detection)",
+   "related": "ophthalm|\\beye\\b",
+   "quantity": "(\\d[\\d,]*)\\+?\\s*(cataract|eye) (surgeries|operations)",
+   "specialty_values": [
+    "cataractAndAnteriorSegmentSurgery",
+    "MICS & Cataract",
+    "cataract",
+    "cataractAndLensImplantation",
+    "cataractAndRefractiveLensSurgery",
+    "cataractSurgeon",
+    "cataractSurgery",
+    "childhoodCataracts",
+    "phacoSurgery"
+   ],
+   "prerequisite_specialty_values": [
+    "ophthalmology",
+    "Ophthalmology",
+    "opthalmology",
+    "eyeCare",
+    "eyeHospital",
+    "ophthalmologist"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "count": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d[\\d,]*)\\+?\\s*(cataract|eye) (surgeries|operations)"
+    }
+   }
+  },
+  "eye_emergency": {
+   "include": "eye (emergenc|trauma|injur|casualty)|ocular (trauma|emergenc|injur)|emergency eye|24 ?(x|/|hours?) ?7?.{0,20}eye|eye.{0,20}24 ?(x|/) ?7|open globe|corneal (ulcer|foreign body|tear)|foreign body (removal )?(from|in) (the )?eye|chemical (injur|burn)\\w* (of|to) (the )?eye|retinal detachment",
+   "related": "ophthalm|\\beye\\b|retina|cornea",
+   "specialty_values": [
+    "eyeTraumaAndEmergencyEyeCare",
+    "retinalDetachment",
+    "Retinal Detachment"
+   ],
+   "prerequisite_specialty_values": [
+    "ophthalmology",
+    "Ophthalmology",
+    "opthalmology",
+    "eyeCare",
+    "eyeHospital",
+    "ophthalmologist"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "hours_24x7": {
+     "type": "bool",
+     "note": "24x7 stated in a sentence about this service",
+     "pattern": "24 ?(x|/|×|\\*) ?7|24 ?(hours?|hrs?)|24-hours?|round[- ]the[- ]clock|day and night|all (days|hours)"
+    }
+   }
+  },
+  "tb_care": {
+   "include": "tuberculosis|\\bTB\\b|\\bDOTS\\b|\\bRNTCP\\b|\\bNTEP\\b|\\bDR-?TB\\b|\\bMDR[- ]?TB|CBNAAT|gene ?xpert|true ?nat",
+   "exclude": "\\bTB\\b (of|storage)|terabyte",
+   "related": "chest|pulmonolog|sputum",
+   "specialty_values": [
+    "Tuberculosis TB and Chest",
+    "Tuberculosis and Respiratory Medicine/Pulmonary Medicine",
+    "pediatricTuberculosisTreatment",
+    "spinalTuberculosis",
+    "tbAndChestRespiratory",
+    "tuberculosis",
+    "tuberculosisAndRespiratoryDiseases"
+   ],
+   "prerequisite_specialty_values": [
+    "pulmonology",
+    "infectiousDiseases",
+    "pediatricPulmonology",
+    "pediatricInfectiousDiseases",
+    "pulmonaryMedicine",
+    "respiratoryMedicine",
+    "paediatricPulmonology",
+    "chestMedicine",
+    "infectiousDiseaseControl",
+    "pulmonary",
+    "interventionalPulmonology",
+    "chestSurgery",
+    "Pulmonology",
+    "pulmonologist",
+    "pediatricPulmonary",
+    "respiratoryMedicineAndInterventionalPulmonology",
+    "pulmonologyRespiratoryCare",
+    "pulmonologyPFT",
+    "pulmonologyAndRespiratoryMedicine",
+    "pulmonology-sleep-study",
+    "pulmonaryAndSleepMedicine",
+    "pediatricsInfectiousDiseases",
+    "Pulmonology and Respiratory Medicine",
+    "microbiologyAndInfectiousDieaseSerology",
+    "lungTransplantationChestSurgery",
+    "interventionalPulmonologyAndChestMedicine",
+    "infectionControl",
+    "chestAndAllergy",
+    "chest medicine",
+    "Pulmonologist",
+    "Chest Medicine",
+    "severeInfections"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "naat": {
+     "type": "bool",
+     "note": "",
+     "pattern": "CBNAAT|gene ?xpert|true ?nat|\\bNAAT"
+    },
+    "dr_tb": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bDR-?TB|\\bMDR"
+    }
+   }
+  },
+  "hiv_art": {
+   "include": "\\bART (cent|clinic|services?|plus)|anti-?retroviral|\\bICTC\\b|\\bPPTCT\\b|\\bHIV\\b.{0,30}(care|treatment|clinic|testing|counsel|management)|\\bLink ART\\b",
+   "exclude": "of[- ]the[- ]art|assisted reproduct|\\bART\\b.{0,20}(IVF|fertility|ICSI|IUI|bank|PGS|PGD)|(IVF|fertility|ICSI|IUI|ICMR|PGS|PGD).{0,60}\\bART\\b|ART clinics and banks",
+   "related": "\\bHIV\\b|\\bAIDS\\b|\\bSTI\\b",
+   "specialty_values": [
+    "contactLensAndLowVisionAids",
+    "lowVisionAids",
+    "lowVisionAidsAndContactLenses"
+   ],
+   "prerequisite_specialty_values": [
+    "infectiousDiseases",
+    "pediatricInfectiousDiseases",
+    "infectiousDiseaseControl",
+    "infectionControl",
+    "microbiologyAndInfectiousDieaseSerology",
+    "pediatricsInfectiousDiseases",
+    "severeInfections"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "level": {
+     "type": "enum",
+     "note": "",
+     "values": {
+      "link_art": "link ART",
+      "art_centre": "\\bART (cent|clinic)|anti-?retroviral",
+      "ictc_testing": "\\bICTC\\b|\\bPPTCT\\b|testing"
+     }
+    }
+   }
+  },
+  "anti_rabies": {
+   "include": "rabies|dog ?bites?|animal ?bites?|\\bARV\\b.{0,20}(dog|bite|rabies)",
+   "related": "vaccinat|immuni[sz]ation|bites?\\b",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "immunoglobulin": {
+     "type": "bool",
+     "note": "",
+     "pattern": "immunoglobulin|\\bE?H?RIG\\b"
+    }
+   }
+  },
+  "paediatric_inpatient": {
+   "include": "p(a)?ediatric(s)? (ward|in-?patient|ipd|admissions?|beds?|hdu|high dependency)|children'?s? (ward|in-?patient)|child(ren)? (admission|ward)|\\d+\\s*-?\\s*bed(ded|s)?\\s*(p(a)?ediatric|children)(?!\\s*(intensive|icu|critical))|in-?patient (p(a)?ediatric|care for children)",
+   "exclude": "p(a)?ediatric (dental|dentist)|ambulance|\\bI?CCU\\b|coronary",
+   "related": "p(a)?ediatric|paediatrician|pediatrician|child health",
+   "quantity": "(\\d+)\\s*-?\\s*bed(ded|s)?.{0,15}(p(a)?ediatric|children)",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [
+    "pediatrics",
+    "paediatrics",
+    "Paediatrics",
+    "paediatric",
+    "Pediatrics",
+    "adolescentPaediatricianCouncillor",
+    "paediatricCare",
+    "paediatricMedicine",
+    "pediatrician"
+   ],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    },
+    "hdu": {
+     "type": "bool",
+     "note": "",
+     "pattern": "\\bHDU\\b|high dependency"
+    }
+   }
+  },
+  "nutrition_rehabilitation": {
+   "include": "nutrition(al)? rehabilitation|\\bNRC\\b|severe acute malnutrition|\\bSAM\\b (child|management|treatment)|malnourished children",
+   "related": "malnutrition|nutrition",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": true,
+   "attribute_patterns": {
+    "beds": {
+     "type": "int",
+     "note": "",
+     "pattern": "(\\d+)\\s*-?\\s*bed(ded|s)?"
+    }
+   }
+  },
+  "palliative_care": {
+   "include": "palliative|hospice|end[- ]of[- ]life care",
+   "exclude": "palliative (surgery|radiotherapy|radiation|chemo\\w*|stent\\w*|procedure)",
+   "related": "pain (management|clinic)|oncolog",
+   "specialty_values": [],
+   "prerequisite_specialty_values": [],
+   "in_taxonomy": false
+  }
+ }
+}

@@ -1,0 +1,100 @@
+facts total 42036 text 35447 structured 6589 llm 18
+status text {'ok': 30969, 'flagged': 3901, 'excluded': 577} polarity {'positive': 41839, 'neutral': 164, 'negative': 33}
+| type | text facts | ok | flagged | excluded | facilities with usable text fact | share |
+| accreditation | 3,498 | 3,317 | 158 | 23 | 1,431 | 14.4% |
+| ambulance | 1,991 | 1,791 | 181 | 19 | 1,168 | 11.7% |
+| blood_centre | 1,380 | 1,157 | 184 | 39 | 591 | 5.9% |
+| empanelment | 6,268 | 4,979 | 1,092 | 197 | 2,283 | 22.9% |
+| equipment_count | 1,537 | 1,404 | 103 | 30 | 568 | 5.7% |
+| free_or_government | 1,560 | 1,269 | 204 | 87 | 805 | 8.1% |
+| hours_24x7 | 10,506 | 10,008 | 459 | 39 | 4,112 | 41.3% |
+| hours_dialysis_shifts | 4 | 4 | 0 | 0 | 4 | 0.0% |
+| opd_hours | 592 | 503 | 69 | 20 | 509 | 5.1% |
+| staffing | 4,475 | 3,577 | 833 | 65 | 2,855 | 28.7% |
+| unit_beds | 3,636 | 2,960 | 618 | 58 | 1,875 | 18.8% |
+any usable text fact 6831 any usable incl structured 7489
+accreditation.JCI: facts 69, facilities usable 36 (0.4%)
+accreditation.Kayakalp: facts 19, facilities usable 10 (0.1%)
+accreditation.LaQshya: facts 1, facilities usable 1 (0.0%)
+accreditation.NABH: facts 2629, facilities usable 1242 (12.5%)
+accreditation.NABL: facts 775, facilities usable 341 (3.4%)
+accreditation.NQAS: facts 5, facilities usable 3 (0.0%)
+ambulance.ambulance_service: facts 1991, facilities usable 1168 (11.7%)
+blood_centre.blood_bank: facts 1329, facilities usable 566 (5.7%)
+blood_centre.blood_storage_unit: facts 51, facilities usable 35 (0.4%)
+empanelment.aarogyasri_ap_ts: facts 34, facilities usable 23 (0.2%)
+empanelment.bsky_od: facts 4, facilities usable 3 (0.0%)
+empanelment.capf: facts 29, facilities usable 22 (0.2%)
+empanelment.cghs: facts 313, facilities usable 182 (1.8%)
+empanelment.cmchis_tn: facts 12, facilities usable 7 (0.1%)
+empanelment.echs: facts 205, facilities usable 140 (1.4%)
+empanelment.esic: facts 151, facilities usable 105 (1.1%)
+empanelment.gujarat_ma: facts 7, facilities usable 5 (0.1%)
+empanelment.karnataka: facts 21, facilities usable 13 (0.1%)
+empanelment.kasp_kl: facts 6, facilities usable 5 (0.1%)
+empanelment.mjpjay_mh: facts 20, facilities usable 15 (0.2%)
+empanelment.other_state_scheme: facts 137, facilities usable 114 (1.1%)
+empanelment.pmjay: facts 1270, facilities usable 642 (6.4%)
+empanelment.private_insurance: facts 3918, facilities usable 1793 (18.0%)
+empanelment.railway: facts 5, facilities usable 4 (0.0%)
+empanelment.rajasthan: facts 111, facilities usable 39 (0.4%)
+empanelment.rsby: facts 15, facilities usable 13 (0.1%)
+empanelment.swasthya_sathi_wb: facts 10, facilities usable 5 (0.1%)
+equipment_count.cath_labs: facts 34, facilities usable 17 (0.2%)
+equipment_count.ct_slices: facts 468, facilities usable 212 (2.1%)
+equipment_count.dialysis_machines: facts 53, facilities usable 32 (0.3%)
+equipment_count.mri_tesla: facts 575, facilities usable 235 (2.4%)
+equipment_count.operation_theatres: facts 368, facilities usable 254 (2.6%)
+equipment_count.ventilators: facts 39, facilities usable 29 (0.3%)
+free_or_government.free_ambulance: facts 36, facilities usable 21 (0.2%)
+free_or_government.free_camp: facts 195, facilities usable 134 (1.3%)
+free_or_government.free_care: facts 677, facilities usable 377 (3.8%)
+free_or_government.free_event: facts 2, facilities usable 2 (0.0%)
+free_or_government.free_under_scheme: facts 121, facilities usable 107 (1.1%)
+free_or_government.free_with_package: facts 10, facilities usable 7 (0.1%)
+free_or_government.government_run_text: facts 519, facilities usable 236 (2.4%)
+hours_24x7.ambulance: facts 452, facilities usable 323 (3.2%)
+hours_24x7.blood_bank: facts 79, facilities usable 58 (0.6%)
+hours_24x7.dialysis: facts 109, facilities usable 68 (0.7%)
+hours_24x7.emergency: facts 4348, facilities usable 2281 (22.9%)
+hours_24x7.facility: facts 3910, facilities usable 2517 (25.3%)
+hours_24x7.helpline: facts 185, facilities usable 150 (1.5%)
+hours_24x7.home_care: facts 13, facilities usable 9 (0.1%)
+hours_24x7.icu: facts 224, facilities usable 159 (1.6%)
+hours_24x7.lab_imaging: facts 683, facilities usable 393 (3.9%)
+hours_24x7.labour_room: facts 52, facilities usable 41 (0.4%)
+hours_24x7.nursing: facts 64, facilities usable 53 (0.5%)
+hours_24x7.operation_theatre: facts 16, facilities usable 16 (0.2%)
+hours_24x7.pharmacy: facts 371, facilities usable 287 (2.9%)
+hours_dialysis_shifts.dialysis_shifts: facts 4, facilities usable 4 (0.0%)
+opd_hours.dialysis: facts 2, facilities usable 2 (0.0%)
+opd_hours.doctor_session: facts 53, facilities usable 44 (0.4%)
+opd_hours.emergency: facts 10, facilities usable 10 (0.1%)
+opd_hours.general: facts 384, facilities usable 345 (3.5%)
+opd_hours.lab: facts 16, facilities usable 13 (0.1%)
+opd_hours.opd: facts 124, facilities usable 115 (1.2%)
+opd_hours.pharmacy: facts 1, facilities usable 1 (0.0%)
+opd_hours.visiting: facts 2, facilities usable 2 (0.0%)
+staffing.doctor_24x7: facts 222, facilities usable 200 (2.0%)
+staffing.doctors: facts 2310, facilities usable 1739 (17.5%)
+staffing.nurses: facts 74, facilities usable 58 (0.6%)
+staffing.specialty_doctors: facts 505, facilities usable 365 (3.7%)
+staffing.staff_total: facts 1135, facilities usable 923 (9.3%)
+staffing.visiting_or_on_call: facts 229, facilities usable 170 (1.7%)
+unit_beds.ccu: facts 26, facilities usable 20 (0.2%)
+unit_beds.dialysis: facts 24, facilities usable 16 (0.2%)
+unit_beds.emergency: facts 44, facilities usable 34 (0.3%)
+unit_beds.hdu: facts 15, facilities usable 13 (0.1%)
+unit_beds.icu: facts 488, facilities usable 374 (3.8%)
+unit_beds.nicu: facts 66, facilities usable 48 (0.5%)
+unit_beds.picu: facts 27, facilities usable 21 (0.2%)
+unit_beds.total: facts 2946, facilities usable 1757 (17.6%)
+structured {('blood_centre', 'blood_bank'): 22, ('free_or_government', 'public_operator'): 467, ('staffing', 'doctors_named'): 3604, ('unit_beds', 'total'): 2496}
+text total beds 2946 with capacity 2759 equal 2261 disagree>25% 346
+unit beds 690 exceeds_total 13 clinic_or_dentist 19
+doctor counts 2310 with numberDoctors 1990 equal 1316 disagree>50% 416 doctors>2x beds 34
+implausible {'cath_labs': 11, 'icu': 7, 'doctors': 6, 'operation_theatres': 4, 'staff_total': 4, 'dialysis_machines': 2, 'ambulance_service': 2, 'ventilators': 1}
+zero {'staff_total': 14, 'ambulance_service': 10, 'nurses': 9, 'doctors': 8, 'specialty_doctors': 7, 'total': 5, 'icu': 2}
+flags {'': 28959, 'dup_in_record': 2083, 'kind_list': 1465, 'listing': 1028, 'attr_ambiguous': 477, 'disagrees_numberDoctors': 416, 'attr_other_facility': 382, 'disagrees_capacity': 346, 'aggregate_or_future_scope': 157, 'dated': 126, 'kind_staff': 95, 'cue_parttime': 93, 'zero_count': 55, 'historical': 51, 'type_scale_mismatch': 40, 'implausible_value': 37, 'staff_bio': 37, 'doctors_exceed_beds': 34, 'cue_future': 20, 'llm_extracted': 18, 'cue_negation': 16, 'cue_third_party': 15, 'exceeds_total_beds': 13, 'close_before_open': 11, 'cue_hedge': 10, 'kind_research': 9, 'cue_referral': 8, 'odd_open_time': 5, 'cue_camp': 3, 'kind_template': 1, 'meridiem_guessed': 1}
+attribution {'unanchored': 32660, 'own_anchored': 1928, 'ambiguous': 477, 'other_facility': 382}
+facility rows 26046 conflicting 746 {'total': 379, 'doctors': 226, 'staff_total': 29, 'specialty_doctors': 25, 'operation_theatres': 21, 'icu': 19, 'mri_tesla': 18, 'ct_slices': 14}

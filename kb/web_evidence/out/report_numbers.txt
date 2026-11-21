@@ -1,0 +1,166 @@
+site_identity rows by kind x confidence
+ confidence   high  low  medium  none
+kind                                
+branch        222   51       0     7
+shared_home   290  128      35    36
+site         4643  819     312   227
+attributable rows: 5177 of 6770 | own site and branch rows: 6281
+name_how among attributable: {'full': 4355, 'dist': 432, 'head': 250, 'fuzzy': 110, 'none': 30}
+pin found among attributable: 3398 | locality found: 4789
+conflicts: other_pin_only 408 | other place in host or name line 178 | parked 3
+records by type: reachable site linked / attributable
+                    reached         att      
+                       sum count   sum count
+facility_type_norm                          
+clinic                2076  3770  1778  3770
+dentist                262   488   215   488
+doctor                   9    21     7    21
+hospital              3504  5611  2843  5611
+other_or_null           26    57    20    57
+pharmacy                 4    12     3    12
+states with >=1 attributable record: 34 of 34
+lowest shares (states with 10+ records):
+                    sum  count  share
+state_final                         
+JAMMU AND KASHMIR   18     70  0.257
+MEGHALAYA            4     14  0.286
+JHARKHAND           55    157  0.350
+MADHYA PRADESH     124    313  0.396
+ODISHA              49    119  0.412
+service rows: 153160 | attributable: 125052 | chain_home rows: 28108
+attributable by strength: {'weak': 60848, 'strong': 55116, 'none': 9088} | negated: 117 | nonoffer cue: {'referral': 167, 'future': 129, 'negation': 117, 'camp': 53, 'past': 23}
+not positive because kind: {'specific': 96149, 'list': 24047, 'staff': 3336, 'directory': 633, 'research': 358, 'template': 40} | edu: 4310
+records with >=1 positive service: 3664 | strong: 3202
+per service
+                             records_positive  records_strong
+service_id                                                  
+emergency_24x7                          1903            1775
+trauma_care                             1457            1063
+burn_care                                309             171
+orthopaedic_trauma_surgery               716             367
+snakebite_antivenom                       58              27
+icu                                     1682            1488
+picu                                     271             215
+ventilator_support                       647             442
+emergency_csection                       356             188
+institutional_delivery                   938             647
+high_risk_pregnancy                      631             388
+nicu                                     635             518
+safe_abortion_mtp                        101              77
+cardiac_surgery                          558             397
+cath_lab_angioplasty                     609             471
+stemi_thrombolysis                        54              30
+stroke_care                              158             106
+neurosurgery                             939             747
+dialysis                                 910             766
+kidney_transplant                        333             213
+chemotherapy                             445             303
+radiotherapy                             282             182
+surgical_oncology                        596             390
+mri                                      660             406
+ct_scan                                  988             688
+ultrasound                              1727            1178
+blood_bank                               510             426
+psychiatric_care                         167             149
+de_addiction                             148              96
+cataract_surgery                         741             493
+eye_emergency                            260             166
+tb_care                                  304             120
+hiv_art                                   39              34
+anti_rabies                               26              10
+paediatric_inpatient                      52              33
+nutrition_rehabilitation                   8               4
+hour rows: 43540 | usable attributable: 38515 | by method: {'regex': 38110, 'llm': 405}
+records per hours attribute
+ fact_type              attribute        
+hours_24x7             ambulance             371
+                       blood_bank             50
+                       dialysis               79
+                       emergency            1433
+                       facility             1716
+                       helpline              205
+                       home_care               4
+                       icu                   304
+                       lab_imaging           416
+                       labour_room            75
+                       nursing               117
+                       operation_theatre      25
+                       pharmacy              481
+hours_dialysis_shifts  dialysis_shifts         5
+opd_hours              dialysis                8
+                       doctor_session         93
+                       emergency              90
+                       general              2193
+                       helpline              140
+                       lab                    50
+                       opd                   397
+                       pharmacy                6
+                       visiting               61
+staffing               doctor_24x7           432
+records with 24x7 emergency: 1433 | with status ok: 1287
+records with an OPD or general schedule: 2349 | opd scope: 397
+detail rows: 41191 | usable attributable: 33680
+records per detail attribute
+ fact_type           attribute          
+accreditation       JCI                      30
+                    Kayakalp                 11
+                    NABH                    684
+                    NABL                    233
+                    NQAS                      3
+ambulance           ambulance_service      1048
+blood_centre        blood_bank              389
+                    blood_storage_unit       39
+emergency_phone     ambulance                49
+                    emergency               348
+                    helpline                 84
+empanelment         aarogyasri_ap_ts         24
+                    bsky_od                   2
+                    capf                     19
+                    cghs                    147
+                    cmchis_tn                10
+                    echs                     94
+                    esic                     37
+                    gujarat_ma                9
+                    karnataka                 7
+                    kasp_kl                  15
+                    mjpjay_mh                23
+                    other_state_scheme      150
+                    pmjay                   189
+                    private_insurance      1412
+                    railway                   3
+                    rajasthan                27
+                    rsby                      8
+                    swasthya_sathi_wb         7
+equipment_count     cath_labs                20
+                    ct_slices               151
+                    dialysis_machines        32
+                    mri_tesla               148
+                    operation_theatres      202
+                    ventilators              31
+free_or_government  free_ambulance           24
+                    free_camp               176
+                    free_care               577
+                    free_event                1
+                    free_under_scheme        48
+                    free_with_package        23
+                    government_run_text      38
+staffing            doctors                 283
+                    nurses                   11
+                    specialty_doctors       214
+                    staff_total              84
+                    visiting_or_on_call     502
+unit_beds           ccu                      21
+                    dialysis                 26
+                    emergency                48
+                    hdu                      11
+                    icu                     231
+                    nicu                     58
+                    picu                     14
+                    total                   722
+stats_build.json {"pages_used": 28589, "files_used": 27809, "site_identity_rows": 6770, "identity_conf": {"high": {"branch": 222, "shared_home": 290, "site": 4643}, "low": {"branch": 51, "shared_home": 128, "site": 819}, "medium": {"branch": 0, "shared_home": 35, "site": 312}, "none": {"branch": 7, "shared_home": 36, "site": 227}}, "service_rows": 153160, "service_rows_dropped_identity": 17113, "hour_rows": 43540, "detail_rows": 41191, "detail_rows_dropped_identity": 9912, "hour_candidates": 833, "quotes_verified": 237608}
+stats_compare.json {"population_records": 4866, "population_with_services_page": 3583, "population_site_in_vf_sources": 4110, "all": {"service_id": "ALL", "dataset_claims": 17735, "confirmed": 10621, "confirm_rate": 0.599, "confirm_lo": 0.592, "confirm_hi": 0.606, "confirm_rate_strong": 0.493, "claims_text": 14351, "confirm_rate_text": 0.671, "claims_specialty_only": 3384, "confirm_rate_specialty_only": 0.294, "confirm_rate_site_not_in_vf_sources": 0.425, "confirm_rate_site_in_vf_sources": 0.623, "web_positive_pairs": 20218, "web_only": 9557, "web_only_rate": 0.473, "web_only_lo": 0.466, "web_only_hi": 0.48, "web_strong_pairs": 14774, "web_only_strong": 6006, "web_only_strong_rate": 0.407, "claims_with_services_page": 14495, "silent": 4961, "silent_rate": 0.342, "silent_lo": 0.335, "silent_hi": 0.35}, "service_summary_rows": 20886, "records_with_web_positive_service": 3664, "facility_details_rows": 17908}
+selfcheck.json {"all": {"k": 37, "n": 40, "wilson": [0.801, 0.974]}, "by_group": {"detail": {"k": 5, "n": 5, "wilson": [0.566, 1.0]}, "hours": {"k": 6, "n": 7, "wilson": [0.487, 0.974]}, "identity": {"k": 8, "n": 8, "wilson": [0.676, 1.0]}, "service": {"k": 18, "n": 20, "wilson": [0.699, 0.972]}}, "by_stratum": {"detail_accreditation": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "detail_ambulance": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "detail_blood_centre": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "detail_empanelment": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "detail_unit_beds": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "hours_24x7_emergency": {"k": 3, "n": 3, "wilson": [0.438, 1.0]}, "hours_llm": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "hours_opd": {"k": 1, "n": 2, "wilson": [0.095, 0.905]}, "hours_service_24x7": {"k": 1, "n": 1, "wilson": [0.207, 1.0]}, "identity_attributable": {"k": 4, "n": 4, "wilson": [0.51, 1.0]}, "identity_not_attributable": {"k": 4, "n": 4, "wilson": [0.51, 1.0]}, "service_confirms_dataset": {"k": 6, "n": 6, "wilson": [0.61, 1.0]}, "service_negated": {"k": 4, "n": 4, "wilson": [0.51, 1.0]}, "service_web_only_strong": {"k": 5, "n": 6, "wilson": [0.436, 0.97]}, "service_web_only_weak": {"k": 3, "n": 4, "wilson": [0.301, 0.954]}}, "wrong": [{"n": 15, "stratum": "service_web_only_strong", "item": "emergency_24x7", "note": "phone support outside OPD hours, not an emergency department"}, {"n": 22, "stratum": "service_web_only_weak", "item": "nutrition_rehabilitatio
+llm_statements.json {"statements": 3}
+llm verdicts: {'kept': 303, 'not_operating_hours': 135, 'time_not_in_quote': 75, 'implausible_schedule': 45, 'quote_not_in_source': 39, 'days_not_in_source': 34, 'no_entries': 2}
+round1 35 / 40 {'detail_accreditation': {'sum': 1, 'count': 1}, 'detail_ambulance': {'sum': 1, 'count': 1}, 'detail_blood_centre': {'sum': 1, 'count': 1}, 'detail_empanelment': {'sum': 1, 'count': 1}, 'detail_unit_beds': {'sum': 1, 'count': 1}, 'hours_24x7_emergency': {'sum': 3, 'count': 3}, 'hours_llm': {'sum': 1, 'count': 1}, 'hours_opd': {'sum': 1, 'count': 2}, 'hours_service_24x7': {'sum': 1, 'count': 1}, 'identity_attributable': {'sum': 4, 'count': 4}, 'identity_not_attributable': {'sum': 4, 'count': 4}, 'service_confirms_dataset': {'sum': 8, 'count': 8}, 'service_negated': {'sum': 3, 'count': 4}, 'service_web_only': {'sum': 5, 'count': 8}}
+round2 29 / 40 {'detail_accreditation': {'sum': 0, 'count': 1}, 'detail_ambulance': {'sum': 1, 'count': 1}, 'detail_blood_centre': {'sum': 1, 'count': 1}, 'detail_empanelment': {'sum': 0, 'count': 1}, 'detail_unit_beds': {'sum': 1, 'count': 1}, 'hours_24x7_emergency': {'sum': 2, 'count': 3}, 'hours_llm': {'sum': 1, 'count': 1}, 'hours_opd': {'sum': 2, 'count': 2}, 'hours_service_24x7': {'sum': 1, 'count': 1}, 'identity_attributable': {'sum': 4, 'count': 4}, 'identity_not_attributable': {'sum': 4, 'count': 4}, 'service_confirms_dataset': {'sum': 7, 'count': 8}, 'service_negated': {'sum': 1, 'count': 4}, 'service_web_only': {'sum': 4, 'count': 8}}

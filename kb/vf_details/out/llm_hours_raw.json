@@ -1,0 +1,1363 @@
+[
+ {
+  "claim_id": "09e699d5:capa:25",
+  "text": "Outpatient services suspended for 24 hours starting 6 am on 17-Aug-2024 due to nationwide withdrawal of non-emergency medical services announced by the Indian Medical Association",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Outpatient services suspended for 24 hours starting 6 am on 17-Aug-2024 due to nationwide withdrawal of non-emergency medical services announced by the Indian Medical Association",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "0b82fcd8:capa:6",
+  "text": "Empanelled under CGHS Lucknow as Exclusive Dental Clinic from 01.04.2018 to 31.03.2020 or until expiry of QCI/NABH whichever is earlier",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "from 01.04.2018 to 31.03.2020 or until expiry of QCI/NABH whichever is earlier",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "0ef1cbde:desc:2",
+  "text": "Timings Mon - Sun 10:00 - 02:00, 05:00 - 09:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00 - 02:00, 05:00 - 09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "10:00",
+     "close": "02:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "05:00",
+     "close": "09:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "10ba70df:capa:4",
+  "text": "Online consultations available at 4:30 AM",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "4:30 AM",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "2cc7ede6:capa:8",
+  "text": "Clinic operates with Monday-Saturday sessions: 02:00 AM-04:00 PM, 04:00 PM-06:00 PM, 06:00 PM-07:00 PM; Sunday closed.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "02:00 AM-04:00 PM, 04:00 PM-06:00 PM, 06:00 PM-07:00 PM",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "02:00",
+     "close": "07:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "2fed030a:desc:1",
+  "text": "OP timings Mon - Sat 12:00 noon - Onwards; Fee: 1000.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "opd",
+   "quote": "12:00 noon - Onwards",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "12:00",
+     "close": "23:59"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "67706137:capa:12",
+  "text": "Operates 24 hours daily (Mon-Sun 08:00-08:00).",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "24 hours daily (Mon-Sun 08:00-08:00)",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "00:00",
+     "close": "23:59"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "6847f305:desc:3",
+  "text": "Timings: Mon - Sun 03:00 - 09:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "03:00 - 09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "03:00",
+     "close": "09:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "ff9a75d2:proc:0",
+  "text": "MRI scanning at District Hospital Satara is provided under NHM PPP; service provider is M/S Unique Wellness Pvt. Ltd; Satara is one of the five facilities in this provider's MRI program; Work Order Date is 27.09.2022 and MoU date is 24.11.2023; MRI service is 24x7 and free for government patients; radiologists from the service provider report the images and make reports available to the hospital and patient.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "24x7",
+   "entries": [
+    {
+     "days": [
+      "sat"
+     ],
+     "open": "00:00",
+     "close": "23:59"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "a4a6943a:capa:11",
+  "text": "Offers visiting ENT Dr. Chetana Naik (availability Mon-Wed-Fri 12:30 PM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "12:30 PM",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "wed",
+      "fri"
+     ],
+     "open": "12:30",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "a4a6943a:capa:14",
+  "text": "Offers visiting radiation oncology Dr. Gunjan Baijal (availability Fri 3-4 PM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "Fri 3-4 PM",
+   "entries": [
+    {
+     "days": [
+      "fri"
+     ],
+     "open": "15:00",
+     "close": "16:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "a4a6943a:capa:15",
+  "text": "Offers visiting dietician/nutritionist Dr. Hameeda Merchant (availability Every Saturday 10:30 AM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "Every Saturday 10:30 AM",
+   "entries": [
+    {
+     "days": [
+      "sat"
+     ],
+     "open": "10:30",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "a4a6943a:capa:20",
+  "text": "Offers visiting orthopedics Dr. Rohan Dessai (availability Fri 5:00 PM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "Fri 5:00 PM",
+   "entries": [
+    {
+     "days": [
+      "fri"
+     ],
+     "open": "17:00",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "3b72c3b0:capa:36",
+  "text": "Timings: Mon-Sun 09:00-09:00 (24/7 operation implied by 09:00-09:00 timing)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "09:00-09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "00:00",
+     "close": "23:59"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "3e8f4535:capa:13",
+  "text": "Saraswati Mission Hospital is 1.04 km away from Dr. A.K. Mehta - Arun Medical Clinic & Store",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "",
+   "entries": []
+  },
+  "verdict": "quote_not_in_source"
+ },
+ {
+  "claim_id": "43ff0012:capa:17",
+  "text": "ISO 9001:2.15 certified Multispeciality Diagnostics & Polyclinic",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "",
+   "entries": []
+  },
+  "verdict": "quote_not_in_source"
+ },
+ {
+  "claim_id": "4c469752:capa:7",
+  "text": "Offers outpatient consultation services Mon-Sat 09:00am-14:00 IST and 17:00pm-21:00 IST; Sundays by appointment",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "opd",
+   "quote": "Mon-Sat 09:00am-14:00 IST and 17:00pm-21:00 IST; Sundays by appointment",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "09:00",
+     "close": "14:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "17:00",
+     "close": "21:00"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "",
+     "close": ""
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "a1a3b974:capa:2",
+  "text": "Clinic has a rating of 4.50.",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "",
+   "entries": []
+  },
+  "verdict": "quote_not_in_source"
+ },
+ {
+  "claim_id": "aee4f51b:capa:10",
+  "text": "Walk-in interviews for recruitment of AYUSH staff in Palakkad district are scheduled (e.g., date 24 November 2023 at 10.00 AM).",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "10.00 AM",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "b16a2bd9:capa:6",
+  "text": "Clinic hours are Mon-Sat 10:00-09:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00-09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "21:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "b19e36f0:capa:4",
+  "text": "Appointments for Dr Jitendra Sharma at Divine Life Hospital are scheduled on 27 November 2025 and 25 December 2025 at 12:00 pm.",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "doctor_session",
+   "quote": "at 12:00 pm",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "b391d70f:desc:6",
+  "text": "Consultation times: 12 p.m.",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "12 p.m.",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "0d6ae848:capa:27",
+  "text": "Timings: Mon - Sat 10:00-07:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00-07:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "19:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "0e82ff90:desc:0",
+  "text": "NABH accredited Single Specialty eye clinic/hospital empanelled with Government of Haryana (Empanelment: 17.09.2019 to 16.03.2026).",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "",
+   "entries": []
+  },
+  "verdict": "quote_not_in_source"
+ },
+ {
+  "claim_id": "7c485dc8:capa:17",
+  "text": "Online consultations available (slot at 04:30 AM)",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Online consultations available (slot at 04:30 AM)",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "80dbf33e:capa:10",
+  "text": "Open charges \u20b92.08 Cr as on 24 Mar 2025",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Open charges \u20b92.08 Cr as on 24 Mar 2025",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "83703c0d:capa:11",
+  "text": "Offers paediatric cardiac surgeon consultation; scheduled for June 15, 2024, 4-6 pm at SMF Hospital, Annur",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "4-6 pm",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "8609281a:capa:7",
+  "text": "Timings: Mon-Sun 08:00-08:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "08:00-08:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "08:00",
+     "close": "08:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "a4a6943a:capa:21",
+  "text": "Offers visiting cardiology Dr. Sabyasachi Mukhopadhyay (availability Thu 4:00 PM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "4:00 PM",
+   "entries": [
+    {
+     "days": [
+      "thu"
+     ],
+     "open": "16:00",
+     "close": "16:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "a4a6943a:capa:23",
+  "text": "Offers visiting urology Dr. Sarang Kanekar (availability Tue & Thu 3:00 PM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "3:00 PM",
+   "entries": [
+    {
+     "days": [
+      "tue",
+      "thu"
+     ],
+     "open": "15:00",
+     "close": "15:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "a4a6943a:capa:25",
+  "text": "Offers visiting counsellor Dr. Sharon (availability Every Saturday 10:00 AM)",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "visiting",
+   "quote": "Every Saturday 10:00 AM",
+   "entries": [
+    {
+     "days": [
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "ac28ab42:capa:38",
+  "text": "Open charges amounting to \u20b92.50 million as on 17 July 2025.",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Open charges amounting to \u20b92.50 million as on 17 July 2025",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "4f3e937e:capa:2",
+  "text": "Gynecology and obstetrics consultations available on Monday, Wednesday, and Friday evenings 5-7 pm",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "doctor_session",
+   "quote": "5-7 pm",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "wed",
+      "fri"
+     ],
+     "open": "17:00",
+     "close": "19:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "58330a3f:capa:9",
+  "text": "Office hours: Monday-Saturday 5-7 pm; Sunday closed",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "5-7 pm",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "17:00",
+     "close": "19:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "59708a52:desc:2",
+  "text": "Timings: Mon-Sat 07:00-01:00, 05:00-10:00; Sun 10:00-02:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "07:00-01:00, 05:00-10:00; Sun 10:00-02:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "07:00",
+     "close": "01:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "05:00",
+     "close": "10:00"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "10:00",
+     "close": "02:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "5c1109fa:capa:2",
+  "text": "OPD timings are morning 9.30 to 1:00 and evening 5:00 to 8:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "opd",
+   "quote": "morning 9.30 to 1:00 and evening 5:00 to 8:00",
+   "entries": [
+    {
+     "days": [],
+     "open": "09:30",
+     "close": "13:00"
+    },
+    {
+     "days": [],
+     "open": "17:00",
+     "close": "20:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "6d4004ec:capa:20",
+  "text": "Clinic hours: Mon-Sat 10:30-09:00; Sun 10:30-03:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:30-09:00; Sun 10:30-03:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:30",
+     "close": "21:00"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "10:30",
+     "close": "15:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "74e7722c:capa:8",
+  "text": "Consultant psychiatrist available Tuesdays and Thursdays 6-8 pm",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "doctor_session",
+   "quote": "Tuesdays and Thursdays 6-8 pm",
+   "entries": [
+    {
+     "days": [
+      "tue",
+      "thu"
+     ],
+     "open": "18:00",
+     "close": "20:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "74e7722c:capa:10",
+  "text": "Offers psychiatry consultations with a consultant psychiatrist Dr. Rakesh; timings Tuesdays and Thursdays 6-8 pm",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "doctor_session",
+   "quote": "timings Tuesdays and Thursdays 6-8 pm",
+   "entries": [
+    {
+     "days": [
+      "tue",
+      "thu"
+     ],
+     "open": "18:00",
+     "close": "20:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "788a47ec:proc:9",
+  "text": "Outcomes included a rise in time in range from 36.33% to 65.07%, a reduction in total daily insulin dose from 1.29 to 0.81 U/kg/day, and a reduction in time above range",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Outcomes included a rise in time in range from 36.33% to 65.07%, a reduction in total daily insulin dose from 1.29 to 0.81 U/kg/day, and a reduction in time above range",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "dda3e7e4:proc:8",
+  "text": "RHTC Mandur offers specialty OPDs: Ophthalmic OPD on Mondays 3-5 pm; Psychiatric OPD on Tuesdays 3-5 pm; Medicine OPD daily 9 am-1 pm; Orthopedic OPD on Thursdays 3-5 pm; Pediatrics OPD on Fridays 3-5 pm; OBG OPD on Fridays 3-5 pm; Surgery OPD daily 9 am-1 pm",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "opd",
+   "quote": "3-5 pm; Psychiatric OPD on Tuesdays 3-5 pm; Medicine OPD daily 9 am-1 pm; Orthopedic OPD on Thursdays 3-5 pm; Pediatrics OPD on Fridays 3-5 pm; OBG OPD on Fridays 3-5 pm; Surgery OPD daily 9 am-1 pm",
+   "entries": [
+    {
+     "days": [
+      "mon"
+     ],
+     "open": "15:00",
+     "close": "17:00"
+    },
+    {
+     "days": [
+      "tue"
+     ],
+     "open": "15:00",
+     "close": "17:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "09:00",
+     "close": "13:00"
+    },
+    {
+     "days": [
+      "thu"
+     ],
+     "open": "15:00",
+     "close": "17:00"
+    },
+    {
+     "days": [
+      "fri"
+     ],
+     "open": "15:00",
+     "close": "17:00"
+    },
+    {
+     "days": [
+      "fri"
+     ],
+     "open": "15:00",
+     "close": "17:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "09:00",
+     "close": "13:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "de8b2220:equi:8",
+  "text": "Paid treatment ward declared open at the District Government Headquarters Hospital in Kumbakonam, established at a cost of \u20b933.60 lakh",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Paid treatment ward declared open at the District Government Headquarters Hospital in Kumbakonam, established at a cost of \u20b933.60 lakh",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "e25adecf:capa:18",
+  "text": "Timings: Mon-Sat 12:00-11:59",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "12:00-11:59",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "12:00",
+     "close": "23:59"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "e5306e8b:capa:31",
+  "text": "Online consultations with Dr. E Prabhakar Sastry are available tomorrow at 02:00 AM",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Online consultations with Dr. E Prabhakar Sastry are available tomorrow at 02:00 AM",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "b49d6498:capa:21",
+  "text": "Belle Vue Clinic, Minto Park OPD timing is 12:30-2:30 PM, Monday to Saturday, by appointment",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "opd",
+   "quote": "12:30-2:30 PM, Monday to Saturday, by appointment",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "12:30",
+     "close": "14:30"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "b97ee580:capa:26",
+  "text": "Approximately 0.61 km from Agroha Dental clinic",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Approximately 0.61 km from Agroha Dental clinic",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "c0fa9d6f:capa:13",
+  "text": "Dr. Vijay Kumar Rai, Consultant Gastroenterology, available at IRIS Hospital, Mon & Wed, Sun 8:00 AM and by appointment",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "doctor_session",
+   "quote": "8:00 AM",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "wed",
+      "sun"
+     ],
+     "open": "08:00",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "time_not_in_quote"
+ },
+ {
+  "claim_id": "c8b74080:desc:4",
+  "text": "Timing: Monday\u2013Saturday 6:30\u20138:30 pm; Sunday: Closed.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "6:30\u20138:30 pm",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "18:30",
+     "close": "20:30"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "120ace0f:capa:6",
+  "text": "Online consultation with Dr. Anupam Gupta available at 01:30 AM",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "01:30 AM",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "14f54bc7:capa:30",
+  "text": "Dr. Swati Chitnis is available between 10:00 am and 1:00 pm at Sarla Hospital & ICU",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "doctor_session",
+   "quote": "between 10:00 am and 1:00 pm",
+   "entries": [
+    {
+     "days": [],
+     "open": "10:00",
+     "close": "13:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "1c06c3fb:capa:12",
+  "text": "Has provided 1.68+ million medical consultations since 2015",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Has provided 1.68+ million medical consultations since 2015",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "2add4f3f:desc:8",
+  "text": "Timings: Mon-Sun 10:00-02:00, 06:00-09:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00-02:00, 06:00-09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "06:00",
+     "close": "09:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "10:00",
+     "close": "02:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "960c4a2a:proc:9",
+  "text": "The CCL section's Microbiology wing operates from 2 PM to 8 AM daily",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "lab",
+   "quote": "2 PM to 8 AM daily",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "14:00",
+     "close": "08:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "9fe35c6f:capa:35",
+  "text": "Induction programme for the first MBBS batch scheduled for 16 October 2024 at 9:00 AM.",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "9:00 AM",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "a0a1011f:capa:2",
+  "text": "Clinic hours: Mon-Sat 09:00-09:00; Sun 09:00-01:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "Mon-Sat 09:00-09:00; Sun 09:00-01:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "09:00",
+     "close": "09:00"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "09:00",
+     "close": "01:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "a184e422:desc:1",
+  "text": "Timings: Mon-Sat 09:00-01:00; 04:00-07:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "09:00-01:00; 04:00-07:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "09:00",
+     "close": "13:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "16:00",
+     "close": "19:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "88263303:capa:4",
+  "text": "Operating hours Monday to Saturday: 10:00\u201302:00 and 02:30\u201308:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00\u201302:00 and 02:30\u201308:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "14:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "14:30",
+     "close": "20:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "8bc216dd:capa:4",
+  "text": "Capital Hospital Bhubaneswar was designated as a fever clinic in Bhubaneswar under the Epidemic Diseases Act, 1897 per Health & Family Welfare notification No.9570/H/03.04.2020 (April 2020).",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "",
+   "entries": []
+  },
+  "verdict": "quote_not_in_source"
+ },
+ {
+  "claim_id": "8d93970f:desc:2",
+  "text": "Timings: Mon-Sat 10:00-01:00 05:30-09:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00-01:00 05:30-09:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "05:30",
+     "close": "09:00"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "01:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "9463669e:capa:22",
+  "text": "Certificate of Registration for ART Clinic (Level 1) valid 28.01.2023 to 27.01.2028",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "general",
+   "quote": "Certificate of Registration for ART Clinic (Level 1) valid 28.01.2023 to 27.01.2028",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "e5306e8b:capa:47",
+  "text": "Dr. E Prabhakar Sastry is available tomorrow at 05:00 AM; Dr. L Sanjay is available in 2 days",
+  "output": {
+   "is_operating_hours": false,
+   "scope": "doctor_session",
+   "quote": "Dr. E Prabhakar Sastry is available tomorrow at 05:00 AM; Dr. L Sanjay is available in 2 days",
+   "entries": []
+  },
+  "verdict": "not_operating_hours"
+ },
+ {
+  "claim_id": "e6dbaf82:capa:29",
+  "text": "Open hours include Mon-Sun 11:00-05:00",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "11:00-05:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+     ],
+     "open": "11:00",
+     "close": "17:00"
+    }
+   ]
+  },
+  "verdict": "kept"
+ },
+ {
+  "claim_id": "ee06e060:desc:4",
+  "text": "Timings Mon-Sat 10:00-08:30, Sun 10:00-02:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "10:00-08:30, Sun 10:00-02:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "10:00",
+     "close": "20:30"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "10:00",
+     "close": "02:00"
+    }
+   ]
+  },
+  "verdict": "implausible_schedule"
+ },
+ {
+  "claim_id": "f73efb65:desc:2",
+  "text": "Timings: Mon \\\\- Sat 11:30 \\- 03:30 06:30 \\- 09:00 Sun 11:00 \\- 03:00.",
+  "output": {
+   "is_operating_hours": true,
+   "scope": "general",
+   "quote": "Mon \\- Sat 11:30 \\- 03:30 06:30 \\- 09:00 Sun 11:00 \\- 03:00",
+   "entries": [
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "11:30",
+     "close": "03:30"
+    },
+    {
+     "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat"
+     ],
+     "open": "06:30",
+     "close": "09:00"
+    },
+    {
+     "days": [
+      "sun"
+     ],
+     "open": "11:00",
+     "close": "03:00"
+    }
+   ]
+  },
+  "verdict": "quote_not_in_source"
+ }
+]

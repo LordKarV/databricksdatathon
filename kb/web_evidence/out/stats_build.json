@@ -1,0 +1,34 @@
+{
+ "pages_used": 28589,
+ "files_used": 27809,
+ "site_identity_rows": 6770,
+ "identity_conf": {
+  "high": {
+   "branch": 222,
+   "shared_home": 290,
+   "site": 4643
+  },
+  "low": {
+   "branch": 51,
+   "shared_home": 128,
+   "site": 819
+  },
+  "medium": {
+   "branch": 0,
+   "shared_home": 35,
+   "site": 312
+  },
+  "none": {
+   "branch": 7,
+   "shared_home": 36,
+   "site": 227
+  }
+ },
+ "service_rows": 153160,
+ "service_rows_dropped_identity": 17113,
+ "hour_rows": 43540,
+ "detail_rows": 41191,
+ "detail_rows_dropped_identity": 9912,
+ "hour_candidates": 833,
+ "quotes_verified": 237608
+}

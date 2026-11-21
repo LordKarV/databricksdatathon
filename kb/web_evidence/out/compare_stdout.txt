@@ -1,0 +1,74 @@
+{
+ "population_records": 4866,
+ "population_with_services_page": 3583,
+ "population_site_in_vf_sources": 4110,
+ "all": {
+  "service_id": "ALL",
+  "dataset_claims": 17735,
+  "confirmed": 10621,
+  "confirm_rate": 0.599,
+  "confirm_lo": 0.592,
+  "confirm_hi": 0.606,
+  "confirm_rate_strong": 0.493,
+  "claims_text": 14351,
+  "confirm_rate_text": 0.671,
+  "claims_specialty_only": 3384,
+  "confirm_rate_specialty_only": 0.294,
+  "confirm_rate_site_not_in_vf_sources": 0.425,
+  "confirm_rate_site_in_vf_sources": 0.623,
+  "web_positive_pairs": 20218,
+  "web_only": 9557,
+  "web_only_rate": 0.473,
+  "web_only_lo": 0.466,
+  "web_only_hi": 0.48,
+  "web_strong_pairs": 14774,
+  "web_only_strong": 6006,
+  "web_only_strong_rate": 0.407,
+  "claims_with_services_page": 14495,
+  "silent": 4961,
+  "silent_rate": 0.342,
+  "silent_lo": 0.335,
+  "silent_hi": 0.35
+ },
+ "service_summary_rows": 20886,
+ "records_with_web_positive_service": 3664,
+ "facility_details_rows": 17908
+}
+                service_id  dataset_claims  confirm_rate  confirm_rate_text  confirm_rate_specialty_only  confirm_rate_site_not_in_vf_sources  confirm_rate_site_in_vf_sources  confirm_rate_strong  web_positive_pairs  web_only_rate  web_strong_pairs  web_only_strong_rate  claims_with_services_page  silent_rate
+            emergency_24x7            1915         0.722              0.743                        0.545                                0.616                            0.735                0.688                1903          0.273              1775                 0.257                       1555        0.195
+               trauma_care             760         0.759              0.759                        0.800                                0.540                            0.788                0.651                1457          0.603              1063                 0.532                        634        0.174
+                 burn_care             133         0.444              0.479                        0.188                                0.048                            0.518                0.323                 309          0.806               171                 0.743                         95        0.495
+orthopaedic_trauma_surgery             322         0.624              0.628                        0.400                                0.333                            0.657                0.404                 716          0.718               367                 0.646                        258        0.337
+       snakebite_antivenom              10         0.700              0.667                        1.000                                0.000                            0.875                0.500                  58          0.879                27                 0.815                          5        0.000
+                       icu            1597         0.771              0.807                        0.545                                0.597                            0.796                0.702                1682          0.267              1488                 0.247                       1312        0.146
+                      picu             234         0.526              0.584                        0.216                                0.303                            0.562                0.453                 271          0.542               215                 0.507                        195        0.426
+        ventilator_support             301         0.591              0.590                        1.000                                0.333                            0.617                0.439                 647          0.725               442                 0.701                        246        0.350
+        emergency_csection             264         0.424              0.424                          NaN                                0.267                            0.444                0.254                 356          0.685               188                 0.644                        213        0.563
+    institutional_delivery             623         0.632              0.668                        0.333                                0.423                            0.662                0.486                 938          0.578               647                 0.529                        495        0.335
+       high_risk_pregnancy             530         0.494              0.669                        0.278                                0.250                            0.533                0.355                 631          0.583               388                 0.515                        413        0.465
+                      nicu             462         0.671              0.671                          NaN                                0.389                            0.708                0.574                 635          0.509               518                 0.485                        388        0.263
+         safe_abortion_mtp              84         0.381              0.381                          NaN                                0.200                            0.405                0.333                 101          0.683                77                 0.636                         71        0.577
+           cardiac_surgery             595         0.578              0.641                        0.420                                0.409                            0.607                0.439                 558          0.380               397                 0.338                        492        0.348
+      cath_lab_angioplasty             527         0.676              0.675                        0.714                                0.485                            0.703                0.550                 609          0.414               471                 0.382                        449        0.256
+        stemi_thrombolysis              17         0.294              0.294                          NaN                                  NaN                            0.294                0.176                  54          0.907                30                 0.900                         14        0.714
+               stroke_care              97         0.402              0.450                        0.176                                0.125                            0.427                0.289                 158          0.747               106                 0.726                         83        0.566
+              neurosurgery            1315         0.565              0.719                        0.360                                0.513                            0.572                0.467                 939          0.208               747                 0.177                       1094        0.355
+                  dialysis             664         0.717              0.717                        0.667                                0.413                            0.749                0.636                 910          0.477               766                 0.449                        554        0.217
+         kidney_transplant             293         0.543              0.555                        0.368                                0.351                            0.570                0.372                 333          0.517               213                 0.479                        242        0.417
+              chemotherapy             892         0.330              0.609                        0.196                                0.230                            0.345                0.257                 445          0.339               303                 0.244                        740        0.619
+              radiotherapy             224         0.558              0.565                        0.400                                0.417                            0.585                0.473                 282          0.543               182                 0.401                        187        0.364
+         surgical_oncology             890         0.448              0.569                        0.267                                0.350                            0.464                0.313                 596          0.326               390                 0.277                        745        0.490
+                       mri             547         0.556              0.556                          NaN                                0.319                            0.603                0.411                 660          0.538               406                 0.443                        444        0.405
+                   ct_scan             852         0.624              0.624                          NaN                                0.427                            0.658                0.486                 988          0.459               688                 0.394                        699        0.323
+                ultrasound            1293         0.695              0.696                        0.000                                0.509                            0.723                0.507                1727          0.479              1178                 0.444                       1018        0.250
+                blood_bank             369         0.642              0.643                        0.600                                0.435                            0.672                0.585                 510          0.529               426                 0.486                        308        0.279
+          psychiatric_care             750         0.143              0.368                        0.094                                0.140                            0.143                0.125                 167          0.359               149                 0.369                        618        0.846
+              de_addiction             147         0.395              0.512                        0.238                                0.167                            0.439                0.293                 148          0.601                96                 0.552                        114        0.605
+          cataract_surgery             567         0.780              0.815                        0.396                                0.574                            0.808                0.683                 741          0.404               493                 0.215                        445        0.178
+             eye_emergency             257         0.584              0.654                        0.481                                0.368                            0.601                0.416                 260          0.423               166                 0.355                        211        0.393
+                   tb_care             129         0.473              0.469                        1.000                                0.267                            0.500                0.279                 304          0.786               120                 0.683                         98        0.500
+                   hiv_art              39         0.179              0.200                        0.000                                0.000                            0.200                0.179                  39          0.821                34                 0.794                         30        0.767
+               anti_rabies               6         0.333              0.333                          NaN                                0.000                            0.400                0.167                  26          0.923                10                 0.900                          3        0.667
+      paediatric_inpatient              28         0.429              0.429                          NaN                                0.000                            0.444                0.357                  52          0.769                33                 0.697                         25        0.520
+  nutrition_rehabilitation               2         0.500              0.500                          NaN                                  NaN                            0.500                0.500                   8          0.875                 4                 0.750                          2        0.500
+                       ALL           17735         0.599              0.671                        0.294                                0.425                            0.623                0.493               20218          0.473             14774                 0.407                      14495        0.342

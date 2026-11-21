@@ -1,0 +1,268 @@
+{
+ "vf_facilities": 9959,
+ "candidates_by_source_tier": {
+  "osm_conflict": 634,
+  "osm_high": 2596,
+  "osm_medium": 195,
+  "osm_none": 6531,
+  "wikidata_conflict": 31,
+  "wikidata_high": 182,
+  "wikidata_medium": 24,
+  "wikidata_none": 7469
+ },
+ "match_conf_by_tier": {
+  "high": 0.85,
+  "medium": 0.7,
+  "conflict": 0.267
+ },
+ "coverage": {
+  "any_match": {
+   "n": 2844,
+   "share_of_vf": 0.2856
+  },
+  "osm_match": {
+   "n": 2791,
+   "share_of_vf": 0.2802
+  },
+  "wikidata_match": {
+   "n": 206,
+   "share_of_vf": 0.0207
+  },
+  "hours_parsed": {
+   "n": 134,
+   "share_of_vf": 0.0135
+  },
+  "is_24x7_true": {
+   "n": 88,
+   "share_of_vf": 0.0088
+  },
+  "emergency_tag": {
+   "n": 177,
+   "share_of_vf": 0.0178
+  },
+  "emergency_yes": {
+   "n": 162,
+   "share_of_vf": 0.0163
+  },
+  "speciality": {
+   "n": 260,
+   "share_of_vf": 0.0261
+  },
+  "beds": {
+   "n": 51,
+   "share_of_vf": 0.0051
+  },
+  "operator_type": {
+   "n": 292,
+   "share_of_vf": 0.0293
+  },
+  "wheelchair": {
+   "n": 80,
+   "share_of_vf": 0.008
+  },
+  "by_tier": {
+   "osm_conflict": 634,
+   "osm_high": 2596,
+   "osm_medium": 195,
+   "wikidata_conflict": 31,
+   "wikidata_high": 182,
+   "wikidata_medium": 24
+  },
+  "high_only": {
+   "any_match": 2643,
+   "osm_match": 2599,
+   "wikidata_match": 186,
+   "hours_parsed": 124,
+   "is_24x7_true": 83,
+   "emergency_tag": 168,
+   "emergency_yes": 154,
+   "speciality": 236,
+   "beds": 49,
+   "operator_type": 277,
+   "wheelchair": 76
+  }
+ },
+ "facts_by_field": {
+  "osm:beds": 19,
+  "osm:emergency": 177,
+  "osm:facility_kind": 2791,
+  "osm:is_24x7": 134,
+  "osm:opening_hours": 134,
+  "osm:opening_hours_unparsed": 5,
+  "osm:operator": 95,
+  "osm:operator_type": 292,
+  "osm:phone_switchboard": 387,
+  "osm:speciality": 959,
+  "osm:website": 457,
+  "osm:wheelchair": 80,
+  "wikidata:beds": 32,
+  "wikidata:facility_kind": 296,
+  "wikidata:inception": 131,
+  "wikidata:operator": 2,
+  "wikidata:speciality": 10
+ },
+ "facts_vf_with_any": 2844,
+ "not_in_vf_total": 147080,
+ "not_in_vf_by_source": {
+  "osm": 133640,
+  "wikidata": 13440
+ },
+ "not_in_vf_by_state": {
+  "MAHARASHTRA": 15622,
+  "WEST BENGAL": 15505,
+  "KERALA": 12778,
+  "TAMIL NADU": 11205,
+  "TELANGANA": 9389,
+  "GUJARAT": 9023,
+  "UTTAR PRADESH": 8784,
+  "RAJASTHAN": 8204,
+  "KARNATAKA": 7945,
+  "ANDHRA PRADESH": 7380,
+  "PUNJAB": 6637,
+  "BIHAR": 6543,
+  "MADHYA PRADESH": 5968,
+  "ODISHA": 3358,
+  "HARYANA": 3103,
+  "ASSAM": 2135,
+  "JHARKHAND": 2032,
+  "UTTARAKHAND": 1903,
+  "CHHATTISGARH": 1808,
+  "DELHI": 1533,
+  "TRIPURA": 1344,
+  "JAMMU AND KASHMIR": 1054,
+  "HIMACHAL PRADESH": 959,
+  "GOA": 596,
+  "MIZORAM": 401,
+  "MEGHALAYA": 384,
+  "MANIPUR": 367,
+  "NAGALAND": 257,
+  "CHANDIGARH": 228,
+  "PUDUCHERRY": 216,
+  "SIKKIM": 160,
+  "ARUNACHAL PRADESH": 147,
+  "ANDAMAN AND NICOBAR ISLANDS": 41,
+  "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU": 34,
+  "LADAKH": 31,
+  "LAKSHADWEEP": 6
+ },
+ "vf_by_state": {
+  "MAHARASHTRA": 1654,
+  "GUJARAT": 996,
+  "UTTAR PRADESH": 948,
+  "TAMIL NADU": 825,
+  "KARNATAKA": 533,
+  "KERALA": 522,
+  "WEST BENGAL": 493,
+  "PUNJAB": 485,
+  "HARYANA": 465,
+  "TELANGANA": 431,
+  "RAJASTHAN": 408,
+  "DELHI": 352,
+  "ANDHRA PRADESH": 338,
+  "MADHYA PRADESH": 313,
+  "BIHAR": 260,
+  "JHARKHAND": 157,
+  "CHHATTISGARH": 143,
+  "UTTARAKHAND": 132,
+  "ODISHA": 119,
+  "ASSAM": 119,
+  "JAMMU AND KASHMIR": 70,
+  "CHANDIGARH": 47,
+  "HIMACHAL PRADESH": 39,
+  "GOA": 35,
+  "PUDUCHERRY": 18,
+  "MEGHALAYA": 14,
+  "MANIPUR": 13,
+  "TRIPURA": 9,
+  "NAGALAND": 6,
+  "SIKKIM": 4,
+  "ARUNACHAL PRADESH": 3,
+  "MIZORAM": 3,
+  "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU": 3,
+  "ANDAMAN AND NICOBAR ISLANDS": 2
+ },
+ "focus_states": {
+  "BIHAR": {
+   "not_in_vf": 6543,
+   "vf_records": 260,
+   "not_in_vf_by_kind": {
+    "centre": 4932,
+    "hospital": 781,
+    "clinic": 499,
+    "doctors": 134,
+    "dentist": 115,
+    "health_post": 26,
+    "laboratory": 12,
+    "health sub-centre": 12
+   },
+   "not_in_vf_hospitals_osm": 781
+  },
+  "UTTAR PRADESH": {
+   "not_in_vf": 8784,
+   "vf_records": 948,
+   "not_in_vf_by_kind": {
+    "centre": 4308,
+    "hospital": 3444,
+    "clinic": 714,
+    "doctors": 126,
+    "dentist": 60,
+    "alternative": 24,
+    "laboratory": 24,
+    "yes": 20
+   },
+   "not_in_vf_hospitals_osm": 3444
+  },
+  "JHARKHAND": {
+   "not_in_vf": 2032,
+   "vf_records": 157,
+   "not_in_vf_by_kind": {
+    "centre": 657,
+    "hospital": 652,
+    "clinic": 312,
+    "health_post": 243,
+    "dentist": 92,
+    "health sub-centre": 33,
+    "doctors": 32,
+    "primary health centre": 4
+   },
+   "not_in_vf_hospitals_osm": 652
+  },
+  "ODISHA": {
+   "not_in_vf": 3358,
+   "vf_records": 119,
+   "not_in_vf_by_kind": {
+    "centre": 1436,
+    "hospital": 1010,
+    "clinic": 556,
+    "dentist": 167,
+    "doctors": 150,
+    "health sub-centre": 17,
+    "laboratory": 6,
+    "midwife": 5
+   },
+   "not_in_vf_hospitals_osm": 1010
+  }
+ },
+ "crosscheck_vs_vf_text": {
+  "24x7": {
+   "n_osm_tagged": 134,
+   "osm_yes_vf_text_yes": 60,
+   "osm_yes_vf_text_no": 28,
+   "osm_no_vf_text_yes": 11,
+   "osm_no_vf_text_no": 35
+  },
+  "emergency": {
+   "n_osm_tagged": 177,
+   "osm_yes_vf_text_yes": 115,
+   "osm_yes_vf_text_no": 47,
+   "osm_no_vf_text_yes": 8,
+   "osm_no_vf_text_no": 7
+  },
+  "beds": {
+   "n_osm_beds": 19,
+   "n_vf_capacity_too": 7,
+   "within_20pct": 4
+  }
+ },
+ "osm_features_shared_by_2plus_vf": 44
+}

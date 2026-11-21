@@ -1,0 +1,95 @@
+"""Hand verdicts for qa/out/sample.csv (seed 4242), written after reading each item in `qa.py show` against the stored page.
+
+n -> (correct, error pattern or "", note). Criteria:
+- service: read with its page, the best quote says this facility provides this service now;
+- hours and details: fact type, attribute and the facility-level value are what the quote says about this facility;
+- identity accepted: the site is this record's facility; identity rejected: the stored pages do not show this facility
+  (an empty, parked, spam or other-facility site); a rejection of a site that plainly is the facility counts as wrong.
+"""
+LABELS: dict[int, tuple[bool, str, str]] = {
+    # services: confirms a dataset claim, strong
+    1: (True, "", "psychiatric care listed as available for consultation"),
+    2: (False, "copied_other_facility_text", "page text names Ruby Hall Clinic: copied template; the line is about anaesthesia"),
+    3: (True, "", "USG with colour doppler"), 4: (True, "", ""), 5: (True, "", "own department menu"), 6: (True, "", "own top-services list"),
+    7: (True, "", ""), 8: (True, "", ""), 9: (True, "", "marketing line names a neurosurgery facility"), 10: (True, "", "critical care department menu"),
+    11: (True, "", "SICU"), 12: (True, "", ""), 13: (True, "", "Emergency: 24 hours on an ENT hospital site"),
+    14: (True, "", "retinal detachment is in the eye_emergency definition; retina services page"),
+    15: (False, "news_or_event_page", "event teaser on a university events page"),
+    # services: confirms, weak
+    16: (True, "", ""), 17: (True, "", "doctor bio, but the doctor is on this hospital's roster"), 18: (True, "", ""), 19: (True, "", ""),
+    20: (False, "other_branch_or_chain", "Apollo Cradle Chennai page for an Amritsar record"),
+    21: (False, "same_name_other_facility", "Green City Hospital, Kathmandu, Nepal, for a record in Uttar Pradesh"),
+    22: (False, "menu_or_footer_edu", "chain-wide 'Eye Diseases' encyclopedia menu"),
+    23: (False, "educational_or_generic", "glaucoma explainer mentions eye injuries"), 24: (True, "", ""),
+    25: (True, "", "medical oncology heading with a listed oncologist"),
+    26: (False, "wrong_service_sense", "eye trauma read as trauma care; the clause split dropped 'Eye' from the clause holding 'trauma'"),
+    27: (True, "", ""), 28: (True, "", ""),
+    29: (False, "educational_or_generic", "pregnancy explainer sentence"), 30: (False, "educational_or_generic", "vague line on a general surgery page"),
+    # services: web-only, strong
+    31: (True, "", "college hospital facilities menu"), 32: (True, "", ""),
+    33: (False, "lexicon_false_hit", "'3D scans' of a dental CBCT matched ultrasound"),
+    34: (True, "", ""), 35: (True, "", ""), 36: (True, "", "tobacco de-addiction clinic"),
+    37: (False, "wrong_service_sense", "psychological trauma at a psychiatric hospital"), 38: (True, "", ""), 39: (True, "", "casualty, round the clock"),
+    40: (False, "lexicon_false_hit", "'advanced life support' in an ER line matched ventilator support"),
+    41: (True, "", ""), 42: (True, "", ""), 43: (True, "", "conditional 'may include ultrasound' at an IVF centre"), 44: (True, "", ""),
+    45: (False, "wrong_service_sense", "orthopaedic trauma at an OPD clinic, not trauma care"),
+    # services: web-only, weak
+    46: (True, "", "record is itself a merge (Gujarat PIN, Delhi city); site matches name and city"),
+    47: (False, "doctor_bio", "doctor founded a blood bank society"),
+    48: (False, "wrong_service_sense", "psychological trauma, hypnotherapy"),
+    49: (False, "coming_soon", "'will be operational soon'"), 50: (True, "", "Nephrology (Dialysis) department"),
+    51: (False, "testimonial", "patient testimonial about a planned C-section"),
+    52: (False, "doctor_bio", "doctor presented at a critical care CME"),
+    53: (False, "educational_or_generic", "chemotherapy named as a reason to freeze sperm"),
+    54: (False, "educational_or_generic", "lab test explainer"),
+    55: (True, "", "service right; best quote is a VAP line although 'Non-invasive and invasive ventilation' is on the page"),
+    56: (False, "menu_or_footer_edu", "article category menu on a nuclear medicine centre"),
+    57: (False, "educational_or_generic", "physiotherapy explainer mentions fractures"),
+    58: (False, "educational_or_generic", "kidney disease explainer"),
+    59: (False, "doctor_bio", "vascular surgeon bio lists thrombolysis; not STEMI"), 60: (True, "", ""),
+    # hours
+    61: (True, "", ""), 62: (True, "", ""), 63: (True, "", ""), 64: (True, "", ""), 65: (True, "", "badge on the departments page"),
+    66: (False, "helpline_or_visiting", "'Emergency 24 hours' label over phone numbers at a diagnostic centre"),
+    67: (True, "", ""), 68: (True, "", ""), 69: (True, "", "24x7 emergency-qualified team; could be ambulance text"), 70: (True, "", ""),
+    71: (False, "facility_value_mismatch", "facility row value 'days? 18:00-20:00' is the evening session, the quote is the Mon-Sat morning session"),
+    72: (True, "", ""), 73: (True, "", ""), 74: (True, "", ""), 75: (True, "", ""),
+    76: (False, "parent_org_footer", "the parent foundation's office hours in the site footer"),
+    77: (True, "", ""), 78: (True, "", "hours right, 'weekdays' left as days?; page has injected casino spam"), 79: (True, "", ""), 80: (True, "", ""),
+    81: (True, "", "LLM read '9:30 tp 7:30' correctly"),
+    82: (False, "other_branch_or_chain", "Regencare Calicut branch page for a Kochi record"), 83: (True, "", ""), 84: (True, "", ""),
+    85: (True, "", "only the Monday line is kept; the other days are separate lines"),
+    86: (False, "helpline_or_visiting", "NICU parent visiting policy stored as facility 24x7"),
+    87: (False, "wrong_scope", "HDU round-the-clock supervision stored as facility-wide 24x7"),
+    88: (False, "same_name_other_facility", "Pulse Hospital Bhagalpur site for a Siliguri record"),
+    89: (False, "helpline_or_visiting", "'Call Us 24/7' stored as facility 24x7"), 90: (True, "", "24 hour obstetric care"),
+    # details
+    91: (True, "", ""), 92: (False, "unit_beds_as_total", "16-bed AMCU stored as total beds"),
+    93: (False, "other_branch_or_chain", "group page: 200-bed Haldwani hospital for the Lucknow record (203+ beds)"),
+    94: (False, "same_name_other_facility", "Bharati Vidyapeeth Sangli for a Chandrapur record"),
+    95: (False, "other_branch_or_chain", "50 beds across two branches stored for the T-Nagar branch"), 96: (True, "", ""),
+    97: (False, "other_branch_or_chain", "Kolkata flagship accreditations on the chain homepage, record is Siliguri"),
+    98: (True, "", ""), 99: (True, "", ""), 100: (True, "", "the page lists a Kayakalp award"), 101: (True, "", ""),
+    102: (False, "other_hospitals_list", "blog of top cancer hospitals: RGCIRC's NABL credited to this hospital"),
+    103: (True, "", ""), 104: (True, "", "AB-PMJAY badge"), 105: (True, "", ""), 106: (True, "", "group FAQ; group-wide insurance policy"), 107: (True, "", ""),
+    108: (False, "lexicon_false_hit", "'paramount importance' matched the Paramount TPA"),
+    109: (False, "facility_value_mismatch", "facility value 24 comes from '24 Hrs ICCU Ambulance' read as 24 ambulances"),
+    110: (True, "", ""), 111: (False, "same_name_other_facility", "'Asian Hospital' matched 'Asian Eye Hospital' after generic words were dropped"),
+    112: (True, "", ""), 113: (True, "", ""), 114: (True, "", ""), 115: (True, "", ""), 116: (True, "", ""), 117: (True, "", ""), 118: (True, "", ""),
+    119: (True, "", "1500 non-teaching staff"), 120: (True, "", ""),
+    # identity accepted
+    121: (True, "", ""), 122: (True, "", ""), 123: (True, "", ""), 124: (True, "", ""), 125: (True, "", ""), 126: (True, "", ""), 127: (True, "", ""),
+    128: (True, "", ""), 129: (True, "", ""), 130: (True, "", ""),
+    131: (False, "same_name_other_facility", "Dr. Anand Patel, gastro surgeon in Ahmedabad, for Anand Hospital, Rajpipla (one-token 'dist' match)"),
+    132: (False, "same_name_other_facility", "Navkar Dental Clinic of Khapar & Akkalkuwa for an Ahmedabad record"),
+    133: (True, "", "unverifiable: name only, no place on the one page; it is the record's officialWebsite"),
+    134: (True, "", "address and PIN match"),
+    135: (False, "other_branch_or_chain", "Shuddhi Ayurveda chain site accepted as the Faizabad clinic's own site"),
+    # identity rejected
+    136: (True, "", "spam page"), 137: (False, "missed_name_variant", "Sri vs Sree Lakshmi; same hospital in Thudiyalur, Coimbatore"),
+    138: (True, "", "empty"), 139: (True, "", "empty"), 140: (True, "", "'Launching Soon' page"),
+    141: (False, "missed_name_variant", "site names the doctor, not 'Sidh Clinic', but the record's street address (Kishanpura Chowk, Hoshiarpur Rd) is on it"),
+    142: (True, "", "other PINs only"), 143: (True, "", "empty"),
+    144: (False, "missed_name_variant", "Udyan vs Udayan Hospital; same street and PIN"), 145: (True, "", "bot wall"),
+    146: (True, "", "yahoo.in"), 147: (True, "", "empty"), 148: (True, "", "default page"), 149: (True, "", "empty"),
+    150: (False, "missed_name_variant", "'IMB Hospital & Research Centre' vs 'and', Sreekaryam, Trivandrum"),
+}

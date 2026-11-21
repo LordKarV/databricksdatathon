@@ -1,0 +1,610 @@
+{
+ "all": {
+  "k": 102,
+  "n": 150,
+  "p": 0.68,
+  "wilson": [
+   0.602,
+   0.749
+  ],
+  "weighted_p": 0.709,
+  "weighted_bounds": [
+   0.432,
+   0.869
+  ]
+ },
+ "by_group": {
+  "det": {
+   "k": 21,
+   "n": 30,
+   "p": 0.7,
+   "wilson": [
+    0.521,
+    0.833
+   ],
+   "weighted_p": 0.787,
+   "weighted_bounds": [
+    0.379,
+    0.929
+   ]
+  },
+  "hrs": {
+   "k": 22,
+   "n": 30,
+   "p": 0.733,
+   "wilson": [
+    0.556,
+    0.858
+   ],
+   "weighted_p": 0.508,
+   "weighted_bounds": [
+    0.274,
+    0.786
+   ]
+  },
+  "id_acc": {
+   "k": 12,
+   "n": 15,
+   "p": 0.8,
+   "wilson": [
+    0.548,
+    0.93
+   ],
+   "weighted_p": 0.964,
+   "weighted_bounds": [
+    0.686,
+    0.986
+   ]
+  },
+  "id_rej": {
+   "k": 11,
+   "n": 15,
+   "p": 0.733,
+   "wilson": [
+    0.48,
+    0.891
+   ],
+   "weighted_p": 0.721,
+   "weighted_bounds": [
+    0.393,
+    0.907
+   ]
+  },
+  "svc": {
+   "k": 36,
+   "n": 60,
+   "p": 0.6,
+   "wilson": [
+    0.474,
+    0.714
+   ],
+   "weighted_p": 0.69,
+   "weighted_bounds": [
+    0.459,
+    0.844
+   ]
+  }
+ },
+ "by_stratum": {
+  "det_accreditation": {
+   "k": 4,
+   "n": 6,
+   "p": 0.667,
+   "wilson": [
+    0.3,
+    0.903
+   ]
+  },
+  "det_ambulance": {
+   "k": 2,
+   "n": 4,
+   "p": 0.5,
+   "wilson": [
+    0.15,
+    0.85
+   ]
+  },
+  "det_beds": {
+   "k": 2,
+   "n": 6,
+   "p": 0.333,
+   "wilson": [
+    0.097,
+    0.7
+   ]
+  },
+  "det_blood_centre": {
+   "k": 4,
+   "n": 4,
+   "p": 1.0,
+   "wilson": [
+    0.51,
+    1.0
+   ]
+  },
+  "det_empanelment": {
+   "k": 5,
+   "n": 6,
+   "p": 0.833,
+   "wilson": [
+    0.436,
+    0.97
+   ]
+  },
+  "det_other": {
+   "k": 4,
+   "n": 4,
+   "p": 1.0,
+   "wilson": [
+    0.51,
+    1.0
+   ]
+  },
+  "hrs_emergency_24x7": {
+   "k": 9,
+   "n": 10,
+   "p": 0.9,
+   "wilson": [
+    0.596,
+    0.982
+   ]
+  },
+  "hrs_llm": {
+   "k": 4,
+   "n": 5,
+   "p": 0.8,
+   "wilson": [
+    0.376,
+    0.964
+   ]
+  },
+  "hrs_opd_regex": {
+   "k": 8,
+   "n": 10,
+   "p": 0.8,
+   "wilson": [
+    0.49,
+    0.943
+   ]
+  },
+  "hrs_other": {
+   "k": 1,
+   "n": 5,
+   "p": 0.2,
+   "wilson": [
+    0.036,
+    0.624
+   ]
+  },
+  "id_acc_high": {
+   "k": 10,
+   "n": 10,
+   "p": 1.0,
+   "wilson": [
+    0.722,
+    1.0
+   ]
+  },
+  "id_acc_medium": {
+   "k": 2,
+   "n": 5,
+   "p": 0.4,
+   "wilson": [
+    0.118,
+    0.769
+   ]
+  },
+  "id_rej_low": {
+   "k": 7,
+   "n": 10,
+   "p": 0.7,
+   "wilson": [
+    0.397,
+    0.892
+   ]
+  },
+  "id_rej_none": {
+   "k": 4,
+   "n": 5,
+   "p": 0.8,
+   "wilson": [
+    0.376,
+    0.964
+   ]
+  },
+  "svc_confirm_strong": {
+   "k": 13,
+   "n": 15,
+   "p": 0.867,
+   "wilson": [
+    0.621,
+    0.963
+   ]
+  },
+  "svc_confirm_weak": {
+   "k": 8,
+   "n": 15,
+   "p": 0.533,
+   "wilson": [
+    0.301,
+    0.752
+   ]
+  },
+  "svc_webonly_strong": {
+   "k": 11,
+   "n": 15,
+   "p": 0.733,
+   "wilson": [
+    0.48,
+    0.891
+   ]
+  },
+  "svc_webonly_weak": {
+   "k": 4,
+   "n": 15,
+   "p": 0.267,
+   "wilson": [
+    0.109,
+    0.52
+   ]
+  }
+ },
+ "errors_by_pattern": {
+  "educational_or_generic": 7,
+  "other_branch_or_chain": 6,
+  "same_name_other_facility": 6,
+  "wrong_service_sense": 4,
+  "missed_name_variant": 4,
+  "lexicon_false_hit": 3,
+  "doctor_bio": 3,
+  "helpline_or_visiting": 3,
+  "menu_or_footer_edu": 2,
+  "facility_value_mismatch": 2,
+  "copied_other_facility_text": 1,
+  "news_or_event_page": 1,
+  "coming_soon": 1,
+  "testimonial": 1,
+  "parent_org_footer": 1,
+  "wrong_scope": 1,
+  "unit_beds_as_total": 1,
+  "other_hospitals_list": 1
+ },
+ "wrong": [
+  {
+   "n": 2,
+   "stratum": "svc_confirm_strong",
+   "item": "neurosurgery",
+   "error": "copied_other_facility_text",
+   "note": "page text names Ruby Hall Clinic: copied template; the line is about anaesthesia"
+  },
+  {
+   "n": 15,
+   "stratum": "svc_confirm_strong",
+   "item": "psychiatric_care",
+   "error": "news_or_event_page",
+   "note": "event teaser on a university events page"
+  },
+  {
+   "n": 20,
+   "stratum": "svc_confirm_weak",
+   "item": "ultrasound",
+   "error": "other_branch_or_chain",
+   "note": "Apollo Cradle Chennai page for an Amritsar record"
+  },
+  {
+   "n": 21,
+   "stratum": "svc_confirm_weak",
+   "item": "icu",
+   "error": "same_name_other_facility",
+   "note": "Green City Hospital, Kathmandu, Nepal, for a record in Uttar Pradesh"
+  },
+  {
+   "n": 22,
+   "stratum": "svc_confirm_weak",
+   "item": "eye_emergency",
+   "error": "menu_or_footer_edu",
+   "note": "chain-wide 'Eye Diseases' encyclopedia menu"
+  },
+  {
+   "n": 23,
+   "stratum": "svc_confirm_weak",
+   "item": "eye_emergency",
+   "error": "educational_or_generic",
+   "note": "glaucoma explainer mentions eye injuries"
+  },
+  {
+   "n": 26,
+   "stratum": "svc_confirm_weak",
+   "item": "trauma_care",
+   "error": "wrong_service_sense",
+   "note": "eye trauma read as trauma care; the clause split dropped 'Eye' from the clause holding 'trauma'"
+  },
+  {
+   "n": 29,
+   "stratum": "svc_confirm_weak",
+   "item": "ultrasound",
+   "error": "educational_or_generic",
+   "note": "pregnancy explainer sentence"
+  },
+  {
+   "n": 30,
+   "stratum": "svc_confirm_weak",
+   "item": "orthopaedic_trauma_surgery",
+   "error": "educational_or_generic",
+   "note": "vague line on a general surgery page"
+  },
+  {
+   "n": 33,
+   "stratum": "svc_webonly_strong",
+   "item": "ultrasound",
+   "error": "lexicon_false_hit",
+   "note": "'3D scans' of a dental CBCT matched ultrasound"
+  },
+  {
+   "n": 37,
+   "stratum": "svc_webonly_strong",
+   "item": "trauma_care",
+   "error": "wrong_service_sense",
+   "note": "psychological trauma at a psychiatric hospital"
+  },
+  {
+   "n": 40,
+   "stratum": "svc_webonly_strong",
+   "item": "ventilator_support",
+   "error": "lexicon_false_hit",
+   "note": "'advanced life support' in an ER line matched ventilator support"
+  },
+  {
+   "n": 45,
+   "stratum": "svc_webonly_strong",
+   "item": "trauma_care",
+   "error": "wrong_service_sense",
+   "note": "orthopaedic trauma at an OPD clinic, not trauma care"
+  },
+  {
+   "n": 47,
+   "stratum": "svc_webonly_weak",
+   "item": "blood_bank",
+   "error": "doctor_bio",
+   "note": "doctor founded a blood bank society"
+  },
+  {
+   "n": 48,
+   "stratum": "svc_webonly_weak",
+   "item": "trauma_care",
+   "error": "wrong_service_sense",
+   "note": "psychological trauma, hypnotherapy"
+  },
+  {
+   "n": 49,
+   "stratum": "svc_webonly_weak",
+   "item": "cataract_surgery",
+   "error": "coming_soon",
+   "note": "'will be operational soon'"
+  },
+  {
+   "n": 51,
+   "stratum": "svc_webonly_weak",
+   "item": "emergency_csection",
+   "error": "testimonial",
+   "note": "patient testimonial about a planned C-section"
+  },
+  {
+   "n": 52,
+   "stratum": "svc_webonly_weak",
+   "item": "icu",
+   "error": "doctor_bio",
+   "note": "doctor presented at a critical care CME"
+  },
+  {
+   "n": 53,
+   "stratum": "svc_webonly_weak",
+   "item": "chemotherapy",
+   "error": "educational_or_generic",
+   "note": "chemotherapy named as a reason to freeze sperm"
+  },
+  {
+   "n": 54,
+   "stratum": "svc_webonly_weak",
+   "item": "chemotherapy",
+   "error": "educational_or_generic",
+   "note": "lab test explainer"
+  },
+  {
+   "n": 56,
+   "stratum": "svc_webonly_weak",
+   "item": "mri",
+   "error": "menu_or_footer_edu",
+   "note": "article category menu on a nuclear medicine centre"
+  },
+  {
+   "n": 57,
+   "stratum": "svc_webonly_weak",
+   "item": "orthopaedic_trauma_surgery",
+   "error": "educational_or_generic",
+   "note": "physiotherapy explainer mentions fractures"
+  },
+  {
+   "n": 58,
+   "stratum": "svc_webonly_weak",
+   "item": "kidney_transplant",
+   "error": "educational_or_generic",
+   "note": "kidney disease explainer"
+  },
+  {
+   "n": 59,
+   "stratum": "svc_webonly_weak",
+   "item": "stemi_thrombolysis",
+   "error": "doctor_bio",
+   "note": "vascular surgeon bio lists thrombolysis; not STEMI"
+  },
+  {
+   "n": 66,
+   "stratum": "hrs_emergency_24x7",
+   "item": "hours_24x7:emergency",
+   "error": "helpline_or_visiting",
+   "note": "'Emergency 24 hours' label over phone numbers at a diagnostic centre"
+  },
+  {
+   "n": 71,
+   "stratum": "hrs_opd_regex",
+   "item": "opd_hours:general",
+   "error": "facility_value_mismatch",
+   "note": "facility row value 'days? 18:00-20:00' is the evening session, the quote is the Mon-Sat morning session"
+  },
+  {
+   "n": 76,
+   "stratum": "hrs_opd_regex",
+   "item": "opd_hours:general",
+   "error": "parent_org_footer",
+   "note": "the parent foundation's office hours in the site footer"
+  },
+  {
+   "n": 82,
+   "stratum": "hrs_llm",
+   "item": "opd_hours:general",
+   "error": "other_branch_or_chain",
+   "note": "Regencare Calicut branch page for a Kochi record"
+  },
+  {
+   "n": 86,
+   "stratum": "hrs_other",
+   "item": "hours_24x7:facility",
+   "error": "helpline_or_visiting",
+   "note": "NICU parent visiting policy stored as facility 24x7"
+  },
+  {
+   "n": 87,
+   "stratum": "hrs_other",
+   "item": "hours_24x7:facility",
+   "error": "wrong_scope",
+   "note": "HDU round-the-clock supervision stored as facility-wide 24x7"
+  },
+  {
+   "n": 88,
+   "stratum": "hrs_other",
+   "item": "hours_24x7:helpline",
+   "error": "same_name_other_facility",
+   "note": "Pulse Hospital Bhagalpur site for a Siliguri record"
+  },
+  {
+   "n": 89,
+   "stratum": "hrs_other",
+   "item": "hours_24x7:facility",
+   "error": "helpline_or_visiting",
+   "note": "'Call Us 24/7' stored as facility 24x7"
+  },
+  {
+   "n": 92,
+   "stratum": "det_beds",
+   "item": "unit_beds:total",
+   "error": "unit_beds_as_total",
+   "note": "16-bed AMCU stored as total beds"
+  },
+  {
+   "n": 93,
+   "stratum": "det_beds",
+   "item": "unit_beds:total",
+   "error": "other_branch_or_chain",
+   "note": "group page: 200-bed Haldwani hospital for the Lucknow record (203+ beds)"
+  },
+  {
+   "n": 94,
+   "stratum": "det_beds",
+   "item": "unit_beds:nicu",
+   "error": "same_name_other_facility",
+   "note": "Bharati Vidyapeeth Sangli for a Chandrapur record"
+  },
+  {
+   "n": 95,
+   "stratum": "det_beds",
+   "item": "unit_beds:total",
+   "error": "other_branch_or_chain",
+   "note": "50 beds across two branches stored for the T-Nagar branch"
+  },
+  {
+   "n": 97,
+   "stratum": "det_accreditation",
+   "item": "accreditation:NABH",
+   "error": "other_branch_or_chain",
+   "note": "Kolkata flagship accreditations on the chain homepage, record is Siliguri"
+  },
+  {
+   "n": 102,
+   "stratum": "det_accreditation",
+   "item": "accreditation:NABL",
+   "error": "other_hospitals_list",
+   "note": "blog of top cancer hospitals: RGCIRC's NABL credited to this hospital"
+  },
+  {
+   "n": 108,
+   "stratum": "det_empanelment",
+   "item": "empanelment:private_insurance",
+   "error": "lexicon_false_hit",
+   "note": "'paramount importance' matched the Paramount TPA"
+  },
+  {
+   "n": 109,
+   "stratum": "det_ambulance",
+   "item": "ambulance:ambulance_service",
+   "error": "facility_value_mismatch",
+   "note": "facility value 24 comes from '24 Hrs ICCU Ambulance' read as 24 ambulances"
+  },
+  {
+   "n": 111,
+   "stratum": "det_ambulance",
+   "item": "ambulance:ambulance_service",
+   "error": "same_name_other_facility",
+   "note": "'Asian Hospital' matched 'Asian Eye Hospital' after generic words were dropped"
+  },
+  {
+   "n": 131,
+   "stratum": "id_acc_medium",
+   "item": "anandgastrosurgeon.com",
+   "error": "same_name_other_facility",
+   "note": "Dr. Anand Patel, gastro surgeon in Ahmedabad, for Anand Hospital, Rajpipla (one-token 'dist' match)"
+  },
+  {
+   "n": 132,
+   "stratum": "id_acc_medium",
+   "item": "navkardentalclinic.com",
+   "error": "same_name_other_facility",
+   "note": "Navkar Dental Clinic of Khapar & Akkalkuwa for an Ahmedabad record"
+  },
+  {
+   "n": 135,
+   "stratum": "id_acc_medium",
+   "item": "shuddhi.com",
+   "error": "other_branch_or_chain",
+   "note": "Shuddhi Ayurveda chain site accepted as the Faizabad clinic's own site"
+  },
+  {
+   "n": 137,
+   "stratum": "id_rej_low",
+   "item": "smch.in#4f848d20",
+   "error": "missed_name_variant",
+   "note": "Sri vs Sree Lakshmi; same hospital in Thudiyalur, Coimbatore"
+  },
+  {
+   "n": 141,
+   "stratum": "id_rej_low",
+   "item": "drshridharsharma.in",
+   "error": "missed_name_variant",
+   "note": "site names the doctor, not 'Sidh Clinic', but the record's street address (Kishanpura Chowk, Hoshiarpur Rd) is on it"
+  },
+  {
+   "n": 144,
+   "stratum": "id_rej_low",
+   "item": "udayanhospital.com",
+   "error": "missed_name_variant",
+   "note": "Udyan vs Udayan Hospital; same street and PIN"
+  },
+  {
+   "n": 150,
+   "stratum": "id_rej_none",
+   "item": "imbhrc.org",
+   "error": "missed_name_variant",
+   "note": "'IMB Hospital & Research Centre' vs 'and', Sreekaryam, Trivandrum"
+  }
+ ]
+}

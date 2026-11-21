@@ -1,0 +1,95 @@
+/Users/karthikvattem/projects/datathon/kb/taxonomy/build_lexicon.py:145: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  hit = t.text.str.contains(rx)
+/Users/karthikvattem/projects/datathon/kb/taxonomy/build_lexicon.py:145: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  hit = t.text.str.contains(rx)
+/Users/karthikvattem/projects/datathon/kb/taxonomy/build_lexicon.py:151: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  hit = own.text.str.contains(rx)
+{
+ "core_tag_diff_vs_claims_parquet": {
+  "burn_care": {
+   "only_claims_parquet": 1,
+   "only_kb": 0,
+   "both": 401
+  },
+  "cardiac_surgery": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 1953
+  },
+  "dialysis": {
+   "only_claims_parquet": 15,
+   "only_kb": 6,
+   "both": 3064
+  },
+  "emergency_24x7": {
+   "only_claims_parquet": 2237,
+   "only_kb": 265,
+   "both": 6636
+  },
+  "emergency_csection": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 691
+  },
+  "icu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 5965
+  },
+  "mri": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 3135
+  },
+  "nicu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 1555
+  }
+ },
+ "claims": 469498,
+ "matched_sentence_service_pairs": 64670,
+ "sentences_with_any_match": 58004,
+ "services_in_taxonomy": 36,
+ "candidates_not_included": [
+  "palliative_care"
+ ]
+}
+                   service  in_taxonomy  sentences  facilities_any  facilities_2plus_fields  states_any  facilities_text  facilities_specialty_only  facilities_text_positive  facilities_text_2plus_fields  sentences_nonoffer_cue  sentences_other_facility  sentences_with_quantity  low_coverage
+            emergency_24x7         True       6901            3367                     1910          33             2936                        431                      2925                           742                      10                        28                       69         False
+                       icu         True       5965            2789                     1589          32             2300                        489                      2280                           868                       9                        31                      380         False
+              neurosurgery         True       2891            2235                     1058          31             1174                       1061                      1149                           447                       5                        20                        0         False
+                ultrasound         True       7132            2103                     1281          31             2102                          1                      2099                          1278                       6                        11                        0         False
+              chemotherapy         True       1238            1568                      408          29              472                       1096                       468                           198                       2                         7                        1         False
+         surgical_oncology         True       1954            1530                      625          30              853                        677                       837                           259                       0                        11                        0         False
+                   ct_scan         True       5127            1459                      868          32             1459                          0                      1448                           859                      23                        27                      468         False
+          psychiatric_care         True        437            1317                      206          33              241                       1076                       228                            35                       1                         6                        6          True
+               trauma_care         True       2852            1270                      463          28             1254                         16                      1237                           435                       8                        25                       54         False
+    institutional_delivery         True       2308            1206                      489          26             1049                        157                      1031                           383                       4                        28                       33         False
+                  dialysis         True       3070            1051                      575          30             1047                          4                      1035                           559                      14                        28                       42         False
+           cardiac_surgery         True       1953             976                      490          28              670                        306                       659                           258                       6                        17                       21         False
+       high_risk_pregnancy         True       1059             963                      326          28              487                        476                       482                           174                       1                         0                        0         False
+                       mri         True       3135             952                      538          31              952                          0                       942                           533                      12                        15                      578         False
+          cataract_surgery         True       4093             909                      645          27              800                        109                       793                           513                      36                         9                       45         False
+      cath_lab_angioplasty         True       2619             817                      491          29              805                         12                       797                           463                      10                        10                       52         False
+                      nicu         True       1555             746                      245          29              746                          0                       742                           242                       3                         9                      192         False
+                blood_bank         True       1613             685                      265          30              678                          7                       667                           240                       7                        32                        6         False
+orthopaedic_trauma_surgery         True       1094             560                      158          25              547                         13                       542                           143                       2                         7                        0         False
+         kidney_transplant         True       1065             483                      226          26              448                         35                       432                           191                       5                         6                       16         False
+        ventilator_support         True        836             462                      125          24              461                          1                       459                           120                       2                         1                       29         False
+        emergency_csection         True        691             442                       93          26              442                          0                       437                            92                       2                         5                        4          True
+                      picu         True        631             425                      176          29              337                         88                       331                            93                       4                         2                       22          True
+              radiotherapy         True       1552             384                      227          27              365                         19                       355                           200                       7                         8                        4         False
+             eye_emergency         True        409             369                      125          23              205                        164                       205                            61                       0                         0                        0          True
+              de_addiction         True        456             287                      102          24              161                        126                       157                            50                       7                         6                        0          True
+                 burn_care         True        401             265                      125          24              217                         48                       215                            66                       3                         1                       11          True
+                   tb_care         True        492             242                       70          24              240                          2                       222                            62                       4                        16                        0          True
+           palliative_care        False        412             185                       58          24              185                          0                       180                            56                       3                         2                        0          True
+               stroke_care         True        211             159                       42          20              128                         31                       126                            34                       0                         2                        0          True
+         safe_abortion_mtp         True        237             151                       27          21              151                          0                       151                            25                       0                         2                        0          True
+                   hiv_art         True        131              74                       15          22               70                          4                        67                            14                       0                         6                        0          True
+      paediatric_inpatient         True         53              40                        5          17               40                          0                        39                             5                       1                         2                       11          True
+        stemi_thrombolysis         True         30              22                        2          12               22                          0                        21                             2                       1                         0                        0          True
+               anti_rabies         True         32              19                        5          13               19                          0                        19                             5                       0                         0                        0          True
+       snakebite_antivenom         True         23              17                        5           6               16                          1                        16                             5                       0                         0                        0          True
+  nutrition_rehabilitation         True         12              10                        1           7               10                          0                         9                             1                       0                         0                        0          True
