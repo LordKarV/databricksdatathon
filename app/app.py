@@ -6,12 +6,13 @@ fill from the model (see stub_data.py and README.md).
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from stub_data import SERVICES, recommend_stub
@@ -21,6 +22,7 @@ Depth = Literal["quick", "compare", "area"]
 
 HERE = Path(__file__).resolve().parent
 STATIC = HERE / "static"
+PACKS = HERE / "packs" / "out"  # built by packs/build_packs.py (git-ignored)
 
 # Only these files are served from the root. An allowlist keeps the shell small and
 # avoids exposing anything else in the folder.
@@ -29,6 +31,7 @@ SHELL_FILES: dict[str, str] = {
     "app.js": "text/javascript; charset=utf-8",
     "app.css": "text/css; charset=utf-8",
     "sw.js": "text/javascript; charset=utf-8",
+    "pack.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -82,6 +85,32 @@ def plan(req: PlanRequest) -> dict:
 def recommend_dev_alias(req: Annotated[PlanRequest, Query()]) -> dict:
     """Dev-only alias for curl and browser checks. The page never calls it."""
     return _plan(req)
+
+
+def _pack_index() -> dict | None:
+    path = PACKS / "index.json"
+    return json.loads(path.read_text()) if path.is_file() else None
+
+
+@app.get("/api/pack/version")
+def pack_version() -> JSONResponse:
+    idx = _pack_index()
+    if idx is None:
+        return JSONResponse({"error": "no packs built"}, 404, headers={"Cache-Control": "no-cache"})
+    return JSONResponse(idx, headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/api/pack/{slug}")
+def pack(slug: str) -> Response:
+    # The slug must be a key of index.json, so no client string ever reaches the filesystem path.
+    idx = _pack_index()
+    if idx is None or slug not in idx["packs"]:
+        raise HTTPException(404)
+    body = (PACKS / f"{slug}.json.gz").read_bytes()
+    # Pre-compressed: Content-Encoding is set, so GZipMiddleware leaves it alone.
+    return Response(body, media_type="application/json",
+                    headers={"Content-Encoding": "gzip", "Cache-Control": "no-cache",
+                             "ETag": f'"{idx["packs"][slug]["sha256"]}"'})
 
 
 @app.get("/{name}")
