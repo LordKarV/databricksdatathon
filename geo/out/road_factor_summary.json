@@ -1,5 +1,5 @@
 {
- "measured_utc": "2026-11-21T19:34:18Z",
+ "measured_utc": "2026-11-21T19:42:06Z",
  "source": "https://router.project-osrm.org table service, car profile, free flow (no traffic)",
  "sampling": {
   "seed": 7,
@@ -14,7 +14,10 @@
    110
   ],
   "urban_proxy": "other PIN centroids within 10 km >= 8 (national 75th percentile)",
-  "origins_sampled": 242,
+  "origins_sampled": 379,
+  "origins_core": 242,
+  "pairs_all_origins": 3790,
+  "origins_per_state_stratum_hill_candidates": 12,
   "origins_failed_or_not_cached": 0,
   "states": 34
  },
