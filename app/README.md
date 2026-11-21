@@ -57,7 +57,7 @@ Response:
     "rank": 1, "facility_id": "<unique_id>", "name": "...", "town": "...", "district": "...", "state": "...",
     "address": "...", "operator": "private | public | unknown", "lat": 0.0, "lon": 0.0,
     "travel": {"minutes", "low", "high", "km", "method": "osrm | haversine_factor",
-               "cached", "factor", "kmh", "label"},
+               "cached", "factor", "kmh", "terrain", "label"},
     "band": "likely | not_verified | unlikely", "band_word": "Likely", "band_reason": null | "...",
     "p": 0.81, "p_lo": 0.70, "p_hi": 0.89,
     "evidence": [{"claim_id", "field", "quote", "source_url"}],
@@ -76,7 +76,8 @@ Response:
 ```
 
 The page reads only these fields. `travel` is one row of `geo/travel.py` (#7, PR #13) passed through unchanged;
-the stub uses that module's fallback (straight-line x 1.35 at 65.1-40 km/h).
+the stub calls `geo.travel.estimate` (measured factor and percentile range, no OSRM call) and falls back to
+straight-line x 1.35 only if `geo/` is not importable.
 
 ## Not done here
 

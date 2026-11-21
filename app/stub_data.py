@@ -7,7 +7,9 @@ the page only depends on the field names documented in README.md.
 from __future__ import annotations
 
 import math
+import sys
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Literal, TypedDict
 
 Profile = Literal["emergency", "urgent", "scheduled", "planned"]
@@ -58,10 +60,16 @@ SERVICES: dict[str, ServiceInfo] = {
     },
 }
 
-# Matches geo/travel.py (#7, PR #13) fallback: straight-line x 1.35, 65.1-40 km/h.
+# Fallback only when geo/ is not importable (app folder deployed alone): the #7 constants.
 ROAD_FACTOR = 1.35
 SPEED_HI_KMH = 65.1
 SPEED_LO_KMH = 40.0
+
+try:  # geo/ lives at the repo root, one level above app/
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from geo.travel import estimate as _geo_estimate
+except ImportError:  # pragma: no cover - exercised only when deployed without geo/
+    _geo_estimate = None
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -72,7 +80,9 @@ def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 
 def _travel(lat: float, lon: float, flat: float, flon: float) -> dict:
-    """Stand-in for one geo/travel.py row (#7): same keys, haversine x factor only."""
+    """One geo/travel.py estimate row (#14): measured factor, speed and percentile range, no OSRM call."""
+    if _geo_estimate is not None:
+        return _geo_estimate((lat, lon), (flat, flon))
     road = _haversine_km(lat, lon, flat, flon) * ROAD_FACTOR
     return {
         "minutes": round(road / SPEED_HI_KMH * 60),
@@ -83,7 +93,8 @@ def _travel(lat: float, lon: float, flat: float, flon: float) -> dict:
         "cached": False,
         "factor": ROAD_FACTOR,
         "kmh": SPEED_HI_KMH,
-        "label": f"straight-line x {ROAD_FACTOR}, rough",
+        "terrain": None,
+        "label": f"rough estimate: straight line x {ROAD_FACTOR} (geo/ not available)",
     }
 
 
