@@ -113,3 +113,9 @@ body.slip-big header.top, body.slip-big #bar108 { display: none; }
   .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
   .slip a { color: #000; text-decoration: none; }
 }
+
+/* Offline answer: saved-data age (spec 3.2.3) - amber after 30 days, red after 90; words carry the meaning too. */
+.stale-amber { border-left: 6px solid var(--warn); padding-left: 8px; }
+.stale-red { border-left: 6px solid var(--bad); padding-left: 8px; }
+select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--muted); border-radius: 8px;
+  background: var(--bg); color: var(--fg); padding: 6px; }

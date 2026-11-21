@@ -62,3 +62,16 @@ def test_loader_query_bihar_dialysis():
             assert q["text"]
             assert q["claim_id"] is None or q["claim_id"].startswith(o["uid8"] + ":")
     assert any(q["claim_id"] for o in opts for q in o["quotes"]), "no quote carries a claim id"
+
+
+@pytest.mark.parametrize("lat, lon, slug", [(26.5951, 85.4808, "bihar"), (19.07, 72.88, "maharashtra"),
+                                            (28.61, 77.21, "delhi")])
+def test_locate_picks_state_of_nearest_pin(lat, lon, slug):
+    r = client.post("/api/pack/locate", json={"lat": lat, "lon": lon})
+    assert r.status_code == 200 and r.json()["slug"] == slug
+
+
+def test_locate_validates_body():
+    assert client.post("/api/pack/locate", json={"lat": 50, "lon": 77}).status_code == 422
+    assert client.post("/api/pack/locate", json={"lat": 26, "lon": 85, "user": "x"}).status_code == 422
+    assert client.get("/api/pack/locate").status_code == 404  # GET /api/pack/{slug}: not a pack name

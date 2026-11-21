@@ -6,7 +6,9 @@ fill from the model (see stub_data.py and README.md).
 """
 from __future__ import annotations
 
+import gzip
 import json
+import math
 from pathlib import Path
 from typing import Annotated, Literal
 
@@ -32,6 +34,7 @@ SHELL_FILES: dict[str, str] = {
     "app.css": "text/css; charset=utf-8",
     "sw.js": "text/javascript; charset=utf-8",
     "pack.js": "text/javascript; charset=utf-8",
+    "offline.js": "text/javascript; charset=utf-8",
     "slip.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
@@ -112,6 +115,48 @@ def pack(slug: str) -> Response:
     return Response(body, media_type="application/json",
                     headers={"Content-Encoding": "gzip", "Cache-Control": "no-cache",
                              "ETag": f'"{idx["packs"][slug]["sha256"]}"'})
+
+
+class LocateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    lat: float = Field(ge=6.0, le=37.5)
+    lon: float = Field(ge=68.0, le=97.5)
+
+
+_PIN_STATES: tuple[list[str], list[float], list[float]] | None = None
+
+
+def _pin_states() -> tuple[list[str], list[float], list[float]]:
+    """(slug, lat, lon) per PIN centroid across all built packs, decoded once."""
+    global _PIN_STATES
+    if _PIN_STATES is None:
+        slugs: list[str] = []
+        lats: list[float] = []
+        lons: list[float] = []
+        for slug in (_pack_index() or {"packs": {}})["packs"]:
+            pack = json.loads(gzip.decompress((PACKS / f"{slug}.json.gz").read_bytes()))
+            scale = pack["scale"]["pin"]
+            la = lo = 0
+            for dla, dlo in zip(pack["pins"]["lat"], pack["pins"]["lon"], strict=True):
+                la, lo = la + dla, lo + dlo
+                slugs.append(slug)
+                lats.append(la / scale)
+                lons.append(lo / scale)
+        _PIN_STATES = (slugs, lats, lons)
+    return _PIN_STATES
+
+
+@app.post("/api/pack/locate")
+def pack_locate(req: LocateRequest) -> dict:
+    """Which state pack covers this point: the state of the nearest PIN centroid. Point in the body, never logged."""
+    slugs, lats, lons = _pin_states()
+    if not slugs:
+        raise HTTPException(404, "no packs built")
+    lat, lon = round(req.lat, 2), round(req.lon, 2)
+    k = math.cos(math.radians(lat))
+    i = min(range(len(slugs)), key=lambda j: (lats[j] - lat) ** 2 + ((lons[j] - lon) * k) ** 2)
+    return {"slug": slugs[i], "state": (_pack_index() or {})["packs"][slugs[i]]["state"]}
 
 
 @app.get("/{name}")

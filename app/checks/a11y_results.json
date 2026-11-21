@@ -103,29 +103,49 @@
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
+  },
+  "offline_answer_dialysis-light": {
+   "violations": [],
+   "horizontal_scroll": false,
+   "options": 4,
+   "tel_links": 4,
+   "sms_links": 4
+  },
+  "offline_no_saved_pack-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "offline_old_fix_confirm-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "offline_pin_picker-light": {
+   "violations": [],
+   "horizontal_scroll": false,
+   "district_select": "#/"
   }
  },
  "critical_path": {
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1073,
-    "gzip": 572
+    "raw": 1051,
+    "gzip": 563
    },
    "/app.css": {
-    "raw": 5823,
-    "gzip": 1954
+    "raw": 6247,
+    "gzip": 2082
    },
    "/app.js": {
-    "raw": 22895,
-    "gzip": 8194
+    "raw": 28131,
+    "gzip": 9614
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 10856,
+  "gzip_total": 12395,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
