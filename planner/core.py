@@ -318,26 +318,37 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
         vs = None
         if best_direct is not None:
             gain = p["p_objective"] - best_direct["p_objective"]
+            # every number the sentence quotes, rounded exactly as it is printed, so a page can check
+            # the text against fields
+            shown = {"direct_p_objective": round(best_direct["p_objective"], 2), "plan_p_objective": round(p["p_objective"], 2),
+                     "direct_p_first_care": round(best_direct["p_first_care"], 2),
+                     "plan_p_first_care": round(p["p_first_care"], 2),
+                     "direct_minutes": best_direct["stops"][-1]["eta_minutes"], "threshold_minutes": ctx["gate"]}
             if p is best_direct:
-                text = "This is the best direct plan."
+                text, used = "This is the best direct plan.", []
             elif p["type"] == "one_stop" and gain >= MARGIN:
-                text = (f"Stopping first raises the chance of care in time from {best_direct['p_objective']:.2f} to "
-                        f"{p['p_objective']:.2f}; going direct to {best_direct['stops'][-1]['name']} takes "
-                        f"{best_direct['stops'][-1]['eta_minutes']} min, beyond the {ctx['gate']} min threshold.")
+                used = ["direct_p_objective", "plan_p_objective", "direct_minutes", "threshold_minutes"]
+                text = (f"Stopping first raises the chance of care in time from {shown['direct_p_objective']:.2f} to "
+                        f"{shown['plan_p_objective']:.2f}; going direct to {best_direct['stops'][-1]['name']} takes "
+                        f"{shown['direct_minutes']} min, beyond the {shown['threshold_minutes']} min threshold.")
             elif p["type"] == "one_stop":
-                text = (f"Definitive care cannot be reached in time either way ({p['p_objective']:.2f} against "
-                        f"{best_direct['p_objective']:.2f}). Stopping first raises the chance of first care in time from "
-                        f"{best_direct['p_first_care']:.2f} to {p['p_first_care']:.2f}; going direct to "
-                        f"{best_direct['stops'][-1]['name']} takes {best_direct['stops'][-1]['eta_minutes']} min.")
+                used = ["plan_p_objective", "direct_p_objective", "direct_p_first_care", "plan_p_first_care", "direct_minutes"]
+                text = (f"Definitive care cannot be reached in time either way ({shown['plan_p_objective']:.2f} against "
+                        f"{shown['direct_p_objective']:.2f}). Stopping first raises the chance of first care in time from "
+                        f"{shown['direct_p_first_care']:.2f} to {shown['plan_p_first_care']:.2f}; going direct to "
+                        f"{best_direct['stops'][-1]['name']} takes {shown['direct_minutes']} min.")
             else:
-                text = (f"Direct to a different facility: chance of care in time {p['p_objective']:.2f} against "
-                        f"{best_direct['p_objective']:.2f} for the best direct plan.")
+                used = ["plan_p_objective", "direct_p_objective"]
+                text = (f"Direct to a different facility: chance of care in time {shown['plan_p_objective']:.2f} against "
+                        f"{shown['direct_p_objective']:.2f} for the best direct plan.")
             vs = {"direct_facility_id": best_direct["stops"][-1]["facility_id"],
+                  "direct_name": best_direct["stops"][-1]["name"],
                   "direct_minutes": best_direct["stops"][-1]["eta_minutes"],
                   "direct_p_objective": round(best_direct["p_objective"], 4),
                   "direct_p_first_care": round(best_direct["p_first_care"], 4),
                   "plan_p_objective": round(p["p_objective"], 4), "plan_p_first_care": round(p["p_first_care"], 4),
-                  "gain": round(gain, 4), "text": text}
+                  "gain": round(gain, 4), "text": text,
+                  "text_numbers": {k: shown[k] for k in used}}
         out.append({"type": p["type"], "stops": p["stops"],
                     "totals": {"minutes_to_definitive": p["stops"][-1]["eta_minutes"],
                                "low": p["stops"][-1]["eta_low"], "high": p["stops"][-1]["eta_high"],
@@ -409,12 +420,17 @@ def _scheduled(origin, pathway, facilities, capability_p, travel_fn):
     single = next((o for o in out if o["totals"]["distinct_sites"] == 1), None)
     for o in out:
         if single is not None and o is not single:
-            o["vs_direct"] = {"direct_facility_id": single["stops"][-1]["facility_id"],
-                              "text": f"Uses {o['totals']['distinct_sites']} sites against one site at {single['stops'][-1]['name']}; "
-                                      f"travel over {PLANNING_WEEKS} weeks {o['totals']['travel_minutes_over_planning_weeks']} min "
-                                      f"against {single['totals']['travel_minutes_over_planning_weeks']} min."}
+            shown = {"plan_sites": o["totals"]["distinct_sites"], "planning_weeks": PLANNING_WEEKS,
+                     "plan_travel_minutes": o["totals"]["travel_minutes_over_planning_weeks"],
+                     "single_site_travel_minutes": single["totals"]["travel_minutes_over_planning_weeks"]}
+            o["vs_direct"] = {"direct_facility_id": single["stops"][-1]["facility_id"], "direct_name": single["stops"][-1]["name"],
+                              "text": f"Uses {shown['plan_sites']} sites against one site at {single['stops'][-1]['name']}; "
+                                      f"travel over {shown['planning_weeks']} weeks {shown['plan_travel_minutes']} min "
+                                      f"against {shown['single_site_travel_minutes']} min.",
+                              "text_numbers": shown}
         elif o is single:
-            o["vs_direct"] = {"direct_facility_id": o["stops"][-1]["facility_id"], "text": "One site for every stage."}
+            o["vs_direct"] = {"direct_facility_id": o["stops"][-1]["facility_id"], "direct_name": o["stops"][-1]["name"],
+                              "text": "One site for every stage.", "text_numbers": {}}
         o.pop("_last"), o.pop("_sites")
     return out, []
 
