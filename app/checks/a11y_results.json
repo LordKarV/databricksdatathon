@@ -56,6 +56,18 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "compare_dialysis-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "compare_desk-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "area_trauma-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "start_first_visit-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -100,6 +112,18 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "compare_dialysis-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "compare_desk-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "area_trauma-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
@@ -133,19 +157,19 @@
     "gzip": 563
    },
    "/app.css": {
-    "raw": 6247,
-    "gzip": 2082
+    "raw": 6741,
+    "gzip": 2241
    },
    "/app.js": {
-    "raw": 30121,
-    "gzip": 10227
+    "raw": 39677,
+    "gzip": 12722
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 13008,
+  "gzip_total": 15662,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

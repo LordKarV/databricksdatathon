@@ -89,6 +89,20 @@ function needScripts(srcs) {
       el.addEventListener('error', fail);
     })));
 }
+async function loadArea() {
+  const l = state.loc;
+  state.area = {loading: true};
+  try {
+    const r = await fetch('/api/area', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2)}), redirect: 'manual'});
+    if (!r.ok) throw new Error('The area plan is not available (' + (r.status || 'signed out') + ').');
+    state.area = await r.json();
+    announce('Area plan loaded.');
+  } catch (e) {
+    state.area = {error: navigator.onLine ? e.message : 'The area plan needs internet.'};
+  }
+  render();
+}
 function stopWatch() { if (state.stopWatch) { state.stopWatch(); state.stopWatch = null; } }
 async function offlinePlan(reason) {
   let pack = null;
@@ -302,6 +316,13 @@ function planScreen() {
   if (!p) return head + '<p>Finding options...</p>';
   if (p.error) return head + `<p class="card" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">Back</a>`;
   const label = p.query.service_label.en;
+  const depth = state.depth || 'quick';
+  const toggle = `<div class="row" role="group" aria-label="Detail">${['quick', 'compare', 'area'].map(d =>
+    `<button type="button" data-depth="${d}" aria-pressed="${depth === d}">${d[0].toUpperCase() + d.slice(1)}</button>`).join('')}</div>`;
+  const foot = `<p class="small muted">Data as of ${F('as_of', p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
+    <a class="btn btn-block" href="#/">New search</a>`;
+  if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
+  if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
   let body;
   if (p.abstain) {
     const oo = p.abstain.outside_option;
@@ -316,8 +337,99 @@ function planScreen() {
         ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');
   }
-  return head + body + `<p class="small muted">Data as of ${F('as_of', p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
-    <a class="btn btn-block" href="#/">New search</a>`;
+  return head + toggle + body + foot;
+}
+
+// ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
+const COMPARE_ROWS = [
+  ['Band', (o, P) => bandHtml(o, P)],
+  ['Offers (range)', (o, P) => `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
+  ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
+  ['Exists / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
+  ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
+  ['Quote', (o, P) => o.evidence.length ? quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
+  ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
+  ['Phone', (o, P) => !o.phone || !o.phone.e164 ? 'no number in our data'
+    : o.phone.shared_listings > 1 ? `shared by ${F(P + '.phone.shared_listings', o.phone.shared_listings, 'num')} listings` : 'number on file, not shared'],
+  ['Public / private', (o, P) => F(P + '.operator', o.operator)],
+  ['Ask on call', (o, P) => o.call_ahead.length ? F(P + '.call_ahead.0.question', o.call_ahead[0].question) : '-'],
+  ['Phone result', o => { const r = (state.outcomes || {})[o.rank]; return r ? `<span data-device>${esc(r.said)} ${timeStr(r.at)}</span>` : '-'; }],
+];
+function compareHtml(p) {
+  if (state.patientHere == null) {
+    return `<fieldset class="card"><legend>Is the patient here, at this location?</legend>
+      <label class="check"><input type="radio" name="here" value="yes"> Yes</label>
+      <label class="check"><input type="radio" name="here" value="no"> No</label></fieldset>
+      <p class="small">Choose one to see the comparison.</p>`;
+  }
+  const opts = p.options;
+  const P = i => `options.${i}`;
+  const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
+  const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', then ');
+  const head = `<p>${state.patientHere ? 'Patient is at this location.' : 'Patient is elsewhere: distances are from this location.'}</p>
+    <p>Plan: ${names}.</p>
+    <p>Chance at least one listing checks out: ${F('options', atLeast.toFixed(2), 'atleast')} (assumes they fail independently).</p>`;
+  const table = `<div class="compare-table"><table><caption>${F('query.service_label.en', p.query.service_label.en)}: options side by side</caption>
+    <thead><tr><th scope="col">Row</th>${opts.map((o, i) => `<th scope="col">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
+    <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${esc(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>`;
+  const cards = `<div class="compare-cards">${opts.map((o, i) => `<article class="card" aria-labelledby="cmp-${o.rank}">
+    <h3 id="cmp-${o.rank}">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</h3>
+    <dl class="rows">${COMPARE_ROWS.map(([lab, fn]) => `<dt>${esc(lab)}</dt><dd>${fn(o, P(i))}</dd>`).join('')}</dl>
+    <a class="btn" href="#/why/${o.rank}">Why / how <span class="visually-hidden">${F(P(i) + '.name', o.name)}</span></a></article>`).join('')}</div>`;
+  const why = opts[0] && opts[0].why_first_text ? `<p><strong>Why first:</strong> ${F(P(0) + '.why_first_text', opts[0].why_first_text)}</p>` : '';
+  return head + '<h2>Side by side</h2>' + table + cards + why;
+}
+
+// ---------- Area depth (S11 standing plan, S12 ten calls); data from POST /api/area ----------
+function areaHtml(a) {
+  if (!a || a.loading) return '<p>Loading the area plan...</p>';
+  if (a.error) return `<p class="card" role="alert">${esc(a.error)}</p>`;
+  const S = a.summary;
+  const n = x => F('area.' + x, (x.split('.').reduce((o, k) => o[k], a)).toFixed(2), 'num');
+  const rows = a.pins.map((r, i) => {
+    const R = `area.pins.${i}`;
+    return r.first
+      ? `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td>${F(R + '.first.name', r.first.name)}</td>
+          <td>${F(R + '.backup.name', r.backup.name)}</td>
+          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td>
+          <td>${F(R + '.call_first', r.call_first)}</td></tr>`
+      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
+          No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
+          nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km</td></tr>`;
+  }).join('');
+  const calls = a.ten_calls.map((c, i) => {
+    const C = `area.ten_calls.${i}`;
+    return `<tr><th scope="row">${F(C + '.rank', c.rank, 'num')}</th><td>${F(C + '.name', c.name)}</td>
+      <td>${F(C + '.phone_kind', c.phone_kind)}</td><td class="num">${F(C + '.areas', c.areas, 'num')}</td>
+      <td class="num">+${F(C + '.access_gain', c.access_gain.toFixed(3), 'num')}</td></tr>`;
+  }).join('');
+  const csv = [['pin', 'first_choice', 'backup', 'min_low', 'min_high', 'call_first', 'nearest_km_if_none']]
+    .concat(a.pins.map(r => [r.pin, r.first ? r.first.name : '', r.backup ? r.backup.name : '', r.travel ? r.travel.low : '',
+      r.travel ? r.travel.high : '', r.call_first || '', r.nearest_km ?? '']))
+    .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  return `<h2>Standing referral plan: ${F('area.query.service_label.en', a.query.service_label.en)}</h2>
+    <p>${F('area.area.district', a.area.district)}, ${F('area.area.state', a.area.state)}.
+      ${F('area.summary.n_pins', S.n_pins, 'num')} PIN areas.</p>
+    <p><strong>${F('area.summary.n_without_option', S.n_without_option, 'num')} of ${F('area.summary.n_pins', S.n_pins, 'num')}
+      PIN areas: no option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min.</strong></p>
+    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the area</caption><tbody>
+      <tr><th scope="row">Access now</th><td class="num">${n('summary.access_now')}</td></tr>
+      <tr><th scope="row">If calls confirm the listings</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
+      <tr><th scope="row">Calls could close</th><td class="num">${n('summary.calls_could_close')}</td></tr>
+      <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
+    </tbody></table>
+    <p>${F('area.caveat', a.caveat)}</p>
+    <table><caption>Plan per PIN area</caption>
+      <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    <h2 id="ten-calls">Calls that close the most of the gap</h2>
+    <table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
+      <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
+      <tbody>${calls}</tbody></table>
+    <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
+      <button type="button" id="area-print">Print chart</button></div>
+    ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;
 }
 async function bindPlan() {
   if (state.plan && state.plan.offline) {
@@ -327,6 +439,17 @@ async function bindPlan() {
       if (p.pack) p.answer = window.RSOffline.answer(p.pack, state.loc, state.service);
       render();
     });
+    return;
+  }
+  document.querySelectorAll('[data-depth]').forEach(b => b.addEventListener('click', () => {
+    state.depth = b.dataset.depth; render();
+  }));
+  document.querySelectorAll('input[name=here]').forEach(r => r.addEventListener('change', () => {
+    state.patientHere = r.value === 'yes'; render();
+  }));
+  $('#area-print')?.addEventListener('click', () => window.print());
+  if (state.plan && !state.plan.error && state.depth === 'area' && !state.area) {
+    loadArea();
     return;
   }
   if (!state.service || !state.loc || state.plan) return;
@@ -495,6 +618,7 @@ function render() {
   else if (h.startsWith('#/slip/')) [html, bind] = [slipScreen(parseInt(h.split('/')[2], 10)), bindSlip];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
+  document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));
   renderBar();
   const h1 = $('#main h1');
   if (h1 && !h.endsWith('#call')) h1.focus({preventScroll: false});
@@ -502,7 +626,9 @@ function render() {
   bind();
 }
 window.addEventListener('hashchange', () => {
-  if (location.hash === '#/' || location.hash === '#/change') { state.plan = null; state.outcomes = {}; stopWatch(); }
+  if (location.hash === '#/' || location.hash === '#/change') {
+    state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; stopWatch();
+  }
   document.body.classList.remove('slip-big');
   render();
 });

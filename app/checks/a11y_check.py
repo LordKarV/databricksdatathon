@@ -188,6 +188,23 @@ def slip_for(lang: str) -> Callable[[Page], None]:
     return run
 
 
+def compare(desk: bool) -> Callable[[Page], None]:
+    def run(page: Page) -> None:
+        if desk:
+            page.set_viewport_size({"width": 1280, "height": 900})
+        plan_for("Dialysis")(page)
+        page.locator("[data-depth=compare]").click()
+        page.get_by_role("radio", name="Yes").click()
+        page.locator(".compare-cards").wait_for(state="attached")
+    return run
+
+
+def area(page: Page) -> None:
+    plan_for("Accident")(page)
+    page.locator("[data-depth=area]").click()
+    page.locator("#ten-calls").wait_for()
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -200,6 +217,9 @@ STATES: dict[str, Callable[[Page], None]] = {
     "call_ahead_trauma": call_ahead,
     "slip_english": slip_for("en"),
     "slip_hindi": slip_for("hi"),
+    "compare_dialysis": compare(desk=False),
+    "compare_desk": compare(desk=True),
+    "area_trauma": area,
 }
 
 
