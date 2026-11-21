@@ -73,6 +73,7 @@ SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 
 
 REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
+                "sitamarhi_dialysis": ("dialysis", 26.6, 85.48),  # verified option far, nearer ones not verified
                 "maharashtra_csection": ("emergency_csection", 19.88, 75.34),
                 "nh19_trauma_mohania": ("trauma_emergency", 25.15, 83.68)}
 
@@ -284,7 +285,15 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         page.goto(base_url + "/#/")
         page.locator(f"[data-svc={payload['query']['service']}]").first.click()
         page.wait_for_selector("article.card")
-        errs += check_screen("plan", payload, page.evaluate(COLLECT_JS), report)
+        got = page.evaluate(COLLECT_JS)
+        errs += check_screen("plan", payload, got, report)
+        opts = payload["options"]
+        far = (opts and opts[0]["band"] != "likely" and any(o["band"] == "likely" for o in opts)
+               and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
+                   x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
+        shown_note = "The nearest verified" in page.inner_text("#main")
+        if bool(far) != shown_note:
+            errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
         for i, o in enumerate(payload["options"]):
             page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
             page.wait_for_selector("#how")
