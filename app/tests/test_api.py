@@ -34,7 +34,7 @@ def test_contract_shape(service):
         assert o["p_lo"] <= o["p"] <= o["p_hi"]
         assert o["travel"]["method"] in {"osrm", "haversine_factor"}
         assert o["travel"]["low"] <= o["travel"]["minutes"] <= o["travel"]["high"]
-        assert {"km", "method", "cached", "factor", "kmh", "label"} <= o["travel"].keys()
+        assert {"km", "method", "cached", "factor", "kmh", "terrain", "label"} <= o["travel"].keys()
         for e in o["evidence"]:
             assert {"claim_id", "field", "quote", "source_url"} <= e.keys()
         for c in o["call_ahead"]:
@@ -99,3 +99,13 @@ def test_main_reads_databricks_port(monkeypatch):
     monkeypatch.setenv("DATABRICKS_APP_PORT", "8123")
     runpy.run_path(str(Path(__file__).resolve().parents[1] / "main.py"), run_name="__main__")
     assert seen["port"] == 8123 and seen["access_log"] is False and seen["host"] == "0.0.0.0"
+
+
+def test_stub_travel_comes_from_geo_module():
+    from geo.travel import estimate
+
+    import stub_data
+    assert stub_data._geo_estimate is estimate
+    o = get(service="dialysis", lat=26.5951, lon=85.4808).json()["options"][0]
+    assert o["travel"] == estimate((26.6, 85.48), (o["lat"], o["lon"]))
+    assert "40 km/h" not in o["travel"]["label"]
