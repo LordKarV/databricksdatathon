@@ -2,7 +2,7 @@
 
 Candidates = officialWebsite + websites + source_urls, kept only when the provenance classifier
 (audit/provenance/domains.py) calls the host 'official' or 'official_like'. URL shorteners and
-site builders that never name one facility are dropped. Hosts are grouped by registrable domain.
+site builders that never name one facility are dropped. Sites are hosts without www/m; the registrable domain is kept for rate limiting.
 
 A domain claimed by records in 2+ cities (or 2+ records outside one duplicate group) is 'shared'
 (chains: Apollo, Fortis, Manipal...). For a shared domain each record with a branch-specific URL

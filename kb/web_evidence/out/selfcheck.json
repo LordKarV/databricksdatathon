@@ -1,0 +1,186 @@
+{
+ "all": {
+  "k": 37,
+  "n": 40,
+  "wilson": [
+   0.801,
+   0.974
+  ]
+ },
+ "by_group": {
+  "detail": {
+   "k": 5,
+   "n": 5,
+   "wilson": [
+    0.566,
+    1.0
+   ]
+  },
+  "hours": {
+   "k": 6,
+   "n": 7,
+   "wilson": [
+    0.487,
+    0.974
+   ]
+  },
+  "identity": {
+   "k": 8,
+   "n": 8,
+   "wilson": [
+    0.676,
+    1.0
+   ]
+  },
+  "service": {
+   "k": 18,
+   "n": 20,
+   "wilson": [
+    0.699,
+    0.972
+   ]
+  }
+ },
+ "by_stratum": {
+  "detail_accreditation": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "detail_ambulance": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "detail_blood_centre": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "detail_empanelment": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "detail_unit_beds": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "hours_24x7_emergency": {
+   "k": 3,
+   "n": 3,
+   "wilson": [
+    0.438,
+    1.0
+   ]
+  },
+  "hours_llm": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "hours_opd": {
+   "k": 1,
+   "n": 2,
+   "wilson": [
+    0.095,
+    0.905
+   ]
+  },
+  "hours_service_24x7": {
+   "k": 1,
+   "n": 1,
+   "wilson": [
+    0.207,
+    1.0
+   ]
+  },
+  "identity_attributable": {
+   "k": 4,
+   "n": 4,
+   "wilson": [
+    0.51,
+    1.0
+   ]
+  },
+  "identity_not_attributable": {
+   "k": 4,
+   "n": 4,
+   "wilson": [
+    0.51,
+    1.0
+   ]
+  },
+  "service_confirms_dataset": {
+   "k": 6,
+   "n": 6,
+   "wilson": [
+    0.61,
+    1.0
+   ]
+  },
+  "service_negated": {
+   "k": 4,
+   "n": 4,
+   "wilson": [
+    0.51,
+    1.0
+   ]
+  },
+  "service_web_only_strong": {
+   "k": 5,
+   "n": 6,
+   "wilson": [
+    0.436,
+    0.97
+   ]
+  },
+  "service_web_only_weak": {
+   "k": 3,
+   "n": 4,
+   "wilson": [
+    0.301,
+    0.954
+   ]
+  }
+ },
+ "wrong": [
+  {
+   "n": 15,
+   "stratum": "service_web_only_strong",
+   "item": "emergency_24x7",
+   "note": "phone support outside OPD hours, not an emergency department"
+  },
+  {
+   "n": 22,
+   "stratum": "service_web_only_weak",
+   "item": "nutrition_rehabilitation",
+   "note": "NRC is the board's Nomination and Remuneration Committee"
+  },
+  {
+   "n": 32,
+   "stratum": "hours_opd",
+   "item": "general",
+   "note": "bare time range on an accreditation page; nothing says what it is"
+  }
+ ]
+}

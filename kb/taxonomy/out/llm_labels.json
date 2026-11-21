@@ -1,0 +1,2226 @@
+{
+ "model": "databricks-meta-llama-3-3-70b-instruct",
+ "statements": 1,
+ "labels": {
+  "headacheMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "epilepsyNeurology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "maternalAndChildHealth": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "movementDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuroOncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "underseaAndHyperbaricMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "occupationalAndEnvironmentalMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "clinicalInformatics": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "clinicalOncology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "occupationalAndIndustrialHygiene": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "paediatricOrthopaedics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pediatricHospitalMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "psychoOncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "retinopathyOfPrematurity": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "musculoskeletalRadiology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuroMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "specialEducation": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "crownsAndBridges": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "globalHealthAndInternationalHealth": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "immunotherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "dietitian": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "genitoUrinarySurgeries": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "jawOrthopedics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "multispeciality": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "pediatricOrthopedics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pharmacy": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "Cryopreservation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Pediatric Orthopedics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "clinicalImaging": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "contactLens": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "emergencyMedicalServices": {
+   "label": "emergency_csection",
+   "confidence": 0.6
+  },
+  "hospitalMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implants": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "integratedMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "interventionalNeurology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "mammography": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "mycology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "osteoporosis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "parasitology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "podiary": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "renalCare": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexualMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "stemCellTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "targetedTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Dietitian": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "Era Endometrial Receptivity Array Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Gynaeoncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "HSG": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ICSI": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ICSI Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Invisalign": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Kayachikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Oocyte Vitrification": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Ovulation Induction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PGS PGD Screening Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Root Canal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Semen / Sperm Freezing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Sexologists": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Sperm Retrieval": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "audiometry": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "bacteriology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "bridgesAndCrowns": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "cancerMarker": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "childAbusePediatrics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "clinicalChemistry": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "communityChildHealth": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "coronaryAngiography": {
+   "label": "cath_lab_angioplasty",
+   "confidence": 0.9
+  },
+  "crownAndBridge": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "dryEyes": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "echocardiography": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "emergencyPreparednessAndDisasterResponse": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "endometriosis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "facialAsymmetryCorrection": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "familyAndGeneralMedicine": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "healthCheckup": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "hormones": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implantProsthesis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "kayachikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "macularEdema": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "macularHole": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "myopiaClinic": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuroEndovascularTherapy": {
+   "label": "neurosurgery",
+   "confidence": 0.9
+  },
+  "orthoptics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ozoneTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pacemakerClinic": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "paediatricCardiacCentre": {
+   "label": "cardiac_surgery",
+   "confidence": 0.9
+  },
+  "paediatricOrthopaedic": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.9
+  },
+  "precisionMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "psychotherapy": {
+   "label": "psychiatric_care",
+   "confidence": 0.9
+  },
+  "retinopathyPrematurity": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexologists": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sonology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "superspeciality": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "traumatology": {
+   "label": "trauma_emergency",
+   "confidence": 0.9
+  },
+  "visionTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "24 hrs Digital X Ray": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Abbe Flap Ca Lip": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Acne Scar Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Acupressure": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "All on 4/6 implant": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Ankylosing Spondylitis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Anxiety": {
+   "label": "psychiatric_care",
+   "confidence": 0.9
+  },
+  "Armd treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Birthmark Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "BlastocystTransfer": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Bone Grafting": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.9
+  },
+  "Bone Tumor Treatment": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.9
+  },
+  "Braces": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Bridges": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "CBCT": {
+   "label": "ct_scan",
+   "confidence": 0.9
+  },
+  "Ca Maxilla": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Care/risk management of adult asthma": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "Care/risk management of heart disease": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "Care/risk management of pediatric asthma": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "Care/risk management of women's health": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "Cavity Filling": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Circumcision": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Clear aligners": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Colposcopy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Computer Vision Syndrome": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Constipation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Contoura Vision": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Critaical Care & Emergency": {
+   "label": "trauma_emergency",
+   "confidence": 0.7
+  },
+  "Crown & Bridges": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Crown Lengthening": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Crown and Bridge": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Crowns": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Cystolitholapaxy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "DEXA": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "DNA Sexing": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Deep Scaling and Polishing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Depression": {
+   "label": "psychiatric_care",
+   "confidence": 0.6
+  },
+  "Diagnostic Testing": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "Dietician": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Dietics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Dry Eyes": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "EggDonation": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Endometriosis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Erectile Dysfunction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Excessive sweating treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Faciomaxillary": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Feat Scans": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Fillings": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Fistula In Ano": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Fluoride Application & Sealants": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Full Mouth Reconstruction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Gas & Acidity": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "General Internal Medicine": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "Genital Surgeries": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Gum Depigmentation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Gum treatments": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Gynae Oncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.6
+  },
+  "Gynaecosmastia": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Head Neck Oncologist": {
+   "label": "surgical_oncology",
+   "confidence": 0.6
+  },
+  "Health Checkups": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "Healthcare Tourism": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "Home Collection": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "Home Visits": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "Hyperlipidaemia Management": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Hypertension Management": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Hysterectomy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "I.C.U.": {
+   "label": "icu",
+   "confidence": 0.9
+  },
+  "IBS": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ICL": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Implant Prosthesis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Karyotyping": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Keloid treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Koumarbhritya": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "LU-177 PSMA Therapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Lacrimal Gland Tumor": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Lapsrscopic Nepherctomy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Laser Assisted Hatching": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Laser Peel Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Laser Pigmentation Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Lithotripsy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Lymphedema": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "MacularDegeneration": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Magnet Therapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Marma chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Melasma Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Meru chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Migraine Management": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Mole Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Multispeciality": {
+   "label": "too_general",
+   "confidence": 0.9
+  },
+  "Nerve Surgeries": {
+   "label": "neurosurgery",
+   "confidence": 0.7
+  },
+  "Nerve Tumor Treatment": {
+   "label": "neurosurgery",
+   "confidence": 0.7
+  },
+  "Neuropelveology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Neurosciences & Spinal Disorders": {
+   "label": "neurosurgery",
+   "confidence": 0.7
+  },
+  "Nevas Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "New Born Screening": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Obsessive Compulsive Disorder (OCD": {
+   "label": "psychiatric_care",
+   "confidence": 0.6
+  },
+  "Oestopathy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Onco Care": {
+   "label": "surgical_oncology",
+   "confidence": 0.7
+  },
+  "Open pores treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Other Diseases": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Ovarian Mass": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PCR Testing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PGS/PGD": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PRP": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PRP Therapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PRPTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PTOSIS ( Droopy Lid)": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PaediatricOrthopedics": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.7
+  },
+  "Parkinson’s Disease": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Parotid Mass": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Periarticular Surgeries": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.7
+  },
+  "Pollicization": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Prasoothi Thanthra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "PrasutiTantraEvumStriRoga": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Pruritus Ani": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Psoriasis Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Psychotherapy": {
+   "label": "psychiatric_care",
+   "confidence": 0.6
+  },
+  "Pterygium": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Pterygium & Pinguecula": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "RFT Test": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ROP": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Rasa chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Rasayana chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Reconstruction of Congenital Deformities": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Respiratory Diseases Management": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Retinology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Retinopathy Of Prematurity (ROP)": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Rhinoplasty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Salakya Chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Scaling & Polishing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Scaling & polishing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ScalingAndPolishing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Scalp Tumor": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "SemenAnalysis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Sexual Medicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ShalakyaTantra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Shalya Chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ShalyaTantra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Soft Tissue Grafting": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Soft tissue sarcoma surgeries": {
+   "label": "surgical_oncology",
+   "confidence": 0.7
+  },
+  "Stem Cell Regreneration & Cartilage repair": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Stones": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Stretch Marks Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Stricture Urethra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "TESA": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Tattoo Removal": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Thoracic Cancer": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Thumb Recreation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Tongue Tie": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Traditional Braces": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Traumatology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "Urethral Structure Disease / OIU/Urethroplast": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Vajikarana chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Veneers & Laminates": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "Venereal disease & sexual problem treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Verrucous Carcinoma": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Visha Chikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Vitiligo Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Vitrectomy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Weight Management": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "Wrinkles Treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "abdominalRadiology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "acuteRenalFailure": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "adolescence": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "aerospaceMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ageRelatedMacularDegeneration": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "aligners": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "allSpecialities": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "alternativeSystemOfMedicine": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "ambulanceServices": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "anaplastology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "angiogram": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "anxiety": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "anxietyAndDepression": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "appendicitis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "arrhythmias": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "artTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "arthroplasty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "articulationTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "asdVsdDeviceClosure": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ballisticGunShotInjury": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "billiarySciences": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "biofeedback": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "biostatistics": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "biostatisticsAndDataScience": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "bloodDiseaseManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "bloodPressure": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "bloodStorageUnit": {
+   "label": "blood_bank",
+   "confidence": 0.8
+  },
+  "bone": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "botoxTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "bracesAligners": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "bracesTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "cancerOncology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "cancerReconstruction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "cancerRegistryEpidemiology": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "cancerScreening": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "cancerScreeningCentre": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "cancerStaging": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "cardioOncology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "cardiovascularCareServices": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "cardiovascularThoracic": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "cervicalSpondylosis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "chalazion": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "chromotherapyAndMagnetotherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "chronicRenalFailure": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "circumcision": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "clinicalPharmacology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "clinicalResearch": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "coagulation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "communityAndPublicHealth": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "communityHealth": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "communityOncology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "complementaryMedicineBowenTechnique": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "computerVisionSyndrome": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "congenitalDeformities": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "conservatives": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "contouraVision": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "contouraVisionTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "crown&bridges": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "crowns": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "crownsAndBridgesFixing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "danceAndMovement": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "depression": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "diagnosisAndBiopsy": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "diagnosticNeurology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "diagnosticOncology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "diagnosticTesting": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "dietician": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "distractionOsteogenesis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "divyaang": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "dnaSexing": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "dysphonia": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "earwaxRemoval": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ectopicPregnancy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "electroconvulsiveTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "emergencyRadiology": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "engineeringAndMaintenance": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "environmentalAndOccupationalHealth": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "epidemicDisease": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "epilepsyCentre": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "epileptologist": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "erectileDysfunction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "facial": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "facialGrowthGuidance": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "fetalAndMaternalMedicine": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "fetalPrenatalEcoCardiography": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "fibroscan": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "flowCytometry": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "fluencyStutteringTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "full-mouth-reconstruction": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "functionalNeurologicalDisorder": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gallbladderStones": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "generalAdministration": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "generalAnatomy": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "generalInternalMedicine": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "generalMedicineAndEmergency": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "gingivoplasty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "groupTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "growth": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "growthdisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gumDepigmentation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gumSpecialists": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gumTreatments": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gynaeOncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "gynaecOncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.8
+  },
+  "gynaeoncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.8
+  },
+  "gyneOncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.8
+  },
+  "gynecomastia": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "headNeckOncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.8
+  },
+  "heartFailureClinic": {
+   "label": "cardiac_surgery",
+   "confidence": 0.7
+  },
+  "heartValveCentre": {
+   "label": "cardiac_surgery",
+   "confidence": 0.7
+  },
+  "hemifacialMicrosomia": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "highEndTesting": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "holisticMedicineSpecialist": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "holisticTherapies": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "homeCareServices": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "hormonalAssays": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "hormonalTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "hydrocele": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "hypertension": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "icl": {
+   "label": "not_a_service",
+   "confidence": 0.8
+  },
+  "imageGuidedInterventions": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "immunoassay": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "immunoassays": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implant": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implantServices": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implantableContactsLenses": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "implantalogy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "inflammatoryDiseases": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "inlaysAndOnlays": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "intensiveCardiacCareCentre": {
+   "label": "icu",
+   "confidence": 0.7
+  },
+  "interstitialLungDisease": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "interventional": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "interventionalOncology": {
+   "label": "surgical_oncology",
+   "confidence": 0.8
+  },
+  "intravitrealInjection": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "invisalign": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "invisalignAndBraces": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "invisalignProvider": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "invisalignTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "invisibleBraces": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "invisibleBracesAndClearAligners": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "karyotyping": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "kaumarabhritya": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "kayaChikitsa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ketamineInfusionTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "kidneyHealthCentre": {
+   "label": "dialysis",
+   "confidence": 0.7
+  },
+  "kidneySciences": {
+   "label": "dialysis",
+   "confidence": 0.7
+  },
+  "koumarbhritya": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "lactationConsultancy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "languageTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "laprascopy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "laserTherapyPLDD": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "laserTreatments": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "lasers": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "limbLengthening": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.7
+  },
+  "limbReconstruction": {
+   "label": "orthopaedic_trauma_surgery",
+   "confidence": 0.7
+  },
+  "limbalStemCellDeficiency": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "liposuction": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "medicalDepartment": {
+   "label": "too_general",
+   "confidence": 0.8
+  },
+  "medicalPhysics": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "medicalPhysicsAndRadiationSafety": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "menIntimateHealth": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "menstrualProblems": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "microbialKeratitis": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "microvascular": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "miniImplants": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "miscarriageClinic": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "motherAndChild": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "multipleSclerosis": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "myocardialInfarction": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "myopia": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "myopiaManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "myopiaTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "nephriticSyndrome": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "nephrosciences": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "nephroticSyndrome": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "nerveInjury": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuroImaging": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neurodegenerativeDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "neuromodulation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuromuscularDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "neuromuscularMedicine": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "neuronavigation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "nuclearTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "ob-gy": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "obsessiveCompulsiveDisorder": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "obsessiveCompulsiveDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "occuloplastyAndAdnexa": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "occupationalHealth": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "occupationalTherapist": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "oldAgeCare": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "one-sitting-root-canal-treatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "opticalAndContactLens": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "opticalShop": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "opticalsAndContactLenses": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "organTesting": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "orth orthopedic? wrong": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "orthopaedicTumorAndOncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "orthopedicSurgeryAndProcedures": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "osteoporosisManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "osteoporosisTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "otherDiseases": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "otherSpecialties": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "outpatientServices": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "pacemakerImplantTechniques": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pacemakerImplantation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "paediatricAndChildCare": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "paediatricRenalCentre": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "parkinsonsDisease": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "pcodManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pcrTesting": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pediatricCardiacCentre": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "pediatricCardiacServices": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "pediatricOrthopaedic": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "pediatricOrthopedic": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "pediatricOrthopedicsDeformityCorrection": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pediatricRootCanalsAndCrown": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pediatricSST": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pediatricsAndChildCare": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "peripheralAngiography": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "peripheralVascularAndEndovascularSciences": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "peritonealSurfaceMalignancies": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "peritonealSurfaceMalignancy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pgt-a": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pgt-m": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "phlebology": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "pituitaryDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "placentalAbruption": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "postSurgical": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "prasoothithantra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "prasutiTantraEvumStriRoga": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "precisionOncology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "prophylaxis": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "prosthesis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "prpTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "puberty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "pulmanology": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "radiofrequencyAblation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "regenerativeMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "replacements": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "respiratory": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "rhinoplasty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "roganidanam": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "rootCanalSpecialists": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "rootCanalTreatment": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "scalingAndRootPlaning": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "scarRevision": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sedationForNervousPatients": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sensoryIntegrationTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexClinic": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexologist": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexualDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexualMedicineAndMaritalTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sexualProblems": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "shalakyatantra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "shalyatantra": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "silk": {
+   "label": "not_a_service",
+   "confidence": 0.9
+  },
+  "slippedDisc": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "solidMalignancies": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "specialistConsultation": {
+   "label": "too_general",
+   "confidence": 0.7
+  },
+  "specializedVisionTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "spinalCordStimulation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "spondylosisSpondylolisthesis": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "stemCellBanking": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "stemCellPreservation": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "stressManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "swallowingAndDysphagia": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "swallowingAndFeedingTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "sympatheticNerveBlock": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "targetedTherapies": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "tavr-tavi-centre": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "telemedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "temporomandibularDisorders": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "thoracicMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "thoracicSyndrome": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "threeDimensionalScanners": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "tinnitusManagement": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "tobaccoCessationClinic": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "transforaminalBlocks": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "translationalMedicine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "treatmentOfHeadache": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "treatmentOfMigraine": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "tuboplasty": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "tumorMarker": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "urinaryIncontinence": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "uroOncoTreatment": {
+   "label": "surgical_oncology",
+   "confidence": 0.7
+  },
+  "vascularDiseases": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "vascularInterventions": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "vascularSciences": {
+   "label": "too_general",
+   "confidence": 0.6
+  },
+  "vertebroplasty": {
+   "label": "neurosurgery",
+   "confidence": 0.8
+  },
+  "virology": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "visionCorrection": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "visualFieldTestingServices": {
+   "label": "out_of_scope",
+   "confidence": 0.7
+  },
+  "vitrectomy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "voiceAndFluency": {
+   "label": "out_of_scope",
+   "confidence": 0.9
+  },
+  "voiceTherapy": {
+   "label": "out_of_scope",
+   "confidence": 0.8
+  },
+  "wellWomenClinic": {
+   "label": "institutional_delivery",
+   "confidence": 0.6
+  },
+  "womenMentalHealth": {
+   "label": "psychiatric_care",
+   "confidence": 0.7
+  }
+ }
+}

@@ -303,10 +303,10 @@
     },
     {
      "id": "lyse_first_if_transfer_30_plus",
-     "type": "add_stop_only_if",
+     "type": "caution",
      "stage": "thrombolysis",
-     "when": "Alternative, stricter reading from the MoHFW guideline: transfer time to the PCI centre is 30 minutes or more.",
-     "then": "Thrombolyse first (pharmaco-invasive approach). Use this rule or the 120 minute rule, not both; see open questions.",
+     "when": "Transfer time to the PCI centre is 30 minutes or more (stricter reading in the MoHFW guideline).",
+     "then": "Shown as a caution on the card: MoHFW says thrombolysing first is appropriate from 30 minutes of transfer time. The planner decides on the 120 minute rule.",
      "condition": {
       "definitive_travel_minutes_gte": 30
      },
@@ -391,11 +391,13 @@
     }
    ],
    "open_questions": [
-    "Which add-stop threshold should the planner use: PCI within 120 minutes of first medical contact (ICMR, CSI) or transfer time of 30 minutes or more (MoHFW Appendix C)? They have different reference points.",
     "The 120 minute rule includes time inside the PCI centre. How many minutes should the planner add to travel time for that? No Indian figure was encoded.",
     "No numeric door-in-door-out target for the referring facility was found in an Indian guideline. The 90 minute dwell is the repeat-ECG check, not a transfer target.",
     "The MoHFW 2022 text has internal inconsistencies (a 6 hour lysis window in Appendix C against 12 hours elsewhere; 'door to needle within 2 hours'). The 12 hour window from ICMR and CSI is used.",
     "STEMI is not one of the 8 graded services in derived/v1. The pathway needs the thrombolysis, ecg and pci_cath_lab tags before it can be planned."
+   ],
+   "decisions": [
+    "Lead, issue #6: the ICMR 120 minute rule is the STEMI decision rule; the MoHFW 30 minute transfer reading is shown as a caution line, not a second decision rule."
    ]
   },
   {

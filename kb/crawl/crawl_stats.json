@@ -1,0 +1,283 @@
+{
+ "runtime": {
+  "runs": 9,
+  "seconds_total": 3087.9,
+  "minutes_total": 51.5,
+  "note": "includes a 122 s smoke run whose output was discarded (robots parser bug) and recrawled"
+ },
+ "targets": {
+  "usable_records": 9959,
+  "records_with_official_candidate": 8015,
+  "sites": 9037,
+  "registrable_domains": 8918,
+  "shared_sites": 219,
+  "targets_by_kind": {
+   "site": 8818,
+   "branch": 368,
+   "shared_home": 219
+  },
+  "targets_total": 9405
+ },
+ "targets_attempted": 9405,
+ "sites_attempted": 9037,
+ "sites_reachable": 6127,
+ "targets_reachable": 6405,
+ "targets_by_status": {
+  "ok": 5989,
+  "dns_fail": 1880,
+  "ok_thin": 416,
+  "http_4xx": 253,
+  "hijacked_spam": 156,
+  "timeout": 122,
+  "robots_disallow": 121,
+  "robots_txt_forbidden": 94,
+  "robots_txt_5xx": 86,
+  "redirect_unverified": 61,
+  "connect_error": 49,
+  "http_5xx": 42,
+  "suspended_or_expired": 31,
+  "tls_error": 29,
+  "parked_or_for_sale": 22,
+  "too_many_redirects": 18,
+  "empty": 12,
+  "crawl_delay_too_long": 11,
+  "redirect_third_party": 8,
+  "non_html": 4,
+  "protocol_error": 1
+ },
+ "targets_by_group": {
+  "dead_or_unreachable": 2123,
+  "live_but_not_this_facility": 565,
+  "blocked_by_site_policy": 312,
+  "reachable": 6405
+ },
+ "flags": {
+  "tls_invalid_cert": 221,
+  "http_fallback": 128,
+  "redirect_same_org": 150,
+  "under_construction": 45,
+  "spam_injected": 34,
+  "relabelled_at_index": 84
+ },
+ "pages": {
+  "attempts": 31075,
+  "stored": 28909,
+  "stored_on_reachable_targets": 28589,
+  "distinct_text_hash": 26911,
+  "by_role": {
+   "link": 17762,
+   "home": 6378,
+   "seed": 4769
+  },
+  "link_pages_by_keyword_group": {
+   "about": 3450,
+   "services": 3328,
+   "contact": 2925,
+   "specialty": 2403,
+   "facilities": 1321,
+   "maternity": 1111,
+   "emergency": 715,
+   "doctors": 714,
+   "dialysis": 582,
+   "radiology": 571,
+   "timing": 390,
+   "icu": 252
+  },
+  "text_len_median": 1705.0,
+  "text_len_p90": 6225.0,
+  "empty_text": 437,
+  "truncated_2mb": 98,
+  "fallback_full_text": 3453,
+  "with_last_modified_header": 6559,
+  "lang": {
+   "en": 28311,
+   "none": 444,
+   "hi_mr": 109,
+   "gu": 20,
+   "ta": 10,
+   "ml": 8,
+   "te": 4,
+   "bn_as": 3
+  },
+  "page_errors": {
+   "http_404": 995,
+   "timeout": 189,
+   "http_403": 180,
+   "robots_disallow": 158,
+   "http_409": 118,
+   "robots_txt_forbidden": 95,
+   "robots_txt_5xx": 87,
+   "connect_error": 75,
+   "http_500": 60,
+   "tls_error": 42,
+   "too_many_redirects": 36,
+   "crawl_delay_too_long": 11,
+   "protocol_error": 11,
+   "dns_fail": 10,
+   "non_html": 10,
+   "http_503": 10,
+   "http_410": 9,
+   "http_525": 8,
+   "http_429": 5,
+   "http_526": 4,
+   "http_521": 4,
+   "http_402": 4,
+   "http_502": 4,
+   "http_400": 2,
+   "http_522": 2,
+   "http_406": 1,
+   "http_520": 1,
+   "http_421": 1
+  }
+ },
+ "coverage": {
+  "records": 9959,
+  "covered_own_site": 5721,
+  "covered_chain_home_only": 160,
+  "states_with_any_covered_record": 34,
+  "states_total": 34,
+  "by_type": {
+   "hospital": {
+    "records": 5610,
+    "with_candidate": 4583,
+    "covered_own_site": 3382,
+    "chain_home_only": 121,
+    "share_covered": 0.603
+   },
+   "clinic": {
+    "records": 3770,
+    "with_candidate": 2987,
+    "covered_own_site": 2040,
+    "chain_home_only": 36,
+    "share_covered": 0.541
+   },
+   "dentist": {
+    "records": 488,
+    "with_candidate": 374,
+    "covered_own_site": 259,
+    "chain_home_only": 3,
+    "share_covered": 0.531
+   },
+   "null": {
+    "records": 57,
+    "with_candidate": 48,
+    "covered_own_site": 26,
+    "chain_home_only": 0,
+    "share_covered": 0.456
+   },
+   "doctor": {
+    "records": 21,
+    "with_candidate": 15,
+    "covered_own_site": 9,
+    "chain_home_only": 0,
+    "share_covered": 0.429
+   },
+   "farmacy": {
+    "records": 10,
+    "with_candidate": 6,
+    "covered_own_site": 4,
+    "chain_home_only": 0,
+    "share_covered": 0.4
+   },
+   "pharmacy": {
+    "records": 2,
+    "with_candidate": 1,
+    "covered_own_site": 0,
+    "chain_home_only": 0,
+    "share_covered": 0.0
+   },
+   "nursing_home": {
+    "records": 1,
+    "with_candidate": 1,
+    "covered_own_site": 1,
+    "chain_home_only": 0,
+    "share_covered": 1.0
+   }
+  }
+ },
+ "identity_check": {
+  "definition": "reachable own-site/branch targets whose stored text contains the distinctive part of a linked record's name (fuzzy partial ratio >= 90; names with a distinctive key of 5+ chars)",
+  "matched": 3932,
+  "n": 5779,
+  "share": 0.68,
+  "wilson95": [
+   0.668,
+   0.692
+  ]
+ },
+ "content_teaser": {
+  "denominator_reachable_specific_targets": 6229,
+  "targets_with_match": {
+   "mentions_24x7": 2702,
+   "opd_or_timings": 2065,
+   "dialysis": 1069,
+   "nabh": 901,
+   "beds_number": 1165,
+   "insurance_or_pmjay": 1402
+  },
+  "patterns": {
+   "mentions_24x7": "24\\s?[x*/]\\s?7|24\\s?hours|round the clock|24-hour",
+   "opd_or_timings": "\\bopd\\b.{0,40}\\d|timings?\\s*[:\\-]|\\d{1,2}(:\\d\\d)?\\s?(am|a\\.m\\.)\\s?(to|-)\\s?\\d{1,2}(:\\d\\d)?\\s?(pm|p\\.m\\.)",
+   "dialysis": "dialysis|haemodialysis|hemodialysis",
+   "nabh": "\\bnabh\\b",
+   "beds_number": "\\b\\d{2,4}\\s?(-|\\s)?(bed|beds|bedded)\\b",
+   "insurance_or_pmjay": "cashless|\\btpa\\b|ayushman|pm-?jay|empanel"
+  }
+ },
+ "hand_checks": {
+  "dns_fail_recheck_8888": {
+   "resolved": 0,
+   "n": 40,
+   "wilson95_false_dns_fail": [
+    -0.0,
+    0.088
+   ]
+  },
+  "hijacked_spam_sample": {
+   "correct": 25,
+   "n": 25,
+   "wilson95": [
+    0.867,
+    1.0
+   ]
+  },
+  "redirect_unverified_census_before_final_relabel": {
+   "n": 67,
+   "same_org_rebrand_or_acquired": 25,
+   "different_org_or_junk": 29,
+   "unclear": 13,
+   "note": "every redirect_unverified target was labelled by eye from landing URL and title; some junk ones were later relabelled hijacked_spam by the injected-spam rule"
+  },
+  "parked_or_for_sale_sample_v1": {
+   "correct": 8,
+   "n": 10,
+   "wilson95": [
+    0.49,
+    0.943
+   ],
+   "note": "first version; the false positive (dan.com inside netranidan.com) is fixed"
+  }
+ },
+ "gov_probe": [
+  {
+   "url": "https://thrissur.nic.in/en/public-utility/maria-theresa-hospital/",
+   "dns": true,
+   "status": 200,
+   "error": null,
+   "final_url": "https://thrissur.nic.in/en/public-utility/maria-theresa-hospital/",
+   "bytes": 120063,
+   "seconds": 2.4,
+   "at": "2026-11-21T19:13:34+00:00"
+  },
+  {
+   "url": "https://pmjay.gov.in/",
+   "dns": true,
+   "status": null,
+   "error": "timeout",
+   "final_url": "https://pmjay.gov.in/",
+   "bytes": 0,
+   "seconds": 15.3,
+   "at": "2026-11-21T19:13:49+00:00"
+  }
+ ]
+}

@@ -21,7 +21,7 @@ a stop. Facility-level routing only. It is not clinical advice and not a triage 
   `target`.
 - `dwell_minutes.typical` is the time at a stop before the patient can move on.
 - `rules[].type`: `add_stop_only_if` (the only way a stabilising stop gets added), `skip_stop_if`,
-  `never_delay`, `before_transfer`, `refer_if`. `condition` holds the thresholds; `when` and `then`
+  `never_delay`, `before_transfer`, `refer_if`, `caution` (text for the card, never a decision). `condition` holds the thresholds; `when` and `then`
   say the same in words.
 - Every number has `basis`:
   - `guideline`: carries a `source` id and a verbatim `quote`.
@@ -80,8 +80,8 @@ burns and sick newborns, where no guideline gives any travel-time rule.
   onset, then transfer for PCI 3 to 24 hours later, or at once if thrombolysis fails.
 - MoHFW (2022) describes the hub-and-spoke model: thrombolysis at district, sub-district and
   community hospitals, PCI at the hub. It also states a stricter trigger: thrombolyse first when
-  transfer time is 30 minutes or more. Both readings are encoded as separate rules; the planner
-  must pick one.
+  transfer time is 30 minutes or more. Decision (lead, issue #6): the 120 minute rule decides;
+  the 30 minute reading is a `caution` rule shown on the card.
 - IPHS 2022 lists streptokinase and heart attack management at CHC, SDH and DH, nothing at PHC,
   and calls a cath lab at a district hospital aspirational.
 
@@ -264,8 +264,8 @@ decision-to-delivery interval (NICE).
 
 Each pathway lists its own under `open_questions` in the JSON. The ones that change planner output:
 
-1. STEMI: 120 minute rule or 30 minute rule? And how many minutes to add to travel for time inside
-   the PCI centre?
+1. STEMI: decided, the 120 minute rule (see above). Still open: how many minutes to add to travel
+   for time inside the PCI centre?
 2. Trauma: keep the direct-to-trauma-centre branch, given the Indian guideline says nearest
    facility?
 3. Accept, change or remove the 11 assumed values in the table above.

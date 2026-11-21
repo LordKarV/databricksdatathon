@@ -1,0 +1,139 @@
+/Users/karthikvattem/projects/datathon/kb/vf_details/extract.py:171: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  sub = c[(c.attribution != "other_facility") & c.text.str.contains(P.TIME_ANY) & c.text.str.contains(P.HOURS_WORD)]
+{
+ "facilities": 9959,
+ "claims_scanned": 469498,
+ "facts": 42036,
+ "hour_candidates": 64,
+ "hour_candidate_unique_texts": 64,
+ "facts_by_method": {
+  "regex": 35429,
+  "structured": 6589,
+  "llm": 18
+ },
+ "facts_by_status": {
+  "ok": 37536,
+  "flagged": 3923,
+  "excluded": 577
+ },
+ "facts_by_polarity": {
+  "positive": 41839,
+  "neutral": 164,
+  "negative": 33
+ },
+ "coverage_by_type": {
+  "accreditation": {
+   "facts": 3498,
+   "facilities_any": 1491,
+   "facilities_usable": 1431,
+   "facilities_ok": 1404,
+   "share_usable": 0.1437
+  },
+  "ambulance": {
+   "facts": 1991,
+   "facilities_any": 1180,
+   "facilities_usable": 1168,
+   "facilities_ok": 1107,
+   "share_usable": 0.1173
+  },
+  "blood_centre": {
+   "facts": 1402,
+   "facilities_any": 607,
+   "facilities_usable": 598,
+   "facilities_ok": 554,
+   "share_usable": 0.06
+  },
+  "empanelment": {
+   "facts": 6268,
+   "facilities_any": 2330,
+   "facilities_usable": 2283,
+   "facilities_ok": 2006,
+   "share_usable": 0.2292
+  },
+  "equipment_count": {
+   "facts": 1537,
+   "facilities_any": 577,
+   "facilities_usable": 568,
+   "facilities_ok": 542,
+   "share_usable": 0.057
+  },
+  "free_or_government": {
+   "facts": 2027,
+   "facilities_any": 1045,
+   "facilities_usable": 1037,
+   "facilities_ok": 997,
+   "share_usable": 0.1041
+  },
+  "hours_24x7": {
+   "facts": 10506,
+   "facilities_any": 4116,
+   "facilities_usable": 4112,
+   "facilities_ok": 4077,
+   "share_usable": 0.4129
+  },
+  "hours_dialysis_shifts": {
+   "facts": 4,
+   "facilities_any": 4,
+   "facilities_usable": 4,
+   "facilities_ok": 4,
+   "share_usable": 0.0004
+  },
+  "opd_hours": {
+   "facts": 592,
+   "facilities_any": 527,
+   "facilities_usable": 509,
+   "facilities_ok": 458,
+   "share_usable": 0.0511
+  },
+  "staffing": {
+   "facts": 8079,
+   "facilities_any": 4288,
+   "facilities_usable": 4277,
+   "facilities_ok": 4197,
+   "share_usable": 0.4295
+  },
+  "unit_beds": {
+   "facts": 6132,
+   "facilities_any": 2678,
+   "facilities_usable": 2674,
+   "facilities_ok": 2665,
+   "share_usable": 0.2685
+  }
+ },
+ "flag_counts": {
+  "dup_in_record": 2083,
+  "kind_list": 1465,
+  "listing": 1028,
+  "attr_ambiguous": 477,
+  "disagrees_numberDoctors": 416,
+  "attr_other_facility": 382,
+  "disagrees_capacity": 346,
+  "aggregate_or_future_scope": 157,
+  "dated": 126,
+  "kind_staff": 95,
+  "cue_parttime": 93,
+  "zero_count": 55,
+  "historical": 51,
+  "type_scale_mismatch": 40,
+  "implausible_value": 37,
+  "staff_bio": 37,
+  "doctors_exceed_beds": 34,
+  "kind_specialty_tag": 22,
+  "cue_future": 20,
+  "llm_extracted": 18,
+  "cue_negation": 16,
+  "cue_third_party": 15,
+  "exceeds_total_beds": 13,
+  "close_before_open": 11,
+  "cue_hedge": 10,
+  "kind_research": 9,
+  "cue_referral": 8,
+  "odd_open_time": 5,
+  "cue_camp": 3,
+  "kind_template": 1,
+  "meridiem_guessed": 1
+ },
+ "facilities_with_any_usable_fact": 7489,
+ "facility_attribute_rows": 26046,
+ "conflicting_values_rows": 746
+}

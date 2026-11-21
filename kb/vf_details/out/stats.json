@@ -1,0 +1,841 @@
+{
+ "facilities": 9959,
+ "claims_scanned": 469498,
+ "facts": 42036,
+ "hour_candidates": 64,
+ "hour_candidate_unique_texts": 64,
+ "facts_by_method": {
+  "regex": 35429,
+  "structured": 6589,
+  "llm": 18
+ },
+ "facts_by_status": {
+  "ok": 37536,
+  "flagged": 3923,
+  "excluded": 577
+ },
+ "facts_by_polarity": {
+  "positive": 41839,
+  "neutral": 164,
+  "negative": 33
+ },
+ "coverage": {
+  "accreditation.JCI": {
+   "facts": 69,
+   "ok": 60,
+   "flagged": 8,
+   "excluded": 1,
+   "facilities_any": 40,
+   "facilities_usable": 36,
+   "facilities_ok": 33
+  },
+  "accreditation.Kayakalp": {
+   "facts": 19,
+   "ok": 16,
+   "flagged": 1,
+   "excluded": 2,
+   "facilities_any": 14,
+   "facilities_usable": 10,
+   "facilities_ok": 10
+  },
+  "accreditation.LaQshya": {
+   "facts": 1,
+   "ok": 1,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 1,
+   "facilities_usable": 1,
+   "facilities_ok": 1
+  },
+  "accreditation.NABH": {
+   "facts": 2629,
+   "ok": 2503,
+   "flagged": 109,
+   "excluded": 17,
+   "facilities_any": 1299,
+   "facilities_usable": 1242,
+   "facilities_ok": 1221
+  },
+  "accreditation.NABL": {
+   "facts": 775,
+   "ok": 732,
+   "flagged": 40,
+   "excluded": 3,
+   "facilities_any": 354,
+   "facilities_usable": 341,
+   "facilities_ok": 332
+  },
+  "accreditation.NQAS": {
+   "facts": 5,
+   "ok": 5,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 3,
+   "facilities_usable": 3,
+   "facilities_ok": 3
+  },
+  "ambulance.ambulance_service": {
+   "facts": 1991,
+   "ok": 1791,
+   "flagged": 181,
+   "excluded": 19,
+   "facilities_any": 1180,
+   "facilities_usable": 1168,
+   "facilities_ok": 1107
+  },
+  "blood_centre.blood_bank": {
+   "facts": 1351,
+   "ok": 1114,
+   "flagged": 200,
+   "excluded": 37,
+   "facilities_any": 582,
+   "facilities_usable": 573,
+   "facilities_ok": 531
+  },
+  "blood_centre.blood_storage_unit": {
+   "facts": 51,
+   "ok": 43,
+   "flagged": 6,
+   "excluded": 2,
+   "facilities_any": 35,
+   "facilities_usable": 35,
+   "facilities_ok": 32
+  },
+  "empanelment.aarogyasri_ap_ts": {
+   "facts": 34,
+   "ok": 24,
+   "flagged": 10,
+   "excluded": 0,
+   "facilities_any": 23,
+   "facilities_usable": 23,
+   "facilities_ok": 18
+  },
+  "empanelment.bsky_od": {
+   "facts": 4,
+   "ok": 4,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 3,
+   "facilities_usable": 3,
+   "facilities_ok": 3
+  },
+  "empanelment.capf": {
+   "facts": 29,
+   "ok": 13,
+   "flagged": 16,
+   "excluded": 0,
+   "facilities_any": 22,
+   "facilities_usable": 22,
+   "facilities_ok": 11
+  },
+  "empanelment.cghs": {
+   "facts": 313,
+   "ok": 265,
+   "flagged": 44,
+   "excluded": 4,
+   "facilities_any": 184,
+   "facilities_usable": 182,
+   "facilities_ok": 168
+  },
+  "empanelment.cmchis_tn": {
+   "facts": 12,
+   "ok": 10,
+   "flagged": 2,
+   "excluded": 0,
+   "facilities_any": 7,
+   "facilities_usable": 7,
+   "facilities_ok": 7
+  },
+  "empanelment.echs": {
+   "facts": 205,
+   "ok": 161,
+   "flagged": 38,
+   "excluded": 6,
+   "facilities_any": 142,
+   "facilities_usable": 140,
+   "facilities_ok": 122
+  },
+  "empanelment.esic": {
+   "facts": 151,
+   "ok": 107,
+   "flagged": 42,
+   "excluded": 2,
+   "facilities_any": 105,
+   "facilities_usable": 105,
+   "facilities_ok": 83
+  },
+  "empanelment.gujarat_ma": {
+   "facts": 7,
+   "ok": 5,
+   "flagged": 2,
+   "excluded": 0,
+   "facilities_any": 5,
+   "facilities_usable": 5,
+   "facilities_ok": 4
+  },
+  "empanelment.karnataka": {
+   "facts": 21,
+   "ok": 16,
+   "flagged": 3,
+   "excluded": 2,
+   "facilities_any": 14,
+   "facilities_usable": 13,
+   "facilities_ok": 10
+  },
+  "empanelment.kasp_kl": {
+   "facts": 6,
+   "ok": 6,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 5,
+   "facilities_usable": 5,
+   "facilities_ok": 5
+  },
+  "empanelment.mjpjay_mh": {
+   "facts": 20,
+   "ok": 18,
+   "flagged": 2,
+   "excluded": 0,
+   "facilities_any": 15,
+   "facilities_usable": 15,
+   "facilities_ok": 15
+  },
+  "empanelment.other_state_scheme": {
+   "facts": 137,
+   "ok": 122,
+   "flagged": 14,
+   "excluded": 1,
+   "facilities_any": 115,
+   "facilities_usable": 114,
+   "facilities_ok": 105
+  },
+  "empanelment.pmjay": {
+   "facts": 1270,
+   "ok": 1146,
+   "flagged": 105,
+   "excluded": 19,
+   "facilities_any": 647,
+   "facilities_usable": 642,
+   "facilities_ok": 597
+  },
+  "empanelment.private_insurance": {
+   "facts": 3918,
+   "ok": 2959,
+   "flagged": 799,
+   "excluded": 160,
+   "facilities_any": 1837,
+   "facilities_usable": 1793,
+   "facilities_ok": 1529
+  },
+  "empanelment.railway": {
+   "facts": 5,
+   "ok": 5,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 4,
+   "facilities_usable": 4,
+   "facilities_ok": 4
+  },
+  "empanelment.rajasthan": {
+   "facts": 111,
+   "ok": 101,
+   "flagged": 8,
+   "excluded": 2,
+   "facilities_any": 39,
+   "facilities_usable": 39,
+   "facilities_ok": 36
+  },
+  "empanelment.rsby": {
+   "facts": 15,
+   "ok": 9,
+   "flagged": 6,
+   "excluded": 0,
+   "facilities_any": 13,
+   "facilities_usable": 13,
+   "facilities_ok": 8
+  },
+  "empanelment.swasthya_sathi_wb": {
+   "facts": 10,
+   "ok": 8,
+   "flagged": 1,
+   "excluded": 1,
+   "facilities_any": 6,
+   "facilities_usable": 5,
+   "facilities_ok": 5
+  },
+  "equipment_count.cath_labs": {
+   "facts": 34,
+   "ok": 23,
+   "flagged": 0,
+   "excluded": 11,
+   "facilities_any": 25,
+   "facilities_usable": 17,
+   "facilities_ok": 17
+  },
+  "equipment_count.ct_slices": {
+   "facts": 468,
+   "ok": 434,
+   "flagged": 29,
+   "excluded": 5,
+   "facilities_any": 213,
+   "facilities_usable": 212,
+   "facilities_ok": 207
+  },
+  "equipment_count.dialysis_machines": {
+   "facts": 53,
+   "ok": 42,
+   "flagged": 9,
+   "excluded": 2,
+   "facilities_any": 34,
+   "facilities_usable": 32,
+   "facilities_ok": 30
+  },
+  "equipment_count.mri_tesla": {
+   "facts": 575,
+   "ok": 547,
+   "flagged": 24,
+   "excluded": 4,
+   "facilities_any": 235,
+   "facilities_usable": 235,
+   "facilities_ok": 233
+  },
+  "equipment_count.operation_theatres": {
+   "facts": 368,
+   "ok": 326,
+   "flagged": 35,
+   "excluded": 7,
+   "facilities_any": 255,
+   "facilities_usable": 254,
+   "facilities_ok": 233
+  },
+  "equipment_count.ventilators": {
+   "facts": 39,
+   "ok": 32,
+   "flagged": 6,
+   "excluded": 1,
+   "facilities_any": 30,
+   "facilities_usable": 29,
+   "facilities_ok": 26
+  },
+  "free_or_government.free_ambulance": {
+   "facts": 36,
+   "ok": 33,
+   "flagged": 3,
+   "excluded": 0,
+   "facilities_any": 21,
+   "facilities_usable": 21,
+   "facilities_ok": 20
+  },
+  "free_or_government.free_camp": {
+   "facts": 195,
+   "ok": 159,
+   "flagged": 33,
+   "excluded": 3,
+   "facilities_any": 136,
+   "facilities_usable": 134,
+   "facilities_ok": 121
+  },
+  "free_or_government.free_care": {
+   "facts": 677,
+   "ok": 629,
+   "flagged": 46,
+   "excluded": 2,
+   "facilities_any": 378,
+   "facilities_usable": 377,
+   "facilities_ok": 361
+  },
+  "free_or_government.free_event": {
+   "facts": 2,
+   "ok": 2,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 2,
+   "facilities_usable": 2,
+   "facilities_ok": 2
+  },
+  "free_or_government.free_under_scheme": {
+   "facts": 121,
+   "ok": 116,
+   "flagged": 5,
+   "excluded": 0,
+   "facilities_any": 107,
+   "facilities_usable": 107,
+   "facilities_ok": 103
+  },
+  "free_or_government.free_with_package": {
+   "facts": 10,
+   "ok": 8,
+   "flagged": 1,
+   "excluded": 1,
+   "facilities_any": 8,
+   "facilities_usable": 7,
+   "facilities_ok": 6
+  },
+  "free_or_government.government_run_text": {
+   "facts": 519,
+   "ok": 322,
+   "flagged": 116,
+   "excluded": 81,
+   "facilities_any": 251,
+   "facilities_usable": 236,
+   "facilities_ok": 192
+  },
+  "free_or_government.public_operator": {
+   "facts": 467,
+   "ok": 467,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 467,
+   "facilities_usable": 467,
+   "facilities_ok": 467
+  },
+  "hours_24x7.ambulance": {
+   "facts": 452,
+   "ok": 435,
+   "flagged": 17,
+   "excluded": 0,
+   "facilities_any": 323,
+   "facilities_usable": 323,
+   "facilities_ok": 314
+  },
+  "hours_24x7.blood_bank": {
+   "facts": 79,
+   "ok": 75,
+   "flagged": 4,
+   "excluded": 0,
+   "facilities_any": 58,
+   "facilities_usable": 58,
+   "facilities_ok": 57
+  },
+  "hours_24x7.dialysis": {
+   "facts": 109,
+   "ok": 99,
+   "flagged": 9,
+   "excluded": 1,
+   "facilities_any": 69,
+   "facilities_usable": 68,
+   "facilities_ok": 64
+  },
+  "hours_24x7.emergency": {
+   "facts": 4348,
+   "ok": 4136,
+   "flagged": 198,
+   "excluded": 14,
+   "facilities_any": 2285,
+   "facilities_usable": 2281,
+   "facilities_ok": 2246
+  },
+  "hours_24x7.facility": {
+   "facts": 3910,
+   "ok": 3775,
+   "flagged": 118,
+   "excluded": 17,
+   "facilities_any": 2523,
+   "facilities_usable": 2517,
+   "facilities_ok": 2475
+  },
+  "hours_24x7.helpline": {
+   "facts": 185,
+   "ok": 180,
+   "flagged": 3,
+   "excluded": 2,
+   "facilities_any": 152,
+   "facilities_usable": 150,
+   "facilities_ok": 148
+  },
+  "hours_24x7.home_care": {
+   "facts": 13,
+   "ok": 9,
+   "flagged": 4,
+   "excluded": 0,
+   "facilities_any": 9,
+   "facilities_usable": 9,
+   "facilities_ok": 7
+  },
+  "hours_24x7.icu": {
+   "facts": 224,
+   "ok": 212,
+   "flagged": 12,
+   "excluded": 0,
+   "facilities_any": 159,
+   "facilities_usable": 159,
+   "facilities_ok": 151
+  },
+  "hours_24x7.lab_imaging": {
+   "facts": 683,
+   "ok": 626,
+   "flagged": 53,
+   "excluded": 4,
+   "facilities_any": 396,
+   "facilities_usable": 393,
+   "facilities_ok": 369
+  },
+  "hours_24x7.labour_room": {
+   "facts": 52,
+   "ok": 48,
+   "flagged": 4,
+   "excluded": 0,
+   "facilities_any": 41,
+   "facilities_usable": 41,
+   "facilities_ok": 38
+  },
+  "hours_24x7.nursing": {
+   "facts": 64,
+   "ok": 56,
+   "flagged": 7,
+   "excluded": 1,
+   "facilities_any": 54,
+   "facilities_usable": 53,
+   "facilities_ok": 49
+  },
+  "hours_24x7.operation_theatre": {
+   "facts": 16,
+   "ok": 14,
+   "flagged": 2,
+   "excluded": 0,
+   "facilities_any": 16,
+   "facilities_usable": 16,
+   "facilities_ok": 14
+  },
+  "hours_24x7.pharmacy": {
+   "facts": 371,
+   "ok": 343,
+   "flagged": 28,
+   "excluded": 0,
+   "facilities_any": 287,
+   "facilities_usable": 287,
+   "facilities_ok": 272
+  },
+  "hours_dialysis_shifts.dialysis_shifts": {
+   "facts": 4,
+   "ok": 4,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 4,
+   "facilities_usable": 4,
+   "facilities_ok": 4
+  },
+  "opd_hours.dialysis": {
+   "facts": 2,
+   "ok": 2,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 2,
+   "facilities_usable": 2,
+   "facilities_ok": 2
+  },
+  "opd_hours.doctor_session": {
+   "facts": 53,
+   "ok": 35,
+   "flagged": 16,
+   "excluded": 2,
+   "facilities_any": 46,
+   "facilities_usable": 44,
+   "facilities_ok": 32
+  },
+  "opd_hours.emergency": {
+   "facts": 10,
+   "ok": 7,
+   "flagged": 3,
+   "excluded": 0,
+   "facilities_any": 10,
+   "facilities_usable": 10,
+   "facilities_ok": 7
+  },
+  "opd_hours.general": {
+   "facts": 384,
+   "ok": 332,
+   "flagged": 36,
+   "excluded": 16,
+   "facilities_any": 360,
+   "facilities_usable": 345,
+   "facilities_ok": 314
+  },
+  "opd_hours.lab": {
+   "facts": 16,
+   "ok": 13,
+   "flagged": 3,
+   "excluded": 0,
+   "facilities_any": 13,
+   "facilities_usable": 13,
+   "facilities_ok": 10
+  },
+  "opd_hours.opd": {
+   "facts": 124,
+   "ok": 114,
+   "flagged": 8,
+   "excluded": 2,
+   "facilities_any": 117,
+   "facilities_usable": 115,
+   "facilities_ok": 108
+  },
+  "opd_hours.pharmacy": {
+   "facts": 1,
+   "ok": 0,
+   "flagged": 1,
+   "excluded": 0,
+   "facilities_any": 1,
+   "facilities_usable": 1,
+   "facilities_ok": 0
+  },
+  "opd_hours.visiting": {
+   "facts": 2,
+   "ok": 0,
+   "flagged": 2,
+   "excluded": 0,
+   "facilities_any": 2,
+   "facilities_usable": 2,
+   "facilities_ok": 0
+  },
+  "staffing.doctor_24x7": {
+   "facts": 222,
+   "ok": 201,
+   "flagged": 21,
+   "excluded": 0,
+   "facilities_any": 200,
+   "facilities_usable": 200,
+   "facilities_ok": 183
+  },
+  "staffing.doctors": {
+   "facts": 2310,
+   "ok": 1748,
+   "flagged": 542,
+   "excluded": 20,
+   "facilities_any": 1747,
+   "facilities_usable": 1739,
+   "facilities_ok": 1455
+  },
+  "staffing.doctors_named": {
+   "facts": 3604,
+   "ok": 3604,
+   "flagged": 0,
+   "excluded": 0,
+   "facilities_any": 3604,
+   "facilities_usable": 3604,
+   "facilities_ok": 3604
+  },
+  "staffing.nurses": {
+   "facts": 74,
+   "ok": 54,
+   "flagged": 11,
+   "excluded": 9,
+   "facilities_any": 62,
+   "facilities_usable": 58,
+   "facilities_ok": 49
+  },
+  "staffing.specialty_doctors": {
+   "facts": 505,
+   "ok": 404,
+   "flagged": 91,
+   "excluded": 10,
+   "facilities_any": 372,
+   "facilities_usable": 365,
+   "facilities_ok": 299
+  },
+  "staffing.staff_total": {
+   "facts": 1135,
+   "ok": 1019,
+   "flagged": 93,
+   "excluded": 23,
+   "facilities_any": 933,
+   "facilities_usable": 923,
+   "facilities_ok": 853
+  },
+  "staffing.visiting_or_on_call": {
+   "facts": 229,
+   "ok": 151,
+   "flagged": 75,
+   "excluded": 3,
+   "facilities_any": 173,
+   "facilities_usable": 170,
+   "facilities_ok": 122
+  },
+  "unit_beds.ccu": {
+   "facts": 26,
+   "ok": 20,
+   "flagged": 4,
+   "excluded": 2,
+   "facilities_any": 22,
+   "facilities_usable": 20,
+   "facilities_ok": 17
+  },
+  "unit_beds.dialysis": {
+   "facts": 24,
+   "ok": 19,
+   "flagged": 5,
+   "excluded": 0,
+   "facilities_any": 16,
+   "facilities_usable": 16,
+   "facilities_ok": 13
+  },
+  "unit_beds.emergency": {
+   "facts": 44,
+   "ok": 35,
+   "flagged": 7,
+   "excluded": 2,
+   "facilities_any": 36,
+   "facilities_usable": 34,
+   "facilities_ok": 27
+  },
+  "unit_beds.hdu": {
+   "facts": 15,
+   "ok": 12,
+   "flagged": 3,
+   "excluded": 0,
+   "facilities_any": 13,
+   "facilities_usable": 13,
+   "facilities_ok": 10
+  },
+  "unit_beds.icu": {
+   "facts": 488,
+   "ok": 410,
+   "flagged": 67,
+   "excluded": 11,
+   "facilities_any": 382,
+   "facilities_usable": 374,
+   "facilities_ok": 333
+  },
+  "unit_beds.nicu": {
+   "facts": 66,
+   "ok": 50,
+   "flagged": 13,
+   "excluded": 3,
+   "facilities_any": 50,
+   "facilities_usable": 48,
+   "facilities_ok": 39
+  },
+  "unit_beds.picu": {
+   "facts": 27,
+   "ok": 18,
+   "flagged": 8,
+   "excluded": 1,
+   "facilities_any": 21,
+   "facilities_usable": 21,
+   "facilities_ok": 15
+  },
+  "unit_beds.total": {
+   "facts": 5442,
+   "ok": 4892,
+   "flagged": 511,
+   "excluded": 39,
+   "facilities_any": 2632,
+   "facilities_usable": 2628,
+   "facilities_ok": 2627
+  }
+ },
+ "coverage_by_type": {
+  "accreditation": {
+   "facts": 3498,
+   "facilities_any": 1491,
+   "facilities_usable": 1431,
+   "facilities_ok": 1404,
+   "share_usable": 0.1437
+  },
+  "ambulance": {
+   "facts": 1991,
+   "facilities_any": 1180,
+   "facilities_usable": 1168,
+   "facilities_ok": 1107,
+   "share_usable": 0.1173
+  },
+  "blood_centre": {
+   "facts": 1402,
+   "facilities_any": 607,
+   "facilities_usable": 598,
+   "facilities_ok": 554,
+   "share_usable": 0.06
+  },
+  "empanelment": {
+   "facts": 6268,
+   "facilities_any": 2330,
+   "facilities_usable": 2283,
+   "facilities_ok": 2006,
+   "share_usable": 0.2292
+  },
+  "equipment_count": {
+   "facts": 1537,
+   "facilities_any": 577,
+   "facilities_usable": 568,
+   "facilities_ok": 542,
+   "share_usable": 0.057
+  },
+  "free_or_government": {
+   "facts": 2027,
+   "facilities_any": 1045,
+   "facilities_usable": 1037,
+   "facilities_ok": 997,
+   "share_usable": 0.1041
+  },
+  "hours_24x7": {
+   "facts": 10506,
+   "facilities_any": 4116,
+   "facilities_usable": 4112,
+   "facilities_ok": 4077,
+   "share_usable": 0.4129
+  },
+  "hours_dialysis_shifts": {
+   "facts": 4,
+   "facilities_any": 4,
+   "facilities_usable": 4,
+   "facilities_ok": 4,
+   "share_usable": 0.0004
+  },
+  "opd_hours": {
+   "facts": 592,
+   "facilities_any": 527,
+   "facilities_usable": 509,
+   "facilities_ok": 458,
+   "share_usable": 0.0511
+  },
+  "staffing": {
+   "facts": 8079,
+   "facilities_any": 4288,
+   "facilities_usable": 4277,
+   "facilities_ok": 4197,
+   "share_usable": 0.4295
+  },
+  "unit_beds": {
+   "facts": 6132,
+   "facilities_any": 2678,
+   "facilities_usable": 2674,
+   "facilities_ok": 2665,
+   "share_usable": 0.2685
+  }
+ },
+ "flag_counts": {
+  "dup_in_record": 2083,
+  "kind_list": 1465,
+  "listing": 1028,
+  "attr_ambiguous": 477,
+  "disagrees_numberDoctors": 416,
+  "attr_other_facility": 382,
+  "disagrees_capacity": 346,
+  "aggregate_or_future_scope": 157,
+  "dated": 126,
+  "kind_staff": 95,
+  "cue_parttime": 93,
+  "zero_count": 55,
+  "historical": 51,
+  "type_scale_mismatch": 40,
+  "implausible_value": 37,
+  "staff_bio": 37,
+  "doctors_exceed_beds": 34,
+  "kind_specialty_tag": 22,
+  "cue_future": 20,
+  "llm_extracted": 18,
+  "cue_negation": 16,
+  "cue_third_party": 15,
+  "exceeds_total_beds": 13,
+  "close_before_open": 11,
+  "cue_hedge": 10,
+  "kind_research": 9,
+  "cue_referral": 8,
+  "odd_open_time": 5,
+  "cue_camp": 3,
+  "kind_template": 1,
+  "meridiem_guessed": 1
+ },
+ "facilities_with_any_usable_fact": 7489,
+ "facility_attribute_rows": 26046,
+ "conflicting_values_rows": 746
+}

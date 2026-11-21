@@ -1,0 +1,449 @@
+{
+ "quotes": {
+  "triples_checked": 227761,
+  "files": 26454,
+  "not_substring": 0,
+  "examples": []
+ },
+ "quote_shape": {
+  "n_quotes": 237891,
+  "with_newline": 0.029,
+  "with_redaction_token": 0.015,
+  "three_words_or_fewer": 0.295,
+  "service_quote_is_window_of_longer_line": 0.064,
+  "ellipsis_in_quote": 0.005
+ },
+ "facility_values": {
+  "facility_facts_usable": 17548,
+  "best_quote_equals_fact_quote": 17548,
+  "value_differs_from_best_fact_row": 1128,
+  "value_differs_by_fact_type": {
+   "accreditation": 10,
+   "ambulance": 168,
+   "equipment_count": 23,
+   "free_or_government": 86,
+   "opd_hours": 716,
+   "staffing": 54,
+   "unit_beds": 71
+  },
+  "opd_value_with_unknown_days": 1118,
+  "opd_facts": 3038,
+  "examples": [
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "tue 18:00-20:00",
+    "value_num": NaN,
+    "best_value_text": "mon-sat 09:00-21:00",
+    "best_value_num": NaN,
+    "best_quote": "Opening Hours\nMonday to Saturday-9.00 AM TO 9.00 PM"
+   },
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "days? 18:00-21:30",
+    "value_num": NaN,
+    "best_value_text": "days? 10:00-14:30",
+    "best_value_num": NaN,
+    "best_quote": "10:00 am to 2:30 pm"
+   },
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "days? 10:30-13:00",
+    "value_num": NaN,
+    "best_value_text": "sun 10:30-20:30",
+    "best_value_num": NaN,
+    "best_quote": "Sundays\n10.30 AM to 8.30 PM"
+   },
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "days? 10:00-13:00; days? 17:00-21:00",
+    "value_num": NaN,
+    "best_value_text": "mon-sat 10:00-13:00; mon-sat 17:00-21:00",
+    "best_value_num": NaN,
+    "best_quote": "Timings :\nMon - Sat: 10 A.M. - 1 P.M. & 5 P.M. - 9 P.M."
+   },
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "days? 17:00-19:00",
+    "value_num": NaN,
+    "best_value_text": "mon-sat 09:00-13:00",
+    "best_value_num": NaN,
+    "best_quote": "Days Available : Monday to Saturday\nOP Timings : 9 am \u2013 1 pm, 3"
+   },
+   {
+    "fact_type": "opd_hours",
+    "attribute": "general",
+    "value_text": "days? 16:00-18:00",
+    "value_num": NaN,
+    "best_value_text": "mon-fri 10:00-13:00",
+    "best_value_num": NaN,
+    "best_quote": "Monday - Friday\n10:00 a.m. - 1:00 p.m."
+   }
+  ]
+ },
+ "services": {
+  "positive_rows": 115964,
+  "positive_pairs": 20218,
+  "rules": {
+   "doctor_bio": {
+    "rows_hit": 898,
+    "pairs_dropped": 119,
+    "share_pairs_dropped": 0.006,
+    "sample_wrong_removed": 2,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     47,
+     52
+    ]
+   },
+   "educational": {
+    "rows_hit": 1227,
+    "pairs_dropped": 152,
+    "share_pairs_dropped": 0.008,
+    "sample_wrong_removed": 6,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     26,
+     37,
+     45,
+     53,
+     54,
+     57
+    ]
+   },
+   "coming_soon": {
+    "rows_hit": 27,
+    "pairs_dropped": 9,
+    "share_pairs_dropped": 0.0,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     49
+    ]
+   },
+   "testimonial": {
+    "rows_hit": 721,
+    "pairs_dropped": 73,
+    "share_pairs_dropped": 0.004,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     51
+    ]
+   },
+   "trauma_sense": {
+    "rows_hit": 203,
+    "pairs_dropped": 42,
+    "share_pairs_dropped": 0.002,
+    "sample_wrong_removed": 3,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     26,
+     37,
+     48
+    ]
+   },
+   "event_or_article_url": {
+    "rows_hit": 512,
+    "pairs_dropped": 44,
+    "share_pairs_dropped": 0.002,
+    "sample_wrong_removed": 2,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     15,
+     56
+    ]
+   },
+   "template_item_10plus_sites": {
+    "rows_hit": 20457,
+    "pairs_dropped": 1454,
+    "share_pairs_dropped": 0.072,
+    "sample_wrong_removed": 0,
+    "sample_right_lost": 3,
+    "sample_removed_n": [
+     5,
+     25,
+     31
+    ]
+   },
+   "chrome_text_only": {
+    "rows_hit": 41818,
+    "pairs_dropped": 1363,
+    "share_pairs_dropped": 0.067,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 4,
+    "sample_removed_n": [
+     5,
+     22,
+     31,
+     46,
+     60
+    ]
+   },
+   "ALL_TEXT_RULES_COMBINED": {
+    "rows_hit": 3490,
+    "pairs_dropped": 429,
+    "share_pairs_dropped": 0.021,
+    "sample_wrong_removed": 13,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     15,
+     26,
+     37,
+     45,
+     47,
+     48,
+     49,
+     51,
+     52,
+     53,
+     54,
+     56,
+     57
+    ]
+   }
+  }
+ },
+ "facts": {
+  "facility_facts_usable": 17548,
+  "rules": {
+   "hours_24x7_facility_with_helpline_or_visiting_cue": {
+    "facts_hit": 137,
+    "of_type": 5276,
+    "sample_wrong_removed": 2,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     86,
+     89
+    ]
+   },
+   "hours_24x7_facility_quote_names_a_unit": {
+    "facts_hit": 109,
+    "of_type": 5276,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     87
+    ]
+   },
+   "total_beds_quote_names_a_unit": {
+    "facts_hit": 86,
+    "of_type": 1131,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     92
+    ]
+   },
+   "beds_or_accreditation_quote_with_group_cue": {
+    "facts_hit": 162,
+    "of_type": 2092,
+    "sample_wrong_removed": 0,
+    "sample_right_lost": 0,
+    "sample_removed_n": []
+   },
+   "ambulance_count_from_24_hours": {
+    "facts_hit": 71,
+    "of_type": 1048,
+    "sample_wrong_removed": 1,
+    "sample_right_lost": 0,
+    "sample_removed_n": [
+     109
+    ]
+   },
+   "only_flagged_rows_no_ok_row": {
+    "facts_hit": 3712,
+    "of_type": 17548,
+    "sample_wrong_removed": 4,
+    "sample_right_lost": 8,
+    "sample_removed_n": [
+     61,
+     69,
+     81,
+     82,
+     83,
+     84,
+     85,
+     92,
+     102,
+     103,
+     108,
+     117
+    ]
+   }
+  },
+  "paramount_rows": {
+   "rows": 261,
+   "rows_adjective_use": 102,
+   "records": 197,
+   "records_only_adjective_use": 80
+  },
+  "private_insurance_match_terms_top": {
+   "cashless": 2710,
+   "tpa": 2285,
+   "health insurance": 606,
+   "mediclaim": 369,
+   "tpas": 297,
+   "paramount": 261,
+   "insurance companies": 229,
+   "star health": 187,
+   "raksha": 175,
+   "hdfc ergo": 156,
+   "insurance partners": 149,
+   "care health": 134,
+   "medi assist": 127,
+   "icici lombard": 124,
+   "good health": 100
+  },
+  "flagged_usable_rows": 17873,
+  "flag_terms_top": {
+   "kind_list": 12120,
+   "bare_24x7_line": 2361,
+   "edu_page": 741,
+   "aggregate_or_future_scope": 634,
+   "kind_staff": 618,
+   "meridiem_guessed": 512,
+   "cue_parttime": 479,
+   "llm_extracted": 405,
+   "disagrees_capacity": 309,
+   "disagrees_numberDoctors": 226
+  }
+ },
+ "identity": {
+  "rejected_site_or_branch_rows_not_parked": 1101,
+  "recoverable_by_normalised_name": 17,
+  "recoverable_by_street_address_only": 41,
+  "recoverable_examples": [
+   "Sree Lakshmi Narayana Institute of Medical Sciences and Hospital",
+   "Bone & Joint Hospital",
+   "Dr. Arya\u2019s Dental Hospitals-Rampally X Road",
+   "MGM Hospital and Research Centre",
+   "Jaipur Eye And Dental Hospital",
+   "Vidyasagar Institute of Mental Health and Neuro and Allied Sciences",
+   "Nayanshree Netralaya",
+   "ASG Eye Hospitals - Kharvela Nagar, Bhubaneswar",
+   "Tibetan Delek Hospital"
+  ],
+  "recoverable_in_sample": {
+   "wrong_fixed": 3,
+   "right_changed": 0,
+   "n": [
+    137,
+    141,
+    144
+   ]
+  },
+  "medium_own_sites": 312,
+  "medium_by_name_how": {
+   "full": 187,
+   "dist": 62,
+   "none": 30,
+   "fuzzy": 23,
+   "head": 10
+  },
+  "medium_with_other_place_in_title_or_name_line": 39,
+  "medium_other_place_examples": [
+   "ratlam",
+   "hyderabad",
+   "mumbai",
+   "surat",
+   "ahmedabad",
+   "trichy",
+   "ahmedabad",
+   "delhi"
+  ],
+  "medium_other_place_in_sample": {
+   "wrong_fixed": 1,
+   "right_changed": 0,
+   "n": [
+    131
+   ]
+  }
+ },
+ "evidence_cells": {
+  "A strong, 2+ pages": {
+   "pairs": 9190,
+   "share": 0.455,
+   "sample_k": 13,
+   "sample_n": 13,
+   "wilson": [
+    0.772,
+    1.0
+   ]
+  },
+  "B strong, 1 page, list item": {
+   "pairs": 1571,
+   "share": 0.078,
+   "sample_k": 3,
+   "sample_n": 3,
+   "wilson": [
+    0.438,
+    1.0
+   ]
+  },
+  "C strong, 1 page, sentence": {
+   "pairs": 4013,
+   "share": 0.198,
+   "sample_k": 8,
+   "sample_n": 14,
+   "wilson": [
+    0.326,
+    0.786
+   ]
+  },
+  "D weak, 2+ pages": {
+   "pairs": 1187,
+   "share": 0.059,
+   "sample_k": 5,
+   "sample_n": 12,
+   "wilson": [
+    0.193,
+    0.68
+   ]
+  },
+  "E weak, 1 page": {
+   "pairs": 4257,
+   "share": 0.211,
+   "sample_k": 7,
+   "sample_n": 18,
+   "wilson": [
+    0.203,
+    0.614
+   ]
+  }
+ },
+ "other_place_pages": {
+  "service_rows_hit": 13870,
+  "service_pairs_dropped": 1310,
+  "of_pairs": 20218,
+  "service_sample": {
+   "wrong_removed": 1,
+   "right_lost": 2,
+   "n": [
+    14,
+    33,
+    43
+   ]
+  },
+  "facility_facts_whose_best_page_hits": 1508,
+  "of_facts": 17548,
+  "fact_sample": {
+   "wrong_removed": 3,
+   "right_lost": 5,
+   "n": [
+    62,
+    79,
+    82,
+    88,
+    97,
+    101,
+    107,
+    110
+   ]
+  }
+ }
+}

@@ -1,0 +1,2383 @@
+{
+  "version": "1.0",
+  "created": "2026-11-21",
+  "about": "Canonical referral service taxonomy for the (service, location) model. Two levels: category -> service. Ids of the 7 MODEL_SPEC_v1 gold services and icu are kept; 'aliases' lists the key used in cleaning/claims (lexicon.py, claims.parquet services column). 'coverage' is measured by build_coverage.py (facility counts over the 9,959 usable records; fields = procedure, capability, equipment, description, specialties). Urgency windows and required capabilities are standard clinical guidance summarised by the author for referral routing, not measured and not yet clinically reviewed. Hindi names are the author's and Marathi names are unverified; both need a native-speaker check before use in the app.",
+  "name_status": {
+    "hi": "author, not native-speaker checked",
+    "mr": "unverified, needs native-speaker check"
+  },
+  "iphs_sources": {
+    "vol1_sdh_dh": {
+      "title": "IPHS 2022 Volume I, Sub District Hospital and District Hospital",
+      "url": "https://nhsrcindia.org/sites/default/files/Volume%201_SDH-DH_0.pdf",
+      "index": "https://nhsrcindia.org/IPHS2022/iphs-2022-guidelines"
+    },
+    "vol2_chc": {
+      "title": "IPHS 2022 Volume II, Community Health Centre",
+      "url": "https://nhsrcindia.org/sites/default/files/CHC%20IPHS%202022%20Guidelines%20pdf.pdf"
+    },
+    "vol3_phc": {
+      "title": "IPHS 2022 Volume III, Health and Wellness Centre - Primary Health Centre",
+      "url": "https://nhsrcindia.org/sites/default/files/PHC%20IPHS_2022_Guideline_pdf.pdf"
+    },
+    "local_text": "data/crawl/iphs/*.txt (pdftotext -layout of the three PDFs, fetched 2026-11-21, robots.txt allowed)",
+    "legend": "E = essential, D = desirable, - = not expected. SDH = sub district hospital (100 beds), DH = district hospital (50 to 500 beds), FRU = first referral unit."
+  },
+  "levels": [
+    "SHC-HWC",
+    "PHC",
+    "CHC (non-FRU)",
+    "CHC (FRU)",
+    "SDH",
+    "DH",
+    "medical college / tertiary"
+  ],
+  "categories": [
+    {
+      "id": "emergency_and_trauma",
+      "name": {
+        "en": "Emergency and trauma",
+        "hi": "आपातकालीन और ट्रॉमा सेवाएं"
+      },
+      "services": [
+        {
+          "id": "trauma_emergency",
+          "aliases": [
+            "trauma"
+          ],
+          "names": {
+            "en": [
+              "24x7 emergency and trauma care",
+              "casualty",
+              "accident and emergency"
+            ],
+            "hi": [
+              "आपातकालीन और ट्रॉमा चिकित्सा",
+              "इमरजेंसी",
+              "कैजुअल्टी"
+            ],
+            "mr": [
+              "अपघात व आपत्कालीन सेवा"
+            ]
+          },
+          "definition": "A round-the-clock emergency department that receives, resuscitates and stabilises injured or acutely ill patients, with surgery or orthopaedics and CT available or arranged.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "golden hour: resuscitation within about 60 minutes of injury; call ahead",
+            "model_spec": "emergency, D_s 30 km"
+          },
+          "required_capabilities": [
+            "24x7 emergency department or casualty",
+            "doctor on duty round the clock",
+            "general surgery or orthopaedics",
+            "CT scan on site or within reach",
+            "blood storage or blood bank"
+          ],
+          "supporting_evidence": [
+            "'24x7 emergency', 'casualty', 'trauma centre', 'polytrauma'",
+            "level I/II/III trauma centre wording",
+            "emergency beds or triage area with a count",
+            "listed in the MoHFW 196 trauma care facilities"
+          ],
+          "contradicting_evidence": [
+            "single-specialty eye, dental, IVF, skin or AYUSH facility (emergency text there is scoped to that specialty or copied)",
+            "ambulance-only text with no emergency department",
+            "'refer to', 'transfer to' a higher centre for trauma",
+            "OPD-only timings (for example 9 am to 5 pm)"
+          ],
+          "iphs": {
+            "expected_from": "PHC (stabilise and refer); CHC all types (essential); SDH and DH (essential, polytrauma unit integrated with emergency)",
+            "citations": [
+              "vol2_chc Annexure 2 'List of services available at CHCs', S.No. 1 Accident and emergency (triage, resuscitation, stabilisation, referral) and 2.1 RTA: E at all CHC types",
+              "vol1_sdh_dh Annexure 2 'Service Areas': 24x7 Emergency Care and Polytrauma Unit at SDH and every DH size",
+              "vol3_phc section 8 service packages: 'Emergency Medical Services including Burns and Trauma'"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/mohfw_trauma_196",
+              "what": "196 NPPMTBI trauma care facilities with level and 2019 functionality status",
+              "strength": "strong for listed hospitals"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code EMD",
+              "strength": "medium"
+            },
+            {
+              "dataset": "external/hotosm_ind_health_facilities",
+              "what": "healthcare:speciality trauma or emergency tags (sparse)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "emergency",
+            "casualty",
+            "accident ho gaya",
+            "accident case kahan le jaayein",
+            "trauma centre",
+            "24 ghante emergency",
+            "chot lagi hai",
+            "sar pe chot",
+            "road accident",
+            "emergency ward"
+          ],
+          "coverage": {
+            "facilities_any": 3579,
+            "facilities_2plus_fields": 2172,
+            "states_any": 33,
+            "facilities_text": 3192,
+            "facilities_specialty_only": 387,
+            "facilities_text_positive": 3181,
+            "sentences": 8798,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "burn_care",
+          "aliases": [
+            "burns"
+          ],
+          "names": {
+            "en": [
+              "burn care",
+              "burn unit",
+              "burns ward"
+            ],
+            "hi": [
+              "जलने का इलाज",
+              "बर्न यूनिट",
+              "बर्न वार्ड"
+            ],
+            "mr": [
+              "भाजल्यावरील उपचार",
+              "बर्न वॉर्ड"
+            ]
+          },
+          "definition": "Acute care of thermal, chemical or electrical burns in a dedicated burn ward or unit, with fluid resuscitation, dressing, and plastic surgery for grafting.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "fluid resuscitation in the first hours; large burns (commonly cited as over about 20% body surface in adults, less in children) need a burn unit within 24 hours",
+            "model_spec": "emergency, D_s 100 km"
+          },
+          "required_capabilities": [
+            "burn ward or burn unit (isolation beds)",
+            "plastic surgery or general surgery for debridement and grafting",
+            "24x7 emergency",
+            "ICU access for major burns"
+          ],
+          "supporting_evidence": [
+            "'burn unit', 'burns ward', 'burn ICU' with or without bed count",
+            "plastic and reconstructive surgery department",
+            "skin grafting for acute burns"
+          ],
+          "contradicting_evidence": [
+            "'post-burn contracture release', 'burn scar' (reconstruction, not acute care)",
+            "'heartburn', 'sunburn', 'burnout', 'fat burning'",
+            "laser or cosmetic clinic",
+            "'no burns or scars' (varicose vein and laser marketing)"
+          ],
+          "iphs": {
+            "expected_from": "CHC (manage burns as an emergency, essential); DH (burn ward: 3 beds at 50-bed DH, 6 at 100 to 300, 10 at 400 to 500); SDH desirable (6 beds, D)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 2.8 Burns: E at all CHC types",
+              "vol1_sdh_dh Annexure 2 'Service Areas', In Patient Services: Burn Ward/Beds"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/mohfw_trauma_196",
+              "what": "NPPMTBI covers trauma and burn injuries; the list is of trauma care facilities, so burns are not confirmed per hospital",
+              "strength": "weak"
+            },
+            {
+              "dataset": "external/idp-hmis-subdistrict",
+              "what": "burn cases reported per sub-district (context, no facility rows)",
+              "strength": "context only"
+            }
+          ],
+          "phrases": [
+            "jal gaya",
+            "aag se jala",
+            "burn case",
+            "garam paani gira",
+            "tezaab (acid) se jala",
+            "current laga",
+            "burn ward",
+            "jalne ka ilaaj"
+          ],
+          "coverage": {
+            "facilities_any": 265,
+            "facilities_2plus_fields": 125,
+            "states_any": 24,
+            "facilities_text": 217,
+            "facilities_specialty_only": 48,
+            "facilities_text_positive": 215,
+            "sentences": 401,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "orthopaedic_trauma_surgery",
+          "aliases": [],
+          "names": {
+            "en": [
+              "fracture surgery",
+              "orthopaedic trauma surgery"
+            ],
+            "hi": [
+              "हड्डी टूटने का ऑपरेशन",
+              "फ्रैक्चर सर्जरी"
+            ],
+            "mr": [
+              "अस्थिभंग शस्त्रक्रिया"
+            ]
+          },
+          "definition": "Operative and non-operative treatment of fractures and dislocations: reduction, plaster, internal or external fixation, nailing and plating.",
+          "urgency": {
+            "profile": "urgent",
+            "window": "open fractures need debridement within about 24 hours; closed fractures are fixed within days"
+          },
+          "required_capabilities": [
+            "orthopaedic surgeon",
+            "operating theatre",
+            "C-arm image intensifier",
+            "X-ray",
+            "anaesthesia"
+          ],
+          "supporting_evidence": [
+            "'fracture surgery', 'ORIF', 'interlocking nail', 'external fixator'",
+            "C-arm in the equipment list",
+            "orthopaedic trauma department"
+          ],
+          "contradicting_evidence": [
+            "dental, jaw or facial fracture text (oral and maxillofacial surgery)",
+            "osteoporosis 'fracture risk' or DEXA screening only",
+            "physiotherapy or rehabilitation centre"
+          ],
+          "iphs": {
+            "expected_from": "CHC (fracture management as emergency, essential; orthopaedics OPD at larger FRU-CHC); DH 300+ beds (elective orthopaedic OT essential)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 2.17 Fractures: E at all CHC types",
+              "vol1_sdh_dh Annexure 2 'Service Areas', Elective OT, Orthopaedics: E at 300, 400 and 500-bed DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code ORT",
+              "strength": "medium"
+            },
+            {
+              "dataset": "external/mohfw_trauma_196",
+              "what": "trauma care facilities have orthopaedics by design",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "haddi toot gayi",
+            "fracture",
+            "plaster chahiye",
+            "rod daalna hai",
+            "haddi ka doctor",
+            "ortho",
+            "pair toot gaya"
+          ],
+          "coverage": {
+            "facilities_any": 560,
+            "facilities_2plus_fields": 157,
+            "states_any": 25,
+            "facilities_text": 547,
+            "facilities_specialty_only": 13,
+            "facilities_text_positive": 544,
+            "sentences": 1094,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "critical_care",
+      "name": {
+        "en": "Critical care",
+        "hi": "गहन चिकित्सा"
+      },
+      "services": [
+        {
+          "id": "icu",
+          "aliases": [
+            "icu"
+          ],
+          "names": {
+            "en": [
+              "intensive care unit (ICU)",
+              "critical care",
+              "HDU"
+            ],
+            "hi": [
+              "आईसीयू",
+              "गहन चिकित्सा इकाई"
+            ],
+            "mr": [
+              "अतिदक्षता विभाग"
+            ]
+          },
+          "definition": "Adult intensive or high-dependency care with continuous monitoring, organ support and ventilators, run by intensivists or anaesthetists round the clock. Neonatal and paediatric ICUs are separate services.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "within hours of deterioration; transfer of a ventilated patient needs a staffed ambulance",
+            "model_spec": "used as prerequisite evidence only in v1"
+          },
+          "required_capabilities": [
+            "ICU or HDU beds",
+            "ventilators",
+            "multipara monitors",
+            "intensivist or anaesthetist cover 24x7",
+            "oxygen supply"
+          ],
+          "supporting_evidence": [
+            "'ICU', 'MICU', 'SICU', 'CCU', 'HDU' with bed count",
+            "ventilator count",
+            "critical care medicine department"
+          ],
+          "contradicting_evidence": [
+            "'ICU on wheels', 'ICU ambulance' (transport only)",
+            "NICU or PICU text only (strip before matching)",
+            "clinic or day-care facility with no inpatient beds"
+          ],
+          "iphs": {
+            "expected_from": "SDH and DH (HDU/ICU essential: 5-bed HDU at SDH, adult and paediatric HDU or ICU at every DH size; obstetric HDU/ICU)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2 'Service Areas', Critical Care: General HDU (including isolation)/ICU with designated beds for paediatric cases; Obstetric HDU/ICU"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code ICU",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "ICU",
+            "ICU bed khaali hai",
+            "serious patient",
+            "behosh hai",
+            "critical",
+            "oxygen kam hai",
+            "ICU wala hospital"
+          ],
+          "coverage": {
+            "facilities_any": 2789,
+            "facilities_2plus_fields": 1589,
+            "states_any": 32,
+            "facilities_text": 2300,
+            "facilities_specialty_only": 489,
+            "facilities_text_positive": 2295,
+            "sentences": 5965,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "picu",
+          "aliases": [],
+          "names": {
+            "en": [
+              "paediatric intensive care unit (PICU)"
+            ],
+            "hi": [
+              "बच्चों का आईसीयू",
+              "पीआईसीयू"
+            ],
+            "mr": [
+              "बालरुग्ण अतिदक्षता विभाग"
+            ]
+          },
+          "definition": "Intensive care for infants and children beyond the newborn period, with paediatric ventilators and paediatricians or paediatric intensivists round the clock.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "within hours (severe pneumonia, shock, convulsions, dengue shock)"
+          },
+          "required_capabilities": [
+            "PICU or paediatric HDU beds",
+            "paediatric ventilators",
+            "paediatrician or paediatric intensivist 24x7"
+          ],
+          "supporting_evidence": [
+            "'PICU', 'paediatric ICU', 'paediatric critical care' with bed count",
+            "paediatric critical care specialty"
+          ],
+          "contradicting_evidence": [
+            "NICU-only text (newborns)",
+            "paediatric OPD clinic"
+          ],
+          "iphs": {
+            "expected_from": "DH (paediatric HDU at every size; paediatric ICU at 200+ beds); SDH (2 paediatric HDU beds)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2 'Service Areas', Critical Care: paediatric HDU at SDH and DH; paediatric ICU beds listed at 200, 300, 400 and 500-bed DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty codes ICU and PED together (not PICU itself)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "bachche ka ICU",
+            "PICU",
+            "bachcha serious hai",
+            "bachche ko saans nahi aa rahi",
+            "bachchon ka ventilator"
+          ],
+          "coverage": {
+            "facilities_any": 425,
+            "facilities_2plus_fields": 176,
+            "states_any": 29,
+            "facilities_text": 337,
+            "facilities_specialty_only": 88,
+            "facilities_text_positive": 335,
+            "sentences": 631,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "ventilator_support",
+          "aliases": [],
+          "names": {
+            "en": [
+              "ventilator support",
+              "mechanical ventilation"
+            ],
+            "hi": [
+              "वेंटिलेटर सुविधा"
+            ],
+            "mr": [
+              "व्हेंटिलेटर सुविधा"
+            ]
+          },
+          "definition": "Invasive or non-invasive mechanical ventilation (ventilator, BiPAP, high-flow oxygen) for patients who cannot breathe adequately, inside an ICU, HDU or emergency department.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "minutes to hours (respiratory failure, neurotoxic snakebite, organophosphate poisoning)"
+          },
+          "required_capabilities": [
+            "working ventilators",
+            "oxygen supply (pipeline or cylinders)",
+            "anaesthetist or intensivist",
+            "ICU or HDU bed"
+          ],
+          "supporting_evidence": [
+            "ventilator count ('10 ventilators')",
+            "'mechanical ventilation', 'BiPAP', 'NIV'",
+            "ICU text with ventilators"
+          ],
+          "contradicting_evidence": [
+            "ambulance ventilator only",
+            "building ventilation (HVAC, 'well ventilated rooms')",
+            "life-support training courses (BLS, ACLS)"
+          ],
+          "iphs": {
+            "expected_from": "SDH and DH (ventilators in the HDU/ICU equipment list)",
+            "citations": [
+              "vol1_sdh_dh section 7.1.1.15 Infrastructure for Clinical Services: every DH should have a hybrid critical care area (HDU + ICU) with ventilatory and non-ventilatory beds",
+              "vol1_sdh_dh Annexure 10 'List of Equipment at SDH & DH': mechanical ventilators (red beds) and transport ventilators",
+              "vol1_sdh_dh Annexure 3: 'Resuscitation and Ventilation' among in-patient procedures, E at all sizes"
+            ]
+          },
+          "external_confirmation": [],
+          "phrases": [
+            "ventilator",
+            "ventilator wala bed",
+            "saans ki machine",
+            "oxygen machine",
+            "BiPAP"
+          ],
+          "coverage": {
+            "facilities_any": 462,
+            "facilities_2plus_fields": 125,
+            "states_any": 24,
+            "facilities_text": 461,
+            "facilities_specialty_only": 1,
+            "facilities_text_positive": 460,
+            "sentences": 836,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "maternal_and_newborn",
+      "name": {
+        "en": "Maternal and newborn care",
+        "hi": "मातृ एवं नवजात देखभाल"
+      },
+      "services": [
+        {
+          "id": "emergency_csection",
+          "aliases": [
+            "csection"
+          ],
+          "names": {
+            "en": [
+              "emergency caesarean section",
+              "C-section",
+              "LSCS",
+              "comprehensive emergency obstetric care (CEmONC)"
+            ],
+            "hi": [
+              "आपातकालीन सिज़ेरियन",
+              "ऑपरेशन से डिलीवरी"
+            ],
+            "mr": [
+              "आपत्कालीन सिझेरियन प्रसूती"
+            ]
+          },
+          "definition": "Caesarean delivery performed at any hour for obstetric emergencies, which needs an obstetrician, an anaesthetist, an operating theatre and blood available together, round the clock.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "decision-to-delivery within about 30 minutes for the most urgent category; total time to a capable facility should be short (call ahead)",
+            "model_spec": "emergency, D_s 30 km"
+          },
+          "required_capabilities": [
+            "obstetrician or EmOC-trained doctor",
+            "anaesthetist",
+            "operating theatre (maternity OT)",
+            "blood storage or blood bank",
+            "24x7 availability",
+            "newborn resuscitation"
+          ],
+          "supporting_evidence": [
+            "'caesarean', 'C-section', 'LSCS', 'CEmONC'",
+            "LaQshya-certified maternity OT",
+            "deliveries and C-section counts",
+            "obstetrics plus anaesthesia plus OT in the same record"
+          ],
+          "contradicting_evidence": [
+            "'after C-section', 'VBAC', 'caesarean scar' (care after a previous section)",
+            "BEmONC or 'emergency obstetric care' without surgery (basic EmOC has no caesarean)",
+            "single-specialty eye, dental or skin facility",
+            "gynaecology clinic with OPD hours only"
+          ],
+          "iphs": {
+            "expected_from": "FRU-CHC (essential); non-FRU CHC (desirable); SDH and DH (essential at every size)",
+            "citations": [
+              "vol2_chc Annexure 2: 'Essential and Emergency Obstetric Care including surgical interventions (Caesarean Section)': D at non-FRU CHC, E at FRU-CHC and FRU-UCHC",
+              "vol1_sdh_dh Annexure 3 'List of Service and Procedures', Obstetrics & Gynaecology Procedures: Caesarean section E at SDH and all DH sizes",
+              "vol1_sdh_dh Annexure 2: Emergency OT and Ob-Gyn OT essential"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/laqshya_master",
+              "what": "Maternity OT certification with validity date (public facilities)",
+              "strength": "strong, dated"
+            },
+            {
+              "dataset": "external/idp-hmis-subdistrict",
+              "what": "C-section volumes by sub-district and sector (context, no facility rows)",
+              "strength": "context only"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code OBG",
+              "strength": "weak (obstetrics, not caesarean)"
+            }
+          ],
+          "phrases": [
+            "operation se delivery",
+            "seezer",
+            "C-section",
+            "bachcha ulta hai",
+            "delivery mein dikkat",
+            "dard nahi ho raha, operation karna padega",
+            "emergency delivery",
+            "khoon jaa raha hai delivery mein"
+          ],
+          "coverage": {
+            "facilities_any": 442,
+            "facilities_2plus_fields": 93,
+            "states_any": 26,
+            "facilities_text": 442,
+            "facilities_specialty_only": 0,
+            "facilities_text_positive": 437,
+            "sentences": 691,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "institutional_delivery",
+          "aliases": [],
+          "names": {
+            "en": [
+              "institutional delivery",
+              "normal delivery",
+              "labour room"
+            ],
+            "hi": [
+              "संस्थागत प्रसव",
+              "नॉर्मल डिलीवरी",
+              "लेबर रूम"
+            ],
+            "mr": [
+              "संस्थात्मक प्रसूती"
+            ]
+          },
+          "definition": "A labour room that conducts normal vaginal deliveries round the clock with skilled birth attendants and newborn care corner, and refers or performs caesarean when needed.",
+          "urgency": {
+            "profile": "urgent",
+            "window": "plan the place before term; in active labour, reach within hours"
+          },
+          "required_capabilities": [
+            "labour room or LDR unit",
+            "skilled birth attendant (staff nurse, ANM or doctor) 24x7",
+            "newborn care corner",
+            "referral link to a caesarean-capable facility"
+          ],
+          "supporting_evidence": [
+            "'labour room', 'normal delivery', 'maternity ward', delivery counts",
+            "JSY or JSSK participation",
+            "LaQshya-certified labour room"
+          ],
+          "contradicting_evidence": [
+            "'drug delivery', 'service delivery', 'home delivery of medicines'",
+            "IVF or fertility clinic without maternity ward",
+            "gynaecology OPD only"
+          ],
+          "iphs": {
+            "expected_from": "24x7 PHC (deliveries); CHC all types (labour room/LDR essential); SDH and DH",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 5 Labour room/LDR (with NBCC): E at all CHC types",
+              "vol3_phc section 4: PHCs conducting deliveries to function as 24x7 HWC-PHCs",
+              "vol1_sdh_dh Annexure 2: LDR complex units at SDH and every DH size"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/laqshya_master",
+              "what": "Labour Room certification with validity date",
+              "strength": "strong, dated"
+            },
+            {
+              "dataset": "external/idp-hmis-subdistrict",
+              "what": "institutional deliveries by sub-district (context)",
+              "strength": "context only"
+            }
+          ],
+          "phrases": [
+            "delivery kahan karayein",
+            "normal delivery",
+            "labour room",
+            "dard shuru ho gaya",
+            "sarkari delivery (JSY)",
+            "zachgi",
+            "prasav"
+          ],
+          "coverage": {
+            "facilities_any": 1206,
+            "facilities_2plus_fields": 489,
+            "states_any": 26,
+            "facilities_text": 1049,
+            "facilities_specialty_only": 157,
+            "facilities_text_positive": 1039,
+            "sentences": 2308,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "high_risk_pregnancy",
+          "aliases": [],
+          "names": {
+            "en": [
+              "high-risk pregnancy care",
+              "maternal-fetal medicine"
+            ],
+            "hi": [
+              "उच्च जोखिम गर्भावस्था देखभाल"
+            ],
+            "mr": [
+              "उच्च जोखमीची गर्भधारणा"
+            ]
+          },
+          "definition": "Specialist antenatal and intrapartum care for pregnancies at high risk (pre-eclampsia, eclampsia, severe anaemia, twins, previous caesarean, diabetes), with an obstetric HDU or ICU and neonatal backup.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "scheduled antenatal visits; eclampsia or heavy bleeding is an emergency (route as emergency_csection)"
+          },
+          "required_capabilities": [
+            "obstetrician (maternal-fetal medicine for complex cases)",
+            "obstetric HDU or ICU",
+            "blood bank",
+            "NICU or SNCU on site",
+            "caesarean capability"
+          ],
+          "supporting_evidence": [
+            "'high-risk pregnancy', 'fetal medicine', 'perinatology'",
+            "obstetric ICU or HDU",
+            "eclampsia management"
+          ],
+          "contradicting_evidence": [
+            "fetal medicine scan-only centre (ultrasound, no delivery)",
+            "fertility clinic"
+          ],
+          "iphs": {
+            "expected_from": "FRU-CHC (high-risk deliveries managed or referred); SDH and DH (obstetric HDU/ICU essential)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2 'Service Areas', Critical Care: Obstetric HDU (including isolation)/ICU at SDH and DH",
+              "vol2_chc Annexure 2: Essential and Emergency Obstetric Care at FRU-CHC"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/laqshya_master",
+              "what": "labour room and maternity OT certification (indirect)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "high risk pregnancy",
+            "BP badha hua hai pregnancy mein",
+            "khoon ki kami (anaemia) pregnancy",
+            "judwa bachche",
+            "pehle operation hua tha",
+            "jhatke aa rahe hain (eclampsia)"
+          ],
+          "coverage": {
+            "facilities_any": 963,
+            "facilities_2plus_fields": 326,
+            "states_any": 28,
+            "facilities_text": 487,
+            "facilities_specialty_only": 476,
+            "facilities_text_positive": 486,
+            "sentences": 1059,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "nicu",
+          "aliases": [
+            "nicu"
+          ],
+          "names": {
+            "en": [
+              "neonatal intensive care unit (NICU)",
+              "special newborn care unit (SNCU)"
+            ],
+            "hi": [
+              "नवजात शिशु गहन चिकित्सा इकाई",
+              "एनआईसीयू",
+              "एसएनसीयू"
+            ],
+            "mr": [
+              "नवजात अतिदक्षता विभाग"
+            ]
+          },
+          "definition": "Intensive or special care for sick and small newborns (prematurity, low birth weight, birth asphyxia, sepsis, jaundice) with radiant warmers, phototherapy, CPAP or ventilators and round-the-clock paediatric cover.",
+          "urgency": {
+            "profile": "urgent",
+            "window": "within hours of birth or of danger signs; keep the baby warm during transfer",
+            "model_spec": "urgent, D_s 50 km"
+          },
+          "required_capabilities": [
+            "NICU or SNCU beds",
+            "radiant warmers and phototherapy",
+            "CPAP or neonatal ventilator",
+            "paediatrician or neonatologist 24x7",
+            "oxygen"
+          ],
+          "supporting_evidence": [
+            "'NICU', 'SNCU', 'level II/III NICU' with bed count",
+            "neonatal ventilator or CPAP",
+            "neonatology department plus warmers"
+          ],
+          "contradicting_evidence": [
+            "'newborn care corner' only (basic resuscitation, not intensive care)",
+            "neonatal transport ambulance only",
+            "paediatric OPD clinic"
+          ],
+          "iphs": {
+            "expected_from": "CHC (NBSU, 4 to 6 beds, stabilise and refer); SDH and DH (SNCU at every size; NICU beds added at 100+ bed DH)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 6 NBSU: E at all CHC types; S.No. 36 Newborn Stabilization Unit (NBSU) 4-6 bedded for basic care and stabilization prior to referral",
+              "vol1_sdh_dh Annexure 2 'Service Areas': SNCU + NICU (12 SNCU at SDH; 6 SNCU at 50-bed DH; SNCU plus 4 to 6 NICU beds at larger DH)"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/idp-hmis-subdistrict",
+              "what": "newborn care indicators by sub-district (context)",
+              "strength": "context only"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code PED (not NICU itself)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "bachcha kamzor paida hua",
+            "premature baby",
+            "SNCU",
+            "NICU",
+            "naya bachcha saans nahi le raha",
+            "peeliya (jaundice) wala bachcha",
+            "machine mein rakhna hai",
+            "kaanch ki machine (incubator)"
+          ],
+          "coverage": {
+            "facilities_any": 746,
+            "facilities_2plus_fields": 245,
+            "states_any": 29,
+            "facilities_text": 746,
+            "facilities_specialty_only": 0,
+            "facilities_text_positive": 742,
+            "sentences": 1555,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "heart_and_brain",
+      "name": {
+        "en": "Heart, stroke and brain",
+        "hi": "हृदय, लकवा और मस्तिष्क"
+      },
+      "services": [
+        {
+          "id": "cardiac_surgery",
+          "aliases": [
+            "cardiac_surgery"
+          ],
+          "names": {
+            "en": [
+              "cardiac surgery",
+              "open-heart surgery",
+              "CABG / bypass",
+              "valve surgery",
+              "CTVS"
+            ],
+            "hi": [
+              "हृदय की सर्जरी",
+              "बाईपास सर्जरी",
+              "दिल का ऑपरेशन"
+            ],
+            "mr": [
+              "हृदय शस्त्रक्रिया"
+            ]
+          },
+          "definition": "Open-heart and cardiothoracic surgery (coronary bypass, valve repair or replacement, congenital heart surgery) with a cardiac OT, heart-lung machine and cardiac ICU.",
+          "urgency": {
+            "profile": "elective",
+            "window": "scheduled within weeks; a few cases are urgent",
+            "model_spec": "elective, D_s 150 km"
+          },
+          "required_capabilities": [
+            "cardiothoracic (CTVS) surgeon",
+            "cardiac OT with heart-lung machine and perfusionist",
+            "cardiac anaesthesia",
+            "cardiac ICU",
+            "cath lab for workup"
+          ],
+          "supporting_evidence": [
+            "'CABG', 'open heart', 'valve replacement', 'CTVS department'",
+            "heart-lung machine, IABP, ECMO",
+            "surgery counts ('1,000 open-heart surgeries')"
+          ],
+          "contradicting_evidence": [
+            "'without surgery', TAVI or TAVR, balloon valvotomy (catheter, not open surgery)",
+            "glaucoma valve surgery, gastric bypass, brain bypass",
+            "cardiology OPD or ECG clinic only"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS district-level service; medical colleges and tertiary centres (cardiology OPD is only desirable at 200+ bed DH)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2 'Service Areas', Out-Patient Services: Cardiology D at 200 to 500-bed DH; no cardiac surgery service area listed"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code CAR (cardiology, not surgery)",
+              "strength": "weak"
+            },
+            {
+              "dataset": "external/nmc_colleges",
+              "what": "medical college teaching hospitals (tertiary prior)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "dil ka operation",
+            "bypass surgery",
+            "valve badalna hai",
+            "bachche ke dil mein chhed",
+            "heart surgery",
+            "open heart"
+          ],
+          "coverage": {
+            "facilities_any": 976,
+            "facilities_2plus_fields": 490,
+            "states_any": 28,
+            "facilities_text": 670,
+            "facilities_specialty_only": 306,
+            "facilities_text_positive": 663,
+            "sentences": 1953,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "cath_lab_angioplasty",
+          "aliases": [],
+          "names": {
+            "en": [
+              "cath lab",
+              "angioplasty (PTCA / PCI)",
+              "primary angioplasty for heart attack"
+            ],
+            "hi": [
+              "एंजियोप्लास्टी",
+              "कैथ लैब",
+              "स्टेंट डालना"
+            ],
+            "mr": [
+              "अँजिओप्लास्टी",
+              "कॅथ लॅब"
+            ]
+          },
+          "definition": "A cardiac catheterisation laboratory doing coronary angiography and angioplasty with stents, including primary angioplasty for heart attack (STEMI) round the clock where available.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "heart attack: primary angioplasty within about 90 to 120 minutes of first medical contact, otherwise thrombolysis at the nearest capable facility; elective angioplasty is scheduled"
+          },
+          "required_capabilities": [
+            "cath lab",
+            "interventional cardiologist",
+            "CCU or ICU",
+            "24x7 cath team for primary angioplasty",
+            "cardiac surgery backup (desirable)"
+          ],
+          "supporting_evidence": [
+            "'cath lab', 'angioplasty', 'PTCA', 'primary PCI', 'stenting'",
+            "interventional cardiology department",
+            "cath lab count or 'bi-plane'"
+          ],
+          "contradicting_evidence": [
+            "neuro, peripheral, renal or biliary interventions only",
+            "ECG, echo or TMT only (non-invasive cardiology)",
+            "'referred for angioplasty'"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS district-level service; tertiary centres and some medical colleges",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: cardiology OPD D at 200+ bed DH; no cath lab service area"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code CAR",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "heart attack",
+            "seene mein dard",
+            "stent dalwana",
+            "angiography",
+            "angioplasty",
+            "dil ka daura",
+            "nas band hai"
+          ],
+          "coverage": {
+            "facilities_any": 817,
+            "facilities_2plus_fields": 491,
+            "states_any": 29,
+            "facilities_text": 805,
+            "facilities_specialty_only": 12,
+            "facilities_text_positive": 801,
+            "sentences": 2619,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "stroke_care",
+          "aliases": [],
+          "names": {
+            "en": [
+              "acute stroke care",
+              "stroke thrombolysis",
+              "stroke unit"
+            ],
+            "hi": [
+              "लकवा (स्ट्रोक) का तुरंत इलाज",
+              "स्ट्रोक यूनिट"
+            ],
+            "mr": [
+              "पक्षाघात (स्ट्रोक) उपचार"
+            ]
+          },
+          "definition": "Emergency care of acute stroke: CT within minutes of arrival, clot-busting thrombolysis, and mechanical thrombectomy at advanced centres, followed by a stroke unit.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "thrombolysis within about 4.5 hours of symptom onset; thrombectomy in selected patients up to about 24 hours; time of onset must be noted"
+          },
+          "required_capabilities": [
+            "CT scan 24x7",
+            "neurologist or trained emergency physician",
+            "thrombolytic drug (alteplase or tenecteplase)",
+            "ICU or stroke unit",
+            "neuro-intervention for thrombectomy (tertiary)"
+          ],
+          "supporting_evidence": [
+            "'stroke unit', 'thrombolysis', 'acute stroke', 'thrombectomy'",
+            "stroke-ready or comprehensive stroke centre wording"
+          ],
+          "contradicting_evidence": [
+            "'post-stroke rehabilitation', physiotherapy only",
+            "'heat stroke'",
+            "stroke awareness or prevention camps"
+          ],
+          "iphs": {
+            "expected_from": "CHC (stroke as a common emergency to stabilise and refer); DH 200+ beds with CT (CT scan essential at 200+ beds; neurology OPD desirable at 300+)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 2.13 Stroke: E at all CHC types (manage common emergencies)",
+              "vol1_sdh_dh Annexure 2: CT Scan E at 200 to 500-bed DH; Neurology D at 300+ beds"
+            ]
+          },
+          "external_confirmation": [],
+          "phrases": [
+            "lakwa maar gaya",
+            "laqwa",
+            "muh tedha ho gaya",
+            "haath pair nahi chal rahe",
+            "brain stroke",
+            "paralysis attack",
+            "zubaan ladkhada rahi hai"
+          ],
+          "coverage": {
+            "facilities_any": 162,
+            "facilities_2plus_fields": 43,
+            "states_any": 21,
+            "facilities_text": 128,
+            "facilities_specialty_only": 34,
+            "facilities_text_positive": 126,
+            "sentences": 211,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "neurosurgery",
+          "aliases": [],
+          "names": {
+            "en": [
+              "neurosurgery",
+              "brain and spine surgery"
+            ],
+            "hi": [
+              "न्यूरोसर्जरी",
+              "दिमाग का ऑपरेशन"
+            ],
+            "mr": [
+              "मेंदू व मणक्याची शस्त्रक्रिया"
+            ]
+          },
+          "definition": "Surgery of the brain, spinal cord and nerves, including emergency craniotomy for head injury with bleeding, brain tumours and VP shunts.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "head injury with bleeding: surgery within hours; tumours and spine cases are scheduled"
+          },
+          "required_capabilities": [
+            "neurosurgeon",
+            "CT scan 24x7",
+            "operating theatre with neuro instruments",
+            "ICU with ventilators",
+            "neuro-anaesthesia"
+          ],
+          "supporting_evidence": [
+            "'neurosurgery', 'craniotomy', 'brain tumour surgery', 'VP shunt'",
+            "neurosurgery department plus CT"
+          ],
+          "contradicting_evidence": [
+            "IPHS-style 'craniotomy - dead foetus' (obstetric procedure)",
+            "neurology OPD only (medical, not surgical)",
+            "spine physiotherapy"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS district-level service; tertiary centres, medical colleges and level I/II trauma centres",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: no neurosurgery service area at SDH or DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/mohfw_trauma_196",
+              "what": "level I and II trauma care facilities are expected to have neurosurgery",
+              "strength": "medium for listed hospitals"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code NEU (neurology or neurosurgery)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "dimaag ka operation",
+            "sar mein khoon jam gaya",
+            "head injury",
+            "brain tumour",
+            "reedh ki haddi ka operation",
+            "neuro surgeon"
+          ],
+          "coverage": {
+            "facilities_any": 2235,
+            "facilities_2plus_fields": 1058,
+            "states_any": 31,
+            "facilities_text": 1174,
+            "facilities_specialty_only": 1061,
+            "facilities_text_positive": 1169,
+            "sentences": 2891,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "kidney",
+      "name": {
+        "en": "Kidney care",
+        "hi": "गुर्दा (किडनी) देखभाल"
+      },
+      "services": [
+        {
+          "id": "dialysis",
+          "aliases": [
+            "dialysis"
+          ],
+          "names": {
+            "en": [
+              "dialysis",
+              "haemodialysis",
+              "peritoneal dialysis"
+            ],
+            "hi": [
+              "डायलिसिस",
+              "खून साफ करने की मशीन"
+            ],
+            "mr": [
+              "डायलिसिस"
+            ]
+          },
+          "definition": "Haemodialysis (or peritoneal dialysis) sessions for kidney failure in a dialysis unit with machines, RO water and trained staff under a nephrologist or physician.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "2 to 3 sessions a week for life, so distance and session slots matter more than rank; acute kidney failure or high potassium is an emergency",
+            "model_spec": "scheduled, D_s 15 km"
+          },
+          "required_capabilities": [
+            "dialysis machines (count)",
+            "RO water plant",
+            "nephrologist, or trained physician and dialysis technician",
+            "separate machines for HBV/HCV positive patients",
+            "session shifts"
+          ],
+          "supporting_evidence": [
+            "machine or bed count ('10 dialysis machines')",
+            "PMNDP centre",
+            "RO plant, Fresenius or Nipro machines",
+            "nephrology department plus dialysis unit"
+          ],
+          "contradicting_evidence": [
+            "'dialysis access', 'AV fistula' surgery only",
+            "'kidney function / dialysis profile' lab test",
+            "eye, dental or single-specialty facility name (Aravind Eye Hospital record with a copied dialysis sentence)",
+            "sentence naming another hospital (Wockhardt Nagpur record describing Nair Hospital)"
+          ],
+          "iphs": {
+            "expected_from": "SDH and DH (essential at every size: 4+1 dialysis beds, 8+2 at 300+ beds)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2 'Service Areas': Dialysis 4+1 at SDH and 50 to 200-bed DH, 8+2 at 300-bed DH",
+              "vol1_sdh_dh Annexure 3 'List of Service and Procedures', Medical Procedures: Peritoneal dialysis, Haemodialysis E at all sizes"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/pmndp_counts_and_state_lists",
+              "what": "state counts of functional PMNDP centres (36 states) and the Goa centre list; no national facility list",
+              "strength": "state-level context; strong for Goa"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code DIA",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "dialysis",
+            "dialysis kahan hota hai",
+            "kidney fail",
+            "khoon saaf karna",
+            "hafte mein do baar dialysis",
+            "free dialysis (PMNDP)",
+            "gurde kharab"
+          ],
+          "coverage": {
+            "facilities_any": 1051,
+            "facilities_2plus_fields": 573,
+            "states_any": 30,
+            "facilities_text": 1047,
+            "facilities_specialty_only": 4,
+            "facilities_text_positive": 1038,
+            "sentences": 3079,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "kidney_transplant",
+          "aliases": [],
+          "names": {
+            "en": [
+              "kidney transplant",
+              "renal transplant"
+            ],
+            "hi": [
+              "गुर्दा प्रत्यारोपण",
+              "किडनी ट्रांसप्लांट"
+            ],
+            "mr": [
+              "मूत्रपिंड प्रत्यारोपण"
+            ]
+          },
+          "definition": "Living or deceased donor kidney transplantation in a centre registered under the Transplantation of Human Organs Act, with nephrology, transplant surgery and post-transplant follow-up.",
+          "urgency": {
+            "profile": "elective",
+            "window": "planned over months (donor workup, authorisation committee)"
+          },
+          "required_capabilities": [
+            "registered transplant centre",
+            "nephrologist and transplant surgeon or urologist",
+            "dialysis unit",
+            "HLA lab access",
+            "ICU"
+          ],
+          "supporting_evidence": [
+            "'kidney transplant', 'renal transplant program', transplant counts"
+          ],
+          "contradicting_evidence": [
+            "'post-transplant follow-up' or counselling only",
+            "'facilitates transplant through' another centre"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS service; tertiary centres",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: Nephrology D at 200+ bed DH; no transplant service area"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code TRN (any organ)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "kidney transplant",
+            "gurda badalna",
+            "kidney donate",
+            "transplant kahan hota hai"
+          ],
+          "coverage": {
+            "facilities_any": 485,
+            "facilities_2plus_fields": 226,
+            "states_any": 26,
+            "facilities_text": 450,
+            "facilities_specialty_only": 35,
+            "facilities_text_positive": 447,
+            "sentences": 1067,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "cancer",
+      "name": {
+        "en": "Cancer care",
+        "hi": "कैंसर उपचार"
+      },
+      "services": [
+        {
+          "id": "chemotherapy",
+          "aliases": [],
+          "names": {
+            "en": [
+              "chemotherapy",
+              "medical oncology"
+            ],
+            "hi": [
+              "कीमोथेरेपी",
+              "कैंसर की दवा"
+            ],
+            "mr": [
+              "केमोथेरपी"
+            ]
+          },
+          "definition": "Drug treatment of cancer (cytotoxic, targeted or immunotherapy) given in day-care or inpatient cycles under a medical oncologist.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "cycles every 1 to 4 weeks over months; fever during chemotherapy is an emergency"
+          },
+          "required_capabilities": [
+            "medical oncologist",
+            "day-care chemotherapy beds or chairs",
+            "safe drug preparation",
+            "pathology for diagnosis"
+          ],
+          "supporting_evidence": [
+            "'chemotherapy', 'day-care chemo', 'medical oncology'",
+            "chemo bed or chair count"
+          ],
+          "contradicting_evidence": [
+            "pharmacy selling chemotherapy medicines only",
+            "'post-chemo' care or counselling only",
+            "cancer screening camp"
+          ],
+          "iphs": {
+            "expected_from": "DH 200+ beds (oncology OPD desirable; chemotherapy medicines on the DH list); tertiary cancer centres",
+            "citations": [
+              "vol1_sdh_dh Annexure 2, Out-Patient Services: Oncology D at 200 to 500-bed DH",
+              "vol1_sdh_dh section 7.1.1.15: day care beds for procedures like PHACO and chemotherapy"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code ONC",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "chemo",
+            "cancer ka ilaaj",
+            "kimo lagwana",
+            "cancer ki dawai"
+          ],
+          "coverage": {
+            "facilities_any": 1568,
+            "facilities_2plus_fields": 408,
+            "states_any": 29,
+            "facilities_text": 472,
+            "facilities_specialty_only": 1096,
+            "facilities_text_positive": 469,
+            "sentences": 1238,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "radiotherapy",
+          "aliases": [],
+          "names": {
+            "en": [
+              "radiotherapy",
+              "radiation oncology"
+            ],
+            "hi": [
+              "रेडियोथेरेपी",
+              "सिकाई (कैंसर)"
+            ],
+            "mr": [
+              "रेडिओथेरपी"
+            ]
+          },
+          "definition": "Radiation treatment of cancer with a linear accelerator, cobalt unit or brachytherapy, delivered in daily sessions under a radiation oncologist.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "daily sessions, 5 days a week for several weeks, so the patient stays near the centre"
+          },
+          "required_capabilities": [
+            "linear accelerator or cobalt-60 unit, or brachytherapy",
+            "radiation oncologist and medical physicist",
+            "AERB-licensed bunker"
+          ],
+          "supporting_evidence": [
+            "LINAC, TrueBeam, Halcyon, cobalt-60, brachytherapy",
+            "'radiation oncology department'"
+          ],
+          "contradicting_evidence": [
+            "'radiation safety', 'no radiation' (imaging marketing)",
+            "radiofrequency ablation"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS district-level service; regional and tertiary cancer centres",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: oncology OPD D at 200+ beds; no radiotherapy service area"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code ONC",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "sikai",
+            "radiation",
+            "cancer ki sikai",
+            "radiotherapy kahan hoti hai",
+            "light lagwana (cancer)"
+          ],
+          "coverage": {
+            "facilities_any": 384,
+            "facilities_2plus_fields": 227,
+            "states_any": 27,
+            "facilities_text": 365,
+            "facilities_specialty_only": 19,
+            "facilities_text_positive": 361,
+            "sentences": 1552,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "surgical_oncology",
+          "aliases": [],
+          "names": {
+            "en": [
+              "cancer surgery",
+              "surgical oncology"
+            ],
+            "hi": [
+              "कैंसर की सर्जरी"
+            ],
+            "mr": [
+              "कर्करोग शस्त्रक्रिया"
+            ]
+          },
+          "definition": "Surgical removal of cancers (breast, head and neck, gastrointestinal, gynaecological, urological) by surgical oncologists, with pathology and ICU support.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "within weeks of diagnosis"
+          },
+          "required_capabilities": [
+            "surgical oncologist",
+            "operating theatre",
+            "histopathology",
+            "ICU",
+            "link to chemotherapy and radiotherapy"
+          ],
+          "supporting_evidence": [
+            "'surgical oncology', 'onco-surgery', 'mastectomy', 'Whipple'"
+          ],
+          "contradicting_evidence": [
+            "breast reconstruction or post-mastectomy care only",
+            "sleeve gastrectomy (bariatric)",
+            "benign tumour excision"
+          ],
+          "iphs": {
+            "expected_from": "not an IPHS district-level service; tertiary centres",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: oncology OPD D at 200+ beds"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code ONC",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "cancer ka operation",
+            "gaanth nikalwani hai",
+            "breast cancer surgery",
+            "muh ka cancer operation"
+          ],
+          "coverage": {
+            "facilities_any": 1531,
+            "facilities_2plus_fields": 625,
+            "states_any": 30,
+            "facilities_text": 853,
+            "facilities_specialty_only": 678,
+            "facilities_text_positive": 851,
+            "sentences": 1954,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "diagnostics_and_blood",
+      "name": {
+        "en": "Diagnostics and blood",
+        "hi": "जांच और रक्त"
+      },
+      "services": [
+        {
+          "id": "mri",
+          "aliases": [
+            "mri"
+          ],
+          "names": {
+            "en": [
+              "MRI scan"
+            ],
+            "hi": [
+              "एमआरआई जांच"
+            ],
+            "mr": [
+              "एमआरआय तपासणी"
+            ]
+          },
+          "definition": "Magnetic resonance imaging on a scanner at the facility (field strength usually 1.5 T or 3 T).",
+          "urgency": {
+            "profile": "elective",
+            "window": "days to weeks; urgent for suspected spinal cord compression",
+            "model_spec": "elective, D_s 75 km"
+          },
+          "required_capabilities": [
+            "MRI scanner on site (not outsourced)",
+            "radiologist reporting",
+            "operating hours"
+          ],
+          "supporting_evidence": [
+            "field strength ('1.5T', '3 Tesla')",
+            "vendor model (Siemens Magnetom, GE Signa, Philips Ingenia)",
+            "MRI suite or department"
+          ],
+          "contradicting_evidence": [
+            "'MRI-compatible' implants or 'MRI-guided' wording",
+            "'tie-up', 'outsourced', 'through partner' imaging",
+            "name words Mrityunjay or Mrinal"
+          ],
+          "iphs": {
+            "expected_from": "DH (desirable at 50+ beds, not essential); medical colleges",
+            "citations": [
+              "vol1_sdh_dh Annexure 2, Radiology: Magnetic Resonance Imaging (MRI) D at 50 to 500-bed DH, - at SDH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code IMG (any imaging)",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "MRI",
+            "MRI karana hai",
+            "MRI kitne ka",
+            "badi machine wali jaanch",
+            "sar ka MRI"
+          ],
+          "coverage": {
+            "facilities_any": 952,
+            "facilities_2plus_fields": 538,
+            "states_any": 31,
+            "facilities_text": 952,
+            "facilities_specialty_only": 0,
+            "facilities_text_positive": 947,
+            "sentences": 3135,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "ct_scan",
+          "aliases": [],
+          "names": {
+            "en": [
+              "CT scan"
+            ],
+            "hi": [
+              "सीटी स्कैन"
+            ],
+            "mr": [
+              "सीटी स्कॅन"
+            ]
+          },
+          "definition": "Computed tomography on a scanner at the facility (slice count 16 to 256+), used for head injury, stroke, chest and abdominal emergencies.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "head injury and stroke need CT within about an hour of arrival; other scans are scheduled"
+          },
+          "required_capabilities": [
+            "CT scanner on site",
+            "radiologist or teleradiology reporting",
+            "24x7 operation for emergency use"
+          ],
+          "supporting_evidence": [
+            "slice count ('128-slice CT')",
+            "'CT scan', 'HRCT', 'CECT', 'PET-CT'",
+            "24x7 CT wording"
+          ],
+          "contradicting_evidence": [
+            "dental cone-beam CT (CBCT)",
+            "'CT surgeon' or 'CTVS' (cardiothoracic)",
+            "'CT value' (PCR cycle threshold)",
+            "outsourced or partner imaging"
+          ],
+          "iphs": {
+            "expected_from": "DH (desirable at 50 and 100 beds, essential at 200+ beds)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2, Radiology: CT Scan - at SDH, D at 50 and 100-bed DH, E at 200 to 500-bed DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code IMG",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "CT scan",
+            "city scan",
+            "sar ka scan",
+            "CT karwana hai",
+            "scan machine"
+          ],
+          "coverage": {
+            "facilities_any": 1459,
+            "facilities_2plus_fields": 868,
+            "states_any": 32,
+            "facilities_text": 1459,
+            "facilities_specialty_only": 0,
+            "facilities_text_positive": 1452,
+            "sentences": 5127,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "ultrasound",
+          "aliases": [],
+          "names": {
+            "en": [
+              "ultrasound",
+              "sonography",
+              "obstetric scan"
+            ],
+            "hi": [
+              "अल्ट्रासाउंड",
+              "सोनोग्राफी"
+            ],
+            "mr": [
+              "सोनोग्राफी"
+            ]
+          },
+          "definition": "Ultrasound imaging, including obstetric scans and colour Doppler, at a PCPNDT-registered facility with a sonologist or radiologist.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "antenatal scans at fixed weeks of pregnancy; urgent for suspected ectopic pregnancy or abdominal emergencies"
+          },
+          "required_capabilities": [
+            "ultrasound machine",
+            "radiologist, sonologist or trained obstetrician",
+            "PCPNDT registration for obstetric scans"
+          ],
+          "supporting_evidence": [
+            "'USG', 'ultrasound', 'colour Doppler', 'anomaly scan', '4D scan'"
+          ],
+          "contradicting_evidence": [
+            "therapeutic ultrasound in physiotherapy",
+            "ultrasonic dental scaler",
+            "HIFU"
+          ],
+          "iphs": {
+            "expected_from": "FRU-CHC (essential; desirable at non-FRU CHC); SDH and DH (essential)",
+            "citations": [
+              "vol2_chc Annexure 3 'Service areas', Diagnostic Services: USG with colour doppler D at non-FRU CHC, E at FRU-CHC",
+              "vol1_sdh_dh Annexure 2, Radiology: USG with colour doppler E at SDH and all DH sizes"
+            ]
+          },
+          "external_confirmation": [],
+          "phrases": [
+            "sonography",
+            "ultrasound",
+            "USG",
+            "pet ki jaanch",
+            "bachche ki jaanch (scan)",
+            "4D scan"
+          ],
+          "coverage": {
+            "facilities_any": 2101,
+            "facilities_2plus_fields": 1280,
+            "states_any": 31,
+            "facilities_text": 2100,
+            "facilities_specialty_only": 1,
+            "facilities_text_positive": 2098,
+            "sentences": 7086,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "blood_bank",
+          "aliases": [],
+          "names": {
+            "en": [
+              "blood bank",
+              "blood centre",
+              "blood storage unit",
+              "blood transfusion"
+            ],
+            "hi": [
+              "ब्लड बैंक",
+              "रक्त केंद्र",
+              "खून चढ़ाना"
+            ],
+            "mr": [
+              "रक्तपेढी"
+            ]
+          },
+          "definition": "A licensed blood centre (collection, testing, components) or a blood storage unit that issues blood for transfusion, ideally round the clock.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "obstetric haemorrhage and trauma need blood within the hour; thalassaemia transfusions are scheduled"
+          },
+          "required_capabilities": [
+            "licensed blood centre or blood storage unit",
+            "24x7 issue",
+            "component separation (desirable)"
+          ],
+          "supporting_evidence": [
+            "'blood bank', 'blood centre', 'BSU', 'component separation'",
+            "licence number",
+            "e-RaktKosh listing"
+          ],
+          "contradicting_evidence": [
+            "cord blood or stem cell bank",
+            "'blood test', 'blood sugar' (lab only)",
+            "'tie-up with blood bank' (third party)"
+          ],
+          "iphs": {
+            "expected_from": "FRU-CHC (blood storage unit essential; desirable at non-FRU CHC); SDH (blood storage unit); DH (blood bank essential at every size)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 7 Blood Storage: D at non-FRU CHC, E at FRU-CHC",
+              "vol1_sdh_dh Annexure 2, Support Services: Blood Bank, 'Blood Storage Unit' at SDH, E at all DH sizes"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/eraktkosh_blood_centres",
+              "what": "e-RaktKosh directory of blood banks and blood storage units with category and coordinates",
+              "strength": "strong"
+            },
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code BLO",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "khoon chahiye",
+            "blood bank",
+            "khoon chadhana hai",
+            "blood ki zaroorat",
+            "B positive blood"
+          ],
+          "coverage": {
+            "facilities_any": 685,
+            "facilities_2plus_fields": 265,
+            "states_any": 30,
+            "facilities_text": 678,
+            "facilities_specialty_only": 7,
+            "facilities_text_positive": 673,
+            "sentences": 1613,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "mental_health",
+      "name": {
+        "en": "Mental health",
+        "hi": "मानसिक स्वास्थ्य"
+      },
+      "services": [
+        {
+          "id": "psychiatric_care",
+          "aliases": [
+            "psychiatric_emergency"
+          ],
+          "names": {
+            "en": [
+              "psychiatric care",
+              "psychiatric emergency and admission",
+              "mental health services"
+            ],
+            "hi": [
+              "मानसिक रोग का इलाज",
+              "मनोरोग विभाग"
+            ],
+            "mr": [
+              "मानसिक आरोग्य उपचार"
+            ]
+          },
+          "definition": "Assessment and treatment of mental illness by a psychiatrist, including emergency assessment and inpatient admission for acute psychosis, mania or suicide risk where a ward exists.",
+          "urgency": {
+            "profile": "urgent",
+            "window": "suicide risk or acute psychosis: same day; follow-up is scheduled"
+          },
+          "required_capabilities": [
+            "psychiatrist",
+            "inpatient psychiatric beds for admission (not every facility)",
+            "emergency assessment"
+          ],
+          "supporting_evidence": [
+            "'psychiatry department', 'psychiatric ward', 'inpatient psychiatry', bed count",
+            "24x7 crisis or admission wording"
+          ],
+          "contradicting_evidence": [
+            "counselling or psychology only",
+            "tele-psychiatry or online consultation only",
+            "historic text ('a psychiatric ward was proposed in 1937')"
+          ],
+          "iphs": {
+            "expected_from": "CHC (mental health services essential); DH 100+ beds (psychiatry OPD essential; desirable at SDH and 50-bed DH)",
+            "citations": [
+              "vol2_chc Annexure 2: Mental health E at all CHC types",
+              "vol1_sdh_dh Annexure 2, Out-Patient Services: Psychiatry D at SDH and 50-bed DH, E at 100 to 500-bed DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code PSY",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "dimaagi bimari",
+            "pagalpan (avoid; stigmatising, but users type it)",
+            "mental hospital",
+            "depression ka ilaaj",
+            "khudkushi ki baat kar raha hai",
+            "psychiatrist",
+            "nind nahi aati, ajeeb baatein karta hai"
+          ],
+          "coverage": {
+            "facilities_any": 1287,
+            "facilities_2plus_fields": 189,
+            "states_any": 33,
+            "facilities_text": 223,
+            "facilities_specialty_only": 1064,
+            "facilities_text_positive": 221,
+            "sentences": 399,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "de_addiction",
+          "aliases": [],
+          "names": {
+            "en": [
+              "de-addiction",
+              "addiction treatment"
+            ],
+            "hi": [
+              "नशा मुक्ति केंद्र",
+              "नशा छुड़ाने का इलाज"
+            ],
+            "mr": [
+              "व्यसनमुक्ती केंद्र"
+            ]
+          },
+          "definition": "Medical treatment of alcohol, opioid and other substance dependence: detoxification, withdrawal management, opioid substitution therapy and counselling.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "planned admission; severe alcohol withdrawal (delirium tremens) is an emergency"
+          },
+          "required_capabilities": [
+            "psychiatrist or trained physician",
+            "detox beds",
+            "medicines for withdrawal and substitution"
+          ],
+          "supporting_evidence": [
+            "'de-addiction centre', 'detoxification', 'opioid substitution therapy'"
+          ],
+          "contradicting_evidence": [
+            "Ayurveda panchakarma 'detox'",
+            "smoking cessation awareness camp",
+            "unlicensed rehab home without doctor (not visible in text)"
+          ],
+          "iphs": {
+            "expected_from": "DH (mental health and de-addiction within psychiatry; not a separate IPHS service area)",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: Psychiatry OPD E at 100+ bed DH"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code PSY",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "nasha mukti",
+            "sharab chhudwana",
+            "daru ki aadat",
+            "smack / chitta chhudwana",
+            "nashe ka ilaaj"
+          ],
+          "coverage": {
+            "facilities_any": 287,
+            "facilities_2plus_fields": 102,
+            "states_any": 24,
+            "facilities_text": 161,
+            "facilities_specialty_only": 126,
+            "facilities_text_positive": 158,
+            "sentences": 456,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye",
+      "name": {
+        "en": "Eye care",
+        "hi": "नेत्र चिकित्सा"
+      },
+      "services": [
+        {
+          "id": "cataract_surgery",
+          "aliases": [],
+          "names": {
+            "en": [
+              "cataract surgery"
+            ],
+            "hi": [
+              "मोतियाबिंद का ऑपरेशन"
+            ],
+            "mr": [
+              "मोतीबिंदू शस्त्रक्रिया"
+            ]
+          },
+          "definition": "Removal of cataract with lens implant (SICS or phacoemulsification) in an eye operating theatre.",
+          "urgency": {
+            "profile": "elective",
+            "window": "planned; weeks to months"
+          },
+          "required_capabilities": [
+            "ophthalmologist",
+            "eye operating theatre",
+            "IOL stock",
+            "biometry"
+          ],
+          "supporting_evidence": [
+            "'cataract surgery', 'phaco', 'SICS', 'IOL'",
+            "surgery counts"
+          ],
+          "contradicting_evidence": [
+            "cataract screening camp only (camp cue)",
+            "optical shop"
+          ],
+          "iphs": {
+            "expected_from": "CHC (cataract and glaucoma services on a weekly basis); SDH and DH (eye elective OT essential)",
+            "citations": [
+              "vol2_chc Annexure 2, S.No. 28 Eye: refraction and screening daily, cataract/glaucoma weekly: E",
+              "vol1_sdh_dh Annexure 2, Elective OT, Eye: E at SDH and all DH sizes"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code EYE",
+              "strength": "medium"
+            }
+          ],
+          "phrases": [
+            "motiyabind",
+            "aankh ka operation",
+            "dhundla dikhta hai",
+            "lens daalna",
+            "safed motia"
+          ],
+          "coverage": {
+            "facilities_any": 909,
+            "facilities_2plus_fields": 645,
+            "states_any": 27,
+            "facilities_text": 800,
+            "facilities_specialty_only": 109,
+            "facilities_text_positive": 795,
+            "sentences": 4093,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "eye_emergency",
+          "aliases": [],
+          "names": {
+            "en": [
+              "eye emergency",
+              "eye injury care"
+            ],
+            "hi": [
+              "आंख की आपातकालीन चोट का इलाज"
+            ],
+            "mr": [
+              "डोळ्याची आपत्कालीन इजा"
+            ]
+          },
+          "definition": "Urgent care for eye injuries and sight-threatening emergencies: chemical injury, penetrating injury, corneal ulcer, foreign body and retinal detachment.",
+          "urgency": {
+            "profile": "emergency",
+            "window": "chemical injury: wash immediately and reach care within hours; penetrating injury within 24 hours"
+          },
+          "required_capabilities": [
+            "ophthalmologist on call",
+            "slit lamp",
+            "eye OT",
+            "24x7 or same-day access"
+          ],
+          "supporting_evidence": [
+            "'eye emergency', 'ocular trauma', '24x7 eye casualty'",
+            "eye trauma specialty"
+          ],
+          "contradicting_evidence": [
+            "optical shop or refraction-only clinic",
+            "LASIK or cosmetic eye centre only"
+          ],
+          "iphs": {
+            "expected_from": "DH (ophthalmology OPD and eye OT essential); CHC refers",
+            "citations": [
+              "vol1_sdh_dh Annexure 2: Ophthalmology OPD and Eye elective OT E at SDH and all DH sizes"
+            ]
+          },
+          "external_confirmation": [
+            {
+              "dataset": "external/nabh_accredited",
+              "what": "NABH specialty code EYE",
+              "strength": "weak"
+            }
+          ],
+          "phrases": [
+            "aankh mein chot",
+            "aankh mein chuna (lime) gir gaya",
+            "aankh mein kuch chala gaya",
+            "aankh laal aur dard",
+            "achanak dikhna band"
+          ],
+          "coverage": {
+            "facilities_any": 369,
+            "facilities_2plus_fields": 125,
+            "states_any": 23,
+            "facilities_text": 205,
+            "facilities_specialty_only": 164,
+            "facilities_text_positive": 205,
+            "sentences": 409,
+            "low_coverage": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "infectious_disease",
+      "name": {
+        "en": "Infectious disease programmes",
+        "hi": "संक्रामक रोग कार्यक्रम"
+      },
+      "services": [
+        {
+          "id": "tb_care",
+          "aliases": [],
+          "names": {
+            "en": [
+              "TB diagnosis and treatment",
+              "DOTS / NTEP centre"
+            ],
+            "hi": [
+              "टीबी (क्षय रोग) जांच और इलाज"
+            ],
+            "mr": [
+              "क्षयरोग (टीबी) तपासणी व उपचार"
+            ]
+          },
+          "definition": "Diagnosis of tuberculosis (sputum microscopy, CBNAAT or TrueNat) and treatment under the National TB Elimination Programme, including drug-resistant TB at nodal centres.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "test within days of a 2-week cough; treatment is daily for 6+ months near home"
+          },
+          "required_capabilities": [
+            "designated microscopy centre or NAAT machine",
+            "NTEP drugs",
+            "DR-TB centre for resistant cases"
+          ],
+          "supporting_evidence": [
+            "'DOTS', 'NTEP', 'RNTCP', 'CBNAAT', 'GeneXpert', 'TrueNat'",
+            "DR-TB centre"
+          ],
+          "contradicting_evidence": [
+            "research-only mentions",
+            "BCG vaccination only",
+            "FNAC lab test only"
+          ],
+          "iphs": {
+            "expected_from": "PHC (NTEP services); CHC (NTEP diagnostic essential); DH",
+            "citations": [
+              "vol2_chc Annexure 2: NTEP Diagnostic E at all CHC types"
+            ]
+          },
+          "external_confirmation": [],
+          "phrases": [
+            "TB",
+            "tibi ki jaanch",
+            "khansi do hafte se",
+            "balgam ki jaanch",
+            "DOTS ki dawai",
+            "kshay rog"
+          ],
+          "coverage": {
+            "facilities_any": 242,
+            "facilities_2plus_fields": 70,
+            "states_any": 24,
+            "facilities_text": 240,
+            "facilities_specialty_only": 2,
+            "facilities_text_positive": 230,
+            "sentences": 492,
+            "low_coverage": false
+          }
+        },
+        {
+          "id": "hiv_art",
+          "aliases": [],
+          "names": {
+            "en": [
+              "HIV testing and ART"
+            ],
+            "hi": [
+              "एचआईवी जांच और एआरटी इलाज"
+            ],
+            "mr": [
+              "एचआयव्ही तपासणी व एआरटी उपचार"
+            ]
+          },
+          "definition": "HIV counselling and testing (ICTC) and antiretroviral therapy at ART centres or link ART centres under NACO, including prevention of parent-to-child transmission.",
+          "urgency": {
+            "profile": "scheduled",
+            "window": "post-exposure prophylaxis within 72 hours is urgent; ART refills are monthly"
+          },
+          "required_capabilities": [
+            "ICTC for testing",
+            "ART centre or link ART centre for treatment",
+            "NACO supply"
+          ],
+          "supporting_evidence": [
+            "'ART centre', 'ICTC', 'PPTCT', 'antiretroviral'"
+          ],
+          "contradicting_evidence": [
+            "assisted reproductive technology (IVF 'ART clinic')",
+            "'state-of-the-art' wording",
+            "HIV test in a lab panel only"
+          ],
+          "iphs": {
+            "expected_from": "CHC and DH (ART services listed as essential in the service areas tables)",
+            "citations": [
+              "vol2_chc Annexure 3 'Service areas': ART Services E at all CHC types",
+              "vol1_sdh_dh Annexure 2, Support Services: ART Services E at SDH and all DH sizes",
+              "note: read as antiretroviral therapy; the tables do not expand the abbreviation"
+            ]
+          },
+          "external_confirmation": [],
+          "phrases": [
+            "HIV test",
+            "ART centre",
+            "HIV ki dawai",
+            "AIDS ki jaanch",
+            "PEP"
+          ],
+          "coverage": {
+            "facilities_any": 74,
+            "facilities_2plus_fields": 15,
+            "states_any": 22,
+            "facilities_text": 70,
+            "facilities_specialty_only": 4,
+            "facilities_text_positive": 69,
+            "sentences": 131,
+            "low_coverage": true
+          }
+        }
+      ]
+    }
+  ],
+  "coverage_definition": "facilities_any: usable records (of 9,959) with a matching claim sentence or a specialties value mapped to the service; facilities_2plus_fields: distinct fields among procedure, capability, equipment, description, specialties after dropping in-record echoes; states_any: distinct state_final; facilities_text_positive: text matches without a non-offer cue and not attributed to another facility; low_coverage: facilities_any < 100 or facilities_2plus_fields < 25. Mentions are claims, not verified offers.",
+  "candidates_not_included": [
+    {
+      "id": "snakebite_antivenom",
+      "aliases": [],
+      "names": {
+        "en": [
+          "snakebite treatment",
+          "anti-snake venom (ASV)"
+        ],
+        "hi": [
+          "सांप काटने का इलाज",
+          "एंटी-स्नेक वेनम"
+        ],
+        "mr": [
+          "सर्पदंश उपचार"
+        ]
+      },
+      "definition": "Emergency treatment of snakebite with anti-snake venom (ASV), observation, and ventilator support or dialysis for severe neurotoxic or haemotoxic envenomation.",
+      "urgency": {
+        "profile": "emergency",
+        "window": "ASV as soon as signs of envenomation appear; the first hours decide outcome; neurotoxic bites may need a ventilator"
+      },
+      "required_capabilities": [
+        "ASV in stock",
+        "24x7 emergency",
+        "doctor trained in snakebite protocol",
+        "ventilator or bag-and-mask ventilation for neurotoxic bites",
+        "dialysis or referral link for kidney injury"
+      ],
+      "supporting_evidence": [
+        "'anti-snake venom', 'ASV', 'snakebite management'",
+        "poisoning and snakebite unit"
+      ],
+      "contradicting_evidence": [
+        "template line 'Animal bites (Excluding Snake Bite)'",
+        "historic or past-tense mentions ('known for anti-venom in the 1990s')"
+      ],
+      "iphs": {
+        "expected_from": "PHC (snake venom antiserum on the essential medicines list); CHC all types (snake bite management essential); SDH and DH",
+        "citations": [
+          "vol3_phc Annexure 6 'List of Essential Medicines Required at Primary Health Centre': Snake venom antiserum injection",
+          "vol2_chc Annexure 2, S.No. 2.3 Snake/dog bite/other animal bites: E at all CHC types",
+          "vol1_sdh_dh Annexure 8 essential medicines: Snake Venom Antiserum"
+        ]
+      },
+      "external_confirmation": [],
+      "phrases": [
+        "saanp ne kaata",
+        "saap kaata",
+        "snake bite",
+        "ASV injection",
+        "zehar ka injection",
+        "naag ne dasa"
+      ],
+      "coverage": {
+        "facilities_any": 17,
+        "facilities_2plus_fields": 5,
+        "states_any": 6,
+        "facilities_text": 16,
+        "facilities_specialty_only": 1,
+        "facilities_text_positive": 16,
+        "sentences": 23,
+        "low_coverage": true
+      },
+      "category": "emergency_and_trauma",
+      "not_included_because": "fewer than 20 of 9,959 usable records mention it (see coverage). IPHS 2022 expects it at every PHC/CHC, so a level prior over public facility lists (HOT OSM, LGD) can answer it; enable it once that prior exists."
+    },
+    {
+      "id": "anti_rabies",
+      "aliases": [],
+      "names": {
+        "en": [
+          "anti-rabies vaccination",
+          "animal bite treatment"
+        ],
+        "hi": [
+          "कुत्ते के काटने पर रेबीज़ का टीका",
+          "रेबीज़ इंजेक्शन"
+        ],
+        "mr": [
+          "रेबीज प्रतिबंधक लस",
+          "कुत्रा चावल्यावर उपचार"
+        ]
+      },
+      "definition": "Post-exposure care for dog, cat, monkey or other animal bites: wound washing, anti-rabies vaccine and, for severe (category III) bites, rabies immunoglobulin.",
+      "urgency": {
+        "profile": "urgent",
+        "window": "start the same day; later doses on fixed days (day 0, 3, 7 and 28 in the common intradermal schedule); immunoglobulin for category III bites as early as possible"
+      },
+      "required_capabilities": [
+        "anti-rabies vaccine in cold chain",
+        "rabies immunoglobulin for category III bites (often only at higher facilities)",
+        "staff trained in intradermal administration"
+      ],
+      "supporting_evidence": [
+        "'anti-rabies vaccine', 'ARV clinic', 'animal bite treatment', 'dog bite'",
+        "rabies immunoglobulin stocked"
+      ],
+      "contradicting_evidence": [
+        "'does not stock rabies immunoglobulin' (vaccine only; route category III elsewhere)",
+        "pet or veterinary clinic"
+      ],
+      "iphs": {
+        "expected_from": "PHC (rabies vaccine on the essential medicines list); CHC (dog bite management essential; rabies vaccine and anti-rabies immunoglobulin listed); DH",
+        "citations": [
+          "vol3_phc Annexure 6 essential medicines: Rabies vaccine",
+          "vol2_chc Annexure 8 'List of medicines': Rabies vaccine, Anti-Rabies Immunoglobulin",
+          "vol2_chc Annexure 2, S.No. 2.3 Snake/dog bite/other animal bites: E",
+          "vol1_sdh_dh Annexure 8: Anti-rabies Immunoglobulin, Rabies Vaccine"
+        ]
+      },
+      "external_confirmation": [],
+      "phrases": [
+        "kutte ne kaata",
+        "kutta kaat liya",
+        "dog bite injection",
+        "rabies ka teeka",
+        "bandar ne kaata",
+        "chaudah injection (old belief, now 4 to 5 doses)"
+      ],
+      "coverage": {
+        "facilities_any": 19,
+        "facilities_2plus_fields": 5,
+        "states_any": 13,
+        "facilities_text": 19,
+        "facilities_specialty_only": 0,
+        "facilities_text_positive": 19,
+        "sentences": 32,
+        "low_coverage": true
+      },
+      "category": "emergency_and_trauma",
+      "not_included_because": "fewer than 20 of 9,959 usable records mention it (see coverage). IPHS 2022 expects it at every PHC/CHC, so a level prior over public facility lists (HOT OSM, LGD) can answer it; enable it once that prior exists."
+    },
+    {
+      "id": "nutrition_rehabilitation",
+      "category": "maternal_and_newborn",
+      "names": {
+        "en": [
+          "nutrition rehabilitation centre (NRC)"
+        ],
+        "hi": [
+          "पोषण पुनर्वास केंद्र"
+        ],
+        "mr": [
+          "पोषण पुनर्वसन केंद्र"
+        ]
+      },
+      "definition": "Inpatient treatment of children with severe acute malnutrition at a nutrition rehabilitation centre.",
+      "urgency": {
+        "profile": "urgent",
+        "window": "SAM with complications: admit within days"
+      },
+      "iphs": {
+        "expected_from": "DH (NRC essential at 100+ beds, desirable at SDH and 50-bed DH)",
+        "citations": [
+          "vol1_sdh_dh Annexure 2 'Service Areas': NRC 10(D) at SDH, 6(D) at 50-bed DH, 10 to 20 (E) at 100+ bed DH"
+        ]
+      },
+      "phrases": [
+        "NRC",
+        "kuposhit bachcha",
+        "bachcha bahut kamzor hai",
+        "laal band (MUAC red)"
+      ],
+      "not_included_because": "10 of 9,959 usable records mention it, several as 'excluding NRC'. The IPHS level prior is the only usable signal.",
+      "coverage": {
+        "facilities_any": 10,
+        "facilities_2plus_fields": 1,
+        "states_any": 7,
+        "facilities_text": 10,
+        "facilities_specialty_only": 0,
+        "facilities_text_positive": 10,
+        "sentences": 12,
+        "low_coverage": true
+      }
+    }
+  ],
+  "inclusion_rule": "A service is in the taxonomy when it is referral-relevant for intermediaries and at least 20 usable records mention it; it is flagged low_coverage below 100 facilities or 25 facilities with 2+ fields."
+}
