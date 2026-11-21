@@ -1,0 +1,842 @@
+[
+ {
+  "case": "S1",
+  "kind": "strong",
+  "query_id": "demo_panipat",
+  "service": "dialysis",
+  "place": "Panipat district, Haryana",
+  "unique_id": "acde9be7-1859-4c30-a5aa-71f18a4f590e",
+  "name": "Civil Hospital, Panipat",
+  "rank": 1,
+  "n_candidates": 12,
+  "R_used": 25,
+  "abstained": false,
+  "plan": [
+   "Civil Hospital, Panipat",
+   "Ravindra Hospital, Panipat",
+   "Singla Children Hospital"
+  ],
+  "plan_p_any": 0.8286649081128676,
+  "d1": 8.676077278752011,
+  "d2": null,
+  "P_E": 0.710949502625004,
+  "P_S": 0.702384978571009,
+  "P_L": 0.9910474630671878,
+  "G": 0.5557715204661599,
+  "U": 0.2775302060510763,
+  "P_succ": 0.49488971007498794,
+  "band": "Likely",
+  "T": 4,
+  "C": 0,
+  "P": 1,
+  "bucket": "mid",
+  "p_s_without_cited": 0.6392843747628342,
+  "logit_by_group": {
+   "base": -1.2142,
+   "context": 1.4407,
+   "evidence": 0.6322
+  },
+  "terms": [
+   {
+    "term": "b_dialysis",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.526,
+    "contribution_logit": -0.9596,
+    "points": -27.6883
+   },
+   {
+    "term": "t1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.754,
+    "contribution_logit": 0.2864,
+    "points": 8.2644
+   },
+   {
+    "term": "t2",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0159,
+    "contribution_logit": 0.006,
+    "points": 0.1739
+   },
+   {
+    "term": "t4",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0992,
+    "contribution_logit": 0.0377,
+    "points": 1.0873
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "g_mid",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 1.0551,
+    "contribution_logit": 0.4008,
+    "points": 11.5654
+   },
+   {
+    "term": "public",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4341,
+    "contribution_logit": -0.1649,
+    "points": -4.7578
+   },
+   {
+    "term": "level_dh",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 1.1795,
+    "contribution_logit": 0.4481,
+    "points": 12.9293
+   },
+   {
+    "term": "iphs_essential",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.9861,
+    "contribution_logit": 0.3746,
+    "points": 10.8089
+   },
+   {
+    "term": "beds_100p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.2407,
+    "contribution_logit": 0.0914,
+    "points": 2.6379
+   },
+   {
+    "term": "doctors_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.0478,
+    "contribution_logit": -0.0182,
+    "points": -0.5238
+   },
+   {
+    "term": "breadth_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.8129,
+    "contribution_logit": 0.3088,
+    "points": 8.9104
+   },
+   {
+    "term": "t2@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0159,
+    "contribution_logit": -0.006,
+    "points": -0.1739
+   },
+   {
+    "term": "t4@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0992,
+    "contribution_logit": -0.0377,
+    "points": -1.0873
+   },
+   {
+    "term": "p1@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0672,
+    "contribution_logit": -0.0255,
+    "points": -0.7365
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ },
+ {
+  "case": "S2",
+  "kind": "strong",
+  "query_id": "q35",
+  "service": "dialysis",
+  "place": "Patna",
+  "unique_id": "a52cd60a-a5c0-427e-bfbc-e9c63dc9410a",
+  "name": "Satyavrat Hospital",
+  "rank": 1,
+  "n_candidates": 81,
+  "R_used": 25,
+  "abstained": true,
+  "plan": [
+   "Satyavrat Hospital",
+   "Big Apollo Spectra Hospitals",
+   "Indira Gandhi Institute of Medical Sciences"
+  ],
+  "plan_p_any": 0.8882399523482627,
+  "d1": 4.697628362957365,
+  "d2": null,
+  "P_E": 0.8807970779778823,
+  "P_S": 0.6477915875114203,
+  "P_L": 0.9910474630671878,
+  "G": 0.7245763962780037,
+  "U": 0.41342368280860575,
+  "P_succ": 0.5654648621236085,
+  "band": "Unverified",
+  "T": 5,
+  "C": 0,
+  "P": 1,
+  "bucket": "mid",
+  "p_s_without_cited": 0.5500501080943303,
+  "logit_by_group": {
+   "base": -1.2142,
+   "context": 0.7829,
+   "evidence": 1.0406
+  },
+  "terms": [
+   {
+    "term": "b_dialysis",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.526,
+    "contribution_logit": -0.9596,
+    "points": -27.6883
+   },
+   {
+    "term": "t1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.754,
+    "contribution_logit": 0.2864,
+    "points": 8.2644
+   },
+   {
+    "term": "t2",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0159,
+    "contribution_logit": 0.006,
+    "points": 0.1739
+   },
+   {
+    "term": "t4",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0992,
+    "contribution_logit": 0.0377,
+    "points": 1.0873
+   },
+   {
+    "term": "t5",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 1.0753,
+    "contribution_logit": 0.4085,
+    "points": 11.786
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "g_mid",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 1.0551,
+    "contribution_logit": 0.4008,
+    "points": 11.5654
+   },
+   {
+    "term": "beds_100p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.2407,
+    "contribution_logit": 0.0914,
+    "points": 2.6379
+   },
+   {
+    "term": "doctors_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.0478,
+    "contribution_logit": -0.0182,
+    "points": -0.5238
+   },
+   {
+    "term": "breadth_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.8129,
+    "contribution_logit": 0.3088,
+    "points": 8.9104
+   },
+   {
+    "term": "t2@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0159,
+    "contribution_logit": -0.006,
+    "points": -0.1739
+   },
+   {
+    "term": "t4@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0992,
+    "contribution_logit": -0.0377,
+    "points": -1.0873
+   },
+   {
+    "term": "p1@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0672,
+    "contribution_logit": -0.0255,
+    "points": -0.7365
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ },
+ {
+  "case": "U1",
+  "kind": "uncertain",
+  "query_id": "q01",
+  "service": "emergency_csection",
+  "place": "Singwahini village, Sitamarhi district, Bihar",
+  "unique_id": "830706f4-456c-4a54-8ab3-e9a730f3c531",
+  "name": "Referal Hospital",
+  "rank": 1,
+  "n_candidates": 5,
+  "R_used": 100,
+  "abstained": true,
+  "plan": [
+   "Referal Hospital",
+   "Rahmania Medical Centre Private Limited",
+   "Dhanwantari Allergy & Asthma Clinic"
+  ],
+  "plan_p_any": 0.44151597715773894,
+  "d1": 266.91068306459005,
+  "d2": 54.550922716033455,
+  "P_E": 0.710949502625004,
+  "P_S": 0.2352652916924423,
+  "P_L": 0.3563029337031465,
+  "G": 0.10451499884223658,
+  "U": 0.01748136078336052,
+  "P_succ": 0.10766589270226919,
+  "band": "Unverified",
+  "T": 0,
+  "C": 0,
+  "P": 1,
+  "bucket": "high",
+  "p_s_without_cited": 0.2352652916924423,
+  "logit_by_group": {
+   "base": -1.2354,
+   "context": -0.3282,
+   "evidence": 0.3847
+  },
+  "terms": [
+   {
+    "term": "b_emergency_csection",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.5817,
+    "contribution_logit": -0.9808,
+    "points": -28.2986
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "g_high",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.4596,
+    "contribution_logit": 0.1746,
+    "points": 5.0375
+   },
+   {
+    "term": "public",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4341,
+    "contribution_logit": -0.1649,
+    "points": -4.7578
+   },
+   {
+    "term": "beds_missing",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4338,
+    "contribution_logit": -0.1648,
+    "points": -4.7549
+   },
+   {
+    "term": "doctors_missing",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4556,
+    "contribution_logit": -0.1731,
+    "points": -4.9938
+   },
+   {
+    "term": "p1@emergency_csection",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0354,
+    "contribution_logit": 0.0134,
+    "points": 0.3876
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ },
+ {
+  "case": "U2",
+  "kind": "uncertain",
+  "query_id": "q12",
+  "service": "trauma_emergency",
+  "place": "Palamu district, Jharkhand",
+  "unique_id": "05e535b3-d6b2-4b91-bf6a-d6dfd8505296",
+  "name": "Smile Kraft Dental Clinic",
+  "rank": 1,
+  "n_candidates": 3,
+  "R_used": 50,
+  "abstained": true,
+  "plan": [
+   "Smile Kraft Dental Clinic",
+   "Parmeshwari Medical Centre",
+   "Roop Dev Eye And Dental Hospital"
+  ],
+  "plan_p_any": 0.4831833161365392,
+  "d1": 2.4839749322379143,
+  "d2": null,
+  "P_E": 0.8807970779778823,
+  "P_S": 0.22220799159771543,
+  "P_L": 0.9910474630671878,
+  "G": 0.9122948724668888,
+  "U": 0.17855448901213528,
+  "P_succ": 0.1939679578338935,
+  "band": "Unverified",
+  "T": 0,
+  "C": 0,
+  "P": 1,
+  "bucket": "mid",
+  "p_s_without_cited": 0.22220799159771543,
+  "logit_by_group": {
+   "base": -1.2855,
+   "context": -0.3534,
+   "evidence": 0.3861
+  },
+  "terms": [
+   {
+    "term": "b_trauma_emergency",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.7138,
+    "contribution_logit": -1.0309,
+    "points": -29.7466
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "g_mid",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 1.0551,
+    "contribution_logit": 0.4008,
+    "points": 11.5654
+   },
+   {
+    "term": "type_clinic",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -1.096,
+    "contribution_logit": -0.4163,
+    "points": -12.013
+   },
+   {
+    "term": "beds_missing",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4338,
+    "contribution_logit": -0.1648,
+    "points": -4.7549
+   },
+   {
+    "term": "doctors_missing",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4556,
+    "contribution_logit": -0.1731,
+    "points": -4.9938
+   },
+   {
+    "term": "p1@trauma_emergency",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0389,
+    "contribution_logit": 0.0148,
+    "points": 0.4268
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ },
+ {
+  "case": "C1",
+  "kind": "contaminated",
+  "query_id": "demo_nagpur",
+  "service": "dialysis",
+  "place": "Nagpur",
+  "unique_id": "3ac5ae50-9ce2-4de3-a13c-d95a4ef218ee",
+  "name": "Wockhardt Hospital Nagpur",
+  "rank": 51,
+  "n_candidates": 63,
+  "R_used": 25,
+  "abstained": true,
+  "plan": [
+   "Meditrina Institute of Medical Sciences",
+   "Viveka Hospitals",
+   "Nelson Hospital"
+  ],
+  "plan_p_any": 0.8730875892215353,
+  "d1": 889.967940862016,
+  "d2": 10.0,
+  "P_E": 0.9088770389851438,
+  "P_S": 0.5404080962186766,
+  "P_L": 0.5794390906285596,
+  "G": 0.21592317046721196,
+  "U": 0.10605379829247208,
+  "P_succ": 0.20656459311739414,
+  "band": "Unverified",
+  "T": 5,
+  "C": 1,
+  "P": 1,
+  "bucket": "high",
+  "p_s_without_cited": 0.399015723590952,
+  "logit_by_group": {
+   "base": -1.2142,
+   "context": 0.5567,
+   "evidence": 0.8195
+  },
+  "terms": [
+   {
+    "term": "b_dialysis",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.526,
+    "contribution_logit": -0.9596,
+    "points": -27.6883
+   },
+   {
+    "term": "t1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.754,
+    "contribution_logit": 0.2864,
+    "points": 8.2644
+   },
+   {
+    "term": "t2",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0159,
+    "contribution_logit": 0.006,
+    "points": 0.1739
+   },
+   {
+    "term": "t4",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0992,
+    "contribution_logit": 0.0377,
+    "points": 1.0873
+   },
+   {
+    "term": "t5",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 1.0753,
+    "contribution_logit": 0.4085,
+    "points": 11.786
+   },
+   {
+    "term": "c1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.5821,
+    "contribution_logit": -0.2211,
+    "points": -6.3802
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "g_high",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.4596,
+    "contribution_logit": 0.1746,
+    "points": 5.0375
+   },
+   {
+    "term": "beds_100p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.2407,
+    "contribution_logit": 0.0914,
+    "points": 2.6379
+   },
+   {
+    "term": "doctors_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.0478,
+    "contribution_logit": -0.0182,
+    "points": -0.5238
+   },
+   {
+    "term": "breadth_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.8129,
+    "contribution_logit": 0.3088,
+    "points": 8.9104
+   },
+   {
+    "term": "t2@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0159,
+    "contribution_logit": -0.006,
+    "points": -0.1739
+   },
+   {
+    "term": "t4@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0992,
+    "contribution_logit": -0.0377,
+    "points": -1.0873
+   },
+   {
+    "term": "p1@dialysis",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0672,
+    "contribution_logit": -0.0255,
+    "points": -0.7365
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ },
+ {
+  "case": "C2",
+  "kind": "contaminated",
+  "query_id": "q29",
+  "service": "trauma_emergency",
+  "place": "25.1546, 83.6814",
+  "unique_id": "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b",
+  "name": "Sharda Hospital",
+  "rank": 1,
+  "n_candidates": 43,
+  "R_used": 100,
+  "abstained": true,
+  "plan": [
+   "Sharda Hospital",
+   "Ford Hospital",
+   "G. S. Memorial Plastic Surgery Hospital And Trauma Center"
+  ],
+  "plan_p_any": 0.8454240933678959,
+  "d1": 60.428280792730234,
+  "d2": null,
+  "P_E": 0.9088770389851438,
+  "P_S": 0.4929648773017333,
+  "P_L": 0.7657195314674605,
+  "G": 0.10215997115354454,
+  "U": 0.04577220890536516,
+  "P_succ": 0.34307639246069704,
+  "band": "Unverified",
+  "T": 4,
+  "C": 0,
+  "P": 2,
+  "bucket": "high",
+  "p_s_without_cited": 0.4398086701407084,
+  "logit_by_group": {
+   "base": -1.2855,
+   "context": 0.4017,
+   "evidence": 0.8556
+  },
+  "terms": [
+   {
+    "term": "b_trauma_emergency",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -2.7138,
+    "contribution_logit": -1.0309,
+    "points": -29.7466
+   },
+   {
+    "term": "t1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.754,
+    "contribution_logit": 0.2864,
+    "points": 8.2644
+   },
+   {
+    "term": "t2",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0159,
+    "contribution_logit": 0.006,
+    "points": 0.1739
+   },
+   {
+    "term": "t4",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0992,
+    "contribution_logit": 0.0377,
+    "points": 1.0873
+   },
+   {
+    "term": "p1",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.9773,
+    "contribution_logit": 0.3713,
+    "points": 10.7127
+   },
+   {
+    "term": "p2",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.3486,
+    "contribution_logit": 0.1324,
+    "points": 3.8215
+   },
+   {
+    "term": "g_high",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.4596,
+    "contribution_logit": 0.1746,
+    "points": 5.0375
+   },
+   {
+    "term": "beds_100p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.2407,
+    "contribution_logit": 0.0914,
+    "points": 2.6379
+   },
+   {
+    "term": "doctors_missing",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": -0.4556,
+    "contribution_logit": -0.1731,
+    "points": -4.9938
+   },
+   {
+    "term": "breadth_20p",
+    "group": "context",
+    "x_value": 1.0,
+    "weight": 0.8129,
+    "contribution_logit": 0.3088,
+    "points": 8.9104
+   },
+   {
+    "term": "t2@trauma_emergency",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": -0.0159,
+    "contribution_logit": -0.006,
+    "points": -0.1739
+   },
+   {
+    "term": "t4@trauma_emergency",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0343,
+    "contribution_logit": 0.013,
+    "points": 0.376
+   },
+   {
+    "term": "p1@trauma_emergency",
+    "group": "evidence",
+    "x_value": 1.0,
+    "weight": 0.0389,
+    "contribution_logit": 0.0148,
+    "points": 0.4268
+   },
+   {
+    "term": "platt_offset",
+    "group": "base",
+    "x_value": 1.0,
+    "weight": -0.2546,
+    "contribution_logit": -0.2546,
+    "points": -7.3461
+   }
+  ]
+ }
+]

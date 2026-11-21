@@ -1,0 +1,326 @@
+{
+ "rows_before_after_dedup": [
+  9970,
+  9959
+ ],
+ "busy_pins_gt25km_from_facility_median_before_after": [
+  78,
+  43,
+  1051
+ ],
+ "busy_pins_gt10km_before_after": [
+  138,
+  71,
+  1051
+ ],
+ "coords_gt50km_from_pin_before(audit)_after(repaired)": [
+  [
+   1405,
+   9672
+  ],
+  [
+   1367,
+   9869
+  ]
+ ],
+ "coords_10_50km_band_before_after": [
+  1081,
+  718
+ ],
+ "loc_src": {
+  "listing_coordinates": 8788,
+  "postcode_centre": 868,
+  "address_city_centre": 235,
+  "map_link": 68
+ },
+ "loc_conf": {
+  "high": 7762,
+  "low": 1142,
+  "disputed": 538,
+  "medium": 517
+ },
+ "records_whose_ranking_point_moved_gt25km": 1171,
+ "records_ranked_on_raw_coords_that_conflict_gt50km": 202,
+ "conflict_resolution_rules": {
+  "city_confirms_pin": 644,
+  "both_points_elsewhere": 235,
+  "city_points_elsewhere": 195,
+  "city_confirms_coords": 174,
+  "location_disputed": 108,
+  "coords_look_wrong": 101,
+  "map_link_used": 68,
+  "pin_looks_wrong": 23,
+  "coords_other_state": 9,
+  "pin_other_state": 5
+ },
+ "coords_outside_india_before_used_after": [
+  6,
+  0
+ ],
+ "stated_state_resolved_before_after": [
+  9877,
+  9927
+ ],
+ "state_for_filter_missing_after": 0,
+ "district_assigned_after": 9946,
+ "nfhs_joined_after": [
+  9934,
+  9959
+ ],
+ "nfhs_how_after": {
+  "exact": 9460,
+  "fuzzy": 295,
+  "parent_table": 173,
+  "no_district": 13,
+  "no_nfhs_row": 12,
+  "spatial_parent": 6
+ },
+ "district_boundary_notes": 550,
+ "resolver": {
+  "tests": 54,
+  "passed": 54,
+  "status_counts": {
+   "ok": 41,
+   "ask_state": 7,
+   "not_found": 3,
+   "confirm": 2,
+   "did_you_mean": 1
+  }
+ },
+ "groups": {
+  "groups": 75,
+  "records_in_groups": 152,
+  "records_marked_non_canonical": 77,
+  "records_with_possible_same_site_link": 52,
+  "records_with_co_located_unit": 17,
+  "groups_whose_copies_are_gt25km_apart": 22,
+  "linked_pairs_by_rule": {
+   "R5": 74,
+   "T3": 30,
+   "U": 9,
+   "T2": 3
+  },
+  "eval": {
+   "strong_groups_47": {
+    "n": 47,
+    "tp": 26,
+    "fp": 5,
+    "fn": 3,
+    "precision": 0.84,
+    "recall": 0.9,
+    "units_linked": [
+     1,
+     2
+    ],
+    "units_wrongly_merged": 1,
+    "with_soft_links": {
+     "n": 47,
+     "tp": 27,
+     "fp": 5,
+     "fn": 2,
+     "precision": 0.84,
+     "recall": 0.93,
+     "units_linked": [
+      1,
+      2
+     ],
+     "units_wrongly_merged": 1
+    }
+   },
+   "near_contact_pairs_42": {
+    "n": 42,
+    "tp": 2,
+    "fp": 0,
+    "fn": 13,
+    "precision": 1.0,
+    "recall": 0.13,
+    "units_linked": [
+     4,
+     10
+    ],
+    "units_wrongly_merged": 0,
+    "with_soft_links": {
+     "n": 42,
+     "tp": 15,
+     "fp": 5,
+     "fn": 0,
+     "precision": 0.75,
+     "recall": 1.0,
+     "units_linked": [
+      7,
+      10
+     ],
+     "units_wrongly_merged": 3
+    }
+   },
+   "near_contact_labels": {
+    "true_dup": 15,
+    "different": 10,
+    "same_site_unit": 10,
+    "uncertain": 4,
+    "different_campus_shared_geocode": 3
+   }
+  }
+ },
+ "trust": {
+  "flag_counts": {
+   "location_low": 1142,
+   "location_disputed": 538,
+   "official_phone_is_directory": 292,
+   "no_direct_contact": 247,
+   "claims_6plus_of_8_services": 79,
+   "copies_far_apart": 44,
+   "website_may_belong_to_other_org": 32,
+   "small_facility_tertiary_claim": 32,
+   "doctors_exceed_beds": 19,
+   "veterinary": 12
+  },
+  "trust_level": {
+   "no_concerns": 7812,
+   "minor": 1426,
+   "caution": 709,
+   "exclude_review": 12
+  },
+  "records_with_display_phone": 9548,
+  "records_official_phone_directory_before_display": 292,
+  "emails_before_after": [
+   8512,
+   8136
+  ],
+  "email_issue": {
+   "email_placeholder": 360,
+   "email_malformed": 16
+  },
+  "phones_directory_vs_chain_helpline": [
+   84,
+   56
+  ],
+  "website_class": {
+   "own": 7902,
+   "NaN": 1602,
+   "directory": 288,
+   "government": 92,
+   "social": 75
+  }
+ },
+ "ground_truth": {
+  "before_flag": {
+   "verdict_pairs": 29,
+   "no_and_flagged(caught)": 3,
+   "no_and_trusted(missed)": 1,
+   "yes_and_trusted": 23,
+   "yes_and_flagged(false_alarm)": 2
+  },
+  "after_flag": {
+   "verdict_pairs": 29,
+   "no_and_flagged(caught)": 4,
+   "no_and_trusted(missed)": 0,
+   "yes_and_trusted": 23,
+   "yes_and_flagged(false_alarm)": 2
+  },
+  "location_verdicts": {
+   "yes": 25,
+   "unclear": 7,
+   "no": 4
+  },
+  "unclear_pairs_after_conf": {
+   "high": 5,
+   "low": 1,
+   "disputed": 1
+  },
+  "yes_pairs_where_point_moved_gt5km": [
+   [
+    "mri_suspect_2",
+    "postcode_centre",
+    165.0
+   ]
+  ],
+  "true_town_distance_raw_vs_chosen": [
+   [
+    "emergency_csection_suspect_1",
+    "Kaithal",
+    50.5,
+    50.5,
+    "disputed"
+   ],
+   [
+    "nicu_suspect_2",
+    "Punalur",
+    54.1,
+    0.0,
+    "disputed"
+   ],
+   [
+    "trauma_emergency_suspect_1",
+    "Firozabad",
+    467.3,
+    0.0,
+    "disputed"
+   ],
+   [
+    "trauma_emergency_suspect_2",
+    "Satna",
+    0.9,
+    0.9,
+    "low"
+   ]
+  ],
+  "exists_vs_trust_level": {
+   "caution": {
+    "unclear": 2,
+    "yes": 3
+   },
+   "minor": {
+    "unclear": 1,
+    "yes": 6
+   },
+   "no_concerns": {
+    "unclear": 1,
+    "yes": 23
+   }
+  },
+  "service_contradicted_vs_trust_level": {
+   "caution": {
+    "confirmed": 2,
+    "contradicted": 1,
+    "no_info": 2
+   },
+   "minor": {
+    "confirmed": 2,
+    "contradicted": 3,
+    "no_info": 2
+   },
+   "no_concerns": {
+    "confirmed": 11,
+    "contradicted": 3,
+    "no_info": 10
+   }
+  },
+  "handcheck_location": {
+   "both_points_elsewhere": {
+    "no": 4,
+    "real_conflict": 0,
+    "unclear": 6,
+    "yes": 5
+   },
+   "city_confirms_coords": {
+    "no": 0,
+    "real_conflict": 0,
+    "unclear": 2,
+    "yes": 8
+   },
+   "city_confirms_pin": {
+    "no": 0,
+    "real_conflict": 0,
+    "unclear": 1,
+    "yes": 9
+   },
+   "city_points_elsewhere": {
+    "no": 0,
+    "real_conflict": 12,
+    "unclear": 0,
+    "yes": 0
+   }
+  }
+ }
+}

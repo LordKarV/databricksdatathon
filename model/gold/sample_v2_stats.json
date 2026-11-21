@@ -1,0 +1,299 @@
+{
+ "seed": 20261122,
+ "split_salt": "vf-gold-split-v1",
+ "wellformed_rows": 10036,
+ "eligible_facilities": 8659,
+ "excluded_ids": 321,
+ "pool_sizes": {
+  "dialysis_strong": 319,
+  "dialysis_weak": 42,
+  "dialysis_suspect": 119,
+  "dialysis_no_mention": 788,
+  "emergency_csection_strong": 63,
+  "emergency_csection_weak": 68,
+  "emergency_csection_suspect": 48,
+  "emergency_csection_no_mention": 1072,
+  "nicu_strong": 144,
+  "nicu_weak": 13,
+  "nicu_suspect": 79,
+  "nicu_no_mention": 958,
+  "cardiac_surgery_strong": 132,
+  "cardiac_surgery_weak": 35,
+  "cardiac_surgery_suspect": 66,
+  "cardiac_surgery_no_mention": 840,
+  "mri_strong": 38,
+  "mri_weak": 29,
+  "mri_suspect": 97,
+  "mri_no_mention": 901,
+  "burn_care_strong": 29,
+  "burn_care_weak": 14,
+  "burn_care_suspect": 31,
+  "burn_care_no_mention": 1099,
+  "trauma_emergency_strong": 621,
+  "trauma_emergency_weak": 103,
+  "trauma_emergency_suspect": 392,
+  "trauma_emergency_no_mention": 271
+ },
+ "pool_suspect_kinds": {
+  "dialysis": {
+   "named_other": 10,
+   "coord_far": 109,
+   "state_mismatch": 9
+  },
+  "emergency_csection": {
+   "coord_far": 44,
+   "named_other": 3,
+   "state_mismatch": 1
+  },
+  "nicu": {
+   "coord_far": 73,
+   "state_mismatch": 4,
+   "named_other": 5
+  },
+  "cardiac_surgery": {
+   "coord_far": 61,
+   "named_other": 5,
+   "state_mismatch": 4
+  },
+  "mri": {
+   "coord_far": 93,
+   "state_mismatch": 3,
+   "named_other": 3
+  },
+  "burn_care": {
+   "coord_far": 31,
+   "named_other": 1,
+   "state_mismatch": 1
+  },
+  "trauma_emergency": {
+   "coord_far": 363,
+   "state_mismatch": 18,
+   "named_other": 21
+  }
+ },
+ "picked_slot_fill": {
+  "dialysis_suspect_named_other": true,
+  "dialysis_suspect_coord_far": true,
+  "dialysis_suspect_state_mismatch": true,
+  "dialysis_no_mention_public": true,
+  "dialysis_no_mention_large": true,
+  "emergency_csection_suspect_named_other": true,
+  "emergency_csection_suspect_coord_far": true,
+  "emergency_csection_suspect_state_mismatch": true,
+  "emergency_csection_no_mention_public": true,
+  "emergency_csection_no_mention_large": true,
+  "nicu_suspect_named_other": true,
+  "nicu_suspect_coord_far": true,
+  "nicu_suspect_state_mismatch": true,
+  "nicu_no_mention_public": true,
+  "nicu_no_mention_large": true,
+  "cardiac_surgery_suspect_named_other": true,
+  "cardiac_surgery_suspect_coord_far": true,
+  "cardiac_surgery_suspect_state_mismatch": true,
+  "cardiac_surgery_no_mention_public": true,
+  "cardiac_surgery_no_mention_large": true,
+  "mri_suspect_named_other": true,
+  "mri_suspect_coord_far": true,
+  "mri_suspect_state_mismatch": true,
+  "mri_no_mention_public": true,
+  "mri_no_mention_large": true,
+  "burn_care_suspect_named_other": false,
+  "burn_care_suspect_coord_far": true,
+  "burn_care_suspect_state_mismatch": true,
+  "burn_care_no_mention_public": true,
+  "burn_care_no_mention_large": true,
+  "trauma_emergency_suspect_named_other": true,
+  "trauma_emergency_suspect_coord_far": true,
+  "trauma_emergency_suspect_state_mismatch": true,
+  "trauma_emergency_no_mention_public": true,
+  "trauma_emergency_no_mention_large": true
+ },
+ "states": 31,
+ "state_counts": {
+  "UTTAR PRADESH": 7,
+  "BIHAR": 7,
+  "RAJASTHAN": 7,
+  "ASSAM": 6,
+  "MADHYA PRADESH": 6,
+  "JHARKHAND": 6,
+  "ODISHA": 6,
+  "HIMACHAL PRADESH": 5,
+  "ANDHRA PRADESH": 5,
+  "HARYANA": 5,
+  "MAHARASHTRA": 5,
+  "GUJARAT": 5,
+  "TAMIL NADU": 5,
+  "DELHI": 5,
+  "KERALA": 5,
+  "KARNATAKA": 5,
+  "MEGHALAYA": 4,
+  "WEST BENGAL": 4,
+  "JAMMU AND KASHMIR": 4,
+  "CHANDIGARH": 4,
+  "PUNJAB": 4,
+  "GOA": 4,
+  "CHHATTISGARH": 4,
+  "MANIPUR": 4,
+  "TELANGANA": 4,
+  "UTTARAKHAND": 4,
+  "NAGALAND": 3,
+  "ARUNACHAL PRADESH": 3,
+  "MIZORAM": 2,
+  "SIKKIM": 1,
+  "TRIPURA": 1
+ },
+ "focus_state_pairs": {
+  "ASSAM": 6,
+  "BIHAR": 7,
+  "JHARKHAND": 6,
+  "MADHYA PRADESH": 6,
+  "ODISHA": 6,
+  "RAJASTHAN": 7,
+  "UTTAR PRADESH": 7
+ },
+ "rural_pin_pairs": 62,
+ "overlap_by_stratum": {
+  "strong": 7,
+  "weak": 7,
+  "suspect": 8,
+  "no_mention": 8
+ },
+ "overlap_by_service": {
+  "dialysis": 5,
+  "emergency_csection": 4,
+  "nicu": 5,
+  "cardiac_surgery": 4,
+  "mri": 4,
+  "burn_care": 4,
+  "trauma_emergency": 4
+ },
+ "split_totals": {
+  "test": 88,
+  "dev": 88
+ },
+ "split_by_version": {
+  "v1": {
+   "test": 17,
+   "dev": 19
+  },
+  "v2": {
+   "dev": 69,
+   "test": 71
+  }
+ },
+ "split_by_cell": {
+  "burn_care_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "burn_care_strong": {
+   "dev": 3,
+   "test": 2
+  },
+  "burn_care_suspect": {
+   "dev": 3,
+   "test": 2
+  },
+  "burn_care_weak": {
+   "dev": 2,
+   "test": 3
+  },
+  "cardiac_surgery_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "cardiac_surgery_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "cardiac_surgery_suspect": {
+   "dev": 4,
+   "test": 3
+  },
+  "cardiac_surgery_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "dialysis_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "dialysis_strong": {
+   "test": 4,
+   "dev": 3
+  },
+  "dialysis_suspect": {
+   "test": 3,
+   "dev": 4
+  },
+  "dialysis_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "emergency_csection_no_mention": {
+   "test": 2,
+   "dev": 3
+  },
+  "emergency_csection_strong": {
+   "dev": 4,
+   "test": 3
+  },
+  "emergency_csection_suspect": {
+   "test": 4,
+   "dev": 3
+  },
+  "emergency_csection_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "mri_no_mention": {
+   "test": 2,
+   "dev": 3
+  },
+  "mri_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "mri_suspect": {
+   "test": 4,
+   "dev": 3
+  },
+  "mri_weak": {
+   "dev": 3,
+   "test": 4
+  },
+  "nicu_no_mention": {
+   "dev": 3,
+   "test": 2
+  },
+  "nicu_strong": {
+   "test": 3,
+   "dev": 4
+  },
+  "nicu_suspect": {
+   "dev": 3,
+   "test": 4
+  },
+  "nicu_weak": {
+   "dev": 3,
+   "test": 4
+  },
+  "trauma_emergency_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "trauma_emergency_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "trauma_emergency_suspect": {
+   "dev": 4,
+   "test": 3
+  },
+  "trauma_emergency_weak": {
+   "dev": 4,
+   "test": 3
+  }
+ },
+ "multi_pair_groups": 0
+}

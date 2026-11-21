@@ -1,0 +1,105 @@
+{
+ "leaflet": {
+  "leaflet.js": {
+   "wire_bytes": 42605,
+   "bytes": 147552,
+   "encoding": "gzip",
+   "cache_control": "no-transform, public, s-maxage=30672000, max-age=30672000, immutable",
+   "ms": 72
+  },
+  "leaflet.css": {
+   "wire_bytes": 3526,
+   "bytes": 14806,
+   "encoding": "gzip",
+   "cache_control": "no-transform, public, s-maxage=30672000, max-age=30672000, immutable",
+   "ms": 76
+  }
+ },
+ "tiles": [
+  {
+   "z": 12,
+   "x": 3025,
+   "y": 1734,
+   "wire_bytes": 24114,
+   "bytes": 24114,
+   "encoding": null,
+   "cache_control": "max-age=90206, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 139
+  },
+  {
+   "z": 12,
+   "x": 3025,
+   "y": 1735,
+   "wire_bytes": 23448,
+   "bytes": 23448,
+   "encoding": null,
+   "cache_control": "max-age=86452, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 67
+  },
+  {
+   "z": 12,
+   "x": 3025,
+   "y": 1736,
+   "wire_bytes": 21369,
+   "bytes": 21369,
+   "encoding": null,
+   "cache_control": "max-age=91767, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 185
+  },
+  {
+   "z": 12,
+   "x": 3025,
+   "y": 1737,
+   "wire_bytes": 21868,
+   "bytes": 21868,
+   "encoding": null,
+   "cache_control": "max-age=88877, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 240
+  },
+  {
+   "z": 12,
+   "x": 3026,
+   "y": 1734,
+   "wire_bytes": 21200,
+   "bytes": 21200,
+   "encoding": null,
+   "cache_control": "max-age=94673, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 89
+  },
+  {
+   "z": 12,
+   "x": 3026,
+   "y": 1735,
+   "wire_bytes": 17568,
+   "bytes": 17568,
+   "encoding": null,
+   "cache_control": "max-age=93988, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 68
+  },
+  {
+   "z": 12,
+   "x": 3026,
+   "y": 1736,
+   "wire_bytes": 21313,
+   "bytes": 21313,
+   "encoding": null,
+   "cache_control": "max-age=92930, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 151
+  },
+  {
+   "z": 12,
+   "x": 3026,
+   "y": 1737,
+   "wire_bytes": 22682,
+   "bytes": 22682,
+   "encoding": null,
+   "cache_control": "max-age=96246, stale-while-revalidate=604800, stale-if-error=604800",
+   "ms": 166
+  }
+ ],
+ "n_tiles": 8,
+ "tile_bytes_total": 173562,
+ "tile_bytes_mean": 21695,
+ "leaflet_wire_bytes": 46131,
+ "first_map_view_bytes": 219693
+}

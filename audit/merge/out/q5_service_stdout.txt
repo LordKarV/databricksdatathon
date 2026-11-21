@@ -1,0 +1,23 @@
+        service  records_matching  records_with_quarantined_match  records_matching_ONLY_via_quarantined  sentences_matching  sentences_quarantined
+       dialysis              1046                              17                                      6                3016                     28
+      c_section               440                               5                                      3                 688                      5
+           nicu               701                               6                                      3                1452                      9
+cardiac_surgery               660                              12                                      8                1620                     14
+            mri               942                               8                                      1                3075                     15
+           burn                87                               1                                      1                 163                      1
+         trauma              1431                              25                                     11                3433                     28
+      emergency              3433                              21                                      4                8653                     24
+            icu              2041                              18                                      4                4673                     23
+
+self-anchored sentences (name the record's own facility): 33581 of 469498
+records with merge evidence (>=1 quarantined or tagged sentence): 3739 of 9959
+        service  records  tier_A_self_anchored  tier_B_clean_record  tier_C_merged_record  tier_Q_only_quarantined
+       dialysis     1046                    80                  479                   481                        6
+      c_section      440                    19                  235                   183                        3
+           nicu      701                    32                  329                   337                        3
+cardiac_surgery      660                    70                  267                   315                        8
+            mri      942                    44                  415                   482                        1
+           burn       87                     4                   36                    46                        1
+         trauma     1431                   148                  663                   609                       11
+      emergency     3433                   249                 1737                  1443                        4
+            icu     2041                   124                  999                   914                        4

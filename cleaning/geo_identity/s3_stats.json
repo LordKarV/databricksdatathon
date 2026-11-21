@@ -1,0 +1,22 @@
+{
+ "tests": 54,
+ "passed": 54,
+ "status_counts": {
+  "ok": 41,
+  "ask_state": 7,
+  "not_found": 3,
+  "confirm": 2,
+  "did_you_mean": 1
+ },
+ "failed": [],
+ "gazetteer_rows_by_kind": {
+  "office": 146047,
+  "district": 761,
+  "city": 537
+ },
+ "city_layer_spread_p90_quantiles_50_90_99": [
+  2.4,
+  11.2,
+  21.4
+ ]
+}

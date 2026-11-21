@@ -1,0 +1,52 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "lang": "mr",
+ "placeholders": true,
+ "ms": 2443,
+ "source": "Best option for dialysis: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. It is 7.4 km away, about 22 minutes by road. Chance you will be treated when you arrive: 0.81 (likely range 0.70 to 0.89). Why: the hospital's own text says \"Has 17 dialysis machines currently\" and \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". Caution: \"Plans to increase dialysis capacity to 27 units\" is a future plan, so we did not count it. For 3 sessions a week, travel adds about 132 minutes per week. Backup: if they cannot take you, option 2 is 12.9 km away with a 0.64 chance.",
+ "sent": "Best option for dialysis: [[P1]]. It is [[P10]] km away, about [[P11]] minutes by road. Chance you will be treated when you arrive: [[P4]] (likely range [[P7]] to [[P5]]). Why: the hospital's own text says \"[[P3]]\" and \"[[P0]]\". Caution: \"[[P2]]\" is a future plan, so we did not count it. For [[P15]] sessions a week, travel adds about [[P9]] minutes per week. Backup: if they cannot take you, option [[P14]] is [[P6]] km away with a [[P8]] chance.",
+ "raw": "डायलिसिससाठी सर्वोत्तम पर्याय: [[P1]]. ते [[P10]] किलोमीटर दूर आहे, रस्त्याने जायला साधारणपणे [[P11]] मिनिटे लागतील. तुम्ही तिथे पोहोचल्यावर उपचार मिळण्याची शक्यता: [[P4]] (अंदाजे [[P7]] ते [[P5]]). कारण: हॉस्पिटलने स्वतःच्या माहितीमध्ये सांगितले आहे \"[[P3]]\" आणि \"[[P0]]\". कृपया लक्षात घ्या: \"[[P2]]\" भविष्यात सुरू करण्याची योजना आहे, त्यामुळे आम्ही ते विचारात घेतले नाही. [[P15]] सत्रांसाठी आठवड्यातून, प्रवासासाठी साधारणपणे [[P9]] मिनिटे जास्त लागतील. पर्यायी व्यवस्था: जर ते तुम्हाला घेऊ शकत नसेल, तर पर्याय [[P14]] [[P6]] किलोमीटर दूर आहे आणि त्याची शक्यता [[P8]] आहे.",
+ "final": "डायलिसिससाठी सर्वोत्तम पर्याय: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. ते 7.4 किलोमीटर दूर आहे, रस्त्याने जायला साधारणपणे 22 मिनिटे लागतील. तुम्ही तिथे पोहोचल्यावर उपचार मिळण्याची शक्यता: 0.81 (अंदाजे 0.70 ते 0.89). कारण: हॉस्पिटलने स्वतःच्या माहितीमध्ये सांगितले आहे \"Has 17 dialysis machines currently\" आणि \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". कृपया लक्षात घ्या: \"Plans to increase dialysis capacity to 27 units\" भविष्यात सुरू करण्याची योजना आहे, त्यामुळे आम्ही ते विचारात घेतले नाही. 3 सत्रांसाठी आठवड्यातून, प्रवासासाठी साधारणपणे 132 मिनिटे जास्त लागतील. पर्यायी व्यवस्था: जर ते तुम्हाला घेऊ शकत नसेल, तर पर्याय 2 12.9 किलोमीटर दूर आहे आणि त्याची शक्यता 0.64 आहे.",
+ "unrestored_tokens": [],
+ "check": {
+  "spans_verbatim": {
+   "NKP Salve Institute of Medical Sciences and Research Centre, Nagpur": true,
+   "Has 17 dialysis machines currently": true,
+   "Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana": true,
+   "Plans to increase dialysis capacity to 27 units": true
+  },
+  "all_spans_ok": true,
+  "numbers_expected": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_strict": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_ok_strict": true,
+  "numbers_ok_normalised": true,
+  "missing_numbers": [],
+  "extra_numbers": []
+ }
+}

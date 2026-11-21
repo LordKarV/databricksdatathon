@@ -1,0 +1,106 @@
+{
+  "proxy_env": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "NO_PROXY": false,
+    "http_proxy": false,
+    "https_proxy": false
+  },
+  "targets": {
+    "google": {
+      "host": "www.google.com",
+      "dns": [
+        "142.251.150.119",
+        "142.251.151.119"
+      ],
+      "status": 204,
+      "bytes": 0,
+      "ms": 66
+    },
+    "github_api": {
+      "host": "api.github.com",
+      "dns": [
+        "140.82.114.5"
+      ],
+      "status": 200,
+      "bytes": 39,
+      "ms": 118
+    },
+    "pypi": {
+      "host": "pypi.org",
+      "dns": [
+        "151.101.0.223",
+        "151.101.128.223"
+      ],
+      "status": 200,
+      "bytes": 65536,
+      "ms": 15
+    },
+    "huggingface": {
+      "host": "huggingface.co",
+      "dns": [
+        "18.155.75.29",
+        "18.155.75.74"
+      ],
+      "status": 200,
+      "bytes": 465,
+      "ms": 30
+    },
+    "osrm_routing": {
+      "host": "router.project-osrm.org",
+      "dns": [
+        "2a02:418:39aa:8::7",
+        "5.148.170.168"
+      ],
+      "status": 200,
+      "bytes": 589,
+      "ms": 352
+    },
+    "nominatim_geocode": {
+      "host": "nominatim.openstreetmap.org",
+      "dns": [
+        "146.75.77.91",
+        "2a04:4e42:83::347"
+      ],
+      "status": 200,
+      "bytes": 623,
+      "ms": 35
+    },
+    "osm_tiles": {
+      "host": "tile.openstreetmap.org",
+      "dns": [
+        "146.75.77.91",
+        "2a04:4e42:83::347"
+      ],
+      "status": 200,
+      "bytes": 6800,
+      "ms": 33
+    },
+    "wikipedia": {
+      "host": "en.wikipedia.org",
+      "dns": [
+        "208.80.154.224",
+        "2620:0:861:ed1a::1"
+      ],
+      "status": 200,
+      "bytes": 3278,
+      "ms": 45
+    },
+    "data_gov_in": {
+      "host": "data.gov.in",
+      "dns": [
+        "164.100.61.218"
+      ],
+      "error": "URLError: <urlopen error [Errno 113] No route to host>",
+      "ms": 260
+    },
+    "pmjay_hospitals": {
+      "host": "hospitals.pmjay.gov.in",
+      "dns": [
+        "14.143.193.104"
+      ],
+      "error": "URLError: <urlopen error timed out>",
+      "ms": 10007
+    }
+  }
+}

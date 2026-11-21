@@ -1,0 +1,337 @@
+{
+ "model_hash": "de82eeee9ea0d0f6-fallback",
+ "labels_sha256": "f3afb0cb2b4ec298204ffc031e1569954ff95d092bd95cc01ea9ef77e6cb973d",
+ "created_at": "2026-11-21T13:53:18",
+ "service": {
+  "weighting": "uniform",
+  "prior": "M1@1",
+  "constant_rate_logloss_in_sample": 0.6619439760154051,
+  "candidates": {
+   "ipw|M0@1": {
+    "oof_logloss": 0.8585540187886069
+   },
+   "ipw|M1@1": {
+    "oof_logloss": 0.8556759954522899
+   },
+   "ipw|M1@0.5": {
+    "oof_logloss": 0.8101405557847646
+   },
+   "ipw|M1@0.25": {
+    "oof_logloss": 0.7543128095991225
+   },
+   "ipw|M2@1": {
+    "oof_logloss": 0.9504599293466828
+   },
+   "ipw|M2@0.5": {
+    "oof_logloss": 1.0071978465877263
+   },
+   "ipw|M2@0.25": {
+    "oof_logloss": 1.0621987591600786
+   },
+   "uniform|M0@1": {
+    "oof_logloss": 0.8166842265951413
+   },
+   "uniform|M1@1": {
+    "oof_logloss": 0.6936397905563723
+   },
+   "uniform|M1@0.5": {
+    "oof_logloss": 0.6747834433644371
+   },
+   "uniform|M1@0.25": {
+    "oof_logloss": 0.6728346254442008
+   },
+   "uniform|M2@1": {
+    "oof_logloss": 0.7255682019830884
+   },
+   "uniform|M2@0.5": {
+    "oof_logloss": 0.7720739410684109
+   },
+   "uniform|M2@0.25": {
+    "oof_logloss": 0.8681885007719189
+   }
+  },
+  "paired_vs_M0": {
+   "M0@1": {
+    "oof_logloss": 0.8166842265951413,
+    "diff_vs_best_M0": 0.0,
+    "se_diff": 0.0,
+    "eligible": true
+   },
+   "M1@1": {
+    "oof_logloss": 0.6936397905563723,
+    "diff_vs_best_M0": -0.1230444360387691,
+    "se_diff": 0.10680052569734766,
+    "eligible": true
+   },
+   "M1@0.5": {
+    "oof_logloss": 0.6747834433644371,
+    "diff_vs_best_M0": -0.1419007832307041,
+    "se_diff": 0.15222469060441224,
+    "eligible": false
+   },
+   "M1@0.25": {
+    "oof_logloss": 0.6728346254442008,
+    "diff_vs_best_M0": -0.14384960115094056,
+    "se_diff": 0.17275987323876374,
+    "eligible": false
+   },
+   "M2@1": {
+    "oof_logloss": 0.7255682019830884,
+    "diff_vs_best_M0": -0.09111602461205297,
+    "se_diff": 0.21336142507832526,
+    "eligible": false
+   },
+   "M2@0.5": {
+    "oof_logloss": 0.7720739410684109,
+    "diff_vs_best_M0": -0.04461028552673044,
+    "se_diff": 0.2595852488109482,
+    "eligible": false
+   },
+   "M2@0.25": {
+    "oof_logloss": 0.8681885007719189,
+    "diff_vs_best_M0": 0.05150427417677758,
+    "se_diff": 0.31596635619540187,
+    "eligible": false
+   }
+  },
+  "rule": "eligible = M0 or a candidate beating M0 by >= 1 paired SE of OOF IPW log loss; lowest-loss eligible ships; weighting (ipw vs uniform) chosen by M0's OOF loss; kappa scales informative prior sds",
+  "n_train": 76,
+  "n_pos": 28,
+  "ess": 21.97853332864121,
+  "folds": 5,
+  "draw_acceptance": 0.014428571428571428,
+  "active_constraints": [
+   [
+    "t3"
+   ],
+   [
+    "t2",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@emergency_csection"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@emergency_csection"
+   ],
+   [
+    "t2",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@cardiac_surgery"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@cardiac_surgery"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@mri"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@mri"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@burn_care"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@burn_care"
+   ],
+   [
+    "t2",
+    "t2@trauma_emergency"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@trauma_emergency"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@trauma_emergency"
+   ],
+   [
+    "c2"
+   ],
+   [
+    "t4",
+    "t4@dialysis"
+   ],
+   [
+    "t4",
+    "t4@emergency_csection"
+   ],
+   [
+    "t4",
+    "t4@mri"
+   ],
+   [
+    "t4",
+    "t4@burn_care"
+   ]
+  ]
+ },
+ "location": {
+  "prior": "M0",
+  "fitted": true,
+  "n_train": 121,
+  "n_pos": 101,
+  "selection": {
+   "M0": {
+    "oof_logloss": 0.3540949373840954
+   },
+   "M1": {
+    "oof_logloss": 0.34514240515867395
+   },
+   "diff_M1_minus_M0": -0.00895253222542141,
+   "se": 0.022121825569396594
+  },
+  "sources": {
+   "gold_dev": 65,
+   "geo_hand_check": 30,
+   "cleaning_hand_check": 26
+  },
+  "draw_acceptance": 0.4145
+ },
+ "existence": {
+  "prior": "M1",
+  "fitted": false,
+  "n_train": 76,
+  "n_neg": 5,
+  "note": "fewer than 15 negatives: existence weights are expert settings, not learned"
+ },
+ "thresholds": {
+  "t_L": 0.7,
+  "t_U": 0.2,
+  "n_eligible_T2_PL_PE": 46,
+  "tl_estimated": null,
+  "tu_estimated": null,
+  "fallback_used": {
+   "t_L": true,
+   "t_U": true
+  }
+ },
+ "variants": {
+  "B4_prior_only": {
+   "active_constraints": 7
+  },
+  "M0": {
+   "prior": "M0@1",
+   "oof_logloss": 0.8166842265951413,
+   "platt": [
+    0.20466343054789826,
+    -0.39265654967196784
+   ]
+  },
+  "M1": {
+   "prior": "M1@1",
+   "oof_logloss": 0.6936397905563723,
+   "platt": [
+    0.379885730618284,
+    -0.25459560333074516
+   ]
+  },
+  "M2": {
+   "prior": "M2@1",
+   "oof_logloss": 0.7255682019830884,
+   "platt": [
+    0.37676489180174566,
+    0.057635380550598525
+   ]
+  },
+  "M1_k1": {
+   "prior": "M1@1",
+   "oof_logloss": 0.6936397905563723,
+   "platt": [
+    0.379885730618284,
+    -0.25459560333074516
+   ]
+  },
+  "M2_k1": {
+   "prior": "M2@1",
+   "oof_logloss": 0.7255682019830884,
+   "platt": [
+    0.37676489180174566,
+    0.057635380550598525
+   ]
+  },
+  "abl_noown": {
+   "oof_logloss": 0.6629554572674566
+  },
+  "abl_noecho": {
+   "oof_logloss": 0.678958898139137
+  },
+  "abl_nobucket": {
+   "oof_logloss": 0.6881898205905951
+  },
+  "abl_nocontext": {
+   "oof_logloss": 0.6718937605415533
+  }
+ },
+ "kappa_dev_overlap": {
+  "service": {
+   "n": 13,
+   "agreement": 0.615,
+   "kappa": 0.293
+  },
+  "exists": {
+   "n": 13,
+   "agreement": 0.769,
+   "kappa": 0.494
+  },
+  "location": {
+   "n": 13,
+   "agreement": 0.615,
+   "kappa": 0.398
+  }
+ },
+ "dev_label_status": {
+  "checked": 78,
+  "unchecked": 27
+ },
+ "dropped_dev_rows_in_test_leakage_groups": [
+  "trauma_emergency_strong_1",
+  "v2_burn_care_weak_5"
+ ],
+ "band_counts_all_pairs": {
+  "Unlikely": 37108,
+  "Unverified": 32603,
+  "Likely": 2
+ }
+}

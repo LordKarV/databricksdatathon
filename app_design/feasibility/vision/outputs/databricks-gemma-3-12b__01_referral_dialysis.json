@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "01_referral_dialysis.png",
+ "bytes": 69298,
+ "status": 200,
+ "latency_s": 2.87,
+ "response": {
+  "id": "chatcmpl_a48702a8-ef81-4703-9000-4597ab750355_ad237466-1c7a-40f6-bed7-d94850ce608b",
+  "object": "chat.completion",
+  "created": 1795284598,
+  "model": "gemma-3-12b-it-060225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\n  \"detected_text\": \"PHC Example Block OPD slip no. 0000\\nPt: Test Patient, 52 M\\nclo swelling feet, breathlessness, low urine\\nCKD stage 5. Creatinine 9.2 mg/dl\\nRefer to higher centre for dialysis.\\nDr. (sign)\",\n  \"language\": \"English\",\n  \"document_type\": \"referral\",\n  \"suggested_service\": \"dialysis\",\n  \"urgency\": \"urgent\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"Refer to higher centre for dialysis.\",\n  \"red_flags\": []\n}\n```"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 820,
+   "completion_tokens": 158,
+   "total_tokens": 978,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "```json\n{\n  \"detected_text\": \"PHC Example Block OPD slip no. 0000\\nPt: Test Patient, 52 M\\nclo swelling feet, breathlessness, low urine\\nCKD stage 5. Creatinine 9.2 mg/dl\\nRefer to higher centre for dialysis.\\nDr. (sign)\",\n  \"language\": \"English\",\n  \"document_type\": \"referral\",\n  \"suggested_service\": \"dialysis\",\n  \"urgency\": \"urgent\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"Refer to higher centre for dialysis.\",\n  \"red_flags\": []\n}\n```",
+ "parsed": {
+  "detected_text": "PHC Example Block OPD slip no. 0000\nPt: Test Patient, 52 M\nclo swelling feet, breathlessness, low urine\nCKD stage 5. Creatinine 9.2 mg/dl\nRefer to higher centre for dialysis.\nDr. (sign)",
+  "language": "English",
+  "document_type": "referral",
+  "suggested_service": "dialysis",
+  "urgency": "urgent",
+  "confidence": 0.95,
+  "trigger_phrase": "Refer to higher centre for dialysis.",
+  "red_flags": []
+ },
+ "parse_mode": "after_stripping",
+ "usage": {
+  "prompt_tokens": 820,
+  "completion_tokens": 158,
+  "total_tokens": 978,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

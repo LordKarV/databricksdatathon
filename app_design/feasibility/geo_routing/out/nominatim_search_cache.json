@@ -1,0 +1,172 @@
+{
+ "Muhra": {
+  "ms": 366,
+  "body": [
+   {
+    "place_id": 242723419,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "relation",
+    "osm_id": 10277592,
+    "lat": "24.9002846",
+    "lon": "85.2920998",
+    "category": "boundary",
+    "type": "administrative",
+    "place_rank": 12,
+    "importance": 0.4482706218576648,
+    "addresstype": "county",
+    "name": "Muhra",
+    "display_name": "Muhra, Gaya, Bihar, India",
+    "address": {
+     "county": "Muhra",
+     "state_district": "Gaya",
+     "state": "Bihar",
+     "ISO3166-2-lvl4": "IN-BR",
+     "country": "India",
+     "country_code": "in"
+    },
+    "boundingbox": [
+     "24.8271537",
+     "24.9734038",
+     "85.1939964",
+     "85.3900427"
+    ]
+   },
+   {
+    "place_id": 246909410,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "relation",
+    "osm_id": 16607920,
+    "lat": "23.5446163",
+    "lon": "79.4596048",
+    "category": "boundary",
+    "type": "administrative",
+    "place_rank": 18,
+    "importance": 0.16004000076295108,
+    "addresstype": "city_district",
+    "name": "Muhra",
+    "display_name": "Muhra, Tendukheda Tahsil, Damoh, Madhya Pradesh, India",
+    "address": {
+     "city_district": "Muhra",
+     "county": "Tendukheda Tahsil",
+     "state_district": "Damoh",
+     "state": "Madhya Pradesh",
+     "ISO3166-2-lvl4": "IN-MP",
+     "country": "India",
+     "country_code": "in"
+    },
+    "boundingbox": [
+     "23.5299287",
+     "23.5592223",
+     "79.4410185",
+     "79.4872528"
+    ]
+   }
+  ]
+ },
+ "Muhra, Gaya": {
+  "ms": 319,
+  "body": [
+   {
+    "place_id": 240828903,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "relation",
+    "osm_id": 10277592,
+    "lat": "24.9002846",
+    "lon": "85.2920998",
+    "category": "boundary",
+    "type": "administrative",
+    "place_rank": 12,
+    "importance": 0.4482706218576648,
+    "addresstype": "county",
+    "name": "Muhra",
+    "display_name": "Muhra, Gaya, Bihar, India",
+    "address": {
+     "county": "Muhra",
+     "state_district": "Gaya",
+     "state": "Bihar",
+     "ISO3166-2-lvl4": "IN-BR",
+     "country": "India",
+     "country_code": "in"
+    },
+    "boundingbox": [
+     "24.8271537",
+     "24.9734038",
+     "85.1939964",
+     "85.3900427"
+    ]
+   }
+  ]
+ },
+ "Makepalli, Gadchiroli": {
+  "ms": 333,
+  "body": [
+   {
+    "place_id": 251007305,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 9919471761,
+    "lat": "19.8252030",
+    "lon": "80.0715887",
+    "category": "place",
+    "type": "village",
+    "place_rank": 19,
+    "importance": 0.14670416800183103,
+    "addresstype": "village",
+    "name": "Makepalli Chak No 1",
+    "display_name": "Makepalli Chak No 1, Chamorshi Taluka, Gadchiroli, Maharashtra, 442604, India",
+    "address": {
+     "village": "Makepalli Chak No 1",
+     "county": "Chamorshi Taluka",
+     "state_district": "Gadchiroli",
+     "state": "Maharashtra",
+     "ISO3166-2-lvl4": "IN-MH",
+     "postcode": "442604",
+     "country": "India",
+     "country_code": "in"
+    },
+    "boundingbox": [
+     "19.8052030",
+     "19.8452030",
+     "80.0515887",
+     "80.0915887"
+    ]
+   }
+  ]
+ },
+ "Ghat Sawali": {
+  "ms": 334,
+  "body": [
+   {
+    "place_id": 250519541,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 10084968700,
+    "lat": "18.9877408",
+    "lon": "75.9413302",
+    "category": "place",
+    "type": "village",
+    "place_rank": 19,
+    "importance": 0.1467103158617532,
+    "addresstype": "village",
+    "name": "Ghat Sawali",
+    "display_name": "Ghat Sawali, Beed, Beed District, Maharashtra, 431144, India",
+    "address": {
+     "village": "Ghat Sawali",
+     "county": "Beed",
+     "state_district": "Beed District",
+     "state": "Maharashtra",
+     "ISO3166-2-lvl4": "IN-MH",
+     "postcode": "431144",
+     "country": "India",
+     "country_code": "in"
+    },
+    "boundingbox": [
+     "18.9677408",
+     "19.0077408",
+     "75.9213302",
+     "75.9613302"
+    ]
+   }
+  ]
+ }
+}

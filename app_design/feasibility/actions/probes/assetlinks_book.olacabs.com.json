@@ -1,0 +1,25 @@
+[{
+    "relation": [
+        "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+        "namespace": "android_app",
+        "package_name": "com.olacabs.customer",
+        "sha256_cert_fingerprints": [
+            "79:E1:0F:4D:B6:F2:4A:77:71:E1:FD:E5:FF:51:20:0E:66:99:87:D9:6B:98:93:CD:24:5F:11:A7:4A:F9:37:29"
+        ]
+    }
+},
+{
+    "relation": [
+        "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+        "namespace": "android_app",
+        "package_name": "com.olacabs.customer.dev",
+        "sha256_cert_fingerprints": [
+            "8C:89:3F:7B:92:E4:D7:91:33:C8:21:C0:7F:C7:65:D2:C4:B0:02:4C:E1:0E:94:C1:CA:55:5C:4B:82:0C:2C:ED"
+        ]
+    }
+}
+]

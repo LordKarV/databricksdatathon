@@ -1,0 +1,93 @@
+{
+ "sw": {
+  "landed_after_login": "http://localhost:8765/",
+  "sw_controls_page": true,
+  "cached": [
+   "/",
+   "/picker.json",
+   "/pack_norm.json"
+  ],
+  "precache_requests_had_cookie": true,
+  "sw_script_fetch_header": [
+   "script"
+  ],
+  "session_online": "ok",
+  "offline_reload_title": "Referral finder",
+  "offline_banner": "Offline: using saved referral pack",
+  "session_offline": "offline",
+  "offline_gps_lookup": {
+   "pin": "842005",
+   "snapshot": "2026-11-21",
+   "rows": [
+    {
+     "name": "Phular Superspeciality Hospital, Road No-02, Juran Chappra, Muzaffarpur - 842001",
+     "phone": "+916212271151",
+     "conf": 0.43,
+     "quote": "Dialysis program is offered",
+     "cite": "2dccd2d1:capa:17"
+    },
+    {
+     "name": "Prasad Hospital",
+     "phone": "+919570996625",
+     "conf": 0.37,
+     "quote": "Provides dialysis treatment",
+     "cite": "d3725c9b:proc:9"
+    },
+    {
+     "name": "Ganpati Hospital",
+     "phone": "+918460838186",
+     "conf": 0.48,
+     "quote": "Dialysis Unit",
+     "cite": "6f4cc862:equi:6"
+    }
+   ]
+  },
+  "stopped_app_503_title": "Referral finder",
+  "session_expired_online": "expired",
+  "expired_online_navigation_ends_at": "http://localhost:8765/",
+  "update_without_session": "rejected: TypeError",
+  "sw_still_active_after_failed_update": true,
+  "new_register_without_session": "rejected: SecurityError: Failed to register a ServiceWorker for scope ('http://localhost:8765/') with script ('http://localhost:8765/sw.js?v=2'): The script resource is behind a redirect, which is disallowed.",
+  "manifest_cred": {
+   "cookie_sent": [
+    true
+   ],
+   "parsed_name": "Referral finder",
+   "errors": []
+  },
+  "manifest_nocred": {
+   "cookie_sent": [
+    false
+   ],
+   "parsed_name": null,
+   "errors": []
+  }
+ },
+ "indexeddb": {
+  "norm": {
+   "estimate_usage_delta_bytes": 673184,
+   "usage_details": {
+    "caches": 475904,
+    "indexedDB": 196189,
+    "serviceWorkerRegistrations": 1091
+   },
+   "leveldb_dir_bytes": 196189,
+   "dirs": [
+    "http_localhost_8765.indexeddb.blob",
+    "http_localhost_8765.indexeddb.leveldb"
+   ]
+  },
+  "denorm": {
+   "estimate_usage_delta_bytes": 3243304,
+   "usage_details": {
+    "caches": 475904,
+    "indexedDB": 2766309,
+    "serviceWorkerRegistrations": 1091
+   },
+   "leveldb_dir_bytes": 2766309,
+   "dirs": [
+    "http_localhost_8765.indexeddb.leveldb"
+   ]
+  }
+ }
+}

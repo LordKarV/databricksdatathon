@@ -1,0 +1,548 @@
+{
+ "facilities_geocoded": 9953,
+ "candidate_pairs": 6876,
+ "candidates_per_service": {
+  "dialysis": 986,
+  "emergency_csection": 429,
+  "nicu": 684,
+  "cardiac_surgery": 576,
+  "mri": 913,
+  "burn_care": 163,
+  "trauma_emergency": 3125
+ },
+ "bihar_pin": {
+  "keys": 882,
+  "distinct_facilities": 409,
+  "evidence_rows": 892,
+  "denorm": {
+   "raw_bytes": 4271535,
+   "gzip9_bytes": 416416
+  },
+  "norm": {
+   "raw_bytes": 303423,
+   "gzip9_bytes": 54003
+  }
+ },
+ "bihar_grid10km": {
+  "keys": 491,
+  "distinct_facilities": 385,
+  "evidence_rows": 858,
+  "denorm": {
+   "raw_bytes": 2378850,
+   "gzip9_bytes": 280957
+  },
+  "norm": {
+   "raw_bytes": 222797,
+   "gzip9_bytes": 47390
+  }
+ },
+ "bihar_pin_picker": {
+  "pins": 882,
+  "post_offices": 9058,
+  "raw_bytes": 167694,
+  "gzip9_bytes": 56472
+ },
+ "bihar_district_packs_norm_plus_picker": [
+  {
+   "district": "PATNA",
+   "pins": 68,
+   "raw_bytes": 74902,
+   "gzip9_bytes": 21092
+  },
+  {
+   "district": "DARBHANGA",
+   "pins": 39,
+   "raw_bytes": 55933,
+   "gzip9_bytes": 16487
+  },
+  {
+   "district": "GAYA",
+   "pins": 31,
+   "raw_bytes": 43948,
+   "gzip9_bytes": 12890
+  },
+  {
+   "district": "MUZAFFARPUR",
+   "pins": 39,
+   "raw_bytes": 44683,
+   "gzip9_bytes": 12814
+  },
+  {
+   "district": "SARAN",
+   "pins": 48,
+   "raw_bytes": 42078,
+   "gzip9_bytes": 11657
+  },
+  {
+   "district": "BANKA",
+   "pins": 14,
+   "raw_bytes": 36095,
+   "gzip9_bytes": 11240
+  },
+  {
+   "district": "AURANGABAD",
+   "pins": 25,
+   "raw_bytes": 37056,
+   "gzip9_bytes": 10979
+  },
+  {
+   "district": "NALANDA",
+   "pins": 22,
+   "raw_bytes": 37309,
+   "gzip9_bytes": 10967
+  },
+  {
+   "district": "KATIHAR",
+   "pins": 20,
+   "raw_bytes": 29931,
+   "gzip9_bytes": 9012
+  },
+  {
+   "district": "PURBI CHAMPARAN",
+   "pins": 41,
+   "raw_bytes": 32995,
+   "gzip9_bytes": 8962
+  },
+  {
+   "district": "SITAMARHI",
+   "pins": 23,
+   "raw_bytes": 30544,
+   "gzip9_bytes": 8812
+  },
+  {
+   "district": "BHAGALPUR",
+   "pins": 22,
+   "raw_bytes": 28522,
+   "gzip9_bytes": 8797
+  },
+  {
+   "district": "ARWAL",
+   "pins": 10,
+   "raw_bytes": 25238,
+   "gzip9_bytes": 7839
+  },
+  {
+   "district": "SUPAUL",
+   "pins": 21,
+   "raw_bytes": 25796,
+   "gzip9_bytes": 7738
+  },
+  {
+   "district": "MADHUBANI",
+   "pins": 39,
+   "raw_bytes": 28330,
+   "gzip9_bytes": 7662
+  },
+  {
+   "district": "ROHTAS",
+   "pins": 32,
+   "raw_bytes": 26410,
+   "gzip9_bytes": 7641
+  },
+  {
+   "district": "NAWADA",
+   "pins": 25,
+   "raw_bytes": 25932,
+   "gzip9_bytes": 7525
+  },
+  {
+   "district": "SIWAN",
+   "pins": 36,
+   "raw_bytes": 25996,
+   "gzip9_bytes": 7221
+  },
+  {
+   "district": "VAISHALI",
+   "pins": 31,
+   "raw_bytes": 24340,
+   "gzip9_bytes": 7007
+  },
+  {
+   "district": "ARARIA",
+   "pins": 12,
+   "raw_bytes": 21207,
+   "gzip9_bytes": 6729
+  },
+  {
+   "district": "JEHANABAD",
+   "pins": 11,
+   "raw_bytes": 20439,
+   "gzip9_bytes": 6361
+  },
+  {
+   "district": "PURNIA",
+   "pins": 18,
+   "raw_bytes": 19099,
+   "gzip9_bytes": 5933
+  },
+  {
+   "district": "GOPALGANJ",
+   "pins": 19,
+   "raw_bytes": 19230,
+   "gzip9_bytes": 5838
+  },
+  {
+   "district": "BHOJPUR",
+   "pins": 37,
+   "raw_bytes": 21836,
+   "gzip9_bytes": 5825
+  },
+  {
+   "district": "BUXAR",
+   "pins": 26,
+   "raw_bytes": 19692,
+   "gzip9_bytes": 5663
+  },
+  {
+   "district": "MUNGER",
+   "pins": 9,
+   "raw_bytes": 16174,
+   "gzip9_bytes": 5222
+  },
+  {
+   "district": "KISHANGANJ",
+   "pins": 7,
+   "raw_bytes": 15418,
+   "gzip9_bytes": 5159
+  },
+  {
+   "district": "PASHCHIM CHAMPARAN",
+   "pins": 19,
+   "raw_bytes": 17163,
+   "gzip9_bytes": 5133
+  },
+  {
+   "district": "KAIMUR (BHABUA)",
+   "pins": 9,
+   "raw_bytes": 15402,
+   "gzip9_bytes": 4973
+  },
+  {
+   "district": "BEGUSARAI",
+   "pins": 28,
+   "raw_bytes": 18022,
+   "gzip9_bytes": 4854
+  },
+  {
+   "district": "SAMASTIPUR",
+   "pins": 36,
+   "raw_bytes": 19160,
+   "gzip9_bytes": 4721
+  },
+  {
+   "district": "JAMUI",
+   "pins": 11,
+   "raw_bytes": 12642,
+   "gzip9_bytes": 4223
+  },
+  {
+   "district": "MADHEPURA",
+   "pins": 13,
+   "raw_bytes": 12788,
+   "gzip9_bytes": 4027
+  },
+  {
+   "district": "SAHARSA",
+   "pins": 13,
+   "raw_bytes": 12112,
+   "gzip9_bytes": 3746
+  },
+  {
+   "district": "KHAGARIA",
+   "pins": 13,
+   "raw_bytes": 11318,
+   "gzip9_bytes": 3521
+  },
+  {
+   "district": "SHEIKHPURA",
+   "pins": 6,
+   "raw_bytes": 10124,
+   "gzip9_bytes": 3455
+  },
+  {
+   "district": "LAKHISARAI",
+   "pins": 6,
+   "raw_bytes": 9373,
+   "gzip9_bytes": 3226
+  },
+  {
+   "district": "SHEOHAR",
+   "pins": 3,
+   "raw_bytes": 7373,
+   "gzip9_bytes": 2568
+  }
+ ],
+ "states_norm_plus_picker": [
+  {
+   "state": "UTTAR PRADESH",
+   "pins": 1664,
+   "distinct_facilities": 848,
+   "raw_bytes": 909630,
+   "gzip9_bytes": 228131
+  },
+  {
+   "state": "MAHARASHTRA",
+   "pins": 1599,
+   "distinct_facilities": 735,
+   "raw_bytes": 785807,
+   "gzip9_bytes": 189111
+  },
+  {
+   "state": "NA",
+   "pins": 275,
+   "distinct_facilities": 1789,
+   "raw_bytes": 650438,
+   "gzip9_bytes": 180347
+  },
+  {
+   "state": "TAMIL NADU",
+   "pins": 2048,
+   "distinct_facilities": 509,
+   "raw_bytes": 845537,
+   "gzip9_bytes": 177993
+  },
+  {
+   "state": "GUJARAT",
+   "pins": 1009,
+   "distinct_facilities": 613,
+   "raw_bytes": 531726,
+   "gzip9_bytes": 127937
+  },
+  {
+   "state": "RAJASTHAN",
+   "pins": 1017,
+   "distinct_facilities": 449,
+   "raw_bytes": 528300,
+   "gzip9_bytes": 126285
+  },
+  {
+   "state": "KARNATAKA",
+   "pins": 1357,
+   "distinct_facilities": 398,
+   "raw_bytes": 580418,
+   "gzip9_bytes": 125807
+  },
+  {
+   "state": "WEST BENGAL",
+   "pins": 1131,
+   "distinct_facilities": 324,
+   "raw_bytes": 504369,
+   "gzip9_bytes": 112378
+  },
+  {
+   "state": "ANDHRA PRADESH",
+   "pins": 1252,
+   "distinct_facilities": 329,
+   "raw_bytes": 537826,
+   "gzip9_bytes": 110700
+  },
+  {
+   "state": "BIHAR",
+   "pins": 882,
+   "distinct_facilities": 409,
+   "raw_bytes": 471136,
+   "gzip9_bytes": 110539
+  },
+  {
+   "state": "KERALA",
+   "pins": 1428,
+   "distinct_facilities": 376,
+   "raw_bytes": 528849,
+   "gzip9_bytes": 107141
+  },
+  {
+   "state": "MADHYA PRADESH",
+   "pins": 773,
+   "distinct_facilities": 326,
+   "raw_bytes": 408799,
+   "gzip9_bytes": 99174
+  },
+  {
+   "state": "TELANGANA",
+   "pins": 689,
+   "distinct_facilities": 381,
+   "raw_bytes": 373049,
+   "gzip9_bytes": 85356
+  },
+  {
+   "state": "ODISHA",
+   "pins": 942,
+   "distinct_facilities": 158,
+   "raw_bytes": 384380,
+   "gzip9_bytes": 79815
+  },
+  {
+   "state": "PUNJAB",
+   "pins": 531,
+   "distinct_facilities": 427,
+   "raw_bytes": 312367,
+   "gzip9_bytes": 75868
+  },
+  {
+   "state": "HARYANA",
+   "pins": 318,
+   "distinct_facilities": 411,
+   "raw_bytes": 229621,
+   "gzip9_bytes": 58809
+  },
+  {
+   "state": "JHARKHAND",
+   "pins": 388,
+   "distinct_facilities": 169,
+   "raw_bytes": 201164,
+   "gzip9_bytes": 49091
+  },
+  {
+   "state": "ASSAM",
+   "pins": 576,
+   "distinct_facilities": 115,
+   "raw_bytes": 228752,
+   "gzip9_bytes": 46913
+  },
+  {
+   "state": "CHHATTISGARH",
+   "pins": 279,
+   "distinct_facilities": 165,
+   "raw_bytes": 174141,
+   "gzip9_bytes": 44798
+  },
+  {
+   "state": "HIMACHAL PRADESH",
+   "pins": 437,
+   "distinct_facilities": 152,
+   "raw_bytes": 182139,
+   "gzip9_bytes": 38629
+  },
+  {
+   "state": "UTTARAKHAND",
+   "pins": 305,
+   "distinct_facilities": 158,
+   "raw_bytes": 158292,
+   "gzip9_bytes": 36844
+  },
+  {
+   "state": "DELHI",
+   "pins": 103,
+   "distinct_facilities": 224,
+   "raw_bytes": 100153,
+   "gzip9_bytes": 27859
+  },
+  {
+   "state": "JAMMU AND KASHMIR",
+   "pins": 213,
+   "distinct_facilities": 135,
+   "raw_bytes": 103014,
+   "gzip9_bytes": 24275
+  },
+  {
+   "state": "ARUNACHAL PRADESH",
+   "pins": 51,
+   "distinct_facilities": 33,
+   "raw_bytes": 35238,
+   "gzip9_bytes": 11336
+  },
+  {
+   "state": "MEGHALAYA",
+   "pins": 70,
+   "distinct_facilities": 53,
+   "raw_bytes": 41128,
+   "gzip9_bytes": 11255
+  },
+  {
+   "state": "PUDUCHERRY",
+   "pins": 33,
+   "distinct_facilities": 69,
+   "raw_bytes": 35345,
+   "gzip9_bytes": 10024
+  },
+  {
+   "state": "MANIPUR",
+   "pins": 55,
+   "distinct_facilities": 26,
+   "raw_bytes": 33923,
+   "gzip9_bytes": 9467
+  },
+  {
+   "state": "NAGALAND",
+   "pins": 46,
+   "distinct_facilities": 42,
+   "raw_bytes": 31194,
+   "gzip9_bytes": 8721
+  },
+  {
+   "state": "TRIPURA",
+   "pins": 79,
+   "distinct_facilities": 50,
+   "raw_bytes": 37340,
+   "gzip9_bytes": 8291
+  },
+  {
+   "state": "CHANDIGARH",
+   "pins": 23,
+   "distinct_facilities": 58,
+   "raw_bytes": 24591,
+   "gzip9_bytes": 7130
+  },
+  {
+   "state": "ANDAMAN AND NICOBAR ISLANDS",
+   "pins": 22,
+   "distinct_facilities": 44,
+   "raw_bytes": 21065,
+   "gzip9_bytes": 6334
+  },
+  {
+   "state": "MIZORAM",
+   "pins": 41,
+   "distinct_facilities": 23,
+   "raw_bytes": 22865,
+   "gzip9_bytes": 6132
+  },
+  {
+   "state": "LAKSHADWEEP",
+   "pins": 8,
+   "distinct_facilities": 40,
+   "raw_bytes": 16475,
+   "gzip9_bytes": 5345
+  },
+  {
+   "state": "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+   "pins": 10,
+   "distinct_facilities": 40,
+   "raw_bytes": 15955,
+   "gzip9_bytes": 5262
+  },
+  {
+   "state": "LADAKH",
+   "pins": 14,
+   "distinct_facilities": 33,
+   "raw_bytes": 15437,
+   "gzip9_bytes": 5035
+  },
+  {
+   "state": "GOA",
+   "pins": 89,
+   "distinct_facilities": 18,
+   "raw_bytes": 27450,
+   "gzip9_bytes": 5015
+  },
+  {
+   "state": "SIKKIM",
+   "pins": 19,
+   "distinct_facilities": 21,
+   "raw_bytes": 15344,
+   "gzip9_bytes": 4631
+  }
+ ],
+ "all_india_pin": {
+  "pins": 19776,
+  "distinct_facilities": 3824,
+  "norm_plus_picker": {
+   "raw_bytes": 8355713,
+   "gzip9_bytes": 1848858
+  },
+  "denorm_without_picker": {
+   "raw_bytes": 95374854,
+   "gzip9_bytes": 9344339
+  }
+ }
+}

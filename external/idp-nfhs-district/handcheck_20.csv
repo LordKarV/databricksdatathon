@@ -1,0 +1,21 @@
+state_ut,district_name_nfhs5,district_name_idp,state_code,district_code,how,score,values_compared,values_agree,value_confirmed
+Assam,Morigaon ,Marigaon,18,296,fuzzy,87.5,6,6,True
+Meghalaya,East Jantia Hills ,East Jaintia Hills,17,657,fuzzy,97.1,6,6,True
+Andhra Pradesh,Sri Potti Sriramulu Nello ,Sri Potti Sriramulu Nellore,28,515,fuzzy,96.2,6,6,True
+Jammu & Kashmir,Baramula ,Baramulla,01,003,fuzzy,94.1,6,6,True
+Jharkhand,Sahibganj ,Sahebganj,20,340,fuzzy,88.9,6,6,True
+Gujarat,Ahmadabad ,Ahmedabad,24,438,fuzzy,88.9,6,6,True
+Odisha,Jajapur ,Jajpur,21,356,fuzzy,92.3,6,6,True
+Jharkhand,Purbi Singhbhum ,East Singhbum,20,327,values,0.0,6,6,True
+Andhra Pradesh,Y.S.R. ,Y.S.R. Kadapa,28,504,values,0.0,6,6,True
+Odisha,Sundargarh ,Sundaragada,21,373,values,0.0,6,6,True
+Sikkim,West District ,Gyalshing,11,228,values,0.0,6,6,True
+Jharkhand,Pashchimi Singhbhum ,West Singhbhum,20,343,values,0.0,6,6,True
+Punjab,Firozpur ,Ferozepur,03,031,values,0.0,6,6,True
+Maharastra,Ahmadnagar ,Ahilyanagar,27,466,values,0.0,6,6,True
+Madhya Pradesh,Satna ,Satna,23,426,exact,100.0,6,6,True
+Tripura,Gomati ,Gomati,16,654,exact,100.0,6,6,True
+Puducherry,Puducherry ,Puducherry,34,600,exact,100.0,6,5,False
+Maharastra,Sindhudurg ,Sindhudurg,27,495,exact,100.0,6,6,True
+Jharkhand,Ramgarh ,Ramgarh,20,607,exact,100.0,6,6,True
+Assam,Majuli ,Majuli,18,706,exact,100.0,6,6,True

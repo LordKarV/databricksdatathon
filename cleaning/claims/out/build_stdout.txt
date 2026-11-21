@@ -1,0 +1,67 @@
+{
+ "claims_exploded": 469498,
+ "merge_sentence_rows": 469498,
+ "join_status": {
+  "both": 469498,
+  "left_only": 0,
+  "right_only": 0
+ },
+ "text_mismatch_on_join": 0,
+ "records": 9959,
+ "claims": 469498,
+ "claims_by_field": {
+  "capability": 231465,
+  "procedure": 163647,
+  "equipment": 55998,
+  "description": 18388
+ },
+ "exact_duplicate_claims_in_record": 27528,
+ "attribution": {
+  "unanchored": 423958,
+  "own_anchored": 30112,
+  "other_facility": 9506,
+  "ambiguous": 5922
+ },
+ "claims_with_service": 24447,
+ "service_claims_by_attribution": {
+  "unanchored": 23249,
+  "own_anchored": 955,
+  "other_facility": 136,
+  "ambiguous": 107
+ },
+ "service_claims_nonoffer": 57,
+ "kind_all": {
+  "specific": 422467,
+  "directory": 22717,
+  "list": 17525,
+  "staff": 5981,
+  "template": 421,
+  "research": 343,
+  "qualified": 44
+ },
+ "kind_service_claims": {
+  "specific": 21906,
+  "list": 2246,
+  "directory": 135,
+  "staff": 91,
+  "qualified": 44,
+  "research": 20,
+  "template": 5
+ },
+ "claims_with_quantity": 7580,
+ "quantity_units": {
+  "beds": 3939,
+  "doctors": 2013,
+  "tesla": 573,
+  "ct_slices": 451,
+  "procedures": 407,
+  "ots": 84,
+  "deliveries": 32,
+  "ventilators": 24,
+  "cath_labs": 20,
+  "machines": 20,
+  "sessions": 17
+ },
+ "specialty_rows_raw": 278994,
+ "specialty_rows_distinct": 117964
+}

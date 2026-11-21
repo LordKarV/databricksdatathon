@@ -1,0 +1,34 @@
+[   0.1s] dev pairs 105 checked 78 in test leakage groups 2
+[   0.1s]   service shipped ipw M0@1: OOF weighted log loss 0.8586
+[   0.1s]   service shipped ipw M1@1: OOF weighted log loss 0.8557
+[   0.1s]   service shipped ipw M1@0.5: OOF weighted log loss 0.8101
+[   0.1s]   service shipped ipw M1@0.25: OOF weighted log loss 0.7543
+[  95.8s]   service shipped ipw M2@1: OOF weighted log loss 0.9505
+[  95.9s]   service shipped ipw M2@0.5: OOF weighted log loss 1.0072
+[  95.9s]   service shipped ipw M2@0.25: OOF weighted log loss 1.0622
+[  95.9s]   service shipped uniform M0@1: OOF weighted log loss 0.8167
+[  95.9s]   service shipped uniform M1@1: OOF weighted log loss 0.6936
+[  95.9s]   service shipped uniform M1@0.5: OOF weighted log loss 0.6748
+[  95.9s]   service shipped uniform M1@0.25: OOF weighted log loss 0.6728
+[  95.9s]   service shipped uniform M2@1: OOF weighted log loss 0.7256
+[  95.9s]   service shipped uniform M2@0.5: OOF weighted log loss 0.7721
+[  95.9s]   service shipped uniform M2@0.25: OOF weighted log loss 0.8682
+[  95.9s] service head: uniform M1@1 platt {'use': True, 'a': 0.379885730618284, 'c': -0.25459560333074516, 'oof_logloss_identity': 0.6936397905563723, 'oof_logloss_platt_crossfit': 0.692507892231597, 'diff': -0.0011318983247751275, 'diff_se': 0.06744921510120049}
+[  95.9s] location head: 121 rows 101 pos M0 False {'M0': {'oof_logloss': 0.3540949373840954}, 'M1': {'oof_logloss': 0.34514240515867395}, 'diff_M1_minus_M0': -0.00895253222542141, 'se': 0.022121825569396594}
+[  95.9s] existence head: negatives 5 fitted False
+[ 114.9s] thresholds 0.7 0.2 {'n_eligible_T2_PL_PE': 46, 'tl_estimated': None, 'tu_estimated': None}
+[ 115.1s] wrote scores 69713 pairs, 478734 contribution rows; 9959 facilities
+[ 115.6s]   service shipped uniform M0@1: OOF weighted log loss 0.8167
+[ 115.6s]   service shipped uniform M1@1: OOF weighted log loss 0.6936
+[ 115.7s]   service shipped uniform M2@1: OOF weighted log loss 0.7256
+[ 115.7s]   service shipped uniform M1@1: OOF weighted log loss 0.6936
+[ 115.8s]   service shipped uniform M2@1: OOF weighted log loss 0.7256
+[ 115.8s]   service ('noown',) uniform M1@1: OOF weighted log loss 0.6630
+[ 115.8s] ablation noown {'oof_logloss': 0.6629554572674566}
+[ 115.8s]   service ('noecho',) uniform M1@1: OOF weighted log loss 0.6790
+[ 115.8s] ablation noecho {'oof_logloss': 0.678958898139137}
+[ 115.9s]   service ('nobucket',) uniform M1@1: OOF weighted log loss 0.6882
+[ 115.9s] ablation nobucket {'oof_logloss': 0.6881898205905951}
+[ 115.9s]   service ('nocontext',) uniform M1@1: OOF weighted log loss 0.6719
+[ 115.9s] ablation nocontext {'oof_logloss': 0.6718937605415533}
+[ 115.9s] done de82eeee9ea0d0f6-fallback bands {'Unlikely': 37108, 'Unverified': 32603, 'Likely': 2}

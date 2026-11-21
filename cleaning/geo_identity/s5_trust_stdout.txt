@@ -1,0 +1,56 @@
+{
+ "records": 9959,
+ "phones_directory_vs_chain_helpline": [
+  84,
+  56
+ ],
+ "emails_before_after": [
+  8512,
+  8136
+ ],
+ "email_issue": {
+  "email_placeholder": 360,
+  "email_malformed": 16
+ },
+ "website_class": {
+  "own": 7902,
+  "NaN": 1602,
+  "directory": 288,
+  "government": 92,
+  "social": 75
+ },
+ "flag_counts": {
+  "location_low": 1142,
+  "location_disputed": 538,
+  "official_phone_is_directory": 292,
+  "no_direct_contact": 247,
+  "claims_6plus_of_8_services": 79,
+  "copies_far_apart": 44,
+  "website_may_belong_to_other_org": 32,
+  "small_facility_tertiary_claim": 32,
+  "doctors_exceed_beds": 19,
+  "veterinary": 12
+ },
+ "trust_level": {
+  "no_concerns": 7812,
+  "minor": 1426,
+  "caution": 709,
+  "exclude_review": 12
+ },
+ "records_with_display_phone": 9548,
+ "records_official_phone_directory_before_display": 292,
+ "veterinary_names": [
+  "Baroda Pet Clinic",
+  "Pet Care Pathology Lab & Diagnostic Centre",
+  "Government Veterinary Dispensary; Petlad",
+  "The Vet Point",
+  "Supriya Multispeciality Pet Hospital",
+  "SKS Veterinary Hospital",
+  "Prime Animal Care Hospital - Delhi NCR",
+  "Indira Pet Clinic",
+  "Veterinary Hospital",
+  "District Veterinary Hospital",
+  "Vatika Pet Clinic & Surgery Centre",
+  "Pets Care Super Speciality Hospital"
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "04_discharge_cabg.png",
+ "bytes": 60339,
+ "status": 200,
+ "latency_s": 3.7,
+ "response": {
+  "id": "chatcmpl_f7dd1e98-837b-422a-8f6a-0c075d1111ce_ef10dd2b-ca84-4256-8f3f-cd14aa74ad70",
+  "object": "chat.completion",
+  "created": 1795284622,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"DISCHARGE SUMMARY - Example District Hospital, Dept of Medicine\\nName: Test Patient  Age/Sex: 61/M  DOA: 12/11/2026  DOD: 19/11/2026\\nFinal diagnosis: Acute anterior wall STEMI, thrombolysed (Tenecteplase).\\nCoronary angiography: triple vessel disease, LM 70% stenosis.\\nLVEF 40%. Hemodynamically stable at discharge.\\nAdvice on discharge:\\n- Cardiothoracic surgery consult for CABG at a higher centre.\\n- Tab Aspirin 75 mg OD, Tab Clopidogrel 75 mg OD, Tab Atorvastatin 80 mg HS\\n- Return immediately if chest pain, sweating or breathlessness.\", \"language\": \"English\", \"document_type\": \"discharge_summary\", \"suggested_service\": \"cardiac_surgery\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Cardiothoracic surgery consult for CABG at a higher centre\", \"red_flags\": [\"chest pain\", \"sweating\", \"breathlessness\"]}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 2177,
+   "completion_tokens": 253,
+   "total_tokens": 2430,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"DISCHARGE SUMMARY - Example District Hospital, Dept of Medicine\\nName: Test Patient  Age/Sex: 61/M  DOA: 12/11/2026  DOD: 19/11/2026\\nFinal diagnosis: Acute anterior wall STEMI, thrombolysed (Tenecteplase).\\nCoronary angiography: triple vessel disease, LM 70% stenosis.\\nLVEF 40%. Hemodynamically stable at discharge.\\nAdvice on discharge:\\n- Cardiothoracic surgery consult for CABG at a higher centre.\\n- Tab Aspirin 75 mg OD, Tab Clopidogrel 75 mg OD, Tab Atorvastatin 80 mg HS\\n- Return immediately if chest pain, sweating or breathlessness.\", \"language\": \"English\", \"document_type\": \"discharge_summary\", \"suggested_service\": \"cardiac_surgery\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Cardiothoracic surgery consult for CABG at a higher centre\", \"red_flags\": [\"chest pain\", \"sweating\", \"breathlessness\"]}",
+ "parsed": {
+  "detected_text": "DISCHARGE SUMMARY - Example District Hospital, Dept of Medicine\nName: Test Patient  Age/Sex: 61/M  DOA: 12/11/2026  DOD: 19/11/2026\nFinal diagnosis: Acute anterior wall STEMI, thrombolysed (Tenecteplase).\nCoronary angiography: triple vessel disease, LM 70% stenosis.\nLVEF 40%. Hemodynamically stable at discharge.\nAdvice on discharge:\n- Cardiothoracic surgery consult for CABG at a higher centre.\n- Tab Aspirin 75 mg OD, Tab Clopidogrel 75 mg OD, Tab Atorvastatin 80 mg HS\n- Return immediately if chest pain, sweating or breathlessness.",
+  "language": "English",
+  "document_type": "discharge_summary",
+  "suggested_service": "cardiac_surgery",
+  "urgency": "urgent",
+  "confidence": 0.9,
+  "trigger_phrase": "Cardiothoracic surgery consult for CABG at a higher centre",
+  "red_flags": [
+   "chest pain",
+   "sweating",
+   "breathlessness"
+  ]
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 2177,
+  "completion_tokens": 253,
+  "total_tokens": 2430,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

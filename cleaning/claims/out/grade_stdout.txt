@@ -1,0 +1,32 @@
+burns 264 {'strong': 108, 'weak': 59, 'moderate': 49, 'tag_only': 46, 'attributed_elsewhere': 1, 'counter_evidence': 1}
+cardiac_surgery 973 {'moderate': 363, 'tag_only': 302, 'strong': 204, 'weak': 97, 'attributed_elsewhere': 4, 'counter_evidence': 3}
+csection 448 {'moderate': 327, 'strong': 97, 'weak': 19, 'attributed_elsewhere': 3, 'counter_evidence': 2}
+dialysis 1050 {'moderate': 879, 'strong': 88, 'weak': 71, 'attributed_elsewhere': 6, 'tag_only': 3, 'counter_evidence': 3}
+icu 2786 {'moderate': 1613, 'tag_only': 486, 'strong': 441, 'weak': 241, 'attributed_elsewhere': 4, 'counter_evidence': 1}
+mri 952 {'strong': 546, 'moderate': 348, 'weak': 53, 'counter_evidence': 4, 'attributed_elsewhere': 1}
+nicu 746 {'moderate': 494, 'strong': 182, 'weak': 66, 'attributed_elsewhere': 3, 'counter_evidence': 1}
+trauma 3580 {'moderate': 2643, 'tag_only': 376, 'strong': 302, 'weak': 247, 'attributed_elsewhere': 7, 'counter_evidence': 5}
+burns 264 {'strong': 108, 'weak': 59, 'moderate': 50, 'tag_only': 46, 'counter_evidence': 1}
+cardiac_surgery 973 {'moderate': 363, 'tag_only': 302, 'strong': 206, 'weak': 99, 'counter_evidence': 3}
+csection 448 {'moderate': 327, 'strong': 99, 'weak': 20, 'counter_evidence': 2}
+dialysis 1050 {'moderate': 883, 'strong': 90, 'weak': 71, 'tag_only': 3, 'counter_evidence': 3}
+icu 2786 {'moderate': 1613, 'tag_only': 486, 'strong': 444, 'weak': 242, 'counter_evidence': 1}
+mri 952 {'strong': 550, 'moderate': 344, 'weak': 54, 'counter_evidence': 4}
+nicu 746 {'moderate': 495, 'strong': 183, 'weak': 67, 'counter_evidence': 1}
+trauma 3580 {'moderate': 2643, 'tag_only': 376, 'strong': 307, 'weak': 249, 'counter_evidence': 5}
+burns 264 {'strong': 106, 'moderate': 65, 'tag_only': 46, 'weak': 45, 'attributed_elsewhere': 1, 'counter_evidence': 1}
+cardiac_surgery 973 {'strong': 347, 'tag_only': 302, 'moderate': 233, 'weak': 84, 'attributed_elsewhere': 4, 'counter_evidence': 3}
+csection 448 {'moderate': 236, 'strong': 193, 'weak': 14, 'attributed_elsewhere': 3, 'counter_evidence': 2}
+dialysis 1050 {'strong': 695, 'moderate': 279, 'weak': 64, 'attributed_elsewhere': 6, 'tag_only': 3, 'counter_evidence': 3}
+icu 2786 {'strong': 1279, 'moderate': 814, 'tag_only': 486, 'weak': 202, 'attributed_elsewhere': 4, 'counter_evidence': 1}
+mri 952 {'strong': 543, 'moderate': 362, 'weak': 42, 'counter_evidence': 4, 'attributed_elsewhere': 1}
+nicu 746 {'strong': 506, 'moderate': 196, 'weak': 40, 'attributed_elsewhere': 3, 'counter_evidence': 1}
+trauma 3580 {'moderate': 2478, 'strong': 482, 'tag_only': 376, 'weak': 232, 'attributed_elsewhere': 7, 'counter_evidence': 5}
+burns 264 {'strong': 106, 'moderate': 66, 'tag_only': 46, 'weak': 45, 'counter_evidence': 1}
+cardiac_surgery 973 {'strong': 350, 'tag_only': 302, 'moderate': 232, 'weak': 86, 'counter_evidence': 3}
+csection 448 {'moderate': 236, 'strong': 195, 'weak': 15, 'counter_evidence': 2}
+dialysis 1050 {'strong': 702, 'moderate': 278, 'weak': 64, 'tag_only': 3, 'counter_evidence': 3}
+icu 2786 {'strong': 1287, 'moderate': 809, 'tag_only': 486, 'weak': 203, 'counter_evidence': 1}
+mri 952 {'strong': 547, 'moderate': 358, 'weak': 43, 'counter_evidence': 4}
+nicu 746 {'strong': 507, 'moderate': 197, 'weak': 41, 'counter_evidence': 1}
+trauma 3580 {'moderate': 2476, 'strong': 490, 'tag_only': 376, 'weak': 233, 'counter_evidence': 5}

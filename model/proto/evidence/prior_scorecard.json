@@ -1,0 +1,20 @@
+{
+ "written": "2026-11-21, before any gold pair was scored with it",
+ "purpose": "Evidence-only prior scorecard used to measure the evidence layer (a provisional B4). The shipped M1 priors belong to the fusion layer (model/proto/fusion/priors_M1.json).",
+ "intercept": -2.0,
+ "weights": {
+  "t1": {"w": 0.5, "why": "specialty enum or list mention: weak, v1 weak stratum 1/12 confirmed"},
+  "t2": {"w": 1.5, "why": "first own unit: v1 strong 10/12 vs weak 1/12 confirmed; split across steps"},
+  "t3": {"w": 0.5, "why": "second own unit"},
+  "t4": {"w": 0.5, "why": "two fields after echo collapse"},
+  "t5": {"w": 0.5, "why": "unit or quantity named"},
+  "tb_mid": {"w": -0.2, "why": "mid merge risk"},
+  "tb_high": {"w": -0.5, "why": "high merge risk: contamination 59.6% at 30+ URLs vs 4.2% at <3 (spec 2); unanchored high-bucket sentences were own in 57/61 hand labels, so the discount is modest"},
+  "c1": {"w": -1.0, "why": "a sentence of this service names another facility: other_facility class is about another facility in 14/18 hand labels"},
+  "c2": {"w": -1.0, "why": "only rejected evidence"},
+  "n1": {"w": -1.0, "why": "non-offer cue, correct 34/40 (audit v2)"},
+  "s1": {"w": -1.5, "why": "scope conflict (eye, dental, IVF, lab name claiming the service)"},
+  "p1": {"w": 0.5, "why": "one clinical prerequisite from a separate sentence"},
+  "p2": {"w": 0.3, "why": "two prerequisites"}
+ }
+}

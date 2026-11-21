@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Referral finder</title>
+<script>
+// The manifest link is added by script so a test can compare with and without credentials.
+// Behind a cookie-auth proxy the manifest fetch only carries the cookie with use-credentials.
+const l = document.createElement('link'); l.rel = 'manifest'; l.href = '/manifest.webmanifest';
+if (location.hash !== '#nocred') l.crossOrigin = 'use-credentials';
+document.head.appendChild(l);
+</script></head>
+<body><main><h1>Referral finder</h1><p id="net"></p><p id="out" role="status"></p></main>
+<script>
+const net = document.getElementById('net');
+const show = () => net.textContent = navigator.onLine ? '' : 'Offline: using saved referral pack';
+addEventListener('online', show); addEventListener('offline', show); show();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+
+function idb() {
+  return new Promise((ok, no) => {
+    const q = indexedDB.open('care', 1);
+    q.onupgradeneeded = () => q.result.createObjectStore('kv');
+    q.onsuccess = () => ok(q.result); q.onerror = () => no(q.error);
+  });
+}
+async function put(entries) {  // entries: [[key, value], ...] in one transaction
+  const db = await idb();
+  await new Promise((ok, no) => {
+    const t = db.transaction('kv', 'readwrite'); const s = t.objectStore('kv');
+    for (const [k, v] of entries) s.put(v, k);
+    t.oncomplete = ok; t.onerror = () => no(t.error);
+  });
+  db.close();
+}
+async function get(k) {
+  const db = await idb();
+  const v = await new Promise((ok, no) => { const q = db.transaction('kv').objectStore('kv').get(k);
+    q.onsuccess = () => ok(q.result); q.onerror = () => no(q.error); });
+  db.close(); return v;
+}
+// Session check: a redirect means the auth proxy wants a new sign-in (we are online, cookie expired).
+async function session() {
+  try { const r = await fetch('/api/ping', {redirect: 'manual'});
+        return r.type === 'opaqueredirect' ? 'expired' : (r.ok ? 'ok' : 'error ' + r.status); }
+  catch (e) { return 'offline'; }
+}
+// Offline lookup: nearest saved PIN centroid to the GPS fix, then its 3 facilities for a service.
+async function lookup(lat, lon, svc) {
+  const pack = await get('pack'), picker = await get('picker');
+  let best = null, bd = 1e9;
+  for (const [pin, [la, lo]] of Object.entries(picker)) {
+    const d = (la - lat) ** 2 + ((lo - lon) * Math.cos(lat * Math.PI / 180)) ** 2;
+    if (d < bd) { bd = d; best = pin; }
+  }
+  const rows = pack.index[best][svc].map(i => {
+    const [name, phones] = pack.facilities[i]; const [conf, q1] = pack.evidence[i + '|' + svc];
+    return {name, phone: phones[0] || null, conf, quote: q1[0], cite: q1[1]};
+  });
+  return {pin: best, snapshot: pack.snapshot, rows};
+}
+</script></body></html>

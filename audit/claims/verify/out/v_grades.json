@@ -1,0 +1,303 @@
+{
+ "grades_rows": {
+  "dialysis": {
+   "medium": 566,
+   "strong": 355,
+   "weak": 123,
+   "non_offer_only": 3
+  },
+  "csection": {
+   "medium": 283,
+   "weak": 152,
+   "strong": 23,
+   "non_offer_only": 4
+  },
+  "nicu": {
+   "medium": 532,
+   "strong": 125,
+   "weak": 90,
+   "non_offer_only": 1
+  },
+  "cardiac_surgery": {
+   "medium": 348,
+   "weak": 186,
+   "strong": 136,
+   "non_offer_only": 3
+  },
+  "mri": {
+   "strong": 534,
+   "medium": 230,
+   "weak": 191,
+   "non_offer_only": 9
+  },
+  "burns": {
+   "medium": 91,
+   "weak": 77,
+   "strong": 62,
+   "non_offer_only": 2
+  },
+  "trauma": {
+   "medium": 2075,
+   "weak": 801,
+   "strong": 354,
+   "non_offer_only": 7
+  },
+  "icu": {
+   "medium": 1593,
+   "weak": 528,
+   "strong": 221,
+   "non_offer_only": 2
+  }
+ },
+ "grades_distinct_uid": {
+  "dialysis": {
+   "medium": 566,
+   "strong": 355,
+   "weak": 123,
+   "non_offer_only": 3
+  },
+  "csection": {
+   "medium": 283,
+   "weak": 152,
+   "strong": 23,
+   "non_offer_only": 4
+  },
+  "nicu": {
+   "medium": 532,
+   "strong": 124,
+   "weak": 89,
+   "non_offer_only": 1
+  },
+  "cardiac_surgery": {
+   "medium": 348,
+   "weak": 186,
+   "strong": 136,
+   "non_offer_only": 3
+  },
+  "mri": {
+   "strong": 530,
+   "medium": 230,
+   "weak": 191,
+   "non_offer_only": 9
+  },
+  "burns": {
+   "medium": 91,
+   "weak": 77,
+   "strong": 62,
+   "non_offer_only": 2
+  },
+  "trauma": {
+   "medium": 2069,
+   "weak": 800,
+   "strong": 353,
+   "non_offer_only": 7
+  },
+  "icu": {
+   "medium": 1589,
+   "weak": 526,
+   "strong": 221,
+   "non_offer_only": 2
+  }
+ },
+ "all_prereqs_rows": {
+  "dialysis": 486,
+  "csection": 110,
+  "nicu": 226,
+  "cardiac_surgery": 233,
+  "mri": 699,
+  "burns": 208,
+  "trauma": 719,
+  "icu": 347
+ },
+ "rule_reapplied_mismatches": 0,
+ "prereq_circularity": {
+  "dialysis": {
+   "all_prereqs": 486,
+   "some_prereq_only_from_core_sentence": 474,
+   "by_prereq": {
+    "nephrology": 4,
+    "dialysis_unit_or_machine": 473
+   },
+   "strong": 355,
+   "strong_with_circular_prereq": 345
+  },
+  "csection": {
+   "all_prereqs": 110,
+   "some_prereq_only_from_core_sentence": 2,
+   "by_prereq": {
+    "obstetrics": 0,
+    "operating_theatre": 1,
+    "anaesthesia": 1
+   },
+   "strong": 23,
+   "strong_with_circular_prereq": 1
+  },
+  "nicu": {
+   "all_prereqs": 225,
+   "some_prereq_only_from_core_sentence": 36,
+   "by_prereq": {
+    "paeds_or_neonatology": 0,
+    "incubator_warmer_ventilator": 36
+   },
+   "strong": 124,
+   "strong_with_circular_prereq": 24
+  },
+  "cardiac_surgery": {
+   "all_prereqs": 233,
+   "some_prereq_only_from_core_sentence": 30,
+   "by_prereq": {
+    "cardiothoracic_surgeon_or_dept": 30,
+    "cathlab_or_heart_lung": 0
+   },
+   "strong": 136,
+   "strong_with_circular_prereq": 14
+  },
+  "mri": {
+   "all_prereqs": 695,
+   "some_prereq_only_from_core_sentence": 564,
+   "by_prereq": {
+    "mri_scanner": 564
+   },
+   "strong": 530,
+   "strong_with_circular_prereq": 433
+  },
+  "burns": {
+   "all_prereqs": 208,
+   "some_prereq_only_from_core_sentence": 18,
+   "by_prereq": {
+    "burn_unit_or_plastic_surgery": 18
+   },
+   "strong": 62,
+   "strong_with_circular_prereq": 5
+  },
+  "trauma": {
+   "all_prereqs": 717,
+   "some_prereq_only_from_core_sentence": 696,
+   "by_prereq": {
+    "emergency_24x7": 696,
+    "surgery_or_ortho": 2,
+    "ct": 3
+   },
+   "strong": 353,
+   "strong_with_circular_prereq": 340
+  },
+  "icu": {
+   "all_prereqs": 347,
+   "some_prereq_only_from_core_sentence": 114,
+   "by_prereq": {
+    "ventilator": 97,
+    "critical_care_or_anaesthesia": 20
+   },
+   "strong": 221,
+   "strong_with_circular_prereq": 90
+  }
+ },
+ "mri_scanner_prereq_only_from_vendor_in_nonmri_sentence": {
+  "facilities": 23,
+  "of_them_strong": 5,
+  "examples": [
+   [
+    "23feae12",
+    "Philips Azurion C7 Cath Lab"
+   ],
+   [
+    "2ac539eb",
+    "Laparoscopic, minimally invasive, and interventional radiology procedures are performed using instruments from"
+   ],
+   [
+    "320add3e",
+    "Siemens clinical laboratory equipment and other imported instruments used in the Laboratory Medicine departmen"
+   ],
+   [
+    "3ba2d4c3",
+    "Was the only designated hospital in Hubballi-Dharwad twin cities to offer Covid-19 treatment (as of 2020)."
+   ],
+   [
+    "54c07666",
+    "Signage on Lifeline Hospital building identifies the facility as Lifeline Hospital"
+   ],
+   [
+    "587bf5c2",
+    "Siemens Immunoassay Machine"
+   ],
+   [
+    "5b4b5514",
+    "GE-Lunar DPX Pro Pencil Beam DXA scanner (Encore 2005, 9.30.044) used to measure total body fat percentage (TB"
+   ],
+   [
+    "6da98361",
+    "Digital flat panel cath lab (Philips FD 10c)"
+   ]
+  ]
+ },
+ "qty_24x7_false_positive": {
+  "dialysis": {
+   "qty_sentences": 166,
+   "qty_only_from_24x7": 37,
+   "strong_single_field": 9,
+   "strong_single_field_qty_is_only_24x7": 2,
+   "examples": [
+    "24x7 dialysis coverage",
+    "Dialysis machines (4) planned for 24x7 dialysis",
+    "Provides 24/7 dialysis services"
+   ]
+  },
+  "csection": {
+   "qty_sentences": 4,
+   "qty_only_from_24x7": 1,
+   "strong_single_field": 0,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": [
+    "24/7 cesarean section facility"
+   ]
+  },
+  "nicu": {
+   "qty_sentences": 195,
+   "qty_only_from_24x7": 1,
+   "strong_single_field": 12,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": [
+    "24/7 bedside ultrasound, echocardiography and advanced neuro-imaging in NICU"
+   ]
+  },
+  "cardiac_surgery": {
+   "qty_sentences": 35,
+   "qty_only_from_24x7": 0,
+   "strong_single_field": 0,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": []
+  },
+  "mri": {
+   "qty_sentences": 588,
+   "qty_only_from_24x7": 0,
+   "strong_single_field": 89,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": []
+  },
+  "burns": {
+   "qty_sentences": 10,
+   "qty_only_from_24x7": 0,
+   "strong_single_field": 4,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": []
+  },
+  "trauma": {
+   "qty_sentences": 96,
+   "qty_only_from_24x7": 1,
+   "strong_single_field": 4,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": [
+    "Emergency Department is a 24-bedded fully equipped unit."
+   ]
+  },
+  "icu": {
+   "qty_sentences": 424,
+   "qty_only_from_24x7": 1,
+   "strong_single_field": 11,
+   "strong_single_field_qty_is_only_24x7": 0,
+   "examples": [
+    "24-bed intensive care unit (ICU)"
+   ]
+  }
+ }
+}

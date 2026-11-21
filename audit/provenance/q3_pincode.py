@@ -63,6 +63,8 @@ def main():
         "in_india_bbox": int(inbox.sum()), "swapped_lat_lon": int(swapped.sum()),
         "numeric_outside_bbox_not_swapped": int((num & ~inbox & ~swapped).sum()),
     })
+    dec = p.latitude.where(num).astype(str).str.extract(r"\.(\d*)$")[0].str.len().fillna(0)
+    res["lat_lon"]["numeric_lat_with_le2_decimals"] = int((num & (dec <= 2)).sum())
     # fixed coords: swap the swapped ones, drop the rest outside the box
     flat = np.where(swapped, lon, np.where(inbox, lat, np.nan))
     flon = np.where(swapped, lat, np.where(inbox, lon, np.nan))

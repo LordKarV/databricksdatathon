@@ -1,0 +1,56 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "cut_leg.jpg",
+ "bytes": 101800,
+ "status": 200,
+ "latency_s": 1.38,
+ "response": {
+  "id": "chatcmpl_fc50a894-2b02-467a-8832-2d006ceea4b1_06fec332-b63c-486d-b920-dc393b775e47",
+  "object": "chat.completion",
+  "created": 1795284629,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"injury_photo\", \"suggested_service\": \"trauma_emergency\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"laceration on leg with blood\", \"red_flags\": [\"bleeding\"]}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1742,
+   "completion_tokens": 69,
+   "total_tokens": 1811,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"injury_photo\", \"suggested_service\": \"trauma_emergency\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"laceration on leg with blood\", \"red_flags\": [\"bleeding\"]}",
+ "parsed": {
+  "detected_text": "",
+  "language": "",
+  "document_type": "injury_photo",
+  "suggested_service": "trauma_emergency",
+  "urgency": "urgent",
+  "confidence": 0.8,
+  "trigger_phrase": "laceration on leg with blood",
+  "red_flags": [
+   "bleeding"
+  ]
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 1742,
+  "completion_tokens": 69,
+  "total_tokens": 1811,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

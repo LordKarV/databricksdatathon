@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "03_hindi_nicu.png",
+ "bytes": 70408,
+ "status": 200,
+ "latency_s": 2.71,
+ "response": {
+  "id": "chatcmpl_2d9d615e-af45-43af-b8a8-0ed8c686e68b_52ae8605-adf6-470c-8a85-408cad1d9a9c",
+  "object": "chat.completion",
+  "created": 1795284633,
+  "model": "gemma-3-12b-it-060225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\n  \"detected_text\": \"रेफरल पर्ची - प्राथमिक स्वास्थ्य केंद्र\\nशिशु: समय से पहले जन्म (32 सप्ताह), वजन 1.4 किलो\\nसांस लेने में तकलीफ, दूध नहीं पी रहा\\nNICU वाले उच्च केंद्र में तुरंत रेफर करें।\\nडॉक्टर के हस्ताक्षर\",\n  \"language\": \"Hindi\",\n  \"document_type\": \"referral\",\n  \"suggested_service\": \"nicu\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"NICU वाले उच्च केंद्र में तुरंत रेफर करें।\",\n  \"red_flags\": []\n}\n```"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 820,
+   "completion_tokens": 155,
+   "total_tokens": 975,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "```json\n{\n  \"detected_text\": \"रेफरल पर्ची - प्राथमिक स्वास्थ्य केंद्र\\nशिशु: समय से पहले जन्म (32 सप्ताह), वजन 1.4 किलो\\nसांस लेने में तकलीफ, दूध नहीं पी रहा\\nNICU वाले उच्च केंद्र में तुरंत रेफर करें।\\nडॉक्टर के हस्ताक्षर\",\n  \"language\": \"Hindi\",\n  \"document_type\": \"referral\",\n  \"suggested_service\": \"nicu\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"NICU वाले उच्च केंद्र में तुरंत रेफर करें।\",\n  \"red_flags\": []\n}\n```",
+ "parsed": {
+  "detected_text": "रेफरल पर्ची - प्राथमिक स्वास्थ्य केंद्र\nशिशु: समय से पहले जन्म (32 सप्ताह), वजन 1.4 किलो\nसांस लेने में तकलीफ, दूध नहीं पी रहा\nNICU वाले उच्च केंद्र में तुरंत रेफर करें।\nडॉक्टर के हस्ताक्षर",
+  "language": "Hindi",
+  "document_type": "referral",
+  "suggested_service": "nicu",
+  "urgency": "emergency",
+  "confidence": 0.95,
+  "trigger_phrase": "NICU वाले उच्च केंद्र में तुरंत रेफर करें।",
+  "red_flags": []
+ },
+ "parse_mode": "after_stripping",
+ "usage": {
+  "prompt_tokens": 820,
+  "completion_tokens": 155,
+  "total_tokens": 975,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

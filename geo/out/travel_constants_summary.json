@@ -1,0 +1,375 @@
+{
+ "built_utc": "2026-11-21T19:42:08Z",
+ "pairs": {
+  "measured": 3790,
+  "usable": 3335,
+  "core_usable": 2162,
+  "origins_measured": 379
+ },
+ "hill_rule": "candidate state with median road factor >= 1.5",
+ "candidate_states": {
+  "HIMACHAL PRADESH": {
+   "n_pairs": 238,
+   "n_origins": 24,
+   "n_origins_requested": 24,
+   "factor_median": 1.781,
+   "factor_ci95": [
+    1.647,
+    1.948
+   ],
+   "kmh_median": 51.1,
+   "kmh_ci95": [
+    47.626,
+    57.845
+   ],
+   "terrain": "hill"
+  },
+  "UTTARAKHAND": {
+   "n_pairs": 219,
+   "n_origins": 24,
+   "n_origins_requested": 24,
+   "factor_median": 1.936,
+   "factor_ci95": [
+    1.463,
+    2.099
+   ],
+   "kmh_median": 56.2,
+   "kmh_ci95": [
+    48.962,
+    58.598
+   ],
+   "terrain": "hill"
+  },
+  "JAMMU AND KASHMIR": {
+   "n_pairs": 195,
+   "n_origins": 20,
+   "n_origins_requested": 24,
+   "factor_median": 1.421,
+   "factor_ci95": [
+    1.304,
+    1.562
+   ],
+   "kmh_median": 61.2,
+   "kmh_ci95": [
+    58.578,
+    62.892
+   ],
+   "terrain": "plain"
+  },
+  "LADAKH": {
+   "n_pairs": 20,
+   "n_origins": 2,
+   "n_origins_requested": 2,
+   "factor_median": 1.609,
+   "factor_ci95": [
+    1.607,
+    1.611
+   ],
+   "kmh_median": 65.2,
+   "kmh_ci95": [
+    64.822,
+    65.503
+   ],
+   "terrain": "hill"
+  },
+  "SIKKIM": {
+   "n_pairs": 110,
+   "n_origins": 11,
+   "n_origins_requested": 12,
+   "factor_median": 2.107,
+   "factor_ci95": [
+    2.034,
+    2.28
+   ],
+   "kmh_median": 67.9,
+   "kmh_ci95": [
+    65.087,
+    70.69
+   ],
+   "terrain": "hill"
+  },
+  "ARUNACHAL PRADESH": {
+   "n_pairs": 70,
+   "n_origins": 7,
+   "n_origins_requested": 12,
+   "factor_median": 2.105,
+   "factor_ci95": [
+    1.927,
+    2.436
+   ],
+   "kmh_median": 75.5,
+   "kmh_ci95": [
+    56.586,
+    79.846
+   ],
+   "terrain": "hill"
+  },
+  "NAGALAND": {
+   "n_pairs": 109,
+   "n_origins": 11,
+   "n_origins_requested": 12,
+   "factor_median": 1.821,
+   "factor_ci95": [
+    1.643,
+    1.985
+   ],
+   "kmh_median": 74.8,
+   "kmh_ci95": [
+    71.389,
+    80.123
+   ],
+   "terrain": "hill"
+  },
+  "MANIPUR": {
+   "n_pairs": 160,
+   "n_origins": 16,
+   "n_origins_requested": 17,
+   "factor_median": 1.519,
+   "factor_ci95": [
+    1.389,
+    1.725
+   ],
+   "kmh_median": 66.3,
+   "kmh_ci95": [
+    58.747,
+    75.055
+   ],
+   "terrain": "hill"
+  },
+  "MIZORAM": {
+   "n_pairs": 120,
+   "n_origins": 12,
+   "n_origins_requested": 13,
+   "factor_median": 1.898,
+   "factor_ci95": [
+    1.478,
+    2.655
+   ],
+   "kmh_median": 78.3,
+   "kmh_ci95": [
+    75.426,
+    81.302
+   ],
+   "terrain": "hill"
+  },
+  "MEGHALAYA": {
+   "n_pairs": 176,
+   "n_origins": 22,
+   "n_origins_requested": 24,
+   "factor_median": 1.558,
+   "factor_ci95": [
+    1.484,
+    1.66
+   ],
+   "kmh_median": 67.6,
+   "kmh_ci95": [
+    60.995,
+    78.042
+   ],
+   "terrain": "hill"
+  },
+  "TRIPURA": {
+   "n_pairs": 204,
+   "n_origins": 23,
+   "n_origins_requested": 24,
+   "factor_median": 1.389,
+   "factor_ci95": [
+    1.319,
+    1.548
+   ],
+   "kmh_median": 78.4,
+   "kmh_ci95": [
+    74.16,
+    81.778
+   ],
+   "terrain": "plain"
+  },
+  "ASSAM": {
+   "n_pairs": 223,
+   "n_origins": 23,
+   "n_origins_requested": 24,
+   "factor_median": 1.317,
+   "factor_ci95": [
+    1.286,
+    1.429
+   ],
+   "kmh_median": 72.7,
+   "kmh_ci95": [
+    68.801,
+    76.464
+   ],
+   "terrain": "plain"
+  }
+ },
+ "hill_states": [
+  "ARUNACHAL PRADESH",
+  "HIMACHAL PRADESH",
+  "LADAKH",
+  "MANIPUR",
+  "MEGHALAYA",
+  "MIZORAM",
+  "NAGALAND",
+  "SIKKIM",
+  "UTTARAKHAND"
+ ],
+ "classes": {
+  "plain": {
+   "n_pairs": 1707,
+   "n_origins": 185,
+   "n_states": 25,
+   "factor": 1.296,
+   "factor_ci95": [
+    1.279,
+    1.315
+   ],
+   "kmh_free_flow": 65.0,
+   "kmh_free_flow_ci95": [
+    63.174,
+    66.58
+   ]
+  },
+  "hill": {
+   "n_pairs": 1222,
+   "n_origins": 129,
+   "n_states": 9,
+   "factor": 1.787,
+   "factor_ci95": [
+    1.675,
+    1.882
+   ],
+   "kmh_free_flow": 64.4,
+   "kmh_free_flow_ci95": [
+    61.447,
+    67.27
+   ]
+  }
+ },
+ "held_out_by_origin": {
+  "plain_pooled_range": {
+   "all": {
+    "n_pairs": 1707,
+    "ratio_median": 1.027,
+    "ape_median": 0.142,
+    "ape_p90": 0.361,
+    "share_inside_range": 0.793,
+    "share_above_high": 0.103,
+    "range_width_median": 0.547
+   },
+   "rural": {
+    "n_pairs": 879,
+    "ratio_median": 1.058,
+    "ape_median": 0.14,
+    "ape_p90": 0.342,
+    "share_inside_range": 0.807,
+    "share_above_high": 0.117,
+    "range_width_median": 0.526
+   },
+   "urban": {
+    "n_pairs": 828,
+    "ratio_median": 1.0,
+    "ape_median": 0.147,
+    "ape_p90": 0.373,
+    "share_inside_range": 0.779,
+    "share_above_high": 0.088,
+    "range_width_median": 0.603
+   }
+  },
+  "plain_area_range": {
+   "all": {
+    "n_pairs": 1707,
+    "ratio_median": 1.027,
+    "ape_median": 0.142,
+    "ape_p90": 0.361,
+    "share_inside_range": 0.783,
+    "share_above_high": 0.107,
+    "range_width_median": 0.559
+   },
+   "rural": {
+    "n_pairs": 879,
+    "ratio_median": 1.058,
+    "ape_median": 0.14,
+    "ape_p90": 0.342,
+    "share_inside_range": 0.784,
+    "share_above_high": 0.105,
+    "range_width_median": 0.563
+   },
+   "urban": {
+    "n_pairs": 828,
+    "ratio_median": 1.0,
+    "ape_median": 0.147,
+    "ape_p90": 0.373,
+    "share_inside_range": 0.783,
+    "share_above_high": 0.109,
+    "range_width_median": 0.549
+   }
+  },
+  "hill_pooled_range": {
+   "all": {
+    "n_pairs": 1222,
+    "ratio_median": 1.072,
+    "ape_median": 0.271,
+    "ape_p90": 0.537,
+    "share_inside_range": 0.777,
+    "share_above_high": 0.113,
+    "range_width_median": 1.113
+   },
+   "rural": {
+    "n_pairs": 867,
+    "ratio_median": 1.083,
+    "ape_median": 0.268,
+    "ape_p90": 0.529,
+    "share_inside_range": 0.759,
+    "share_above_high": 0.135,
+    "range_width_median": 1.116
+   },
+   "urban": {
+    "n_pairs": 355,
+    "ratio_median": 1.058,
+    "ape_median": 0.282,
+    "ape_p90": 0.557,
+    "share_inside_range": 0.82,
+    "share_above_high": 0.059,
+    "range_width_median": 1.11
+   }
+  },
+  "hill_area_range": {
+   "all": {
+    "n_pairs": 1222,
+    "ratio_median": 1.072,
+    "ape_median": 0.271,
+    "ape_p90": 0.537,
+    "share_inside_range": 0.778,
+    "share_above_high": 0.111,
+    "range_width_median": 1.109
+   },
+   "rural": {
+    "n_pairs": 867,
+    "ratio_median": 1.083,
+    "ape_median": 0.268,
+    "ape_p90": 0.529,
+    "share_inside_range": 0.773,
+    "share_above_high": 0.119,
+    "range_width_median": 1.129
+   },
+   "urban": {
+    "n_pairs": 355,
+    "ratio_median": 1.058,
+    "ape_median": 0.282,
+    "ape_p90": 0.557,
+    "share_inside_range": 0.792,
+    "share_above_high": 0.093,
+    "range_width_median": 0.923
+   }
+  }
+ },
+ "hill_class_gain": {
+  "hill_pairs_scored_with_plain_constants": {
+   "ratio_median": 1.49,
+   "ape_median": 0.339
+  },
+  "hill_pairs_scored_with_hill_constants_in_sample": {
+   "ratio_median": 1.082,
+   "ape_median": 0.264
+  }
+ }
+}

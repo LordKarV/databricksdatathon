@@ -1,0 +1,24 @@
+{
+ "city_check_denominator": 9687,
+ "city_no_match_pin": 1649,
+ "gt100_city_agrees": {
+  "pin_only": 612,
+  "neither": 350,
+  "coords_only": 123,
+  "both": 29
+ },
+ "gt50_city_agrees": {
+  "pin_only": 752,
+  "neither": 431,
+  "coords_only": 159,
+  "both": 65
+ },
+ "state_vote": {
+  "all_agree": 9177,
+  "missing": 600,
+  "odd:coord": 133,
+  "odd:stated": 39,
+  "odd:pin": 20,
+  "all_differ": 1
+ }
+}

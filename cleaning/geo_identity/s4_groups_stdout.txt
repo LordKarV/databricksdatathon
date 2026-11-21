@@ -1,0 +1,82 @@
+{
+ "records": 9959,
+ "phones_specific_vs_all": [
+  36559,
+  36701
+ ],
+ "candidate_pairs": 2996,
+ "linked_pairs_by_rule": {
+  "R5": 74,
+  "T3": 30,
+  "U": 9,
+  "T2": 3
+ },
+ "groups": 75,
+ "records_in_groups": 152,
+ "records_marked_non_canonical": 77,
+ "largest_group": 3,
+ "groups_whose_copies_are_gt25km_apart": 22,
+ "records_with_possible_same_site_link": 52,
+ "records_with_co_located_unit": 17,
+ "eval": {
+  "strong_groups_47": {
+   "n": 47,
+   "tp": 26,
+   "fp": 5,
+   "fn": 3,
+   "precision": 0.84,
+   "recall": 0.9,
+   "units_linked": [
+    1,
+    2
+   ],
+   "units_wrongly_merged": 1,
+   "with_soft_links": {
+    "n": 47,
+    "tp": 27,
+    "fp": 5,
+    "fn": 2,
+    "precision": 0.84,
+    "recall": 0.93,
+    "units_linked": [
+     1,
+     2
+    ],
+    "units_wrongly_merged": 1
+   }
+  },
+  "near_contact_pairs_42": {
+   "n": 42,
+   "tp": 2,
+   "fp": 0,
+   "fn": 13,
+   "precision": 1.0,
+   "recall": 0.13,
+   "units_linked": [
+    4,
+    10
+   ],
+   "units_wrongly_merged": 0,
+   "with_soft_links": {
+    "n": 42,
+    "tp": 15,
+    "fp": 5,
+    "fn": 0,
+    "precision": 0.75,
+    "recall": 1.0,
+    "units_linked": [
+     7,
+     10
+    ],
+    "units_wrongly_merged": 3
+   }
+  },
+  "near_contact_labels": {
+   "true_dup": 15,
+   "different": 10,
+   "same_site_unit": 10,
+   "uncertain": 4,
+   "different_campus_shared_geocode": 3
+  }
+ }
+}

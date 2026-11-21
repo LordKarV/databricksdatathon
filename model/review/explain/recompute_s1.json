@@ -1,0 +1,130 @@
+{
+ "query_point": "Using Panipat (district layer, median of 13 PIN points), Haryana",
+ "platt_a": 0.379885730618284,
+ "platt_c": -0.25459560333074516,
+ "z_recomputed": 0.8586808793139765,
+ "z_stored": 0.8586808793139767,
+ "P_S_recomputed": 0.702384978571009,
+ "P_S_stored": 0.702384978571009,
+ "logit_evidence": 0.6321674094172193,
+ "logit_context": 1.440711158486649,
+ "logit_base": -1.2141976885898917,
+ "logit_from_quoted_text_steps": 0.2864213991816104,
+ "points_from_quoted_text": 8.264374644075751,
+ "points_from_prereq_p1": 9.97612108748116,
+ "points_context": 41.57013687404164,
+ "P_S_if_context_removed": 0.35846556037587346,
+ "P_S_without_text_steps": 0.6392843747628342,
+ "P_S_without_cited_stored": 0.6392843747628342,
+ "margin_over_tL": 0.0023849785710090554,
+ "P_L_recomputed": 0.9910474630671878,
+ "P_L_stored": 0.9910474630671878,
+ "P_E_recomputed": 0.7109495026250039,
+ "P_E_stored": 0.710949502625004,
+ "existence_terms_fired": {
+  "e_phone_none": -0.7,
+  "e_multi_source": 0.3,
+  "e_recency": 0.3
+ },
+ "d1_km": 8.676077278752011,
+ "G": 0.5557715204661599,
+ "U": 0.2775302060510763,
+ "P_succ": 0.4948897100749879,
+ "nearer": {
+  "name": "Ravindra Hospital, Panipat",
+  "d1_km": 6.434778250139779,
+  "P_E": 0.9088770389851438,
+  "P_S": 0.44760288050914837,
+  "P_L": 0.9910474630671878,
+  "G": 0.6453399360647284,
+  "U": 0.2625345989610929
+ },
+ "U_ratio": 1.0571185936989804,
+ "evidence_ratio": 1.2274843538192306,
+ "G_ratio": 0.8612073876215454,
+ "contributions_points": {
+  "b_dialysis": -27.69,
+  "t1": 8.26,
+  "t2": 0.17,
+  "t3": 0.0,
+  "t4": 1.09,
+  "tb_mid": -0.0,
+  "g_mid": 11.57,
+  "p1": 10.71,
+  "public": -4.76,
+  "level_dh": 12.93,
+  "iphs_essential": 10.81,
+  "beds_100p": 2.64,
+  "doctors_20p": -0.52,
+  "breadth_20p": 8.91,
+  "t2@dialysis": -0.17,
+  "t4@dialysis": -1.09,
+  "p1@dialysis": -0.74
+ },
+ "quote_checks": {
+  "n": 12,
+  "n_equal": 11,
+  "rows": [
+   {
+    "case": "S1",
+    "atom": "acde9be7:capa:25|dialysis",
+    "equal": true
+   },
+   {
+    "case": "S1",
+    "atom": "acde9be7:equi:4|dialysis",
+    "equal": true
+   },
+   {
+    "case": "S1",
+    "atom": "acde9be7:proc:33|dialysis",
+    "equal": true
+   },
+   {
+    "case": "S2",
+    "atom": "a52cd60a:capa:2|dialysis",
+    "equal": true
+   },
+   {
+    "case": "S2",
+    "atom": "a52cd60a:proc:2|dialysis",
+    "equal": true
+   },
+   {
+    "case": "S2",
+    "atom": "a52cd60a:proc:10|dialysis",
+    "equal": true
+   },
+   {
+    "case": "C1",
+    "atom": "3ac5ae50:equi:43|dialysis",
+    "equal": false
+   },
+   {
+    "case": "C1",
+    "atom": "3ac5ae50:capa:24|dialysis",
+    "equal": true
+   },
+   {
+    "case": "C1",
+    "atom": "3ac5ae50:proc:17|dialysis",
+    "equal": true
+   },
+   {
+    "case": "C1",
+    "atom": "3ac5ae50:equi:7|dialysis",
+    "equal": true
+   },
+   {
+    "case": "C2",
+    "atom": "7e420f3f:capa:0|trauma_emergency",
+    "equal": true
+   },
+   {
+    "case": "C2",
+    "atom": "7e420f3f:proc:4|trauma_emergency",
+    "equal": true
+   }
+  ]
+ }
+}

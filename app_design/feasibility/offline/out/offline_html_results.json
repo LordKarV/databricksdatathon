@@ -1,0 +1,18 @@
+{
+ "bytes": 474967,
+ "gps": {
+  "secure_context": true,
+  "has_geolocation": true,
+  "status": "Nearest 3 for PIN 800017 (GPS), data of 2026-11-21.",
+  "first": "Medizone Hospitals - 1 km straight line, confidence 42%\n\"Cesarean delivery\" [531e6b63:proc:1] \"Performs cesarean deliveries\" [531e6b63:proc:0]\nCall +917677190002",
+  "non_file_requests": []
+ },
+ "denied": {
+  "secure_context": true,
+  "has_geolocation": true,
+  "message": "No GPS fix (User denied Geolocation). Type the PIN code.",
+  "status": "Nearest 3 for PIN 800001 (PIN), data of 2026-11-21.",
+  "first": "Medizone Hospitals - 2 km straight line, confidence 42%\n\"Cesarean delivery\" [531e6b63:proc:1] \"Performs cesarean deliveries\" [531e6b63:proc:0]\nCall +917677190002",
+  "non_file_requests": []
+ }
+}

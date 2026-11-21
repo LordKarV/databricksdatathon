@@ -1,0 +1,176 @@
+Proposed card wording and layout (input for the explanation layer and the App)
+==============================================================================
+
+Source of every number below: cases.json, recompute_s1.json, audit_benchmark_cards.json in this folder, built from
+the prototype tables. Facility names are real records from the dataset. Phone numbers are left out on purpose.
+
+Layout rule 1. Three levels, the action comes first.
+  Level 0, the phone view (at most 4 short lines, fits a basic phone screen or one SMS): what to do, where, what to
+    ask on the call, and one plain line on how sure we are.
+  Level 1, "Why this one" (one tap): quotes, what we ignored, where the location comes from, why it ranks above a
+    nearer option.
+  Level 2, "How the score was made" (judge view): the waterfall in points, with the calibration slope shown.
+
+Layout rule 2. One badge per card, from this fixed list. Hard warnings come before the name.
+  [CHECKED BY US]   reserved for a future verified list (X family). Not used in v1.
+  [LIKELY]          the band rule holds. If P_S is within 0.05 of t_L, add "(borderline)".
+  [CALL FIRST]      Unverified with at least one own sentence about the service (T >= 2).
+  [NO SERVICE TEXT] Unverified with no own sentence (T < 2). Shown under a fold, never as the first option for an
+                    emergency (see rule 4).
+  [PLACE UNCLEAR]   P_L < 0.7, any location vote is -1, or the stated city could not be placed on the map. Shown
+                    before the name, in the strongest colour on the page.
+
+Layout rule 3. "How sure" uses the score bin, not the band. Every Unverified card in the prototype shows the same
+  "16 of 35 confirmed" line, whether P_S is 0.22 or 0.65. Use calibration.parquet (test bins) instead, and say when
+  the bin is tiny:
+    P_S 0.49 to 0.61: "Of 7 listings we checked with a score like this, 5 were confirmed by a public source,
+                       2 had no public information. (Small sample.)"
+    P_S 0.18 to 0.28: "Of 8 listings we checked with a score like this, 1 was confirmed, 7 had no public
+                       information."
+
+Layout rule 4. Emergency plans (trauma, emergency C-section, burns) never lead with a [NO SERVICE TEXT] or
+  [PLACE UNCLEAR] option. Such options go under "Other places nearby, not suitable on current evidence".
+
+Layout rule 5. The call script is part of the card, because a phone call does not catch a wrong location when the
+  number belongs to the real facility in another town (case C2):
+    "Ask: 1) Do you do <service> now? 2) What is your full address and town? 3) Is someone available today?"
+
+Layout rule 6. Distances above 100 km are given in hours ("about 4 to 7 hours"), never "400 to 641 min".
+
+Layout rule 7. When a record has two candidate points, lead with the point that has more belief, and say which
+  witness supports each point: "Probably in Sheikhpura (PIN 811101 and the listing's web pages say so). The map
+  pin is near Sitamarhi, 55 km from you, but nothing else in the listing supports it."
+
+Layout rule 8. The abstention line and P(at least one works) must not appear together as they do now
+  ("ABSTAIN: No facility ... has enough public evidence" followed by "P(at least one of these works) = 0.88").
+  Replace P(at least one works) on lay cards with "If the first call says no, call the next one." Keep the number
+  only on the judge view, labelled "not yet checked against outcomes: no Witness Ledger top-1 answer has a label".
+
+
+Case S1 (strong): Civil Hospital, Panipat, dialysis near Panipat district
+------------------------------------------------------------------------
+Now (prototype):
+  [1] LIKELY offers dialysis - Civil Hospital, Panipat, Panipat
+  [2] How sure it offers the service: 0.70 (range 0.38 to 0.97).
+  [3] Why we think it offers it (sentences from its own listing): ... 3 quotes
+  [4] Is it real: website none; phone none. P_E = 0.71 ...
+  [8] Call first: 1802630102 (number found in the listing text, not checked)
+
+Proposed level 0:
+  [LIKELY, borderline] Civil Hospital, Panipat (government district hospital) - 9 km, about 13 to 21 min
+  Call first: <number> (from the listing, not checked). Ask if dialysis runs today and the timing.
+  Its listing says: "Hemodialysis facility run under Public-Private Partnership" (+2 similar)
+  How sure: score 0.70, just at our 0.70 cut-off. We have not yet checked any listing this high.
+
+Proposed level 1, new line under the quotes:
+  "Most of this score comes from the kind of hospital it is: a government district hospital, where the public
+   standard (IPHS 2022) expects dialysis (+24 points), with 20+ specialties (+9). The three sentences add
+   8 points. Without them the score would be 0.64."
+Fix the contradiction: [4] says "phone none" while [8] shows a number. phone_class and display_phones come from
+  different tables; the existence head took a -0.7 logit penalty for "no phone" (-20 points) on a record that shows one.
+
+Proposed level 2 (waterfall rows, values from recompute_s1.json, points = 20/ln 2 x contribution):
+  base for dialysis (intercept x slope, plus offset)       -35.0
+  text about dialysis: any own mention (t1)                 +8.3
+  text: more units, more fields (t2, t4 with dialysis adj.)   0.0  (fitted to zero, see model card)
+  related-service hints (p1, ICU or similar, net)          +10.0  <- quote the triggering sentence or tag
+  merge-risk group "mid" (g_mid)                           +11.6  <- raises the score; say so
+  district hospital (level_dh)                             +12.9
+  IPHS says DH should offer it (iphs_essential)            +10.8
+  20+ specialties, 100+ beds, 20+ doctors, public          +6.3
+  total 24.8 points -> logit 0.859 -> P_S 0.702
+  Column note: "fitted weight x calibration slope 0.38 = contribution". Without this note the weight column
+  (t1 = 0.754) and the contribution column (0.286) do not match and a judge will think the numbers are wrong.
+
+
+Case S2 (strong text, Unverified): Satyavrat Hospital, dialysis near Patna (q35)
+-------------------------------------------------------------------------------
+Proposed level 0:
+  [CALL FIRST] Satyavrat Hospital, Patna - 5 km, about 10 min
+  Call first: <number>. Ask: dialysis now? full address? a slot this week?
+  Its listing says: "Hemodialysis unit available" (+2 more, in 2 sections of the listing)
+  Not checked by us. No test listing scored this high (test bins end at 0.61). In development data, 7 of 15
+  listings scoring 0.48 to 0.75 were confirmed, 0 were wrong, 8 had no public information. (Small sample.)
+Level 1 addition, the comparison a user will ask about: "Civil Hospital, Panipat is marked Likely and this one is
+  not, though this listing has more dialysis text. The difference is the kind of hospital (district hospital,
+  +24 points), not the text."
+Level 1, near-tie notice: the 2nd and 3rd options changed when the query point moved 4.4 km (benchmark point vs
+  resolver point), so print "options 1 to 3 are close; any of them is a reasonable first call" when U ratios are
+  below 1.1.
+Fix the echo: benchmark_answers says "Using Patna (district layer, median of 66 PIN points)" but the distances used
+  the stored GPO PIN 800001 point, 4.4 km away. The echoed point must be the computed point.
+
+
+Case U1 (uncertain): Referal Hospital, emergency C-section near Singwahini village, Sitamarhi (q01)
+--------------------------------------------------------------------------------------------------
+Now: the top option for a rural Bihar emergency. Card leads with "About 267 km by road (400 to 641 min)", then
+  "Or 55 km if it is at its second recorded location (we put 64% of the location belief there)". No phone. No
+  sentence about C-section. Backup 2 is "Dhanwantari Allergy & Asthma Clinic".
+Proposed (this option moves under the fold per rule 4):
+  [PLACE UNCLEAR] [NO SERVICE TEXT] Referal Hospital (listed city: Nalanda)
+  Probably in Sheikhpura district, about 7 to 11 hours by road (267 km, rough): its PIN 811101 and a listing URL
+  name Barbigha, Sheikhpura. The map pin is 55 km from you, but nothing else in the listing supports it.
+  No sentence in its listing mentions C-section. No phone number in our data, so you cannot confirm before going.
+  Not suitable on current evidence.
+And the page-level line for this query:
+  "We found no facility within 150 km whose listing says it does emergency C-sections and whose location we trust.
+   Call 102/108 (state ambulance) or the nearest government hospital you know." (the helpline text is a product
+   decision; it is not derived from the data)
+Model fix behind the card: 1 - P_L is assigned to p2 by construction (spec 5.4). Here p2 is the raw coordinate
+  point, whose own vote was -1, and the city vote is -1 only because Nalanda's centre is 29.5 km from p1 against a
+  25 km cut-off, while loc_note says "'Nalanda' lies near the postcode". Require that p2 receive mass only from
+  witnesses that support p2, or send the mass to "unknown".
+
+
+Case U2 (uncertain): Smile Kraft Dental Clinic, trauma near Palamu (q12)
+-----------------------------------------------------------------------
+Now: the top option for trauma, 2 km. Card says "(no sentence of its own names the service: the score rests on
+  facility type and size)".
+That sentence is false for this card. The facility-type terms pull the score down (context -0.35 logit). The score
+  rests on a prerequisite hit: "Provides 24 Hours Dental Emergency Services" was read as trauma.emergency_24x7
+  (P = 1, +0.39 logit, about +11 points). The dentist penalty (-2.0 prior) never fired because the record's type
+  is "clinic", although the name and all 10 specialties are dental.
+Proposed:
+  [NO SERVICE TEXT] Smile Kraft Dental Clinic, Palamu - 2 km
+  "This is a dental clinic. Its listing does not mention trauma care. It appears only because it says
+   '24 Hours Dental Emergency Services'. Not suitable for an injury."
+Template fix: when T < 2, print the actual non-text drivers: the prerequisite sentence or tag that set P, and the
+  top two context terms by points. Across the 40 benchmark queries, 113 cards have T < 2; 64 of them (0.57, Wilson
+  0.47 to 0.65) have P >= 1, and 22 (0.19, 0.13 to 0.28) have a negative context total, so the current sentence is
+  wrong or incomplete on most of them.
+
+
+Case C1 (contaminated, caught): Wockhardt Hospital Nagpur, dialysis near Nagpur
+------------------------------------------------------------------------------
+What works: rank 51 of 63 in Nagpur, 36 of 175 at Mumbai PIN 400078; the two Nair Hospital sentences are shown
+  under "What we ignored" with the hospital named. Keep this section as it is; it is the clearest evidence of
+  trust logic on any card.
+Proposed when the record is shown (search, or "why not this one"):
+  [PLACE UNCLEAR] Wockhardt Hospital Nagpur
+  "Name and city say Nagpur. PIN 400078 and the map point say Mumbai (677 km apart). We put 58% on Mumbai.
+   The landline starts with 22, the Mumbai code. Do not travel on this listing; call and ask for the address."
+  "We ignored 2 dialysis sentences because they describe Nair Hospital, Mumbai Central."
+Fixes: "890 km by road (1335 to 2136 min)" -> "about 22 to 36 hours"; the header "..., Nagpur" next to a Mumbai
+  point must carry the warning; "In-house dialysis units" is quoted at claim idx 43 while the raw equipment array
+  holds it at position 46 (blank items are skipped when indexing), so a "show in source" link would open the wrong
+  item. 2,171 of 18,936 atoms (0.115, Wilson 0.110 to 0.119) have this offset; 18,934 of 18,936 texts do appear
+  verbatim in the raw array. Store the raw position next to idx.
+
+
+Case C2 (contaminated, not caught): Sharda Hospital (city "Greater Noida"), trauma near 25.15, 83.68 (q29)
+---------------------------------------------------------------------------------------------------------
+Now: the top option, 60 km, P_L 0.77, "Agree: stated state. Point elsewhere: none." No warning. City "Greater
+  Noida" with PIN 270001 (not in the India Post directory) and map point in Chandauli district. Landline starts with
+  120 (Ghaziabad/Noida code; general knowledge, not checked here). Also rank 1 for a Chandauli trauma query.
+  The cited "Pediatric trauma care." comes from a record whose source pages include a PubMed article.
+Risk: the health worker calls "to confirm", reaches the real Sharda Hospital in Greater Noida, hears "yes, we do
+  trauma", and sends the patient 60 km to a point where that hospital is not.
+Proposed:
+  [PLACE UNCLEAR] Sharda Hospital
+  "Listed city Greater Noida is about 680 km (straight line) from the map point we have (Chandauli). The PIN is not a valid
+   India Post PIN. On the call, ask for the full address before you send anyone."
+Model fix: the query resolver places "Greater Noida" (city layer, median of 21 PIN points; 681 km from the map
+  point), but the location features have d_city_km = null for this record, so the city vote abstained. Use the same
+  place layers for votes and queries, and count a stated city that cannot be placed as a dissent (or at least block
+  P_L >= 0.7), not as an abstention. 22 of 181 benchmark cards (0.12, Wilson 0.08 to 0.18) have an unresolved city whose vote silently
+  abstained.

@@ -1,0 +1,88 @@
+{
+ "pin_pairs": 754,
+ "exact": 606,
+ "cw_rows": 754,
+ "cw_tiers": {
+  "exact": 606,
+  "manual_split_parent": 47,
+  "manual_rename": 42,
+  "fuzzy_ge80": 41,
+  "normalized": 10,
+  "prefix_truncated": 6,
+  "unmatched": 2
+ },
+ "cw_targets_exist": 752,
+ "cw_matched": 752,
+ "cw_cross_state": 0,
+ "fac_reach": 9659,
+ "fac_pin_with_district": 9670,
+ "fac": 9959,
+ "fac_reach_exact_only": 8167,
+ "spot": [
+  [
+   "HARYANA",
+   "GURUGRAM",
+   "manual_rename",
+   "Haryana",
+   "Gurgaon"
+  ],
+  [
+   "PUNJAB",
+   "MALERKOTLA",
+   "manual_split_parent",
+   "Punjab",
+   "Sangrur"
+  ],
+  [
+   "UTTAR PRADESH",
+   "PRAYAGRAJ",
+   "manual_rename",
+   "Uttar Pradesh",
+   "Allahabad"
+  ],
+  [
+   "CHHATTISGARH",
+   "KOREA",
+   "manual_rename",
+   "Chhattisgarh",
+   "Koriya"
+  ],
+  [
+   "ANDHRA PRADESH",
+   "NTR",
+   "manual_split_parent",
+   "Andhra Pradesh",
+   "Krishna"
+  ],
+  [
+   "WEST BENGAL",
+   "HOWRAH",
+   "manual_rename",
+   "West Bengal",
+   "Haora"
+  ],
+  [
+   "MIZORAM",
+   "SAITUAL",
+   "manual_split_parent",
+   "Mizoram",
+   "Aizawl"
+  ]
+ ],
+ "unmatched": [
+  [
+   "WEST BENGAL",
+   "PURBA BARDHAMAN",
+   "unmatched",
+   NaN,
+   NaN
+  ],
+  [
+   "MIZORAM",
+   "SAIHA",
+   "unmatched",
+   NaN,
+   NaN
+  ]
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "facilities": 9959,
+ "stated_state_resolved_before_after": [
+  9877,
+  9927
+ ],
+ "records_with_city_point": [
+  8579,
+  9959
+ ],
+ "city_point_kind": {
+  "district": 6763,
+  "office": 1816
+ },
+ "records_with_name_matched_mappls_point": 907,
+ "nfhs_blocked_missing_or_copied_row": 12,
+ "loc_src": {
+  "listing_coordinates": 8788,
+  "postcode_centre": 868,
+  "address_city_centre": 235,
+  "map_link": 68
+ },
+ "loc_conf": {
+  "high": 7762,
+  "low": 1142,
+  "disputed": 538,
+  "medium": 517
+ },
+ "flag_counts": {
+  "coords_pin_conflict_gt50km": 1367,
+  "city_confirms_pin": 644,
+  "coords_pin_10_25km": 329,
+  "both_points_elsewhere": 235,
+  "city_points_elsewhere": 195,
+  "coords_pin_25_50km": 178,
+  "city_confirms_coords": 174,
+  "copied_geocode": 160,
+  "location_disputed": 108,
+  "coords_look_wrong": 101,
+  "other_pin_district_in_text": 92,
+  "no_pin_point": 84,
+  "map_link_used": 68,
+  "stated_state_vs_pin_state": 68,
+  "pin_looks_wrong": 23,
+  "coords_other_state": 9,
+  "city_level_point": 9,
+  "no_coordinates": 6,
+  "pin_other_state": 5
+ },
+ "raw_coords_gt50km_from_repaired_pin": [
+  1367,
+  9869
+ ],
+ "raw_coords_gt50km_from_audit_pin": [
+  1405,
+  9672
+ ],
+ "raw_coords_10_50km_audit_vs_repaired": [
+  1081,
+  718
+ ],
+ "district_src": {
+  "postcode": 9269,
+  "map_point": 690
+ },
+ "district_boundary_note": 550,
+ "nfhs_joined": [
+  9934,
+  9959
+ ],
+ "nfhs_how": {
+  "exact": 9460,
+  "fuzzy": 295,
+  "parent_table": 173,
+  "no_district": 13,
+  "no_nfhs_row": 12,
+  "spatial_parent": 6
+ },
+ "state_final_missing": 0
+}

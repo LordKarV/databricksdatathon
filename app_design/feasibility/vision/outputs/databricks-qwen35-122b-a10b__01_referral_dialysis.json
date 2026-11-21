@@ -1,0 +1,11 @@
+{
+ "endpoint": "databricks-qwen35-122b-a10b",
+ "image": "01_referral_dialysis.png",
+ "bytes": 69298,
+ "status": 400,
+ "latency_s": 0.25,
+ "response": {
+  "error_code": "BAD_REQUEST",
+  "message": "BAD_REQUEST: Image input is not supported for this endpoint: databricks-qwen35-122b-a10b."
+ }
+}

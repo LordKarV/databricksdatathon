@@ -1,0 +1,12 @@
+{
+ "rows": 1929,
+ "G_max_err": 0.0,
+ "U_max_err": 0.0,
+ "P_succ_max_err": 0.0,
+ "rank_order_by_U": true,
+ "plan_p_any_max_err": 0.0,
+ "plan_leakage_groups_distinct": true,
+ "why_first_rows": 462,
+ "why_first_identity_max_rel_err": 3.024051162590276e-16,
+ "passed": true
+}

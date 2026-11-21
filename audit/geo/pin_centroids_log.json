@@ -56,8 +56,9 @@
    "36.3000000"
   ]
  ],
- "offices_on_shared_coarse_point": 13904,
- "dropped_far_from_pin_median": 13729,
+ "dropped_sentinel_lat_15_59": 1033,
+ "offices_on_shared_coarse_point": 13726,
+ "dropped_far_from_pin_median": 12912,
  "far_examples": [
   [
    "110005",
@@ -124,10 +125,10 @@
    "61.7"
   ]
  ],
- "offices_kept": 138066,
- "offices_kept_but_not_used_coarse": 7911,
- "pins_with_centroid": 19346,
- "pins_without_centroid": 240,
+ "offices_kept": 137850,
+ "offices_kept_but_not_used_coarse": 7942,
+ "pins_with_centroid": 19388,
+ "pins_without_centroid": 198,
  "pins_multi_state": 52,
  "pins_state_unknown": 100,
  "pins_state_label_outside_zone": 4,
@@ -154,23 +155,36 @@
   ]
  ],
  "pins_state_relabelled": 2,
- "pins_outside_state_box": 93,
+ "pins_outside_state_box": 69,
  "pins_outside_state_box_by_state": {
   "UTTAR PRADESH/PRATAPGARH": 30,
-  "KERALA/PALAKKAD": 14,
   "BIHAR/AURANGABAD": 4,
-  "WEST BENGAL/MEDINIPUR EAST": 4,
-  "KERALA/KOTTAYAM": 3,
   "WEST BENGAL/HOWRAH": 2,
+  "BIHAR/ARWAL": 2,
+  "UTTARAKHAND/PAURI GARHWAL": 2,
   "BIHAR/PATNA": 2,
   "BIHAR/SARAN": 2,
-  "UTTARAKHAND/PAURI GARHWAL": 2,
-  "BIHAR/ARWAL": 2,
   "UTTAR PRADESH/BIJNOR": 2,
-  "JAMMU AND KASHMIR/RAJOURI": 2
+  "JAMMU AND KASHMIR/RAJOURI": 2,
+  "ANDHRA PRADESH/KRISHNA": 1,
+  "NAGALAND/KOHIMA": 1,
+  "UTTAR PRADESH/MAU": 1
  },
- "pins_misplaced_knn_only": 129,
- "pins_misplaced_total": 184,
+ "pins_far_from_district": 165,
+ "pins_far_from_district_by_district": {
+  "KARNATAKA/UTTARA KANNADA": 16,
+  "CHHATTISGARH/RAIPUR": 11,
+  "ASSAM/CHARAIDEO": 6,
+  "BIHAR/BHAGALPUR": 6,
+  "ASSAM/SIVASAGAR": 6,
+  "UTTAR PRADESH/MAINPURI": 6,
+  "UTTAR PRADESH/FARRUKHABAD": 4,
+  "TAMIL NADU/TIRUVANNAMALAI": 4,
+  "MADHYA PRADESH/REWA": 3,
+  "UTTAR PRADESH/RAE BARELI": 3
+ },
+ "pins_misplaced_knn_only": 112,
+ "pins_misplaced_total": 310,
  "pins_misplaced_examples": [
   [
    "110072",
@@ -179,22 +193,6 @@
    "28.644252350000002",
    "77.45851865",
    "0.06666666666666667"
-  ],
-  [
-   "121009",
-   "HARYANA",
-   "FARIDABAD",
-   "28.4881111",
-   "77.2945833",
-   "0.13333333333333333"
-  ],
-  [
-   "121010",
-   "HARYANA",
-   "FARIDABAD",
-   "28.51061945",
-   "77.6399639",
-   "0.13333333333333333"
   ],
   [
    "122413",
@@ -210,7 +208,7 @@
    "REWARI",
    "28.2335556",
    "77.8032778",
-   "0.06666666666666667"
+   "0.0"
   ],
   [
    "125052",
@@ -218,7 +216,7 @@
    "HISAR",
    "28.2817778",
    "75.4726389",
-   "0.06666666666666667"
+   "0.0"
   ],
   [
    "125121",
@@ -226,7 +224,7 @@
    "HISAR",
    "29.356295",
    "74.079947",
-   "0.0"
+   "0.06666666666666667"
   ],
   [
    "131022",
@@ -234,7 +232,7 @@
    "SONIPAT",
    "21.15",
    "81.71",
-   "0.0"
+   "0.06666666666666667"
   ],
   [
    "132157",
@@ -245,24 +243,40 @@
    "0.06666666666666667"
   ],
   [
+   "134118",
+   "HARYANA",
+   "PANCHKULA",
+   "29.36695",
+   "75.9458",
+   "1.0"
+  ],
+  [
    "140507",
    "PUNJAB",
    "S.A.S Nagar",
    "30.4601667",
    "76.8762778",
+   "0.13333333333333333"
+  ],
+  [
+   "140604",
+   "PUNJAB",
+   "S.A.S Nagar",
+   "30.6703333",
+   "76.8320556",
    "0.06666666666666667"
   ]
  ],
- "pins_coarse_majority": 677,
+ "pins_coarse_majority": 698,
  "pins_best_point_source": {
-  "pin_median": 19162,
-  "district_median": 413,
+  "pin_median": 19078,
+  "district_median": 497,
   "prefix3_median": 9,
   "nan": 2
  },
  "spread_p90_km_quantiles": [
   5.8,
-  26.0,
-  44.5
+  26.1,
+  44.6
  ]
 }

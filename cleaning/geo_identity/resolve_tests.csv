@@ -1,0 +1,55 @@
+typed,status,expected_status,expected_state,states,first_label,radius_km,passed,note
+Jaipur,ok,ok,RAJASTHAN,RAJASTHAN,jaipur,73.0,True,"Matched district 'jaipur', RAJASTHAN."
+Lucknow,ok,ok,UTTAR PRADESH,UTTAR PRADESH,lucknow,23.7,True,"Matched district 'lucknow', UTTAR PRADESH."
+Patna,ok,ok,BIHAR,BIHAR,patna,59.5,True,"Matched district 'patna', BIHAR."
+Gurgaon,ok,ok,HARYANA,HARYANA,gurugram,21.0,True,"Matched district 'gurugram', HARYANA."
+Gurugram,ok,ok,HARYANA,HARYANA,gurugram,21.0,True,"Matched district 'gurugram', HARYANA."
+Bombay,ok,ok,MAHARASHTRA,MAHARASHTRA,mumbai,6.4,True,"Matched district 'mumbai', MAHARASHTRA."
+Mumbai,ok,ok,MAHARASHTRA,MAHARASHTRA,mumbai,6.4,True,"Matched district 'mumbai', MAHARASHTRA."
+Bangalore,ok,ok,KARNATAKA,KARNATAKA,bengaluru urban,21.5,True,"Matched district 'bengaluru urban', KARNATAKA."
+Bengaluru,ok,ok,KARNATAKA,KARNATAKA,bengaluru,14.7,True,"Matched city 'bengaluru', KARNATAKA."
+Madras,ok,ok,TAMIL NADU,TAMIL NADU,chennai,11.4,True,"Matched district 'chennai', TAMIL NADU."
+Calcutta,ok,ok,WEST BENGAL,WEST BENGAL,kolkata,10.9,True,"Matched district 'kolkata', WEST BENGAL."
+Kolkata,ok,ok,WEST BENGAL,WEST BENGAL,kolkata,10.9,True,"Matched district 'kolkata', WEST BENGAL."
+Trivandrum,ok,ok,KERALA,KERALA,thiruvananthapuram,29.4,True,"Matched district 'thiruvananthapuram', KERALA."
+Cochin,ok,ok,KERALA,KERALA,kochi,7.8,True,"Matched city 'kochi', KERALA."
+Kochi,ok,ok,KERALA,KERALA,kochi,7.8,True,"Matched city 'kochi', KERALA."
+Vizag,ok,ok,ANDHRA PRADESH,ANDHRA PRADESH,visakhapatanam,71.2,True,"Matched district 'visakhapatanam', ANDHRA PRADESH."
+Mysore,ok,ok,KARNATAKA,KARNATAKA,mysuru,46.3,True,"Matched district 'mysuru', KARNATAKA."
+Allahabad,ok,ok,UTTAR PRADESH,UTTAR PRADESH,prayagraj,35.6,True,"Matched district 'prayagraj', UTTAR PRADESH."
+Prayagraj,ok,ok,UTTAR PRADESH,UTTAR PRADESH,prayagraj,35.6,True,"Matched district 'prayagraj', UTTAR PRADESH."
+Baroda,ok,ok,GUJARAT,GUJARAT,vadodara,73.1,True,"Matched district 'vadodara', GUJARAT."
+Poona,ok,ok,MAHARASHTRA,MAHARASHTRA,pune,75.0,True,"Matched district 'pune', MAHARASHTRA."
+Noida,ok,ok,UTTAR PRADESH,UTTAR PRADESH,gautam buddha nagar,38.7,True,"Matched district 'gautam buddha nagar', UTTAR PRADESH."
+Navi Mumbai,ok,ok,MAHARASHTRA,MAHARASHTRA,thane,31.3,True,"Matched district 'thane', MAHARASHTRA."
+Secunderabad,ok,ok,TELANGANA,TELANGANA,hyderabad,13.7,True,"Matched district 'hyderabad', TELANGANA."
+Mohali,ok,ok,PUNJAB,PUNJAB,s a s nagar,20.9,True,"Matched district 's a s nagar', PUNJAB."
+Darbhanga,ok,ok,BIHAR,BIHAR,darbhanga,48.0,True,"Matched district 'darbhanga', BIHAR."
+Muzaffarpur,ok,ok,BIHAR,BIHAR,muzaffarpur,31.1,True,"Matched district 'muzaffarpur', BIHAR."
+Aurangabad,ask_state,ask_state,BIHAR,BIHAR|MAHARASHTRA,aurangabad,43.9,True,'Aurangabad' exists in 2 states; which one?
+Bilaspur,ask_state,ask_state,HIMACHAL PRADESH,CHHATTISGARH|HIMACHAL PRADESH,bilaspur,29.3,True,'Bilaspur' exists in 2 states; which one?
+Hamirpur,ask_state,ask_state,UTTAR PRADESH,HIMACHAL PRADESH|UTTAR PRADESH,hamirpur,18.1,True,'Hamirpur' exists in 2 states; which one?
+Pratapgarh,ask_state,ask_state,RAJASTHAN,RAJASTHAN|UTTAR PRADESH,pratapgarh,40.7,True,'Pratapgarh' exists in 2 states; which one?
+Raigarh,ok,ok,CHHATTISGARH,CHHATTISGARH,raigarh,51.7,True,"Matched district 'raigarh', CHHATTISGARH."
+Raigad,ok,ok,MAHARASHTRA,MAHARASHTRA,raigad,60.8,True,"Matched district 'raigad', MAHARASHTRA."
+Rampur,ok,ok,UTTAR PRADESH,UTTAR PRADESH,rampur,27.0,True,"Matched district 'rampur', UTTAR PRADESH."
+Balrampur,ask_state,ask_state,CHHATTISGARH,CHHATTISGARH|UTTAR PRADESH,balrampur,57.8,True,'Balrampur' exists in 2 states; which one?
+Jaipur Rajasthan,ok,ok,RAJASTHAN,RAJASTHAN,jaipur,73.0,True,"Matched district 'jaipur', RAJASTHAN."
+"Aurangabad, Bihar",ok,ok,BIHAR,BIHAR,aurangabad,43.9,True,"Matched district 'aurangabad', BIHAR."
+Hydrabad,confirm,confirm,TELANGANA,ANDHRA PRADESH|TELANGANA|UTTAR PRADESH,hyderabad,13.8,True,'Hydrabad' is only a post-office name (UTTAR PRADESH); please confirm or pick a suggestion.
+Lucknw,did_you_mean,did_you_mean,UTTAR PRADESH,UTTAR PRADESH,lucknow,9.7,True,No exact match; did you mean one of these?
+Bhubaneshwar,ok,ok,ODISHA,ODISHA,bhubaneswar,7.2,True,"Matched city 'bhubaneswar', ODISHA."
+Pondicherry,ok,ok,PUDUCHERRY,PUDUCHERRY,pondicherry,15.9,True,"Matched district 'pondicherry', PUDUCHERRY."
+Thane,ok,ok,MAHARASHTRA,MAHARASHTRA,thane,31.3,True,"Matched district 'thane', MAHARASHTRA."
+Bijapur,ask_state,ask_state,CHHATTISGARH,CHHATTISGARH|KARNATAKA,bijapur,2.0,True,'Bijapur' exists in 2 states; which one?
+Goa,ask_state,ask_state,GOA,GOA,,2.0,True,'Goa' is a state; which district?
+Patana,confirm,confirm,BIHAR,BIHAR|GUJARAT|UTTAR PRADESH,patan,2.0,True,'Patana' is only a post-office name (UTTAR PRADESH); please confirm or pick a suggestion.
+560017,ok,ok,KARNATAKA,KARNATAKA,PIN 560017,25.0,True,"Centre of PIN 560017 (BENGALURU URBAN), accurate to about 25 km."
+422009,ok,ok,MAHARASHTRA,MAHARASHTRA,PIN 422009,2.0,True,"Centre of PIN 422009 (NASHIK), accurate to about 2 km."
+500063,ok,ok,TELANGANA,TELANGANA,PIN 500063,50.0,True,"Centre of PIN 500063 (nan), accurate to about 50 km."
+110001,ok,ok,DELHI,DELHI,PIN 110001,6.7,True,"Centre of PIN 110001 (NEW DELHI), accurate to about 7 km."
+999999,not_found,not_found,,,,,True,PIN 999999 is not in the India Post directory; try the town name.
+"26.85, 80.95",ok,ok,,,coordinates,0.1,True,Coordinates used as given.
+"51.5, -0.12",not_found,not_found,,,,,True,"Could not find '51.5, -0.12'. Try a PIN code or the district name."
+Xyzabad,not_found,not_found,,,,,True,Could not find 'Xyzabad'. Try a PIN code or the district name.
+Kaithal,ok,ok,HARYANA,HARYANA,kaithal,26.1,True,"Matched district 'kaithal', HARYANA."

@@ -1,0 +1,111 @@
+=== Example: strong (Civil Hospital, Panipat, dialysis) ===
+[1] LIKELY offers dialysis - Civil Hospital, Panipat, Panipat        [band, name]
+    Distance and travel time come from the decision layer for a query point (not part of fusion).
+[2] How sure: 0.70 (range 0.38 to 0.97).        [p_s, p_s_lo, p_s_hi]
+    No checked test facility fell in this band, so there is no track record yet. Dev out-of-fold: 2 pairs, 1 confirmed, 0 wrong, 1 no public information.        [band_record]
+[3] Why we think it offers dialysis (from its listing):        [cited_atom_ids -> atoms.text]
+    [capability] "Hemodialysis facility run under Public-Private Partnership"
+    [equipment] "Haemodialysis facility run in PPP mode"
+    [procedure] "Provides haemodialysis treatment"
+    Sources: one of these pages: https://panipat.gov.in/public-utility-category/hospitals/, https://www.tribuneindia.com/news/haryana/indefinite-doctors-strike-hits-civil-hospitals-across-state/, http://www.onefivenine.com/india/villages/Panipat/Panipat/Tehsil-Camp ... (13 pages in the record)
+[4] Is it real: website none (nan); phone none. P_E = 0.71. Existence weights are expert settings, not learned (5 dev negatives).
+[5] Where: point taken from listing coordinates. Agree within 25 km: PIN centre, stated city, place in the name, stated state. Point elsewhere: none. P_L = 0.99.
+    Note: Listing coordinates agree with postcode 132103 (1.6 km from its centre).
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 1802630102
+--- judge view: service head waterfall (points = 20/ln2 x logit; 20 points doubles the odds) ---
+    base (intercept + calibration offset): -1.214 logit = -35.0 pts
+    [evidence] p1                   x=+1  +0.371 logit =  +10.7 pts  (prior +0.90, posterior +0.98, fired on 49 dev pairs)
+    [evidence] t1                   x=+1  +0.286 logit =   +8.3 pts  (prior +0.40, posterior +0.75, fired on 58 dev pairs)
+    [evidence] t4@dialysis          x=+1  -0.038 logit =   -1.1 pts  (prior +0.00, posterior -0.10, fired on 7 dev pairs)
+    [evidence] t4                   x=+1  +0.038 logit =   +1.1 pts  (prior +1.00, posterior +0.10, fired on 17 dev pairs)
+    [evidence] p1@dialysis          x=+1  -0.026 logit =   -0.7 pts  (prior +0.00, posterior -0.07, fired on 7 dev pairs)
+    [evidence] t2                   x=+1  +0.006 logit =   +0.2 pts  (prior +0.46, posterior +0.02, fired on 51 dev pairs)
+    [evidence] t2@dialysis          x=+1  -0.006 logit =   -0.2 pts  (prior +0.00, posterior -0.02, fired on 11 dev pairs)
+    [evidence] tb_mid               x=+1  -0.000 logit =   -0.0 pts  (prior -0.43, posterior -0.00, fired on 20 dev pairs)
+    [evidence] t3                   x=+1  +0.000 logit =   +0.0 pts  (prior +0.80, posterior +0.00, fired on 22 dev pairs)
+    [context] level_dh             x=+1  +0.448 logit =  +12.9 pts  (prior +0.50, posterior +1.18, fired on 11 dev pairs)
+    [context] g_mid                x=+1  +0.401 logit =  +11.6 pts  (prior +0.00, posterior +1.06, fired on 28 dev pairs)
+    [context] iphs_essential       x=+1  +0.375 logit =  +10.8 pts  (prior +0.50, posterior +0.99, fired on 6 dev pairs)
+    [context] breadth_20p          x=+1  +0.309 logit =   +8.9 pts  (prior +0.30, posterior +0.81, fired on 39 dev pairs)
+    [context] public               x=+1  -0.165 logit =   -4.8 pts  (prior +0.00, posterior -0.43, fired on 21 dev pairs)
+    [context] beds_100p            x=+1  +0.091 logit =   +2.6 pts  (prior +0.50, posterior +0.24, fired on 33 dev pairs)
+    [context] doctors_20p          x=+1  -0.018 logit =   -0.5 pts  (prior +0.30, posterior -0.05, fired on 11 dev pairs)
+    total +0.859 logit = z_cal +0.859 -> P_S = 0.702 (additivity error 4.4e-16)
+    band rule: [x] P_S >= t_L (0.70)  [x] P_L >= 0.7  [x] P_E >= 0.7  [x] T >= 2 (T = 4)  -> Likely: all four Likely rules hold
+    stored counterfactual: without the quoted sentences P_S would be 0.64
+    location head: b_loc x=+1 +12.9 pts, v_pin x=+1 +38.4 pts, v_city x=+1 +63.3 pts, v_state x=+1 +21.2 pts
+
+=== Example: uncertain (Karan Hospital, dialysis) ===
+[1] Not verified: call to confirm dialysis - Karan Hospital, Palampur        [band, name]
+    Distance and travel time come from the decision layer for a query point (not part of fusion).
+[2] How sure: 0.57 (range 0.32 to 0.89).        [p_s, p_s_lo, p_s_hi]
+    Of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.        [band_record, split = test]
+[3] Why we think it offers dialysis (from its listing):        [cited_atom_ids -> atoms.text]
+    [equipment] "Dialysis machines"
+    [capability] "Dialysis services"
+    [capability] "In-house dialysis facility"
+    Sources: one of these pages: https://drkaranhospital.com/about-us/, https://drkaranhospital.com/contact/, https://drkaranhospital.com/ ... (8 pages in the record)
+[4] Is it real: website own domain (linkkpro.com); phone mobile. P_E = 0.88. Existence weights are expert settings, not learned (5 dev negatives).
+[5] Where: point taken from listing coordinates. Agree within 25 km: PIN centre, stated city, stated state. Point elsewhere: none. P_L = 0.99.
+    Note: Listing coordinates agree with postcode 176061 (1.3 km from its centre).
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 6230065277, 9318749157
+--- judge view: service head waterfall (points = 20/ln2 x logit; 20 points doubles the odds) ---
+    base (intercept + calibration offset): -1.214 logit = -35.0 pts
+    [evidence] t5                   x=+1  +0.408 logit =  +11.8 pts  (prior +0.60, posterior +1.08, fired on 10 dev pairs)
+    [evidence] p1                   x=+1  +0.371 logit =  +10.7 pts  (prior +0.90, posterior +0.98, fired on 49 dev pairs)
+    [evidence] t1                   x=+1  +0.286 logit =   +8.3 pts  (prior +0.40, posterior +0.75, fired on 58 dev pairs)
+    [evidence] t4@dialysis          x=+1  -0.038 logit =   -1.1 pts  (prior +0.00, posterior -0.10, fired on 7 dev pairs)
+    [evidence] t4                   x=+1  +0.038 logit =   +1.1 pts  (prior +1.00, posterior +0.10, fired on 17 dev pairs)
+    [evidence] p1@dialysis          x=+1  -0.026 logit =   -0.7 pts  (prior +0.00, posterior -0.07, fired on 7 dev pairs)
+    [evidence] t2                   x=+1  +0.006 logit =   +0.2 pts  (prior +0.46, posterior +0.02, fired on 51 dev pairs)
+    [evidence] t2@dialysis          x=+1  -0.006 logit =   -0.2 pts  (prior +0.00, posterior -0.02, fired on 11 dev pairs)
+    [evidence] tb_mid               x=+1  -0.000 logit =   -0.0 pts  (prior -0.43, posterior -0.00, fired on 20 dev pairs)
+    [evidence] t3                   x=+1  +0.000 logit =   +0.0 pts  (prior +0.80, posterior +0.00, fired on 22 dev pairs)
+    [context] g_mid                x=+1  +0.401 logit =  +11.6 pts  (prior +0.00, posterior +1.06, fired on 28 dev pairs)
+    [context] breadth_20p          x=+1  +0.309 logit =   +8.9 pts  (prior +0.30, posterior +0.81, fired on 39 dev pairs)
+    [context] beds_missing         x=+1  -0.165 logit =   -4.8 pts  (prior +0.00, posterior -0.43, fired on 30 dev pairs)
+    [context] doctors_lt5          x=+1  -0.076 logit =   -2.2 pts  (prior -0.30, posterior -0.20, fired on 11 dev pairs)
+    total +0.295 logit = z_cal +0.295 -> P_S = 0.573 (additivity error 0.0e+00)
+    band rule: [ ] P_S >= t_L (0.70)  [x] P_L >= 0.7  [x] P_E >= 0.7  [x] T >= 2 (T = 5)  -> Unverified: P_S below t_L (0.70)
+    stored counterfactual: without the quoted sentences P_S would be 0.47
+    location head: b_loc x=+1 +12.9 pts, v_pin x=+1 +38.4 pts, v_city x=+1 +63.3 pts, v_state x=+1 +21.2 pts
+
+=== Example: contaminated (Wockhardt Hospital Nagpur, dialysis) ===
+[1] Not verified: call to confirm dialysis - Wockhardt Hospital Nagpur, Nagpur        [band, name]
+    Distance and travel time come from the decision layer for a query point (not part of fusion).
+[2] How sure: 0.54 (range 0.29 to 0.85).        [p_s, p_s_lo, p_s_hi]
+    Of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.        [band_record, split = test]
+[3] Why we think it offers dialysis (from its listing):        [cited_atom_ids -> atoms.text]
+    [equipment] "In-house dialysis units"
+    [capability] "Offers dialysis services at concessional pricing (Rs. 350 or less per session) including blood tubing and dialyser"
+    Sources: one of these pages: https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp, https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp, https://pmc.ncbi.nlm.nih.gov/articles/PMC9859970/ ... (50 pages in the record)
+[4] Is it real: website own domain (fortishealthcare.com); phone mobile. P_E = 0.91. Existence weights are expert settings, not learned (5 dev negatives).
+[5] Where: point taken from listing coordinates. Agree within 25 km: PIN centre, stated state. Point elsewhere: stated city, place in the name. P_L = 0.58.
+    Note: Listing coordinates and postcode 400078 agree (MUMBAI SUBURBAN), but the address city 'Nagpur' is a place 677 km away. Confirm which town before travelling.
+[6] What we ignored:
+    "Provides dialysis treatment at Nair Hospital, Mumbai Central" - names a different hospital (Nair Hospital, Mumbai Central)
+    "Dialysis machines donated by Jivan Jyot Drug Bank are used at Nair Hospital, Mumbai Central" - names a different hospital (Nair Hospital, Mumbai Central)
+[8] Call first: 8554954315, 2261784400
+--- judge view: service head waterfall (points = 20/ln2 x logit; 20 points doubles the odds) ---
+    base (intercept + calibration offset): -1.214 logit = -35.0 pts
+    [evidence] t5                   x=+1  +0.408 logit =  +11.8 pts  (prior +0.60, posterior +1.08, fired on 10 dev pairs)
+    [evidence] p1                   x=+1  +0.371 logit =  +10.7 pts  (prior +0.90, posterior +0.98, fired on 49 dev pairs)
+    [evidence] t1                   x=+1  +0.286 logit =   +8.3 pts  (prior +0.40, posterior +0.75, fired on 58 dev pairs)
+    [evidence] c1                   x=+1  -0.221 logit =   -6.4 pts  (prior -0.51, posterior -0.58, fired on 9 dev pairs)
+    [evidence] t4@dialysis          x=+1  -0.038 logit =   -1.1 pts  (prior +0.00, posterior -0.10, fired on 7 dev pairs)
+    [evidence] t4                   x=+1  +0.038 logit =   +1.1 pts  (prior +1.00, posterior +0.10, fired on 17 dev pairs)
+    [evidence] p1@dialysis          x=+1  -0.026 logit =   -0.7 pts  (prior +0.00, posterior -0.07, fired on 7 dev pairs)
+    [evidence] t2                   x=+1  +0.006 logit =   +0.2 pts  (prior +0.46, posterior +0.02, fired on 51 dev pairs)
+    [evidence] t2@dialysis          x=+1  -0.006 logit =   -0.2 pts  (prior +0.00, posterior -0.02, fired on 11 dev pairs)
+    [evidence] tb_high              x=+1  -0.000 logit =   -0.0 pts  (prior -0.86, posterior -0.00, fired on 25 dev pairs)
+    [evidence] t3                   x=+1  +0.000 logit =   +0.0 pts  (prior +0.80, posterior +0.00, fired on 22 dev pairs)
+    [context] breadth_20p          x=+1  +0.309 logit =   +8.9 pts  (prior +0.30, posterior +0.81, fired on 39 dev pairs)
+    [context] g_high               x=+1  +0.175 logit =   +5.0 pts  (prior +0.00, posterior +0.46, fired on 38 dev pairs)
+    [context] beds_100p            x=+1  +0.091 logit =   +2.6 pts  (prior +0.50, posterior +0.24, fired on 33 dev pairs)
+    [context] doctors_20p          x=+1  -0.018 logit =   -0.5 pts  (prior +0.30, posterior -0.05, fired on 11 dev pairs)
+    total +0.162 logit = z_cal +0.162 -> P_S = 0.540 (additivity error 5.6e-17)
+    band rule: [ ] P_S >= t_L (0.70)  [ ] P_L >= 0.7  [x] P_E >= 0.7  [x] T >= 2 (T = 5)  -> Unverified: P_S below t_L (0.70)
+    stored counterfactual: without the quoted sentences P_S would be 0.40
+    location head: b_loc x=+1 +12.9 pts, v_pin x=+1 +38.4 pts, v_city x=-1 -63.3 pts, v_state x=+1 +21.2 pts

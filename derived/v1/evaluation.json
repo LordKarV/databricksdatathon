@@ -1,0 +1,346 @@
+{
+ "note": "Gold TEST split (model/gold/splits.json); verdicts hidden from the fit.",
+ "service_claim": {
+  "n": 29,
+  "n_true": 23,
+  "n_false": 6,
+  "baseline_no_sources": {
+   "auc": 0.826,
+   "ci90": [
+    0.689,
+    0.946
+   ]
+  },
+  "model": {
+   "auc": 0.819,
+   "ci90": [
+    0.666,
+    0.944
+   ]
+  },
+  "sources_only": {
+   "auc": 0.493,
+   "ci90": [
+    0.282,
+    0.694
+   ]
+  },
+  "true_rate_by_source_tercile": {
+   "low": {
+    "n": 10,
+    "true": 8,
+    "rate": 0.8,
+    "wilson90": [
+     0.541,
+     0.931
+    ],
+    "source_support_range": [
+     0.785,
+     0.859
+    ]
+   },
+   "mid": {
+    "n": 9,
+    "true": 7,
+    "rate": 0.778,
+    "wilson90": [
+     0.504,
+     0.924
+    ],
+    "source_support_range": [
+     0.86,
+     0.869
+    ]
+   },
+   "high": {
+    "n": 10,
+    "true": 8,
+    "rate": 0.8,
+    "wilson90": [
+     0.541,
+     0.931
+    ],
+    "source_support_range": [
+     0.87,
+     0.88
+    ]
+   }
+  }
+ },
+ "location": {
+  "n": 56,
+  "n_true": 46,
+  "n_false": 10,
+  "baseline_no_sources": {
+   "auc": 0.77,
+   "ci90": [
+    0.624,
+    0.905
+   ]
+  },
+  "model": {
+   "auc": 0.802,
+   "ci90": [
+    0.643,
+    0.934
+   ]
+  },
+  "sources_only": {
+   "auc": 0.696,
+   "ci90": [
+    0.547,
+    0.828
+   ]
+  },
+  "true_rate_by_source_tercile": {
+   "low": {
+    "n": 19,
+    "true": 13,
+    "rate": 0.684,
+    "wilson90": [
+     0.496,
+     0.827
+    ],
+    "source_support_range": [
+     0.782,
+     0.858
+    ]
+   },
+   "mid": {
+    "n": 18,
+    "true": 15,
+    "rate": 0.833,
+    "wilson90": [
+     0.648,
+     0.931
+    ],
+    "source_support_range": [
+     0.859,
+     0.87
+    ]
+   },
+   "high": {
+    "n": 19,
+    "true": 18,
+    "rate": 0.947,
+    "wilson90": [
+     0.795,
+     0.988
+    ],
+    "source_support_range": [
+     0.87,
+     0.88
+    ]
+   }
+  }
+ },
+ "service_and_location_pooled": {
+  "n": 85,
+  "n_true": 69,
+  "n_false": 16,
+  "baseline_no_sources": {
+   "auc": 0.775,
+   "ci90": [
+    0.644,
+    0.891
+   ]
+  },
+  "model": {
+   "auc": 0.791,
+   "ci90": [
+    0.661,
+    0.904
+   ]
+  },
+  "sources_only": {
+   "auc": 0.619,
+   "ci90": [
+    0.498,
+    0.736
+   ]
+  },
+  "true_rate_by_source_tercile": {
+   "low": {
+    "n": 29,
+    "true": 21,
+    "rate": 0.724,
+    "wilson90": [
+     0.573,
+     0.837
+    ],
+    "source_support_range": [
+     0.782,
+     0.859
+    ]
+   },
+   "mid": {
+    "n": 28,
+    "true": 23,
+    "rate": 0.821,
+    "wilson90": [
+     0.676,
+     0.91
+    ],
+    "source_support_range": [
+     0.859,
+     0.87
+    ]
+   },
+   "high": {
+    "n": 28,
+    "true": 25,
+    "rate": 0.893,
+    "wilson90": [
+     0.76,
+     0.956
+    ],
+    "source_support_range": [
+     0.87,
+     0.88
+    ]
+   }
+  }
+ },
+ "goal3_page_check": {
+  "urls_checked": 385,
+  "fetch_status": {
+   "ok_html": 258,
+   "unreachable": 55,
+   "robots_disallowed": 18,
+   "blocked_http_403": 17,
+   "http_404": 12,
+   "skipped_after_blocked": 12,
+   "ok_empty": 12,
+   "login_redirect": 1
+  },
+  "urls_with_text": 258,
+  "sentences_tested": 6364,
+  "by_stratum": {
+   "aggregator_about": {
+    "urls_with_text": 32,
+    "urls_checked": 40,
+    "unreachable": 2,
+    "sentences": 783,
+    "supported": 38,
+    "supported_rate": 0.049,
+    "supported_wilson90": [
+     0.037,
+     0.063
+    ],
+    "token_supported_rate": 0.157,
+    "service_sentences": 204,
+    "service_supported": 7,
+    "service_supported_rate": 0.034,
+    "service_supported_wilson90": [
+     0.019,
+     0.062
+    ],
+    "urls_with_any_supported_sentence": 13
+   },
+   "government": {
+    "urls_with_text": 42,
+    "urls_checked": 88,
+    "unreachable": 35,
+    "sentences": 1035,
+    "supported": 12,
+    "supported_rate": 0.012,
+    "supported_wilson90": [
+     0.007,
+     0.018
+    ],
+    "token_supported_rate": 0.087,
+    "service_sentences": 194,
+    "service_supported": 0,
+    "service_supported_rate": 0.0,
+    "service_supported_wilson90": [
+     0.0,
+     0.014
+    ],
+    "urls_with_any_supported_sentence": 7
+   },
+   "list_page": {
+    "urls_with_text": 33,
+    "urls_checked": 40,
+    "unreachable": 4,
+    "sentences": 814,
+    "supported": 12,
+    "supported_rate": 0.015,
+    "supported_wilson90": [
+     0.009,
+     0.023
+    ],
+    "token_supported_rate": 0.14,
+    "service_sentences": 121,
+    "service_supported": 2,
+    "service_supported_rate": 0.017,
+    "service_supported_wilson90": [
+     0.005,
+     0.049
+    ],
+    "urls_with_any_supported_sentence": 7
+   },
+   "official_about": {
+    "urls_with_text": 117,
+    "urls_checked": 150,
+    "unreachable": 14,
+    "sentences": 2891,
+    "supported": 277,
+    "supported_rate": 0.096,
+    "supported_wilson90": [
+     0.087,
+     0.105
+    ],
+    "token_supported_rate": 0.379,
+    "service_sentences": 916,
+    "service_supported": 79,
+    "service_supported_rate": 0.086,
+    "service_supported_wilson90": [
+     0.072,
+     0.103
+    ],
+    "urls_with_any_supported_sentence": 81
+   },
+   "research": {
+    "urls_with_text": 34,
+    "urls_checked": 67,
+    "unreachable": 0,
+    "sentences": 841,
+    "supported": 7,
+    "supported_rate": 0.008,
+    "supported_wilson90": [
+     0.005,
+     0.015
+    ],
+    "token_supported_rate": 0.137,
+    "service_sentences": 225,
+    "service_supported": 2,
+    "service_supported_rate": 0.009,
+    "service_supported_wilson90": [
+     0.003,
+     0.027
+    ],
+    "urls_with_any_supported_sentence": 5
+   }
+  },
+  "by_attribution": {
+   "ambiguous": {
+    "sentences": 84,
+    "supported_rate": 0.024
+   },
+   "other_facility": {
+    "sentences": 142,
+    "supported_rate": 0.0
+   },
+   "own_anchored": {
+    "sentences": 515,
+    "supported_rate": 0.023
+   },
+   "unanchored": {
+    "sentences": 5623,
+    "supported_rate": 0.059
+   }
+  },
+  "overall_supported_rate": 0.054,
+  "overall_token_supported_rate": 0.242
+ }
+}

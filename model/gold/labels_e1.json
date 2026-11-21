@@ -1,0 +1,591 @@
+{
+ "batch": "e1",
+ "status": "partial",
+ "note": "WebSearch budget exhausted after 25 pairs; remaining pairs labeled from PIN directory and facility names only, confidence low.",
+ "results": [
+  {
+   "pair_id": "e2e_001",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/bargarh/sai-multispeciality-hospital-milan-vihar"
+   ],
+   "quote": "Path Lab, X Ray, Pharmacy, Parking",
+   "notes": "Directory lists Sai Multispeciality Hospital, Milan Vihar, Bargarh; specialities Gynecology/Obstetrics and General Medicine; no dialysis listed. Vikash Multi Speciality Hospital, Bargarh lists dialysis (different facility)."
+  },
+  {
+   "pair_id": "e2e_004",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.orchidmedcentre.com",
+    "https://www.hexahealth.com/ranchi/hospital/orchid-medical-centre-ranchi/doctors-list/obstetrician-gynaecologist"
+   ],
+   "quote": "Orchid Medical Centre, Department of Obstetrics & Gynaecology ... H.B. Road, Ranchi, Jharkhand 834001",
+   "notes": "Own site has an OBG department with 3 OBGs but does not state caesarean or 24x7 obstetric emergency; plausible, not stated."
+  },
+  {
+   "pair_id": "e2e_007",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/solapur/jagdale-mama-hospital-barshi"
+   ],
+   "quote": "Dr. Mamasaheb Jagdale Road, Shivaji Nagar, Karmaveer Nagar, Barshi, Solapur",
+   "notes": "General medicine/multispecialty hospital in Barshi; no source mentions MRI."
+  },
+  {
+   "pair_id": "e2e_010",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.cmai.org/oldsite/network-vacancies/item/404-cmc-vellore-calling-for-multiple-positions-at-reynolds-memorial-hospital-affiliated-clinics-washim-maharashtra.html"
+   ],
+   "quote": "100 Bedded hospital with good infrastructure to develop services",
+   "notes": "Mission hospital in Washim (CMC Vellore/EHA/Church of the Nazarene); no page states emergency or trauma service."
+  },
+  {
+   "pair_id": "e2e_013",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Searches for Bharati Hospital Chandrapur returned only Bharati Hospital Pune (Bharati Vidyapeeth); PIN 442402 is Chandrapur district per India Post directory. Possible name collision with the Pune hospital's NICU text."
+  },
+  {
+   "pair_id": "e2e_016",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.marwarihospitals.com"
+   ],
+   "quote": "It consists of 4 beds in NICU and 8 beds in step down (Recovery room).",
+   "notes": "Own site, SJ Road, Athgaon, Guwahati-781008. Neonatology section also says NICU at sister concern unit."
+  },
+  {
+   "pair_id": "e2e_019",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/lucknow/medox-hospital-jankipuram"
+   ],
+   "quote": "Path Lab, X Ray, Pharmacy, Parking",
+   "notes": "Medox Hospital Jankipuram, Lucknow; MRI not listed in directory."
+  },
+  {
+   "pair_id": "e2e_022",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.policybazaar.com/hospitals/pmjay/auraiya/",
+    "https://www.drlogy.com/ayushman-bharat/hospitals/uttar-pradesh/auraiya/nayan-jyoti-eye-care-centre-auraiya"
+   ],
+   "quote": "NAYAN JYOTI EYE CARE CENTRE",
+   "notes": "PMJAY-empanelled eye care centre in Auraiya, PIN 206122; single-specialty eye facility, emergency C-section implausible."
+  },
+  {
+   "pair_id": "e2e_025",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.hexahealth.com/ranchi/hospital/vardaan-hospital-and-research-centre/doctors-list/obstetrician-gynaecologist"
+   ],
+   "quote": "6 Obstetrician Gynaecologists practicing at Vardaan Hospital And Research Centre, Ranchi",
+   "notes": "Directory places it at Ratu, Ranchi (PIN 835222 is Ranchi district). OBGs listed but no C-section statement."
+  },
+  {
+   "pair_id": "e2e_028",
+   "exists": "yes",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.policybazaar.com/network-hospitals/aditya-birla-hospitals-bihar-motihari/",
+    "https://www.indiraivf.com/fertility-doctors/dr-anju-harsh"
+   ],
+   "quote": "Bankat N H 28 A Near Hyundai Showroom",
+   "notes": "Harsh Hospital exists in Motihari (Bankat, NH-28A) and separately in Purnia (Line Bazar). Record PIN 854301 is Purnia per India Post, city Motihari: likely merged record."
+  },
+  {
+   "pair_id": "e2e_031",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/darbhanga/pediatrics-hospitals-21",
+    "https://www.policybazaar.com/hospitals/pmjay/darbhanga/"
+   ],
+   "quote": "Darbhanga children hospital, Opp. Benta Durga Mandir, up of HDFC bank, Darbhanga, 846001",
+   "notes": "Paediatric hospital, PMJAY neonatal and paediatric packages; no dialysis evidence."
+  },
+  {
+   "pair_id": "e2e_034",
+   "exists": "unclear",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/nashik/parijat-hospital-koknipura"
+   ],
+   "quote": "Sinnar, Nashik, Maharashtra - 422103",
+   "notes": "No Parijat Hospital found in Trimbak; one exists in Sinnar. Record PIN 444603 is Amravati per India Post, inconsistent with Trimbak/Nashik."
+  },
+  {
+   "pair_id": "e2e_037",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://medindia.net/directories/labs/purvanchal-metro-city-hospital-gorakhpur-uttar-pradesh-41486-1.htm",
+    "https://www.zurichkotak.com/network-locator/cashless-hospitals/gorakhpur/purvanchal-metrocity-hospital"
+   ],
+   "quote": "H N Singh Chowk, Medical College Road, Gorakhpur",
+   "notes": "Exists in Gorakhpur (directory PIN 273001 vs record 273002, same city). No dialysis found."
+  },
+  {
+   "pair_id": "e2e_040",
+   "exists": "unclear",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://dse.bihar.gov.in/CRS/Form-11/2022/FEB/NALANDA.pdf"
+   ],
+   "quote": "REFERAL HOSPITAL KALYAN BIGHA HARNAUT",
+   "notes": "Generic name; Nalanda has several referral hospitals (Chandi, Harnaut). Record PIN 811101 is Sheikhpura district per India Post. No C-section evidence."
+  },
+  {
+   "pair_id": "e2e_043",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.myhospitalnow.com/hospitals/nemcare-super-speciality-hospital",
+    "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2023-1126_5th Edition - RA, SA, Focus & Scope Correction.pdf"
+   ],
+   "quote": "Recognized for its Burn Care Unit as the best in Northeast India",
+   "notes": "Only a low-reputation directory states the burn unit; another directory specialty list omits burns. GMC Hospital Rd, Bhangagarh, 781005 matches."
+  },
+  {
+   "pair_id": "e2e_046",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "No listing found for Smile Kraft Dental Clinic in Palamu. Dental clinic is unrelated to trauma emergency (name-based)."
+  },
+  {
+   "pair_id": "e2e_049",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://paradipport.gov.in/?p=1021"
+   ],
+   "quote": "M/s Ashwini Trauma Center( A Unit of Cuttack Hospitals private Limited) ... Trauma & Burn Care",
+   "notes": "Govt referral list: Ashwini Hospital (Plot 3(P), Sector-1, CDA, 753014) is 'All Disciplines'; burn care is listed for the sibling unit Ashwini Trauma Center, separate building, same sector."
+  },
+  {
+   "pair_id": "e2e_052",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; PIN 121006 is Faridabad per India Post."
+  },
+  {
+   "pair_id": "e2e_055",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://en.wikipedia.org/wiki/King_George%27s_Medical_University"
+   ],
+   "quote": "Shahmina Road, Chowk",
+   "notes": "KGMU exists at Chowk, Lucknow (226003). kgmu.org unreachable; MRI not verified on any page read."
+  },
+  {
+   "pair_id": "e2e_058",
+   "exists": "unclear",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 431508 is Parbhani district per India Post, not Jalgaon."
+  },
+  {
+   "pair_id": "e2e_061",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.pdmmc.edu.in/pages/gynecology_department.php",
+    "https://www.pdmmc.edu.in"
+   ],
+   "quote": "Management of Normal & complicated pregnancies and and deliveries including caesarean section",
+   "notes": "Own site; address Shivaji Nagar, Morshi Road, Amravati 444603; also 'All routine, emergency and complicated obstetric operations'."
+  },
+  {
+   "pair_id": "e2e_064",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; PIN 241001 is Hardoi per India Post."
+  },
+  {
+   "pair_id": "e2e_067",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.kmckatihar.org/dep-surgery.php",
+    "https://www.kmckatihar.org"
+   ],
+   "quote": "Karim Bagh, Bihar 854106",
+   "notes": "Own site lists departments; no burn unit or plastic surgery department."
+  },
+  {
+   "pair_id": "e2e_070",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_073",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_076",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_079",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; PIN 410206 is Raigad (Panvel) per India Post."
+  },
+  {
+   "pair_id": "e2e_082",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; charakhospital.com did not resolve."
+  },
+  {
+   "pair_id": "e2e_085",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; dental clinic is unrelated to cardiac surgery (name-based)."
+  },
+  {
+   "pair_id": "e2e_088",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; record state field 'New Mondha' is a locality; PIN 431401 is Parbhani."
+  },
+  {
+   "pair_id": "e2e_091",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; dental hospital is unrelated to emergency C-section (name-based). PIN 843331 is Sitamarhi."
+  },
+  {
+   "pair_id": "e2e_094",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_097",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_100",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_103",
+   "exists": "unclear",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 425418 is Nandurbar, Maharashtra per India Post, state Gujarat."
+  },
+  {
+   "pair_id": "e2e_106",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_109",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; maternity and IVF centre is unrelated to cardiac surgery (name-based)."
+  },
+  {
+   "pair_id": "e2e_112",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.wellsunmedicity.com"
+   ],
+   "quote": "8-B/NH-5, Vrindavan Yojna, Shaheed Path,Lucknow - 226029",
+   "notes": "Own site lists a 'Neonatology & Pediatrics' department but no NICU text found (department page 404)."
+  },
+  {
+   "pair_id": "e2e_115",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_118",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; dental clinic is unrelated to dialysis (name-based)."
+  },
+  {
+   "pair_id": "e2e_121",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; cancer hospital is unrelated to emergency C-section (name-based)."
+  },
+  {
+   "pair_id": "e2e_124",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_127",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_130",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.pdmmc.edu.in/pages/super_speciality_service.php"
+   ],
+   "quote": "Cardiology with Angiography & Angioplasty",
+   "notes": "Own super-speciality list (16 items) has no cardiac/CTVS surgery. PIN 444602 vs site 444603, both Amravati."
+  },
+  {
+   "pair_id": "e2e_133",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; eye hospital is unrelated to cardiac surgery (name-based)."
+  },
+  {
+   "pair_id": "e2e_136",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; newborn and child hospital, obstetric surgery unlikely but unverified."
+  },
+  {
+   "pair_id": "e2e_139",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; anshospital.com did not resolve."
+  },
+  {
+   "pair_id": "e2e_142",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://desunhospital.com/department/burn-unit/"
+   ],
+   "quote": "The only dedicated tertiary-level burn unit in Kolkata, with 16 beds.",
+   "notes": "Desun burn unit is at Kasba, Kolkata 700107; Siliguri appears only in a 2015 blog title. Claim likely belongs to the Kolkata hospital."
+  },
+  {
+   "pair_id": "e2e_145",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch"
+  },
+  {
+   "pair_id": "e2e_148",
+   "exists": "unclear",
+   "location_ok": "no",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 814133 is Godda per India Post, not Jamshedpur (East Singhbhum)."
+  },
+  {
+   "pair_id": "e2e_151",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.igims.org/about-us/department-detail/nephrology---kidney-transplant"
+   ],
+   "quote": "the dialysis unit has grown to 25 machines as of January 2026",
+   "notes": "Own site, Nephrology & Kidney Transplant department, IGIMS Patna."
+  },
+  {
+   "pair_id": "e2e_154",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.drrmlims.ac.in/department/Paediatrics"
+   ],
+   "quote": "Department of Pediatrics has a well equipped NICU, PICU, Private and general wards.",
+   "notes": "Own site; also 'Level 3 NICU with ventilators'. PIN 226010 is Lucknow."
+  },
+  {
+   "pair_id": "e2e_157",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not web-checked: shared WebSearch budget exhausted mid-batch; children's hospital, burn care unverified."
+  }
+ ]
+}

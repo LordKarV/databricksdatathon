@@ -33,8 +33,8 @@ if which == "q1_recall_strata":
     cap_after_prep = un.text.str.contains(r"\b(?:at|from|with|of|to|by|under)\s+(?:the\s+)?[A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z.]+)+")
     u1, u2 = un[has_m], un[~has_m & cap_after_prep]
     print("unflagged", len(un), "U1 with self/generic mention", len(u1), "U2 cap phrase after preposition", len(u2), "U3 rest", len(un) - len(u1) - len(u2))
-    ctx(u1.sample(30, random_state=2026))[["unique_id", "rec_name", "rec_city", "self_names", "other_mentions", "text"]].to_csv(f"{D}/handcheck/q1_recall_U1.tsv", sep="\t", index=False)
-    ctx(u2.sample(30, random_state=2026))[["unique_id", "rec_name", "rec_city", "text"]].to_csv(f"{D}/handcheck/q1_recall_U2.tsv", sep="\t", index=False)
+    ctx(u1.sample(30, random_state=7777))[["unique_id", "rec_name", "rec_city", "self_names", "other_mentions", "text"]].to_csv(f"{D}/handcheck/q1_recall_U1.tsv", sep="\t", index=False)
+    ctx(u2.sample(30, random_state=7777))[["unique_id", "rec_name", "rec_city", "text"]].to_csv(f"{D}/handcheck/q1_recall_U2.tsv", sep="\t", index=False)
 if which == "q5":
     dec = pd.read_parquet(f"{D}/out/sentence_decisions.parquet")
     x = s.merge(dec, on=["unique_id", "field", "idx"])

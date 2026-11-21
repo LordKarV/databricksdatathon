@@ -1,0 +1,62 @@
+{
+ "rows": 10088,
+ "uuid_ok": 10000,
+ "uuid_and_kie": 9970,
+ "distinct_uid_w": 9959,
+ "uids_twice": 11,
+ "distinct_full_rows_w": 9959,
+ "dup_uid_groups_full_distinct": 11,
+ "base": 9959,
+ "cluster_distinct_base": [
+  9959,
+  9959
+ ],
+ "cluster_null_base": 0,
+ "source_values": [
+  [
+   "kie",
+   9959
+  ]
+ ],
+ "cti_eq_sci": 9959,
+ "cti_null": 0,
+ "cti_shared": [
+  1324,
+  405,
+  27
+ ],
+ "nu_eq_nt_w": 1489,
+ "nu_eq_nt_on_well_formed_9970": 1492,
+ "url_total_raw_elements": 169742,
+ "url_median": [
+  10.0,
+  50,
+  1240,
+  0
+ ],
+ "url_nonempty_elements": 158444,
+ "distinct_source_ids_gt1": 6444,
+ "source_ids_zero_distinct": 730,
+ "source_types_values": [
+  [
+   "overture",
+   161298
+  ],
+  [
+   "dynamic",
+   82559
+  ],
+  [
+   "constant",
+   20582
+  ],
+  [
+   "mongo_facility",
+   5945
+  ],
+  [
+   "mongo_ngo",
+   1121
+  ]
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "DIALYSIS 842001": {
+  "reply": "dialysis near 842001, data 2026-11-21. Call before going:\n1) Dr. Global Healthcare & Diabetes Centre  +917004545746 conf 27% \"Dialysis facility\"\n2) R. B. Memorial Hospital +916272233684 conf 32% \"Dialysis service\"\n3) Phular Superspeciality Hospital, Road No +916212271151 conf 43% \"Dialysis program is offered\"",
+  "chars": 310,
+  "segments": 3
+ },
+ "csec 800001": {
+  "reply": "emergency csection near 800001, data 2026-11-21. Call before going:\n1) Medizone Hospitals +917677190002 conf 42% \"Cesarean delivery\"\n2) Shrinivas Hospital +919430964248 conf 42% \"Caesarean Section\"\n3) MGM Hospital and Research Centre +919386563244 conf 39% \"Performs cesarean delivery\"",
+  "chars": 285,
+  "segments": 2
+ },
+ "BURN 846004": {
+  "reply": "burn care near 846004, data 2026-11-21. Call before going:\n1) Sri Krishna Medical College and Hospital +916212230333 conf 31% \"Offers burn and plastic surgery\"\n2) Ganpati Hospital +918460838186 conf 33% \"Burn care ward\"\n3) Palika Vinayak Hospital +917766916411 conf 38% \"Burns management\"",
+  "chars": 288,
+  "segments": 2
+ },
+ "help": {
+  "reply": "Send: SERVICE PIN. Services: DIALYSIS CSEC NICU HEART MRI BURN TRAUMA. Example: DIALYSIS 842001",
+  "chars": 95,
+  "segments": 1
+ },
+ "MRI 110001": {
+  "reply": "PIN 110001 is not in this pack (Bihar only). Send another PIN.",
+  "chars": 62,
+  "segments": 1
+ },
+ "hindi_header_only": {
+  "chars": 64,
+  "segments": 1
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "burn_hand.jpg",
+ "bytes": 221004,
+ "status": 200,
+ "latency_s": 1.68,
+ "response": {
+  "id": "chatcmpl_cb521dbe-f76d-44cc-a8f5-c8cea481700c_ab6f1ed5-82bf-484a-a381-52c50b7d027a",
+  "object": "chat.completion",
+  "created": 1795284628,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"injury_photo\", \"suggested_service\": \"burn_care\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"burn on the palm of a hand\", \"red_flags\": []}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 2177,
+   "completion_tokens": 66,
+   "total_tokens": 2243,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"injury_photo\", \"suggested_service\": \"burn_care\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"burn on the palm of a hand\", \"red_flags\": []}",
+ "parsed": {
+  "detected_text": "",
+  "language": "",
+  "document_type": "injury_photo",
+  "suggested_service": "burn_care",
+  "urgency": "urgent",
+  "confidence": 0.8,
+  "trigger_phrase": "burn on the palm of a hand",
+  "red_flags": []
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 2177,
+  "completion_tokens": 66,
+  "total_tokens": 2243,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

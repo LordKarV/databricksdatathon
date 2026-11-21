@@ -1,0 +1,111 @@
+{
+ "atoms": 22787,
+ "atoms_by_ownership": {
+  "unanchored": 21830,
+  "own_anchored": 762,
+  "other_facility": 114,
+  "other_place_district": 40,
+  "other_place_state": 23,
+  "ambiguous": 18
+ },
+ "atoms_by_role": {
+  "offer": 11638,
+  "unit_or_equipment": 5138,
+  "list": 5103,
+  "quantity": 714,
+  "staff": 72,
+  "nonoffer": 54,
+  "hedge": 50,
+  "research_or_template": 18
+ },
+ "counts_as_own": 17353,
+ "units": 15503,
+ "T": {
+  "0": 61746,
+  "1": 1097,
+  "2": 3169,
+  "3": 1393,
+  "4": 822,
+  "5": 1486
+ },
+ "T_noecho": {
+  "0": 61746,
+  "1": 1097,
+  "2": 2919,
+  "3": 1517,
+  "4": 885,
+  "5": 1549
+ },
+ "T_noown": {
+  "0": 61728,
+  "1": 1089,
+  "2": 3173,
+  "3": 1399,
+  "4": 823,
+  "5": 1501
+ },
+ "C": {
+  "0": 69583,
+  "1": 90,
+  "2": 40
+ },
+ "N": 44,
+ "S": 335,
+ "P": {
+  "0": 48170,
+  "1": 17029,
+  "2": 4514
+ },
+ "bucket_records": {
+  "mid": 3685,
+  "low": 3281,
+  "high": 2993
+ },
+ "level": {
+  "none": 9678,
+  "mc": 182,
+  "dh": 60,
+  "chc": 18,
+  "phc": 13,
+  "sdh": 8
+ },
+ "pairs_T_ge_2": 6870,
+ "pairs_any_mention": 8013,
+ "loc_votes": {
+  "v_coords": {
+   "0": 8788,
+   "-1": 1171
+  },
+  "v_pin": {
+   "1": 8202,
+   "0": 1143,
+   "-1": 614
+  },
+  "v_city": {
+   "1": 7846,
+   "0": 1660,
+   "-1": 453
+  },
+  "v_name": {
+   "0": 8890,
+   "1": 839,
+   "-1": 230
+  },
+  "v_state": {
+   "1": 9825,
+   "0": 81,
+   "-1": 53
+  }
+ },
+ "leakage_groups": 8548,
+ "largest_group": 134,
+ "inputs": {
+  "claims.parquet": "e233088e021b81c34fa0dc81adddb158307c06542a69322d17c13fa7dbc1b206",
+  "facility_location.parquet": "e2d140490ce169c09cd0d6ad4fa351a30860d767deb72049585febaeb16bf5ef",
+  "grades.parquet": "b5ccde356858e783b938655a9101f824809cd76529472d9c1873914a3a6e7e4c",
+  "handcheck_location.csv": "127ebb212a349114019cdb47d611b4cdd918c52be9f142feb28c6be72e026ab3",
+  "record_trust.parquet": "fd02549b56eab38fe5b98c5a4d5f2b9506927633a0c91e800c32b1e975656f7f",
+  "specialties.parquet": "cb6b22d3568fddea18284469b1e563133a12552bf9c3b5dae254699c09d0bd7f"
+ },
+ "code_sha256": "200b062901b65e0997008ee747f275d544f5c0d43e4adf10fdc420d7105ad5d1"
+}

@@ -1,0 +1,11 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "02_prescription_lscs.png",
+ "bytes": 43638,
+ "status": 429,
+ "latency_s": 0.15,
+ "response": {
+  "error_code": "REQUEST_LIMIT_EXCEEDED",
+  "message": "REQUEST_LIMIT_EXCEEDED: Exceeded workspace QPS rate limit for databricks-gemma-3-12b. Please use a provisioned throughput Foundation Model APIs endpoint for a higher rate limit."
+ }
+}

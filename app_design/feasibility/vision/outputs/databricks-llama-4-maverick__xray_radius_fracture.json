@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "xray_radius_fracture.jpg",
+ "bytes": 169409,
+ "status": 200,
+ "latency_s": 1.25,
+ "response": {
+  "id": "chatcmpl_48fc1f94-cb10-4229-b3b1-b5b2b4ff996e_de2d8dea-a3e7-47b9-81eb-02a38192b13c",
+  "object": "chat.completion",
+  "created": 1795284630,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"xray\", \"suggested_service\": \"trauma_emergency\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"broken wrist\", \"red_flags\": []}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1742,
+   "completion_tokens": 61,
+   "total_tokens": 1803,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"\", \"language\": \"\", \"document_type\": \"xray\", \"suggested_service\": \"trauma_emergency\", \"urgency\": \"urgent\", \"confidence\": 0.8, \"trigger_phrase\": \"broken wrist\", \"red_flags\": []}",
+ "parsed": {
+  "detected_text": "",
+  "language": "",
+  "document_type": "xray",
+  "suggested_service": "trauma_emergency",
+  "urgency": "urgent",
+  "confidence": 0.8,
+  "trigger_phrase": "broken wrist",
+  "red_flags": []
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 1742,
+  "completion_tokens": 61,
+  "total_tokens": 1803,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

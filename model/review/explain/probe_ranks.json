@@ -1,0 +1,168 @@
+[
+ {
+  "service": "dialysis",
+  "place": "Mumbai",
+  "note": "Using Mumbai (district layer, median of 33 PIN points), Maharashtra",
+  "R_used": 25,
+  "n_cand": 97,
+  "rank": null,
+  "top3": [
+   "Smt. Motiben B. Dalvi Hospital",
+   "Masina Hospital",
+   "Jaslok Hospital and Research Center"
+  ],
+  "rec": null
+ },
+ {
+  "service": "dialysis",
+  "place": "400078",
+  "note": "Using PIN 400078 (Bhandup Ind Estate SO), Mumbai Suburban, Maharashtra",
+  "R_used": 25,
+  "n_cand": 175,
+  "rank": 36,
+  "top3": [
+   "Navkaar Hospitals",
+   "Apex Hospitals Mulund",
+   "Hira Mongi Navneet Hospital Shushrusha Hospital"
+  ],
+  "rec": {
+   "d1": 12.1,
+   "d2": 891.5,
+   "P_L": 0.579,
+   "P_S": 0.54,
+   "U": 0.1273,
+   "P_succ": 0.285,
+   "band": "Unverified"
+  }
+ },
+ {
+  "service": "dialysis",
+  "place": "Hyderabad",
+  "note": "Using Hyderabad (district layer, median of 53 PIN points), Telangana",
+  "R_used": 25,
+  "n_cand": 187,
+  "rank": 148,
+  "top3": [
+   "Yashoda Hospital",
+   "Aster Prime Hospital",
+   "Sathya Kidney Centre And Super Specialty Hospitals"
+  ],
+  "rec": {
+   "d1": 13.9,
+   "d2": 818.5,
+   "P_L": 0.587,
+   "P_S": 0.34,
+   "U": 0.0717,
+   "P_succ": 0.181,
+   "band": "Unverified"
+  }
+ },
+ {
+  "service": "dialysis",
+  "place": "605001",
+  "note": "Using PIN 605001 (Pondicherry Bazaar SO), Pondicherry, Puducherry",
+  "R_used": 25,
+  "n_cand": 7,
+  "rank": null,
+  "top3": [
+   "New Medical Centre",
+   "East Coast Hospital",
+   "Alpha Ortho Clinic"
+  ],
+  "rec": null
+ },
+ {
+  "service": "dialysis",
+  "place": "110002",
+  "note": "Using PIN 110002 (AGCR SO), Central, Delhi",
+  "R_used": 25,
+  "n_cand": 133,
+  "rank": null,
+  "top3": [
+   "East Delhi Medical Centre",
+   "Ashoka Nursing Home & Multispeciality Hospital",
+   "Chacha Nehru Bal Chikitsalya"
+  ],
+  "rec": null
+ },
+ {
+  "service": "trauma_emergency",
+  "place": "Gautam Buddha Nagar",
+  "note": "Using Gautam Buddha Nagar (district layer, median of 27 PIN points), Uttar Pradesh",
+  "R_used": 25,
+  "n_cand": 82,
+  "rank": null,
+  "top3": [
+   "Felix Hospital",
+   "Prayag Hospital & Research Centre",
+   "ShardaCare - Healthcity"
+  ],
+  "rec": null
+ },
+ {
+  "service": "trauma_emergency",
+  "place": "Chandauli",
+  "note": "Using Chandauli (district layer, median of 17 PIN points), Uttar Pradesh",
+  "R_used": 50,
+  "n_cand": 56,
+  "rank": 1,
+  "top3": [
+   "Sharda Hospital",
+   "G. S. Memorial Plastic Surgery Hospital And Trauma Center",
+   "Ford Hospital"
+  ],
+  "rec": {
+   "d1": 15.8,
+   "d2": null,
+   "P_L": 0.766,
+   "P_S": 0.493,
+   "U": 0.2025,
+   "P_succ": 0.343,
+   "band": "Unverified"
+  }
+ },
+ {
+  "service": "emergency_csection",
+  "place": "Sheikhpura",
+  "note": "Using Sheikhpura (district layer, median of 6 PIN points), Bihar",
+  "R_used": 50,
+  "n_cand": 3,
+  "rank": 3,
+  "top3": [
+   "Vardhman Institute of Medical Sciences, Pawapuri",
+   "Jahnavi Eye Care And Research Centre",
+   "Referal Hospital"
+  ],
+  "rec": {
+   "d1": 49.6,
+   "d2": 270.1,
+   "P_L": 0.356,
+   "P_S": 0.235,
+   "U": 0.0114,
+   "P_succ": 0.06,
+   "band": "Unverified"
+  }
+ },
+ {
+  "service": "emergency_csection",
+  "place": "Sitamarhi",
+  "note": "Using Sitamarhi (district layer, median of 23 PIN points), Bihar",
+  "R_used": 100,
+  "n_cand": 25,
+  "rank": 22,
+  "top3": [
+   "Sri Krishna Medical College and Hospital",
+   "Phular Superspeciality Hospital, Road No-02, Juran Chappra, Muzaffarpur - 842001",
+   "Prashant Memorial Charitable Hospital"
+  ],
+  "rec": {
+   "d1": 218.4,
+   "d2": 68.2,
+   "P_L": 0.356,
+   "P_S": 0.235,
+   "U": 0.0111,
+   "P_succ": 0.108,
+   "band": "Unverified"
+  }
+ }
+]

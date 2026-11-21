@@ -1,0 +1,706 @@
+state_ut,district_name_nfhs5,district_name_idp,state_code,district_code,how,score,values_compared,values_agree,value_confirmed
+Andaman & Nicobar Islands,Nicobars,Nicobars,35,603,exact,100.0,6,6,True
+Andaman & Nicobar Islands,North & Middle Andaman ,North And Middle Andaman,35,632,exact,100.0,6,6,True
+Andaman & Nicobar Islands,South Andaman ,South Andamans,35,602,fuzzy,96.3,6,6,True
+Andhra Pradesh,Chittoor ,Chittoor,28,503,exact,100.0,6,6,True
+Andhra Pradesh,East Godavari ,East Godavari,28,505,exact,100.0,6,6,True
+Andhra Pradesh,Guntur ,Guntur,28,506,exact,100.0,6,6,True
+Andhra Pradesh,Krishna ,Krishna,28,510,exact,100.0,6,6,True
+Andhra Pradesh,Kurnool ,Kurnool,28,511,exact,100.0,6,6,True
+Andhra Pradesh,Prakasam ,Prakasam,28,517,exact,100.0,6,6,True
+Andhra Pradesh,Srikakulam ,Srikakulam,28,519,exact,100.0,6,6,True
+Andhra Pradesh,Visakhapatnam ,Visakhapatnam,28,520,exact,100.0,6,6,True
+Andhra Pradesh,Vizianagaram ,Vizianagaram,28,521,exact,100.0,6,6,True
+Andhra Pradesh,West Godavari ,West Godavari,28,523,exact,100.0,6,6,True
+Andhra Pradesh,Sri Potti Sriramulu Nello ,Sri Potti Sriramulu Nellore,28,515,fuzzy,96.2,6,6,True
+Arunachal Pradesh,Anjaw ,Anjaw,12,628,exact,100.0,6,6,True
+Arunachal Pradesh,Changlang ,Changlang,12,229,exact,100.0,6,6,True
+Arunachal Pradesh,Dibang Valley ,Dibang Valley,12,230,exact,100.0,6,6,True
+Arunachal Pradesh,East Kameng ,East Kameng,12,231,exact,100.0,6,6,True
+Arunachal Pradesh,East Siang ,East Siang,12,232,exact,100.0,6,6,True
+Arunachal Pradesh,Kra Daadi ,Kra Daadi,12,677,exact,100.0,6,6,True
+Arunachal Pradesh,Kurung Kumey ,Kurung Kumey,12,233,exact,100.0,6,6,True
+Arunachal Pradesh,Lohit ,Lohit,12,234,exact,100.0,6,6,True
+Arunachal Pradesh,Longding ,Longding,12,666,exact,100.0,6,6,True
+Arunachal Pradesh,Lower Dibang Valley ,Lower Dibang Valley,12,235,exact,100.0,6,6,True
+Arunachal Pradesh,Lower Subansiri ,Lower Subansiri,12,236,exact,100.0,6,6,True
+Arunachal Pradesh,Namsai ,Namsai,12,678,exact,100.0,6,6,True
+Arunachal Pradesh,Papum Pare ,Papum Pare,12,237,exact,100.0,6,6,True
+Arunachal Pradesh,Siang ,Siang,12,679,exact,100.0,6,6,True
+Arunachal Pradesh,Tawang ,Tawang,12,238,exact,100.0,6,6,True
+Arunachal Pradesh,Tirap ,Tirap,12,239,exact,100.0,6,6,True
+Arunachal Pradesh,Upper Siang ,Upper Siang,12,240,exact,100.0,6,6,True
+Arunachal Pradesh,Upper Subansiri ,Upper Subansiri,12,241,exact,100.0,6,6,True
+Arunachal Pradesh,West Kameng ,West Kameng,12,242,exact,100.0,6,6,True
+Arunachal Pradesh,West Siang ,West Siang,12,243,exact,100.0,6,6,True
+Assam,Baksa ,Baksa,18,616,exact,100.0,6,6,True
+Assam,Barpeta ,Barpeta,18,280,exact,100.0,6,6,True
+Assam,Biswanath ,Biswanath,18,705,exact,100.0,6,6,True
+Assam,Bongaigaon ,Bongaigaon,18,281,exact,100.0,6,6,True
+Assam,Cachar ,Cachar,18,282,exact,100.0,6,6,True
+Assam,Charaideo ,Charaideo,18,708,exact,100.0,6,6,True
+Assam,Chirang ,Chirang,18,612,exact,100.0,6,6,True
+Assam,Darrang ,Darrang,18,283,exact,100.0,6,6,True
+Assam,Dhemaji ,Dhemaji,18,284,exact,100.0,6,6,True
+Assam,Dhubri ,Dhubri,18,285,exact,100.0,6,6,True
+Assam,Dibrugarh ,Dibrugarh,18,286,exact,100.0,6,6,True
+Assam,Dima Hasao ,Dima Hasao,18,299,exact,100.0,6,6,True
+Assam,Goalpara ,Goalpara,18,287,exact,100.0,6,6,True
+Assam,Golaghat ,Golaghat,18,288,exact,100.0,6,6,True
+Assam,Hailakandi ,Hailakandi,18,289,exact,100.0,6,6,True
+Assam,Hojai ,Hojai,18,709,exact,100.0,6,6,True
+Assam,Jorhat ,Jorhat,18,290,exact,100.0,6,6,True
+Assam,Kamrup ,Kamrup,18,291,exact,100.0,6,6,True
+Assam,Karbi Anglong ,Karbi Anglong,18,292,exact,100.0,6,6,True
+Assam,Kokrajhar ,Kokrajhar,18,294,exact,100.0,6,6,True
+Assam,Lakhimpur ,Lakhimpur,18,295,exact,100.0,6,6,True
+Assam,Majuli ,Majuli,18,706,exact,100.0,6,6,True
+Assam,Nagaon ,Nagaon,18,297,exact,100.0,6,6,True
+Assam,Nalbari ,Nalbari,18,298,exact,100.0,6,6,True
+Assam,Sivasagar ,Sivasagar,18,300,exact,100.0,6,6,True
+Assam,Sonitpur ,Sonitpur,18,301,exact,100.0,6,6,True
+Assam,South Salmara Mancachar ,South Salmara Mancachar,18,707,exact,100.0,6,6,True
+Assam,Tinsukia ,Tinsukia,18,302,exact,100.0,6,6,True
+Assam,Udalguri ,Udalguri,18,617,exact,100.0,6,6,True
+Assam,West Karbi Anglong ,West Karbi Anglong,18,710,exact,100.0,6,6,True
+Assam,Morigaon ,Marigaon,18,296,fuzzy,87.5,6,6,True
+Bihar,Araria ,Araria,10,188,exact,100.0,6,6,True
+Bihar,Arwal ,Arwal,10,611,exact,100.0,6,6,True
+Bihar,Aurangabad ,Aurangabad,10,189,exact,100.0,6,6,True
+Bihar,Banka ,Banka,10,190,exact,100.0,6,6,True
+Bihar,Begusarai ,Begusarai,10,191,exact,100.0,6,6,True
+Bihar,Bhagalpur ,Bhagalpur,10,192,exact,100.0,6,6,True
+Bihar,Bhojpur ,Bhojpur,10,193,exact,100.0,6,6,True
+Bihar,Buxar ,Buxar,10,194,exact,100.0,6,6,True
+Bihar,Darbhanga ,Darbhanga,10,195,exact,100.0,6,6,True
+Bihar,Gaya ,Gaya,10,196,exact,100.0,6,6,True
+Bihar,Gopalganj ,Gopalganj,10,197,exact,100.0,6,6,True
+Bihar,Jamui ,Jamui,10,198,exact,100.0,6,6,True
+Bihar,Jehanabad ,Jehanabad,10,199,exact,100.0,6,6,True
+Bihar,Kaimur (Bhabua) ,Kaimur (Bhabua),10,200,exact,100.0,6,6,True
+Bihar,Katihar ,Katihar,10,201,exact,100.0,6,6,True
+Bihar,Khagaria ,Khagaria,10,202,exact,100.0,6,6,True
+Bihar,Kishanganj ,Kishanganj,10,203,exact,100.0,6,6,True
+Bihar,Lakhisarai ,Lakhisarai,10,204,exact,100.0,6,6,True
+Bihar,Madhepura ,Madhepura,10,205,exact,100.0,6,6,True
+Bihar,Madhubani ,Madhubani,10,206,exact,100.0,6,6,True
+Bihar,Munger ,Munger,10,207,exact,100.0,6,6,True
+Bihar,Muzaffarpur ,Muzaffarpur,10,208,exact,100.0,6,6,True
+Bihar,Nalanda ,Nalanda,10,209,exact,100.0,6,6,True
+Bihar,Nawada ,Nawada,10,210,exact,100.0,6,6,True
+Bihar,Pashchim Champaran ,Pashchim Champaran,10,211,exact,100.0,6,6,True
+Bihar,Patna ,Patna,10,212,exact,100.0,6,6,True
+Bihar,Purnia ,Purnia,10,214,exact,100.0,6,6,True
+Bihar,Rohtas ,Rohtas,10,215,exact,100.0,6,6,True
+Bihar,Saharsa ,Saharsa,10,216,exact,100.0,6,6,True
+Bihar,Samastipur ,Samastipur,10,217,exact,100.0,6,6,True
+Bihar,Saran ,Saran,10,218,exact,100.0,6,6,True
+Bihar,Sheikhpura ,Sheikhpura,10,219,exact,100.0,6,6,True
+Bihar,Sheohar ,Sheohar,10,220,exact,100.0,6,6,True
+Bihar,Sitamarhi ,Sitamarhi,10,221,exact,100.0,6,6,True
+Bihar,Siwan ,Siwan,10,222,exact,100.0,6,6,True
+Bihar,Supaul ,Supaul,10,223,exact,100.0,6,6,True
+Bihar,Vaishali ,Vaishali,10,224,exact,100.0,6,6,True
+Bihar,Purba Champaran ,Purbi Champaran,10,213,fuzzy,93.3,6,6,True
+Chandigarh,Chandigarh,Chandigarh,04,044,exact,100.0,6,6,True
+Chhattisgarh,Balod ,Balod,22,646,exact,100.0,6,6,True
+Chhattisgarh,Bastar ,Bastar,22,374,exact,100.0,6,6,True
+Chhattisgarh,Bemetara ,Bemetara,22,650,exact,100.0,6,6,True
+Chhattisgarh,Bijapur ,Bijapur,22,636,exact,100.0,6,6,True
+Chhattisgarh,Bilaspur ,Bilaspur,22,375,exact,100.0,6,6,True
+Chhattisgarh,Dhamtari ,Dhamtari,22,377,exact,100.0,6,6,True
+Chhattisgarh,Durg ,Durg,22,378,exact,100.0,6,6,True
+Chhattisgarh,Gariyaband ,Gariyaband,22,645,exact,100.0,6,6,True
+Chhattisgarh,Janjgir - Champa ,Janjgir-Champa,22,379,exact,100.0,6,6,True
+Chhattisgarh,Jashpur ,Jashpur,22,380,exact,100.0,6,6,True
+Chhattisgarh,Kabeerdham ,Kabeerdham,22,382,exact,100.0,6,6,True
+Chhattisgarh,Korba ,Korba,22,383,exact,100.0,6,6,True
+Chhattisgarh,Mahasamund ,Mahasamund,22,385,exact,100.0,6,6,True
+Chhattisgarh,Mungeli ,Mungeli,22,647,exact,100.0,6,6,True
+Chhattisgarh,Narayanpur ,Narayanpur,22,637,exact,100.0,6,6,True
+Chhattisgarh,Raigarh ,Raigarh,22,386,exact,100.0,6,6,True
+Chhattisgarh,Raipur ,Raipur,22,387,exact,100.0,6,6,True
+Chhattisgarh,Rajnandgaon ,Rajnandgaon,22,388,exact,100.0,6,6,True
+Chhattisgarh,Sukma ,Sukma,22,642,exact,100.0,6,6,True
+Chhattisgarh,Surajpur ,Surajpur,22,648,exact,100.0,6,6,True
+Chhattisgarh,Surguja ,Surguja,22,389,exact,100.0,6,6,True
+Chhattisgarh,Uttar Bastar Kanker ,Uttar Bastar Kanker,22,381,exact,100.0,6,6,True
+Chhattisgarh,Kodagaon ,Kondagaon,22,643,fuzzy,94.1,6,6,True
+Dadra and Nagar Haveli & Daman and Diu,Dadra & Nagar Haveli ,Dadra And Nagar Haveli,38,465,exact,100.0,6,6,True
+Dadra and Nagar Haveli & Daman and Diu,Daman ,Daman,38,463,exact,100.0,6,6,True
+Dadra and Nagar Haveli & Daman and Diu,Diu ,Diu,38,464,exact,100.0,6,6,True
+Goa,North Goa ,North Goa,30,551,exact,100.0,6,6,True
+Goa,South Goa ,South Goa,30,552,exact,100.0,6,6,True
+Gujarat,Amreli ,Amreli,24,439,exact,100.0,6,6,True
+Gujarat,Anand ,Anand,24,440,exact,100.0,6,6,True
+Gujarat,Banas Kantha ,Banas Kantha,24,441,exact,100.0,6,6,True
+Gujarat,Bharuch ,Bharuch,24,442,exact,100.0,6,6,True
+Gujarat,Bhavnagar ,Bhavnagar,24,443,exact,100.0,6,6,True
+Gujarat,Botad ,Botad,24,676,exact,100.0,6,6,True
+Gujarat,Devbhumi Dwarka ,Devbhumi Dwarka,24,674,exact,100.0,6,6,True
+Gujarat,Gandhinagar ,Gandhinagar,24,446,exact,100.0,6,6,True
+Gujarat,Gir Somnath ,Gir Somnath,24,675,exact,100.0,6,6,True
+Gujarat,Jamnagar ,Jamnagar,24,447,exact,100.0,6,6,True
+Gujarat,Junagadh ,Junagadh,24,448,exact,100.0,6,6,True
+Gujarat,Kachchh ,Kachchh,24,449,exact,100.0,6,6,True
+Gujarat,Kheda ,Kheda,24,450,exact,100.0,6,6,True
+Gujarat,Mahesana ,Mahesana,24,451,exact,100.0,6,6,True
+Gujarat,Mahisagar ,Mahisagar,24,669,exact,100.0,6,6,True
+Gujarat,Morbi ,Morbi,24,673,exact,100.0,6,6,True
+Gujarat,Narmada ,Narmada,24,452,exact,100.0,6,6,True
+Gujarat,Navsari ,Navsari,24,453,exact,100.0,6,6,True
+Gujarat,Panch Mahals ,Panch Mahals,24,454,exact,100.0,6,6,True
+Gujarat,Patan ,Patan,24,455,exact,100.0,6,6,True
+Gujarat,Porbandar ,Porbandar,24,456,exact,100.0,6,6,True
+Gujarat,Rajkot ,Rajkot,24,457,exact,100.0,6,6,True
+Gujarat,Sabar Kantha ,Sabar Kantha,24,458,exact,100.0,6,6,True
+Gujarat,Surat ,Surat,24,459,exact,100.0,6,6,True
+Gujarat,Surendranagar ,Surendranagar,24,460,exact,100.0,6,6,True
+Gujarat,Tapi ,Tapi,24,641,exact,100.0,6,6,True
+Gujarat,Vadodara ,Vadodara,24,461,exact,100.0,6,6,True
+Gujarat,Valsad ,Valsad,24,462,exact,100.0,6,6,True
+Gujarat,Ahmadabad ,Ahmedabad,24,438,fuzzy,88.9,6,6,True
+Gujarat,Aravali ,Arvalli,24,672,fuzzy,85.7,6,6,True
+Haryana,Ambala ,Ambala,06,058,exact,100.0,6,6,True
+Haryana,Bhiwani ,Bhiwani,06,059,exact,100.0,6,6,True
+Haryana,Charkhi Dadri ,Charkhi Dadri,06,701,exact,100.0,6,6,True
+Haryana,Faridabad ,Faridabad,06,060,exact,100.0,6,6,True
+Haryana,Fatehabad ,Fatehabad,06,061,exact,100.0,6,6,True
+Haryana,Hisar ,Hisar,06,063,exact,100.0,6,6,True
+Haryana,Jhajjar ,Jhajjar,06,064,exact,100.0,6,6,True
+Haryana,Jind ,Jind,06,065,exact,100.0,6,6,True
+Haryana,Kaithal ,Kaithal,06,066,exact,100.0,6,6,True
+Haryana,Karnal ,Karnal,06,067,exact,100.0,6,6,True
+Haryana,Kurukshetra ,Kurukshetra,06,068,exact,100.0,6,6,True
+Haryana,Mahendragarh ,Mahendragarh,06,069,exact,100.0,6,6,True
+Haryana,Palwal ,Palwal,06,619,exact,100.0,6,6,True
+Haryana,Panchkula ,Panchkula,06,070,exact,100.0,6,6,True
+Haryana,Panipat ,Panipat,06,071,exact,100.0,6,6,True
+Haryana,Rewari ,Rewari,06,072,exact,100.0,6,6,True
+Haryana,Rohtak ,Rohtak,06,073,exact,100.0,6,6,True
+Haryana,Sirsa ,Sirsa,06,074,exact,100.0,6,6,True
+Haryana,Sonipat ,Sonipat,06,075,exact,100.0,6,6,True
+Haryana,Yamunanagar ,Yamunanagar,06,076,exact,100.0,6,6,True
+Himachal Pradesh,Bilaspur ,Bilaspur,02,015,exact,100.0,6,6,True
+Himachal Pradesh,Chamba ,Chamba,02,016,exact,100.0,6,6,True
+Himachal Pradesh,Hamirpur ,Hamirpur,02,017,exact,100.0,6,6,True
+Himachal Pradesh,Kangra ,Kangra,02,018,exact,100.0,6,6,True
+Himachal Pradesh,Kinnaur ,Kinnaur,02,019,exact,100.0,6,6,True
+Himachal Pradesh,Kullu ,Kullu,02,020,exact,100.0,6,6,True
+Himachal Pradesh,Mandi ,Mandi,02,022,exact,100.0,6,6,True
+Himachal Pradesh,Shimla ,Shimla,02,023,exact,100.0,6,6,True
+Himachal Pradesh,Sirmaur ,Sirmaur,02,024,exact,100.0,6,6,True
+Himachal Pradesh,Solan ,Solan,02,025,exact,100.0,6,6,True
+Himachal Pradesh,Una ,Una,02,026,exact,100.0,6,6,True
+Himachal Pradesh,Lahul & Spiti ,Lahaul And Spiti,02,021,fuzzy,96.8,6,6,True
+Jammu & Kashmir,Anantnag ,Anantnag,01,001,exact,100.0,6,6,True
+Jammu & Kashmir,Doda ,Doda,01,004,exact,100.0,6,6,True
+Jammu & Kashmir,Ganderbal ,Ganderbal,01,626,exact,100.0,6,6,True
+Jammu & Kashmir,Jammu ,Jammu,01,005,exact,100.0,6,6,True
+Jammu & Kashmir,Kathua ,Kathua,01,007,exact,100.0,6,6,True
+Jammu & Kashmir,Kishtwar ,Kishtwar,01,620,exact,100.0,6,6,True
+Jammu & Kashmir,Kulgam ,Kulgam,01,622,exact,100.0,6,6,True
+Jammu & Kashmir,Kupwara ,Kupwara,01,008,exact,100.0,6,6,True
+Jammu & Kashmir,Pulwama ,Pulwama,01,011,exact,100.0,6,6,True
+Jammu & Kashmir,Rajouri ,Rajouri,01,012,exact,100.0,6,6,True
+Jammu & Kashmir,Ramban ,Ramban,01,621,exact,100.0,6,6,True
+Jammu & Kashmir,Reasi ,Reasi,01,627,exact,100.0,6,6,True
+Jammu & Kashmir,Samba ,Samba,01,624,exact,100.0,6,6,True
+Jammu & Kashmir,Srinagar ,Srinagar,01,013,exact,100.0,6,6,True
+Jammu & Kashmir,Udhampur ,Udhampur,01,014,exact,100.0,6,6,True
+Jammu & Kashmir,Bandipore ,Bandipora,01,623,fuzzy,88.9,6,6,True
+Jammu & Kashmir,Baramula ,Baramulla,01,003,fuzzy,94.1,6,6,True
+Jharkhand,Bokaro ,Bokaro,20,322,exact,100.0,6,6,True
+Jharkhand,Chatra ,Chatra,20,323,exact,100.0,6,6,True
+Jharkhand,Deoghar ,Deoghar,20,324,exact,100.0,6,6,True
+Jharkhand,Dhanbad ,Dhanbad,20,325,exact,100.0,6,6,True
+Jharkhand,Dumka ,Dumka,20,326,exact,100.0,6,6,True
+Jharkhand,Garhwa ,Garhwa,20,328,exact,100.0,6,6,True
+Jharkhand,Giridih ,Giridih,20,329,exact,100.0,6,6,True
+Jharkhand,Godda ,Godda,20,330,exact,100.0,6,6,True
+Jharkhand,Gumla ,Gumla,20,331,exact,100.0,6,6,True
+Jharkhand,Hazaribagh ,Hazaribagh,20,332,exact,100.0,6,6,True
+Jharkhand,Jamtara ,Jamtara,20,333,exact,100.0,6,6,True
+Jharkhand,Khunti ,Khunti,20,606,exact,100.0,6,6,True
+Jharkhand,Latehar ,Latehar,20,335,exact,100.0,6,6,True
+Jharkhand,Lohardaga ,Lohardaga,20,336,exact,100.0,6,6,True
+Jharkhand,Pakur ,Pakur,20,337,exact,100.0,6,6,True
+Jharkhand,Palamu ,Palamu,20,338,exact,100.0,6,6,True
+Jharkhand,Ramgarh ,Ramgarh,20,607,exact,100.0,6,6,True
+Jharkhand,Ranchi ,Ranchi,20,339,exact,100.0,6,6,True
+Jharkhand,Saraikela-Kharsawan ,Saraikela Kharsawan,20,341,exact,100.0,6,6,True
+Jharkhand,Simdega ,Simdega,20,342,exact,100.0,6,6,True
+Jharkhand,Kodarma ,Koderma,20,334,fuzzy,85.7,6,6,True
+Jharkhand,Sahibganj ,Sahebganj,20,340,fuzzy,88.9,6,6,True
+Karnataka,Bidar ,Bidar,29,529,exact,100.0,6,6,True
+Karnataka,Chamarajanagar ,Chamarajanagar,29,531,exact,100.0,6,6,True
+Karnataka,Chikkaballapura ,Chikkaballapura,29,630,exact,100.0,6,6,True
+Karnataka,Chitradurga ,Chitradurga,29,533,exact,100.0,6,6,True
+Karnataka,Dakshina Kannada ,Dakshina Kannada,29,534,exact,100.0,6,6,True
+Karnataka,Davanagere ,Davanagere,29,535,exact,100.0,6,6,True
+Karnataka,Dharwad ,Dharwad,29,536,exact,100.0,6,6,True
+Karnataka,Gadag ,Gadag,29,537,exact,100.0,6,6,True
+Karnataka,Hassan ,Hassan,29,539,exact,100.0,6,6,True
+Karnataka,Haveri ,Haveri,29,540,exact,100.0,6,6,True
+Karnataka,Kodagu ,Kodagu,29,541,exact,100.0,6,6,True
+Karnataka,Kolar ,Kolar,29,542,exact,100.0,6,6,True
+Karnataka,Koppal ,Koppal,29,543,exact,100.0,6,6,True
+Karnataka,Mandya ,Mandya,29,544,exact,100.0,6,6,True
+Karnataka,Raichur ,Raichur,29,546,exact,100.0,6,6,True
+Karnataka,Udupi ,Udupi,29,549,exact,100.0,6,6,True
+Karnataka,Uttara Kannada ,Uttara Kannada,29,550,exact,100.0,6,6,True
+Karnataka,Yadgir ,Yadgir,29,635,exact,100.0,6,6,True
+Karnataka,Bagalkot ,Bagalkote,29,524,fuzzy,94.1,6,6,True
+Karnataka,Chikmagalur ,Chikkamagaluru,29,532,fuzzy,88.0,6,6,True
+Karnataka,Tumkur ,Tumakuru,29,548,fuzzy,85.7,6,6,True
+Kerala,Alappuzha ,Alappuzha,32,554,exact,100.0,6,6,True
+Kerala,Ernakulam ,Ernakulam,32,555,exact,100.0,6,6,True
+Kerala,Idukki ,Idukki,32,556,exact,100.0,6,6,True
+Kerala,Kannur ,Kannur,32,557,exact,100.0,6,6,True
+Kerala,Kasaragod ,Kasaragod,32,558,exact,100.0,6,6,True
+Kerala,Kollam ,Kollam,32,559,exact,100.0,6,6,True
+Kerala,Kottayam ,Kottayam,32,560,exact,100.0,6,6,True
+Kerala,Kozhikode ,Kozhikode,32,561,exact,100.0,6,6,True
+Kerala,Malappuram ,Malappuram,32,562,exact,100.0,6,6,True
+Kerala,Palakkad ,Palakkad,32,563,exact,100.0,6,6,True
+Kerala,Pathanamthitta ,Pathanamthitta,32,564,exact,100.0,6,6,True
+Kerala,Thiruvananthapuram ,Thiruvananthapuram,32,565,exact,100.0,6,6,True
+Kerala,Thrissur ,Thrissur,32,566,exact,100.0,6,6,True
+Kerala,Wayanad ,Wayanad,32,567,exact,100.0,6,6,True
+Ladakh,Kargil ,Kargil,37,006,exact,100.0,6,6,True
+Ladakh,Leh(Ladakh) ,Leh Ladakh,37,009,exact,100.0,6,6,True
+Madhya Pradesh,Agar Malwa ,Agar-Malwa,23,667,exact,100.0,6,6,True
+Madhya Pradesh,Alirajpur ,Alirajpur,23,639,exact,100.0,6,6,True
+Madhya Pradesh,Anuppur ,Anuppur,23,390,exact,100.0,6,6,True
+Madhya Pradesh,Ashoknagar ,Ashoknagar,23,391,exact,100.0,6,6,True
+Madhya Pradesh,Balaghat ,Balaghat,23,392,exact,100.0,6,6,True
+Madhya Pradesh,Barwani ,Barwani,23,393,exact,100.0,6,6,True
+Madhya Pradesh,Betul ,Betul,23,394,exact,100.0,6,6,True
+Madhya Pradesh,Bhind ,Bhind,23,395,exact,100.0,6,6,True
+Madhya Pradesh,Bhopal ,Bhopal,23,396,exact,100.0,6,6,True
+Madhya Pradesh,Burhanpur ,Burhanpur,23,397,exact,100.0,6,6,True
+Madhya Pradesh,Chhatarpur ,Chhatarpur,23,398,exact,100.0,6,6,True
+Madhya Pradesh,Chhindwara ,Chhindwara,23,399,exact,100.0,6,6,True
+Madhya Pradesh,Damoh ,Damoh,23,400,exact,100.0,6,6,True
+Madhya Pradesh,Datia ,Datia,23,401,exact,100.0,6,6,True
+Madhya Pradesh,Dewas ,Dewas,23,402,exact,100.0,6,6,True
+Madhya Pradesh,Dhar ,Dhar,23,403,exact,100.0,6,6,True
+Madhya Pradesh,Dindori ,Dindori,23,404,exact,100.0,6,6,True
+Madhya Pradesh,Guna ,Guna,23,406,exact,100.0,6,6,True
+Madhya Pradesh,Gwalior ,Gwalior,23,407,exact,100.0,6,6,True
+Madhya Pradesh,Harda ,Harda,23,408,exact,100.0,6,6,True
+Madhya Pradesh,Indore ,Indore,23,410,exact,100.0,6,6,True
+Madhya Pradesh,Jabalpur ,Jabalpur,23,411,exact,100.0,5,5,True
+Madhya Pradesh,Jhabua ,Jhabua,23,412,exact,100.0,6,6,True
+Madhya Pradesh,Katni ,Katni,23,413,exact,100.0,6,6,True
+Madhya Pradesh,Khandwa (East Nimar) ,Khandwa (East Nimar),23,405,exact,100.0,6,6,True
+Madhya Pradesh,Khargone (West Nimar) ,Khargone (West Nimar),23,414,exact,100.0,6,6,True
+Madhya Pradesh,Mandla ,Mandla,23,415,exact,100.0,6,6,True
+Madhya Pradesh,Mandsaur ,Mandsaur,23,416,exact,100.0,6,6,True
+Madhya Pradesh,Morena ,Morena,23,417,exact,100.0,6,6,True
+Madhya Pradesh,Narsimhapur ,Narsimhapur,23,418,exact,100.0,6,6,True
+Madhya Pradesh,Neemuch ,Neemuch,23,419,exact,100.0,6,6,True
+Madhya Pradesh,Panna ,Panna,23,420,exact,100.0,6,6,True
+Madhya Pradesh,Raisen ,Raisen,23,421,exact,100.0,6,6,True
+Madhya Pradesh,Rajgarh ,Rajgarh,23,422,exact,100.0,6,6,True
+Madhya Pradesh,Ratlam ,Ratlam,23,423,exact,100.0,6,6,True
+Madhya Pradesh,Rewa ,Rewa,23,424,exact,100.0,6,6,True
+Madhya Pradesh,Sagar ,Sagar,23,425,exact,100.0,6,6,True
+Madhya Pradesh,Satna ,Satna,23,426,exact,100.0,6,6,True
+Madhya Pradesh,Sehore ,Sehore,23,427,exact,100.0,6,6,True
+Madhya Pradesh,Seoni ,Seoni,23,428,exact,100.0,6,6,True
+Madhya Pradesh,Shahdol ,Shahdol,23,429,exact,100.0,6,6,True
+Madhya Pradesh,Shajapur ,Shajapur,23,430,exact,100.0,6,6,True
+Madhya Pradesh,Sheopur ,Sheopur,23,431,exact,100.0,6,6,True
+Madhya Pradesh,Shivpuri ,Shivpuri,23,432,exact,100.0,6,6,True
+Madhya Pradesh,Sidhi ,Sidhi,23,433,exact,100.0,6,6,True
+Madhya Pradesh,Singrauli ,Singrauli,23,638,exact,100.0,6,6,True
+Madhya Pradesh,Tikamgarh ,Tikamgarh,23,434,exact,100.0,6,6,True
+Madhya Pradesh,Ujjain ,Ujjain,23,435,exact,100.0,6,6,True
+Madhya Pradesh,Umaria ,Umaria,23,436,exact,100.0,6,6,True
+Madhya Pradesh,Vidisha ,Vidisha,23,437,exact,100.0,6,6,True
+Maharastra,Akola ,Akola,27,467,exact,100.0,6,6,True
+Maharastra,Amravati ,Amravati,27,468,exact,100.0,6,6,True
+Maharastra,Bhandara ,Bhandara,27,471,exact,100.0,6,6,True
+Maharastra,Chandrapur ,Chandrapur,27,473,exact,100.0,6,6,True
+Maharastra,Dhule ,Dhule,27,474,exact,100.0,6,6,True
+Maharastra,Gadchiroli ,Gadchiroli,27,475,exact,100.0,6,6,True
+Maharastra,Hingoli ,Hingoli,27,477,exact,100.0,6,6,True
+Maharastra,Jalgaon ,Jalgaon,27,478,exact,100.0,6,6,True
+Maharastra,Jalna ,Jalna,27,479,exact,100.0,6,6,True
+Maharastra,Kolhapur ,Kolhapur,27,480,exact,100.0,6,6,True
+Maharastra,Latur ,Latur,27,481,exact,100.0,6,6,True
+Maharastra,Mumbai ,Mumbai,27,482,exact,100.0,6,6,True
+Maharastra,Mumbai Suburban ,Mumbai Suburban,27,483,exact,100.0,6,6,True
+Maharastra,Nagpur ,Nagpur,27,484,exact,100.0,6,6,True
+Maharastra,Nanded ,Nanded,27,485,exact,100.0,6,6,True
+Maharastra,Nandurbar ,Nandurbar,27,486,exact,100.0,6,6,True
+Maharastra,Nashik ,Nashik,27,487,exact,100.0,6,6,True
+Maharastra,Palghar ,Palghar,27,665,exact,100.0,6,6,True
+Maharastra,Parbhani ,Parbhani,27,489,exact,100.0,6,6,True
+Maharastra,Pune ,Pune,27,490,exact,100.0,6,6,True
+Maharastra,Ratnagiri ,Ratnagiri,27,492,exact,100.0,6,6,True
+Maharastra,Sangli ,Sangli,27,493,exact,100.0,6,6,True
+Maharastra,Satara ,Satara,27,494,exact,100.0,6,6,True
+Maharastra,Sindhudurg ,Sindhudurg,27,495,exact,100.0,6,6,True
+Maharastra,Solapur ,Solapur,27,496,exact,100.0,6,6,True
+Maharastra,Thane ,Thane,27,497,exact,100.0,6,6,True
+Maharastra,Wardha ,Wardha,27,498,exact,100.0,6,6,True
+Maharastra,Washim ,Washim,27,499,exact,100.0,6,6,True
+Maharastra,Yavatmal ,Yavatmal,27,500,exact,100.0,6,6,True
+Maharastra,Buldana ,Buldhana,27,472,fuzzy,93.3,6,6,True
+Maharastra,Gondiya ,Gondia,27,476,fuzzy,92.3,6,6,True
+Manipur,Bishnupur ,Bishnupur,14,252,exact,100.0,6,6,True
+Manipur,Chandel ,Chandel,14,253,exact,100.0,6,6,True
+Manipur,Churachandpur ,Churachandpur,14,254,exact,100.0,6,6,True
+Manipur,Imphal East ,Imphal East,14,255,exact,100.0,6,6,True
+Manipur,Imphal West ,Imphal West,14,256,exact,100.0,6,6,True
+Manipur,Senapati ,Senapati,14,257,exact,100.0,6,6,True
+Manipur,Tamenglong ,Tamenglong,14,258,exact,100.0,6,6,True
+Manipur,Thoubal ,Thoubal,14,259,exact,100.0,6,6,True
+Manipur,Ukhrul ,Ukhrul,14,260,exact,100.0,6,6,True
+Meghalaya,East Garo Hills ,East Garo Hills,17,273,exact,100.0,6,6,True
+Meghalaya,East Khasi Hills ,East Khasi Hills,17,274,exact,100.0,6,6,True
+Meghalaya,North Garo Hills ,North Garo Hills,17,656,exact,100.0,6,6,True
+Meghalaya,Ribhoi ,Ri Bhoi,17,276,exact,100.0,6,6,True
+Meghalaya,South Garo Hills ,South Garo Hills,17,277,exact,100.0,6,6,True
+Meghalaya,South West Garo Hills ,South West Garo Hills,17,663,exact,100.0,6,6,True
+Meghalaya,South West Khasi Hills ,South West Khasi Hills,17,658,exact,100.0,6,6,True
+Meghalaya,West Garo Hills ,West Garo Hills,17,278,exact,100.0,6,6,True
+Meghalaya,West Jaintia Hills ,West Jaintia Hills,17,275,exact,100.0,6,6,True
+Meghalaya,West Khasi Hills ,West Khasi Hills,17,279,exact,100.0,6,6,True
+Meghalaya,East Jantia Hills ,East Jaintia Hills,17,657,fuzzy,97.1,6,6,True
+Mizoram,Aizawl ,Aizawl,15,261,exact,100.0,6,6,True
+Mizoram,Champhai ,Champhai,15,262,exact,100.0,6,6,True
+Mizoram,Kolasib ,Kolasib,15,263,exact,100.0,6,6,True
+Mizoram,Lawngtlai ,Lawngtlai,15,264,exact,100.0,6,6,True
+Mizoram,Lunglei ,Lunglei,15,265,exact,100.0,6,6,True
+Mizoram,Mamit ,Mamit,15,266,exact,100.0,6,6,True
+Mizoram,Serchhip ,Serchhip,15,268,exact,100.0,6,6,True
+Nagaland,Dimapur ,Dimapur,13,244,exact,100.0,6,6,True
+Nagaland,Kiphire ,Kiphire,13,614,exact,100.0,6,6,True
+Nagaland,Kohima ,Kohima,13,245,exact,100.0,6,6,True
+Nagaland,Longleng ,Longleng,13,615,exact,100.0,6,6,True
+Nagaland,Mokokchung ,Mokokchung,13,246,exact,100.0,6,6,True
+Nagaland,Mon ,Mon,13,247,exact,100.0,6,6,True
+Nagaland,Peren ,Peren,13,613,exact,100.0,6,6,True
+Nagaland,Phek ,Phek,13,248,exact,100.0,6,6,True
+Nagaland,Tuensang ,Tuensang,13,249,exact,100.0,6,6,True
+Nagaland,Wokha ,Wokha,13,250,exact,100.0,6,6,True
+Nagaland,Zunheboto ,Zunheboto,13,251,exact,100.0,6,6,True
+NCT of Delhi,Central ,Central,07,077,exact,100.0,6,6,True
+NCT of Delhi,East ,East,07,078,exact,100.0,6,6,True
+NCT of Delhi,New Delhi ,New Delhi,07,079,exact,100.0,6,6,True
+NCT of Delhi,North ,North,07,080,exact,100.0,6,6,True
+NCT of Delhi,North East ,North East,07,081,exact,100.0,6,6,True
+NCT of Delhi,North West ,North West,07,082,exact,100.0,6,6,True
+NCT of Delhi,Shahdara ,Shahdara,07,NA-shahdara,exact,100.0,6,6,True
+NCT of Delhi,South ,South,07,083,exact,100.0,6,6,True
+NCT of Delhi,South East ,South East,07,670,exact,100.0,6,6,True
+NCT of Delhi,South West ,South West,07,084,exact,100.0,6,6,True
+NCT of Delhi,West ,West,07,085,exact,100.0,6,6,True
+Odisha,Balangir ,Balangir,21,345,exact,100.0,6,6,True
+Odisha,Baleshwar ,Baleshwar,21,346,exact,100.0,6,6,True
+Odisha,Bhadrak ,Bhadrak,21,348,exact,100.0,6,6,True
+Odisha,Dhenkanal ,Dhenkanal,21,352,exact,100.0,6,6,True
+Odisha,Gajapati ,Gajapati,21,353,exact,100.0,6,6,True
+Odisha,Ganjam ,Ganjam,21,354,exact,100.0,6,6,True
+Odisha,Jagatsinghapur ,Jagatsinghapur,21,355,exact,100.0,6,6,True
+Odisha,Jharsuguda ,Jharsuguda,21,357,exact,100.0,6,6,True
+Odisha,Kalahandi ,Kalahandi,21,358,exact,100.0,6,6,True
+Odisha,Kendujhar ,Kendujhar,21,361,exact,100.0,6,6,True
+Odisha,Khordha ,Khordha,21,362,exact,100.0,6,6,True
+Odisha,Koraput ,Koraput,21,363,exact,100.0,6,6,True
+Odisha,Malkangiri ,Malkangiri,21,364,exact,100.0,6,6,True
+Odisha,Mayurbhanj ,Mayurbhanj,21,365,exact,100.0,6,6,True
+Odisha,Nuapada ,Nuapada,21,368,exact,100.0,6,6,True
+Odisha,Puri ,Puri,21,369,exact,100.0,6,6,True
+Odisha,Rayagada ,Rayagada,21,370,exact,100.0,6,6,True
+Odisha,Sambalpur ,Sambalpur,21,371,exact,100.0,6,6,True
+Odisha,Subarnapur ,Subarnapur,21,372,exact,100.0,6,6,True
+Odisha,Jajapur ,Jajpur,21,356,fuzzy,92.3,6,6,True
+Odisha,Kandhamal ,Kandhamala,21,359,fuzzy,94.7,6,6,True
+Odisha,Kendrapara ,Kendrapada,21,360,fuzzy,90.0,6,6,True
+Odisha,Nabarangapur ,Nabarangpur,21,366,fuzzy,95.7,6,6,True
+Puducherry,Karaikal ,Karaikal,34,598,exact,100.0,6,6,True
+Puducherry,Mahe ,Mahe,34,NA-mahe,exact,100.0,6,5,False
+Puducherry,Puducherry ,Puducherry,34,600,exact,100.0,6,5,False
+Puducherry,Yanam ,Yanam,34,NA-yanam,exact,100.0,6,6,True
+Punjab,Amritsar ,Amritsar,03,027,exact,100.0,6,6,True
+Punjab,Barnala ,Barnala,03,605,exact,100.0,6,6,True
+Punjab,Bathinda ,Bathinda,03,028,exact,100.0,6,6,True
+Punjab,Faridkot ,Faridkot,03,029,exact,100.0,6,6,True
+Punjab,Fatehgarh Sahib ,Fatehgarh Sahib,03,030,exact,100.0,6,6,True
+Punjab,Fazilka ,Fazilka,03,651,exact,100.0,6,6,True
+Punjab,Gurdaspur ,Gurdaspur,03,032,exact,100.0,6,6,True
+Punjab,Hoshiarpur ,Hoshiarpur,03,033,exact,100.0,6,6,True
+Punjab,Jalandhar ,Jalandhar,03,034,exact,100.0,6,6,True
+Punjab,Kapurthala ,Kapurthala,03,035,exact,100.0,6,6,True
+Punjab,Ludhiana ,Ludhiana,03,036,exact,100.0,6,6,True
+Punjab,Mansa ,Mansa,03,037,exact,100.0,6,6,True
+Punjab,Moga ,Moga,03,038,exact,100.0,6,6,True
+Punjab,Pathankot ,Pathankot,03,662,exact,100.0,6,6,True
+Punjab,Patiala ,Patiala,03,041,exact,100.0,6,6,True
+Punjab,Rupnagar ,Rupnagar,03,042,exact,100.0,6,6,True
+Punjab,Sangrur ,Sangrur,03,043,exact,100.0,6,6,True
+Punjab,Shahid Bhagat Singh Nagar ,Shahid Bhagat Singh Nagar,03,040,exact,100.0,6,6,True
+Punjab,Tarn Taran ,Tarn Taran,03,609,exact,100.0,6,6,True
+Rajasthan,Ajmer ,Ajmer,08,086,exact,100.0,6,6,True
+Rajasthan,Alwar ,Alwar,08,087,exact,100.0,6,6,True
+Rajasthan,Banswara ,Banswara,08,088,exact,100.0,6,6,True
+Rajasthan,Baran ,Baran,08,089,exact,100.0,6,6,True
+Rajasthan,Barmer ,Barmer,08,090,exact,100.0,6,6,True
+Rajasthan,Bharatpur ,Bharatpur,08,091,exact,100.0,6,6,True
+Rajasthan,Bhilwara ,Bhilwara,08,092,exact,100.0,6,6,True
+Rajasthan,Bikaner ,Bikaner,08,093,exact,100.0,6,6,True
+Rajasthan,Bundi ,Bundi,08,094,exact,100.0,6,6,True
+Rajasthan,Churu ,Churu,08,096,exact,100.0,6,6,True
+Rajasthan,Dausa ,Dausa,08,097,exact,100.0,6,6,True
+Rajasthan,Dungarpur ,Dungarpur,08,099,exact,100.0,6,6,True
+Rajasthan,Ganganagar ,Ganganagar,08,100,exact,100.0,6,6,True
+Rajasthan,Hanumangarh ,Hanumangarh,08,101,exact,100.0,6,6,True
+Rajasthan,Jaipur ,Jaipur,08,102,exact,100.0,6,6,True
+Rajasthan,Jaisalmer ,Jaisalmer,08,103,exact,100.0,6,6,True
+Rajasthan,Jhalawar ,Jhalawar,08,105,exact,100.0,6,6,True
+Rajasthan,Jodhpur ,Jodhpur,08,107,exact,100.0,6,6,True
+Rajasthan,Karauli ,Karauli,08,108,exact,100.0,6,6,True
+Rajasthan,Kota ,Kota,08,109,exact,100.0,6,6,True
+Rajasthan,Nagaur ,Nagaur,08,110,exact,100.0,6,6,True
+Rajasthan,Pali ,Pali,08,111,exact,100.0,6,6,True
+Rajasthan,Pratapgarh ,Pratapgarh,08,629,exact,100.0,6,6,True
+Rajasthan,Rajsamand ,Rajsamand,08,112,exact,100.0,6,6,True
+Rajasthan,Sawai Madhopur ,Sawai Madhopur,08,113,exact,100.0,6,6,True
+Rajasthan,Sikar ,Sikar,08,114,exact,100.0,6,6,True
+Rajasthan,Sirohi ,Sirohi,08,115,exact,100.0,6,6,True
+Rajasthan,Tonk ,Tonk,08,116,exact,100.0,6,6,True
+Rajasthan,Udaipur ,Udaipur,08,117,exact,100.0,6,6,True
+Rajasthan,Chittaurgarh ,Chittorgarh,08,095,fuzzy,87.0,6,6,True
+Rajasthan,Jalor ,Jalore,08,104,fuzzy,90.9,6,6,True
+Rajasthan,Jhunjhunun ,Jhunjhunu,08,106,fuzzy,94.7,6,6,True
+Tamil Nadu,Ariyalur ,Ariyalur,33,610,exact,100.0,6,6,True
+Tamil Nadu,Chennai ,Chennai,33,568,exact,100.0,6,6,True
+Tamil Nadu,Coimbatore ,Coimbatore,33,569,exact,100.0,6,6,True
+Tamil Nadu,Cuddalore ,Cuddalore,33,570,exact,100.0,6,6,True
+Tamil Nadu,Dharmapuri ,Dharmapuri,33,571,exact,100.0,6,6,True
+Tamil Nadu,Dindigul ,Dindigul,33,572,exact,100.0,6,6,True
+Tamil Nadu,Erode ,Erode,33,573,exact,100.0,6,6,True
+Tamil Nadu,Kancheepuram ,Kancheepuram,33,574,exact,100.0,6,6,True
+Tamil Nadu,Kanniyakumari ,Kanniyakumari,33,575,exact,100.0,6,6,True
+Tamil Nadu,Karur ,Karur,33,576,exact,100.0,6,6,True
+Tamil Nadu,Krishnagiri ,Krishnagiri,33,577,exact,100.0,6,6,True
+Tamil Nadu,Madurai ,Madurai,33,578,exact,100.0,6,6,True
+Tamil Nadu,Nagapattinam ,Nagapattinam,33,579,exact,100.0,6,6,True
+Tamil Nadu,Namakkal ,Namakkal,33,580,exact,100.0,6,6,True
+Tamil Nadu,Perambalur ,Perambalur,33,581,exact,100.0,6,6,True
+Tamil Nadu,Pudukkottai ,Pudukkottai,33,582,exact,100.0,6,6,True
+Tamil Nadu,Ramanathapuram ,Ramanathapuram,33,583,exact,100.0,6,6,True
+Tamil Nadu,Salem ,Salem,33,584,exact,100.0,6,6,True
+Tamil Nadu,Sivaganga ,Sivaganga,33,585,exact,100.0,6,6,True
+Tamil Nadu,Thanjavur ,Thanjavur,33,586,exact,100.0,6,6,True
+Tamil Nadu,The Nilgiris ,The Nilgiris,33,587,exact,100.0,6,6,True
+Tamil Nadu,Theni ,Theni,33,588,exact,100.0,6,6,True
+Tamil Nadu,Thiruvallur ,Thiruvallur,33,589,exact,100.0,6,6,True
+Tamil Nadu,Thiruvarur ,Thiruvarur,33,590,exact,100.0,6,6,True
+Tamil Nadu,Thoothukkudi ,Thoothukkudi,33,594,exact,100.0,6,6,True
+Tamil Nadu,Tiruchirappalli ,Tiruchirappalli,33,591,exact,100.0,6,6,True
+Tamil Nadu,Tirunelveli ,Tirunelveli,33,592,exact,100.0,6,6,True
+Tamil Nadu,Tiruppur ,Tiruppur,33,634,exact,100.0,6,6,True
+Tamil Nadu,Tiruvannamalai ,Tiruvannamalai,33,593,exact,100.0,6,6,True
+Tamil Nadu,Vellore ,Vellore,33,595,exact,100.0,6,6,True
+Tamil Nadu,Viluppuram ,Viluppuram,33,596,exact,100.0,6,6,True
+Tamil Nadu,Virudhunagar ,Virudhunagar,33,597,exact,100.0,6,6,True
+Telangana,Adilabad ,Adilabad,36,501,exact,100.0,6,6,True
+Telangana,Bhadradri Kothagudem ,Bhadradri Kothagudem,36,690,exact,100.0,6,6,True
+Telangana,Hyderabad ,Hyderabad,36,507,exact,100.0,6,6,True
+Telangana,Jagitial ,Jagitial,36,681,exact,100.0,6,6,True
+Telangana,Jangoan ,Jangoan,36,689,exact,100.0,6,6,True
+Telangana,Jayashankar Bhupalapally ,Jayashankar Bhupalapally,36,687,exact,100.0,6,6,True
+Telangana,Jogulamba Gadwal ,Jogulamba Gadwal,36,695,exact,100.0,6,6,True
+Telangana,Kamareddy ,Kamareddy,36,685,exact,100.0,6,6,True
+Telangana,Karimnagar ,Karimnagar,36,508,exact,100.0,6,6,True
+Telangana,Khammam ,Khammam,36,509,exact,100.0,6,6,True
+Telangana,Mahabubabad ,Mahabubabad,36,688,exact,100.0,6,6,True
+Telangana,Mahabubnagar ,Mahabubnagar,36,512,exact,100.0,6,6,True
+Telangana,Mancherial ,Mancherial,36,684,exact,100.0,6,6,True
+Telangana,Medak ,Medak,36,513,exact,100.0,6,6,True
+Telangana,Medchal-Malkajgiri ,Medchal Malkajgiri,36,700,exact,100.0,6,6,True
+Telangana,Nagarkurnool ,Nagarkurnool,36,694,exact,100.0,6,6,True
+Telangana,Nalgonda ,Nalgonda,36,514,exact,100.0,6,6,True
+Telangana,Nirmal ,Nirmal,36,680,exact,100.0,6,6,True
+Telangana,Nizamabad ,Nizamabad,36,516,exact,100.0,6,6,True
+Telangana,Peddapalli ,Peddapalli,36,682,exact,100.0,6,6,True
+Telangana,Rajanna Sircilla ,Rajanna Sircilla,36,683,exact,100.0,6,6,True
+Telangana,Ranga Reddy ,Ranga Reddy,36,518,exact,100.0,6,6,True
+Telangana,Sangareddy ,Sangareddy,36,691,exact,100.0,6,6,True
+Telangana,Siddipet ,Siddipet,36,692,exact,100.0,6,6,True
+Telangana,Suryapet ,Suryapet,36,696,exact,100.0,6,6,True
+Telangana,Vikarabad ,Vikarabad,36,698,exact,100.0,6,6,True
+Telangana,Wanaparthy ,Wanaparthy,36,693,exact,100.0,6,6,True
+Telangana,Yadadri Bhuvanagiri ,Yadadri Bhuvanagiri,36,697,exact,100.0,6,6,True
+Telangana,Komaram Bheem Asifabad ,Kumuram Bheem Asifabad,36,699,fuzzy,90.9,6,6,True
+Tripura,Dhalai ,Dhalai,16,269,exact,100.0,6,6,True
+Tripura,Gomati ,Gomati,16,654,exact,100.0,6,6,True
+Tripura,Khowai ,Khowai,16,652,exact,100.0,6,6,True
+Tripura,North Tripura ,North Tripura,16,270,exact,100.0,6,6,True
+Tripura,Sepahijala ,Sepahijala,16,653,exact,100.0,6,6,True
+Tripura,South Tripura ,South Tripura,16,271,exact,100.0,6,6,True
+Tripura,Unakoti ,Unakoti,16,655,exact,100.0,6,6,True
+Tripura,West Tripura ,West Tripura,16,272,exact,100.0,6,6,True
+Uttar Pradesh,Agra ,Agra,09,118,exact,100.0,6,6,True
+Uttar Pradesh,Aligarh ,Aligarh,09,119,exact,100.0,6,6,True
+Uttar Pradesh,Ambedkar Nagar ,Ambedkar Nagar,09,121,exact,100.0,6,6,True
+Uttar Pradesh,Amethi ,Amethi,09,640,exact,100.0,6,6,True
+Uttar Pradesh,Auraiya ,Auraiya,09,122,exact,100.0,6,6,True
+Uttar Pradesh,Azamgarh ,Azamgarh,09,123,exact,100.0,6,6,True
+Uttar Pradesh,Baghpat ,Baghpat,09,124,exact,100.0,6,6,True
+Uttar Pradesh,Bahraich ,Bahraich,09,125,exact,100.0,6,6,True
+Uttar Pradesh,Ballia ,Ballia,09,126,exact,100.0,6,6,True
+Uttar Pradesh,Balrampur ,Balrampur,09,127,exact,100.0,6,6,True
+Uttar Pradesh,Banda ,Banda,09,128,exact,100.0,6,6,True
+Uttar Pradesh,Bara Banki ,Bara Banki,09,129,exact,100.0,6,6,True
+Uttar Pradesh,Bareilly ,Bareilly,09,130,exact,100.0,6,6,True
+Uttar Pradesh,Basti ,Basti,09,131,exact,100.0,6,6,True
+Uttar Pradesh,Bijnor ,Bijnor,09,132,exact,100.0,6,6,True
+Uttar Pradesh,Budaun ,Budaun,09,133,exact,100.0,6,6,True
+Uttar Pradesh,Bulandshahr ,Bulandshahr,09,134,exact,100.0,6,6,True
+Uttar Pradesh,Chandauli ,Chandauli,09,135,exact,100.0,6,6,True
+Uttar Pradesh,Chitrakoot ,Chitrakoot,09,136,exact,100.0,6,6,True
+Uttar Pradesh,Deoria ,Deoria,09,137,exact,100.0,6,6,True
+Uttar Pradesh,Etah ,Etah,09,138,exact,100.0,6,6,True
+Uttar Pradesh,Etawah ,Etawah,09,139,exact,100.0,6,6,True
+Uttar Pradesh,Farrukhabad ,Farrukhabad,09,141,exact,100.0,6,6,True
+Uttar Pradesh,Fatehpur ,Fatehpur,09,142,exact,100.0,6,6,True
+Uttar Pradesh,Firozabad ,Firozabad,09,143,exact,100.0,6,6,True
+Uttar Pradesh,Gautam Buddha Nagar ,Gautam Buddha Nagar,09,144,exact,100.0,6,6,True
+Uttar Pradesh,Ghaziabad ,Ghaziabad,09,145,exact,100.0,6,6,True
+Uttar Pradesh,Ghazipur ,Ghazipur,09,146,exact,100.0,6,6,True
+Uttar Pradesh,Gonda ,Gonda,09,147,exact,100.0,6,6,True
+Uttar Pradesh,Gorakhpur ,Gorakhpur,09,148,exact,100.0,6,6,True
+Uttar Pradesh,Hamirpur ,Hamirpur,09,149,exact,100.0,6,6,True
+Uttar Pradesh,Hapur ,Hapur,09,661,exact,100.0,6,6,True
+Uttar Pradesh,Hardoi ,Hardoi,09,150,exact,100.0,6,6,True
+Uttar Pradesh,Jalaun ,Jalaun,09,151,exact,100.0,6,6,True
+Uttar Pradesh,Jaunpur ,Jaunpur,09,152,exact,100.0,6,6,True
+Uttar Pradesh,Jhansi ,Jhansi,09,153,exact,100.0,6,6,True
+Uttar Pradesh,Kannauj ,Kannauj,09,155,exact,100.0,6,6,True
+Uttar Pradesh,Kanpur Dehat ,Kanpur Dehat,09,156,exact,100.0,6,6,True
+Uttar Pradesh,Kanpur Nagar ,Kanpur Nagar,09,157,exact,100.0,6,6,True
+Uttar Pradesh,Kaushambi ,Kaushambi,09,158,exact,100.0,6,6,True
+Uttar Pradesh,Kheri ,Kheri,09,159,exact,100.0,6,6,True
+Uttar Pradesh,Kushinagar ,Kushinagar,09,160,exact,100.0,6,6,True
+Uttar Pradesh,Lalitpur ,Lalitpur,09,161,exact,100.0,6,6,True
+Uttar Pradesh,Lucknow ,Lucknow,09,162,exact,100.0,6,6,True
+Uttar Pradesh,Mahoba ,Mahoba,09,165,exact,100.0,6,6,True
+Uttar Pradesh,Mahrajganj ,Mahrajganj,09,164,exact,100.0,6,6,True
+Uttar Pradesh,Mainpuri ,Mainpuri,09,166,exact,100.0,6,6,True
+Uttar Pradesh,Mathura ,Mathura,09,167,exact,100.0,6,6,True
+Uttar Pradesh,Mau ,Mau,09,168,exact,100.0,6,6,True
+Uttar Pradesh,Meerut ,Meerut,09,169,exact,100.0,6,6,True
+Uttar Pradesh,Mirzapur ,Mirzapur,09,170,exact,100.0,6,6,True
+Uttar Pradesh,Moradabad ,Moradabad,09,171,exact,100.0,6,6,True
+Uttar Pradesh,Muzaffarnagar ,Muzaffarnagar,09,172,exact,100.0,6,6,True
+Uttar Pradesh,Pilibhit ,Pilibhit,09,173,exact,100.0,6,6,True
+Uttar Pradesh,Pratapgarh ,Pratapgarh,09,174,exact,100.0,6,6,True
+Uttar Pradesh,Rae Bareli ,Rae Bareli,09,175,exact,100.0,6,6,True
+Uttar Pradesh,Rampur ,Rampur,09,176,exact,100.0,6,6,True
+Uttar Pradesh,Saharanpur ,Saharanpur,09,177,exact,100.0,6,6,True
+Uttar Pradesh,Sambhal ,Sambhal,09,659,exact,100.0,6,6,True
+Uttar Pradesh,Sant Kabir Nagar ,Sant Kabir Nagar,09,178,exact,100.0,6,6,True
+Uttar Pradesh,Shahjahanpur ,Shahjahanpur,09,180,exact,100.0,6,6,True
+Uttar Pradesh,Shamli ,Shamli,09,660,exact,100.0,6,6,True
+Uttar Pradesh,Shrawasti ,Shrawasti,09,181,exact,100.0,6,6,True
+Uttar Pradesh,Siddharthnagar ,Siddharthnagar,09,182,exact,100.0,6,6,True
+Uttar Pradesh,Sitapur ,Sitapur,09,183,exact,100.0,6,6,True
+Uttar Pradesh,Sonbhadra ,Sonbhadra,09,184,exact,100.0,6,6,True
+Uttar Pradesh,Sultanpur ,Sultanpur,09,185,exact,100.0,6,6,True
+Uttar Pradesh,Unnao ,Unnao,09,186,exact,100.0,6,6,True
+Uttar Pradesh,Varanasi ,Varanasi,09,187,exact,100.0,6,6,True
+Uttarakhand,Almora ,Almora,05,045,exact,100.0,6,6,True
+Uttarakhand,Bageshwar ,Bageshwar,05,046,exact,100.0,6,6,True
+Uttarakhand,Chamoli ,Chamoli,05,047,exact,100.0,6,6,True
+Uttarakhand,Champawat ,Champawat,05,048,exact,100.0,6,6,True
+Uttarakhand,Dehradun ,Dehradun,05,049,exact,100.0,6,6,True
+Uttarakhand,Nainital ,Nainital,05,051,exact,100.0,6,6,True
+Uttarakhand,Pithoragarh ,Pithoragarh,05,053,exact,100.0,6,6,True
+Uttarakhand,Rudraprayag ,Rudraprayag,05,054,exact,100.0,6,6,True
+Uttarakhand,Tehri Garhwal ,Tehri Garhwal,05,055,exact,100.0,6,6,True
+Uttarakhand,Udham Singh Nagar ,Udham Singh Nagar,05,056,exact,100.0,6,6,True
+Uttarakhand,Uttarkashi ,Uttarkashi,05,057,exact,100.0,6,6,True
+Uttarakhand,Hardwar ,Haridwar,05,050,fuzzy,93.3,6,6,True
+West Bengal,Bankura ,Bankura,19,305,exact,100.0,6,6,True
+West Bengal,Birbhum ,Birbhum,19,307,exact,100.0,6,6,True
+West Bengal,Dakshin Dinajpur ,Dakshin Dinajpur,19,310,exact,100.0,6,6,True
+West Bengal,Jalpaiguri ,Jalpaiguri,19,314,exact,100.0,6,6,True
+West Bengal,Kolkata ,Kolkata,19,315,exact,100.0,6,6,True
+West Bengal,Murshidabad ,Murshidabad,19,319,exact,100.0,6,6,True
+West Bengal,Nadia ,Nadia,19,320,exact,100.0,6,6,True
+West Bengal,Paschim Medinipur ,Paschim Medinipur,19,318,exact,100.0,6,6,True
+West Bengal,Purba Medinipur ,Purba Medinipur,19,317,exact,100.0,6,6,True
+West Bengal,Uttar Dinajpur ,Uttar Dinajpur,19,311,exact,100.0,6,6,True
+West Bengal,Maldah ,Malda,19,316,fuzzy,90.9,6,6,True
+West Bengal,Paschim Barddhaman ,Paschim Bardhaman,19,704,fuzzy,97.1,6,6,True
+West Bengal,Puruliya ,Purulia,19,321,fuzzy,93.3,6,6,True
+ Lakshadweep ,Lakshadweep ,Lakshadweep District,31,553,values,0.0,6,6,True
+Andhra Pradesh,Anantapur ,Ananthapuramu,28,502,values,0.0,6,6,True
+Andhra Pradesh,Y.S.R. ,Y.S.R. Kadapa,28,504,values,0.0,6,6,True
+Assam,Kamrup Metropolitan ,Kamrup Metro,18,618,values,0.0,6,6,True
+Assam,Karimganj ,Sribhumi,18,293,values,0.0,6,6,True
+Chhattisgarh,Baloda Bazar ,Balodabazar-Bhatapara,22,644,values,0.0,6,6,True
+Chhattisgarh,Balrampur ,Balrampur-Ramanujganj,22,649,values,0.0,6,6,True
+Chhattisgarh,Dantewada ,Dakshin Bastar Dantewada,22,376,values,0.0,6,6,True
+Chhattisgarh,Koriya ,Korea,22,384,values,0.0,6,6,True
+Gujarat,Chhota Udaipur ,Chhotaudepur,24,668,values,0.0,6,6,True
+Gujarat,Dohad ,Dahod,24,445,values,0.0,6,6,True
+Gujarat,The Dangs ,Dangs,24,444,values,0.0,6,6,True
+Haryana,Gurgaon ,Gurugram,06,062,values,0.0,6,6,True
+Haryana,Mewat ,Nuh,06,604,values,0.0,6,6,True
+Jammu & Kashmir,Badgam ,Budgam,01,002,values,0.0,6,6,True
+Jammu & Kashmir,Punch ,Poonch,01,010,values,0.0,6,6,True
+Jammu & Kashmir,Shupiyan ,Shopian,01,625,values,0.0,6,6,True
+Jharkhand,Pashchimi Singhbhum ,West Singhbhum,20,343,values,0.0,6,6,True
+Jharkhand,Purbi Singhbhum ,East Singhbum,20,327,values,0.0,6,6,True
+Karnataka,Bangalore ,Bengaluru Urban,29,525,values,0.0,6,6,True
+Karnataka,Bangalore Rural ,Bengaluru Rural,29,526,values,0.0,6,6,True
+Karnataka,Belgaum ,Belagavi,29,527,values,0.0,6,6,True
+Karnataka,Bellary ,Ballari,29,528,values,0.0,6,6,True
+Karnataka,Bijapur ,Vijayapura,29,530,values,0.0,6,6,True
+Karnataka,Gulbarga ,Kalaburagi,29,538,values,0.0,6,6,True
+Karnataka,Mysore ,Mysuru,29,545,values,0.0,6,6,True
+Karnataka,Ramanagara ,Bengaluru South,29,631,values,0.0,6,6,True
+Karnataka,Shimoga ,Shivamogga,29,547,values,0.0,6,6,True
+Madhya Pradesh,Hoshangabad ,Narmadapuram,23,409,values,0.0,6,6,True
+Maharastra,Ahmadnagar ,Ahilyanagar,27,466,values,0.0,6,6,True
+Maharastra,Aurangabad ,Chhatrapati Sambhajinagar,27,469,values,0.0,6,6,True
+Maharastra,Bid ,Beed,27,470,values,0.0,6,6,True
+Maharastra,Osmanabad ,Dharashiv,27,488,values,0.0,6,6,True
+Maharastra,Raigarh ,Raigad,27,491,values,0.0,6,6,True
+Odisha,Anugul ,Anugola,21,344,values,0.0,6,6,True
+Odisha,Bargarh ,Baragada,21,347,values,0.0,6,6,True
+Odisha,Baudh ,Boudh,21,349,values,0.0,6,6,True
+Odisha,Cuttack ,Kataka,21,350,values,0.0,6,6,True
+Odisha,Debagarh ,Debagada,21,351,values,0.0,6,6,True
+Odisha,Nayagarh ,Nayagada,21,367,values,0.0,6,6,True
+Odisha,Sundargarh ,Sundaragada,21,373,values,0.0,6,6,True
+Punjab,Firozpur ,Ferozepur,03,031,values,0.0,6,6,True
+Punjab,Muktsar ,Sri Muktsar Sahib,03,039,values,0.0,6,6,True
+Punjab,Sahibzada Ajit Singh Nagar ,S.A.S Nagar,03,608,values,0.0,6,6,True
+Rajasthan,Dhaulpur ,Dholpur,08,098,values,0.0,6,6,True
+Sikkim,East District ,Gangtok,11,225,values,0.0,6,6,True
+Sikkim,North  District ,Mangan,11,226,values,0.0,6,6,True
+Sikkim,South District ,Namchi,11,227,values,0.0,6,6,True
+Sikkim,West District ,Gyalshing,11,228,values,0.0,6,6,True
+Telangana,Warangal Rural ,Warangal,36,522,values,0.0,6,6,True
+Telangana,Warangal Urban ,Hanumakonda,36,686,values,0.0,6,6,True
+Uttar Pradesh,Allahabad ,Prayagraj,09,120,values,0.0,6,6,True
+Uttar Pradesh,Faizabad ,Ayodhya,09,140,values,0.0,6,6,True
+Uttar Pradesh,Jyotiba Phule Nagar ,Amroha,09,154,values,0.0,6,6,True
+Uttar Pradesh,Kanshiram Nagar ,Kasganj,09,633,values,0.0,6,6,True
+Uttar Pradesh,Mahamaya Nagar ,Hathras,09,163,values,0.0,6,6,True
+Uttar Pradesh,Sant Ravidas Nagar (Bhadohi) ,Bhadohi,09,179,values,0.0,6,6,True
+Uttarakhand,Garhwal ,Pauri Garhwal,05,052,values,0.0,6,6,True
+West Bengal,Darjiling ,Darjeeling,19,309,values,0.0,6,6,True
+West Bengal,Haora ,Howrah,19,313,values,0.0,6,6,True
+West Bengal,Hugli ,Hooghly,19,312,values,0.0,6,6,True
+West Bengal,Koch Bihar ,Cooch Behar,19,308,values,0.0,6,6,True
+West Bengal,North Twenty Four Pargana ,North 24 Parganas,19,303,values,0.0,6,6,True
+West Bengal,South Twenty Four Pargana ,South 24 Parganas,19,304,values,0.0,6,6,True

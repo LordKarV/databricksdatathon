@@ -1,0 +1,341 @@
+{
+ "inspect": {
+  "rows": 1995,
+  "columns": 129,
+  "rows_by_year": {
+   "2023-24": 713,
+   "2019-21": 707,
+   "2015-16": 575
+  },
+  "states_by_year": {
+   "2015-16": 34,
+   "2019-21": 36,
+   "2023-24": 33
+  },
+  "dup_year_district_code": 0,
+  "dup_year_state_name": 0,
+  "non_numeric_district_code": 8,
+  "percent_cells_out_of_0_100": {},
+  "columns_all_null_by_year": {
+   "2015-16": 45,
+   "2019-21": 0,
+   "2023-24": 30
+  },
+  "key_field_null_rate_by_year": {
+   "2015-16": {
+    "births_c_section": 0.0,
+    "private_births_c_section": 0.151,
+    "public_births_c_section": 0.0,
+    "institutional_births": 0.0,
+    "men_high_blood_sugar_140plus": 1.0,
+    "women_high_blood_sugar_140plus": 1.0,
+    "women_elevated_bp_140plus": 1.0,
+    "men_elevated_bp_140plus": 1.0
+   },
+   "2019-21": {
+    "births_c_section": 0.0,
+    "private_births_c_section": 0.214,
+    "public_births_c_section": 0.0,
+    "institutional_births": 0.0,
+    "men_high_blood_sugar_140plus": 0.0,
+    "women_high_blood_sugar_140plus": 0.0,
+    "women_elevated_bp_140plus": 0.0,
+    "men_elevated_bp_140plus": 0.0
+   },
+   "2023-24": {
+    "births_c_section": 0.0,
+    "private_births_c_section": 0.135,
+    "public_births_c_section": 0.0,
+    "institutional_births": 0.0,
+    "men_high_blood_sugar_140plus": 0.0,
+    "women_high_blood_sugar_140plus": 0.0,
+    "women_elevated_bp_140plus": 0.0,
+    "men_elevated_bp_140plus": 0.0
+   }
+  },
+  "codes_2019_in_2023": 696,
+  "codes_2023_not_in_2019": [
+   "664",
+   "702",
+   "703",
+   "718",
+   "719",
+   "720",
+   "721",
+   "723",
+   "724",
+   "725",
+   "729",
+   "730",
+   "731",
+   "732",
+   "733",
+   "734",
+   "735"
+  ],
+  "codes_2019_not_in_2023": [
+   "044",
+   "252",
+   "253",
+   "254",
+   "255",
+   "256",
+   "257",
+   "258",
+   "259",
+   "260",
+   "553"
+  ],
+  "states_2023_24": [
+   "Andaman and Nicobar Islands",
+   "Andhra Pradesh",
+   "Arunachal Pradesh",
+   "Assam",
+   "Bihar",
+   "Chhattisgarh",
+   "Dadra & Nagar Haveli and Daman & Diu",
+   "Goa",
+   "Gujarat",
+   "Haryana",
+   "Himachal Pradesh",
+   "Jammu and Kashmir",
+   "Jharkhand",
+   "Karnataka",
+   "Kerala",
+   "Ladakh",
+   "Madhya Pradesh",
+   "Maharashtra",
+   "Meghalaya",
+   "Mizoram",
+   "NCT of Delhi",
+   "Nagaland",
+   "Odisha",
+   "Puducherry",
+   "Punjab",
+   "Rajasthan",
+   "Sikkim",
+   "Tamil Nadu",
+   "Telangana",
+   "Tripura",
+   "Uttar Pradesh",
+   "Uttarakhand",
+   "West Bengal"
+  ],
+  "state_total_inside_district_range": "273/275",
+  "births_c_section_2023_24_describe": {
+   "count": 713.0,
+   "mean": 28.66,
+   "std": 17.66,
+   "min": 1.0,
+   "25%": 14.5,
+   "50%": 24.7,
+   "75%": 40.3,
+   "max": 87.3
+  }
+ },
+ "join_nfhs5": {
+  "nfhs5_rows": 706,
+  "idp_2019_rows": 707,
+  "matched": 705,
+  "matched_by_how": {
+   "exact": 611,
+   "values": 64,
+   "fuzzy": 30
+  },
+  "value_confirmed": 703,
+  "value_confirmed_by_how": {
+   "exact": 609,
+   "fuzzy": 30,
+   "values": 64
+  },
+  "per_indicator_agree": {
+   "births_c_section": "705/705",
+   "institutional_births": "705/705",
+   "women_high_blood_sugar_140plus": "705/705",
+   "men_high_blood_sugar_140plus": "705/705",
+   "women_elevated_bp_140plus": "703/705",
+   "under5_stunted": "704/704"
+  },
+  "unmatched_nfhs5": [
+   [
+    "Mizoram",
+    "Chandel "
+   ]
+  ],
+  "unmatched_idp_2019": [
+   [
+    "Mizoram",
+    "Siaha"
+   ],
+   [
+    "West Bengal",
+    "Purba Bardhaman"
+   ]
+  ]
+ },
+ "join_facilities": {
+  "facilities_in_raw": 10088,
+  "facilities_in_audit_district_table": 9970,
+  "facilities_with_district": 9961,
+  "via_nfhs5_code_found": 9961,
+  "via_nfhs5_with_2023_24_c_section": 9902,
+  "direct_code_found": 9785,
+  "direct_with_2023_24_c_section": 9785,
+  "best_with_2023_24_c_section": 9902,
+  "best_by_state_missing": {
+   "CHANDIGARH": 46,
+   "MANIPUR": 13,
+   "GUJARAT": 4,
+   "MAHARASHTRA": 3,
+   "MADHYA PRADESH": 1
+  },
+  "either_code_found": 9961,
+  "both_found": 9785,
+  "both_agree": 9708,
+  "directory_districts": 554,
+  "directory_districts_direct_matched": 536,
+  "directory_districts_direct_by_how": {
+   "exact": 523,
+   "fuzzy": 13
+  },
+  "directory_districts_unmatched": [
+   [
+    "andhra pradesh",
+    "ntr"
+   ],
+   [
+    "chandigarh",
+    "chandigarh"
+   ],
+   [
+    "manipur",
+    "imphal east"
+   ],
+   [
+    "manipur",
+    "imphal west"
+   ],
+   [
+    "andhra pradesh",
+    "kakinada"
+   ],
+   [
+    "andhra pradesh",
+    "parvathipuram manyam"
+   ],
+   [
+    "andhra pradesh",
+    "anakapalli"
+   ],
+   [
+    "andhra pradesh",
+    "sri sathya sai"
+   ],
+   [
+    "andhra pradesh",
+    "nandyal"
+   ],
+   [
+    "tripura",
+    "nirmal"
+   ],
+   [
+    "andhra pradesh",
+    "annamayya"
+   ],
+   [
+    "andhra pradesh",
+    "palnadu"
+   ],
+   [
+    "andhra pradesh",
+    "eluru"
+   ],
+   [
+    "manipur",
+    "churachandpur"
+   ],
+   [
+    "punjab",
+    "malerkotla"
+   ],
+   [
+    "andhra pradesh",
+    "bapatla"
+   ],
+   [
+    "andhra pradesh",
+    "tirupati"
+   ],
+   [
+    "andhra pradesh",
+    "konaseema"
+   ]
+  ],
+  "disagree_examples": [
+   [
+    "TAMIL NADU",
+    "Tirupathur",
+    "vellore",
+    "595",
+    "732"
+   ],
+   [
+    "TAMIL NADU",
+    "CHENGALPATTU",
+    "kancheepuram",
+    "574",
+    "730"
+   ],
+   [
+    "TAMIL NADU",
+    "MAYILADUTHURAI",
+    "nagapattinam",
+    "579",
+    "735"
+   ],
+   [
+    "TAMIL NADU",
+    "Ranipet",
+    "vellore",
+    "595",
+    "731"
+   ],
+   [
+    "TAMIL NADU",
+    "TENKASI",
+    "tirunelveli",
+    "592",
+    "733"
+   ],
+   [
+    "TAMIL NADU",
+    "KALLAKURICHI",
+    "viluppuram",
+    "596",
+    "729"
+   ],
+   [
+    "WEST BENGAL",
+    "PURBA BARDHAMAN",
+    "paschim barddhaman",
+    "704",
+    "306"
+   ],
+   [
+    "WEST BENGAL",
+    "KALIMPONG",
+    "darjiling",
+    "309",
+    "702"
+   ],
+   [
+    "WEST BENGAL",
+    "Alipurduar",
+    "jalpaiguri",
+    "314",
+    "664"
+   ]
+  ]
+ }
+}

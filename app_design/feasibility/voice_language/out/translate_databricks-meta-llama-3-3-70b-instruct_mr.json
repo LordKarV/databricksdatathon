@@ -1,0 +1,52 @@
+{
+ "endpoint": "databricks-meta-llama-3-3-70b-instruct",
+ "lang": "mr",
+ "placeholders": false,
+ "ms": 4681,
+ "source": "Best option for dialysis: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. It is 7.4 km away, about 22 minutes by road. Chance you will be treated when you arrive: 0.81 (likely range 0.70 to 0.89). Why: the hospital's own text says \"Has 17 dialysis machines currently\" and \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". Caution: \"Plans to increase dialysis capacity to 27 units\" is a future plan, so we did not count it. For 3 sessions a week, travel adds about 132 minutes per week. Backup: if they cannot take you, option 2 is 12.9 km away with a 0.64 chance.",
+ "sent": "Best option for dialysis: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. It is 7.4 km away, about 22 minutes by road. Chance you will be treated when you arrive: 0.81 (likely range 0.70 to 0.89). Why: the hospital's own text says \"Has 17 dialysis machines currently\" and \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". Caution: \"Plans to increase dialysis capacity to 27 units\" is a future plan, so we did not count it. For 3 sessions a week, travel adds about 132 minutes per week. Backup: if they cannot take you, option 2 is 12.9 km away with a 0.64 chance.",
+ "raw": "डायलिसीसाठी सर्वात चांगा पर्याय: NKP Salve Institute of Medical Sciences and Research Centre, नागपूर. ते 7.4 किमी अंतरावर आहे, सुमारे 22 मिनिटे रोडवरून. तुम्ही आल्यावर तुमच्यावर उपचार होण्याची शक्यता: 0.81 (संभाव्य श्रेणी 0.70 ते 0.89). का: हॉस्पिटलच्या स्वतःच्या मजकुरात असे म्हटले आहे \"Has 17 dialysis machines currently\" आणि \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". सावधान: \"Plans to increase dialysis capacity to 27 units\" ही भविष्यातील योजना आहे, म्हणून आम्ही ती गणली नाही. आठवड्यात 3 सत्रांसाठी, प्रवासामुळे सुमारे 132 मिनिटे आठवड्यासाठी जोडले जातात. बॅकअप: जर ते तुम्हाला घेऊ शकले नाहीत तर, पर्याय 2 12.9 किमी अंतरावर आहे ज्याची शक्यता 0.64 आहे.",
+ "final": "डायलिसीसाठी सर्वात चांगा पर्याय: NKP Salve Institute of Medical Sciences and Research Centre, नागपूर. ते 7.4 किमी अंतरावर आहे, सुमारे 22 मिनिटे रोडवरून. तुम्ही आल्यावर तुमच्यावर उपचार होण्याची शक्यता: 0.81 (संभाव्य श्रेणी 0.70 ते 0.89). का: हॉस्पिटलच्या स्वतःच्या मजकुरात असे म्हटले आहे \"Has 17 dialysis machines currently\" आणि \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". सावधान: \"Plans to increase dialysis capacity to 27 units\" ही भविष्यातील योजना आहे, म्हणून आम्ही ती गणली नाही. आठवड्यात 3 सत्रांसाठी, प्रवासामुळे सुमारे 132 मिनिटे आठवड्यासाठी जोडले जातात. बॅकअप: जर ते तुम्हाला घेऊ शकले नाहीत तर, पर्याय 2 12.9 किमी अंतरावर आहे ज्याची शक्यता 0.64 आहे.",
+ "unrestored_tokens": [],
+ "check": {
+  "spans_verbatim": {
+   "NKP Salve Institute of Medical Sciences and Research Centre, Nagpur": false,
+   "Has 17 dialysis machines currently": true,
+   "Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana": true,
+   "Plans to increase dialysis capacity to 27 units": true
+  },
+  "all_spans_ok": false,
+  "numbers_expected": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_strict": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_ok_strict": true,
+  "numbers_ok_normalised": true,
+  "missing_numbers": [],
+  "extra_numbers": []
+ }
+}

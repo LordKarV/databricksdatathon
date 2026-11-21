@@ -109,13 +109,14 @@ def classify(h, official_hosts, name):
     """Return the source class for host h given the record's officialWebsite hosts and name.
     'official' = host is the record's officialWebsite; 'official_like' = host label contains
     the distinctive part of the facility name (may be a sister branch, see q1)."""
-    if h in official_hosts:
-        return "official"
     if NOT_RESEARCH.search(h):  # 'journal' in a newspaper or blog host
         return "news" if "livejournal" not in h else "social"
     for c, rx in COMPILED[:8]:  # research..aggregator: always win over name match
         if rx.search(h):
             return c
+    # after the third-party rules: officialWebsite sometimes holds a practo/justdial URL
+    if h in official_hosts:
+        return "official"
     label = h.split(".")[0] if not h.startswith("m.") else h.split(".")[1]
     nk = name_key(name)
     if len(nk) >= 4 and fuzz.partial_ratio(nk, re.sub(r"[^a-z0-9]", "", label)) >= 85:
@@ -133,6 +134,7 @@ if __name__ == "__main__":
     assert classify("practo.com", set(), "X") == "health_aggregator"
     assert classify("rainbowhospitalkolhapur.com", set(), "Rainbow Hospital") == "official_like"
     assert classify("abc.com", {"abc.com"}, "X") == "official"
+    assert classify("practo.com", {"practo.com"}, "X") == "health_aggregator"
     assert classify("jalandhar.nic.in", set(), "X") == "government"
     assert classify("en.wikipedia.org", set(), "X") == "wikipedia"
     print("domains.py self-check ok")

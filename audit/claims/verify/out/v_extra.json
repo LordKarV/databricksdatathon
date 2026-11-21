@@ -1,0 +1,14 @@
+{
+ "mri_name_fp_sentences": 18,
+ "mri_name_fp_facilities_only_fp": 8,
+ "trauma_ambulance_sentences": 205,
+ "trauma_facilities_ambulance_only": 31,
+ "trauma_ambulance_only_grades": {
+  "medium": 18,
+  "weak": 13
+ },
+ "icu_sentences_paediatric_icu": 143,
+ "icu_facilities_only_paediatric_icu": 29,
+ "dup_uid_groups": 11,
+ "dup_uid_groups_with_differing_content": 0
+}

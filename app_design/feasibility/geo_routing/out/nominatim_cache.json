@@ -1,0 +1,172 @@
+{
+ "26.45000,85.95000": {
+  "response": {
+   "place_id": 242491033,
+   "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 729736658,
+   "lat": "26.4500785",
+   "lon": "85.9484026",
+   "category": "highway",
+   "type": "unclassified",
+   "place_rank": 26,
+   "importance": 0.05337333409628439,
+   "addresstype": "unclassified",
+   "name": "",
+   "display_name": "Benipatti, Madhubani, Bihar, 847223, India",
+   "address": {
+    "county": "Benipatti",
+    "state_district": "Madhubani",
+    "state": "Bihar",
+    "ISO3166-2-lvl4": "IN-BR",
+    "postcode": "847223",
+    "country": "India",
+    "country_code": "in"
+   },
+   "boundingbox": [
+    "26.4481433",
+    "26.4500785",
+    "85.9482041",
+    "85.9489042"
+   ]
+  },
+  "ms": 252
+ },
+ "24.85000,85.30000": {
+  "response": {
+   "place_id": 242558711,
+   "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 985062337,
+   "lat": "24.8520416",
+   "lon": "85.3044444",
+   "category": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.0533433333333333,
+   "addresstype": "residential",
+   "name": "",
+   "display_name": "Muhra, Gaya, Bihar, 805129, India",
+   "address": {
+    "county": "Muhra",
+    "state_district": "Gaya",
+    "state": "Bihar",
+    "ISO3166-2-lvl4": "IN-BR",
+    "postcode": "805129",
+    "country": "India",
+    "country_code": "in"
+   },
+   "boundingbox": [
+    "24.8499884",
+    "24.8541054",
+    "85.3040414",
+    "85.3067417"
+   ]
+  },
+  "ms": 337
+ },
+ "18.95000,75.95000": {
+  "response": {
+   "place_id": 246527957,
+   "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 597472278,
+   "lat": "18.9509075",
+   "lon": "75.9540763",
+   "category": "highway",
+   "type": "tertiary",
+   "place_rank": 26,
+   "importance": 0.053376982528419895,
+   "addresstype": "tertiary",
+   "name": "",
+   "display_name": "Pokharitanda, Ghat Sawali, Wadwani, Beed District, Maharashtra, India",
+   "address": {
+    "hamlet": "Pokharitanda",
+    "village": "Ghat Sawali",
+    "county": "Wadwani",
+    "state_district": "Beed District",
+    "state": "Maharashtra",
+    "ISO3166-2-lvl4": "IN-MH",
+    "country": "India",
+    "country_code": "in"
+   },
+   "boundingbox": [
+    "18.9406086",
+    "18.9882604",
+    "75.9406481",
+    "75.9551564"
+   ]
+  },
+  "ms": 298
+ },
+ "19.85000,80.10000": {
+  "response": {
+   "place_id": 248248753,
+   "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 9919471761,
+   "lat": "19.8252030",
+   "lon": "80.0715887",
+   "category": "place",
+   "type": "village",
+   "place_rank": 19,
+   "importance": 0.14670416800183103,
+   "addresstype": "village",
+   "name": "Makepalli Chak No 1",
+   "display_name": "Makepalli Chak No 1, Chamorshi Taluka, Gadchiroli, Maharashtra, 442604, India",
+   "address": {
+    "village": "Makepalli Chak No 1",
+    "county": "Chamorshi Taluka",
+    "state_district": "Gadchiroli",
+    "state": "Maharashtra",
+    "ISO3166-2-lvl4": "IN-MH",
+    "postcode": "442604",
+    "country": "India",
+    "country_code": "in"
+   },
+   "boundingbox": [
+    "19.8052030",
+    "19.8452030",
+    "80.0515887",
+    "80.0915887"
+   ]
+  },
+  "ms": 188
+ },
+ "18.78350,73.37000": {
+  "response": {
+   "place_id": 245543500,
+   "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 1620474560,
+   "lat": "18.7831347",
+   "lon": "73.3662152",
+   "category": "railway",
+   "type": "technical_station",
+   "place_rank": 30,
+   "importance": 4.61745632104527e-05,
+   "addresstype": "railway",
+   "name": "Monkey Hill Cabin",
+   "display_name": "Monkey Hill Cabin, Gufa Road, Khopoli, Khalapur Taluka, Raigad, Maharashtra, 410203, India",
+   "address": {
+    "railway": "Monkey Hill Cabin",
+    "road": "Gufa Road",
+    "town": "Khopoli",
+    "county": "Khalapur Taluka",
+    "state_district": "Raigad",
+    "state": "Maharashtra",
+    "ISO3166-2-lvl4": "IN-MH",
+    "postcode": "410203",
+    "country": "India",
+    "country_code": "in"
+   },
+   "boundingbox": [
+    "18.7830847",
+    "18.7831847",
+    "73.3661652",
+    "73.3662652"
+   ]
+  },
+  "ms": 172
+ }
+}

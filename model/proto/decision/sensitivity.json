@@ -1,0 +1,32 @@
+{
+ "default": {
+  "top1_changed": 0,
+  "top1_T_lt_2": 22,
+  "n": 40
+ },
+ "D_s_x0.5": {
+  "top1_changed": 8,
+  "top1_T_lt_2": 26,
+  "n": 40
+ },
+ "D_s_x2": {
+  "top1_changed": 11,
+  "top1_T_lt_2": 19,
+  "n": 40
+ },
+ "road_1.0": {
+  "top1_changed": 10,
+  "top1_T_lt_2": 22,
+  "n": 40
+ },
+ "road_1.6": {
+  "top1_changed": 7,
+  "top1_T_lt_2": 24,
+  "n": 40
+ },
+ "post_hoc_T2_gate": {
+  "top1_changed": 22,
+  "top1_T_lt_2": 0,
+  "n": 40
+ }
+}

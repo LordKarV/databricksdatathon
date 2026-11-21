@@ -1,0 +1,58 @@
+{
+ "burns": {
+  "fac_2plus_fields": 73,
+  "finder_method_token_set_first_vs_rest": 24,
+  "token_set_all_pairs": 45,
+  "token_sort_ratio85": 15,
+  "token_set_hit_but_not_sort": 30
+ },
+ "cardiac_surgery": {
+  "fac_2plus_fields": 272,
+  "finder_method_token_set_first_vs_rest": 64,
+  "token_set_all_pairs": 133,
+  "token_sort_ratio85": 41,
+  "token_set_hit_but_not_sort": 92
+ },
+ "csection": {
+  "fac_2plus_fields": 102,
+  "finder_method_token_set_first_vs_rest": 29,
+  "token_set_all_pairs": 63,
+  "token_sort_ratio85": 11,
+  "token_set_hit_but_not_sort": 52
+ },
+ "dialysis": {
+  "fac_2plus_fields": 573,
+  "finder_method_token_set_first_vs_rest": 154,
+  "token_set_all_pairs": 294,
+  "token_sort_ratio85": 70,
+  "token_set_hit_but_not_sort": 224
+ },
+ "icu": {
+  "fac_2plus_fields": 935,
+  "finder_method_token_set_first_vs_rest": 284,
+  "token_set_all_pairs": 448,
+  "token_sort_ratio85": 181,
+  "token_set_hit_but_not_sort": 267
+ },
+ "mri": {
+  "fac_2plus_fields": 538,
+  "finder_method_token_set_first_vs_rest": 144,
+  "token_set_all_pairs": 195,
+  "token_sort_ratio85": 43,
+  "token_set_hit_but_not_sort": 152
+ },
+ "nicu": {
+  "fac_2plus_fields": 255,
+  "finder_method_token_set_first_vs_rest": 85,
+  "token_set_all_pairs": 132,
+  "token_sort_ratio85": 47,
+  "token_set_hit_but_not_sort": 85
+ },
+ "trauma": {
+  "fac_2plus_fields": 1158,
+  "finder_method_token_set_first_vs_rest": 293,
+  "token_set_all_pairs": 569,
+  "token_sort_ratio85": 172,
+  "token_set_hit_but_not_sort": 397
+ }
+}

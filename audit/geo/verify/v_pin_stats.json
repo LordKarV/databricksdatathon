@@ -1,0 +1,482 @@
+{
+ "rows": 165627,
+ "pins": 19586,
+ "unparseable": 12015,
+ "literal_NA_either": 12009,
+ "unparseable_not_NA_examples": [
+  [
+   "28.430354\u00b0 N",
+   "77.358526\u00b0 E"
+  ],
+  [
+   "17\u00b057'17.7",
+   "78\u00b035'48.3"
+  ],
+  [
+   "18.856818\u00b0",
+   "79.462604\u00b0"
+  ],
+  [
+   "28.4 32628",
+   "94.28 28092"
+  ],
+  [
+   "26.52 12743",
+   "95.30 54302"
+  ]
+ ],
+ "zero": 13,
+ "swapped": 791,
+ "outside_box_after_swap": 1804,
+ "at_1_1": 434,
+ "lat_228": 70,
+ "lat_15_59_all": 1051,
+ "lat_15_59_by_state": {
+  "GUJARAT": 668,
+  "KERALA": 223,
+  "WEST BENGAL": 79,
+  "BIHAR": 58,
+  "KARNATAKA": 8,
+  "ANDHRA PRADESH": 6,
+  "UTTAR PRADESH": 5,
+  "GOA": 4
+ },
+ "lat_15_59_top_values": {
+  "15.5934000": 695,
+  "15.5900000": 199,
+  "15.5934": 109,
+  "15.593400000000001": 35,
+  "15.5934550": 1
+ },
+ "top_repeated_points": [
+  [
+   25.862968,
+   85.781026,
+   386.0
+  ],
+  [
+   21.5,
+   81.5,
+   300.0
+  ],
+  [
+   24.5373,
+   81.3042,
+   281.0
+  ],
+  [
+   27.8837,
+   79.9122,
+   257.0
+  ],
+  [
+   19.87617,
+   75.343313,
+   250.0
+  ],
+  [
+   25.011173,
+   88.141133,
+   215.0
+  ],
+  [
+   25.416675,
+   86.129379,
+   189.0
+  ],
+  [
+   27.47,
+   77.69,
+   158.0
+  ]
+ ],
+ "lat_15_59_implausible_state": 1033,
+ "far_gt50_from_first_median": 11297,
+ "kept_after_50km": 139465,
+ "pins_with_point_naive": 19557,
+ "pins_with_point_robust": 19412,
+ "dropped_total": 26162,
+ "dropped_plus_swaps": 26953,
+ "robust_pins_gt150km_from_district_median": 231,
+ "known_pins_km_naive_robust_fixed_finder": [
+  [
+   110001,
+   1.5,
+   1.5,
+   1.5,
+   1.5
+  ],
+  [
+   400001,
+   0.2,
+   0.2,
+   0.2,
+   0.2
+  ],
+  [
+   600001,
+   0.7,
+   0.7,
+   0.7,
+   0.7
+  ],
+  [
+   700001,
+   29.2,
+   29.2,
+   29.2,
+   29.2
+  ],
+  [
+   560001,
+   1.1,
+   1.2,
+   1.2,
+   1.2
+  ],
+  [
+   500001,
+   0.4,
+   0.4,
+   0.4,
+   0.4
+  ],
+  [
+   380001,
+   0.2,
+   0.2,
+   0.2,
+   0.2
+  ],
+  [
+   302001,
+   1.5,
+   1.5,
+   1.5,
+   1.5
+  ],
+  [
+   226001,
+   0.1,
+   0.1,
+   0.1,
+   0.4
+  ],
+  [
+   411001,
+   2.5,
+   2.5,
+   2.5,
+   2.5
+  ],
+  [
+   800001,
+   2.3,
+   2.3,
+   2.3,
+   2.2
+  ],
+  [
+   695001,
+   1.1,
+   1.1,
+   1.1,
+   1.1
+  ],
+  [
+   641001,
+   0.7,
+   0.7,
+   0.7,
+   0.7
+  ],
+  [
+   452001,
+   2.0,
+   2.3,
+   2.3,
+   2.4
+  ],
+  [
+   462001,
+   0.6,
+   0.6,
+   0.6,
+   0.6
+  ],
+  [
+   751001,
+   0.9,
+   0.9,
+   0.9,
+   0.9
+  ],
+  [
+   781001,
+   0.5,
+   0.5,
+   0.5,
+   0.2
+  ],
+  [
+   160017,
+   0.4,
+   0.4,
+   0.4,
+   0.4
+  ],
+  [
+   208001,
+   1.6,
+   1.6,
+   1.6,
+   1.6
+  ],
+  [
+   440001,
+   2.4,
+   2.4,
+   2.4,
+   2.4
+  ],
+  [
+   530001,
+   0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  [
+   520001,
+   1.3,
+   1.3,
+   1.3,
+   1.3
+  ],
+  [
+   230001,
+   5.2,
+   5.2,
+   497.1,
+   5.3
+  ],
+  [
+   799001,
+   0.6,
+   0.6,
+   1445.4,
+   0.6
+  ]
+ ],
+ "known_within_10km_naive": "23/24",
+ "known_within_10km_robust": "23/24",
+ "known_within_10km_fixed": "21/24",
+ "known_within_10km_finder": "23/24",
+ "pin_230141": {
+  "offices": [
+   [
+    "Abdul Wahidganj BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.3654000"
+   ],
+   [
+    "Adlabad BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.2547000"
+   ],
+   [
+    "Bakol BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2546000",
+    "81.5469000"
+   ],
+   [
+    "Dhangarh BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.6470000"
+   ],
+   [
+    "Kamapatti BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2546000",
+    "81.5469000"
+   ],
+   [
+    "Kushuwapur BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.3654000"
+   ],
+   [
+    "Lawana Bhawaniganj BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2548000",
+    "81.3654000"
+   ],
+   [
+    "Manuhar BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2465800",
+    "81.6470000"
+   ],
+   [
+    "Newarhiya BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.3654000"
+   ],
+   [
+    "Ping BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2546000",
+    "81.6470000"
+   ],
+   [
+    "Ramapur BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2546000",
+    "81.6470000"
+   ],
+   [
+    "Rokaiyapur BO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "21.2654000",
+    "81.5469000"
+   ],
+   [
+    "Sangramgarh SO",
+    "PRATAPGARH",
+    "UTTAR PRADESH",
+    "25.8598240",
+    "81.4943280"
+   ]
+  ],
+  "finder": [
+   "UTTAR PRADESH",
+   "UTTAR PRADESH",
+   "PRATAPGARH",
+   "25.9102535",
+   "81.90329905",
+   "district_median",
+   "True"
+  ]
+ },
+ "pin_799001": {
+  "offices": [
+   [
+    "Agartala Bazar S.O",
+    "Nirmal",
+    "TELANGANA",
+    "NA",
+    "NA"
+   ],
+   [
+    "Agartala Court S.O",
+    "Nirmal",
+    "TELANGANA",
+    "NA",
+    "NA"
+   ],
+   [
+    "Agartala H.O",
+    "Nirmal",
+    "TELANGANA",
+    "23.82975",
+    "91.27883333"
+   ],
+   [
+    "IDC Agartala",
+    "NA",
+    "NA",
+    "NA",
+    "NA"
+   ],
+   [
+    "Jaganath Bari Road S.O",
+    "Nirmal",
+    "TELANGANA",
+    "NA",
+    "NA"
+   ]
+  ],
+  "finder": [
+   "TRIPURA",
+   "TELANGANA",
+   "Nirmal",
+   "23.82975",
+   "91.27883333",
+   "pin_median",
+   "False"
+  ]
+ },
+ "pin_686587": {
+  "offices": [
+   [
+    "Elakad BO",
+    "KOTTAYAM",
+    "KERALA",
+    "10.3473000",
+    "76.3741000"
+   ],
+   [
+    "Kudalloor BO",
+    "KOTTAYAM",
+    "KERALA",
+    "10.3473000",
+    "76.3741000"
+   ],
+   [
+    "Vattukulam BO",
+    "KOTTAYAM",
+    "KERALA",
+    "15.5934000",
+    "76.3741000"
+   ],
+   [
+    "Vayala SO",
+    "KOTTAYAM",
+    "KERALA",
+    "9.727349",
+    "76.575001"
+   ]
+  ],
+  "finder": [
+   "KERALA",
+   "KERALA",
+   "KOTTAYAM",
+   "9.727349",
+   "76.575001",
+   "pin_median",
+   "False"
+  ]
+ },
+ "mine_vs_finder_centroid_km_quantiles": [
+  NaN,
+  NaN,
+  NaN,
+  NaN
+ ],
+ "mine_vs_finder_gt25km": 568,
+ "finder_src_counts": {
+  "pin_median": 19078,
+  "district_median": 497,
+  "prefix3_median": 9,
+  "NaN": 2
+ },
+ "finder_misplaced": 310
+}

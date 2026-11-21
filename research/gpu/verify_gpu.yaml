@@ -1,0 +1,12 @@
+# NOT SUBMITTED. For the user to approve and run by hand (see GPU.md, "Verification step").
+experiment_name: gpu-smoke-test
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+environment:
+  version: "5"
+max_retries: 0
+timeout_minutes: 10
+command: |-
+  nvidia-smi
+  python -c "import platform; print(platform.python_version())"

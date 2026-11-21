@@ -1,0 +1,34 @@
+{
+ "n_query": 1972,
+ "n_outside_polygons": 28,
+ "jitter_km_max": 5.0,
+ "nearest_pin_centroid_district_accuracy": 0.8717,
+ "nearest_office_district_accuracy": 0.8849,
+ "nearest_pin_state_matches_seed_office_state": 0.9807,
+ "share_points_within_5km_of_district_boundary": 0.3631,
+ "pin_centroid_accuracy_within_5km_of_boundary": 0.7668,
+ "pin_centroid_accuracy_farther_than_5km": 0.9315,
+ "office_accuracy_within_5km_of_boundary": 0.7961,
+ "office_accuracy_farther_than_5km": 0.9355,
+ "n_query_in_clean_districts": 1790,
+ "pin_centroid_accuracy_clean_districts": 0.8866,
+ "office_accuracy_clean_districts": 0.9,
+ "nearest_pin_centroid_km_median_p90": [
+  3.78,
+  9.46
+ ],
+ "nearest_office_km_median_p90": [
+  1.86,
+  3.69
+ ],
+ "directory_districts_mapped": 747,
+ "directory_districts_majority_share_below_0.8": 130,
+ "caveat": "polygons are simplified 2021 districts; directory districts created or split later map to one polygon",
+ "test_points_polygon_district": {
+  "bihar_rural_north": "Madhubani",
+  "bihar_rural_south": "Gaya",
+  "mh_rural_marathwada": "Bid",
+  "mh_rural_gadchiroli": "Gadchiroli",
+  "highway_mumbai_pune": "Pune"
+ }
+}

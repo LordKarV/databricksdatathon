@@ -1,0 +1,197 @@
+{
+ "named_other_distinct_sentences": 364,
+ "named_other_facilities": 246,
+ "facilities_with_any_mention": 4350,
+ "foreign_distinct_sentences": 14,
+ "foreign_facilities": 11,
+ "strong_dialysis_with_named_other": 30,
+ "strong_any_service_with_named_other": 80,
+ "grades_b8a5401f": {
+  "dialysis": "weak",
+  "nicu": "weak",
+  "mri": "weak",
+  "burns": "weak",
+  "trauma": "weak",
+  "icu": "weak"
+ },
+ "grades_3ac5ae50": {
+  "dialysis": "strong",
+  "nicu": "weak",
+  "cardiac_surgery": "enum_only",
+  "mri": "strong",
+  "trauma": "strong",
+  "icu": "medium"
+ },
+ "grades_e0fcd8ad": {
+  "dialysis": "strong",
+  "cardiac_surgery": "enum_only",
+  "burns": "strong",
+  "trauma": "medium",
+  "icu": "medium"
+ },
+ "grades_13e107f9": {
+  "cardiac_surgery": "enum_only",
+  "burns": "enum_only",
+  "trauma": "weak"
+ },
+ "fresh_sample": [
+  [
+   "020e0b74",
+   "dialysis",
+   "NephroPlus Dialysis Clinic",
+   "Operates a NephroPlus Dialysis Clinic at Pareek Hospital & Research Centre in Agra, Uttar Pradesh"
+  ],
+  [
+   "2ac539eb",
+   "cardiac_surgery",
+   "Sapthagiri Super Speciality Hospital; Max Hospital",
+   "Dr. Bansal previously held leadership roles including Chief Heart Surgeon at Sapthagiri Super Speciality Hospital, Bengaluru, and was associated with Max Hospital, Mohali"
+  ],
+  [
+   "2ddc7b9f",
+   "dialysis",
+   "Neurosciences Institute; Orthopaedics Institute; Paediatrics Institute; Urology Institute; Gastrosciences Institute",
+   "Centres of Excellence include Cancer Institute, Heart Institute, Neurosciences Institute, Orthopaedics Institute, Paediatrics Institute, Women\u2019s Institute, Urology Institute, Renalcare & Dialysis, Gastrosciences Institute, Moolchand Diagnostics and The Moolchand Clinic"
+  ],
+  [
+   "f785efc6",
+   "cardiac_surgery",
+   "Top Cardiothoracic Surgery Clinic",
+   "Listed among Top Cardiothoracic Surgery Clinics in Greams Road, Chennai"
+  ],
+  [
+   "50698ab6",
+   "mri",
+   "O Block MRI Centre",
+   "MRI imaging is available on site at Sahyog Imaging Centre (O Block MRI Centre)"
+  ],
+  [
+   "0353d59e",
+   "trauma",
+   "Yuvraj Shivraj Singh Trauma Rehabilitation Centre",
+   "Yuvraj Shivraj Singh Trauma Rehabilitation Centre was located at Rajdadisa Hospital in Jodhpur."
+  ],
+  [
+   "fa1c244c",
+   "icu",
+   "Diet Clinic",
+   "Maintains multiple clinical departments including Anesthesiology, Cardiology, Critical Care, Dermatology & Venereology, ENT, Endocrinology, Eye Surgery, General Surgery, Gastroenterology, Maxillofacial \u2013 Oral & Dental Surgery, Medicine, Nephrology, Neurology, Obstetrics & Gynaecology, Oncology, Orthopaedics Surgery, Ophthalmology, Paediatric Neonatology, Pulmonary Medicine, Psychiatry, Urology, Pathology, Physiotherapy, Radiology, and Diet Clinic"
+  ],
+  [
+   "3ac5ae50",
+   "dialysis",
+   "Nair Hospital",
+   "Provides dialysis treatment at Nair Hospital, Mumbai Central"
+  ],
+  [
+   "ad939638",
+   "trauma",
+   "Rheumatology Clinic",
+   "Krishna Hospital and Trauma Centre operates as a Rheumatology Clinic"
+  ],
+  [
+   "51d3c2e5",
+   "nicu",
+   "Pediatric Hospital",
+   "It is the 1st Pediatric Hospital in Gujarat to get Level III (A) NNF (National Neonatology Forum) accreditation."
+  ],
+  [
+   "61ed89ad",
+   "icu",
+   "Top Clinic",
+   "Navjeevan Hospital & ICCU is listed among Top Clinics in Navi Mumbai on Practo."
+  ],
+  [
+   "52fc3d11",
+   "icu",
+   "Swallow Clinic; Tobacco Cessation Clinic",
+   "Support specialties include Critical Care, Anesthesiology, Pulmonology, Transfusion Medicine & Cellular Therapy, Community Oncology, Dental Oncology, Psycho-Oncology, Nutritional Oncology, Speech & Swallow Clinic, Clinical Pharmacology, Tobacco Cessation Clinic, Palliative Care, Pain Medicine, and Physiotherapy"
+  ]
+ ],
+ "foreign_all": [
+  [
+   "10d85e5c",
+   "mri",
+   "Chandigarh",
+   "Cardiac MRI test in Chandigarh"
+  ],
+  [
+   "120572cf",
+   "icu",
+   "Mumbai",
+   "Dr. Farooq Memon's education includes MBBS (BJ Medical College, 1999), MD (Anesthesia) (Gujarat University, 2002), and Diploma in Critical Care (ISCCM, Hinduja Hospital, Mumbai, 2004)"
+  ],
+  [
+   "2ac539eb",
+   "cardiac_surgery",
+   "Bengaluru",
+   "Dr. Bansal previously held leadership roles including Chief Heart Surgeon at Sapthagiri Super Speciality Hospital, Bengaluru, and was associated with Max Hospital, Mohali"
+  ],
+  [
+   "3ef5c9f7",
+   "trauma",
+   "Pondicherry",
+   "MBBS from JIPMER, Pondicherry; MS (Orthopaedics) from JIPMER, Pondicherry; Membership of the Royal College of Surgeons of Edinburgh (MRCSEd), UK; MCh in Orthopaedics (Trauma and Orthopaedics), UK; Fellowship in Trauma and Orthopaedics from the International College of Surgeons (FICS), USA"
+  ],
+  [
+   "45a4db60",
+   "dialysis",
+   "Mancherial; Telangana",
+   "Operates Aadhya Kidney And Dialysis Center in Mancherial, Telangana"
+  ],
+  [
+   "45a4db60",
+   "dialysis",
+   "Mancherial",
+   "Operates two kidney care facilities: Madanapalle, with Aadhya Hospital Kidney Care Center located at First Floor, Shafi Towers Beside Swad Restarent, Patel Road, Ntr Circle, Madanapalle 517325; and Mancherial, with Aadhya Kidney And Dialysis Center located at H.No.4-163/1, Janmabhoomi Nagar, Mancherial 504208"
+  ],
+  [
+   "57f31693",
+   "icu",
+   "New Delhi",
+   "It oversees the paramedical training institute Critical Care Institute VTC at Lokhra Chariali, affiliated to NCVRT, New Delhi, and recognized by the Government of India."
+  ],
+  [
+   "66d812eb",
+   "dialysis",
+   "Andhra Pradesh",
+   "Provides kidney dialysis services at Aadhar Kidney And Dialysis Center in Madanapalle, Andhra Pradesh."
+  ],
+  [
+   "66d812eb",
+   "dialysis",
+   "Mancherial",
+   "Provides kidney dialysis services at Aadhar Kidney And Dialysis Center in Mancherial"
+  ],
+  [
+   "66d812eb",
+   "icu",
+   "Belagavi",
+   "Operates multispeciality hospitals with ICU facilities at multiple locations including Pune, Mumbai, Thane, Belagavi, Satara, Solapur, and Shrigonda"
+  ],
+  [
+   "8047a7a4",
+   "icu",
+   "Mumbai",
+   "Indo Australian Fellowship in Critical Care Medicine offered in collaboration with Critical Care Education Foundation, Mumbai"
+  ],
+  [
+   "ad3649ac",
+   "icu",
+   "Punjab",
+   "Affiliation of Kajal Jain, Professor and Head, Department of Anesthesia and Intensive Care, PGIMER, Chandigarh, Punjab, India, as listed in the All India Difficult Airway Association 2025 guidelines for the management of unanticipated difficult airway in obstetrics under general anaesthesia."
+  ],
+  [
+   "b94c3b56",
+   "trauma",
+   "Madhepura",
+   "Emergency ward at Sadar Hospital in Madhepura district"
+  ],
+  [
+   "f6e9dc6e",
+   "cardiac_surgery",
+   "Delhi",
+   "Organizes a free pediatric heart surgery camp in Gorakhpur (Purvanchal) with Dr. Neeraj Awasthi of Max Super Specialty Hospital, Delhi"
+  ]
+ ]
+}

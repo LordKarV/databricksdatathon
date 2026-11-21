@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Find care near you</title>
+<style>
+:root{--fg:#111;--bg:#fff;--muted:#444;--warn-bg:#fff4e5;--warn-fg:#5c3200}
+@media (prefers-color-scheme:dark){:root{--fg:#f2f2f2;--bg:#121212;--muted:#ccc;--warn-bg:#3a2600;--warn-fg:#ffe2b8}}
+body{margin:0;font:18px/1.5 system-ui,"Noto Sans","Noto Sans Devanagari",sans-serif;color:var(--fg);background:var(--bg)}
+main{max-width:40rem;margin:0 auto;padding:16px}
+.btn{display:block;width:100%;min-height:56px;margin:12px 0;padding:8px 16px;font:inherit;font-weight:600;
+ color:#fff;background:#0b57d0;border:0;border-radius:12px;box-sizing:border-box}
+.btn:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #e8710a;outline-offset:2px}
+#net{padding:8px 12px;border-radius:8px;background:var(--warn-bg);color:var(--warn-fg)}
+label{display:block;margin-top:16px}
+input{width:100%;min-height:48px;font:inherit;padding:8px;box-sizing:border-box}
+li{margin:8px 0}
+a.call{display:inline-block;min-height:48px;line-height:48px;padding:0 16px;color:#fff;background:#137333;border-radius:12px;text-decoration:none}
+</style></head>
+<body><main>
+<h1>Find care near you</h1>
+<p id="net" hidden>You are offline. Showing saved data. Distances are straight-line, not road time.</p>
+<button class="btn" id="geo" type="button">Use my location</button>
+<form id="pinform">
+ <label for="pin">Or type your 6-digit PIN code</label>
+ <input id="pin" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="postal-code">
+ <button class="btn" type="submit">Search by PIN code</button>
+</form>
+<p id="out" role="status" aria-live="polite"></p>
+<ol id="list"></ol>
+</main>
+<script>
+// GPS first. Online: the real app would call the server ranker. Offline: rank the cached
+// snapshot by straight-line distance on the phone, and say so on screen.
+const out = document.getElementById('out'), list = document.getElementById('list');
+const net = document.getElementById('net');
+const showNet = () => net.hidden = navigator.onLine;
+addEventListener('online', showNet); addEventListener('offline', showNet); showNet();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+
+let pack = null;
+async function getPack() { return pack || (pack = await (await fetch('pack.json')).json()); }
+function km(a, b, c, d) {
+  const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 +
+    Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(x));
+}
+async function rank(lat, lon, how) {
+  try { localStorage.setItem('last', JSON.stringify([lat, lon])); } catch (e) {}
+  if (navigator.onLine) { out.textContent = 'Got location ' + lat.toFixed(4) + ',' + lon.toFixed(4) + ' (' + how + ')'; return; }
+  const p = await getPack();
+  const top = p.f.map(f => [km(lat, lon, f[1], f[2]), f]).sort((x, y) => x[0] - y[0]).slice(0, 3);
+  list.replaceChildren(...top.map(([d, f]) => {
+    const li = document.createElement('li');
+    li.textContent = f[0] + ', ' + (f[4] || '') + ', ' + d.toFixed(1) + ' km ';
+    if (f[3]) { const a = document.createElement('a'); a.className = 'call'; a.href = 'tel:' + f[3];
+      a.textContent = 'Call'; a.setAttribute('aria-label', 'Call ' + f[0]); li.append(a); }
+    return li;
+  }));
+  out.textContent = 'Offline: 3 nearest from saved data of ' + p.snapshot + ' (' + how + ').';
+}
+document.getElementById('geo').onclick = () => {
+  if (!navigator.geolocation) return fallback('Location is not available on this phone.');
+  out.textContent = 'Finding your location...';
+  navigator.geolocation.getCurrentPosition(
+    pos => rank(pos.coords.latitude, pos.coords.longitude, 'GPS'),
+    err => fallback('Could not get location (' + err.message + ').'),
+    {enableHighAccuracy: true, timeout: 15000, maximumAge: 600000});
+};
+function fallback(msg) {
+  let last = null;
+  try { last = JSON.parse(localStorage.getItem('last')); } catch (e) {}
+  if (last) return rank(last[0], last[1], 'last saved location');
+  out.textContent = msg + ' Type your PIN code.';
+  document.getElementById('pin').focus();
+}
+document.getElementById('pinform').onsubmit = async e => {
+  e.preventDefault();
+  const v = document.getElementById('pin').value.trim(), c = (await getPack()).pin[v];
+  if (!c) { out.textContent = 'PIN code ' + v + ' not found. Check the 6 digits.'; return; }
+  rank(c[0], c[1], 'PIN ' + v);
+};
+</script></body></html>

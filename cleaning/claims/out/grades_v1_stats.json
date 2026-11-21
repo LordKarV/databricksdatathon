@@ -1,0 +1,243 @@
+{
+ "burns": {
+  "pairs": 264,
+  "grades": {
+   "strong": 108,
+   "weak": 59,
+   "moderate": 49,
+   "tag_only": 46,
+   "attributed_elsewhere": 1,
+   "counter_evidence": 1
+  },
+  "rules": {
+   "G_strong": 108,
+   "G_nonspec": 50,
+   "G_mod": 49,
+   "G_tag": 46,
+   "G_scope": 8,
+   "G_amb": 1,
+   "G_else": 1,
+   "G_no": 1
+  },
+  "strong_if_risk_ignored": 136,
+  "risk_counts": {
+   "risk_location": 56,
+   "risk_name_collision": 4,
+   "risk_service_elsewhere": 1,
+   "risk_counter": 3,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 122
+ },
+ "cardiac_surgery": {
+  "pairs": 973,
+  "grades": {
+   "moderate": 363,
+   "tag_only": 302,
+   "strong": 204,
+   "weak": 97,
+   "attributed_elsewhere": 4,
+   "counter_evidence": 3
+  },
+  "rules": {
+   "G_mod": 363,
+   "G_tag": 302,
+   "G_strong": 204,
+   "G_nonspec": 88,
+   "G_scope": 9,
+   "G_else": 4,
+   "G_no": 3
+  },
+  "strong_if_risk_ignored": 241,
+  "risk_counts": {
+   "risk_location": 170,
+   "risk_name_collision": 16,
+   "risk_service_elsewhere": 10,
+   "risk_counter": 4,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 545
+ },
+ "csection": {
+  "pairs": 448,
+  "grades": {
+   "moderate": 327,
+   "strong": 97,
+   "weak": 19,
+   "attributed_elsewhere": 3,
+   "counter_evidence": 2
+  },
+  "rules": {
+   "G_mod": 327,
+   "G_strong": 97,
+   "G_nonspec": 12,
+   "G_scope": 6,
+   "G_else": 3,
+   "G_no": 2,
+   "G_amb": 1
+  },
+  "strong_if_risk_ignored": 118,
+  "risk_counts": {
+   "risk_location": 73,
+   "risk_name_collision": 7,
+   "risk_service_elsewhere": 5,
+   "risk_counter": 2,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 182
+ },
+ "dialysis": {
+  "pairs": 1050,
+  "grades": {
+   "moderate": 879,
+   "strong": 88,
+   "weak": 71,
+   "attributed_elsewhere": 6,
+   "tag_only": 3,
+   "counter_evidence": 3
+  },
+  "rules": {
+   "G_mod": 879,
+   "G_strong": 88,
+   "G_nonspec": 51,
+   "G_scope": 17,
+   "G_else": 6,
+   "G_tag": 3,
+   "G_amb": 3,
+   "G_no": 3
+  },
+  "strong_if_risk_ignored": 108,
+  "risk_counts": {
+   "risk_location": 182,
+   "risk_name_collision": 16,
+   "risk_service_elsewhere": 17,
+   "risk_counter": 10,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 524
+ },
+ "icu": {
+  "pairs": 2786,
+  "grades": {
+   "moderate": 1613,
+   "tag_only": 486,
+   "strong": 441,
+   "weak": 241,
+   "attributed_elsewhere": 4,
+   "counter_evidence": 1
+  },
+  "rules": {
+   "G_mod": 1613,
+   "G_tag": 486,
+   "G_strong": 441,
+   "G_nonspec": 154,
+   "G_scope": 82,
+   "G_amb": 5,
+   "G_else": 4,
+   "G_no": 1
+  },
+  "strong_if_risk_ignored": 563,
+  "risk_counts": {
+   "risk_location": 510,
+   "risk_name_collision": 54,
+   "risk_service_elsewhere": 26,
+   "risk_counter": 9,
+   "risk_unit_gt_capacity": 9,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 1085
+ },
+ "mri": {
+  "pairs": 952,
+  "grades": {
+   "strong": 546,
+   "moderate": 348,
+   "weak": 53,
+   "counter_evidence": 4,
+   "attributed_elsewhere": 1
+  },
+  "rules": {
+   "G_strong": 546,
+   "G_mod": 348,
+   "G_nonspec": 33,
+   "G_scope": 18,
+   "G_no": 4,
+   "G_amb": 2,
+   "G_else": 1
+  },
+  "strong_if_risk_ignored": 666,
+  "risk_counts": {
+   "risk_location": 149,
+   "risk_name_collision": 14,
+   "risk_service_elsewhere": 8,
+   "risk_counter": 8,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 504
+ },
+ "nicu": {
+  "pairs": 746,
+  "grades": {
+   "moderate": 494,
+   "strong": 182,
+   "weak": 66,
+   "attributed_elsewhere": 3,
+   "counter_evidence": 1
+  },
+  "rules": {
+   "G_mod": 494,
+   "G_strong": 182,
+   "G_nonspec": 53,
+   "G_scope": 11,
+   "G_else": 3,
+   "G_amb": 2,
+   "G_no": 1
+  },
+  "strong_if_risk_ignored": 222,
+  "risk_counts": {
+   "risk_location": 146,
+   "risk_name_collision": 9,
+   "risk_service_elsewhere": 6,
+   "risk_counter": 2,
+   "risk_unit_gt_capacity": 3,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 328
+ },
+ "trauma": {
+  "pairs": 3580,
+  "grades": {
+   "moderate": 2643,
+   "tag_only": 376,
+   "strong": 302,
+   "weak": 247,
+   "attributed_elsewhere": 7,
+   "counter_evidence": 5
+  },
+  "rules": {
+   "G_mod": 2643,
+   "G_tag": 376,
+   "G_strong": 302,
+   "G_scope": 177,
+   "G_nonspec": 66,
+   "G_else": 7,
+   "G_no": 5,
+   "G_amb": 4
+  },
+  "strong_if_risk_ignored": 392,
+  "risk_counts": {
+   "risk_location": 680,
+   "risk_name_collision": 68,
+   "risk_service_elsewhere": 37,
+   "risk_counter": 15,
+   "risk_unit_gt_capacity": 0,
+   "risk_outpatient_type": 0
+  },
+  "truncated_pairs": 1208
+ }
+}

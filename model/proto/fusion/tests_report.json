@@ -1,0 +1,88 @@
+{
+ "additivity_service": {
+  "rows": 69713,
+  "max_abs_err": 8.881784197001252e-16,
+  "max_prob_err": 0.0,
+  "passed": true
+ },
+ "additivity_location": {
+  "rows": 9959,
+  "max_abs_err": 4.440892098500626e-16,
+  "max_prob_err": 0.0,
+  "passed": true
+ },
+ "additivity_existence": {
+  "rows": 9959,
+  "max_abs_err": 4.440892098500626e-16,
+  "max_prob_err": 0.0,
+  "passed": true
+ },
+ "deletion": {
+  "C": {
+   "pairs": 1105,
+   "changed": 9,
+   "max_abs_err": 1.3877787807814457e-16,
+   "passed": true
+  },
+  "N": {
+   "pairs": 1105,
+   "changed": 1,
+   "max_abs_err": 1.1102230246251565e-16,
+   "passed": true
+  },
+  "S": {
+   "pairs": 1105,
+   "changed": 11,
+   "max_abs_err": 2.220446049250313e-16,
+   "passed": true
+  },
+  "P": {
+   "pairs": 1105,
+   "changed": 376,
+   "max_abs_err": 5.551115123125783e-16,
+   "passed": true
+  },
+  "T": {
+   "pairs": 871,
+   "changed": 114,
+   "max_abs_err": 4.440892098500626e-16,
+   "passed": true
+  }
+ },
+ "monotone_T": {
+  "pairs": 68227,
+  "min_delta": -2.220446049250313e-15,
+  "passed": true
+ },
+ "monotone_C": {
+  "pairs": 69583,
+  "max_delta": -0.5820717493342551,
+  "passed": true
+ },
+ "monotone_location_votes": {
+  "min_vote_weight": 0.0,
+  "passed": true
+ },
+ "wockhardt_dialysis_not_likely": {
+  "band": "Unverified",
+  "reason": "P_S below t_L (0.70)",
+  "p_s": 0.5404080962186766,
+  "p_l": 0.5794390906285596,
+  "passed": true
+ },
+ "aravind_never_likely": {
+  "bands": {
+   "dialysis": "Unverified",
+   "emergency_csection": "Unverified",
+   "nicu": "Unverified",
+   "cardiac_surgery": "Unverified",
+   "mri": "Unverified",
+   "burn_care": "Unverified",
+   "trauma_emergency": "Unverified"
+  },
+  "passed": true
+ },
+ "likely_pairs_total": 2,
+ "note": "Test 4 is weak evidence when few pairs are Likely at all: it holds for every model whose P_S stays below t_L. The informative check is which rule blocks each case (band_reason).",
+ "all_passed": true
+}

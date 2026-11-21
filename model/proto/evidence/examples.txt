@@ -1,0 +1,37 @@
+== strong (gold: [{'pair_id': 'v2_dialysis_strong_3', 'split': 'dev', 'service_label': 'confirmed'}])
+[1] Karan Hospital, Palampur (HIMACHAL PRADESH) - dialysis
+[2] Evidence-only preview score 0.86 (+52 points from base -58); without the quoted sentences it would be 0.79. Final P_S and its band come from fusion.
+[3] Why we think it offers the service (from its listing):
+    [equipment] "Dialysis machines"  (sentences of this kind were about this facility in 100% of 30 checked)
+    [procedure] "Dialysis is provided at Karan Hospital"  (sentences of this kind were about this facility in 95% of 21 checked)
+    [capability] "In-house dialysis facility"  (sentences of this kind were about this facility in 100% of 30 checked)
+    Sources: one of these pages: 2 distinct source ids (no sentence-to-URL map exists)
+[4] Is it real: website own_domain linkkpro.com; phone mobile.
+[5] Where: map point (listing coordinates), PIN centre, stated city, stated state agree (within 25 km of the point we use).
+[6] What we ignored:
+    "HIMCARE cashless facility available for dialysis patients" - only a list or directory entry
+
+== uncertain (gold: [{'pair_id': 'dialysis_weak_2', 'split': 'dev', 'service_label': 'no_info'}])
+[1] Doaba Hospital, Jalandhar (PUNJAB) - dialysis
+[2] Evidence-only preview score 0.38 (-14 points from base -58); without the quoted sentences it would be 0.12. Final P_S and its band come from fusion.
+[3] Why we think it offers the service (from its listing):
+    [procedure] "Advanced Kidney Dialysis"  (sentences of this kind were about this facility in 93% of 61 checked)
+    Sources: one of these pages: 9 distinct source ids (no sentence-to-URL map exists)
+[4] Is it real: website own_domain doabahospitalpvtltd.com; phone landline.
+[5] Where: map point (listing coordinates), PIN centre, stated city, stated state agree (within 25 km of the point we use).
+[7] Cautions: this record merges many web sources (q_share 0.00, 34 URLs), so its text earns less weight.
+
+== contaminated (gold: [])
+[1] Wockhardt Hospital Nagpur, Nagpur (MAHARASHTRA) - dialysis
+[2] Evidence-only preview score 0.62 (+14 points from base -58); without the quoted sentences it would be 0.08. Final P_S and its band come from fusion.
+[3] Why we think it offers the service (from its listing):
+    [equipment] "In-house dialysis units"  (sentences of this kind were about this facility in 93% of 61 checked)
+    [capability] "Offers dialysis services at concessional pricing (Rs. 350 or less per session) including blood tubing and dialyser"  (sentences of this kind were about this facility in 93% of 61 checked)
+    Sources: one of these pages: 10 distinct source ids (no sentence-to-URL map exists)
+[4] Is it real: website own_domain fortishealthcare.com; phone mobile.
+[5] Where: not sure. stated city, place in the name point elsewhere; map point (listing coordinates), PIN centre, stated state support the point we use (MUMBAI SUBURBAN). The alternative point (NAGPUR) is backed by stated city, place in the name, stated state.
+[6] What we ignored:
+    "Dialysis machines donated by Jivan Jyot Drug Bank are used at Nair Hospital, Mumbai Central" - names a different hospital (Nair Hospital, Mumbai Central)
+    "Provides dialysis treatment at Nair Hospital, Mumbai Central" - names a different hospital (Nair Hospital, Mumbai Central)
+[7] Cautions: this record merges many web sources (q_share 0.22, 50 URLs), so its text earns less weight.
+

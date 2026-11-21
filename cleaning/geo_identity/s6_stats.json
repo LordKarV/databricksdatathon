@@ -1,0 +1,120 @@
+{
+ "before_flag": {
+  "verdict_pairs": 29,
+  "no_and_flagged(caught)": 3,
+  "no_and_trusted(missed)": 1,
+  "yes_and_trusted": 23,
+  "yes_and_flagged(false_alarm)": 2
+ },
+ "after_flag": {
+  "verdict_pairs": 29,
+  "no_and_flagged(caught)": 4,
+  "no_and_trusted(missed)": 0,
+  "yes_and_trusted": 23,
+  "yes_and_flagged(false_alarm)": 2
+ },
+ "location_verdicts": {
+  "yes": 25,
+  "unclear": 7,
+  "no": 4
+ },
+ "unclear_pairs_after_conf": {
+  "high": 5,
+  "low": 1,
+  "disputed": 1
+ },
+ "yes_pairs_where_point_moved_gt5km": [
+  [
+   "mri_suspect_2",
+   "postcode_centre",
+   165.0
+  ]
+ ],
+ "true_town_distance_raw_vs_chosen": [
+  [
+   "emergency_csection_suspect_1",
+   "Kaithal",
+   50.5,
+   50.5,
+   "disputed"
+  ],
+  [
+   "nicu_suspect_2",
+   "Punalur",
+   54.1,
+   0.0,
+   "disputed"
+  ],
+  [
+   "trauma_emergency_suspect_1",
+   "Firozabad",
+   467.3,
+   0.0,
+   "disputed"
+  ],
+  [
+   "trauma_emergency_suspect_2",
+   "Satna",
+   0.9,
+   0.9,
+   "low"
+  ]
+ ],
+ "exists_vs_trust_level": {
+  "caution": {
+   "unclear": 2,
+   "yes": 3
+  },
+  "minor": {
+   "unclear": 1,
+   "yes": 6
+  },
+  "no_concerns": {
+   "unclear": 1,
+   "yes": 23
+  }
+ },
+ "service_contradicted_vs_trust_level": {
+  "caution": {
+   "confirmed": 2,
+   "contradicted": 1,
+   "no_info": 2
+  },
+  "minor": {
+   "confirmed": 2,
+   "contradicted": 3,
+   "no_info": 2
+  },
+  "no_concerns": {
+   "confirmed": 11,
+   "contradicted": 3,
+   "no_info": 10
+  }
+ },
+ "handcheck_location": {
+  "both_points_elsewhere": {
+   "no": 4,
+   "real_conflict": 0,
+   "unclear": 6,
+   "yes": 5
+  },
+  "city_confirms_coords": {
+   "no": 0,
+   "real_conflict": 0,
+   "unclear": 2,
+   "yes": 8
+  },
+  "city_confirms_pin": {
+   "no": 0,
+   "real_conflict": 0,
+   "unclear": 1,
+   "yes": 9
+  },
+  "city_points_elsewhere": {
+   "no": 0,
+   "real_conflict": 12,
+   "unclear": 0,
+   "yes": 0
+  }
+ }
+}

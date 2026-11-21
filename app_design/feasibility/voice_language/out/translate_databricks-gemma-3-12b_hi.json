@@ -1,0 +1,52 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "lang": "hi",
+ "placeholders": false,
+ "ms": 2828,
+ "source": "Best option for dialysis: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. It is 7.4 km away, about 22 minutes by road. Chance you will be treated when you arrive: 0.81 (likely range 0.70 to 0.89). Why: the hospital's own text says \"Has 17 dialysis machines currently\" and \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". Caution: \"Plans to increase dialysis capacity to 27 units\" is a future plan, so we did not count it. For 3 sessions a week, travel adds about 132 minutes per week. Backup: if they cannot take you, option 2 is 12.9 km away with a 0.64 chance.",
+ "sent": "Best option for dialysis: NKP Salve Institute of Medical Sciences and Research Centre, Nagpur. It is 7.4 km away, about 22 minutes by road. Chance you will be treated when you arrive: 0.81 (likely range 0.70 to 0.89). Why: the hospital's own text says \"Has 17 dialysis machines currently\" and \"Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana\". Caution: \"Plans to increase dialysis capacity to 27 units\" is a future plan, so we did not count it. For 3 sessions a week, travel adds about 132 minutes per week. Backup: if they cannot take you, option 2 is 12.9 km away with a 0.64 chance.",
+ "raw": "\"डायलिसिस के लिए सबसे अच्छा विकल्प है NKP Salve Institute of Medical Sciences and Research Centre, नागपुर। यह यहाँ से 7.4 किलोमीटर दूर है, सड़क से लगभग 22 मिनट लगेंगे। आपके इलाज की संभावना है 0.81 (संभवतः 0.70 से 0.89 के बीच)। क्यों: अस्पताल खुद कहता है \"हमारे पास अभी 17 डायलिसिस मशीनें हैं\" और \"आयुष्मान भारत और महात्मा ज्योतिबा फुले जन आरोग्य योजना के तहत यह प्रक्रिया मुफ्त में की जाती है\"। सावधानी: \"डायलिसिस क्षमता को 27 यूनिट तक बढ़ाने की योजना\" भविष्य की योजना है, इसलिए हमने इसे नहीं गिना। अगर आप हफ्ते में 3 बार जाते हैं, तो यात्रा में हर हफ्ते लगभग 132 मिनट लगेंगे। बैकअप: अगर वे आपको नहीं ले सकते हैं, तो विकल्प 2 यहाँ से 12.9 किलोमीटर दूर है जिसमें 0.64 की संभावना है।\"",
+ "final": "\"डायलिसिस के लिए सबसे अच्छा विकल्प है NKP Salve Institute of Medical Sciences and Research Centre, नागपुर। यह यहाँ से 7.4 किलोमीटर दूर है, सड़क से लगभग 22 मिनट लगेंगे। आपके इलाज की संभावना है 0.81 (संभवतः 0.70 से 0.89 के बीच)। क्यों: अस्पताल खुद कहता है \"हमारे पास अभी 17 डायलिसिस मशीनें हैं\" और \"आयुष्मान भारत और महात्मा ज्योतिबा फुले जन आरोग्य योजना के तहत यह प्रक्रिया मुफ्त में की जाती है\"। सावधानी: \"डायलिसिस क्षमता को 27 यूनिट तक बढ़ाने की योजना\" भविष्य की योजना है, इसलिए हमने इसे नहीं गिना। अगर आप हफ्ते में 3 बार जाते हैं, तो यात्रा में हर हफ्ते लगभग 132 मिनट लगेंगे। बैकअप: अगर वे आपको नहीं ले सकते हैं, तो विकल्प 2 यहाँ से 12.9 किलोमीटर दूर है जिसमें 0.64 की संभावना है।\"",
+ "unrestored_tokens": [],
+ "check": {
+  "spans_verbatim": {
+   "NKP Salve Institute of Medical Sciences and Research Centre, Nagpur": false,
+   "Has 17 dialysis machines currently": false,
+   "Procedure performed free of cost under Ayushman Bharat and Mahatma Jyotiba Phule Jan Aarogya Yojana": false,
+   "Plans to increase dialysis capacity to 27 units": false
+  },
+  "all_spans_ok": false,
+  "numbers_expected": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_strict": [
+   "0.64",
+   "0.70",
+   "0.81",
+   "0.89",
+   "12.9",
+   "132",
+   "17",
+   "2",
+   "22",
+   "27",
+   "3",
+   "7.4"
+  ],
+  "numbers_ok_strict": true,
+  "numbers_ok_normalised": true,
+  "missing_numbers": [],
+  "extra_numbers": []
+ }
+}

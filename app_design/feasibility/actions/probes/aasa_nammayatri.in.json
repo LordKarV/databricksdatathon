@@ -1,0 +1,55 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "XHH54AU526.com.mobility.movingtechdriver",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            },
+            {
+                "appID": "XHH54AU526.net.openkochi.yatri",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            },
+            {
+                "appID": "XHH54AU526.com.mobility.movingtech",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            },
+            {
+                "appID": "XHH54AU526.in.mobility.manayatri",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            },
+            {
+                "appID": "XHH54AU526.in.juspay.nammayatri",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            },
+            {
+                "appID": "4PD7H7GP63.in.juspay.yatrisathi",
+                "paths": [
+                    "NOT /_/*",
+                    "NOT /t/*",
+                    "/*"
+                ]
+            }
+        ]
+    }
+}

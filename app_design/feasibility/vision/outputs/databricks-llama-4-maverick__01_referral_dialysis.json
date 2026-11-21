@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "01_referral_dialysis.png",
+ "bytes": 69298,
+ "status": 200,
+ "latency_s": 2.51,
+ "response": {
+  "id": "chatcmpl_4f25e930-c513-42a6-b2e0-0e8ee6099430_6bca728a-fd61-4fad-89a1-653595f576c7",
+  "object": "chat.completion",
+  "created": 1795284595,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"PHC Example Block   OPD slip no. 0000\\n\\nPt: Test Patient, 52 M\\nc/o swelling feet, breathlessness, low urine\\nCKD stage 5. Creatinine 9.2 mg/dl\\nRefer to higher centre for dialysis.\\nDr. (sigh)\", \"language\": \"English\", \"document_type\": \"referral\", \"suggested_service\": \"dialysis\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Refer to higher centre for dialysis\", \"red_flags\": []}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1742,
+   "completion_tokens": 131,
+   "total_tokens": 1873,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"PHC Example Block   OPD slip no. 0000\\n\\nPt: Test Patient, 52 M\\nc/o swelling feet, breathlessness, low urine\\nCKD stage 5. Creatinine 9.2 mg/dl\\nRefer to higher centre for dialysis.\\nDr. (sigh)\", \"language\": \"English\", \"document_type\": \"referral\", \"suggested_service\": \"dialysis\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Refer to higher centre for dialysis\", \"red_flags\": []}",
+ "parsed": {
+  "detected_text": "PHC Example Block   OPD slip no. 0000\n\nPt: Test Patient, 52 M\nc/o swelling feet, breathlessness, low urine\nCKD stage 5. Creatinine 9.2 mg/dl\nRefer to higher centre for dialysis.\nDr. (sigh)",
+  "language": "English",
+  "document_type": "referral",
+  "suggested_service": "dialysis",
+  "urgency": "urgent",
+  "confidence": 0.9,
+  "trigger_phrase": "Refer to higher centre for dialysis",
+  "red_flags": []
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 1742,
+  "completion_tokens": 131,
+  "total_tokens": 1873,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

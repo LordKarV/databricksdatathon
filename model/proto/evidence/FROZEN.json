@@ -1,0 +1,44 @@
+{
+ "created_at": "2026-11-21T13:52:53",
+ "code_sha256": {
+  "atoms.py": "42f065657fd4de9ee27cfc6a2d2290bc0c109ba8dc28106d62600d5cf9758b0a",
+  "build.py": "d5b6a5991d765556e020547b2822bb41e0cabf9c34700a35679aa814a6e70055",
+  "common.py": "36c0b88c614477621062b757bf47e5ebc859ff8e5acccc89a17391a719ef2d88",
+  "evaluate.py": "21dd6aa7b8a40280140353474ce2d13c045d937dd63879b78cee9d08e4fd2cf6",
+  "examples.py": "a42500aa651e5dfaa02ab1496d13bd7d5ccbb4e30e5d1c20b6da5111c7b4894e",
+  "facility.py": "5edd3111ec6c4c63f17a58ff5bf9d713f5cd7dbebd8d155dc8e9a0a8d80a8897",
+  "gold.py": "182a4c8bd9d3e06970cfb1a2a04eff89ab81b9ff4fa1d652d6db8e759e4b2165",
+  "llm.py": "070ab267b6737ed7c25daf3ebe6ddc67d8225ed38296b358f9e3aa4e0ca8df4b",
+  "measure_sentences.py": "4a0d9e376469ceb82691fef7d71455804ace3f997a82e34b8fd5ffe3b5335889",
+  "sample_sentences.py": "92af7afd3f7f81acab42622de8e020eaf07d660be4737269179bb9ce3ee79bbd",
+  "test_evidence.py": "5ba5a04c4ecd60eaffb4fa826157d60acf579e5ce9fdb33170e497d5632d5dde"
+ },
+ "input_sha256": {
+  "claims": "e233088e021b81c34fa0dc81adddb158307c06542a69322d17c13fa7dbc1b206",
+  "grades": "b5ccde356858e783b938655a9101f824809cd76529472d9c1873914a3a6e7e4c",
+  "specialties": "cb6b22d3568fddea18284469b1e563133a12552bf9c3b5dae254699c09d0bd7f",
+  "lexicon": "e368df176bdec4df278e2256747cb6485bd72f0ba85efabe357ee08a44e4d3d9",
+  "sentence_decisions": "90bbf53007c58ff0dc926d03a5ebf76665e7fcaf95138acb0908d41710e490b7",
+  "record_scores": "a4bd50b7761ce1b72d2f637195eca0dbf43c7b30178d3c4585d7bbb6685fa4d2",
+  "facility_location": "e2d140490ce169c09cd0d6ad4fa351a30860d767deb72049585febaeb16bf5ef",
+  "pin_gazetteer": "e0e6ab64aec9aece12530b722c8aeb3df5b1f567d53c28c43d5c6d91b1a8608c",
+  "place_gazetteer": "46d7d429270b0e406c02260970ff5f7e18afe1f48c970b7b4a6ceed173f52a5f",
+  "facility_geo": "cccabd339a1650b06b2f9609614afbde34eea761152d77ee80fbe7c3d3a89b67",
+  "existence_signals": "4ff432717162242aa8957b2cc8d2c1f5909a1cdbdacee7c5ae5f3a6f9c07554b",
+  "shared_phones": "1ff79b4395c8fd15073169df7f6014319f5e39a1744c938d9b30c9e482fd1e09",
+  "shared_domains": "b8ed5c1590b45cc2e48a8230dc580df96da1c9811cad1972cacba5f194f73891",
+  "dup_groups": "d18842f57fc228c842b4a0aeb4da1873040925628b439b73bf1469f65b7cca03",
+  "chain_membership": "31e438995c4b1e5afbef9d7c6c78637bda65df69cc0b6a66799f742dd58196b0",
+  "raw_facilities": "7aca5cb1780faa6323d1612a84a27daf69b53433fc15f829b7ee43b37bb0c95e"
+ },
+ "derived_input_sha256": {
+  "attribution_rates.csv": "9eb6624a073043334a62039fc64229c757120a8e3521d14d62cc175258624371"
+ },
+ "output_sha256": {
+  "claim_atoms.parquet": "5f3a00745f6da358e3cb045564b9fc1d93c6dab43e1d0302918962dca3e00106",
+  "pair_features.parquet": "d3c5768dfb685b9653649a30061bd7f4bab27c430e53f298f0bcebb2230ed158",
+  "facility_features.parquet": "677727aa1be4bd881d8e8264699106aa47dd28dc407d8197f122257d73fb36b4",
+  "lexicon_used.csv": "e368df176bdec4df278e2256747cb6485bd72f0ba85efabe357ee08a44e4d3d9"
+ },
+ "note": "Any change to families or lexicon gets a new hash; gold labels read before the change move to dev."
+}

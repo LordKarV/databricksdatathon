@@ -1,0 +1,406 @@
+{
+ "pairs": 36,
+ "verdicts": {
+  "confirmed": 15,
+  "no_info": 14,
+  "contradicted": 7
+ },
+ "usable_pairs_confirmed_or_contradicted": 22,
+ "grade_by_verdict": {
+  "sample_stratum": {
+   "strong": {
+    "confirmed": 10,
+    "contradicted": 0,
+    "no_info": 2
+   },
+   "suspect": {
+    "confirmed": 4,
+    "contradicted": 4,
+    "no_info": 4
+   },
+   "weak": {
+    "confirmed": 1,
+    "contradicted": 3,
+    "no_info": 8
+   }
+  },
+  "audit_grader": {
+   "enum_only": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "medium": {
+    "confirmed": 5,
+    "contradicted": 4,
+    "no_info": 1
+   },
+   "no_mention": {
+    "confirmed": 0,
+    "contradicted": 0,
+    "no_info": 1
+   },
+   "non_offer_only": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 0
+   },
+   "strong": {
+    "confirmed": 7,
+    "contradicted": 1,
+    "no_info": 2
+   },
+   "weak": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 10
+   }
+  },
+  "v1": {
+   "attributed_elsewhere": {
+    "confirmed": 0,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "counter_evidence": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 0
+   },
+   "moderate": {
+    "confirmed": 8,
+    "contradicted": 4,
+    "no_info": 9
+   },
+   "no_mention": {
+    "confirmed": 0,
+    "contradicted": 0,
+    "no_info": 1
+   },
+   "strong": {
+    "confirmed": 4,
+    "contradicted": 1,
+    "no_info": 2
+   },
+   "tag_only": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "weak": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 2
+   }
+  },
+  "v1_no_quarantine": {
+   "counter_evidence": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 0
+   },
+   "moderate": {
+    "confirmed": 8,
+    "contradicted": 4,
+    "no_info": 9
+   },
+   "no_mention": {
+    "confirmed": 0,
+    "contradicted": 0,
+    "no_info": 1
+   },
+   "strong": {
+    "confirmed": 4,
+    "contradicted": 1,
+    "no_info": 2
+   },
+   "tag_only": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "weak": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 2
+   }
+  },
+  "v2": {
+   "attributed_elsewhere": {
+    "confirmed": 0,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "counter_evidence": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 0
+   },
+   "moderate": {
+    "confirmed": 4,
+    "contradicted": 4,
+    "no_info": 9
+   },
+   "no_mention": {
+    "confirmed": 0,
+    "contradicted": 0,
+    "no_info": 1
+   },
+   "strong": {
+    "confirmed": 9,
+    "contradicted": 0,
+    "no_info": 2
+   },
+   "tag_only": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "weak": {
+    "confirmed": 0,
+    "contradicted": 1,
+    "no_info": 2
+   }
+  },
+  "v2_no_quarantine": {
+   "counter_evidence": {
+    "confirmed": 1,
+    "contradicted": 0,
+    "no_info": 0
+   },
+   "moderate": {
+    "confirmed": 4,
+    "contradicted": 3,
+    "no_info": 9
+   },
+   "no_mention": {
+    "confirmed": 0,
+    "contradicted": 0,
+    "no_info": 1
+   },
+   "strong": {
+    "confirmed": 9,
+    "contradicted": 1,
+    "no_info": 2
+   },
+   "tag_only": {
+    "confirmed": 1,
+    "contradicted": 1,
+    "no_info": 0
+   },
+   "weak": {
+    "confirmed": 0,
+    "contradicted": 2,
+    "no_info": 2
+   }
+  }
+ },
+ "recommendable_strong_or_moderate": {
+  "audit_grader": {
+   "predicted_positive": 17,
+   "true_positive": 12,
+   "precision": 0.706,
+   "precision_ci95": [
+    0.47,
+    0.87
+   ],
+   "confirmed": 15,
+   "recall": 0.8,
+   "recall_ci95": [
+    0.55,
+    0.93
+   ],
+   "contradicted_predicted_positive": 5
+  },
+  "v1": {
+   "predicted_positive": 17,
+   "true_positive": 12,
+   "precision": 0.706,
+   "precision_ci95": [
+    0.47,
+    0.87
+   ],
+   "confirmed": 15,
+   "recall": 0.8,
+   "recall_ci95": [
+    0.55,
+    0.93
+   ],
+   "contradicted_predicted_positive": 5
+  },
+  "v1_no_quarantine": {
+   "predicted_positive": 17,
+   "true_positive": 12,
+   "precision": 0.706,
+   "precision_ci95": [
+    0.47,
+    0.87
+   ],
+   "confirmed": 15,
+   "recall": 0.8,
+   "recall_ci95": [
+    0.55,
+    0.93
+   ],
+   "contradicted_predicted_positive": 5
+  },
+  "v2": {
+   "predicted_positive": 17,
+   "true_positive": 13,
+   "precision": 0.765,
+   "precision_ci95": [
+    0.53,
+    0.9
+   ],
+   "confirmed": 15,
+   "recall": 0.867,
+   "recall_ci95": [
+    0.62,
+    0.96
+   ],
+   "contradicted_predicted_positive": 4
+  },
+  "v2_no_quarantine": {
+   "predicted_positive": 17,
+   "true_positive": 13,
+   "precision": 0.765,
+   "precision_ci95": [
+    0.53,
+    0.9
+   ],
+   "confirmed": 15,
+   "recall": 0.867,
+   "recall_ci95": [
+    0.62,
+    0.96
+   ],
+   "contradicted_predicted_positive": 4
+  }
+ },
+ "strong_only": {
+  "sample_stratum": {
+   "predicted_positive": 10,
+   "true_positive": 10,
+   "precision": 1.0,
+   "precision_ci95": [
+    0.72,
+    1.0
+   ],
+   "confirmed": 15,
+   "recall": 0.667,
+   "recall_ci95": [
+    0.42,
+    0.85
+   ],
+   "contradicted_predicted_positive": 0
+  },
+  "audit_grader": {
+   "predicted_positive": 8,
+   "true_positive": 7,
+   "precision": 0.875,
+   "precision_ci95": [
+    0.53,
+    0.98
+   ],
+   "confirmed": 15,
+   "recall": 0.467,
+   "recall_ci95": [
+    0.25,
+    0.7
+   ],
+   "contradicted_predicted_positive": 1
+  },
+  "v1": {
+   "predicted_positive": 5,
+   "true_positive": 4,
+   "precision": 0.8,
+   "precision_ci95": [
+    0.38,
+    0.96
+   ],
+   "confirmed": 15,
+   "recall": 0.267,
+   "recall_ci95": [
+    0.11,
+    0.52
+   ],
+   "contradicted_predicted_positive": 1
+  },
+  "v1_no_quarantine": {
+   "predicted_positive": 5,
+   "true_positive": 4,
+   "precision": 0.8,
+   "precision_ci95": [
+    0.38,
+    0.96
+   ],
+   "confirmed": 15,
+   "recall": 0.267,
+   "recall_ci95": [
+    0.11,
+    0.52
+   ],
+   "contradicted_predicted_positive": 1
+  },
+  "v2": {
+   "predicted_positive": 9,
+   "true_positive": 9,
+   "precision": 1.0,
+   "precision_ci95": [
+    0.7,
+    1.0
+   ],
+   "confirmed": 15,
+   "recall": 0.6,
+   "recall_ci95": [
+    0.36,
+    0.8
+   ],
+   "contradicted_predicted_positive": 0
+  },
+  "v2_no_quarantine": {
+   "predicted_positive": 10,
+   "true_positive": 9,
+   "precision": 0.9,
+   "precision_ci95": [
+    0.6,
+    0.98
+   ],
+   "confirmed": 15,
+   "recall": 0.6,
+   "recall_ci95": [
+    0.36,
+    0.8
+   ],
+   "contradicted_predicted_positive": 1
+  }
+ },
+ "quarantine_changes_v1": [
+  {
+   "pair_id": "mri_suspect_2",
+   "verdict": "contradicted",
+   "without_quarantine": "weak",
+   "with_quarantine": "attributed_elsewhere"
+  }
+ ],
+ "quarantine_changes_v2": [
+  {
+   "pair_id": "cardiac_surgery_suspect_1",
+   "verdict": "contradicted",
+   "without_quarantine": "strong",
+   "with_quarantine": "moderate"
+  },
+  {
+   "pair_id": "mri_suspect_2",
+   "verdict": "contradicted",
+   "without_quarantine": "weak",
+   "with_quarantine": "attributed_elsewhere"
+  }
+ ],
+ "location_flag_vs_web": {
+  "web_no": 4,
+  "web_no_flagged": 3,
+  "web_yes": 25,
+  "web_yes_flagged": 3
+ }
+}

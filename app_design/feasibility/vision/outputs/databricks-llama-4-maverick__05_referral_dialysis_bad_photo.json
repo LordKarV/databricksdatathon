@@ -1,0 +1,57 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "05_referral_dialysis_bad_photo.jpg",
+ "bytes": 9369,
+ "status": 200,
+ "latency_s": 1.84,
+ "response": {
+  "id": "chatcmpl_9c93207e-c9d0-4954-9fb8-5b6717f0412c_09d722b7-9174-41a5-a8c4-456f91607e56",
+  "object": "chat.completion",
+  "created": 1795284624,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"Pt: Test Patient, 52 M c/o swelling feet, breathlessness & low urine CKD stage 5. Creatinine 9.2 mg/dl Refer to higher centre for dialysis. Dr. (sign)\", \"language\": \"English\", \"document_type\": \"referral\", \"suggested_service\": \"dialysis\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Refer to higher centre for dialysis\", \"red_flags\": [\"breathlessness\", \"low urine\"]}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1017,
+   "completion_tokens": 117,
+   "total_tokens": 1134,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"Pt: Test Patient, 52 M c/o swelling feet, breathlessness & low urine CKD stage 5. Creatinine 9.2 mg/dl Refer to higher centre for dialysis. Dr. (sign)\", \"language\": \"English\", \"document_type\": \"referral\", \"suggested_service\": \"dialysis\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"Refer to higher centre for dialysis\", \"red_flags\": [\"breathlessness\", \"low urine\"]}",
+ "parsed": {
+  "detected_text": "Pt: Test Patient, 52 M c/o swelling feet, breathlessness & low urine CKD stage 5. Creatinine 9.2 mg/dl Refer to higher centre for dialysis. Dr. (sign)",
+  "language": "English",
+  "document_type": "referral",
+  "suggested_service": "dialysis",
+  "urgency": "urgent",
+  "confidence": 0.9,
+  "trigger_phrase": "Refer to higher centre for dialysis",
+  "red_flags": [
+   "breathlessness",
+   "low urine"
+  ]
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 1017,
+  "completion_tokens": 117,
+  "total_tokens": 1134,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}
