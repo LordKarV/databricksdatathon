@@ -96,4 +96,20 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 ol.script li { margin: 6px 0; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-@media print { header.top, button, .btn, .bar-108 { display: none !important; } }
+/* Referral slip (S8): one A5/A4 page in print; "Show big" for the family to photograph. */
+.slip { border: 2px solid var(--fg); border-radius: 8px; padding: 12px; margin: 10px 0; background: var(--bg); }
+.slip h2 { text-transform: none; letter-spacing: 0; font-size: 1.15rem; margin-top: 0; }
+.slip-table th { width: 30%; vertical-align: top; }
+.slip-table ul { margin: 4px 0; padding-left: 18px; }
+.slip a { overflow-wrap: anywhere; }
+.slip-name { border-top: 1px dashed var(--line); padding-top: 8px; }
+body.slip-big .slip { font-size: 200%; }
+body.slip-big header.top, body.slip-big #bar108 { display: none; }
+
+@page { size: A5; margin: 10mm; }
+@media print {
+  header.top, button, .btn, .bar-108, .no-print, #offline, #status { display: none !important; }
+  body { max-width: none; padding: 0; font-size: 10pt; background: #fff; color: #000; }
+  .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
+  .slip a { color: #000; text-decoration: none; }
+}
