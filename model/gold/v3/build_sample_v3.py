@@ -41,7 +41,7 @@ ROOT = Path(__file__).resolve().parents[3]
 HERE = Path(__file__).resolve().parent
 V1 = ROOT / "derived" / "v1"
 sys.path.insert(0, str(ROOT / "app"))
-from facts.build import facilities  # noqa: E402
+from facts.build import facilities
 
 SEED = 20261121
 CORE = {"dialysis": "dialysis", "emergency_csection": "csection", "nicu": "nicu", "cardiac_surgery": "cardiac_surgery",
@@ -200,7 +200,7 @@ def main() -> None:
     (HERE / "test_sample.json").write_text(json.dumps(
         [{k: p[k] for k in ("pair_id", "unique_id", "service")} for p in test], indent=1))
     (HERE / "overlap.json").write_text(json.dumps(overlap, indent=1))
-    summary = {"seed": SEED, "frame_facilities": int(len(reach)), "all_facilities": int(len(fr)),
+    summary = {"seed": SEED, "frame_facilities": len(reach), "all_facilities": len(fr),
                "excluded_earlier_gold": len(excl), "n_dev": len(dev), "n_test": len(test),
                "n_overlap": {k: len(v) for k, v in overlap.items()},
                "dev_by_service_stratum": pd.DataFrame(dev).groupby(["service", "stratum"]).size()
