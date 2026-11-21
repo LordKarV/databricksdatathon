@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1152pt" height="756pt" viewBox="0 0 1152 756" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-21T16:45:51.872937</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 756 
+L 1152 756 
+L 1152 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 32.494279 443.307698 
+L 345.991256 443.307698 
+L 345.991256 129.81072 
+L 32.494279 129.81072 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="mbaf930c41d" d="M 0 1.322876 
+C 0.350831 1.322876 0.68734 1.183489 0.935414 0.935414 
+C 1.183489 0.68734 1.322876 0.350831 1.322876 0 
+C 1.322876 -0.350831 1.183489 -0.68734 0.935414 -0.935414 
+C 0.68734 -1.183489 0.350831 -1.322876 0 -1.322876 
+C -0.350831 -1.322876 -0.68734 -1.183489 -0.935414 -0.935414 
+C -1.183489 -0.68734 -1.322876 -0.350831 -1.322876 0 
+C -1.322876 0.350831 -1.183489 0.68734 -0.935414 0.935414 
+C -0.68734 1.183489 -0.350831 1.322876 0 1.322876 
+z
+"/>
+    </defs>
+    <g clip-path="url(#p57145d185d)">
+     <use xlink:href="#mbaf930c41d" x="106.019794" y="389.429623" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="132.996648" y="393.276422" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="118.01257" y="395.920425" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="151.942477" y="391.891942" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="39.28482" y="421.83764" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.192898" y="396.348188" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.855458" y="390.909161" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="224.034224" y="185.171342" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.501791" y="394.742928" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.278791" y="396.314458" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.683672" y="393.073273" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.749839" y="402.483288" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.782922" y="395.645216" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="106.061148" y="413.257852" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="150.627407" y="391.258731" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="134.485406" y="400.421901" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="127.59852" y="395.748707" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="294.882583" y="251.339658" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="109.36123" y="391.877377" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="105.650361" y="389.868118" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="122.222448" y="396.470078" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.397592" y="396.40027" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.545902" y="390.491364" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="145.052834" y="397.361633" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="165.826528" y="361.583643" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.660918" y="400.347541" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="141.035943" y="390.88463" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.545126" y="401.512006" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="151.542718" y="403.672285" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="126.939607" y="381.990536" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.245394" y="399.177709" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="226.620253" y="185.6497" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="106.350629" y="412.216809" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="225.908957" y="185.524744" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="162.355515" y="398.313751" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="162.592614" y="397.773298" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.119777" y="400.708609" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="140.134417" y="404.287098" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="142.488861" y="396.29376" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="175.451845" y="361.573992" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="134.907221" y="390.932926" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="119.534412" y="394.726063" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="231.709601" y="193.699001" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="117.395011" y="405.785801" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="143.856313" y="397.604646" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.386775" y="404.316996" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.947642" y="398.654888" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="121.461527" y="396.489243" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="220.907832" y="186.330441" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="226.548572" y="186.087429" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="130.234174" y="382.573919" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="122.564311" y="381.826484" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.735356" y="402.359866" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="122.299643" y="396.506874" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.174489" y="401.491308" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.637196" y="393.548565" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="111.550215" y="391.285487" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="144.046544" y="398.17193" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="128.63238" y="391.911107" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="135.958114" y="397.053389" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="139.246676" y="387.705539" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="226.146056" y="185.453451" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="144.721999" y="390.88693" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.769216" y="394.739095" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="130.325154" y="389.887283" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="143.238547" y="411.366536" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.858643" y="395.146159" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="156.331557" y="417.359162" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.28667" y="397.979513" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="106.659409" y="390.222287" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="153.72623" y="394.687733" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="127.237358" y="405.87626" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="136.90326" y="397.093323" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="169.010816" y="362.371708" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="156.984957" y="394.341229" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="106.152128" y="390.65235" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.261935" y="397.746467" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="145.152085" y="394.325897" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="124.46937" y="405.163322" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="125.792711" y="389.159013" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.110303" y="397.205247" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="151.741219" y="395.975621" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="234.350769" y="190.170341" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.261935" y="394.499916" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.061454" y="394.98824" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="165.685923" y="361.570611" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="135.367633" y="389.852019" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.358316" y="396.309092" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.09089" y="396.067613" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.762149" y="398.888701" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="130.435432" y="388.860039" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.682974" y="397.855324" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.240194" y="391.389053" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="229.752159" y="187.642094" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="105.939842" y="391.718691" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="111.550215" y="391.285487" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="131.38934" y="387.188084" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.723552" y="395.564723" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="105.870918" y="413.208023" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="140.831928" y="393.166031" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="142.709418" y="397.321004" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="160.643443" y="400.456398" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="143.92248" y="401.275893" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="165.095933" y="361.331432" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.655404" y="400.39507" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.151657" y="397.760266" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="227.194353" y="188.408209" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="131.383826" y="383.876372" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.024837" y="394.844119" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="104.034783" y="290.268374" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.202486" y="397.422195" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.900774" y="397.595446" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="225.947555" y="186.065964" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="133.010433" y="392.3795" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.74429" y="396.473144" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.201596" y="396.237031" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="151.865282" y="397.723469" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="150.511615" y="394.230839" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="119.302827" y="394.72223" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="134.725262" y="396.703124" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="150.65222" y="395.404504" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="132.938752" y="392.538186" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="72.224978" y="385.729244" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.695555" y="398.551397" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.212624" y="398.135133" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="133.308184" y="405.981284" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="127.00026" y="391.837514" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="144.953583" y="397.979513" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.193011" y="397.579348" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.562758" y="391.688793" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="232.597342" y="169.885337" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.7133" y="399.415355" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="149.356449" y="399.489715" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="139.478261" y="394.642503" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="160.750964" y="397.840759" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="123.43551" y="394.393358" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="222.887329" y="183.474856" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.967717" y="393.894302" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="116.758153" y="395.738741" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="151.460009" y="397.713503" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.887687" y="401.314223" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.533321" y="390.545793" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="142.113915" y="405.457697" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="160.891569" y="398.532232" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="142.058775" y="394.56661" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="137.217554" y="397.687439" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="161.586323" y="403.791108" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="132.227456" y="393.579229" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="128.94116" y="386.884511" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="146.257625" y="398.120568" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="128.296031" y="383.636426" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="152.163034" y="403.904565" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.76953" y="396.027749" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="145.256849" y="397.866823" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="120.623411" y="391.829848" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="155.79395" y="400.071565" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="133.104169" y="398.299952" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.724328" y="398.697817" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="148.592771" y="402.103055" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="111.371053" y="391.305493" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="147.013033" y="404.581473" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="154.227997" y="398.766811" style="fill: #c3c2b7"/>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 223.760958 181.260887 
+Q 225.190606 183.455294 225.643772 184.150872 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 224.932941 177.930364 
+L 225.643772 184.150872 
+L 220.240867 180.987232 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 224.292145 192.254354 
+Q 189.24188 291.689103 154.786312 389.436743 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 159.288753 385.086107 
+L 154.786312 389.436743 
+L 154.007268 383.22441 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 48.169127 427.632849 
+L 138.431255 427.632849 
+" clip-path="url(#p57145d185d)" style="fill: none; stroke: #52514e; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 32.494279 443.307698 
+L 32.494279 129.81072 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 32.494279 443.307698 
+L 345.991256 443.307698 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="93.300191" y="420.906894" transform="rotate(-0 93.300191 420.906894)">25 km</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="32.494279" y="115.81072" transform="rotate(-0 32.494279 115.81072)">Major trauma from Muzaffarpur district, Bihar (q05)</text>
+   </g>
+   <g id="PathCollection_2">
+    <defs>
+     <path id="me713b775b3" d="M 0 -8.062258 
+L -1.81009 -2.491375 
+L -7.667663 -2.491375 
+L -2.928786 0.95162 
+L -4.738876 6.522504 
+L -0 3.079508 
+L 4.738876 6.522504 
+L 2.928786 0.95162 
+L 7.667663 -2.491375 
+L 1.81009 -2.491375 
+z
+" style="stroke: #fcfcfb; stroke-width: 1.5"/>
+    </defs>
+    <g clip-path="url(#p57145d185d)">
+     <use xlink:href="#me713b775b3" x="219.939323" y="175.394949" style="fill: #0b0b0b; stroke: #fcfcfb; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="PathCollection_3">
+    <defs>
+     <path id="m795938073e" d="M 0 5.477226 
+C 1.452577 5.477226 2.845856 4.900111 3.872983 3.872983 
+C 4.900111 2.845856 5.477226 1.452577 5.477226 0 
+C 5.477226 -1.452577 4.900111 -2.845856 3.872983 -3.872983 
+C 2.845856 -4.900111 1.452577 -5.477226 0 -5.477226 
+C -1.452577 -5.477226 -2.845856 -4.900111 -3.872983 -3.872983 
+C -4.900111 -2.845856 -5.477226 -1.452577 -5.477226 0 
+C -5.477226 1.452577 -4.900111 2.845856 -3.872983 3.872983 
+C -2.845856 4.900111 -1.452577 5.477226 0 5.477226 
+z
+" style="stroke: #fcfcfb; stroke-width: 2"/>
+    </defs>
+    <g clip-path="url(#p57145d185d)">
+     <use xlink:href="#m795938073e" x="226.620253" y="185.6497" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="PathCollection_4">
+    <defs>
+     <path id="m8f9d65e338" d="M 0 5.477226 
+C 1.452577 5.477226 2.845856 4.900111 3.872983 3.872983 
+C 4.900111 2.845856 5.477226 1.452577 5.477226 0 
+C 5.477226 -1.452577 4.900111 -2.845856 3.872983 -3.872983 
+C 2.845856 -4.900111 1.452577 -5.477226 0 -5.477226 
+C -1.452577 -5.477226 -2.845856 -4.900111 -3.872983 -3.872983 
+C -4.900111 -2.845856 -5.477226 -1.452577 -5.477226 0 
+C -5.477226 1.452577 -4.900111 2.845856 -3.872983 3.872983 
+C -2.845856 4.900111 -1.452577 5.477226 0 5.477226 
+z
+" style="stroke: #fcfcfb; stroke-width: 2"/>
+    </defs>
+    <g clip-path="url(#p57145d185d)">
+     <use xlink:href="#m8f9d65e338" x="151.865282" y="397.723469" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="text_3">
+    <g id="patch_7">
+     <path d="M 186.276823 194.064949 
+L 210.439323 194.064949 
+L 210.439323 181.144949 
+L 186.276823 181.144949 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #0b0b0b" x="209.939323" y="191.394949" transform="rotate(-0 209.939323 191.394949)">Start</text>
+   </g>
+   <g id="text_4">
+    <g id="patch_8">
+     <path d="M 235.120253 204.2797 
+L 386.689003 204.2797 
+L 386.689003 191.6297 
+L 235.120253 191.6297 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="235.620253" y="201.6497" transform="rotate(-0 235.620253 201.6497)">1. Phular Superspeciality Hospital</text>
+   </g>
+   <g id="text_5">
+    <g id="patch_9">
+     <path d="M 160.365282 416.353469 
+L 258.765282 416.353469 
+L 258.765282 403.703469 
+L 160.365282 403.703469 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="160.865282" y="413.723469" transform="rotate(-0 160.865282 413.723469)">2. Rajeshwar Hospital</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="3.00024" y="460.422698" transform="rotate(-0 3.00024 460.422698)">1. Stabilise: arrive 6 min (4 to 9), 4.5 km; P = 0.92</text>
+   </g>
+   <g id="text_7">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="3.00024" y="476.822033" transform="rotate(-0 3.00024 476.822033)">"Provides 24/7 emergency care" [2dccd2d1:capa:0]</text>
+   </g>
+   <g id="text_8">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="3.00024" y="493.876269" transform="rotate(-0 3.00024 493.876269)">"Provides 24/7 emergency services" [2dccd2d1:capa:5]</text>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="3.00024" y="511.585405" transform="rotate(-0 3.00024 511.585405)">2. Definitive care: arrive 105 min (91 to 130), 80.7 km; P = 0.31</text>
+   </g>
+   <g id="text_10">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="3.00024" y="527.98474" transform="rotate(-0 3.00024 527.98474)">"Blood Bank" [acb49d43:capa:43]</text>
+   </g>
+   <g id="text_11">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(3.00024 545.169176)">"Imaging diagnostic capabilities (X-ray, CT scan,</text>
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(3.00024 556.310576)">Ultrasound)" [acb49d43:capa:16]</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(3.00024 575.00659)">Chance of first care in time 0.92; of care in time at both</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(3.00024 586.45939)">steps 0.48. Stopping first raises the chance of care in</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(3.00024 597.91219)">time from 0.27 to 0.48; going direct to Ganpati Hospital</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(3.00024 609.36499)">takes 60 min, beyond the 60 min threshold.</text>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_10">
+    <path d="M 425.843689 443.307698 
+L 739.340666 443.307698 
+L 739.340666 129.81072 
+L 425.843689 129.81072 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="matplotlib.axis_3"/>
+   <g id="matplotlib.axis_4"/>
+   <g id="PathCollection_5">
+    <g clip-path="url(#p6d809007eb)">
+     <use xlink:href="#mbaf930c41d" x="703.178146" y="281.296167" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="462.016417" y="266.511157" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="550.743713" y="251.810423" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="453.942442" y="376.350028" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="462.016417" y="266.511157" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="462.016417" y="266.511157" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="730.59955" y="169.278817" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="460.192255" y="260.95209" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="460.182418" y="261.548585" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="462.016417" y="266.511157" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="681.497825" y="290.280144" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="460.487367" y="261.381254" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="453.660447" y="247.390499" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="636.701263" y="215.445869" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="730.59955" y="169.278817" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="460.67919" y="269.833623" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="461.602234" y="264.269226" style="fill: #c3c2b7"/>
+    </g>
+   </g>
+   <g id="patch_11">
+    <path d="M 697.578467 302.395932 
+Q 692.335377 298.445582 688.521008 295.571686 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 691.308695 301.177826 
+L 688.521008 295.571686 
+L 694.678532 296.705221 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 674.535211 289.52612 
+Q 571.756938 278.395631 470.75712 267.457742 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 476.023101 270.844399 
+L 470.75712 267.457742 
+L 476.626034 265.276951 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 441.518538 427.632849 
+L 492.560233 427.632849 
+" clip-path="url(#p6d809007eb)" style="fill: none; stroke: #52514e; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 425.843689 443.307698 
+L 425.843689 129.81072 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 425.843689 443.307698 
+L 739.340666 443.307698 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="467.039385" y="420.906894" transform="rotate(-0 467.039385 420.906894)">25 km</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="425.843689" y="115.81072" transform="rotate(-0 425.843689 115.81072)">Obstetric emergency from Beed district, Maharashtra (q22)</text>
+   </g>
+   <g id="PathCollection_6">
+    <g clip-path="url(#p6d809007eb)">
+     <use xlink:href="#me713b775b3" x="703.167938" y="306.60726" style="fill: #0b0b0b; stroke: #fcfcfb; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="PathCollection_7">
+    <g clip-path="url(#p6d809007eb)">
+     <use xlink:href="#m795938073e" x="681.497825" y="290.280144" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="PathCollection_8">
+    <g clip-path="url(#p6d809007eb)">
+     <use xlink:href="#m8f9d65e338" x="462.016417" y="266.511157" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="text_15">
+    <g id="patch_15">
+     <path d="M 669.505438 325.27726 
+L 693.667938 325.27726 
+L 693.667938 312.35726 
+L 669.505438 312.35726 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #0b0b0b" x="693.167938" y="322.60726" transform="rotate(-0 693.167938 322.60726)">Start</text>
+   </g>
+   <g id="text_16">
+    <g id="patch_16">
+     <path d="M 573.827512 308.910144 
+L 672.997825 308.910144 
+L 672.997825 296.260144 
+L 573.827512 296.260144 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #0b0b0b" x="672.497825" y="306.280144" transform="rotate(-0 672.497825 306.280144)">1. Matoshree Hospital</text>
+   </g>
+   <g id="text_17">
+    <g id="patch_17">
+     <path d="M 470.516417 262.141157 
+L 554.677354 262.141157 
+L 554.677354 249.491157 
+L 470.516417 249.491157 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="471.016417" y="259.511157" transform="rotate(-0 471.016417 259.511157)">2. Kalyani Hospital</text>
+   </g>
+  </g>
+  <g id="axes_4">
+   <g id="text_18">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="396.34965" y="460.422698" transform="rotate(-0 396.34965 460.422698)">1. Stabilise: arrive 19 min (14 to 27), 17.2 km; P = 0.78</text>
+   </g>
+   <g id="text_19">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="396.34965" y="476.822033" transform="rotate(-0 396.34965 476.822033)">"Offers obstetrics (maternity) services" [925fb5c8:capa:3]</text>
+   </g>
+   <g id="text_20">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(396.34965 494.006469)">"Matoshree Hospital provides Physiotherapy services and</text>
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(396.34965 505.147869)">offers multiple..." [925fb5c8:desc:0]</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #9a3c14" x="396.34965" y="523.423884" transform="rotate(-0 396.34965 523.423884)">location confidence is low: confirm the address by phone</text>
+   </g>
+   <g id="text_22">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="396.34965" y="541.179519" transform="rotate(-0 396.34965 541.179519)">2. Definitive care: arrive 163 min (140 to 223), 139.4 km; P = 0.55</text>
+   </g>
+   <g id="text_23">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="396.34965" y="557.578855" transform="rotate(-0 396.34965 557.578855)">"Offers 24/7 blood bank services" [1a7c035e:capa:11]</text>
+   </g>
+   <g id="text_24">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="396.34965" y="574.63309" transform="rotate(-0 396.34965 574.63309)">"Caesarean section (C-section) delivery" [1a7c035e:proc:5]</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #9a3c14" transform="translate(396.34965 591.771026)">location confidence is disputed: confirm the address by</text>
+    <text style="font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #9a3c14" transform="translate(396.34965 602.865926)">phone</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(396.34965 621.654941)">Chance of first care in time 0.78; of care in time at both</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(396.34965 633.107741)">steps 0.00. Definitive care cannot be reached in time</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(396.34965 644.560541)">either way (0.00 against 0.00). Stopping first raises the</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(396.34965 656.013341)">chance of first care in time from 0.00 to 0.78; going</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(396.34965 667.466141)">direct to Kalyani Hospital takes 126 min.</text>
+   </g>
+  </g>
+  <g id="axes_5">
+   <g id="patch_18">
+    <path d="M 806.008744 443.307698 
+L 1119.505721 443.307698 
+L 1119.505721 129.81072 
+L 806.008744 129.81072 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="matplotlib.axis_5"/>
+   <g id="matplotlib.axis_6"/>
+   <g id="PathCollection_9">
+    <g clip-path="url(#p3afeec8eaf)">
+     <use xlink:href="#mbaf930c41d" x="827.28476" y="173.110237" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="827.28476" y="173.110237" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="854.271428" y="166.317414" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="856.819966" y="166.706066" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="855.352867" y="164.614137" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="951.660557" y="315.176239" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="949.064309" y="316.384674" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="951.89911" y="316.044868" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="858.507726" y="161.105111" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="951.406101" y="315.562768" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="858.704532" y="162.964486" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="851.741502" y="173.914417" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="1075.301778" y="222.596099" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="855.464192" y="163.773649" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="1069.471783" y="223.487082" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="856.589365" y="170.714182" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="950.593034" y="317.579834" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="854.128297" y="165.22154" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="859.706454" y="166.986406" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="865.562922" y="164.252562" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="859.2373" y="160.645312" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="851.683605" y="163.653434" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="854.569619" y="158.93885" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="857.714539" y="165.983448" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="853.76811" y="165.168985" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="855.865755" y="163.776834" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="961.202664" y="171.243005" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="857.859658" y="165.539577" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="876.108938" y="159.733146" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="953.339393" y="308.644964" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="855.823666" y="158.341208" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="854.569619" y="158.93885" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="856.390571" y="166.909419" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="1067.799926" y="224.491633" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="1068.209442" y="224.302616" style="fill: #c3c2b7"/>
+     <use xlink:href="#mbaf930c41d" x="857.130085" y="159.855263" style="fill: #c3c2b7"/>
+    </g>
+   </g>
+   <g id="patch_19">
+    <path d="M 954.59303 401.240642 
+Q 1009.309293 315.812583 1063.060739 231.890887 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 1057.682552 235.096368 
+L 1063.060739 231.890887 
+L 1062.398212 238.116725 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 948.296101 400.603537 
+Q 904.266546 286.56026 860.881276 174.185782 
+" style="fill: none; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 860.286126 180.418422 
+L 860.881276 174.185782 
+L 865.510298 178.401486 
+z
+" style="fill: #52514e; stroke: #52514e; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 821.683593 427.632849 
+L 884.199065 427.632849 
+" clip-path="url(#p3afeec8eaf)" style="fill: none; stroke: #52514e; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 806.008744 443.307698 
+L 806.008744 129.81072 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 806.008744 443.307698 
+L 1119.505721 443.307698 
+" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="852.941329" y="420.906894" transform="rotate(-0 852.941329 420.906894)">25 km</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="806.008744" y="115.81072" transform="rotate(-0 806.008744 115.81072)">Dialysis start from Yavatmal district, Maharashtra (q20)</text>
+   </g>
+   <g id="PathCollection_10">
+    <g clip-path="url(#p3afeec8eaf)">
+     <use xlink:href="#me713b775b3" x="950.817741" y="407.13497" style="fill: #0b0b0b; stroke: #fcfcfb; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="PathCollection_11">
+    <g clip-path="url(#p3afeec8eaf)">
+     <use xlink:href="#m795938073e" x="1067.799926" y="224.491633" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="PathCollection_12">
+    <g clip-path="url(#p3afeec8eaf)">
+     <use xlink:href="#m795938073e" x="1067.799926" y="224.491633" style="fill: #eb6834; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="PathCollection_13">
+    <g clip-path="url(#p3afeec8eaf)">
+     <use xlink:href="#m8f9d65e338" x="857.714539" y="165.983448" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="text_29">
+    <g id="patch_23">
+     <path d="M 917.155241 425.80497 
+L 941.317741 425.80497 
+L 941.317741 412.88497 
+L 917.155241 412.88497 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #0b0b0b" x="940.817741" y="423.13497" transform="rotate(-0 940.817741 423.13497)">Start</text>
+   </g>
+   <g id="text_30">
+    <g id="patch_24">
+     <path d="M 906.423364 220.121633 
+L 1059.299926 220.121633 
+L 1059.299926 207.471633 
+L 906.423364 207.471633 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #0b0b0b" x="1058.799926" y="217.491633" transform="rotate(-0 1058.799926 217.491633)">1. Acharaya Vinoba Bhave Rural...</text>
+   </g>
+   <g id="text_31">
+    <g id="patch_25">
+     <path d="M 866.214539 161.613448 
+L 995.005164 161.613448 
+L 995.005164 148.963448 
+L 866.214539 148.963448 
+z
+" style="fill: #fcfcfb; opacity: 0.85"/>
+    </g>
+    <text style="font-size: 10px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="866.714539" y="158.983448" transform="rotate(-0 866.714539 158.983448)">3. Alliance Hospital Amravati</text>
+   </g>
+  </g>
+  <g id="axes_6">
+   <g id="text_32">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="776.514705" y="460.422698" transform="rotate(-0 776.514705 460.422698)">1. Assessment: arrive 92 min (78 to 127), 112.2 km; P = 0.61</text>
+   </g>
+   <g id="text_33">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="776.514705" y="476.822033" transform="rotate(-0 776.514705 476.822033)">"Laboratory services are provided" [e22f6de9:capa:29]</text>
+   </g>
+   <g id="text_34">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(776.514705 494.006469)">"Laboratory on-site for diagnostic investigations"</text>
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(776.514705 505.147869)">[e22f6de9:equi:5]</text>
+   </g>
+   <g id="text_35">
+    <text style="font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #9a3c14" x="776.514705" y="523.423884" transform="rotate(-0 776.514705 523.423884)">location confidence is low: confirm the address by phone</text>
+   </g>
+   <g id="text_36">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="776.514705" y="541.179519" transform="rotate(-0 776.514705 541.179519)">2. Fistula surgery: arrive 92 min (78 to 127), 112.2 km; P = 0.71</text>
+   </g>
+   <g id="text_37">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="776.514705" y="557.578855" transform="rotate(-0 776.514705 557.578855)">"AV fistula creation and management" [e22f6de9:proc:11]</text>
+   </g>
+   <g id="text_38">
+    <text style="font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #9a3c14" x="776.514705" y="574.58659" transform="rotate(-0 776.514705 574.58659)">location confidence is low: confirm the address by phone</text>
+   </g>
+   <g id="text_39">
+    <text style="font-weight: 700; font-size: 9.8px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="776.514705" y="592.342226" transform="rotate(-0 776.514705 592.342226)">3. Dialysis sessions: arrive 109 min (92 to 157), 133.4 km, 3x a week; P = 0.94</text>
+   </g>
+   <g id="text_40">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="776.514705" y="608.741562" transform="rotate(-0 776.514705 608.741562)">"Facilities for peritoneal dialysis" [9f46eab1:equi:2]</text>
+   </g>
+   <g id="text_41">
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(776.514705 625.925997)">"Provides 24x7 hemodialysis, peritoneal dialysis, and CRRT"</text>
+    <text style="font-style: italic; font-size: 9.3px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #52514e" transform="translate(776.514705 637.067397)">[9f46eab1:proc:9]</text>
+   </g>
+   <g id="text_42">
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(776.514705 655.763412)">2 sites. Travel about 11 hours a week for sessions over 12</text>
+    <text style="font-size: 9.6px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(776.514705 667.216212)">weeks; chance every stage is available 0.41.</text>
+   </g>
+  </g>
+  <g id="text_43">
+   <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(11.52 19.82174)">From Muzaffarpur, the trauma plan stabilises 4.5 km away in 6 min, then rides 81 km to Patna</text>
+   <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(11.52 40.57874)">(arrival at 105 min); in Yavatmal, dialysis means 133 km each way, three times a week</text>
+  </g>
+  <g id="text_44">
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(11.52 716.84276)">Three best plans for benchmark queries (model/gold/queries.json). Star = origin; orange = stabilising or preparatory stop; blue = definitive or recurring site; gray dots = every facility record in frame</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(11.52 728.17626)">(derived/v1/facility_location.parquet). Lines are straight connectors, not roads; dialysis stages are separate trips from home. Arrival times include the 30 min dwell at a stabilising stop. Quotes: the two</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(11.52 739.50976)">shortest of the first four claim ids the planner cited (derived/v1/claims.parquet), so they need not cover the weakest capability. Probabilities: derived/v1 stub (planner/data_v1.py), not the fitted model;</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(11.52 750.84326)">travel: geo.travel straight-line x road-factor estimate.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p57145d185d">
+   <rect x="32.494279" y="129.81072" width="313.496978" height="313.496978"/>
+  </clipPath>
+  <clipPath id="p6d809007eb">
+   <rect x="425.843689" y="129.81072" width="313.496978" height="313.496978"/>
+  </clipPath>
+  <clipPath id="p3afeec8eaf">
+   <rect x="806.008744" y="129.81072" width="313.496978" height="313.496978"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,244 @@
+query_id,rank,unique_id,name,service,offers,confidence,quote,p_s,T,C,S,band
+q01,1,1774eb01-bb63-4cbb-b1ad-c9b4cf03c605,Harsh Hospital,emergency_csection,yes,1.0,Obstetrics services include normal baby delivery and caesarean section delivery.,0.47187873367480065,4,0,0,Unverified
+q01,2,5e6fe7e7-8929-4b07-9687-a6054091f89c,Mishra Hospital Test Tube Baby Centre,emergency_csection,yes,1.0,Performs caesarean section,0.40882659766766083,2,0,0,Unverified
+q02,1,8d5ed75d-35a7-4ab7-a39e-cd3b397cd971,Baibhav Shishu Care,nicu,yes,1.0,Operates Neonatal ICU,0.3951653832786945,5,0,0,Unverified
+q02,2,f115e7cd-6441-4993-9cc5-08335a7c57f0,Dr. A Barkat Multispeciality Hospital,nicu,yes,1.0,"Equipped with NICU, PICU and HDU",0.4321976652635312,3,0,0,Unverified
+q02,3,3732a3f9-08a8-493b-acf7-7b66d5fa2b0c,Buddha Hospital and Research Institute,nicu,yes,1.0,[capability] NICU with ventilators,0.38143082733608347,2,0,0,Unverified
+q03,1,5e0b96cf-e221-4e1f-bd1f-e9b49d3eca7e,R. B. Memorial Hospital,dialysis,yes,1.0,Dialysis procedures are offered at R. B. Memorial Hospital,0.3730698960238929,4,0,0,Unverified
+q03,2,7ada90ef-2c08-442f-ad2f-283360f27582,Dr. Global Healthcare & Diabetes Centre (Dr. Naween Kumar),dialysis,yes,1.0,Dialysis facility,0.28497939334213446,2,0,0,Unverified
+q03,3,61731339-a1d6-4384-92ee-fce2d11b3338,Sub Divisional Hospital Pusa,dialysis,yes,1.0,[procedure] Haemodialysis - Peritoneal Dialysis,0.3830728276864173,3,0,0,Unverified
+q03,4,ce75ab0f-9fcb-4e8c-a81e-0dc3982a49dd,Shivam Kidney Hospital,dialysis,yes,1.0,Offers on-site dialysis services,0.3541525883491863,4,0,0,Unverified
+q03,5,2dccd2d1-a1e2-443f-91b8-34452bb60e69,"Phular Superspeciality Hospital, Road No-02, Juran Chappra, Muzaffarpur - 842001",dialysis,yes,1.0,Dialysis treatment is provided,0.5114866693542874,4,0,0,Unverified
+q03,6,d3725c9b-4b58-4dae-a70c-9d8847ab406d,Prasad Hospital,dialysis,yes,1.0,Provides dialysis treatment,0.43466204471055225,2,0,0,Unverified
+q04,1,ae711d74-537e-4b53-9d44-84e17eb89a53,Shanti Nursing Home,burn_care,yes,1.0,Has Burn Management department,0.45885386083959573,5,0,0,Unverified
+q04,2,a122e838-90c4-4be0-a4cc-0b66e0ea62a0,Desun Hospital,burn_care,yes,1.0,Burn treatments are provided through the Desun Burn Unit,0.4905367327083474,5,0,0,Unverified
+q04,3,6a8e6299-020e-4d23-8d72-d181415594be,Nightingale Hospital & Diagnostics,burn_care,yes,1.0,"Offers General Surgery, Gynecology and Obstetrics, Orthopedics, Pediatrics, Plastic Surgery, Maxillofacial Surgery, Internal Medicine, Urology, and Burn Management",0.21702890196885194,1,0,0,Unverified
+q04,4,79ea5ba0-3f52-4ca0-b613-ac2b561cd783,Mukta Nursing Home,burn_care,yes,0.9,Departments include General Medicine; General & Laparoscopic Surgery; Obstetrics & Gynecology; Paediatrics & Neonatology; Orthopaedics; ENT; Cardiology; Neurosurgery; Psychiatry; Psychology & Counselling; Gastroenterology; Burn Case; Physiotherapy; Urology; Plastic Surgery; Nephrology; ICU & Critical Care Specialist,0.2709576625135315,1,0,0,Unverified
+q05,1,acb49d43-cff0-4aa7-81ab-9a64e646f818,Rajeshwar Hospital,cardiac_surgery,yes,1.0,Cardiothoracic and vascular surgical procedures,0.48750921934576574,4,0,0,Unverified
+q05,2,d2726883-b75f-4292-93ad-7b88fc74e311,Indira Gandhi Institute of Medical Sciences,cardiac_surgery,yes,1.0,[procedure] Performs coronary artery bypass grafting (CABG),0.44510048476241376,3,0,0,Unverified
+q05,3,846902e8-a53b-42af-bc3c-e729cdc31931,New B K Hospital,cardiac_surgery,yes,1.0,Performs coronary artery bypass grafting (CABG) and other cardiac surgeries.,0.492639195548631,4,0,0,Unverified
+q05,4,e8396ece-9b70-4b1f-aa01-85d88ecbc9c3,Ford Hospital And Research Center,cardiac_surgery,yes,1.0,CABG (coronary artery bypass graft) surgery performed at Ford Hospital and Research Center by cardiovascular surgery (CTVS) surgeon Dr. Manmohan,0.4793235054701881,5,0,0,Unverified
+q05,5,1198c409-8061-42f8-8c61-8da730111fbc,Ganja Jal Hospital,cardiac_surgery,yes,1.0,[procedure] Performs cardiac catheterization and bypass surgery,0.43624837830378616,2,0,0,Unverified
+q05,6,73bf12c1-2900-469c-9a25-8afc59add456,JEEVAK HEART HOSPITAL & RESEARCH INSTITUTE,cardiac_surgery,yes,1.0,Open heart surgery (CABG) performed at the hospital,0.27810743492090734,3,0,0,Unverified
+q05,7,b668392a-bc18-4bee-b17e-0155f07e966a,Paras Global Darbhanga,cardiac_surgery,yes,1.0,Coronary bypass surgery is offered in Cardiac Sciences,0.49807828949757554,2,0,0,Unverified
+q05,8,fc9cdea1-23bf-4180-872a-44335e348fb4,Pulse Emergency Hospital,cardiac_surgery,yes,0.9,"Departments include General Medicine, Cardiology, Respiratory Medicine, Nephrology, Urology, Obstetric & Gynecology, Endocrinology, NICU, Oncology, Pathology, Radiology, Emergency, Rheumatology, Cardiothoracic and Vascular Surgery (CTVS), Neuro Surgery, General Surgery, Laparoscopic Surgery, Gastro Surgery, Paediatric Surgery, ENT, Plastic Surgery",0.3691439201782269,1,0,0,Unverified
+q05,9,726316bd-3c0c-4501-8404-34d6f3653a3b,Samay Hospital,cardiac_surgery,yes,0.9,Cardiothoracic Surgery,0.39679923081130414,1,0,0,Unverified
+q06,1,adfecbb0-816b-432f-b063-67ad8c6b0203,Aiman Nursing Home,emergency_csection,yes,1.0,Normal delivery and Caesarean service,0.49766158509174463,4,0,0,Unverified
+q06,2,2935d335-3473-481d-bfce-f856a75268e1,Elite Hospital,emergency_csection,yes,1.0,Cesarean delivery is provided,0.32574344329954547,4,0,0,Unverified
+q06,3,c80ad4c1-cdaa-4254-a07b-7cc0364d7c5d,Krishna Medical Centre,emergency_csection,yes,1.0,Caesarean section (C-section),0.4160904501701965,2,0,0,Unverified
+q06,4,d93e5058-3819-47e3-aaae-49e6d9cfbafb,BNK Hospital,emergency_csection,yes,1.0,[procedure] Performs Lower Segment Caesarean Section (LSCS),0.4850023418765372,2,0,0,Unverified
+q06,5,5c9f7e5b-618b-4859-b7a2-f1735b52eec2,Pawar'S Clinic,emergency_csection,yes,1.0,Delivery by cesarean section (LSCS),0.24161613244663155,2,0,0,Unverified
+q07,1,c80ad4c1-cdaa-4254-a07b-7cc0364d7c5d,Krishna Medical Centre,nicu,yes,1.0,"It has 107 beds, with HDU, NICU, trauma facilities and an infertility unit.",0.47208411505458137,5,0,0,Unverified
+q07,2,d4066f5a-ad1f-48b9-92cf-6b32431939a8,Dr Ram Manohar Lohia Institute of Medical Sciences,nicu,yes,1.0,Bedside X-ray machine in NICU,0.47478796414509183,3,0,0,Unverified
+q07,3,25c6a2b2-af5d-48c7-9ae7-605f04ee3b60,Javitri Test Tube Baby Center,nicu,yes,1.0,Neonatal Intensive Care Unit (NICU) on site,0.21946133294085046,3,0,0,Unverified
+q07,4,28554726-c4c6-4f4a-868e-564699a1217f,Chaitanya Hospital,nicu,yes,1.0,Has NICU,0.36758764554014,5,0,0,Unverified
+q07,5,8b6895ab-0fde-4d83-93be-803be49bdf7c,Jovial Hospital & Trauma Centre,nicu,yes,1.0,"ICU, NICU, and PICU units",0.2636554379481434,2,0,0,Unverified
+q07,6,90293936-e603-4810-a20d-f57e55e8b0a1,JPS Children Hospital,nicu,yes,1.0,NICU with advanced monitoring systems,0.3273871276006422,3,0,0,Unverified
+q07,7,8983f199-31f7-4c8e-b253-79175d2a4f23,"Ekana Hospital And Research Centre, Gomtinagar Vistaar",nicu,yes,1.0,[capability] NICU,0.2636554379481434,3,0,0,Unverified
+q07,8,43d0e338-a916-4791-8823-50c671a22ebf,Wellsun Medicity Hospital,nicu,yes,1.0,Mother and Child Care Department with 24×7 NICU and emergency services,0.6406503089780162,5,0,0,Unverified
+q07,9,84f06705-ee19-4ee1-a974-4bc46a797271,Sewa Hospital & Research Centre,nicu,yes,1.0,NICU,0.30462183722668984,3,0,0,Unverified
+q07,10,e03a7d10-c0eb-4d3e-9696-b1218359ed3d,Divine Heart & Multispeciality Hospital,nicu,yes,1.0,"Neonatal ICU equipped with phototherapy equipment, neonatal ventilators, monitors, and infusion pumps",0.4278227043676068,1,0,0,Unverified
+q08,1,37831f8b-ebbe-4dce-99ff-16d09921820d,Purvanchal Metrocity Hospital,dialysis,yes,1.0,Offers dialysis,0.44762789649405593,4,0,0,Unverified
+q08,2,8f65e34f-83cd-4dba-82bd-c67b645f18ec,Pushpanjali Hospital,dialysis,yes,1.0,Provides dialysis services,0.28497939334213446,2,0,0,Unverified
+q08,3,c2e97c10-5443-4819-86b7-456ba0d1786a,P C Hospital,dialysis,yes,0.9,Advanced Kidney Dialysis,0.373069896023893,2,0,0,Unverified
+q09,1,f8e46a92-1286-459f-a170-7e5118508d14,Life Line Hospital & Research Center,mri,yes,1.0,Offers magnetic resonance imaging (MRI) services,0.3037788342395695,4,0,0,Unverified
+q09,2,390fa6ee-297f-4063-8fbe-82f5e7db7258,Heritage Hospitals,mri,yes,1.0,Performs magnetic resonance imaging using a 3 Tesla MRI system,0.44685623469480196,5,0,0,Unverified
+q09,3,ff724a5a-456a-48ef-971d-0eb2cccf186b,Rays Diagno Interventions,mri,yes,1.0,Performs MRI imaging using a 3.0 Tesla MRI system,0.2108755180619133,5,0,0,Unverified
+q09,4,4daa109c-182c-4be4-9780-74f78117e176,Ford Hospital,mri,yes,1.0,On-site MRI and CT imaging capabilities,0.5152420622088749,5,0,0,Unverified
+q09,5,493d2e6f-0a39-4f60-bd68-f728a786ab52,Disha Path Lab,mri,yes,1.0,[capability] MRI imaging capability (as listed in Lab Tests),0.20465549613221573,2,0,0,Unverified
+q09,6,a6e8d20d-7de7-42b1-a9cc-30c770550106,Niraamaya Diagnostics,mri,yes,1.0,Provides MRI scanning,0.295835513562379,5,0,0,Unverified
+q09,7,5e0abc2b-1c8a-4399-b15a-45d09153412a,Prakash Pathology & Radiology,mri,yes,1.0,"A diagnostic center offering pathology and radiology services, including X-rays, CT scans, MRIs, ultrasounds, mammography, and related imaging technologies.",0.24925136878838847,2,0,0,Unverified
+q09,8,1fecf8f2-3de2-4a25-bfda-bc868419c78f,Anant Hospital,mri,yes,1.0,"Provides diagnostic imaging using X-rays, CT scans, MRI scans, ultrasound, and fluoroscopy",0.3570190692149044,2,0,0,Unverified
+q09,9,328e0055-5900-4378-8fb7-bf9cd100764c,Prakash Indu Diagnostic Center,mri,yes,1.0,Provides MRI services,0.27909110194421294,5,0,0,Unverified
+q09,10,428c8b22-e37c-4929-a6b0-aa82c275facd,Shreyansh Medicare Hospital,mri,yes,1.0,[procedure] MRI,0.2985456987391445,2,0,0,Unverified
+q10,1,b6a873ce-095b-4b66-8605-387951737ad3,Dr. Lal’s Hospital & Research Centre,emergency_csection,yes,0.9,"The hospital offers ENT, Orthopedics, Gynecology, and Obstetrics services.",0.28862195254438083,2,0,0,Unverified
+q10,2,ac382cdf-8ff9-4539-a453-00bec0989719,Orchid Medical Centre,emergency_csection,yes,0.9,Performs Caesarean Section,0.49249211947766663,2,0,0,Unverified
+q10,3,7f0a880d-249c-471f-a02b-7c0dffd0caa4,Raj Hospital & Research Centre,emergency_csection,yes,1.0,Caesarean section,0.5356987528969792,2,0,0,Unverified
+q11,1,7fa87636-fa2a-47fe-8240-c676b11d0599,"Katihar Medical College and Hospital, Katihar",nicu,yes,1.0,Neonatal Intensive Care Unit on site,0.3634688024436825,2,0,0,Unverified
+q11,2,f8463d81-07be-4de0-a882-f13ae1530f60,Dr. Pranjal Shri Hospital (Dr. Ravindra & Dr. Vinita),nicu,yes,1.0,Neonatal Intensive Care Unit (NICU) availability,0.36758764554014,5,0,0,Unverified
+q11,3,9526592c-3f0e-4970-8ddd-d7be11947443,Shivay Hospital,nicu,yes,1.0,On-site ICU and NICU units.,0.2968667495023416,2,0,0,Unverified
+q11,4,76095878-6d16-4866-a5c7-77eeeba799e3,Koshi Hospital,nicu,yes,1.0,"Provides 24/7 ICU, SICU, NICU, and PICU services",0.18349145185627622,1,0,0,Unlikely
+q11,5,c3e84d2d-9e56-4672-b450-9f0e3c94a30d,Santiniketan Sebaniketan,nicu,yes,1.0,Has ICU/HDU/NICU units,0.19606011808990872,2,0,0,Unlikely
+q11,6,c7f931e9-5cad-4847-a0ae-6f48d93bfbff,Jeevan Rekha Hospital,nicu,yes,1.0,"[capability] ICU, HDU, NICU, NHDU, wards and dialysis units",0.4847033199048346,2,0,0,Unverified
+q11,7,eac16a4a-5a75-4524-9abe-98e8397128d3,Raiganj Government Medical College And Hospital,nicu,no,0.8,Plans to establish Newborn Intensive Care Unit (NICU) and Paediatric Intensive Care Unit (PICU),0.380124734624803,2,0,0,Unverified
+q11,8,1774eb01-bb63-4cbb-b1ad-c9b4cf03c605,Harsh Hospital,nicu,yes,1.0,NICU facility is available at Harsh Hospital.,0.40853728434279685,2,0,0,Unverified
+q12,1,28c7548d-840d-496f-9fe2-8c14d2209f7a,Parmeshwari Medical Centre,trauma_emergency,yes,1.0,Provides 24-hour emergency and ICU care,0.3970810709364205,3,0,0,Unverified
+q12,2,4f29d1ab-d901-4de6-81c7-23141741b025,Surya Clinic,trauma_emergency,yes,1.0,Emergency services available at Surya Clinic,0.15969558730448505,2,0,0,Unlikely
+q12,3,2e3538e9-dfe1-4903-8f71-2c8f4b4a151d,Shree Ram Hospital,trauma_emergency,no,0.5,,0.29205281016248524,4,0,0,Unverified
+q13,1,257efb93-0148-431c-a2d0-c81e8dbff406,Medicover Woman & Child Hospitals,emergency_csection,yes,0.9,Caesarean section (C-section) deliveries,0.5311806386183457,2,0,0,Unverified
+q15,1,22f6c258-b765-4864-9f48-d5e365a5a0be,"Tata Main Hospital, Jamshedpur, Jharkhand, India",burn_care,yes,1.0,Operates 13 modular operation theatres including a dedicated Burns Care Theatre,0.5095212066251565,5,0,0,Unverified
+q15,2,8d8ddf59-32df-4d13-a39e-158c2a0787e9,Lords Health Care Nursing Home,burn_care,yes,1.0,Has a Specialist Burn Unit,0.436908104555361,2,0,0,Unverified
+q15,3,3f6542b5-2ab1-4602-aa55-45ac9fa77975,Ashwini Hospital,burn_care,yes,1.0,"Specialties include Internal Medicine, General Surgery, Cardiology, Interventional Cardiology, Neurology & Neurosurgery, Partial / Complete Limb Prosthesis, Burns Unit, Dialysis Unit, Critical Care Unit- ICU, Modular Operation Theatres, Diagnostic Services, CATH LAB, MRI, CT Scan, Pulmonology, Orthopaedics, Plastic Surgery, and COVID and post COVID",0.3197023490692224,2,0,0,Unverified
+q15,4,b471650e-b768-4a05-a10c-36742e6b7753,M.R. Bangur Hospital,burn_care,yes,1.0,Burn care,0.3817541901356727,2,0,0,Unverified
+q15,5,c0a44dda-558e-48d1-8515-fe16233d904c,Nightingale Hospital,burn_care,yes,1.0,"Provides medical services, operation services, surgical services, burn treatment, and trauma treatment",0.459514426985119,1,0,0,Unverified
+q15,6,307d3a95-937a-4d6d-9a73-f2ae3bdbd36c,Dafodil Hospitals,burn_care,yes,1.0,Provides burns management and treatment,0.4213543799804823,2,0,0,Unverified
+q15,7,3e665814-3a52-41b4-a135-042fabc3c9ef,Lifeline Multispeciality Hospital,burn_care,yes,1.0,6-bed burn unit,0.32782446533256365,2,0,0,Unverified
+q15,8,d3d5d6b3-2f44-4dc9-b641-041b4c6d17ce,Vivekananda Hospital,burn_care,yes,1.0,"Emergency Department is equipped with 6 emergency beds, 6 day-care beds, 4 dedicated burn wards, and 56 ICCU beds",0.459514426985119,1,0,0,Unverified
+q15,9,b08cd135-b6a5-420f-b8ee-7c281bf133e4,Charnock Hospital,burn_care,yes,1.0,Burn unit,0.39023360576721683,2,0,0,Unverified
+q15,10,70537965-4b66-4821-931e-d893bb1cdfe3,Singhal Surgical Hospital,burn_care,yes,1.0,Offers Burns Management,0.3033100089317046,2,0,0,Unverified
+q16,1,28726757-41f1-43c5-9556-e3ce109a67b5,Dr. Sai MultiSpeciality Hospital Bargarh,dialysis,yes,1.0,Provides dialysis treatment,0.34128904037196284,2,0,0,Unverified
+q18,1,90bab675-3b99-4123-a205-e2923f37fff1,Bharati Hospital,nicu,yes,1.0,"Includes ICU, NICU, and PICU",0.4387036458983228,2,0,0,Unverified
+q18,2,8bba8616-673a-46c5-8744-33a679cc825d,Infinity Medisurge Centre-Multispeciality Hospital,nicu,yes,1.0,"ICU, ICCU and NICU units available",0.19606011808990872,2,0,0,Unlikely
+q19,1,d6a60d83-5524-4010-91a6-b618bd4cf673,Parijat Hospital,emergency_csection,yes,1.0,Lower segment cesarean section (LSCS) is available,0.42892262591736346,2,0,0,Unverified
+q19,2,463c0cb5-9ce8-4687-b6c8-520322bb394b,Mauli Multispeciality Hospital,emergency_csection,yes,1.0,Provides Cesarean Section (C-section),0.2991372357495001,2,0,0,Unverified
+q20,1,ba5ff135-5768-41a9-844e-d6fd7cd99ed2,"Shri Sant Acchyut Maharaj Heart Hospital, Mardi Road, Amravati 444601",cardiac_surgery,yes,1.0,[procedure] CABG (coronary artery bypass graft) surgery with 4 grafts,0.3940321385331443,3,0,0,Unverified
+q20,2,13964de0-54a7-4fc2-94b5-95454187017d,Orange City Hospital & Research Institute,cardiac_surgery,no,1.0,[capability] CGHS recognition for general and specialized treatment and diagnostic procedures (except cardiac surgery and interventional procedures),0.30748223448710166,4,0,0,Unverified
+q20,3,8a522979-8cd7-4b38-8048-6beddc7afc39,Dr. Panjabrao Deshmukh Memorial Medical College and Hospital,cardiac_surgery,yes,1.0,"[procedure] Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.3874662044975004,3,0,0,Unverified
+q20,4,177de524-ea48-4e98-83c2-02c31ae6da99,Deshmukh Eye Hospital,cardiac_surgery,yes,1.0,"Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.2333686287399511,3,0,1,Unverified
+q20,5,383c6613-ab06-4394-8a15-b1059dbfd4a0,Sunrise Global Superspeciality Hospital Nanded,cardiac_surgery,yes,1.0,Offers cardio-thoracic surgery procedures,0.3842814064109246,2,0,0,Unverified
+q20,6,87847e32-1329-463f-8fd8-3c51b179af94,Viveka Hospitals,cardiac_surgery,yes,1.0,Cardiac surgical procedures performed in Cardiac Surgery OT,0.475927415089469,2,1,0,Unverified
+q20,7,ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c,"All India Institute of Medical Sciences (AIIMS), Nagpur, Maharshtra",cardiac_surgery,yes,1.0,Cardiothoracic and Vascular Surgery,0.3177648947126766,1,0,0,Unverified
+q20,8,bc2521f2-ca08-44eb-89a4-551a16a3eb14,Padale Hospital,cardiac_surgery,yes,0.9,Cardiac surgeon doctor service,0.284709392629566,2,0,0,Unverified
+q20,9,51179ca4-f342-4014-92d7-c2d2ef1adbb1,Srinivasa Nursing Home,cardiac_surgery,yes,1.0,"Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.1728757876230582,4,0,0,Unlikely
+q21,1,8b89a5c7-7c12-449c-b616-5348e0e74a1a,Gugale Memorial Hospital,mri,yes,1.0,"Provides Diagnostic Services including MRI, CT, ultrasound, and laboratory tests.",0.3330216071337617,2,0,0,Unverified
+q21,2,6c4a75be-44f2-4747-9aca-631feb5aa9d1,Jagdale Mama Hospital,mri,yes,1.0,MRI facility,0.34935994980247614,2,0,0,Unverified
+q21,3,f1ebdde7-6ede-45bc-85c0-8adb7128f26a,"Lifeline Superspeciality Hospital, Pandharpur",mri,yes,1.0,Offers comprehensive diagnostic facilities including MRI and CT in the same setup,0.45148929220258405,5,0,0,Unverified
+q21,4,3bf5f2f1-16e0-4562-8976-f36f347759f8,United Hospital,mri,yes,1.0,Provides Magnetic Resonance Imaging (MRI) services,0.44685623469480196,5,0,0,Unverified
+q21,5,bc2521f2-ca08-44eb-89a4-551a16a3eb14,Padale Hospital,mri,yes,1.0,[equipment] MRI system offering 3D MRI,0.3363400832066831,4,0,0,Unverified
+q21,6,5ab66909-41a2-4699-969c-3cbe8b127a6b,"Parbhani Icu And Trauma Care, New Mondha",mri,yes,1.0,[capability] MRI,0.26624388265766846,2,0,0,Unverified
+q21,7,ff9a75d2-54fb-4673-be01-e3e7f8af08c5,"District Hospital, Satara",mri,yes,1.0,MRI scanning at District Hospital Satara is provided under NHM PPP; service provider is M/S Unique Wellness Pvt. Ltd; Satara is one of the five facilities in this provider's MRI program; Work Order Date is 27.09.2022 and MoU date is 24.11.2023; MRI service is 24x7 and free for government patients; radiologists from the service provider report the images and make reports available to the hospital and patient.,0.344014469394454,5,0,0,Unverified
+q21,8,3a2e3846-0571-4784-ab9a-33f15b163a8b,"Omshree hospital and Research centre,Vita,Sangli",mri,yes,1.0,[equipment] MRI machine,0.2209450531912004,2,0,0,Unverified
+q22,1,d5e69311-c95f-476f-98cc-92e20b668260,Ekveera Hospital,burn_care,yes,1.0,Burn unit,0.3156594172816492,2,0,0,Unverified
+q22,2,98d3ab22-db5b-4913-90b7-7c2147a1cba7,Yadav Super Speciality Hospital,burn_care,yes,0.9,"Offers emergency care for hand injuries, trauma and burns",0.2648860377485335,4,0,0,Unverified
+q22,3,5ab66909-41a2-4699-969c-3cbe8b127a6b,"Parbhani Icu And Trauma Care, New Mondha",burn_care,yes,0.8,"Trauma care for traumatic injuries including accidents, falls, and burns",0.2617946381451939,2,0,0,Unverified
+q22,4,a2865ee0-10ce-4b35-8a45-43600d9de794,Onkar Hospital,burn_care,yes,1.0,Burns (excluding cosmetic surgery),0.1815944297165575,1,0,0,Unlikely
+q23,1,f52051e0-fbd4-4b16-bdf3-c1eb5ee67902,Maa Ganga Memorial Baheti Hospital,trauma_emergency,yes,1.0,24/7 emergency care,0.3017401426580609,2,0,0,Unverified
+q23,2,177de524-ea48-4e98-83c2-02c31ae6da99,Deshmukh Eye Hospital,trauma_emergency,yes,0.8,"Dr. Ganesh Deshmukh specializes in Orthopedics, Traumatology, Spine and Pain Management.",0.26661941852365145,2,0,1,Unverified
+q23,3,6720cccc-3f42-4bf6-9bc7-33a16492741c,"District Hospital, Nashik",trauma_emergency,yes,0.8,Offers emergency care for heart attacks and strokes,0.5509087470638319,2,0,0,Unverified
+q23,4,fa445a1d-ff1a-40b5-95b4-7351e0cb7852,"Dr DY Patil Medical College and Hospital, Pune, India",trauma_emergency,yes,1.0,Provides 24/7 emergency services,0.5704782539732535,5,0,0,Unverified
+q24,1,fc8fe2c3-9244-4ff6-96c5-885d7d1843d6,"Dr M. L. Dhawale Memorial Trust Hospital, Palghar",dialysis,yes,1.0,Palghar Rotary Dialysis Centre operates at the hospital site,0.5493916865228936,5,0,0,Unverified
+q24,2,851a4aba-ea01-4016-8f8f-f972ca4d448d,Radiant Hospital,dialysis,yes,1.0,Provides dialysis treatment,0.4880788428435367,5,0,0,Unverified
+q24,3,2bc5af49-5cbb-4cf9-9009-1b5d861ac02e,Cardinal Gracious Memorial Hospital,dialysis,yes,1.0,Offers haemodialysis and peritoneal dialysis,0.4216454634012719,4,0,0,Unverified
+q24,4,1247b299-f57a-469b-b665-6368e379e244,Hfrc Dialysis Center,dialysis,yes,1.0,Provides dialysis treatment,0.18777475950523528,4,1,0,Unlikely
+q24,5,7fc32b36-4186-4658-a3b4-3a01844bfed0,Shree Ganesha Hospital,dialysis,yes,1.0,Dialysis treatment is offered at the hospital's Dialysis Unit,0.5724083692313753,5,0,0,Unverified
+q24,6,af99e7c6-44b0-44db-88b4-d78424f0651d,Doctor A Kapoor's Diabetes Control Clinic at Lifeline Medicare Hospital,dialysis,yes,1.0,Provides round-the-clock hemodialysis services at Lifelline Medicare Hospitals (Dialysis Unit) – Triveni Nagar,0.4498139473239044,5,0,0,Unverified
+q24,7,a5046d17-b6de-41ad-a6b9-ffab3d4a8b09,Platinum Hospital Mulund,dialysis,yes,1.0,Offers dialysis services,0.5568007513533441,5,0,0,Unverified
+q24,8,dbccaebe-1780-43de-8a84-85413ebc99b8,"Highway Hospital Suoer Specialty Centre, Thane",dialysis,yes,1.0,Dialysis Centre,0.5897677132333063,5,0,0,Unverified
+q24,9,02b010de-143d-4e1b-9d67-cb11877c4855,Karuna Hospital,dialysis,yes,1.0,Provides dialysis treatment through an on-site Dialysis Unit inaugurated on 15 October 2000.,0.5946221121416022,5,0,0,Unverified
+q24,10,986cbcdf-65b1-4ac4-a73b-c8a8d738593a,Apex Hospitals Mulund,dialysis,yes,1.0,"Has diagnostics, intensive care unit, operation theatres, dialysis centre and cath lab",0.4981968595785477,2,0,0,Unverified
+q25,1,8146f2e6-3f68-42e5-a54b-d8281aa05081,"Sparsh Hospital - Plot No 141, Sai Arcade, Mission Compound, Line Ali, Opposite Orion Mall, Panvel, Navi Mumbai, Maharashtra 410206",trauma_emergency,yes,1.0,24x7 emergency care,0.6091704258653726,5,0,0,Unverified
+q25,2,fe64c718-2b54-4740-b78a-fa0f1911389d,Mhatre Accident Hospital,trauma_emergency,yes,1.0,Mhatre Accident Hospital provides 24/7 accident and emergency care and orthopedic services in Panvel.,0.5514022500809629,5,0,0,Unverified
+q25,3,9eee74ce-03e5-4cd8-a5a2-172d9464c785,Panacea Hospital,trauma_emergency,yes,1.0,Provides 24/7 emergency services,0.4533283676897172,4,0,0,Unverified
+q25,4,228169c3-4ef3-478f-bd2f-5ff999af2ea7,Kharghar Multispeciality Hospital,trauma_emergency,yes,1.0,Emergency department open 24/7,0.635474858327191,5,0,0,Unverified
+q25,5,ccb0004a-70c8-4f28-b667-d2d4f73970d1,Panvel Hospital,trauma_emergency,yes,1.0,24x7 Emergency care and casualty services.,0.6177077267219396,5,0,0,Unverified
+q25,6,d09f9d0c-aac7-4425-bcbd-602da617a479,Sunrise Multispeciality Hospital,trauma_emergency,yes,0.9,"Sunrise Multispeciality Hospital, Kamothe, provides pediatric care, general medicine, gynecology, and general surgery, with 24x7 emergency/admission services.",0.3151125607490295,2,0,0,Unverified
+q25,7,3141a21e-ce41-4080-8915-3a8af6b8e610,Nikam Parmar Hospital,trauma_emergency,yes,0.9,Intensive Trauma Unit on-site,0.46763264277687683,3,0,0,Unverified
+q25,8,0655e834-cee2-430c-bd36-559d5e33dfe2,"Dr Rohit Nalavade's Clinic - Shop No 4, Umashakti Building, opposite Samarth gym, near Dayanand Anglo Vedic School, Sector-9, New Panvel East, Navi Mumbai, Maharashtra 410206",trauma_emergency,yes,0.9,Emergency medical treatment available round the clock,0.25726729129006926,3,0,0,Unverified
+q25,9,af39dce3-c102-4c20-8158-40a3de0bfc55,Shelar Hospital And Icu,trauma_emergency,yes,1.0,24/7 emergency care,0.4056531437675166,3,0,0,Unverified
+q25,10,7b4b465b-4e30-48ca-abba-b1db245e3967,Criticare Lifeline Hospital,trauma_emergency,yes,1.0,"NABH-certified hospital in Panvel offering 24x7 emergency care and a range of medical and surgical services, including trauma care, nephrology, general and laparoscopic surgery, pediatrics, radiology, gynaecology and obstetrics, ENT, neurology and neuro-surgery, oncology, cardiology, gastroenterology, and endocrinology.",0.45265540857590375,2,0,0,Unverified
+q26,1,9aee17a7-9e57-4b5e-9804-97c0c2177c2f,ANS Super Speciality Hospital,trauma_emergency,yes,1.0,24-hour neuro emergency care for brain and spine trauma,0.5738949173715813,5,0,0,Unverified
+q26,2,aadb1574-11e7-4b5e-9457-878b533f9a3f,The Smile Surgeon Face Surgery and Dental Clinic,trauma_emergency,yes,1.0,Provides Emergency Care,0.18846180843257154,4,0,1,Unlikely
+q26,3,8705e450-49f5-4e48-bdb1-906e49a6e655,"Park Hospital, Faridabad",trauma_emergency,yes,1.0,Operates 24/7 emergency services,0.5939527977532391,5,0,0,Unverified
+q26,4,2ffa0638-ea61-4e7c-98f3-4d7b24f8d0bd,Apex Hospital,trauma_emergency,yes,1.0,Offers 24/7 emergency care,0.42054972682219544,3,0,0,Unverified
+q26,5,8bd5ac95-b99f-4c0b-8e43-c27fc61adec7,NIMS Hospital,trauma_emergency,yes,1.0,Provides 24/7 emergency care,0.3240102365290059,4,0,0,Unverified
+q26,6,befcb04b-473b-4be0-9292-1fe3cfffc415,Sahdeo Hospital,trauma_emergency,yes,1.0,Has 36+ emergency services,0.4056531437675166,3,0,0,Unverified
+q26,7,050479fe-82a8-404b-a41b-a61d15eb9577,Jindal Hospital & Cancer Centre,trauma_emergency,yes,0.9,24/7 EMERGENCY,0.34216175969674106,3,0,0,Unverified
+q26,8,3ef5c9f7-36f1-4af2-9486-88f351d4c188,"Asian Hospital, Faridabad",trauma_emergency,yes,1.0,24x7 Emergency,0.33433663780567846,3,1,0,Unverified
+q26,9,9790323a-5717-4137-abe6-e679f7980e50,Amrita Hospitals,trauma_emergency,yes,0.9,Emergency endoscopy is available 24/7 as an in-hospital specialty service.,0.5045667179813224,3,0,0,Unverified
+q26,10,6d18e43e-2ac7-4dc6-bbac-b8645e41b221,Fortis Escorts Hospital,trauma_emergency,yes,1.0,24/7 emergency services,0.5190059927303468,3,0,0,Unverified
+q27,1,8dc34944-6693-4615-b6d7-0968c332c852,Shri Ram Singh MultiSpeciality Hospital,burn_care,yes,1.0,"Specialities including ENT, Urology, Orthopedics & Joint Replacement, General & Laparoscopic Surgery, Internal Medicine, Burn & Plastic Surgery, Nephrology, Gastroenterology, Paediatrics, Vascular Surgery, Ophthalmology, Physiotherapy, Psychiatry, Psychology, Non Invasive Cardiology, Pulmonology, Dermatology, Gynaecology, Neurology, Neuro Surgery, Dentistry, Radiology, Oncology Surgery",0.3604456596148289,2,0,0,Unverified
+q27,2,78b1a621-4c44-4b8f-8cf1-416cd87c73c8,Neuro Spine & Super Speciality Hospital,burn_care,yes,1.0,"A 30 Bedded-Surgical Super Speciality Hospital with 2 Operation Theatres, Surgical Intensive Care Unit & a dedicated Burn Unit.",0.25722674445796434,5,0,0,Unverified
+q27,3,e6a597e7-7a41-47c0-ac0b-877daf3e7fce,Vinayak Hospital,burn_care,yes,1.0,"Burns & Trauma care, Plastic and Reconstructive Surgery (Plastic Nonconstructive), Cosmetic Surgery, and Cosmetic Laser treatment",0.3100961325559888,4,0,0,Unverified
+q27,4,b386c34b-b2b2-4ef7-a9bd-c45a3e4c0bcb,Alshifa Multispeciality Hospital,burn_care,yes,1.0,"Specialties include General Medicine, General & Laparoscopic Surgery, Orthopaedics, Gynae & Obstetrics, Infertility, Paediatric, Neonatology, Pulmonology, Cardiology, Dermatology, Urology, Nephrology, Neurology, Neurosurgery, Plastic Surgery & Burns, Psychiatry, ENT, Ophthalmology, Diabetes & Thyroid, Dental, Gastroenterology, Gastro Surgery",0.3992386654198213,1,0,0,Unverified
+q27,5,050479fe-82a8-404b-a41b-a61d15eb9577,Jindal Hospital & Cancer Centre,burn_care,yes,1.0,Dedicated Burn Unit,0.1871090085201526,2,0,0,Unlikely
+q27,6,8bd5ac95-b99f-4c0b-8e43-c27fc61adec7,NIMS Hospital,burn_care,yes,1.0,Specializes in Burns Management,0.24633172520070643,2,0,0,Unverified
+q27,7,0f99a172-6e05-4ae3-9ed9-98675dc5603b,"SKS Hospital Medical College & Research Centre, Mathura",burn_care,yes,1.0,Has Burn Unit,0.25055369455567217,3,0,0,Unverified
+q27,8,c966e93e-10fd-4c27-9ac6-6ae5e2da5fc2,Ektaa Hospitals,burn_care,yes,0.9,Performs burn repair surgery,0.2762070066463633,2,0,0,Unverified
+q27,9,e5957c7b-b547-4f6f-8a4b-a1d17b39a3dd,"Dr. Haror’s Wellness - Gurugram, Haryana",burn_care,yes,0.8,Offers burn hair transplant,0.200953594668901,2,0,0,Unverified
+q27,10,0cf03fec-f7a4-48c3-a3de-71ca4a054def,Civil Hospital,burn_care,yes,1.0,Has a burn unit that provides specialized care,0.28501968832524543,2,0,0,Unverified
+q28,1,16d9d5a6-ee35-4281-8a95-b280c1829886,Naraina Medical College & Research Centre,trauma_emergency,yes,1.0,24/7 emergency care,0.6248163692825455,5,0,0,Unverified
+q28,2,59b6c976-2d44-4705-bcff-a83605983487,"RAM HOSPITAL & RESEARCH CENTRE, KANPUR",trauma_emergency,yes,0.9,Rama Hospital Kanpur provides 24x7 emergency multispeciality care.,0.46831592408371153,3,1,0,Unverified
+q28,3,204b83bc-f4f5-4f8c-811c-1a7d755f3158,"New Lakhanpur Hospital And Trauma Center, Lakhanpur",trauma_emergency,yes,1.0,Provides 24/7 emergency care,0.3970810709364205,3,0,0,Unverified
+q28,4,60ffa20a-2ed1-4f73-b830-bb2c8889558b,Cawnpore Med Hospital,trauma_emergency,yes,1.0,Provides 24x7 emergency and trauma care,0.3169655789614813,4,0,0,Unverified
+q28,5,31625db4-d5c4-4448-b21d-008d8c444a82,Nirmala Nursing Home,trauma_emergency,yes,1.0,Provides 24/7 emergency care,0.27131884747404944,2,0,0,Unverified
+q28,6,7278f60e-9fb1-4dc9-aafe-7b22f9c7acb1,"Gahlaut Health Care (GHC), Kanpur",trauma_emergency,yes,1.0,24/7 emergency care,0.3658446741064346,2,0,0,Unverified
+q28,7,f81f97a0-9f91-4682-a285-47ba49df0daa,Lifetron Hospital,trauma_emergency,yes,1.0,Offers Emergency & Trauma Care 24/7,0.5164077046594588,4,0,0,Unverified
+q28,8,547f6f09-3974-4a2f-b458-c9a4b664518f,Katiyar Nursing Home,trauma_emergency,yes,0.9,Has 42+ emergency services,0.3151125607490295,2,0,0,Unverified
+q28,9,7e48608f-183e-4af3-9c0e-60eb1f8c21e4,Gomati Hospital,trauma_emergency,yes,0.9,Provides 38+ emergency services,0.42054972682219544,2,0,0,Unverified
+q28,10,aebb8d07-b055-4b25-b3db-c36ff1a3a09d,Mariumpur Hospital,trauma_emergency,yes,1.0,24x7 emergency services at Mariampur Hospital,0.4808884705718961,3,0,0,Unverified
+q29,1,9dcac40a-eecb-49b3-b528-c602b9359eff,G. S. Memorial Plastic Surgery Hospital And Trauma Center,trauma_emergency,yes,1.0,Provides 24/7 emergency care,0.635474858327191,5,0,0,Unverified
+q29,2,7e420f3f-0cc7-4b8e-811d-7cb54fe1505b,Sharda Hospital,trauma_emergency,yes,1.0,24/7 emergency care,0.4929648773017333,4,0,0,Unverified
+q29,3,4daa109c-182c-4be4-9780-74f78117e176,Ford Hospital,trauma_emergency,yes,1.0,Emergency department provides 24/7 trauma/emergency care with access to modern operation theatres and a 24-hour pharmacy and imaging/diagnostic tools,0.5235361931238218,3,0,0,Unverified
+q29,4,2938dee6-a69f-49e6-b6fb-9b3585da183f,Peace Point Hospital,trauma_emergency,yes,1.0,Emergency care available 24/7,0.4269165524017752,3,0,0,Unverified
+q29,5,2ada7987-6b3a-4041-87b6-cc7e2b4818cb,Chakraverty Clinic,trauma_emergency,yes,1.0,24/7 emergency care,0.2419517835299087,3,0,0,Unverified
+q29,6,0d1a002a-e3ab-4a3e-b9e7-a1522e6c935d,Maxwell Super Multispeciality Hospital,trauma_emergency,yes,1.0,Provides emergency trauma care,0.4653177132850443,3,0,0,Unverified
+q29,7,d1d36e9e-96f9-44ba-a7e4-9fe9ee15040f,Sudha Surgical Hospital,trauma_emergency,yes,1.0,Emergency services available 24/7,0.5115194023282087,3,0,0,Unverified
+q29,8,43a2c82a-0a65-4961-8ce5-8fa59bbae62d,Meghna Multispeciality Hospital,trauma_emergency,yes,1.0,"The hospital operates OPD hours from 11:00AM to 3:00PM and 7:00PM to 8:00PM, with emergency services available 24x7.",0.3776888177162223,4,0,0,Unverified
+q29,9,75a1818b-3879-4c34-a22e-dc0dd17846dc,Agrim Hospitals,trauma_emergency,yes,1.0,24/7 emergency care,0.37527373701377925,3,0,0,Unverified
+q29,10,2e40d1f2-921a-40ed-947c-05628077f691,Omega Plus Hospital,trauma_emergency,yes,1.0,24/7 emergency care,0.40928381155233684,4,0,0,Unverified
+q30,1,5515df89-1c57-41a4-bb40-a2bc8d936dac,Mehra Hospital,mri,yes,1.0,In-house diagnostic imaging capabilities with MRI and CT,0.3846333558589901,5,0,0,Unverified
+q30,2,579c48bf-bb5a-47ea-94a4-56a9aae00adc,Krushna Hospital,mri,yes,1.0,[equipment] 3 Tesla MRI scanner,0.4159929241233213,5,0,0,Unverified
+q30,3,a3ff3833-3479-4957-b231-0ef6dc3c427f,Mahalakshmi Mri & Diagnostics,mri,yes,1.0,Provides MRI scan services.,0.27909110194421294,5,0,0,Unverified
+q30,4,90bab675-3b99-4123-a205-e2923f37fff1,Bharati Hospital,mri,yes,1.0,Offers MRI imaging,0.44929802170624666,5,0,0,Unverified
+q30,5,7b1fb0bb-f849-43a3-88c8-71ff3adeb167,Prudence Hospital,mri,yes,1.0,Offers Magnetic Resonance Imaging,0.464544636357937,5,0,0,Unverified
+q30,6,e22f6de9-371b-404c-b9b1-ece9c854f97e,Acharaya Vinoba Bhave Rural Hospital,mri,yes,1.0,Offers Magnetic Resonance Imaging (MRI) services,0.2805640607197874,4,0,0,Unverified
+q30,7,4616c935-ae1b-4d40-ae5a-3d6c31a90206,Government Medical College And Hospital Chandrapur,mri,yes,1.0,MRI scanner available across units,0.34534574386185213,2,0,0,Unverified
+q30,8,383c6613-ab06-4394-8a15-b1059dbfd4a0,Sunrise Global Superspeciality Hospital Nanded,mri,yes,1.0,On-site MRI scanner,0.45148929220258405,5,0,0,Unverified
+q30,9,5afdab41-c9d9-4dd1-b4bf-874357f4b7b4,Sai Baba Nursing Home,mri,yes,1.0,MRI is offered as a diagnostic imaging procedure.,0.2566785155426472,5,0,0,Unverified
+q30,10,94cfa2e6-28a9-4597-ac9b-8769b0743955,Medicover Hospitals,mri,yes,1.0,MRI and CT imaging facilities,0.3956956371057293,3,0,0,Unverified
+q31,1,3ad8df40-a285-413a-a75e-6839188f5110,Vivekanand Hospital,trauma_emergency,yes,1.0,Provides 24/7 emergency care,0.6171468694656715,5,0,0,Unverified
+q31,2,4afa8b92-64c8-4921-a3a8-6c8a81e6c786,Runwal Accident and Maternity Hospital,trauma_emergency,yes,0.9,Provides trauma care and treatment for fractures,0.40077319786733084,4,0,0,Unverified
+q31,3,64808c12-b9ed-4e98-bf22-0e5c984d5cde,Jalna Mission Hospital,trauma_emergency,yes,0.8,Has 2+ emergency services,0.31827684856093436,2,0,0,Unverified
+q31,4,13e882f3-0534-4fff-b524-016a3babe907,Mantri Surgical & Maternity Hospital,trauma_emergency,yes,0.8,Provides 2+ emergency services,0.3658446741064346,2,0,0,Unverified
+q31,5,2cb66ffa-8f3b-40be-9242-9431a9a96a5d,CARE Hospitals - Nagpur,trauma_emergency,yes,1.0,Offers emergency department services,0.5939527977532391,5,0,0,Unverified
+q32,1,22f6c258-b765-4864-9f48-d5e365a5a0be,"Tata Main Hospital, Jamshedpur, Jharkhand, India",burn_care,yes,1.0,Operates 13 modular operation theatres including a dedicated Burns Care Theatre,0.5095212066251565,5,0,0,Unverified
+q32,2,3f6542b5-2ab1-4602-aa55-45ac9fa77975,Ashwini Hospital,burn_care,yes,1.0,"Specialties include Internal Medicine, General Surgery, Cardiology, Interventional Cardiology, Neurology & Neurosurgery, Partial / Complete Limb Prosthesis, Burns Unit, Dialysis Unit, Critical Care Unit- ICU, Modular Operation Theatres, Diagnostic Services, CATH LAB, MRI, CT Scan, Pulmonology, Orthopaedics, Plastic Surgery, and COVID and post COVID",0.3197023490692224,2,0,0,Unverified
+q32,3,8d8ddf59-32df-4d13-a39e-158c2a0787e9,Lords Health Care Nursing Home,burn_care,yes,1.0,Has a Specialist Burn Unit,0.436908104555361,2,0,0,Unverified
+q32,4,b471650e-b768-4a05-a10c-36742e6b7753,M.R. Bangur Hospital,burn_care,yes,1.0,Burn care,0.3817541901356727,2,0,0,Unverified
+q32,5,c0a44dda-558e-48d1-8515-fe16233d904c,Nightingale Hospital,burn_care,yes,1.0,"Provides medical services, operation services, surgical services, burn treatment, and trauma treatment",0.459514426985119,1,0,0,Unverified
+q32,6,307d3a95-937a-4d6d-9a73-f2ae3bdbd36c,Dafodil Hospitals,burn_care,yes,1.0,Provides burns management and treatment,0.4213543799804823,2,0,0,Unverified
+q32,7,b08cd135-b6a5-420f-b8ee-7c281bf133e4,Charnock Hospital,burn_care,yes,1.0,Burn unit,0.39023360576721683,2,0,0,Unverified
+q32,8,a122e838-90c4-4be0-a4cc-0b66e0ea62a0,Desun Hospital,burn_care,yes,1.0,Burn treatments are provided through the Desun Burn Unit,0.4905367327083474,5,0,0,Unverified
+q33,1,3973f354-7588-4375-a5c1-f85957185077,CKS Hospital,cardiac_surgery,yes,1.0,CKS Hospital offers Cardiology & Cardiac Surgery,0.48750921934576574,4,0,0,Unverified
+q33,2,1272bf33-a367-494c-a0b2-86a8ab3ca90c,Indus Jaipur Hospital,cardiac_surgery,yes,1.0,Provides comprehensive cardiology and cardiac surgery services under one roof,0.4164570550242965,4,0,0,Unverified
+q33,3,c10530e9-d3f9-4fb4-a614-f23fb18006f3,SRK Superspeciality Hospital,cardiac_surgery,yes,1.0,"Departments include Urology, Ophthalmology, Obs & Gynaecology, Cardiac Surgery, Physiotherapy, Oncology, General Surgery, General Medicine, Orthopaedic, Cardiology, Neurology",0.459438016018918,1,0,0,Unverified
+q33,4,2a4f2404-c9c3-4878-bd3a-a344d83fc3f3,Bani Park Hospital,cardiac_surgery,yes,1.0,Cardiac care capabilities including CABG and ECMO,0.4415517407119617,4,0,0,Unverified
+q33,5,ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa,Soni Hospital,cardiac_surgery,yes,1.0,Cardiology and Cardio-thoracic Surgery departments are established at Soni Hospital.,0.574615101588388,5,0,0,Unverified
+q33,6,06059452-3900-4185-bb2d-8633f006679b,Amritam Heart Care Hospital,cardiac_surgery,yes,1.0,Heart Bypass Surgery,0.3054610348370235,3,0,0,Unverified
+q33,7,7c385d20-6a63-417b-a336-154bd22a60e7,Jaipur Hospital,cardiac_surgery,yes,1.0,[procedure] Offers Cardiothoracic and Vascular Surgery,0.26534988587507163,2,0,0,Unverified
+q33,8,72535fdd-808a-4092-937d-4d613709aa5d,Chirayu Hospital,cardiac_surgery,yes,0.9,"Specialties: anesthesia, cardiacsurgery, cardiology, colorectalsurgery, criticalcaremedicine, dentistry, dermatology, emergencymedicine, endodontics, gastroenterology, generalsurgery, gynecologyandobstetrics, internalmedicine, jointreconstructionsurgery, neonatologyperinatalmedicine, nephrology, neurosurgery, ophthalmology, oralandmaxillofacialsurgery, orthopedicsurgery, otolaryngology, pathology, pediatrics, plasticsurgery, radiology, renaltransplantationurology, shoulderandelboworthopedicsurgery, surgicaloncology, transfusionmedicine, urology",0.3745803820242063,2,0,0,Unverified
+q33,9,70a14dce-5b73-4a4e-a15d-c94fbc02e3b6,Rajputana Hospital and Research Centre,cardiac_surgery,yes,1.0,"Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.35544571458667124,3,0,0,Unverified
+q33,10,9f0ecb78-c95f-4992-a22a-c0940c0c2e67,Pratap Narayan Memorial Hospital,cardiac_surgery,yes,1.0,"[procedure] Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.29802013334551347,3,0,0,Unverified
+q34,1,a45cac41-6d27-41ab-878b-7dfb89ec8f33,Charak Hospital And Research Centre,mri,yes,1.0,In-house MRI and CT imaging facilities,0.40959510971936747,3,0,0,Unverified
+q34,2,b39153f3-664a-45c4-9862-4dec3e19fab3,"Shyam Nidan Clinic And Shyam Diagnostics - HS-1/45, Sector A, Jankipuram Sitapur Road Yojna, Lucknow-226021, Uttar Pradesh, India",mri,yes,1.0,Offers imaging services including Magnetic Resonance Imaging and Cardiac MRI and Cardiac CT,0.2353119298835029,4,0,0,Unverified
+q34,3,04309af6-5084-4273-ba40-df461eb616fd,Medox Hospital,mri,yes,1.0,[equipment] MRI scanner,0.4887682072618475,5,0,0,Unverified
+q34,4,d4066f5a-ad1f-48b9-92cf-6b32431939a8,Dr Ram Manohar Lohia Institute of Medical Sciences,mri,yes,1.0,MRI scanner on site,0.38544758654960903,3,0,0,Unverified
+q34,5,225a4f43-4762-4226-8b83-ea6dc828ab30,"Charak Diagnostic Centre, Aliganj",mri,yes,1.0,Provides MRI imaging services,0.2182862830219508,4,0,0,Unverified
+q34,6,1535ad36-ae51-4bd0-b15a-56d35cf17ebb,Pooja Nursing Home,mri,yes,1.0,[equipment] MRI,0.3260473388182054,3,0,0,Unverified
+q34,7,a2a3c136-126f-4fc8-a71d-ccbe09e801af,City Hospital,mri,yes,1.0,MRI scan is offered at City Hospital,0.3589362969848895,5,0,0,Unverified
+q34,8,b5a57699-76c4-4ba4-9936-713c233e752a,"King George's Medical University, Lucknow",mri,yes,1.0,[equipment] MRI scanner,0.3570190692149044,2,0,0,Unverified
+q34,9,2b5d4240-8105-4e60-adb7-01f8cee3a622,Charak Hospital,mri,yes,1.0,[equipment] MRI,0.4139922794052469,2,0,0,Unverified
+q34,10,4e3a5fb5-df76-4d34-81bd-b3448a372f48,Sahara Hospital,mri,yes,1.0,3.0 Tesla MRI,0.3956956371057293,2,0,0,Unverified
+q35,1,96605aef-2fe1-4da6-a81f-c38537a08713,Patna Dialysis Centre,dialysis,yes,1.0,"Patna Dialysis Centre is the first standalone dialysis centre in Bihar dedicated to dialysis, especially maintenance dialysis, offering 24x7 dialysis under the supervision of a nephrologist in a modern, air-conditioned facility.",0.3026013368186759,5,0,0,Unverified
+q35,2,e27fe48f-5ca8-4fae-a5bf-d70058262e21,Big Apollo Spectra Hospitals,dialysis,yes,1.0,Provides hemodialysis treatment in a state-of-the-art dialysis wing with ultra-pure water,0.5768456803318115,5,0,0,Unverified
+q35,3,a8f21439-6a36-4a87-b67f-71ed343e05f3,City Dialysis Centre,dialysis,yes,1.0,Provides hemodialysis services,0.2937824303053314,5,0,0,Unverified
+q35,4,4d16d14e-4d46-4c4e-bafe-073223853d6c,Medico India Hospital & Reaserch Center (A Cancer Institute),dialysis,yes,1.0,Provides nephrology services including haemodialysis and peritoneal dialysis,0.37486030397730463,5,0,0,Unverified
+q35,5,cfe04a36-27d3-42ad-9b9a-381e5b931ade,Advanced Neuro Hospital,dialysis,yes,1.0,Hemodialysis is provided,0.44762789649405593,4,0,0,Unverified
+q35,6,7cb5af39-4217-4c49-ba4b-1c47286c2136,Shahi Hospital,dialysis,yes,1.0,Offers 24x7 dialysis services,0.4165782518529996,5,0,0,Unverified
+q35,7,2058385c-4d0f-462f-8b1d-94f0f59c087c,Nectar Hospital,dialysis,yes,1.0,Performs dialysis treatment,0.47494876095351557,5,0,0,Unverified
+q35,8,30ed41d1-ce7e-4936-9569-cb59d2990443,Patna Medical College & Hospital,dialysis,yes,1.0,[procedure] Provides hemodialysis,0.37986630173356506,3,0,0,Unverified
+q35,9,a52cd60a-a5c0-427e-bfbc-e9c63dc9410a,Satyavrat Hospital,dialysis,yes,1.0,Hemodialysis is performed in the Hemodialysis Unit,0.6477915875114203,5,0,0,Unverified
+q35,10,d2726883-b75f-4292-93ad-7b88fc74e311,Indira Gandhi Institute of Medical Sciences,dialysis,yes,1.0,Dialysis is provided at the IGIMS Dialysis Unit,0.5656446437789863,5,0,0,Unverified
+q36,1,b2db2916-a5db-42ab-87f4-5f9581695f4e,Nemcare Hospital,nicu,yes,1.0,"Medical ICU, Surgical ICU, HDU, and NICU facilities",0.35520095831858767,3,0,0,Unverified
+q36,2,f75d5250-6df0-46f5-8548-aa5705be2725,Marwari Hospitals,nicu,yes,1.0,"NICU Level II with conventional ventilator, CPAP machines, multichannel monitor, oxygen concentrator, central oxygen pipeline and phototherapy unit",0.5178017146698776,2,0,0,Unverified
+q36,3,8b37f553-7fa1-4848-aefc-40b56b779c81,Dispur Polyclinic & Hospitals,nicu,yes,1.0,Neonatal Intensive Care Unit (NICU) with all equipment,0.5416668961635728,5,0,0,Unverified
+q36,4,ac47f0a9-2b0b-4313-8030-9d0cae543284,Guwahati Metro Hospital Khanapara – Hospital in Guwahati,nicu,yes,1.0,Has neonatal ICU facilities,0.29891510548477823,3,0,0,Unverified
+q36,5,bd77bf7d-4822-4932-81bf-7489f5d510e9,"Apollo Hospital, Guwahati, India",nicu,yes,0.9,"Neonatal intensive care unit (NICU) at Apollo Excel Care Hospital, Guwahati",0.5870899457397,5,0,0,Unverified
+q36,6,17c02c25-710e-4e30-a313-82df5b9d3572,Pratiksha Hospitals,nicu,yes,1.0,"Center of Excellence includes Orthopedics & Sports Medicine, Robotic Surgery, ENT & Cochlear Implant, General Surgery, Paediatric Orthopaedics, Internal Medicine, Rheumatology, Diabetology, Endocrinology, Pain Clinic, Neurology, Neuro Surgery, Urology, PICU & NICU, Critical Care ICCU, Oncology, Nephrology.",0.4213045921994948,1,0,0,Unverified
+q36,7,56b65434-6815-4228-84cc-41034fc1d138,E.G. Nursing Home,nicu,yes,1.0,5-bed well-equipped NICU,0.4619168594558594,2,0,0,Unverified
+q37,1,b2db2916-a5db-42ab-87f4-5f9581695f4e,Nemcare Hospital,burn_care,yes,1.0,Tertiary level Burns Unit,0.2989579017498031,3,0,0,Unverified
+q37,2,e93a7ae0-8d8f-49d1-9536-e2a2c0759a10,Nemcare SuperSpeciality Hospital,burn_care,yes,1.0,Operates 5 operation theatres including a dedicated burn OT,0.3745069093403273,3,0,0,Unverified
+q38,1,66812208-efc9-4703-a55e-eab19c58a3b5,All India Institute of Medical Sciences,cardiac_surgery,yes,1.0,[procedure] Beating-heart coronary artery bypass grafting (CABG) surgeries,0.5123124798038114,5,0,0,Unverified
+q38,2,268245b0-e431-4655-8042-bb45df37479e,IGKC Multispecialty Hospital,cardiac_surgery,yes,1.0,[procedure] Minimal access cardiac bypass surgery,0.36275408181518104,2,0,0,Unverified
+q38,3,30494fe0-d130-4168-84a5-02b78a773940,Kalinga Hospital,cardiac_surgery,yes,1.0,Has cardiology and cardiac surgery department,0.3526953727533479,2,0,0,Unverified
+q38,4,18825020-18e2-4aea-be88-ff91bf64d3c0,Utkal Hospital,cardiac_surgery,yes,0.9,Cardiac Sciences center offers Cardiology and Cardiothoracic & Vascular Surgery (CTVS),0.34410380096064763,2,0,0,Unverified
+q38,5,b21455f1-ba4a-4d99-a632-96c72d097bf6,"Hi-Tech Medical College & Hospital, Bhubaneswar",cardiac_surgery,yes,1.0,Offers cardiac surgery as part of the Hi-Tech Heart program,0.37569810254153146,2,0,0,Unverified
+q38,6,3f6542b5-2ab1-4602-aa55-45ac9fa77975,Ashwini Hospital,cardiac_surgery,yes,0.9,Open heart surgery was performed at Dr. Ashwini Trauma Centre on 20 April 2025 (per patient review).,0.354222608966017,1,0,0,Unverified
+q39,1,ac382cdf-8ff9-4539-a453-00bec0989719,Orchid Medical Centre,emergency_csection,yes,0.9,Performs Caesarean Section,0.49249211947766663,2,0,0,Unverified
+q39,2,b6a873ce-095b-4b66-8605-387951737ad3,Dr. Lal’s Hospital & Research Centre,emergency_csection,yes,0.9,"The hospital offers ENT, Orthopedics, Gynecology, and Obstetrics services.",0.28862195254438083,2,0,0,Unverified
+q39,3,7f0a880d-249c-471f-a02b-7c0dffd0caa4,Raj Hospital & Research Centre,emergency_csection,yes,1.0,Caesarean section,0.5356987528969792,2,0,0,Unverified
+q40,1,fccc2b9a-9df1-4883-a05e-d35a6de669f7,Green City Hospital,cardiac_surgery,yes,1.0,"Coronary artery bypass grafting (CABG), including intra operative balloon pump",0.413910107734222,3,0,0,Unverified
+q40,2,3168e3e3-1154-47a7-a2be-2f06afb86a34,Hajela Hospital,cardiac_surgery,no,0.8,Performs cardiothoracic surgery up to closed heart.,0.34656823156271804,2,0,0,Unverified
+q40,3,160970c9-3aaf-474c-9b95-287957844262,Akshaya Heart Hospital,cardiac_surgery,yes,1.0,"Specialties include Anesthesiology, Cardiology, Cardiothoracic Surgery, Emergency Medicine, Endocrinology, Endoscopy, ENT (Otolaryngology), Gastroenterology, Gastrointestinal Surgery, General Medicine, General Surgery, Internal Medicine, Medical Oncology, Nephrology, Neurosurgery, Obstetrics and Gynecology, Ophthalmology, Orthopedic Surgery, Pathology, Pediatric Surgery, Plastic Surgery, Radiology, Respiratory Medicine, Surgical Oncology, Urology",0.3663438620835954,1,0,0,Unverified
+q40,4,e330d865-2b8e-4a80-b2ef-98469eb2538e,Sparsh- The Heart Care Clinic,cardiac_surgery,yes,1.0,Bypass surgery is performed at Sparsh- The Heart Care Clinic,0.2108927109078753,2,0,0,Unverified
+q40,5,fa1c244c-baaa-4848-8baf-74d9f830a93b,Marble City Hospital & Reseach Centre,cardiac_surgery,yes,1.0,[procedure] CABG with total arterial revascularization / bypass surgery / open heart surgery,0.4979741060183317,5,0,0,Unverified

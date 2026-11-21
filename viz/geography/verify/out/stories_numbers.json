@@ -1,0 +1,258 @@
+{
+ "s1": {
+  "national_per_m": 6.832835035969198,
+  "bihar_records": 260,
+  "bihar_pop_m": 133.4816167407692,
+  "bihar_per_m": [
+   1.9478337642923407,
+   1.718244676752179,
+   2.1995571379887138
+  ],
+  "bihar_by_stated_state": 260,
+  "delhi_over_bihar": 7.9923911311782225,
+  "top": "CHANDIGARH",
+  "top_per_m": 35.74614064637467,
+  "lowest_big": {
+   "ARUNACHAL PRADESH": 1.824259938907038,
+   "BIHAR": 1.9478337642923407,
+   "TRIPURA": 2.073435015154797
+  },
+  "bihar_stunt_popw": 42.57967765233995,
+  "bihar_stunt_mean": 42.58947368421053,
+  "stunt_rank_among_over1m": 2.0,
+  "stunt_top3_over1m": {
+   "MEGHALAYA": 43.1912639268073,
+   "BIHAR": 42.57967765233995,
+   "UTTAR PRADESH": 38.29340511891431
+  },
+  "stunt_rank_among_over10m": 1.0,
+  "n_over10m": 21,
+  "n_states_rho": 32,
+  "rho": [
+   -0.45014662756598234,
+   -0.6942849109714886,
+   -0.12695450069945052
+  ],
+  "patna": 145,
+  "bihar_total_in_districts": 260,
+  "patna_pop_share": 0.05783882005276342,
+  "bihar_districts": 38,
+  "bihar_zero": 7,
+  "zero_districts": 227,
+  "districts": 785,
+  "zero_pop_m": 163.2093976689546
+ },
+ "s2": {
+  "districts": 704,
+  "ncd_range": [
+   9.399999999999999,
+   37.7
+  ],
+  "ncd_q75": 21.15625,
+  "by_quartile": [
+   {
+    "q": 0,
+    "pop": 340560532.76009005,
+    "n": 45.0,
+    "districts": 177,
+    "per_m": 0.13213509984640684,
+    "ci": [
+     0.09638024853384007,
+     0.1768071596815847
+    ]
+   },
+   {
+    "q": 1,
+    "pop": 347134632.3714833,
+    "n": 79.0,
+    "districts": 175,
+    "per_m": 0.22757740839715118,
+    "ci": [
+     0.18017517737228475,
+     0.28362935294601244
+    ]
+   },
+   {
+    "q": 2,
+    "pop": 419367549.2333514,
+    "n": 140.0,
+    "districts": 176,
+    "per_m": 0.3338360353726341,
+    "ci": [
+     0.2808290041719906,
+     0.3939396138370369
+    ]
+   },
+   {
+    "q": 3,
+    "pop": 350431069.48321575,
+    "n": 210.0,
+    "districts": 176,
+    "per_m": 0.5992619327666612,
+    "ci": [
+     0.5209472636602674,
+     0.686026853422866
+    ]
+   }
+  ],
+  "n_claim": 1035,
+  "n_conf": 474,
+  "conf_operator": {
+   "private": 437,
+   "not stated": 23,
+   "public": 14
+  },
+  "claim_operator": {
+   "private": 907,
+   "public": 75,
+   "not stated": 53
+  },
+  "conf_private_share": [
+   0.9219409282700421,
+   0.8942578505919556,
+   0.9428398783001011
+  ],
+  "lgd_districts_with_conf": 176,
+  "pmndp_centres": 1994,
+  "pmndp_func_districts": 751,
+  "pmndp_total_districts": 751,
+  "pmndp_states_fewer_centres_than_districts": [
+   "arunachal pradesh",
+   "dadra and nagar haveli and daman and diu",
+   "haryana",
+   "manipur",
+   "meghalaya",
+   "mizoram",
+   "nagaland",
+   "puducherry"
+  ],
+  "pmndp_bihar": 94,
+  "bihar_conf": 19,
+  "pmndp_ap": [
+   61,
+   26
+  ],
+  "public_records_claiming_dialysis": 75
+ },
+ "s3": {
+  "districts": 704,
+  "low_districts": 152,
+  "low_wra_m": 63.89972940310271,
+  "low_claim": 13,
+  "low_conf": 3,
+  "low_lq": 86,
+  "low_states": {
+   "Uttar Pradesh": 25,
+   "Bihar": 21,
+   "Madhya Pradesh": 19,
+   "Rajasthan": 19,
+   "Chhattisgarh": 10
+  },
+  "ratio_claim_hi_vs_low": 9.28585616276615,
+  "ratio_lq_hi_vs_low": 1.89079634619349,
+  "claims_per_m_women": {
+   "[0, 5)": 0.18708348839782227,
+   "[5, 10)": 0.20673071959409814,
+   "[10, 20)": 0.7702686086784454,
+   "[20, 30)": 1.3098469081371997,
+   "[30, 45)": 2.2242330671042447,
+   "[45, 100)": 1.4155865594662533
+  },
+  "priv_gt_pub": [
+   427,
+   430,
+   0.9930232558139535,
+   0.9796910426382964,
+   0.9976244981431833
+  ],
+  "gap_median": 28.9,
+  "private_records": 8805,
+  "records": 9959,
+  "lq_mot": 902,
+  "lq_placed": 733,
+  "lq_valid_on_file": 324
+ },
+ "s6": {
+  "trauma_site1": [
+   1489,
+   1861
+  ],
+  "trauma_site0": [
+   36,
+   1325
+  ],
+  "dialysis_site1": [
+   474,
+   661
+  ],
+  "dialysis_site0": [
+   0,
+   374
+  ],
+  "csection_site1": [
+   112,
+   264
+  ],
+  "csection_site0": [
+   3,
+   173
+  ],
+  "any_site1": [
+   1653,
+   2058,
+   0.8032069970845481,
+   0.7854719312109678,
+   0.8198122406754264
+  ],
+  "any_site0": [
+   38,
+   1496,
+   0.02540106951871658,
+   0.018561611908265357,
+   0.03467165378692904
+  ],
+  "coverage": {
+   "private": [
+    4528,
+    8805,
+    0.5142532651902328,
+    0.5038098916918078,
+    0.5246842072395489
+   ],
+   "public": [
+    83,
+    467,
+    0.1777301927194861,
+    0.14572938406522673,
+    0.2149896131208618
+   ],
+   "not_stated": [
+    255,
+    687,
+    0.37117903930131,
+    0.335862393355642,
+    0.407928316184833
+   ]
+  },
+  "trauma_conf_sources": {
+   "web": 1473,
+   "osm": 110,
+   "tcf": 14
+  },
+  "trauma_conf_web_only": 1403,
+  "site_in_vf_sources": {
+   "trauma": [
+    1330,
+    1473
+   ],
+   "dialysis": [
+    449,
+    474
+   ],
+   "csection": [
+    104,
+    112
+   ]
+  }
+ }
+}

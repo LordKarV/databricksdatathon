@@ -1,0 +1,529 @@
+{
+  "title": "Referral Saathi storybook gallery",
+  "root": "/Users/karthikvattem/projects/datathon",
+  "paths": "repo-relative; join with root",
+  "built": "2026-11-21",
+  "narrative": "viz/STORYBOOK.md",
+  "stories": [
+    {
+      "order": 1,
+      "act": "1 The problem: data you cannot trust",
+      "id": "trust_s1_merged",
+      "theme": "How wrong is the data?",
+      "headline": "1 record in 8 (1,232 of 9,959, 12.4%, 95% CI 11.7 to 13.0) carries a sentence that places care at another named facility; the share climbs from 1.5% (5 of 324) in records built from 1-2 web pages to 33.1% (638 of 1,930) in records built from 30-50, while states range only 4.5% to 16.3%",
+      "presenter_line": "An eye hospital listed in Hyderabad carries a Delhi government hospital's 20-bed dialysis unit. That is not rare: one record in eight names another facility, and what predicts it is how many web pages were merged into the record, not the state.",
+      "primary_chart": "viz/trust/out/s1_who.png",
+      "charts": [
+        {
+          "png": "viz/trust/out/s1_who.png",
+          "svg": "viz/trust/out/s1_who.svg",
+          "alt_text": "1,232 of 9,959 records (12.4%) have a claim sentence that places care at another named facility. Across the 20 states with 100 or more records the share runs from 5% (Uttarakhand) to 16% (Andhra Pradesh); only Uttarakhand, Jharkhand, Andhra Pradesh have intervals that exclude the national 12.4%. Hospitals are flagged at 17% and clinics at 7%. The share climbs steadily with the number of source URLs: 1.5% for 1-2 URLs (5 of 324) to 33% for 30-50 URLs (638 of 1930)."
+        },
+        {
+          "png": "viz/trust/out/s1_anatomy.png",
+          "svg": "viz/trust/out/s1_anatomy.svg",
+          "alt_text": "Two facility records drawn as grids of tiles, one tile per claim sentence, coloured by whom the sentence names. Aravind Eye Hospital (listed in Hyderabad): 151 sentences, 1 name the facility, 5 name another facility or its town, 145 name nobody; postcode 110002 is in Central, Delhi and the coordinates are near Villupuram West, Villupuram, Tamil Nadu. Wockhardt Hospital Nagpur (listed in Nagpur): 146 sentences, 5 name the facility, 32 name another facility or its town, 104 name nobody; postcode 400078 is in Mumbai Suburban, Maharashtra and the coordinates are near Bhandup Ind Estate, Mumbai Suburban, Maharashtra. Most service sentences, including a 20-bed dialysis unit and a 3T MRI, name no facility at all, so no rule can tell they were copied from another hospital."
+        }
+      ],
+      "alt_text": "1,232 of 9,959 records (12.4%) have a claim sentence that places care at another named facility. Across the 20 states with 100 or more records the share runs from 5% (Uttarakhand) to 16% (Andhra Pradesh); only Uttarakhand, Jharkhand, Andhra Pradesh have intervals that exclude the national 12.4%. Hospitals are flagged at 17% and clinics at 7%. The share climbs steadily with the number of source URLs: 1.5% for 1-2 URLs (5 of 324) to 33% for 30-50 URLs (638 of 1930).",
+      "data_csv": [
+        "viz/trust/out/s1_who.csv",
+        "viz/trust/out/s1_anatomy.csv"
+      ],
+      "script": "viz/trust/s1_merged.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "how_page",
+        "model_card"
+      ],
+      "caveat": "The flag (context = direct) was right on about 20 of 30 sentences in the audit's hand check and misses copied text that names no facility, so 12.4% is neither an upper nor a lower bound; the audit's precision-adjusted estimate is about 1,405 (14%). source_urls is capped at 50. Hospitals have more URLs, so type and breadth overlap. The two anatomy records were picked by hand as illustrations.",
+      "verification": "Reproduced exactly by viz/trust/verify/v_s1.py, run for this storybook on 2026-11-21 (1,232 of 9,959; every URL band and type count)."
+    },
+    {
+      "order": 2,
+      "act": "1 The problem: data you cannot trust",
+      "id": "trust_s2_moved",
+      "theme": "How wrong is the data?",
+      "headline": "1,367 records (13.9%) put their map pin more than 50 km from their own postcode; when the record's own text says the facility is located elsewhere, the pin is far off 52.9% of the time (723 of 1,367) against 10.1% (821 of 8,165) for other records",
+      "presenter_line": "A distance on a referral slip is only as good as the pin. One record in seven sits more than 50 km from its own postcode, and when the text itself says the facility is located somewhere else, the pin is off half the time: the coordinates followed the copied text.",
+      "primary_chart": "viz/trust/out/s2_map.png",
+      "charts": [
+        {
+          "png": "viz/trust/out/s2_map.png",
+          "svg": "viz/trust/out/s2_map.svg",
+          "alt_text": "Point map of India without boundaries. 1,367 arrows, one per record whose listed coordinates sit more than 50 km from the centre of its own postcode, drawn from postcode to pin. 726 of them belong to records whose own text says the facility is located in another district or state, and 128 pins land in a different state from the postcode. Most arrows stay inside one region, but some cross the country: Gem Hospital, Bathinda (postcode in Punjab) is pinned about 2,350 km away, and the Aravind Eye Hospital record listed in Hyderabad has a Delhi postcode and a pin in Tamil Nadu, 1,871 km apart."
+        },
+        {
+          "png": "viz/trust/out/s2_distance.png",
+          "svg": "viz/trust/out/s2_distance.svg",
+          "alt_text": "Of 9,869 records with coordinates and a postcode point, 1,367 (13.9%) place the map pin more than 50 km from the record's own postcode, and 105 more than 500 km. Records whose own text says the facility is located in another district or state are far from their postcode 52.9% of the time (723 of 1367), against 10.1% (821 of 8165) for all other records: the coordinates follow the other facility."
+        }
+      ],
+      "alt_text": "Point map of India without boundaries. 1,367 arrows, one per record whose listed coordinates sit more than 50 km from the centre of its own postcode, drawn from postcode to pin. 726 of them belong to records whose own text says the facility is located in another district or state, and 128 pins land in a different state from the postcode. Most arrows stay inside one region, but some cross the country: Gem Hospital, Bathinda (postcode in Punjab) is pinned about 2,350 km away, and the Aravind Eye Hospital record listed in Hyderabad has a Delhi postcode and a pin in Tamil Nadu, 1,871 km apart.",
+      "data_csv": [
+        "viz/trust/out/s2_map.csv",
+        "viz/trust/out/s2_distance.csv"
+      ],
+      "script": "viz/trust/s2_moved.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "how_page",
+        "model_card",
+        "dashboard"
+      ],
+      "caveat": "The two 1,367s are a coincidence (far pins vs 'located elsewhere' records). The verifier counts 1,373 of 9,875 far pins on cleaned postcode centres (still 13.9%) and 129 cross-state pins where the chart says 128 (REPORT.md's other method gives 67 of 1,407): say 'about 130'. A far pin is sometimes right and the postcode wrong (coordinates right 14 of 40 in REPORT.md's hand check). The map draws points and arrows only, no boundaries.",
+      "verification": "viz/trust/verify/v_s2.py run 2026-11-21: 723/1,367 and 821/8,165 reproduced exactly; far-pin count 1,373 vs 1,367 (different row filter)."
+    },
+    {
+      "order": 3,
+      "act": "2 What we measured",
+      "id": "sources_s3_paraphrase",
+      "theme": "Who said so?",
+      "headline": "Only 5.4% of claim sentences (346 of 6,364 tests, 95% CI 4.4 to 6.5) appear near-verbatim on a page from the record's own source list; even on the facility's own site only 9.6% (277 of 2,891) do",
+      "presenter_line": "The source list looks like citations but behaves like search results. So Referral Saathi quotes the crawled page text and labels the record's own sentences as a summary, not a quote.",
+      "primary_chart": "viz/sources/s3_paraphrase.png",
+      "charts": [
+        {
+          "png": "viz/sources/s3_paraphrase.png",
+          "svg": "viz/sources/s3_paraphrase.svg",
+          "alt_text": "Grouped horizontal bars of how often a record's claim sentences are found on one sampled page from the record's own source list (sentences are not tied to a specific URL). Across 6,364 tests on 258 pages, 5.4% are found in near-verbatim wording (95% CI 4.4% to 6.5%) and 24.2% when only most content words must appear. Facility's own site 9.6% (277 of 2891); Aggregator page about it 4.9% (38 of 783); Listing page 1.5% (12 of 814); Government portal 1.2% (12 of 1035); Research paper 0.8% (7 of 841). The records paraphrase their sources: 'Interventional cardiology program with Dr Mehul Patel on staff' sits on kimayaheart.com as different wording."
+        }
+      ],
+      "alt_text": "Grouped horizontal bars of how often a record's claim sentences are found on one sampled page from the record's own source list (sentences are not tied to a specific URL). Across 6,364 tests on 258 pages, 5.4% are found in near-verbatim wording (95% CI 4.4% to 6.5%) and 24.2% when only most content words must appear. Facility's own site 9.6% (277 of 2891); Aggregator page about it 4.9% (38 of 783); Listing page 1.5% (12 of 814); Government portal 1.2% (12 of 1035); Research paper 0.8% (7 of 841). The records paraphrase their sources: 'Interventional cardiology program with Dr Mehul Patel on staff' sits on kimayaheart.com as different wording.",
+      "data_csv": [
+        "viz/sources/s3_paraphrase_gap.csv"
+      ],
+      "script": "viz/sources/s3_paraphrase.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "how_page"
+      ],
+      "caveat": "Stratified sample of 385 URLs (258 fetched), so 5.4% is a pooled sample rate, not a population rate. Sentences are tested against one URL from the list, not tied to it. Strict matching understates support (70%-of-words rule: 24.2%). Pages may have changed; social and map hosts were not fetched. Same table as trust story 7, which is dropped as a duplicate.",
+      "verification": "Recomputed independently in viz/sources/verify/recompute.py (results.json)."
+    },
+    {
+      "order": 4,
+      "act": "2 What we measured",
+      "id": "claims_s3_funnel",
+      "theme": "What facilities say vs what we can confirm",
+      "headline": "Of 7,969 mentions of the 7 core services, 1,798 (23%) pass the record's own checks and 837 (10.5%, 9.8 to 11.2) also have a website or official-list confirmation; of 1,039 records that mention dialysis, 106 are on an official list",
+      "presenter_line": "Mentions are cheap. 442 records mention emergency C-section; 52 have a website that says so and 10 have a LaQshya certificate or an obstetrics postgraduate course. Each step of this ladder is one line on the result card.",
+      "primary_chart": "viz/claims/charts/s3_funnel.png",
+      "charts": [
+        {
+          "png": "viz/claims/charts/s3_funnel.png",
+          "svg": "viz/claims/charts/s3_funnel.svg",
+          "alt_text": "Small multiples of a confirmation funnel for 7 core services. Dialysis: 1,039 mention it, 498 in 2+ fields, 457 also with a prerequisite, website confirms 352 of 663 with a site, official list 106. Trauma and emergency: 3,571 mention it, 891 in 2+ fields, 852 also with a prerequisite, website confirms 1,243 of 2,020 with a site, official list 283. Emergency C-section: 442 mention it, 64 in 2+ fields, 64 also with a prerequisite, website confirms 52 of 266 with a site, official list 10. NICU: 741 mention it, 178 in 2+ fields, 176 also with a prerequisite, website confirms 208 of 462 with a site, official list 0. Cardiac surgery: 970 mention it, 186 in 2+ fields, 165 also with a prerequisite, website confirms 227 of 594 with a site, official list 10. MRI: 945 mention it, 465 in 2+ fields, 49 also with a prerequisite, website confirms 158 of 549 with a site, official list 0. Burn care: 261 mention it, 38 in 2+ fields, 35 also with a prerequisite, website confirms 36 of 133 with a site, official list 6. In total 1,798 of 7,969 facility-service mentions pass the record's own checks and 837 of 7,969 also pass at least one outside check. Official lists cover few facilities, so a missing list match is not evidence against a claim."
+        }
+      ],
+      "alt_text": "Small multiples of a confirmation funnel for 7 core services. Dialysis: 1,039 mention it, 498 in 2+ fields, 457 also with a prerequisite, website confirms 352 of 663 with a site, official list 106. Trauma and emergency: 3,571 mention it, 891 in 2+ fields, 852 also with a prerequisite, website confirms 1,243 of 2,020 with a site, official list 283. Emergency C-section: 442 mention it, 64 in 2+ fields, 64 also with a prerequisite, website confirms 52 of 266 with a site, official list 10. NICU: 741 mention it, 178 in 2+ fields, 176 also with a prerequisite, website confirms 208 of 462 with a site, official list 0. Cardiac surgery: 970 mention it, 186 in 2+ fields, 165 also with a prerequisite, website confirms 227 of 594 with a site, official list 10. MRI: 945 mention it, 465 in 2+ fields, 49 also with a prerequisite, website confirms 158 of 549 with a site, official list 0. Burn care: 261 mention it, 38 in 2+ fields, 35 also with a prerequisite, website confirms 36 of 133 with a site, official list 6. In total 1,798 of 7,969 facility-service mentions pass the record's own checks and 837 of 7,969 also pass at least one outside check. Official lists cover few facilities, so a missing list match is not evidence against a claim.",
+      "data_csv": [
+        "viz/claims/data/s3_funnel.csv",
+        "viz/claims/data/s3_pairs.csv"
+      ],
+      "script": "viz/claims/s3_funnel.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "how_page",
+        "model_card",
+        "dashboard"
+      ],
+      "caveat": "List coverage is structural: NABH scopes fetched for 7 codes, LaQshya and MoHFW are public subsets, NMC covers teaching hospitals, no list covers MRI. Website rates use only records with an attributable site. Websites are not independent of the record. MRI's 5% prerequisite rate reflects few defined MRI prerequisites.",
+      "verification": "Recomputed by viz/claims/verify/v3_funnel.py; headline rewritten in verification."
+    },
+    {
+      "order": 5,
+      "act": "3 How we built trust",
+      "id": "trust_s6_cleaning",
+      "theme": "How wrong is the data?",
+      "headline": "Cleaning fixes geometry, contacts and duplicates but cannot see copied text: 2,610 of 9,959 records (26.2%) keep a problem no rule can fix, 1,589 of them among the 7,812 the pipeline rates 'no concerns'",
+      "presenter_line": "We fixed what has a stated reason: 1,171 records ranked on a corrected point, 292 directory phones hidden, 9,506 sentences about other facilities quarantined. A quarter of records still hold something no rule can see, so 'call first' is the default on every card.",
+      "primary_chart": "viz/trust/out/s6_cleaning.png",
+      "charts": [
+        {
+          "png": "viz/trust/out/s6_cleaning.png",
+          "svg": "viz/trust/out/s6_cleaning.svg",
+          "alt_text": "Three stacked groups of horizontal bars: what cleaning fixed, what it flags, and what it cannot fix, as records affected out of 9,959. Fixed includes 1,171 records ranked on a corrected point and 2,489 records with quarantined sentences. Cannot be fixed: 1,390 records hold 7,514 copied service sentences that name no facility, 1,495 have lists cut at 50 items. In total 2,610 records carry at least one problem cleaning cannot fix, 1,589 of them among the 7,812 that the cleaning pipeline rates as having no concerns."
+        }
+      ],
+      "alt_text": "Three stacked groups of horizontal bars: what cleaning fixed, what it flags, and what it cannot fix, as records affected out of 9,959. Fixed includes 1,171 records ranked on a corrected point and 2,489 records with quarantined sentences. Cannot be fixed: 1,390 records hold 7,514 copied service sentences that name no facility, 1,495 have lists cut at 50 items. In total 2,610 records carry at least one problem cleaning cannot fix, 1,589 of them among the 7,812 that the cleaning pipeline rates as having no concerns.",
+      "data_csv": [
+        "viz/trust/out/s6_cleaning.csv"
+      ],
+      "script": "viz/trust/s6_cleaning.py",
+      "use_in": [
+        "slides",
+        "how_page",
+        "model_card"
+      ],
+      "caveat": "Bars overlap: one record can sit in several. 'No concerns' covers location and contact data only, so the overlap with copied text is expected by design. Copied text that names no facility is counted only in records that also name another facility, so the true count is likely higher.",
+      "verification": "No verifier existed for this story; the storybook step recomputed 2,610, 1,589 and 7,812 independently with duckdb from derived/v1 (scratchpad script v_s6_check.py); all match."
+    },
+    {
+      "order": 6,
+      "act": "3 How we built trust",
+      "id": "claims_s4_lists",
+      "theme": "What facilities say vs what we can confirm",
+      "headline": "540 of 1,242 records that say NABH (43%, 41 to 46%) were not found on NABH's current list, while 1,359 list-matched records never mention NABH; the government reports 1,994 public dialysis centres against 75 public records that mention dialysis",
+      "presenter_line": "Official lists are the only evidence not written by the same extraction as the record. They cut both ways: they catch stale accreditation claims and they reveal facilities the record never admits to.",
+      "primary_chart": "viz/claims/charts/s4_lists.png",
+      "charts": [
+        {
+          "png": "viz/claims/charts/s4_lists.png",
+          "svg": "viz/claims/charts/s4_lists.svg",
+          "alt_text": "Stacked bars comparing four official lists with what records claim. NABH accreditation: 540 dataset-only, 702 both, 1,359 list-only; 19,573 of 21,615 list entries have no record. e-RaktKosh blood centres: 512 dataset-only, 162 both, 203 list-only; 6,516 of 6,904 list entries have no record. LaQshya Maternity OT: 15 dataset-only, 3 both, 44 list-only; 854 of 902 list entries have no record. MoHFW trauma care facilities: 253 dataset-only, 17 both, 3 list-only; 176 of 196 list entries have no record. 43% of records that mention NABH were not found on NABH's current list; matcher recall was not measured, so this is an upper bound on false claims."
+        },
+        {
+          "png": "viz/claims/charts/s4_pmndp.png",
+          "svg": "viz/claims/charts/s4_pmndp.svg",
+          "alt_text": "Dot plot by state of public dialysis centres under PMNDP (1,994 in total) against public facility records in the dataset that mention dialysis (75 in total). Bihar has 94 PMNDP centres and 4 such records; Uttar Pradesh 76 and 4. Silence in the dataset about dialysis at a public district hospital is not evidence that it has none."
+        }
+      ],
+      "alt_text": "Stacked bars comparing four official lists with what records claim. NABH accreditation: 540 dataset-only, 702 both, 1,359 list-only; 19,573 of 21,615 list entries have no record. e-RaktKosh blood centres: 512 dataset-only, 162 both, 203 list-only; 6,516 of 6,904 list entries have no record. LaQshya Maternity OT: 15 dataset-only, 3 both, 44 list-only; 854 of 902 list entries have no record. MoHFW trauma care facilities: 253 dataset-only, 17 both, 3 list-only; 176 of 196 list entries have no record. 43% of records that mention NABH were not found on NABH's current list; matcher recall was not measured, so this is an upper bound on false claims.",
+      "data_csv": [
+        "viz/claims/data/s4_lists.csv",
+        "viz/claims/data/s4_pmndp.csv"
+      ],
+      "script": "viz/claims/s4_lists.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "dashboard",
+        "how_page"
+      ],
+      "caveat": "Matcher recall was not measured, so 'not found' is an upper bound on false claims. LaQshya and MoHFW are subset lists, so their dataset-only segments are not false-claim rates; the LaQshya claim group is n = 18. PMNDP is a state count, not a facility match (this chart: Bihar 4 vs 94; journeys story 5 quotes the PMNDP README's 7 vs 94, a different public flag and claim rule). NABH, NMC and MoHFW facts are for per-facility citation only, never redistribution.",
+      "verification": "Recomputed by viz/claims/verify/v4_lists.py; headline softened to 'not found on' in verification."
+    },
+    {
+      "order": 7,
+      "act": "3 How we built trust",
+      "id": "geography_s6_website",
+      "theme": "Where care is missing",
+      "headline": "'Confirmed' mostly means 'has a website': 80.3% of claims (1,653 of 2,058) are confirmed when the crawl found the facility's own site and 2.5% (38 of 1,496) when it did not; only 18% of public records (83 of 467) have one, against 51% of private records",
+      "presenter_line": "If we treated 'not confirmed' as 'no', we would quietly demote public and rural hospitals, the ones poor patients use. So an unconfirmed claim at a facility with no website is shown as missing evidence, not evidence against.",
+      "primary_chart": "viz/geography/charts/s6_website_test.png",
+      "charts": [
+        {
+          "png": "viz/geography/charts/s6_website_test.png",
+          "svg": "viz/geography/charts/s6_website_test.svg",
+          "alt_text": "Left: confirmation rates of dataset service claims with and without an own website. Trauma / 24x7 emergency, with site: 1489 of 1861 (80%); Trauma / 24x7 emergency, without site: 36 of 1325 (3%); Dialysis, with site: 474 of 661 (72%); Dialysis, without site: 0 of 374 (0%); Emergency C-section, with site: 112 of 264 (42%); Emergency C-section, without site: 3 of 173 (2%). Right: share of records with an own website: Private 51% (4528 of 8805); Public 18% (83 of 467); Operator not stated 37% (255 of 687); Urban centre 50% (4591 of 9247); Town or semi-dense 42% (233 of 557); Rural 27% (42 of 155)."
+        }
+      ],
+      "alt_text": "Left: confirmation rates of dataset service claims with and without an own website. Trauma / 24x7 emergency, with site: 1489 of 1861 (80%); Trauma / 24x7 emergency, without site: 36 of 1325 (3%); Dialysis, with site: 474 of 661 (72%); Dialysis, without site: 0 of 374 (0%); Emergency C-section, with site: 112 of 264 (42%); Emergency C-section, without site: 3 of 173 (2%). Right: share of records with an own website: Private 51% (4528 of 8805); Public 18% (83 of 467); Operator not stated 37% (255 of 687); Urban centre 50% (4591 of 9247); Town or semi-dense 42% (233 of 557); Rural 27% (42 of 155).",
+      "data_csv": [
+        "viz/geography/data/s6_confirmation.csv",
+        "viz/geography/data/s6_coverage.csv"
+      ],
+      "script": "viz/geography/s6_website_test.py",
+      "use_in": [
+        "model_card",
+        "how_page",
+        "slides",
+        "dashboard"
+      ],
+      "caveat": "Partly mechanical: dialysis has no second check except the website, so 0 of 374 is by construction. 1,883 of 2,059 website confirmations come from a site already in the record's own sources. Website presence goes with size and type (observational split). Government portals were not crawled. Website quotes were right 21 of 22 times.",
+      "verification": "Recomputed by viz/geography/verify/v_stories.py."
+    },
+    {
+      "order": 8,
+      "act": "4 How the model decides",
+      "id": "model_s1_ledger",
+      "theme": "How the model decides",
+      "headline": "Every score is a sum of named points: Civil Hospital, Panipat gets +41.6 points for dialysis from hospital type and web footprint and +8.3 from its own dialysis sentences; Wockhardt Hospital Nagpur ranks 51 of 63 near Nagpur because its pin and PIN are in Mumbai, 890 km away",
+      "presenter_line": "Anyone can add these bars up: base, plus what the facility says, plus hints, minus contamination, and the total equals the shipped score to 1e-9. The Nagpur case also shows what we throw away: two sentences about Nair Hospital, Mumbai.",
+      "primary_chart": "viz/model/s1_service_waterfalls.png",
+      "charts": [
+        {
+          "png": "viz/model/s1_service_waterfalls.png",
+          "svg": "viz/model/s1_service_waterfalls.svg",
+          "alt_text": "Three horizontal waterfall charts of the points that make up the service score P_S. Civil Hospital, Panipat (dialysis): base -35.0, own text +8.3, related-service hints +10.0, web footprint +11.6, facility type and size +30.0, total +24.8 points, P_S 0.70, rank 1 of 12. Referal Hospital (emergency C-section): base rate for the service -35.6, related-service hints +11.1, web footprint +5.0, facility type and size -14.5, total -34.0 points, P_S 0.24, rank 1 of 5. Wockhardt Hospital Nagpur (dialysis): base rate for the service -35.0, own service text +20.1, related-service hints +10.0, contamination, non-offer, scope -6.4, web footprint +5.0, facility type and size +11.0, total +4.7 points, P_S 0.54, rank 51 of 63. The two ignored Wockhardt sentences both name Nair Hospital, Mumbai Central; without the ownership filter its P_S would be 0.64 instead of 0.54. Its rank of 51 of 63 comes mostly from location (G 0.216), not from the ignored sentences."
+        },
+        {
+          "png": "viz/model/s1_location_waterfalls.png",
+          "svg": "viz/model/s1_location_waterfalls.svg",
+          "alt_text": "Three horizontal waterfall charts of the location score P_L. Civil Hospital, Panipat: Base +12.9, PIN centre +38.4, Stated city +63.3, Stated state +21.2, P_L 0.99, point used 9 km from the query place. Referal Hospital: Base +12.9, Point source +12.0, Stated city -63.3, Stated state +21.2, P_L 0.36, point used 267 km from the query place. Wockhardt Hospital Nagpur: Base +12.9, PIN centre +38.4, Stated city -63.3, Stated state +21.2, P_L 0.58, point used 890 km from the query place. Coordinates and place-in-name votes appear but carry weight 0 in the fitted head."
+        }
+      ],
+      "alt_text": "Three horizontal waterfall charts of the points that make up the service score P_S. Civil Hospital, Panipat (dialysis): base -35.0, own text +8.3, related-service hints +10.0, web footprint +11.6, facility type and size +30.0, total +24.8 points, P_S 0.70, rank 1 of 12. Referal Hospital (emergency C-section): base rate for the service -35.6, related-service hints +11.1, web footprint +5.0, facility type and size -14.5, total -34.0 points, P_S 0.24, rank 1 of 5. Wockhardt Hospital Nagpur (dialysis): base rate for the service -35.0, own service text +20.1, related-service hints +10.0, contamination, non-offer, scope -6.4, web footprint +5.0, facility type and size +11.0, total +4.7 points, P_S 0.54, rank 51 of 63. The two ignored Wockhardt sentences both name Nair Hospital, Mumbai Central; without the ownership filter its P_S would be 0.64 instead of 0.54. Its rank of 51 of 63 comes mostly from location (G 0.216), not from the ignored sentences.",
+      "data_csv": [
+        "viz/model/s1_service_waterfalls.csv",
+        "viz/model/s1_location_waterfalls.csv",
+        "viz/model/s1_cases.csv"
+      ],
+      "script": "viz/model/s1_ledger.py",
+      "use_in": [
+        "demo",
+        "how_page",
+        "slides",
+        "model_card"
+      ],
+      "caveat": "Three hand-picked cases, not a sample. Ranks come from model/review/explain/cases.json. The P_S 90% range comes from posterior draws with a 1.4% acceptance rate. This is the fallback model (hash de82eeee9ea0d0f6-fallback); numbers change with the v2 evidence build. Panipat is one of only 2 Likely pairs out of 69,713.",
+      "verification": "Recomputed by viz/model/verify/v1_ledger.py; Wockhardt rank attribution corrected in verification."
+    },
+    {
+      "order": 9,
+      "act": "4 How the model decides",
+      "id": "model_s5_families",
+      "theme": "How the model decides",
+      "headline": "Across all 69,713 pairs, own service text earns 8.3 points for a single tag and only 9.2 for sentences in several fields; prerequisite hints (ICU, OT, blood bank) out-earn the text on average at levels 1 to 4, and text pulls ahead only at level 5 (20.8 points)",
+      "presenter_line": "The fitted score mostly measures what kind of facility it is and how visible it is online, not how clearly it describes the service. Fitting on about 22 effective labels pushed the expert's 'more text' steps to zero; we show that rather than hide it.",
+      "primary_chart": "viz/model/s5_points_by_text_level.png",
+      "charts": [
+        {
+          "png": "viz/model/s5_points_by_text_level.png",
+          "svg": "viz/model/s5_points_by_text_level.svg",
+          "alt_text": "Left: line chart of mean points per pair by own-text level T over all 69,713 pairs. Own service text: T0 0.6, T1 8.3, T2 8.3, T3 8.3, T4 9.2, T5 20.8. Related-service hints: T0 2.9, T1 9.4, T2 9.1, T3 10.8, T4 10.4, T5 8.7. Facility type and size: T0 -13.2, T1 -2.4, T2 -2.6, T3 -0.1, T4 -1.1, T5 -1.0. Right: median P_S by level: T0 0.18, T1 0.37, T2 0.37, T3 0.41, T4 0.40, T5 0.51. Text points are flat from level 1 to 4 and jump only at level 5. Hints exceed text for T1 82%, T2 76%, T3 86%, T4 87% of pairs."
+        },
+        {
+          "png": "viz/model/s5_prior_vs_fitted.png",
+          "svg": "viz/model/s5_prior_vs_fitted.svg",
+          "alt_text": "Dumbbell chart of service-head weights, expert prior mean against fitted posterior with 90% interval, in points before Platt scaling. t1: prior +11.5, fitted +21.8; t2: prior +13.3, fitted +0.5; t3: prior +23.1, fitted +0.0; t4: prior +28.9, fitted +2.9; t5: prior +17.3, fitted +31.0; trunc0: prior +8.7, fitted +9.4; tb_mid: prior -12.4, fitted -0.0; tb_high: prior -24.8, fitted -0.0; p1: prior +26.0, fitted +28.2; p2: prior +14.4, fitted +10.1; c1: prior -14.7, fitted -16.8; c2: prior -14.4, fitted -0.0; n1: prior -48.2, fitted -40.4; s1: prior -43.3, fitted -48.7; g_mid: prior +0.0, fitted +30.4; g_high: prior +0.0, fitted +13.3; level_dh: prior +14.4, fitted +34.0; iphs_essential: prior +14.4, fitted +28.5; breadth_20p: prior +8.7, fitted +23.5; public: prior +0.0, fitted -12.5; type_clinic: prior -14.4, fitted -31.6. Shipped contributions multiply these by the Platt slope 0.38."
+        }
+      ],
+      "alt_text": "Left: line chart of mean points per pair by own-text level T over all 69,713 pairs. Own service text: T0 0.6, T1 8.3, T2 8.3, T3 8.3, T4 9.2, T5 20.8. Related-service hints: T0 2.9, T1 9.4, T2 9.1, T3 10.8, T4 10.4, T5 8.7. Facility type and size: T0 -13.2, T1 -2.4, T2 -2.6, T3 -0.1, T4 -1.1, T5 -1.0. Right: median P_S by level: T0 0.18, T1 0.37, T2 0.37, T3 0.41, T4 0.40, T5 0.51. Text points are flat from level 1 to 4 and jump only at level 5. Hints exceed text for T1 82%, T2 76%, T3 86%, T4 87% of pairs.",
+      "data_csv": [
+        "viz/model/s5_points_by_text_level.csv",
+        "viz/model/s5_prior_vs_fitted.csv"
+      ],
+      "script": "viz/model/s5_families.py",
+      "use_in": [
+        "model_card",
+        "how_page",
+        "slides"
+      ],
+      "caveat": "Levels 1 to 4 differ in which facilities reach them, so columns mix weights with population. About 22 effective DEV labels; most weight intervals include the prior. Published ablations on 39 searched test pairs find no family whose removal changes AUROC detectably.",
+      "verification": "Recomputed by viz/model/verify/v5_families.py."
+    },
+    {
+      "order": 10,
+      "act": "4 How the model decides",
+      "id": "model_s2_llm",
+      "theme": "How the model decides",
+      "headline": "An LLM judge (llama-3.3-70b) said yes to 239 of 243 benchmark candidates (98.4%, Wilson 95.8 to 99.4), 208 of them at confidence 1, including bypass surgery at an eye hospital; the ledger spread the same candidates from P_S 0.16 to 0.65",
+      "presenter_line": "We tried an LLM as the judge. It said yes to almost everything it was shown, including cardiac bypass at an eye hospital. That is why the LLM stays off the trust and explanation path.",
+      "primary_chart": "viz/model/s2_llm_vs_ledger.png",
+      "charts": [
+        {
+          "png": "viz/model/s2_llm_vs_ledger.png",
+          "svg": "viz/model/s2_llm_vs_ledger.svg",
+          "alt_text": "Dot strip chart. Each dot is one of 243 benchmark candidates, placed by the ledger's P_S and grouped by own-text level and flags. The LLM judge (llama-3.3-70b) said yes on 239 of 243 (98.4%, Wilson 95% 95.8% to 99.4%), confidence 1 on 208. Ledger P_S ranged from 0.16 to 0.65. The LLM also said yes on all 4 candidates with a sentence about another hospital, all 3 eye or dental candidates (2 facilities), and all 9 the ledger badged Unlikely (14 distinct flagged rows). Published test AUROC on 71 pairs: LLM judge 0.585, ledger 0.776; on the 39 searched pairs reweighted to the population the difference is -0.016 [-0.27, +0.32]."
+        }
+      ],
+      "alt_text": "Dot strip chart. Each dot is one of 243 benchmark candidates, placed by the ledger's P_S and grouped by own-text level and flags. The LLM judge (llama-3.3-70b) said yes on 239 of 243 (98.4%, Wilson 95% 95.8% to 99.4%), confidence 1 on 208. Ledger P_S ranged from 0.16 to 0.65. The LLM also said yes on all 4 candidates with a sentence about another hospital, all 3 eye or dental candidates (2 facilities), and all 9 the ledger badged Unlikely (14 distinct flagged rows). Published test AUROC on 71 pairs: LLM judge 0.585, ledger 0.776; on the 39 searched pairs reweighted to the population the difference is -0.016 [-0.27, +0.32].",
+      "data_csv": [
+        "viz/model/s2_llm_vs_ledger.csv"
+      ],
+      "script": "viz/model/s2_llm_judge.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "model_card",
+        "how_page"
+      ],
+      "caveat": "Candidates are keyword-selected, so all have some service text (T >= 1). Rows are query x facility. The test AUROC gap (ledger 0.776 vs LLM 0.585) holds only in the all-71 raw view; on the 39 searched pairs reweighted it is -0.016 [-0.269, 0.316]. The label-free finding stands. Use 208, not 209: 209 answers had confidence 1 and one of them was a no.",
+      "verification": "Recomputed by viz/model/verify/v2_llm.py (208 not 209; 38 of 40 queries)."
+    },
+    {
+      "order": 11,
+      "act": "4 How the model decides",
+      "id": "model_s3_eval",
+      "theme": "How the model decides",
+      "headline": "On all 71 sealed-test pairs the fitted ledger (AUROC 0.776 [0.680, 0.862]) does not beat the same scorecard with unfitted expert priors (0.789; difference -0.013 [-0.076, 0.048]); P_S runs high (IPW ECE 0.197), while location scores of 0.7 or more were right 30 of 33 times",
+      "presenter_line": "We show the failures next to the wins. Fitting added nothing measurable over expert priors, and P_S is not a calibrated probability, so the card says 'chance a public check confirms it'. The location score holds up: trust 0.7 and above, call first below it.",
+      "primary_chart": "viz/model/s3_auroc_forest.png",
+      "charts": [
+        {
+          "png": "viz/model/s3_auroc_forest.png",
+          "svg": "viz/model/s3_auroc_forest.svg",
+          "alt_text": "Forest plot of test AUROC with 95% intervals for 9 systems on 71 sealed test pairs: Same scorecard, expert priors, no fitting (B4) 0.789 [0.692, 0.875]; Witness Ledger, fitted and shipped 0.776 [0.680, 0.862]; Keyword count (B1) 0.712 [0.590, 0.839]; Rule grade (B2) 0.697 [0.580, 0.826]; Scorecard fitted from zero priors (B5) 0.687 [0.566, 0.794]; Sampling stratum alone 0.671 [0.562, 0.796]; Own-text level T alone 0.626 [0.510, 0.748]; LLM judge, llama-3.3-70b (B3) 0.585 [0.486, 0.685]; Any mention of the service (B0) 0.560 [0.471, 0.647]. Right panel: paired differences, ledger minus each system. Intervals exclude zero against any mention (+0.216), the LLM judge (+0.191), zero-prior fitting (+0.088) and own-text level alone (+0.149); against the unfitted expert scorecard the difference is -0.013 [-0.076, 0.048]. On the 39 searched pairs reweighted to the population (IPW), the ledger minus expert priors is -0.129 [-0.252, -0.026] and no interval against any other baseline excludes 0 (LLM judge -0.016 [-0.269, 0.316])."
+        },
+        {
+          "png": "viz/model/s3_calibration_location.png",
+          "svg": "viz/model/s3_calibration_location.svg",
+          "alt_text": "Left: reliability diagram for the service score P_S on 71 test pairs in 5 bins. Mean P_S per bin 0.19, 0.27, 0.32, 0.41, 0.51 against confirmed shares 0.00, 0.14, 0.21, 0.36, 0.50. The ranking is monotone but every bin sits below the diagonal; ECE IPW 0.197. Right: location head. 30 of 33 pairs with P_L at least 0.7 had their location confirmed (Wilson 0.76 to 0.97); 0 of 5 below 0.7. Only the 38 pairs with a yes or no location label count; 33 unclear pairs are excluded."
+        }
+      ],
+      "alt_text": "Forest plot of test AUROC with 95% intervals for 9 systems on 71 sealed test pairs: Same scorecard, expert priors, no fitting (B4) 0.789 [0.692, 0.875]; Witness Ledger, fitted and shipped 0.776 [0.680, 0.862]; Keyword count (B1) 0.712 [0.590, 0.839]; Rule grade (B2) 0.697 [0.580, 0.826]; Scorecard fitted from zero priors (B5) 0.687 [0.566, 0.794]; Sampling stratum alone 0.671 [0.562, 0.796]; Own-text level T alone 0.626 [0.510, 0.748]; LLM judge, llama-3.3-70b (B3) 0.585 [0.486, 0.685]; Any mention of the service (B0) 0.560 [0.471, 0.647]. Right panel: paired differences, ledger minus each system. Intervals exclude zero against any mention (+0.216), the LLM judge (+0.191), zero-prior fitting (+0.088) and own-text level alone (+0.149); against the unfitted expert scorecard the difference is -0.013 [-0.076, 0.048]. On the 39 searched pairs reweighted to the population (IPW), the ledger minus expert priors is -0.129 [-0.252, -0.026] and no interval against any other baseline excludes 0 (LLM judge -0.016 [-0.269, 0.316]).",
+      "data_csv": [
+        "viz/model/s3_auroc_forest.csv",
+        "viz/model/s3_calibration_location.csv"
+      ],
+      "script": "viz/model/s3_evaluation.py",
+      "use_in": [
+        "model_card",
+        "slides",
+        "how_page"
+      ],
+      "caveat": "17 confirmed and 1 contradicted among 71 test pairs. On the 39 searched pairs reweighted (ESS 13.4) the ledger's AUROC is 0.498 and expert priors win by 0.129 [0.026, 0.252]. The selection rule favouring the priors was written after this test was read, so this test cannot evaluate v2. P_L < 0.7 rests on n = 5. All values quoted from published files; nothing recomputed on test labels.",
+      "verification": "Arithmetic checks against results.json and test_metrics.json in viz/model/verify/v34_published.py."
+    },
+    {
+      "order": 12,
+      "act": "5 Impact: deserts, golden hour, journeys",
+      "id": "geography_s1_bihar",
+      "theme": "Where care is missing",
+      "headline": "Bihar has 1.9 facility records per million people (260 for 133.5 M; 95% 1.72 to 2.20), under a third of the national 6.8, and the highest child stunting (42.6%) of the 21 states with over 10 million people",
+      "presenter_line": "The dataset is thinnest where need is highest: across states, records per million and child stunting have Spearman rho -0.45. And 144 of Bihar's 260 records sit in Patna district, home to 5.8% of its people.",
+      "primary_chart": "viz/geography/charts/s1_state_density.png",
+      "charts": [
+        {
+          "png": "viz/geography/charts/s1_state_density.png",
+          "svg": "viz/geography/charts/s1_state_density.svg",
+          "alt_text": "Ranked bar chart of facility records per million people for 32 states. Bihar has 260 records for 133.5 million people, 1.95 per million (95% interval 1.72 to 2.20), against 6.83 for India. Chandigarh, Goa, Delhi, Punjab and Haryana lead. A second panel shows child stunting: Bihar is second-highest at 42.6%, after Meghalaya (43.2%, 3.5 million people), and the highest of the states with over 10 million people. Across states, records per million and stunting have Spearman rho -0.45 (95% bootstrap interval -0.69 to -0.12)."
+        },
+        {
+          "png": "viz/geography/charts/s1_district_dots.png",
+          "svg": "viz/geography/charts/s1_district_dots.svg",
+          "alt_text": "Dot map, one dot per district sized by population, no boundaries drawn. 227 of 784 districts with 163 million people have zero records; they cluster in the north-east, central India, Bihar and eastern Uttar Pradesh. In Bihar 7 of 38 districts have none and Patna holds 144 of 260 records."
+        }
+      ],
+      "alt_text": "Ranked bar chart of facility records per million people for 32 states. Bihar has 260 records for 133.5 million people, 1.95 per million (95% interval 1.72 to 2.20), against 6.83 for India. Chandigarh, Goa, Delhi, Punjab and Haryana lead. A second panel shows child stunting: Bihar is second-highest at 42.6%, after Meghalaya (43.2%, 3.5 million people), and the highest of the states with over 10 million people. Across states, records per million and stunting have Spearman rho -0.45 (95% bootstrap interval -0.69 to -0.12).",
+      "data_csv": [
+        "viz/geography/data/s1_state.csv",
+        "viz/geography/data/s1_district.csv"
+      ],
+      "script": "viz/geography/s1_density.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "dashboard",
+        "how_page"
+      ],
+      "caveat": "A record is a listing, not a hospital, and the data is 88% private: absence here is not absence of care. NFHS survey intervals are not in the file, so stunting has no error bars. Arunachal is lower per million on 3 records. WorldPop is a modelled projection; totals move by up to 2% with the zonal method.",
+      "verification": "Recomputed by viz/geography/verify/v_stories.py."
+    },
+    {
+      "order": 13,
+      "act": "5 Impact: deserts, golden hour, journeys",
+      "id": "geography_s4_golden_hour",
+      "theme": "Where care is missing",
+      "headline": "About 500 million people (501 M; 283 M to 821 M across measured route error) live more than an hour's drive from a facility whose trauma or emergency claim a second source confirms, yet 98.5% live within an hour of some hospital or clinic",
+      "presenter_line": "The gap between 98.5% and 66% is the size of the evidence problem, not the care problem: most of those people live near a facility that may well treat trauma but whose claim nobody could check. So the planner shows the nearest confirmed and the nearest unconfirmed option.",
+      "primary_chart": "viz/geography/charts/s4_golden_hour.png",
+      "charts": [
+        {
+          "png": "viz/geography/charts/s4_golden_hour.png",
+          "svg": "viz/geography/charts/s4_golden_hour.svg",
+          "alt_text": "Dot plot by state of the share of people within 60 minutes' drive of four kinds of facility. India: 99% within an hour of any hospital or clinic (MAP reference), 87% of any record in this dataset, 79% of a record claiming trauma or emergency care, 66% of a confirmed one (44% to 81% across the travel-time error range). Lowest confirmed shares: Arunachal Pradesh 5%, Mizoram 9%, Odisha 35%, Madhya Pradesh 38%."
+        }
+      ],
+      "alt_text": "Dot plot by state of the share of people within 60 minutes' drive of four kinds of facility. India: 99% within an hour of any hospital or clinic (MAP reference), 87% of any record in this dataset, 79% of a record claiming trauma or emergency care, 66% of a confirmed one (44% to 81% across the travel-time error range). Lowest confirmed shares: Arunachal Pradesh 5%, Mizoram 9%, Odisha 35%, Madhya Pradesh 38%.",
+      "data_csv": [
+        "viz/geography/data/s4_state.csv"
+      ],
+      "script": "viz/geography/s4_golden_hour.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "dashboard",
+        "how_page"
+      ],
+      "caveat": "An independent re-solve on MAP's own grid gives 487 M, hence 'about 500'. Small north-eastern states are solver-sensitive and rest on one confirmed facility each. The whisker is measured route error, not sampling error. MAP's facility layer is from 2019; travel is free-flow. The MoHFW trauma list matched only 20 of 196 facilities.",
+      "verification": "Independent travel re-solve in viz/geography/verify/v_travel.py."
+    },
+    {
+      "order": 14,
+      "act": "5 Impact: deserts, golden hour, journeys",
+      "id": "journeys_s3_itineraries",
+      "theme": "The golden hour: referral journeys",
+      "headline": "From Muzaffarpur, the trauma plan stabilises 4.5 km away in 6 minutes, then travels 81 km to Patna, arriving at 105 minutes (range 91 to 130); in Yavatmal, dialysis means 133 km each way, three times a week",
+      "presenter_line": "This is the product's answer format: every stop has a time with a range, a probability, a quoted sentence with its claim id, and any location warning. In Beed the card says 'confirm the address by phone' because both locations are flagged.",
+      "primary_chart": "viz/journeys/charts/s3_itineraries.png",
+      "charts": [
+        {
+          "png": "viz/journeys/charts/s3_itineraries.png",
+          "svg": "viz/journeys/charts/s3_itineraries.svg",
+          "alt_text": "Three itinerary maps on a plain background with straight connectors and no boundaries. Major trauma from Muzaffarpur district, Bihar: stabilise at Phular Superspeciality Hospital (leg 4.5 km, arrive at 6 min, P 0.92); then definitive care at Rajeshwar Hospital (leg 80.7 km, arrive at 105 min, P 0.31). Obstetric emergency from Beed district, Maharashtra: stabilise at Matoshree Hospital (leg 17.2 km, arrive at 19 min, P 0.78); then definitive care at Kalyani Hospital (leg 139.4 km, arrive at 163 min, P 0.55). Dialysis start from Yavatmal district, Maharashtra: assessment at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.61); then fistula surgery at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.71); then dialysis sessions at Alliance Hospital Amravati (leg 133.4 km, arrive at 109 min, P 0.94). Each stop is annotated with the record sentence that supports it and any location-confidence flag. Probabilities are the derived/v1 stub."
+        }
+      ],
+      "alt_text": "Three itinerary maps on a plain background with straight connectors and no boundaries. Major trauma from Muzaffarpur district, Bihar: stabilise at Phular Superspeciality Hospital (leg 4.5 km, arrive at 6 min, P 0.92); then definitive care at Rajeshwar Hospital (leg 80.7 km, arrive at 105 min, P 0.31). Obstetric emergency from Beed district, Maharashtra: stabilise at Matoshree Hospital (leg 17.2 km, arrive at 19 min, P 0.78); then definitive care at Kalyani Hospital (leg 139.4 km, arrive at 163 min, P 0.55). Dialysis start from Yavatmal district, Maharashtra: assessment at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.61); then fistula surgery at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.71); then dialysis sessions at Alliance Hospital Amravati (leg 133.4 km, arrive at 109 min, P 0.94). Each stop is annotated with the record sentence that supports it and any location-confidence flag. Probabilities are the derived/v1 stub.",
+      "data_csv": [
+        "viz/journeys/data/s3_itineraries.csv"
+      ],
+      "script": "viz/journeys/scripts/s3_itineraries.py",
+      "use_in": [
+        "demo",
+        "slides",
+        "how_page"
+      ],
+      "caveat": "Probabilities come from the derived/v1 stub (planner/data_v1.py), not the fitted model. Connectors are straight lines, not roads; travel is free-flow. Quotes are claims, not verified facts, and are picked by length, so the dialysis assessment stop shows laboratory sentences. Kalyani Hospital's location is disputed.",
+      "verification": "Planner re-run matched all 3,430 plans (viz/journeys/verify/v0_rerun_planner.py); every quoted claim id checked (v3_quotes.log)."
+    },
+    {
+      "order": 15,
+      "act": "6 Limits",
+      "id": "model_s4_labels",
+      "theme": "How the model decides",
+      "headline": "53 of 71 sealed-test labels say 'no public information' and 32 of those were never searched; within labelling batches the never-searched share rose from 16 of 70 (first 10 pairs) to 42 of 70 (last 10) as one 200-search budget ran out",
+      "presenter_line": "Our biggest limit is labels, not modelling. How we treat 'no information' and how we weight the sample move AUROC by up to 0.16, more than any model change (0.013). The next hour is better spent searching than fitting.",
+      "primary_chart": "viz/model/s4_label_budget.png",
+      "charts": [
+        {
+          "png": "viz/model/s4_label_budget.png",
+          "svg": "viz/model/s4_label_budget.svg",
+          "alt_text": "Left: stacked bars of gold label outcomes. Test, 71 pairs: 17 confirmed, 1 contradicted, 21 searched with nothing found, 32 never searched. Dev, 69 pairs: 14 confirmed, 3 contradicted, 26 searched with nothing found, 26 never searched. Right: never-searched share by position in the labelling batch, 16 of 70 for the first 10 pairs against 42 of 70 for the last 10."
+        },
+        {
+          "png": "viz/model/s4_label_agreement.png",
+          "svg": "viz/model/s4_label_agreement.svg",
+          "alt_text": "Left: 3 by 3 agreement table for 30 pairs labelled twice, rows primary labeller, columns second labeller. Diagonal: 5 both confirmed, 1 both contradicted, 15 both no info; all 9 disagreements pair a decisive label with no info. Cohen's kappa 0.382. Right: test AUROC of the ledger and the unfitted expert scorecard under three label treatments: Witness Ledger, All 71, never-searched = not confirmed: 0.776 [0.680, 0.862]; Witness Ledger, Searched 39 only: 0.711 [0.614, 0.810]; Witness Ledger, All 71 as first column, reweighted to the population (IPW): 0.615 [0.406, 0.866]; Expert priors, unfitted (B4), All 71, never-searched = not confirmed: 0.789 [0.692, 0.875]; Expert priors, unfitted (B4), Searched 39 only: 0.754 [0.639, 0.864]; Expert priors, unfitted (B4), All 71 as first column, reweighted to the population (IPW): 0.684 [0.483, 0.906]."
+        }
+      ],
+      "alt_text": "Left: stacked bars of gold label outcomes. Test, 71 pairs: 17 confirmed, 1 contradicted, 21 searched with nothing found, 32 never searched. Dev, 69 pairs: 14 confirmed, 3 contradicted, 26 searched with nothing found, 26 never searched. Right: never-searched share by position in the labelling batch, 16 of 70 for the first 10 pairs against 42 of 70 for the last 10.",
+      "data_csv": [
+        "viz/model/s4_label_budget.csv",
+        "viz/model/s4_label_budget_batch.csv",
+        "viz/model/s4_label_agreement_crosstab.csv"
+      ],
+      "script": "viz/model/s4_labels.py",
+      "use_in": [
+        "model_card",
+        "slides",
+        "how_page"
+      ],
+      "caveat": "'Never searched' is inferred from no_info with no URLs. Batch-position intervals ignore clustering within batches. Kappa is 0.38 on 30 double-labelled pairs, but all 9 disagreements pair a verdict with 'no info'. The overlap set spans dev and test. Quoted from results.json; no label read.",
+      "verification": "viz/model/verify/v34_published.py (agreement table axes and IPW label fixed in verification)."
+    }
+  ],
+  "how_this_works_top5": [
+    {
+      "rank": 1,
+      "png": "viz/model/s1_service_waterfalls.png",
+      "svg": "viz/model/s1_service_waterfalls.svg",
+      "alt_text": "Three horizontal waterfall charts of the points that make up the service score P_S. Civil Hospital, Panipat (dialysis): base -35.0, own text +8.3, related-service hints +10.0, web footprint +11.6, facility type and size +30.0, total +24.8 points, P_S 0.70, rank 1 of 12. Referal Hospital (emergency C-section): base rate for the service -35.6, related-service hints +11.1, web footprint +5.0, facility type and size -14.5, total -34.0 points, P_S 0.24, rank 1 of 5. Wockhardt Hospital Nagpur (dialysis): base rate for the service -35.0, own service text +20.1, related-service hints +10.0, contamination, non-offer, scope -6.4, web footprint +5.0, facility type and size +11.0, total +4.7 points, P_S 0.54, rank 51 of 63. The two ignored Wockhardt sentences both name Nair Hospital, Mumbai Central; without the ownership filter its P_S would be 0.64 instead of 0.54. Its rank of 51 of 63 comes mostly from location (G 0.216), not from the ignored sentences.",
+      "why": "Every score is a sum of named points (three worked cases)."
+    },
+    {
+      "rank": 2,
+      "png": "viz/model/s1_location_waterfalls.png",
+      "svg": "viz/model/s1_location_waterfalls.svg",
+      "alt_text": "Three horizontal waterfall charts of the location score P_L. Civil Hospital, Panipat: Base +12.9, PIN centre +38.4, Stated city +63.3, Stated state +21.2, P_L 0.99, point used 9 km from the query place. Referal Hospital: Base +12.9, Point source +12.0, Stated city -63.3, Stated state +21.2, P_L 0.36, point used 267 km from the query place. Wockhardt Hospital Nagpur: Base +12.9, PIN centre +38.4, Stated city -63.3, Stated state +21.2, P_L 0.58, point used 890 km from the query place. Coordinates and place-in-name votes appear but carry weight 0 in the fitted head.",
+      "why": "How location witnesses vote; why Wockhardt Nagpur ranks 51 of 63."
+    },
+    {
+      "rank": 3,
+      "png": "viz/model/s5_points_by_text_level.png",
+      "svg": "viz/model/s5_points_by_text_level.svg",
+      "alt_text": "Left: line chart of mean points per pair by own-text level T over all 69,713 pairs. Own service text: T0 0.6, T1 8.3, T2 8.3, T3 8.3, T4 9.2, T5 20.8. Related-service hints: T0 2.9, T1 9.4, T2 9.1, T3 10.8, T4 10.4, T5 8.7. Facility type and size: T0 -13.2, T1 -2.4, T2 -2.6, T3 -0.1, T4 -1.1, T5 -1.0. Right: median P_S by level: T0 0.18, T1 0.37, T2 0.37, T3 0.41, T4 0.40, T5 0.51. Text points are flat from level 1 to 4 and jump only at level 5. Hints exceed text for T1 82%, T2 76%, T3 86%, T4 87% of pairs.",
+      "why": "Where the points come from across all 69,713 pairs, and what that says about the score."
+    },
+    {
+      "rank": 4,
+      "png": "viz/model/s3_calibration_location.png",
+      "svg": "viz/model/s3_calibration_location.svg",
+      "alt_text": "Left: reliability diagram for the service score P_S on 71 test pairs in 5 bins. Mean P_S per bin 0.19, 0.27, 0.32, 0.41, 0.51 against confirmed shares 0.00, 0.14, 0.21, 0.36, 0.50. The ranking is monotone but every bin sits below the diagonal; ECE IPW 0.197. Right: location head. 30 of 33 pairs with P_L at least 0.7 had their location confirmed (Wilson 0.76 to 0.97); 0 of 5 below 0.7. Only the 38 pairs with a yes or no location label count; 33 unclear pairs are excluded.",
+      "why": "How far to trust the numbers: P_S runs high, P_L >= 0.7 right 30 of 33."
+    },
+    {
+      "rank": 5,
+      "png": "viz/features/charts/13_card_phrases.png",
+      "svg": "viz/features/charts/13_card_phrases.svg",
+      "alt_text": "Card phrases for kept features: c_n_urls: its listing cites 3 web pages; c_share_social: 40% of its sources are social media; a_T: its own listing describes dialysis (text level 3 of 5); a_contamination: some dialysis text is about another hospital; a_list_truncated: part of its listing is cut off; a_prereq: it lists what dialysis needs (for example an ICU or operating theatre); a_scope_conflict: an eye, dental or lab centre, unlikely to offer dialysis; k_text_24x7_any: its listing says something runs 24x7; k_text_nabh: its listing says it is NABH accredited (not checked); e_web_24x7_emergency: its website says emergency is open 24x7; e_web_service: its own website mentions dialysis; g_iphs_essential: the public standard (IPHS 2022) expects dialysis at a district hospital; g_log_beds: 3 beds (stated); g_n_specialties: 3 specialties listed; g_public_level: a district hospital; g_type_hospital: a hospital; d_erk_blood_centre_on_site: e-RaktKosh lists a blood centre here; d_laqshya_ot_ever: held a LaQshya maternity OT certificate (may have expired); d_laqshya_ot_valid: LaQshya-certified maternity OT, valid to 16 Mar 2027; d_mohfw_trauma_centre: on the MoHFW trauma care facility list; d_nabh_full_accreditation: fully accredited by NABH; d_nabh_service_code: NABH lists its dialysis (DIA) department (a department, not proof of this service); d_nmc_course_strong: NMC lists D.M. Nephrology seats here; a_negation: a sentence suggests dialysis may not be offered here routinely (referral, camp, plan or negation); e_web_negated: its own website says it does not offer dialysis; b_scale_contradiction: too small for dialysis by its own numbers; g_type_dentist: a dental clinic; a_quarantine_share: 40% of its sentences are about other facilities; f_osm_conflict: a same-name OpenStreetMap facility is somewhere else; b_city_points_elsewhere: its stated town points somewhere else; b_coord_pin_km: its map pin is 3 km from its postcode; b_copied_geocode: its map pin is shared with other facilities; b_loc_conf: location confidence: high; b_votes_against: 3 location clues disagree; d_nabh_listed: listed by NABH (Accredited, H-2024-1234); f_osm_match: found on OpenStreetMap; e_identity_conf: its website matches this facility (high confidence); e_site_alive: its website is live; b_directory_phone: its phone number is a directory number used in 3+ cities; b_no_phone: no phone number in the listing; b_website_other_org: its website may belong to someone else",
+      "why": "Every kept feature in the words the card uses, with its DEV and list AUROC."
+    }
+  ]
+}

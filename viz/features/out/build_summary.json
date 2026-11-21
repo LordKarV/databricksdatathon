@@ -1,0 +1,446 @@
+{
+ "rows": 69713,
+ "n_features": 110,
+ "features": {
+  "a_any_mention": {
+   "coverage": 1.0,
+   "nonzero": 0.1149
+  },
+  "a_n_atoms": {
+   "coverage": 1.0,
+   "nonzero": 0.1149
+  },
+  "a_T": {
+   "coverage": 1.0,
+   "nonzero": 0.1143
+  },
+  "a_tag_only": {
+   "coverage": 1.0,
+   "nonzero": 0.0155
+  },
+  "a_n_fields_own": {
+   "coverage": 1.0,
+   "nonzero": 0.0988
+  },
+  "a_n_units_own": {
+   "coverage": 1.0,
+   "nonzero": 0.0988
+  },
+  "a_prereq": {
+   "coverage": 1.0,
+   "nonzero": 0.3089
+  },
+  "a_negation": {
+   "coverage": 1.0,
+   "nonzero": 0.0006
+  },
+  "a_contamination": {
+   "coverage": 1.0,
+   "nonzero": 0.0018
+  },
+  "a_rejected_ownership": {
+   "coverage": 1.0,
+   "nonzero": 0.0018
+  },
+  "a_scope_conflict": {
+   "coverage": 1.0,
+   "nonzero": 0.2945
+  },
+  "a_list_truncated": {
+   "coverage": 1.0,
+   "nonzero": 0.2087
+  },
+  "a_grade": {
+   "coverage": 1.0,
+   "nonzero": 0.1143
+  },
+  "a_m_procedure": {
+   "coverage": 1.0,
+   "nonzero": 0.046
+  },
+  "a_m_capability": {
+   "coverage": 1.0,
+   "nonzero": 0.0754
+  },
+  "a_m_equipment": {
+   "coverage": 1.0,
+   "nonzero": 0.0268
+  },
+  "a_m_description": {
+   "coverage": 1.0,
+   "nonzero": 0.0105
+  },
+  "a_m_specialties": {
+   "coverage": 1.0,
+   "nonzero": 0.0429
+  },
+  "a_echo_dupes": {
+   "coverage": 1.0,
+   "nonzero": 0.0165
+  },
+  "a_own_anchored": {
+   "coverage": 1.0,
+   "nonzero": 0.0082
+  },
+  "a_quantity": {
+   "coverage": 1.0,
+   "nonzero": 0.0051
+  },
+  "a_quarantine_share": {
+   "coverage": 1.0,
+   "nonzero": 0.2499
+  },
+  "a_pair_quarantine_share": {
+   "coverage": 0.1149,
+   "nonzero": 0.0018
+  },
+  "k_text_nabh": {
+   "coverage": 1.0,
+   "nonzero": 0.1247
+  },
+  "k_text_pmjay": {
+   "coverage": 1.0,
+   "nonzero": 0.0645
+  },
+  "k_text_cghs_echs": {
+   "coverage": 1.0,
+   "nonzero": 0.0278
+  },
+  "k_text_blood_bank": {
+   "coverage": 1.0,
+   "nonzero": 0.0575
+  },
+  "k_text_ot_count": {
+   "coverage": 1.0,
+   "nonzero": 0.0255
+  },
+  "k_text_24x7_any": {
+   "coverage": 1.0,
+   "nonzero": 0.4129
+  },
+  "k_text_service_equipment_count": {
+   "coverage": 0.4286,
+   "nonzero": 0.0041
+  },
+  "k_text_service_24x7": {
+   "coverage": 0.5714,
+   "nonzero": 0.0366
+  },
+  "b_coord_pin_km": {
+   "coverage": 0.991,
+   "nonzero": 0.99
+  },
+  "b_coords_far_50km": {
+   "coverage": 0.991,
+   "nonzero": 0.1373
+  },
+  "b_loc_conf": {
+   "coverage": 1.0,
+   "nonzero": 0.946
+  },
+  "b_disputed": {
+   "coverage": 1.0,
+   "nonzero": 0.054
+  },
+  "b_city_points_elsewhere": {
+   "coverage": 1.0,
+   "nonzero": 0.0432
+  },
+  "b_copied_geocode": {
+   "coverage": 1.0,
+   "nonzero": 0.0161
+  },
+  "b_votes_against": {
+   "coverage": 1.0,
+   "nonzero": 0.2093
+  },
+  "b_coord_shared_3plus": {
+   "coverage": 1.0,
+   "nonzero": 0.0013
+  },
+  "b_n_source_ids": {
+   "coverage": 1.0,
+   "nonzero": 0.9267
+  },
+  "b_directory_phone": {
+   "coverage": 1.0,
+   "nonzero": 0.0349
+  },
+  "b_no_phone": {
+   "coverage": 1.0,
+   "nonzero": 0.0502
+  },
+  "b_dup_group": {
+   "coverage": 1.0,
+   "nonzero": 0.0153
+  },
+  "b_email_placeholder": {
+   "coverage": 1.0,
+   "nonzero": 0.0361
+  },
+  "b_breadth_exceeds_size": {
+   "coverage": 1.0,
+   "nonzero": 0.0653
+  },
+  "b_scale_implausible": {
+   "coverage": 1.0,
+   "nonzero": 0.0125
+  },
+  "b_claims_6plus_services": {
+   "coverage": 1.0,
+   "nonzero": 0.0079
+  },
+  "b_website_other_org": {
+   "coverage": 1.0,
+   "nonzero": 0.0032
+  },
+  "b_merge_bucket": {
+   "coverage": 1.0,
+   "nonzero": 0.6705
+  },
+  "b_scale_contradiction": {
+   "coverage": 1.0,
+   "nonzero": 0.002
+  },
+  "c_n_urls": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "c_share_official": {
+   "coverage": 1.0,
+   "nonzero": 0.462
+  },
+  "c_share_aggregator": {
+   "coverage": 1.0,
+   "nonzero": 0.7641
+  },
+  "c_share_social": {
+   "coverage": 1.0,
+   "nonzero": 0.9061
+  },
+  "c_share_business_dir": {
+   "coverage": 1.0,
+   "nonzero": 0.4214
+  },
+  "c_share_government": {
+   "coverage": 1.0,
+   "nonzero": 0.1153
+  },
+  "c_share_maps": {
+   "coverage": 1.0,
+   "nonzero": 0.2575
+  },
+  "c_share_about_pages": {
+   "coverage": 1.0,
+   "nonzero": 0.9129
+  },
+  "c_mean_domain_reliability": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "c_source_support": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "c_location_score_v1": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "c_pagecheck_supported": {
+   "coverage": 0.0064,
+   "nonzero": 0.0004
+  },
+  "d_nabh_listed": {
+   "coverage": 1.0,
+   "nonzero": 0.2069
+  },
+  "d_nabh_full_accreditation": {
+   "coverage": 1.0,
+   "nonzero": 0.0568
+  },
+  "d_nabh_service_code": {
+   "coverage": 0.5714,
+   "nonzero": 0.0316
+  },
+  "d_nabh_code_known": {
+   "coverage": 1.0,
+   "nonzero": 0.1058
+  },
+  "d_nmc_college": {
+   "coverage": 1.0,
+   "nonzero": 0.0081
+  },
+  "d_nmc_course_strong": {
+   "coverage": 1.0,
+   "nonzero": 0.0023
+  },
+  "d_nmc_course_any": {
+   "coverage": 1.0,
+   "nonzero": 0.0047
+  },
+  "d_erk_blood_centre_on_site": {
+   "coverage": 1.0,
+   "nonzero": 0.0367
+  },
+  "d_erk_nearest_km": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "d_erk_within_10km": {
+   "coverage": 1.0,
+   "nonzero": 0.9565
+  },
+  "d_laqshya_ot_valid": {
+   "coverage": 0.1429,
+   "nonzero": 0.0002
+  },
+  "d_laqshya_ot_ever": {
+   "coverage": 0.1429,
+   "nonzero": 0.0007
+  },
+  "d_laqshya_labour_room": {
+   "coverage": 0.1429,
+   "nonzero": 0.0008
+  },
+  "d_mohfw_trauma_centre": {
+   "coverage": 0.1429,
+   "nonzero": 0.0003
+  },
+  "e_has_website": {
+   "coverage": 1.0,
+   "nonzero": 0.8048
+  },
+  "e_site_alive": {
+   "coverage": 0.8048,
+   "nonzero": 0.5905
+  },
+  "e_identity_conf": {
+   "coverage": 0.5905,
+   "nonzero": 0.5677
+  },
+  "e_web_service": {
+   "coverage": 0.4886,
+   "nonzero": 0.0701
+  },
+  "e_web_service_strong": {
+   "coverage": 0.4886,
+   "nonzero": 0.0503
+  },
+  "e_web_service_page": {
+   "coverage": 0.4886,
+   "nonzero": 0.0413
+  },
+  "e_web_negated": {
+   "coverage": 0.4886,
+   "nonzero": 0.0004
+  },
+  "e_web_hours_found": {
+   "coverage": 0.4886,
+   "nonzero": 0.3549
+  },
+  "e_web_24x7_emergency": {
+   "coverage": 0.4886,
+   "nonzero": 0.1292
+  },
+  "e_web_nabh_claim": {
+   "coverage": 0.4886,
+   "nonzero": 0.0687
+  },
+  "f_osm_match": {
+   "coverage": 1.0,
+   "nonzero": 0.2802
+  },
+  "f_osm_conflict": {
+   "coverage": 1.0,
+   "nonzero": 0.0637
+  },
+  "f_wikidata_match": {
+   "coverage": 1.0,
+   "nonzero": 0.0207
+  },
+  "f_osm_emergency_yes": {
+   "coverage": 0.2802,
+   "nonzero": 0.0163
+  },
+  "f_osm_opening_hours": {
+   "coverage": 0.2802,
+   "nonzero": 0.0135
+  },
+  "f_osm_24x7": {
+   "coverage": 0.2802,
+   "nonzero": 0.0088
+  },
+  "f_osm_speciality_service": {
+   "coverage": 0.0261,
+   "nonzero": 0.0033
+  },
+  "g_type_hospital": {
+   "coverage": 1.0,
+   "nonzero": 0.5633
+  },
+  "g_type_clinic": {
+   "coverage": 1.0,
+   "nonzero": 0.3786
+  },
+  "g_type_dentist": {
+   "coverage": 1.0,
+   "nonzero": 0.049
+  },
+  "g_public": {
+   "coverage": 1.0,
+   "nonzero": 0.0469
+  },
+  "g_public_level": {
+   "coverage": 0.0286,
+   "nonzero": 0.0286
+  },
+  "g_medical_college": {
+   "coverage": 1.0,
+   "nonzero": 0.0183
+  },
+  "g_iphs_essential": {
+   "coverage": 1.0,
+   "nonzero": 0.0019
+  },
+  "g_log_beds": {
+   "coverage": 0.2507,
+   "nonzero": 0.2502
+  },
+  "g_log_doctors": {
+   "coverage": 0.363,
+   "nonzero": 0.2431
+  },
+  "g_n_specialties": {
+   "coverage": 1.0,
+   "nonzero": 1.0
+  },
+  "h_nfhs_institutional_birth_pct": {
+   "coverage": 0.9975,
+   "nonzero": 0.9975
+  },
+  "h_nfhs_csection_pct": {
+   "coverage": 0.9975,
+   "nonzero": 0.9975
+  },
+  "h_nfhs_insurance_pct": {
+   "coverage": 0.9975,
+   "nonzero": 0.9975
+  },
+  "h_nfhs_women_high_sugar_pct": {
+   "coverage": 0.9975,
+   "nonzero": 0.9975
+  },
+  "h_tt_motor_min": {
+   "coverage": 0.9974,
+   "nonzero": 0.3012
+  },
+  "h_log_pop_25km": {
+   "coverage": 0.9992,
+   "nonzero": 0.9992
+  },
+  "h_vf_records_25km": {
+   "coverage": 1.0,
+   "nonzero": 0.979
+  }
+ }
+}

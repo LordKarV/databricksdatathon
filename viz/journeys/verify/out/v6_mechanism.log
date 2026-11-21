@@ -1,0 +1,37 @@
+Bihar csection strong/moderate: 13
+
+ obstetric_emergency comprehensive_emoc requires_all ['comprehensive_emoc', 'blood_transfusion'] any []
+                                        name  has_loc  comprehensive_emoc  blood_transfusion  stage_p
+2                          Miracare Hospital     True               0.827              0.783    0.648
+6               Sub Divisional Hospital Pusa     True               0.772              0.783    0.604
+7           MGM Hospital and Research Centre     True               0.970              0.020    0.019
+5      Mishra Hospital Test Tube Baby Centre     True               0.919              0.020    0.018
+8                    Ruban Memorial Hospital     True               0.908              0.020    0.018
+9                         Shrinivas Hospital     True               0.898              0.020    0.018
+11      Pushpanjali Multispeciality Hospital     True               0.919              0.020    0.018
+12  Dr. Pranjal Shri Hospital (Dr. Ravindra      True               0.917              0.020    0.018
+0                             Harsh Hospital     True               0.791              0.020    0.016
+1           Patna Medical College & Hospital     True               0.782              0.020    0.016
+3                  Sanjeevan Sparsh Hospital     True               0.801              0.020    0.016
+10                               Sun Hospita     True               0.816              0.020    0.016
+4                         Medizone Hospitals     True               0.771              0.020    0.015
+records with stage_p >= 0.05 (planner candidate floor): 2 of 13
+
+ major_trauma definitive requires_all ['general_surgery_ot', 'blood_transfusion', 'ct_scan', 'icu'] any [['trauma_centre', 'neurosurgery', 'orthopaedics']]
+                                         name  has_loc  general_surgery_ot  blood_transfusion  ct_scan    icu  trauma_centre  neurosurgery  orthopaedics  stage_p
+188                        Rajeshwar Hospital     True               0.783              0.715    0.783  0.915          0.715         0.783         0.783    0.314
+215                         Shri Sai Hospital     True               0.783              0.715    0.783  0.906          0.020         0.715         0.783    0.311
+220  Indira Gandhi Institute of Medical Scien     True               0.715              0.783    0.783  0.913          0.020         0.715         0.715    0.286
+113                          Ganpati Hospital     True               0.783              0.783    0.783  0.780          0.020         0.715         0.715    0.268
+28   Hi-Tech Emergency Hospital – Saguna More     True               0.715              0.715    0.783  0.916          0.715         0.020         0.715    0.262
+48   Phular Superspeciality Hospital, Road No     True               0.783              0.783    0.783  0.350          0.020         0.783         0.715    0.132
+39              Arsh Superspeciality Hospital     True               0.715              0.715    0.783  0.346          0.020         0.715         0.783    0.108
+64                          Miracare Hospital     True               0.783              0.783    0.020  0.929          0.020         0.783         0.783    0.009
+19   All India Institute of Medical Sciences      True               0.783              0.783    0.783  0.897          0.020         0.020         0.020    0.009
+179                    Savera Cancer Hospital     True               0.783              0.020    0.715  0.910          0.020         0.715         0.783    0.008
+246                       Paras HMRI Hospital     True               0.783              0.020    0.783  0.897          0.020         0.020         0.715    0.008
+258                  Pulse Emergency Hospital     True               0.715              0.020    0.783  0.918          0.020         0.783         0.783    0.008
+5    Netaji Subhas Medical College & Hospital     True               0.715              0.020    0.783  0.898          0.020         0.783         0.783    0.008
+62     Buddha Hospital and Research Institute     True               0.715              0.020    0.783  0.924          0.020         0.783         0.783    0.008
+244       Samarpan Trauma and Research Centre     True               0.715              0.020    0.783  0.914          0.020         0.783         0.783    0.008
+records with stage_p >= 0.05 (planner candidate floor): 7 of 260

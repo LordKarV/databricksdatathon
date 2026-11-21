@@ -1,0 +1,22 @@
+case,kind,name,step,label,points,start,end
+S1,Strong,"Civil Hospital, Panipat",base,Base rate for the service,-35.03433967974957,0.0,-35.03433967974957
+S1,Strong,"Civil Hospital, Panipat",text,Own service text,8.264374644075748,-35.03433967974957,-26.769965035673824
+S1,Strong,"Civil Hospital, Panipat",hints,Related-service hints,9.976121087481157,-26.769965035673824,-16.793843948192666
+S1,Strong,"Civil Hospital, Panipat",flags,"Contamination, non-offer, scope",0.0,-16.793843948192666,-16.793843948192666
+S1,Strong,"Civil Hospital, Panipat",web,Web footprint,11.565371217392808,-16.793843948192666,-5.228472730799858
+S1,Strong,"Civil Hospital, Panipat",type_size,Facility type and size,30.00476565664883,-5.228472730799858,24.77629292584897
+S1,Strong,"Civil Hospital, Panipat",total,Total,24.77629292584897,0.0,24.77629292584897
+U1,Uncertain,Referal Hospital,base,Base rate for the service,-35.6446923164239,0.0,-35.6446923164239
+U1,Uncertain,Referal Hospital,text,Own service text,0.0,-35.6446923164239,-35.6446923164239
+U1,Uncertain,Referal Hospital,hints,Related-service hints,11.100309687633041,-35.6446923164239,-24.544382628790856
+U1,Uncertain,Referal Hospital,flags,"Contamination, non-offer, scope",0.0,-24.544382628790856,-24.544382628790856
+U1,Uncertain,Referal Hospital,web,Web footprint,5.037478272925041,-24.544382628790856,-19.506904355865814
+U1,Uncertain,Referal Hospital,type_size,Facility type and size,-14.506512764871548,-19.506904355865814,-34.01341712073736
+U1,Uncertain,Referal Hospital,total,Total,-34.01341712073736,0.0,-34.01341712073736
+C1,Contaminated,Wockhardt Hospital Nagpur,base,Base rate for the service,-35.03433967974957,0.0,-35.03433967974957
+C1,Contaminated,Wockhardt Hospital Nagpur,text,Own service text,20.050407858535998,-35.03433967974957,-14.983931821213574
+C1,Contaminated,Wockhardt Hospital Nagpur,hints,Related-service hints,9.976121087481157,-14.983931821213574,-5.007810733732416
+C1,Contaminated,Wockhardt Hospital Nagpur,flags,"Contamination, non-offer, scope",-6.380196240269733,-5.007810733732416,-11.388006974002149
+C1,Contaminated,Wockhardt Hospital Nagpur,web,Web footprint,5.037478272925041,-11.388006974002149,-6.350528701077108
+C1,Contaminated,Wockhardt Hospital Nagpur,type_size,Facility type and size,11.02444680651697,-6.350528701077108,4.673918105439862
+C1,Contaminated,Wockhardt Hospital Nagpur,total,Total,4.673918105439862,0.0,4.673918105439862

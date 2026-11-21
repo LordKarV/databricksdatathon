@@ -1,0 +1,93 @@
+runs 3430 origins 490
+
+== Story 1: plan mix ==
+major_trauma Benchmark (40 queries) {'direct': 18, 'one_stop': 18, 'abstain': 4}
+major_trauma Bihar {'one_stop': 113, 'direct': 21, 'abstain': 16}
+major_trauma Uttar Pradesh {'one_stop': 109, 'direct': 38, 'abstain': 3}
+major_trauma Maharashtra {'one_stop': 110, 'direct': 38, 'abstain': 2}
+obstetric_emergency Benchmark (40 queries) {'direct': 15, 'abstain': 14, 'one_stop': 11}
+obstetric_emergency Bihar {'one_stop': 73, 'direct': 58, 'abstain': 19}
+obstetric_emergency Uttar Pradesh {'direct': 87, 'one_stop': 47, 'abstain': 16}
+obstetric_emergency Maharashtra {'direct': 68, 'one_stop': 57, 'abstain': 25}
+burns Benchmark (40 queries) {'direct': 36, 'abstain': 3, 'one_stop': 1}
+burns Bihar {'direct': 150}
+burns Uttar Pradesh {'direct': 149, 'one_stop': 1}
+burns Maharashtra {'direct': 149, 'one_stop': 1}
+sick_newborn Benchmark (40 queries) {'direct': 38, 'abstain': 2}
+sick_newborn Bihar {'direct': 150}
+sick_newborn Uttar Pradesh {'direct': 149, 'one_stop': 1}
+sick_newborn Maharashtra {'direct': 149, 'one_stop': 1}
+stemi Benchmark (40 queries) {'direct': 39, 'abstain': 1}
+stemi Bihar {'direct': 150}
+stemi Uttar Pradesh {'direct': 150}
+stemi Maharashtra {'direct': 148, 'abstain': 2}
+snakebite Benchmark (40 queries) {'abstain': 40}
+snakebite Bihar {'abstain': 150}
+snakebite Uttar Pradesh {'abstain': 150}
+snakebite Maharashtra {'abstain': 150}
+trauma one_stop states: 332/450 = 73.8% (69.5 to 77.6)
+major_trauma n 350 mean p_first direct 0.098 stop 0.851 mean pobj direct 0.098 stop 0.415 median first 36.0 def direct 84.5 def stop 171.5 median delta 76.5 share delta<=0 0.003
+   delta median bootstrap 95% [70.  83.5]
+   direct-plan definitive ETA <= 60 among these: 125/350 = 35.7% (30.9 to 40.9)
+obstetric_emergency n 188 mean p_first direct 0.0 stop 0.764 mean pobj direct 0.0 stop 0.0 median first 36.0 def direct 105.0 def stop 158.0 median delta 48.0 share delta<=0 0.0
+   delta median bootstrap 95% [44. 52.]
+   direct-plan definitive ETA <= 60 among these: 0/188 = 0.0% (0.0 to 2.0)
+stemi best types all {'direct': 487, 'abstain': 3} max defn 155.0
+
+== Story 2: within 60 min, state samples ==
+major_trauma Bihar def<=60 15/150 = 10.0% (6.2 to 15.8) | first<=60 128/150 = 85.3% (78.8 to 90.1) | any returned plan def<=60 27/150 = 18.0% (12.7 to 24.9) | best-direct def<=60 56/150 = 37.3% (30.0 to 45.3) | median defn (planned) 153.0 abstain 16
+major_trauma Uttar Pradesh def<=60 26/150 = 17.3% (12.1 to 24.2) | first<=60 135/150 = 90.0% (84.2 to 93.8) | any returned plan def<=60 39/150 = 26.0% (19.6 to 33.6) | best-direct def<=60 67/150 = 44.7% (36.9 to 52.7) | median defn (planned) 161.0 abstain 3
+major_trauma Maharashtra def<=60 23/150 = 15.3% (10.4 to 22.0) | first<=60 133/150 = 88.7% (82.6 to 92.8) | any returned plan def<=60 44/150 = 29.3% (22.6 to 37.1) | best-direct def<=60 59/150 = 39.3% (31.9 to 47.3) | median defn (planned) 153.0 abstain 2
+obstetric_emergency Bihar def<=60 24/150 = 16.0% (11.0 to 22.7) | first<=60 97/150 = 64.7% (56.7 to 71.9) | any returned plan def<=60 24/150 = 16.0% (11.0 to 22.7) | best-direct def<=60 24/150 = 16.0% (11.0 to 22.7) | median defn (planned) 138.0 abstain 19
+obstetric_emergency Uttar Pradesh def<=60 46/150 = 30.7% (23.8 to 38.5) | first<=60 93/150 = 62.0% (54.0 to 69.4) | any returned plan def<=60 46/150 = 30.7% (23.8 to 38.5) | best-direct def<=60 46/150 = 30.7% (23.8 to 38.5) | median defn (planned) 113.5 abstain 16
+obstetric_emergency Maharashtra def<=60 48/150 = 32.0% (25.1 to 39.8) | first<=60 105/150 = 70.0% (62.2 to 76.8) | any returned plan def<=60 48/150 = 32.0% (25.1 to 39.8) | best-direct def<=60 48/150 = 32.0% (25.1 to 39.8) | median defn (planned) 103.0 abstain 25
+stemi Bihar def<=60 51/150 = 34.0% (26.9 to 41.9) | first<=60 51/150 = 34.0% (26.9 to 41.9) | any returned plan def<=60 54/150 = 36.0% (28.8 to 43.9) | best-direct def<=60 51/150 = 34.0% (26.9 to 41.9) | median defn (planned) 72.0 abstain 0
+stemi Uttar Pradesh def<=60 84/150 = 56.0% (48.0 to 63.7) | first<=60 84/150 = 56.0% (48.0 to 63.7) | any returned plan def<=60 91/150 = 60.7% (52.7 to 68.1) | best-direct def<=60 84/150 = 56.0% (48.0 to 63.7) | median defn (planned) 52.0 abstain 0
+stemi Maharashtra def<=60 101/150 = 67.3% (59.5 to 74.3) | first<=60 101/150 = 67.3% (59.5 to 74.3) | any returned plan def<=60 102/150 = 68.0% (60.2 to 74.9) | best-direct def<=60 101/150 = 67.3% (59.5 to 74.3) | median defn (planned) 48.0 abstain 2
+burns Bihar def<=60 81/150 = 54.0% (46.0 to 61.8) | first<=60 81/150 = 54.0% (46.0 to 61.8) | any returned plan def<=60 81/150 = 54.0% (46.0 to 61.8) | best-direct def<=60 81/150 = 54.0% (46.0 to 61.8) | median defn (planned) 59.0 abstain 0
+burns Uttar Pradesh def<=60 99/150 = 66.0% (58.1 to 73.1) | first<=60 100/150 = 66.7% (58.8 to 73.7) | any returned plan def<=60 99/150 = 66.0% (58.1 to 73.1) | best-direct def<=60 99/150 = 66.0% (58.1 to 73.1) | median defn (planned) 48.5 abstain 0
+burns Maharashtra def<=60 103/150 = 68.7% (60.9 to 75.5) | first<=60 104/150 = 69.3% (61.5 to 76.2) | any returned plan def<=60 103/150 = 68.7% (60.9 to 75.5) | best-direct def<=60 103/150 = 68.7% (60.9 to 75.5) | median defn (planned) 43.0 abstain 0
+sick_newborn Bihar def<=60 111/150 = 74.0% (66.4 to 80.4) | first<=60 111/150 = 74.0% (66.4 to 80.4) | any returned plan def<=60 111/150 = 74.0% (66.4 to 80.4) | best-direct def<=60 111/150 = 74.0% (66.4 to 80.4) | median defn (planned) 45.5 abstain 0
+sick_newborn Uttar Pradesh def<=60 107/150 = 71.3% (63.6 to 78.0) | first<=60 108/150 = 72.0% (64.3 to 78.6) | any returned plan def<=60 107/150 = 71.3% (63.6 to 78.0) | best-direct def<=60 107/150 = 71.3% (63.6 to 78.0) | median defn (planned) 46.5 abstain 0
+sick_newborn Maharashtra def<=60 100/150 = 66.7% (58.8 to 73.7) | first<=60 101/150 = 67.3% (59.5 to 74.3) | any returned plan def<=60 100/150 = 66.7% (58.8 to 73.7) | best-direct def<=60 100/150 = 66.7% (58.8 to 73.7) | median defn (planned) 51.0 abstain 0
+
+== Story 6: funnel (state samples, abstain excluded) ==
+obstetric_emergency Bihar Sub Divisional Hospital Pusa 81/131 = 61.8% (53.3 to 69.7) destinations 3
+obstetric_emergency Uttar Pradesh Ganga Sewa Sadan Hospital 34/134 = 25.4% (18.8 to 33.4) destinations 14
+obstetric_emergency Maharashtra Care Multispeciality Hospital 23/125 = 18.4% (12.6 to 26.1) destinations 11
+major_trauma Bihar Rajeshwar Hospital 79/134 = 59.0% (50.5 to 66.9) destinations 12
+major_trauma Uttar Pradesh Charak Hospital And Research Centre 30/147 = 20.4% (14.7 to 27.6) destinations 26
+major_trauma Maharashtra Jehangir Hospital, Pune, Maharashtra, India 29/148 = 19.6% (14.0 to 26.7) destinations 24
+dialysis_start Bihar Rajeshwar Hospital 47/137 = 34.3% (26.9 to 42.6) destinations 7
+dialysis_start Uttar Pradesh Manipal Hospitals 20/136 = 14.7% (9.7 to 21.6) destinations 34
+dialysis_start Maharashtra Dr. Babasaheb Ambedkar Hospital & Research Center, Nagpur 21/136 = 15.4% (10.3 to 22.5) destinations 20
+burns Bihar Sri Krishna Medical College and Hospital 34/150 = 22.7% (16.7 to 30.0) destinations 19
+burns Uttar Pradesh Suman Hospital 13/150 = 8.7% (5.1 to 14.3) destinations 49
+burns Maharashtra Geetanjali Multispeciality Hospital, Wai, Satara 12/150 = 8.0% (4.6 to 13.5) destinations 48
+stemi Bihar Asia Hospital 28/150 = 18.7% (13.2 to 25.7) destinations 22
+stemi Uttar Pradesh Gupta Heart & Medical Centre 14/150 = 9.3% (5.6 to 15.1) destinations 50
+stemi Maharashtra Prakash Institute of Medical Sciences & Research 9/148 = 6.1% (3.2 to 11.2) destinations 56
+sick_newborn Bihar I.B.Smriti Arogya Sadan 19/150 = 12.7% (8.3 to 18.9) destinations 22
+sick_newborn Uttar Pradesh Rainbow Childrens Hospitals 11/150 = 7.3% (4.1 to 12.7) destinations 58
+sick_newborn Maharashtra Jadhav Hospital 12/150 = 8.0% (4.6 to 13.5) destinations 45
+
+== Story 3: three itineraries ==
+q05 major_trauma one_stop {'minutes_to_definitive': 105, 'low': 91, 'high': 130, 'p_objective': 0.4822, 'p_first_care': 0.9152, 'p_treated': 0.5269, 'expected_minutes': 172.1, 'minutes_if_treated': 110.2}
+   vs_direct {'direct_name': 'Ganpati Hospital', 'direct_minutes': 60, 'direct_p_objective': 0.2674, 'plan_p_objective': 0.4822, 'plan_p_first_care': 0.9152}
+    Phular Superspeciality Hospital, Road No-02, Juran Chappra, Muzaffarpur - 842001 Muzaffarpur eta 6 4 9 p 0.9152 km 4.5 legmin 6 4 9 flags [] ['2dccd2d1:capa:0', '2dccd2d1:capa:5', '2dccd2d1:capa:7']
+    Rajeshwar Hospital Patna eta 105 91 130 p 0.3136 km 80.7 legmin 69 57 91 flags [] ['acb49d43:capa:37', 'acb49d43:capa:46', 'acb49d43:capa:43', 'acb49d43:capa:16']
+q22 obstetric_emergency one_stop {'minutes_to_definitive': 163, 'low': 140, 'high': 223, 'p_objective': 0.0, 'p_first_care': 0.7828, 'p_treated': 0.55, 'expected_minutes': 215.2, 'minutes_if_treated': 159.7}
+   vs_direct {'direct_name': 'Kalyani Hospital', 'direct_minutes': 126, 'direct_p_objective': 0.0, 'plan_p_objective': 0.0, 'plan_p_first_care': 0.7828}
+    Matoshree Hospital Beed eta 19 14 27 p 0.7828 km 17.2 legmin 19 14 27 flags ['location confidence is low: confirm the address by phone'] ['925fb5c8:capa:3', '925fb5c8:desc:0']
+    Kalyani Hospital Murud eta 163 140 223 p 0.55 km 139.4 legmin 114 96 166 flags ['location confidence is disputed: confirm the address by phone'] ['1a7c035e:proc:5', '1a7c035e:capa:10', '1a7c035e:capa:11']
+q20 dialysis_start two_sites {'distinct_sites': 2, 'stops_before_recurring': 1, 'travel_minutes_over_planning_weeks': 8216, 'planning_weeks': 12, 'one_way_minutes_to_recurring_site': 109, 'p_all_stages': 0.4126}
+   vs_direct None
+    Acharaya Vinoba Bhave Rural Hospital Sawangi eta 92 78 127 p 0.6127 km 112.2 legmin 92 78 127 flags ['location confidence is low: confirm the address by phone'] ['e22f6de9:capa:9', 'e22f6de9:capa:16', 'e22f6de9:capa:29', 'e22f6de9:equi:5']
+    Acharaya Vinoba Bhave Rural Hospital Sawangi eta 92 78 127 p 0.7149 km 112.2 legmin 92 78 127 flags ['location confidence is low: confirm the address by phone'] ['e22f6de9:proc:11']
+    Alliance Hospital Amravati Amravati eta 109 92 157 p 0.9419 km 133.4 legmin 109 92 157 flags [] ['9f46eab1:proc:9', '9f46eab1:equi:1', '9f46eab1:equi:2']
+
+== independent re-run vs plans_raw == {'both': 3430, 'left_only': 0, 'right_only': 0}
+best type agree 1.0 def facility agree 1.0 def eta abs diff max 0.0
+Empty DataFrame
+Columns: [set, oid, pw, best_x, best_y, def_name_x, def_name_y]
+Index: []

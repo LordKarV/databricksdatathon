@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="612pt" viewBox="0 0 864 612" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-21T16:48:02.308255</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 612 
+L 864 612 
+L 864 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 107.333365 518.12278 
+L 860.99976 518.12278 
+L 860.99976 70.57874 
+L 107.333365 70.57874 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 107.333365 518.12278 
+L 107.333365 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="m0c103382f7" d="M 0 0 
+L 0 3.5 
+" style="stroke: #898781; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m0c103382f7" x="107.333365" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="107.333365" y="536.07078" transform="rotate(-0 107.333365 536.07078)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 233.702647 518.12278 
+L 233.702647 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m0c103382f7" x="233.702647" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="233.702647" y="536.07078" transform="rotate(-0 233.702647 536.07078)">50</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 360.071928 518.12278 
+L 360.071928 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m0c103382f7" x="360.071928" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="360.071928" y="536.07078" transform="rotate(-0 360.071928 536.07078)">100</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 486.44121 518.12278 
+L 486.44121 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m0c103382f7" x="486.44121" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="486.44121" y="536.07078" transform="rotate(-0 486.44121 536.07078)">150</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 612.810491 518.12278 
+L 612.810491 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m0c103382f7" x="612.810491" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="612.810491" y="536.07078" transform="rotate(-0 612.810491 536.07078)">200</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 739.179773 518.12278 
+L 739.179773 70.57874 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m0c103382f7" x="739.179773" y="518.12278" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="739.179773" y="536.07078" transform="rotate(-0 739.179773 536.07078)">250</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="484.166562" y="554.89628" transform="rotate(-0 484.166562 554.89628)">Facilities (count)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_13">
+      <defs>
+       <path id="m933bad191e" d="M 0 0 
+L -3.5 0 
+" style="stroke: #898781; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="497.779869" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="503.253869" transform="rotate(-0 100.333365 503.253869)">Manipur</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="480.827443" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="486.301443" transform="rotate(-0 100.333365 486.301443)">Arunachal Pradesh</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="463.875018" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="469.349018" transform="rotate(-0 100.333365 469.349018)">Delhi</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="446.922592" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="452.396592" transform="rotate(-0 100.333365 452.396592)">Goa</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="429.970166" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="435.444166" transform="rotate(-0 100.333365 435.444166)">Uttarakhand</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="413.01774" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="418.49174" transform="rotate(-0 100.333365 418.49174)">Haryana</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_19">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="396.065315" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="401.539315" transform="rotate(-0 100.333365 401.539315)">Jharkhand</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="379.112889" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_15">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="384.586889" transform="rotate(-0 100.333365 384.586889)">Himachal Pradesh</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_21">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="362.160463" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_16">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="367.634463" transform="rotate(-0 100.333365 367.634463)">Jammu &amp; Kashmir</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="345.208037" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_17">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="350.682037" transform="rotate(-0 100.333365 350.682037)">Chhattisgarh</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_23">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="328.255612" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_18">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="333.729612" transform="rotate(-0 100.333365 333.729612)">Punjab</text>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_24">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="311.303186" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_19">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="316.777186" transform="rotate(-0 100.333365 316.777186)">Andhra Pradesh</text>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_25">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="294.35076" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_20">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="299.82476" transform="rotate(-0 100.333365 299.82476)">Odisha</text>
+     </g>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_26">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="277.398334" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_21">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="282.872334" transform="rotate(-0 100.333365 282.872334)">Madhya Pradesh</text>
+     </g>
+    </g>
+    <g id="ytick_15">
+     <g id="line2d_27">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="260.445908" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_22">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="265.919908" transform="rotate(-0 100.333365 265.919908)">West Bengal</text>
+     </g>
+    </g>
+    <g id="ytick_16">
+     <g id="line2d_28">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="243.493483" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_23">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="248.967483" transform="rotate(-0 100.333365 248.967483)">Uttar Pradesh</text>
+     </g>
+    </g>
+    <g id="ytick_17">
+     <g id="line2d_29">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="226.541057" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_24">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="232.015057" transform="rotate(-0 100.333365 232.015057)">Assam</text>
+     </g>
+    </g>
+    <g id="ytick_18">
+     <g id="line2d_30">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="209.588631" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_25">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="215.062631" transform="rotate(-0 100.333365 215.062631)">Bihar</text>
+     </g>
+    </g>
+    <g id="ytick_19">
+     <g id="line2d_31">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="192.636205" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_26">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="198.110205" transform="rotate(-0 100.333365 198.110205)">Telangana</text>
+     </g>
+    </g>
+    <g id="ytick_20">
+     <g id="line2d_32">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="175.68378" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_27">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="181.15778" transform="rotate(-0 100.333365 181.15778)">Rajasthan</text>
+     </g>
+    </g>
+    <g id="ytick_21">
+     <g id="line2d_33">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="158.731354" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_28">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="164.205354" transform="rotate(-0 100.333365 164.205354)">Kerala</text>
+     </g>
+    </g>
+    <g id="ytick_22">
+     <g id="line2d_34">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="141.778928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_29">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="147.252928" transform="rotate(-0 100.333365 147.252928)">Tamil Nadu</text>
+     </g>
+    </g>
+    <g id="ytick_23">
+     <g id="line2d_35">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="124.826502" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_30">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="130.300502" transform="rotate(-0 100.333365 130.300502)">Maharashtra</text>
+     </g>
+    </g>
+    <g id="ytick_24">
+     <g id="line2d_36">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="107.874077" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_31">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="113.348077" transform="rotate(-0 100.333365 113.348077)">Karnataka</text>
+     </g>
+    </g>
+    <g id="ytick_25">
+     <g id="line2d_37">
+      <g>
+       <use xlink:href="#m933bad191e" x="107.333365" y="90.921651" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_32">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #52514e" x="100.333365" y="96.395651" transform="rotate(-0 100.333365 96.395651)">Gujarat</text>
+     </g>
+    </g>
+   </g>
+   <g id="LineCollection_1">
+    <path d="M 109.860751 497.779869 
+L 132.607221 497.779869 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 107.333365 480.827443 
+L 137.661993 480.827443 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 142.716764 463.875018 
+L 147.771535 463.875018 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 114.915522 446.922592 
+L 152.826306 446.922592 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 125.025064 429.970166 
+L 155.353692 429.970166 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 145.244149 413.01774 
+L 160.408463 413.01774 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 132.607221 396.065315 
+L 167.99062 396.065315 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 114.915522 379.112889 
+L 170.518006 379.112889 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 114.915522 362.160463 
+L 193.264476 362.160463 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 119.970293 345.208037 
+L 210.956176 345.208037 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 178.100163 328.255612 
+L 216.010947 328.255612 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 130.079836 311.303186 
+L 261.503888 311.303186 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 119.970293 294.35076 
+L 284.250359 294.35076 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 132.607221 277.398334 
+L 289.30513 277.398334 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 188.209705 260.445908 
+L 294.359902 260.445908 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 233.702647 243.493483 
+L 299.414673 243.493483 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 127.55245 226.541057 
+L 314.578987 226.541057 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 155.353692 209.588631 
+L 344.907614 209.588631 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 145.244149 192.636205 
+L 362.599314 192.636205 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 155.353692 175.68378 
+L 367.654085 175.68378 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 195.791862 158.731354 
+L 400.510098 158.731354 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 253.921732 141.778928 
+L 483.913824 141.778928 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 248.86696 124.826502 
+L 552.153236 124.826502 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 170.518006 107.874077 
+L 665.885589 107.874077 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+    <path d="M 203.374019 90.921651 
+L 825.110884 90.921651 
+" clip-path="url(#p83a845f7fc)" style="fill: none; stroke: #e1e0d9; stroke-width: 2"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 107.333365 518.12278 
+L 107.333365 70.57874 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 107.333365 518.12278 
+L 860.99976 518.12278 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m99d40bbe11" d="M 0 3.872983 
+C 1.027127 3.872983 2.012324 3.464901 2.738613 2.738613 
+C 3.464901 2.012324 3.872983 1.027127 3.872983 0 
+C 3.872983 -1.027127 3.464901 -2.012324 2.738613 -2.738613 
+C 2.012324 -3.464901 1.027127 -3.872983 0 -3.872983 
+C -1.027127 -3.872983 -2.012324 -3.464901 -2.738613 -2.738613 
+C -3.464901 -2.012324 -3.872983 -1.027127 -3.872983 0 
+C -3.872983 1.027127 -3.464901 2.012324 -2.738613 2.738613 
+C -2.012324 3.464901 -1.027127 3.872983 0 3.872983 
+z
+"/>
+    </defs>
+    <g clip-path="url(#p83a845f7fc)">
+     <use xlink:href="#m99d40bbe11" x="132.607221" y="497.779869" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="137.661993" y="480.827443" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="147.771535" y="463.875018" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="152.826306" y="446.922592" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="155.353692" y="429.970166" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="160.408463" y="413.01774" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="167.99062" y="396.065315" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="170.518006" y="379.112889" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="193.264476" y="362.160463" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="210.956176" y="345.208037" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="216.010947" y="328.255612" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="261.503888" y="311.303186" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="284.250359" y="294.35076" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="289.30513" y="277.398334" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="294.359902" y="260.445908" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="299.414673" y="243.493483" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="314.578987" y="226.541057" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="344.907614" y="209.588631" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="362.599314" y="192.636205" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="367.654085" y="175.68378" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="400.510098" y="158.731354" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="483.913824" y="141.778928" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="552.153236" y="124.826502" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="665.885589" y="107.874077" style="fill: #2a78d6"/>
+     <use xlink:href="#m99d40bbe11" x="825.110884" y="90.921651" style="fill: #2a78d6"/>
+    </g>
+   </g>
+   <g id="PathCollection_2">
+    <defs>
+     <path id="m2e12026f41" d="M 0 3.162278 
+C 0.838646 3.162278 1.643056 2.82908 2.236068 2.236068 
+C 2.82908 1.643056 3.162278 0.838646 3.162278 0 
+C 3.162278 -0.838646 2.82908 -1.643056 2.236068 -2.236068 
+C 1.643056 -2.82908 0.838646 -3.162278 0 -3.162278 
+C -0.838646 -3.162278 -1.643056 -2.82908 -2.236068 -2.236068 
+C -2.82908 -1.643056 -3.162278 -0.838646 -3.162278 0 
+C -3.162278 0.838646 -2.82908 1.643056 -2.236068 2.236068 
+C -1.643056 2.82908 -0.838646 3.162278 0 3.162278 
+z
+"/>
+    </defs>
+    <g clip-path="url(#p83a845f7fc)">
+     <use xlink:href="#m2e12026f41" x="112.388136" y="497.779869" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="107.333365" y="480.827443" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="145.244149" y="463.875018" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="117.442908" y="446.922592" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="152.826306" y="429.970166" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="231.175261" y="413.01774" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="175.572777" y="396.065315" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="122.497679" y="379.112889" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="137.661993" y="362.160463" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="150.298921" y="345.208037" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="253.921732" y="328.255612" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="173.045391" y="311.303186" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="142.716764" y="294.35076" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="185.68232" y="277.398334" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="291.832516" y="260.445908" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="372.708856" y="243.493483" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="150.298921" y="226.541057" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="205.901405" y="209.588631" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="203.374019" y="192.636205" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="203.374019" y="175.68378" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="256.449117" y="158.731354" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="372.708856" y="141.778928" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="466.222125" y="124.826502" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="236.230032" y="107.874077" style="fill: #86b6ef"/>
+     <use xlink:href="#m2e12026f41" x="301.942059" y="90.921651" style="fill: #86b6ef"/>
+    </g>
+   </g>
+   <g id="text_33">
+    <text style="font-size: 10.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="354.907614" y="213.468381" transform="rotate(-0 354.907614 213.468381)">Bihar: 94 public centres, 19 confirmed records</text>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 12px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="107.333365" y="59.071859" transform="rotate(-0 107.333365 59.071859)">25 states with 10 or more PMNDP centres; counts, not rates. Confirmed records: 437 of 474 private, 14 public</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(107.333365 19.82174)">The government reports 1,994 public dialysis centres serving all 751 districts; only 75</text>
+    <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(107.333365 40.57874)">public records in this dataset claim dialysis</text>
+   </g>
+   <g id="PathCollection_3">
+    <defs>
+     <path id="m4e02526d09" d="M 0 3.872983 
+C 1.027127 3.872983 2.012324 3.464901 2.738613 2.738613 
+C 3.464901 2.012324 3.872983 1.027127 3.872983 0 
+C 3.872983 -1.027127 3.464901 -2.012324 2.738613 -2.738613 
+C 2.012324 -3.464901 1.027127 -3.872983 0 -3.872983 
+C -1.027127 -3.872983 -2.012324 -3.464901 -2.738613 -2.738613 
+C -3.464901 -2.012324 -3.872983 -1.027127 -3.872983 0 
+C -3.872983 1.027127 -3.464901 2.012324 -2.738613 2.738613 
+C -2.012324 3.464901 -1.027127 3.872983 0 3.872983 
+z
+"/>
+    </defs>
+    <g clip-path="url(#p83a845f7fc)">
+     <use xlink:href="#m4e02526d09" x="109.860751" y="497.779869" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="107.333365" y="480.827443" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="142.716764" y="463.875018" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="114.915522" y="446.922592" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="125.025064" y="429.970166" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="145.244149" y="413.01774" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="132.607221" y="396.065315" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="114.915522" y="379.112889" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="114.915522" y="362.160463" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="119.970293" y="345.208037" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="178.100163" y="328.255612" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="130.079836" y="311.303186" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="119.970293" y="294.35076" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="132.607221" y="277.398334" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="188.209705" y="260.445908" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="233.702647" y="243.493483" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="127.55245" y="226.541057" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="155.353692" y="209.588631" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="145.244149" y="192.636205" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="155.353692" y="175.68378" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="195.791862" y="158.731354" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="253.921732" y="141.778928" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="248.86696" y="124.826502" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="170.518006" y="107.874077" style="fill: #eb6834"/>
+     <use xlink:href="#m4e02526d09" x="203.374019" y="90.921651" style="fill: #eb6834"/>
+    </g>
+   </g>
+   <g id="legend_1">
+    <g id="PathCollection_4">
+     <g>
+      <use xlink:href="#m99d40bbe11" x="629.217729" y="466.36228" style="fill: #2a78d6"/>
+     </g>
+    </g>
+    <g id="text_36">
+     <text style="font-size: 11px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="649.017729" y="469.24978" transform="rotate(-0 649.017729 469.24978)">Public dialysis centres, PMNDP (NHSRC)</text>
+    </g>
+    <g id="PathCollection_5">
+     <g>
+      <use xlink:href="#m2e12026f41" x="629.217729" y="484.67728" style="fill: #86b6ef"/>
+     </g>
+    </g>
+    <g id="text_37">
+     <text style="font-size: 11px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="649.017729" y="487.56478" transform="rotate(-0 649.017729 487.56478)">Records claiming dialysis in this dataset</text>
+    </g>
+    <g id="PathCollection_6">
+     <g>
+      <use xlink:href="#m4e02526d09" x="629.217729" y="502.99228" style="fill: #eb6834"/>
+     </g>
+    </g>
+    <g id="text_38">
+     <text style="font-size: 11px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="649.017729" y="505.87978" transform="rotate(-0 649.017729 505.87978)">Records with a confirmed dialysis claim</text>
+    </g>
+   </g>
+  </g>
+  <g id="text_39">
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 572.84276)">Public centres: NHSRC PMNDP state table (nhsrcindia.org/pmndp-map-table, read 2026-11-21; NHSRC permits reproduction with acknowledgement). It reports functional dialysis in</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 584.17626)">every district of every state, but 8 states have fewer centres than districts, so some districts are served from a neighbour. Records: this dataset, by cleaned location;</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 595.50976)">confirmed = the facility's own website states dialysis. The two lists are different populations, mostly public vs mostly private; a referral tool built on the dataset alone</text>
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #898781" transform="translate(8.64 606.84326)">would miss the public network.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p83a845f7fc">
+   <rect x="107.333365" y="70.57874" width="753.666395" height="447.54404"/>
+  </clipPath>
+ </defs>
+</svg>

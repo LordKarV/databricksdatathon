@@ -1,0 +1,5 @@
+pixels 3,201,499, population 1.4574 bn
+claimed: units 1041 districts 275 | weighted median weekly km 255 | 300+ 0.436 | 600+ 0.145
+graded: units 974 districts 267 | weighted median weekly km 261 | 300+ 0.444 | 600+ 0.150
+corroborated: units 408 districts 166 | weighted median weekly km 385 | 300+ 0.588 | 600+ 0.309
+factor check: max abs diff weekly km vs geo.travel.estimate 0.3
