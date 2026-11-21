@@ -51,12 +51,13 @@ def _question(stop):
                              f"(probability {stop['weakest_capability_p']:.2f})"}
 
 
-def to_options(result):
+def to_options(result, stub=True):
+    """stub=True adds the placeholder-probability warning to every option's flags."""
     options = []
     for rank, p in enumerate(result["plans"], start=1):
         d = p["stops"][-1]
         totals = p["totals"]
-        flags = ["Probabilities are a placeholder built from derived/v1, not the fitted model."]
+        flags = ["Probabilities are a placeholder built from derived/v1, not the fitted model."] if stub else []
         for s in p["stops"]:
             flags += [f"{s['name']}: {f}" for f in s["flags"]]
         flags += [f"{c['check']} within {c['limit_minutes']} min is not met (arrival at {c['eta_minutes']} min)."
