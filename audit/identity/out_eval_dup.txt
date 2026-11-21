@@ -1,0 +1,55 @@
+hand-labelled groups: 47 positives: 31 {'true_dup': 29, 'different': 16, 'same_site_unit': 2}
+R0 any strong key                                            flagged 47  TP 31  FP 16  FN  0  precision 0.66  recall 1.00
+R1 (tset>=90 or same name) and km<1                          flagged 33  TP 25  FP  8  FN  6  precision 0.76  recall 0.81
+R2 sort>=80                                                  flagged 22  TP 13  FP  9  FN 18  precision 0.59  recall 0.42
+R3 tset>=90 and (phone or dom or addr>=80 or samepin)        flagged 33  TP 25  FP  8  FN  6  precision 0.76  recall 0.81
+R4 sort>=70 and (phone or dom or addr>=80)                   flagged 16  TP 12  FP  4  FN 19  precision 0.75  recall 0.39
+R5 tset>=95 and (phone or dom or addr>=70 or samecity)       flagged 32  TP 27  FP  5  FN  4  precision 0.84  recall 0.87
+             label        sort        tset          km  phone    dom        addr  samepin                                                                                                    note
+4        different   76.923077   87.323944    0.016119   True  False   29.787234    False                                          Maxivision Vizag vs Maxivision Guntur branch with Vizag coords
+5        different   64.150943   94.117647    0.173173  False  False   68.421053     True                             Dr R.B. Yadav vs R Yadav Surgical and Rekha Eye Hospital Rewari (uncertain)
+8        different   67.857143   88.888889    0.012939  False   True   37.037037    False  Sree Lakshmi Coimbatore vs Sri Lakshmi Namakkal; Namakkal record carries Coimbatore coords and smch.in
+10       different   53.333333   86.666667    0.120200  False  False   35.443038    False                                                                      Amruta vs Samata Hospital Dombivli
+11       different   88.372093   88.372093    0.196659  False  False   26.666667     True                                                                   Rupala vs Pahal Kidney Hospital Surat
+12       different   86.666667  100.000000    0.013764  False  False   39.344262    False                                 RNS Dental Coimbatore vs Dental clinic Tirunelveli at Coimbatore coords
+19       different  100.000000  100.000000  197.912847  False  False    0.000000    False                                            Om Dental Clinic Junagadh vs Thaltej Ahmedabad; generic name
+20       different   77.611940   88.888889    0.049815  False  False   47.058824     True                                                                 Bhatia vs Prime Multispeciality Patiala
+22       different  100.000000  100.000000    9.917042  False  False   19.047619    False                                         Care Dental Hospital record whose text is Omega Eye Care Centre
+24       different  100.000000  100.000000  113.903811  False  False   29.629630     True                        32 Pearls Dental: one record has Pune coords and a different owner; generic name
+26       different   51.851852  100.000000    0.000000  False  False  100.000000     True                                           Amala medical vs Amala Ayurvedic: two hospitals on one campus
+28       different   89.655172   94.117647    0.031638  False  False   35.294118     True                                            Mathur Hospital vs MN Hospital Bikaner; generic suffix match
+30       different   48.484848  100.000000    0.000000   True  False   50.000000    False                                  Aarogya Hapur vs Aarogya Vaishali (Delhi PIN); identical coords copied
+36       different   92.307692   92.307692    0.097087   True  False   38.805970    False                                  Shubham Surat / Sham Wankaner / Isha Vadodara all geocoded at Wankaner
+37       different   82.758621   90.566038    0.009759  False   True   20.779221     True                                        Imax vs Care Multispeciality Wagholi (uncertain; shared website)
+45       different   85.714286  100.000000    0.009661   True  False   32.727273    False                                 Navjeevan Lonand/Buldhana merge geocoded onto Dr Lad's Navjeevan Nashik
+27  same_site_unit   88.524590   92.592593    0.019579  False  False  100.000000     True                                                            Bhagyalatha Hospital dental unit vs eye unit
+41  same_site_unit   75.555556  100.000000    0.010826   True  False   32.876712     True                                                      Sanjiban blood bank is a unit of Sanjiban Hospital
+0         true_dup  100.000000  100.000000  552.745927  False  False   37.500000     True                                                  Sarla Hospital Santacruz; one copy has Amravati coords
+1         true_dup   61.224490  100.000000    0.040310   True   True   35.714286     True                                               Fortis Ludhiana; one copy text is Fortis Escorts Amritsar
+2         true_dup   78.873239  100.000000    0.137710  False  False  100.000000     True                                                                                     SKY Hospital Imphal
+3         true_dup   47.058824  100.000000    0.018152   True   True   96.000000    False                                                                                 KGP Hospital Shivamogga
+6         true_dup  100.000000  100.000000   90.983408  False  False   36.363636    False                                                       Razack Hospital Sankarankovil; coords 91 km apart
+7         true_dup   82.926829  100.000000    0.028180  False  False   21.052632    False                          Deccan Hardikar Hospital Pune; copy carries a Thane PIN and Thane listing text
+9         true_dup   60.000000  100.000000    0.030961  False  False   55.555556    False                      Sindhi Hospital = R K Sindhi Sangh Maternity Hospital Block 11 Govind Nagar Kanpur
+13        true_dup   60.606061  100.000000    0.047757   True   True   94.117647    False                                                                         Manipal Goa Hospital Dona Paula
+14        true_dup   34.042553  100.000000    0.038119   True  False   66.666667    False                                              Capital Hospital = PGIMER and Capital Hospital Bhubaneswar
+15        true_dup   59.090909  100.000000    0.021539   True   True   40.000000    False                                                                         Apollo Clinic Zoo Road Guwahati
+16        true_dup   96.969697   96.969697    0.025497   True  False   16.000000    False                                                            Devmata Hospital Bhopal; one name has a typo
+17        true_dup   61.818182   87.500000    0.012106   True  False   91.891892     True                                                        NKH = New Korba Hospital; same phone and address
+18        true_dup   60.000000  100.000000    0.001273   True   True   94.736842     True                                                                                    PVS Hospital Calicut
+21        true_dup   65.217391  100.000000    0.021924   True   True  100.000000     True                                                                                 Charak Hospital Lucknow
+23        true_dup   86.956522   86.956522    0.030073  False  False   44.444444     True                                        Dr Moses Matthias vs Dr Morris Mathias Nagercoil (probable typo)
+25        true_dup   61.904762  100.000000    0.014504   True   True    0.000000     True                                                                                   IRIS Hospital Kolkata
+29        true_dup   96.551724   96.551724    0.077457   True  False   82.758621     True                                                                       BRJ Ortho Centre and MAK Hospital
+31        true_dup  100.000000  100.000000    0.486227  False  False   25.000000     True                                        Rajindra Hospital Patiala; one copy has amarhospital.com website
+32        true_dup   68.000000  100.000000    0.113306   True   True  100.000000     True                                                                                Nerlikar Hospital Nashik
+33        true_dup  100.000000  100.000000    6.604774  False  False  100.000000     True                                             Siri Dental Hospital same address line; coords 6.6 km apart
+34        true_dup  100.000000  100.000000  117.228817  False  False   36.363636    False                               GMC Thiruvananthapuram; one copy has Alappuzha-area coords and jmmcri.org
+35        true_dup   89.411765  100.000000    0.152312  False  False  100.000000     True                                                         Kanyakumari Government Medical College Hospital
+38        true_dup   66.666667  100.000000    0.042503   True  False   41.379310     True                                                                             Nemcare Guwahati (probable)
+39        true_dup   71.794872  100.000000    0.003870   True  False   40.740741     True                                                                               PACE Hospitals HITEC City
+40        true_dup   83.333333  100.000000    0.044608   True  False   64.285714     True                                                                                   Amrita Hospital Kochi
+42        true_dup  100.000000  100.000000    0.012256   True   True   25.454545     True                                                                              Jain Dental Hospital Alwar
+43        true_dup   73.469388  100.000000    0.031525   True   True   35.483871    False                                                                         Vishwaraj Hospital Loni Kalbhor
+44        true_dup   71.794872  100.000000    0.154009   True   True   87.179487    False                                                                               Ganga Hospital Coimbatore
+46        true_dup   65.217391  100.000000    0.030918   True   True   24.390244     True                                                                                  Jaslok Hospital Mumbai

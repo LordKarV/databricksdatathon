@@ -1,0 +1,296 @@
+{
+ "denominator_rows": 9970,
+ "facilityTypeId_values": {
+  "hospital": 5621,
+  "clinic": 3770,
+  "dentist": 488,
+  "null": 57,
+  "doctor": 21,
+  "farmacy": 10,
+  "pharmacy": 2,
+  "nursing_home": 1
+ },
+ "operatorTypeId_values": {
+  "private": 8812,
+  "null": 687,
+  "public": 469,
+  "government": 2
+ },
+ "organization_type_values": {
+  "facility": 9970
+ },
+ "affiliation": {
+  "null_like": 8744,
+  "with_values": 1226,
+  "with_duplicates": 600,
+  "distinct_value_counts": {
+   "government": 670,
+   "academic": 470,
+   "philanthropy-legacy": 207,
+   "faith-tradition": 123,
+   "community": 112,
+   "private": 19,
+   "public": 4,
+   "teaching-institute": 1,
+   "diagnostic-centre": 1,
+   "clinical": 1,
+   "corporate": 1,
+   "private-entity": 1,
+   "NAAC": 1,
+   "RGUHS": 1,
+   "NMC": 1,
+   "INC": 1,
+   "healthcare": 1,
+   "DCI": 1,
+   "local-area": 1
+  },
+  "multi_distinct_values": 313
+ },
+ "rules": {
+  "name_veterinary": {
+   "count": 13,
+   "ids": [
+    "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+    "3701980c-4699-4a84-a9f1-024939ba0e34",
+    "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+    "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+    "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b",
+    "885c79f6-9f32-4878-8384-5a90259cfae4",
+    "8b8ee908-073c-4356-9c3f-dabbbf915f3e",
+    "9c054087-a278-4ea0-80af-7c1040b4ef1a",
+    "a9a69f69-810b-48ed-a088-afa0adc8f19f",
+    "c710c913-3806-4cd6-8c4a-4188868b2355"
+   ]
+  },
+  "name_hospital_typed_clinic": {
+   "count": 51,
+   "ids": [
+    "04ad106d-21a9-4236-8754-f82c5cd6ea3d",
+    "0a77c719-b39a-423f-821e-16a965dd95fb",
+    "0c16ea7e-3994-4e24-8eef-27edc28d2bfc",
+    "0fa64a78-fd03-462e-b9c9-66ae5fac867e",
+    "16300eb3-2217-4e8a-a418-46e4abf5682c",
+    "1d17f4f3-d962-472e-9809-ae7144d0c8ce",
+    "25b2d950-3e9b-4dc4-b0d7-b8cf020fc9c7",
+    "264e5c7b-ec7e-44c9-95e8-17e9c89cdf21",
+    "2674807e-24ff-4d3c-b040-351d42a47d58",
+    "28dee8e3-12f6-4094-9dcc-911b619fa1bc"
+   ]
+  },
+  "name_clinic_not_hospital_typed_hospital": {
+   "count": 21,
+   "ids": [
+    "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+    "05ca7661-e4f4-439f-b914-474dc877177f",
+    "10f3985d-a8fc-4e9a-9835-da54218060ad",
+    "1d7568a2-63e6-430f-af30-550bcf698fd0",
+    "2213e54b-3b35-4f5b-a38b-4e747783b5d7",
+    "23aef02c-b9ca-4cd0-999b-46d07ff31ea6",
+    "27c00466-f6aa-4491-83e5-2c6dcf33cad5",
+    "3451b5f4-454c-4248-85aa-4e19847c0f26",
+    "3db0863c-bc66-4e6c-b818-1bc5fde2d4bc",
+    "40c3ee04-faee-4f2c-b6eb-c05ab7fd95e4"
+   ]
+  },
+  "name_nursing_home_typed_clinic": {
+   "count": 83,
+   "ids": [
+    "051ddcac-5d26-43bc-84a9-b01adddfefed",
+    "0955c225-9091-48f3-bdbf-0dfd8b031279",
+    "097bda74-beb6-4abb-a8cd-13099ed122a8",
+    "0cb920ef-4922-4944-aca9-30d7016a7bd9",
+    "0d3b98e3-7059-4a49-bfe6-215981f66c23",
+    "10a2bd29-d66c-4d57-b64a-e51e6a82ea44",
+    "12a7b9e5-bedc-4713-abaa-d39bdbf0910d",
+    "13106912-bb0e-43e6-b5db-f3687d21e0bf",
+    "14159818-a738-4afa-90e9-62439c7101fa",
+    "1c0a87bc-d743-48ac-b1e0-f46d5474e8a2"
+   ]
+  },
+  "name_dental_typed_not_dentist": {
+   "count": 1181,
+   "ids": [
+    "00154d81-ce6b-4c73-a49b-4bd3c20580f7",
+    "0062d694-09a6-4cec-8e39-e7550b731bb7",
+    "00cde61f-929a-49ef-abf6-303a9e5fedad",
+    "00ec1648-d499-4343-a937-59eefb5ab8d2",
+    "011428b8-b587-4d09-a929-00650f873887",
+    "01bcd0f0-9de3-4003-acf7-08522b503643",
+    "01c41814-ad82-49b3-b282-3a5783bd2e2e",
+    "01d8bdf3-f553-4ba0-956a-2715b114bff5",
+    "0207488f-8c4a-4665-b08e-55897841a797",
+    "0231a41d-ad54-4042-a0ed-d46adb612df0"
+   ]
+  },
+  "name_dental_hospital_typed_hospital": {
+   "count": 114,
+   "ids": [
+    "047e6a22-2400-4074-8a6c-17c7c1605ddd",
+    "05293189-d097-4787-8c8a-09ddb52fd5b4",
+    "092b1e7b-7c6e-4043-88ee-35ee4ab4b0eb",
+    "0af03a4d-701a-4e2b-a873-320b0c44de0c",
+    "0b1065ea-b072-43ca-9d8c-3178bd2fdcb3",
+    "0b5b42f3-e7ec-4e89-b606-08dddce70860",
+    "0bae96f6-d92c-40b2-9bf4-68b26b3e8269",
+    "0df1bded-e97f-40f3-ad7f-4a9550c49824",
+    "0f775c5a-0d7c-4aa7-ba58-de0be69ac414",
+    "18cb1742-fa1f-4941-bb61-3ba3c6ce46dc"
+   ]
+  },
+  "name_diagnostic_lab_typed_hospital": {
+   "count": 23,
+   "ids": [
+    "05d4a465-dc3f-41b3-b435-cc76c0d42553",
+    "1d04bb8f-b934-45f6-a5a0-522354206d6e",
+    "3cf37130-c356-4a8c-880f-d2e5f1921d15",
+    "3db0863c-bc66-4e6c-b818-1bc5fde2d4bc",
+    "3f9e26eb-0a1a-457f-81a9-e29777a2dc3e",
+    "4307d052-6772-4497-ae25-2d1b0e1a5464",
+    "46e3820a-fdcb-474b-94bf-0fb734c973d6",
+    "4f1b6e2b-804d-4883-be04-e5ccd2a3c46b",
+    "59e75fce-f892-4ce6-9156-17f1db61c156",
+    "6769ec50-e7c9-47a2-af86-a3dfd345bb44"
+   ]
+  },
+  "name_diagnostic_lab_any": {
+   "count": 610,
+   "ids": [
+    "0017676a-fbdb-4309-89a4-4a69f6b83414",
+    "0068f9fe-8453-48e0-aeb0-88c27ede37dc",
+    "00d5071e-8c8a-4efa-9485-325ab309a5e0",
+    "015a6b58-d7e2-4bd2-be54-c949559377ba",
+    "01673d9b-caf3-4ed6-abfa-618064970ccd",
+    "01da102f-8e41-456d-a2fb-3c87124af1f1",
+    "02068f46-df3d-405b-a5be-f660d1b58664",
+    "02475140-f5b1-4d3b-ab6e-cf7a55a39568",
+    "025e3ae2-3fab-453c-a06f-0e9385232825",
+    "026790d3-667f-4d77-90ad-82c6bd7fec7f"
+   ]
+  },
+  "name_pharmacy_typed_not_pharmacy": {
+   "count": 6,
+   "ids": [
+    "09febafe-3c88-4d46-932d-b72e1adef19d",
+    "121af94f-386c-4baa-b5eb-f015f0bb18d2",
+    "195e1bb9-52fd-4eb1-bc5b-0a1297b11e0f",
+    "2a2b39e4-1290-4a6c-ba98-105fb1e28a23",
+    "aa07dc77-d6d2-4be0-94cb-078724248add",
+    "add56f73-cbdd-4c65-a40e-9685e60b10f0"
+   ]
+  },
+  "name_government_typed_private": {
+   "count": 4,
+   "ids": [
+    "7687df38-39d2-487f-9df1-a91452c08996",
+    "aee4f51b-2464-483e-90f0-a9417f4b296c",
+    "c63d560f-2d07-44fd-96c0-a61cb41dffdd",
+    "e41bcfdb-c9f7-4a52-89e0-ec91526667e8"
+   ]
+  },
+  "name_government_any": {
+   "count": 183,
+   "ids": [
+    "0078496c-7cf5-493d-9c82-4045b406d237",
+    "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+    "00b0c116-2deb-4e9a-a77b-9ffd19e89396",
+    "02a3b541-de4e-42d8-95e0-c6dbc700f5dc",
+    "02b8c9bf-79d5-4d46-adf9-615ed75f80aa",
+    "03a3d9b9-aad9-4e81-8ffd-da893417c758",
+    "040c0941-3243-48f9-9494-3112f16aa9d1",
+    "05746699-9803-437b-a9c6-043ad0a1e514",
+    "08d4967a-b02f-4373-aace-2db8f64b0e27",
+    "092b1e7b-7c6e-4043-88ee-35ee4ab4b0eb"
+   ]
+  },
+  "affiliation_government_operator_private": {
+   "count": 265,
+   "ids": [
+    "02068f46-df3d-405b-a5be-f660d1b58664",
+    "0225a167-ade5-4163-81ad-5b2d40ca5316",
+    "04ab2a19-31d3-4f5b-843f-97143b1be64e",
+    "04f43374-e9e4-4ad2-8a08-779252341172",
+    "06011a36-bc17-4e2a-8308-6d029cef7be8",
+    "066891ec-f460-456b-ade8-cc2886161e69",
+    "06ef75cc-4c89-4ac0-a305-b302177fcc47",
+    "082c1e59-7d97-4dec-ba8b-0c3d4ce4bb43",
+    "08ff6beb-cd5f-457f-8149-d396724ee4bb",
+    "093844ce-fce8-44de-a1a1-1277833c080d"
+   ]
+  },
+  "operator_public_or_government": {
+   "count": 471,
+   "ids": [
+    "0078496c-7cf5-493d-9c82-4045b406d237",
+    "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+    "00b0c116-2deb-4e9a-a77b-9ffd19e89396",
+    "016b778f-cbd5-4303-a613-387a533ffe3a",
+    "01b20470-c820-4564-9cf8-69d162803ba2",
+    "02a3b541-de4e-42d8-95e0-c6dbc700f5dc",
+    "02b8c9bf-79d5-4d46-adf9-615ed75f80aa",
+    "03a3d9b9-aad9-4e81-8ffd-da893417c758",
+    "040c0941-3243-48f9-9494-3112f16aa9d1",
+    "04560a89-f23b-4532-a658-36edc91503ce"
+   ]
+  }
+ },
+ "type_by_name_hospital": {
+  "hospital": 4819,
+  "clinic": 51,
+  "dentist": 25,
+  "doctor": 1,
+  "nursing_home": 1
+ },
+ "type_by_name_clinic_only": {
+  "clinic": 1848,
+  "dentist": 66,
+  "hospital": 21
+ },
+ "operator_by_name_government": {
+  "public": 175,
+  "private": 4,
+  "null": 3,
+  "government": 1
+ },
+ "operator_by_type": {
+  "government": {
+   "clinic": 0,
+   "dentist": 0,
+   "doctor": 0,
+   "farmacy": 0,
+   "hospital": 2,
+   "null": 0,
+   "nursing_home": 0,
+   "pharmacy": 0
+  },
+  "null": {
+   "clinic": 129,
+   "dentist": 6,
+   "doctor": 1,
+   "farmacy": 1,
+   "hospital": 519,
+   "null": 31,
+   "nursing_home": 0,
+   "pharmacy": 0
+  },
+  "private": {
+   "clinic": 3615,
+   "dentist": 482,
+   "doctor": 20,
+   "farmacy": 8,
+   "hospital": 4658,
+   "null": 26,
+   "nursing_home": 1,
+   "pharmacy": 2
+  },
+  "public": {
+   "clinic": 26,
+   "dentist": 0,
+   "doctor": 0,
+   "farmacy": 1,
+   "hospital": 442,
+   "null": 0,
+   "nursing_home": 0,
+   "pharmacy": 0
+  }
+ }
+}

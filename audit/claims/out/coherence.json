@@ -1,0 +1,218 @@
+{
+ "eye": {
+  "facilities_named": 631,
+  "claiming_any_of_8": 129,
+  "by_service": {
+   "dialysis": 12,
+   "cardiac_surgery": 9,
+   "nicu": 9,
+   "burns": 4,
+   "trauma": 90,
+   "icu": 49,
+   "mri": 13,
+   "csection": 7
+  },
+  "by_service_strong": {
+   "dialysis": 1,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 1,
+   "icu": 0,
+   "mri": 3,
+   "csection": 0
+  }
+ },
+ "dental": {
+  "facilities_named": 1806,
+  "claiming_any_of_8": 78,
+  "by_service": {
+   "dialysis": 2,
+   "cardiac_surgery": 1,
+   "nicu": 3,
+   "burns": 0,
+   "trauma": 70,
+   "icu": 7,
+   "mri": 5,
+   "csection": 1
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 0,
+   "csection": 0
+  }
+ },
+ "ivf_fertility": {
+  "facilities_named": 228,
+  "claiming_any_of_8": 69,
+  "by_service": {
+   "dialysis": 4,
+   "cardiac_surgery": 2,
+   "nicu": 16,
+   "burns": 2,
+   "trauma": 31,
+   "icu": 19,
+   "mri": 7,
+   "csection": 28
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 1,
+   "burns": 1,
+   "trauma": 1,
+   "icu": 0,
+   "mri": 1,
+   "csection": 0
+  }
+ },
+ "skin_hair": {
+  "facilities_named": 215,
+  "claiming_any_of_8": 25,
+  "by_service": {
+   "dialysis": 1,
+   "cardiac_surgery": 0,
+   "nicu": 1,
+   "burns": 10,
+   "trauma": 11,
+   "icu": 8,
+   "mri": 4,
+   "csection": 0
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 0,
+   "csection": 0
+  }
+ },
+ "ent": {
+  "facilities_named": 99,
+  "claiming_any_of_8": 20,
+  "by_service": {
+   "dialysis": 1,
+   "cardiac_surgery": 1,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 15,
+   "icu": 10,
+   "mri": 2,
+   "csection": 0
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 0,
+   "csection": 0
+  }
+ },
+ "physio_rehab": {
+  "facilities_named": 70,
+  "claiming_any_of_8": 7,
+  "by_service": {
+   "dialysis": 1,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 7,
+   "icu": 1,
+   "mri": 0,
+   "csection": 0
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 0,
+   "csection": 0
+  }
+ },
+ "ayush": {
+  "facilities_named": 358,
+  "claiming_any_of_8": 36,
+  "by_service": {
+   "dialysis": 4,
+   "cardiac_surgery": 1,
+   "nicu": 2,
+   "burns": 2,
+   "trauma": 27,
+   "icu": 12,
+   "mri": 1,
+   "csection": 3
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 1,
+   "csection": 1
+  }
+ },
+ "type_clinic": {
+  "facilities": 3770,
+  "claiming_any_of_8": 640,
+  "by_service": {
+   "dialysis": 58,
+   "cardiac_surgery": 36,
+   "nicu": 39,
+   "burns": 29,
+   "trauma": 298,
+   "icu": 135,
+   "mri": 211,
+   "csection": 70
+  },
+  "by_service_strong": {
+   "dialysis": 24,
+   "cardiac_surgery": 4,
+   "nicu": 5,
+   "burns": 1,
+   "trauma": 6,
+   "icu": 6,
+   "mri": 145,
+   "csection": 2
+  }
+ },
+ "type_dentist": {
+  "facilities": 488,
+  "claiming_any_of_8": 19,
+  "by_service": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 18,
+   "icu": 1,
+   "mri": 0,
+   "csection": 0
+  },
+  "by_service_strong": {
+   "dialysis": 0,
+   "cardiac_surgery": 0,
+   "nicu": 0,
+   "burns": 0,
+   "trauma": 0,
+   "icu": 0,
+   "mri": 0,
+   "csection": 0
+  }
+ }
+}

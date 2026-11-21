@@ -1,0 +1,48 @@
+grp,sort,tset,km,phone,dom,addr,samepin,samecity,unique_id,label,note,pos
+931.0,100.0,100.0,552.745926820561,False,False,37.5,True,True,00a441f9-f65d-4250-a1f9-a068164cba74,true_dup,Sarla Hospital Santacruz; one copy has Amravati coords,True
+2418.0,61.224489795918366,100.0,0.040309763724841775,True,True,35.71428571428571,True,False,1df3d3c4-c4d3-446d-a687-9d5841a57d84,true_dup,Fortis Ludhiana; one copy text is Fortis Escorts Amritsar,True
+2886.0,78.87323943661973,100.0,0.13771012231346355,False,False,100.0,True,True,373ab7bd-8483-4327-bb80-115d5a9c3dc7,true_dup,SKY Hospital Imphal,True
+3669.0,47.05882352941176,100.0,0.018152440564327917,True,True,96.0,False,False,2e9637d9-d79f-4d0a-9a8c-5f7c030e4aec,true_dup,KGP Hospital Shivamogga,True
+3881.0,76.92307692307692,87.32394366197182,0.016118649339650085,True,False,29.787234042553195,False,False,0306a038-ed69-4651-8d2f-f4f7129440d3,different,Maxivision Vizag vs Maxivision Guntur branch with Vizag coords,False
+4557.0,64.15094339622642,94.11764705882354,0.17317311306283145,False,False,68.42105263157895,True,True,28ce4bae-599e-4a87-9c8e-4ca094277577,different,Dr R.B. Yadav vs R Yadav Surgical and Rekha Eye Hospital Rewari (uncertain),False
+4580.0,100.0,100.0,90.98340785505428,False,False,36.36363636363637,False,True,1f620753-cc65-4077-94d3-0edfe6e2f74e,true_dup,Razack Hospital Sankarankovil; coords 91 km apart,True
+4754.0,82.92682926829268,100.0,0.028179830843226818,False,False,21.05263157894737,False,False,5ef1d061-efbf-4cba-a726-636c486b1aaa,true_dup,Deccan Hardikar Hospital Pune; copy carries a Thane PIN and Thane listing text,True
+5041.0,67.85714285714286,88.88888888888889,0.012938878885542425,False,True,37.03703703703704,False,False,4f848d20-bee7-40a9-b5cd-2f2e71d67b0c,different,Sree Lakshmi Coimbatore vs Sri Lakshmi Namakkal; Namakkal record carries Coimbatore coords and smch.in,False
+5059.0,60.0,100.0,0.030961320642773626,False,False,55.55555555555556,False,True,4f0c8cac-352b-4735-8366-5d2e5ba9d426,true_dup,Sindhi Hospital = R K Sindhi Sangh Maternity Hospital Block 11 Govind Nagar Kanpur,True
+5097.0,53.333333333333336,86.66666666666667,0.12019991702512103,False,False,35.44303797468355,False,False,547e04e7-2f78-465e-936d-1de22aab00b2,different,Amruta vs Samata Hospital Dombivli,False
+5634.0,88.37209302325581,88.37209302325581,0.19665864081349382,False,False,26.66666666666667,True,True,0be14897-61e0-42cb-b753-e42b060fd530,different,Rupala vs Pahal Kidney Hospital Surat,False
+5718.0,86.66666666666667,100.0,0.013763743788443795,False,False,39.34426229508197,False,False,121b3862-2136-4b8c-a2b4-34bb4bafb8ea,different,RNS Dental Coimbatore vs Dental clinic Tirunelveli at Coimbatore coords,False
+6016.0,60.60606060606061,100.0,0.04775655696972422,True,True,94.11764705882354,False,False,5a1403dd-dd6a-40cd-89e1-e7eba36c500b,true_dup,Manipal Goa Hospital Dona Paula,True
+6065.0,34.04255319148937,100.0,0.03811898165920841,True,False,66.66666666666666,False,True,8600881d-b94b-4aba-b910-efeaa07fc77a,true_dup,Capital Hospital = PGIMER and Capital Hospital Bhubaneswar,True
+6096.0,59.09090909090908,100.0,0.021538737162238388,True,True,40.0,False,True,4f2ce198-802f-4f26-8aa7-c22ffb3cec53,true_dup,Apollo Clinic Zoo Road Guwahati,True
+6279.0,96.96969696969697,96.96969696969697,0.025496568183925362,True,False,16.0,False,True,09913236-77e2-414b-89d3-4943588527a6,true_dup,Devmata Hospital Bhopal; one name has a typo,True
+6344.0,61.81818181818181,87.5,0.01210590167034262,True,False,91.89189189189189,True,True,6d432c18-06b6-4ddf-8fac-997522ed1135,true_dup,NKH = New Korba Hospital; same phone and address,True
+6590.0,60.0,100.0,0.001272524947867112,True,True,94.73684210526315,True,False,46d54262-3059-4e7f-9e14-543b5f37bfa3,true_dup,PVS Hospital Calicut,True
+6642.0,100.0,100.0,197.9128470930402,False,False,0.0,False,True,07f22851-f027-417a-b4b4-f32279551fda,different,Om Dental Clinic Junagadh vs Thaltej Ahmedabad; generic name,False
+6827.0,77.61194029850746,88.88888888888889,0.04981487441409823,False,False,47.05882352941177,True,True,5f0605af-566d-4123-bc3a-d04efa200d5b,different,Bhatia vs Prime Multispeciality Patiala,False
+6921.0,65.21739130434783,100.0,0.02192397415017707,True,True,100.0,True,True,2b5d4240-8105-4e60-adb7-01f8cee3a622,true_dup,Charak Hospital Lucknow,True
+7112.0,100.0,100.0,9.917042446148683,False,False,19.04761904761905,False,True,aa4b8ccc-fc61-4681-bce6-6443366c5ed2,different,Care Dental Hospital record whose text is Omega Eye Care Centre,False
+7391.0,86.95652173913044,86.95652173913044,0.030072843370447553,False,False,44.44444444444444,True,True,619a9ef7-5d0c-44e8-89f0-1ab201ab3418,true_dup,Dr Moses Matthias vs Dr Morris Mathias Nagercoil (probable typo),True
+7775.0,100.0,100.0,113.90381067437968,False,False,29.629629629629633,True,False,87aa7bed-6884-43fe-ba2d-178de4bf39ac,different,32 Pearls Dental: one record has Pune coords and a different owner; generic name,False
+7891.0,61.904761904761905,100.0,0.014504388352763712,True,True,0.0,True,True,0c199bdf-5e22-4906-af58-c055dad6aba7,true_dup,IRIS Hospital Kolkata,True
+7937.0,51.85185185185186,100.0,0.0,False,False,100.0,True,True,3ebea27c-f11d-4e01-b558-ed4aeb5937bd,different,Amala medical vs Amala Ayurvedic: two hospitals on one campus,False
+7976.0,88.52459016393442,92.5925925925926,0.019579156925669465,False,False,100.0,True,True,aecc588b-b667-4616-b7a5-16259e377178,same_site_unit,Bhagyalatha Hospital dental unit vs eye unit,True
+8613.0,89.65517241379311,94.11764705882354,0.03163830425604039,False,False,35.294117647058826,True,True,52b3d906-b4b1-4c68-b8b8-80b2de885788,different,Mathur Hospital vs MN Hospital Bikaner; generic suffix match,False
+8759.0,96.55172413793103,96.55172413793103,0.07745672856898438,True,False,82.75862068965517,True,True,8032bf8f-eaa8-4737-8e2b-aa761d2dcd3c,true_dup,BRJ Ortho Centre and MAK Hospital,True
+8829.0,48.484848484848484,100.0,0.0,True,False,50.0,False,False,61f58198-4052-4e83-b4cd-547a73894c96,different,Aarogya Hapur vs Aarogya Vaishali (Delhi PIN); identical coords copied,False
+8833.0,100.0,100.0,0.48622710056392954,False,False,25.0,True,True,3477b64c-a135-4493-9a32-3a7fc7d213da,true_dup,Rajindra Hospital Patiala; one copy has amarhospital.com website,True
+8890.0,68.0,100.0,0.11330554295037666,True,True,100.0,True,True,664122a6-74f2-45fe-b030-02ca251c402e,true_dup,Nerlikar Hospital Nashik,True
+8954.0,100.0,100.0,6.60477391960095,False,False,100.0,True,True,3e8946bd-04ac-4d8a-b921-90ee9153f5dd,true_dup,Siri Dental Hospital same address line; coords 6.6 km apart,True
+8980.0,100.0,100.0,117.22881659976329,False,False,36.36363636363637,False,True,13e107f9-7c15-4450-93fb-49c2a3eb1f81,true_dup,GMC Thiruvananthapuram; one copy has Alappuzha-area coords and jmmcri.org,True
+8987.0,89.41176470588236,100.0,0.15231197145685282,False,False,100.0,True,False,81b069d5-fd79-49e8-a520-2731f8c77504,true_dup,Kanyakumari Government Medical College Hospital,True
+9155.0,92.3076923076923,92.3076923076923,0.09708657532978542,True,False,38.80597014925373,False,False,522afae9-86fb-45ff-8fef-4550865a1d1c,different,Shubham Surat / Sham Wankaner / Isha Vadodara all geocoded at Wankaner,False
+9219.0,82.75862068965517,90.56603773584905,0.009759492210459894,False,True,20.77922077922078,True,True,26ab97e0-d7c6-482c-b043-87848a53da6a,different,Imax vs Care Multispeciality Wagholi (uncertain; shared website),False
+9243.0,66.66666666666667,100.0,0.042502874859150316,True,False,41.37931034482759,True,True,b2db2916-a5db-42ab-87f4-5f9581695f4e,true_dup,Nemcare Guwahati (probable),True
+9301.0,71.7948717948718,100.0,0.003870159860531901,True,False,40.74074074074074,True,False,dd0c2a24-cd0e-40d9-be45-adde9ab08272,true_dup,PACE Hospitals HITEC City,True
+9493.0,83.33333333333334,100.0,0.044608486387632505,True,False,64.28571428571428,True,True,33af2594-ec2f-4268-a1a6-9cb47b04d798,true_dup,Amrita Hospital Kochi,True
+9540.0,75.55555555555556,100.0,0.010825547406588318,True,False,32.87671232876713,True,False,cc68c9a0-a61c-4bca-bce9-49aee4d97b20,same_site_unit,Sanjiban blood bank is a unit of Sanjiban Hospital,True
+9549.0,100.0,100.0,0.01225576889418786,True,True,25.454545454545453,True,True,18cb1742-fa1f-4941-bb61-3ba3c6ce46dc,true_dup,Jain Dental Hospital Alwar,True
+9583.0,73.46938775510203,100.0,0.03152490500217981,True,True,35.483870967741936,False,True,9433ea25-31af-43a2-8512-e07d58b2d269,true_dup,Vishwaraj Hospital Loni Kalbhor,True
+9597.0,71.7948717948718,100.0,0.15400949194384939,True,True,87.17948717948718,False,True,9a7c8cd7-5c16-427e-8e14-2a5c4efa1231,true_dup,Ganga Hospital Coimbatore,True
+9617.0,85.71428571428572,100.0,0.009661242954965624,True,False,32.727272727272734,False,False,61ed89ad-11b3-4162-9881-d754f7442760,different,Navjeevan Lonand/Buldhana merge geocoded onto Dr Lad's Navjeevan Nashik,False
+9661.0,65.21739130434783,100.0,0.030917615183167938,True,True,24.390243902439025,True,True,0b125248-fa02-4a43-ac2e-3f466ede4768,true_dup,Jaslok Hospital Mumbai,True

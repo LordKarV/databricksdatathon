@@ -1,0 +1,22 @@
+{
+ "district_names": 742,
+ "district_names_multi_state": 16,
+ "district_names_spread_over_50km": 215,
+ "office_names": 133548,
+ "office_names_multi_state": 8190,
+ "office_names_spread_over_50km": 11860,
+ "city_names": 1600,
+ "city_names_multi_state": 25,
+ "city_names_spread_over_50km": 160,
+ "facility_city_resolves_without_city_layer": {
+  "district": 6764,
+  "office": 2142,
+  "unresolved": 1064
+ },
+ "pins_in_directory": 19584,
+ "facility_pins_not_in_directory": 206,
+ "tests_resolved_no_alias": 34,
+ "tests_resolved_with_alias": 38,
+ "tests_ambiguous": 5,
+ "tests_total": 40
+}

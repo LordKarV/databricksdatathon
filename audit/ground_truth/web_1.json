@@ -1,0 +1,114 @@
+{
+  "batch": 1,
+  "method": "WebSearch + WebFetch, max 4 lookups per pair, queries limited to public facility name, city and service. Fetch summaries come from a small model reading the page; quotes are paraphrased where marked.",
+  "results": [
+    {
+      "pair_id": "dialysis_strong_1",
+      "exists": "yes",
+      "location_matches": "unclear",
+      "service": "confirmed",
+      "confidence": "medium",
+      "evidence_urls": ["https://lifelinemedicarehospitals.com", "https://www.myupchar.com/en/hospitals/mumbai/lifelline-medicare-hospital-malad-east-9251"],
+      "notes": "Merged record: Lybrate places Dr A Kapoor's diabetes clinic at Lifelline Medicare, Goregaon West, while the dialysis claim belongs to the chain's separate 'Dialysis Unit, Triveni Nagar, Malad (E), Mumbai - 97' listed on the chain site (matches PIN 400097). The chain runs a dialysis unit. The site does not say it is open 24/7, so treat the round-the-clock claim as unverified."
+    },
+    {
+      "pair_id": "dialysis_weak_2",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "no_info",
+      "confidence": "medium",
+      "evidence_urls": ["https://www.doabahospitalpvtltd.com/", "https://bajajfinservhealth.in/hospitals/jalandhar/doaba-hospital-lajpat-nagar"],
+      "notes": "Own site gives 320 Lajpat Nagar, near Nakodar Chowk, Jalandhar and lists Urology but not nephrology or dialysis. The Facilities page returned 404. No page found showing it offers dialysis."
+    },
+    {
+      "pair_id": "emergency_csection_strong_1",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "confirmed",
+      "confidence": "medium",
+      "evidence_urls": ["https://en.wikipedia.org/wiki/Tata_Main_Hospital,_Jamshedpur", "https://indiacsr.in/tata-main-hospital-organises-basic-emergency-obstetric-care-training-programme"],
+      "notes": "983-bed teaching hospital in Bistupur, Jamshedpur with an emergency department and DNB training in Obstetrics and Gynaecology. It was a recognised BEmOC training centre in an older report. No page found that names caesarean specifically. The hospital's own site refused the connection."
+    },
+    {
+      "pair_id": "emergency_csection_weak_2",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "contradicted",
+      "confidence": "medium",
+      "evidence_urls": ["https://petalshealth.in"],
+      "notes": "Petals Health runs outpatient clinics, one of them at 12 Loudon Street, Kolkata 700017 (matches the PIN). It calls itself a 'Specialty Primary Care Clinic Chain' and lists no inpatient beds, labour room or operation theatre. C-section appears only as a blog title, so the clinic cannot do emergency C-sections on site."
+    },
+    {
+      "pair_id": "nicu_strong_1",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "confirmed",
+      "confidence": "high",
+      "evidence_urls": ["https://cradlehospital.com", "https://www.bajajfinservhealth.in/hospitals/jaipur/cradle-children-hospital-vaishali-nagar"],
+      "notes": "Own site (formerly Helping Hand Polyclinic, 212 Neminagar Extension, Vaishali Nagar, Jaipur) lists a NICU under departments and mentions 'NICU, PICU'. Bajaj gives PIN 302021. The NICU level and bed count are not stated."
+    },
+    {
+      "pair_id": "nicu_weak_2",
+      "exists": "unclear",
+      "location_matches": "unclear",
+      "service": "no_info",
+      "confidence": "low",
+      "evidence_urls": [],
+      "notes": "The record's website returned 404. Two searches found no Ananya Hospital in Kashipur; only Justdial (a source in the record) lists it. Neither the hospital nor its NICU could be confirmed."
+    },
+    {
+      "pair_id": "cardiac_surgery_strong_1",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "confirmed",
+      "confidence": "high",
+      "evidence_urls": ["https://micc.in", "https://www.hexahealth.com/kozhikode/hospital/metromed-international-cardiac-centre"],
+      "notes": "Own site: Thondayad Bypass Road, Calicut, Kerala 673014. It lists an Adult Cardiac Surgery department and Cardiac Surgery and Heart Transplantation, with a Chief Consultant Cardiothoracic and Vascular Surgeon. The site does not name CABG, but Hexahealth gives a bypass price."
+    },
+    {
+      "pair_id": "cardiac_surgery_weak_2",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "confirmed",
+      "confidence": "medium",
+      "evidence_urls": ["http://www.rajmedicity.com/"],
+      "notes": "Own site: North AOC, Imphal 795001. It lists a 'Cardiovascular and Thoracic Surgery' department and a 'Senior Consultant CTVS'. No case volumes or news reports found, so it is confirmed only by the hospital's own listing."
+    },
+    {
+      "pair_id": "mri_strong_1",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "no_info",
+      "confidence": "medium",
+      "evidence_urls": ["https://painhospital.in", "https://www.practo.com/delhi/hospital/delhi-pain-management-centre-safdarjung-enclave-1"],
+      "notes": "Pain clinic chain with branches in Safdarjung Enclave and Raja Garden, West Delhi (fits PIN 110027). Neither its own site nor Practo mentions MRI. Practo lists fluoroscopy, ozone, RF and PRP machines only. The 3T MRI claim is unsupported and is probably a referral or contamination."
+    },
+    {
+      "pair_id": "mri_weak_2",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "no_info",
+      "confidence": "medium",
+      "evidence_urls": ["https://gujarathospital.in", "https://www.bajajfinservhealth.in/hospitals/surat/gujarat-gastro-and-vascular-hospital-muktanand-nagar"],
+      "notes": "Own site: Anand Mahal Road, Adajan, Surat 395009, 50 beds, 9-bed ICU, cathlab, endoscopy. It mentions 'advanced imaging' but does not name MRI. MRCP is an MRI study, but no source shows an in-house scanner."
+    },
+    {
+      "pair_id": "trauma_emergency_strong_1",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "confirmed",
+      "confidence": "high",
+      "evidence_urls": ["https://www.mukathospital.com/", "https://cghshospitals.com/facility/mukat-hospital-heart-institute-chandiagarh-939"],
+      "notes": "Own site: SCO 47-49, Sector 34A, Chandigarh 160022. It shows a '24x7 Emergency No.' and lists an Orthopaedics and Traumatology department. CGHS also lists it as open 24 hours. There is no dedicated trauma centre."
+    },
+    {
+      "pair_id": "trauma_emergency_weak_2",
+      "exists": "yes",
+      "location_matches": "yes",
+      "service": "no_info",
+      "confidence": "low",
+      "evidence_urls": ["https://prabhahospital.whitecoats.com"],
+      "notes": "Old Dussehra Ground Road, Moga 142001. The whitecoats site (search snippet; the fetch failed on SSL) describes a clinic for general medicine, gynaecology and paediatrics, with general surgery handled by referral. No 24x7 emergency service found, so the claim is weak."
+    }
+  ]
+}

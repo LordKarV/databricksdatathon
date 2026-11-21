@@ -1,0 +1,878 @@
+{
+ "name_veterinary": [
+  [
+   "8b8ee908-073c-4356-9c3f-dabbbf915f3e",
+   "Prime Animal Care Hospital - Delhi NCR",
+   "hospital",
+   "private"
+  ],
+  [
+   "ef0ae66f-4772-42a2-93da-0a1a5254d64d",
+   "Sri Sri Holistic Hospitals (A Unit Of Sreeramachandra Health Services Pvt. Ltd.) - Nizam Pet Road, Hyderabad",
+   "hospital",
+   "private"
+  ],
+  [
+   "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b",
+   "Supriya Multispeciality Pet Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "d65d3aa9-b251-4c03-ab1d-c770e799ec01",
+   "Vatika Pet Clinic & Surgery Centre",
+   "clinic",
+   "private"
+  ],
+  [
+   "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+   "Government Veterinary Dispensary; Petlad",
+   "hospital",
+   "public"
+  ],
+  [
+   "a9a69f69-810b-48ed-a088-afa0adc8f19f",
+   "Veterinary Hospital",
+   "hospital",
+   "public"
+  ],
+  [
+   "3701980c-4699-4a84-a9f1-024939ba0e34",
+   "Pet Care Pathology Lab & Diagnostic Centre",
+   "clinic",
+   "private"
+  ],
+  [
+   "9c054087-a278-4ea0-80af-7c1040b4ef1a",
+   "Indira Pet Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "c710c913-3806-4cd6-8c4a-4188868b2355",
+   "District Veterinary Hospital",
+   "hospital",
+   "public"
+  ],
+  [
+   "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+   "The Vet Point",
+   "null",
+   "null"
+  ],
+  [
+   "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+   "Baroda Pet Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "885c79f6-9f32-4878-8384-5a90259cfae4",
+   "SKS Veterinary Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "f676e32b-6dc7-4203-b39f-5e20351ae45e",
+   "Pets Care Super Speciality Hospital",
+   "hospital",
+   "private"
+  ]
+ ],
+ "name_hospital_typed_clinic": [
+  [
+   "7ca4335e-2ce0-4c2d-b44e-bf02388f732c",
+   "Helios Hospitals",
+   "clinic",
+   "private"
+  ],
+  [
+   "2eca897b-42df-44f0-a6b4-9a55054a3f6a",
+   "Shani Children Hospital & Dental Clinic",
+   "clinic",
+   "null"
+  ],
+  [
+   "2c9994a4-2537-4ab7-9db9-efc73a6ca094",
+   "Implantree International Dental Hospitals",
+   "clinic",
+   "private"
+  ],
+  [
+   "59ecef1c-189e-4b6d-a210-70d74c53b7f9",
+   "Sabharwal Hospital",
+   "clinic",
+   "null"
+  ],
+  [
+   "0c16ea7e-3994-4e24-8eef-27edc28d2bfc",
+   "Kirti Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "7271999c-be22-4a8d-9c95-edd78c7c4b76",
+   "Ashoka Dental Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "eeecfa7d-6b02-49fe-b49a-f41f36add36c",
+   "Laungia Dental Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "9f0b3823-4cef-42d1-b4d9-04af3f915632",
+   "Sneha Hospital",
+   "clinic",
+   "null"
+  ],
+  [
+   "718dd532-e3d3-4b4f-baf5-b5dd99277b84",
+   "RAJARAJESWARI HOSPITAL",
+   "clinic",
+   "private"
+  ],
+  [
+   "16300eb3-2217-4e8a-a418-46e4abf5682c",
+   "Priya Children's Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "a169589d-5bec-4da8-b07a-5919ed0aafbd",
+   "Hope Centre For Speech Therapy And Autism - Building No Gate No.577, opp. Vardan Hospital, near Bus Stand, Mota Singh Nagar, Jalandhar, Punjab 144022",
+   "clinic",
+   "private"
+  ],
+  [
+   "dc065d8a-8fd2-4cd7-9e81-3b26730ba224",
+   "Akshita Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "72365e22-28b5-4189-8fbf-bec6e803751e",
+   "Om Shivam Multi-speciality Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "aa551f26-9018-4f10-bbeb-d9215212d66e",
+   "Care Dental Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "a7e752cc-9d98-4fb5-870c-586b43b6b492",
+   "Eyenova Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "264e5c7b-ec7e-44c9-95e8-17e9c89cdf21",
+   "Global Dental Hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "3b2eff51-83a9-4580-8877-5ff0f604ed6b",
+   "KidsCare Paediatric Neurology Centre - Ambikapur Location Jail Road, near Mata Rajrani Hospital, Babupara, Ambikapur",
+   "clinic",
+   "private"
+  ],
+  [
+   "f3d7ed77-382d-4cd4-a29b-41c14e632579",
+   "Ashwini Ayurvedic Hospital & Research Centre",
+   "clinic",
+   "private"
+  ],
+  [
+   "4d482e1f-2970-484e-a94d-6e228458798f",
+   "Ginni skin and laser hospital",
+   "clinic",
+   "private"
+  ],
+  [
+   "fc40ee1b-599e-48c5-a18a-44ef3f7b31a9",
+   "Burute Women's Hospital & Delta IVF",
+   "clinic",
+   "private"
+  ]
+ ],
+ "name_clinic_not_hospital_typed_hospital": [
+  [
+   "3db0863c-bc66-4e6c-b818-1bc5fde2d4bc",
+   "Diagnoral Pathology & Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "6efa24cd-fba5-4383-8782-01b198c0ddb7",
+   "Khosa Dental Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "e1fe530c-700f-4b99-b24b-15bb991f0177",
+   "Priority Medical Clinic, Kalighat, Kolkata",
+   "hospital",
+   "private"
+  ],
+  [
+   "05ca7661-e4f4-439f-b914-474dc877177f",
+   "Almaa Siddha Care Clinic, Kovil Arch, Tiruppur",
+   "hospital",
+   "null"
+  ],
+  [
+   "611bd631-855b-40c5-8130-8a2def23399d",
+   "Usha Memorial Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "53f6ebed-c231-4139-9df7-dc37f11862a9",
+   "Kaverri Dental Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "6f1cc714-8b30-4c30-b836-dbe378d14bad",
+   "Aryan Eye Clinic and Day-Care Surgery Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "d4d2acd5-28e3-4991-82ed-68d46ad1f1ff",
+   "Agarwal Clinic and Nursing Home",
+   "hospital",
+   "private"
+  ],
+  [
+   "27c00466-f6aa-4491-83e5-2c6dcf33cad5",
+   "Health Care Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "deaf7e1c-6c1a-4f4d-8b82-cb65b224ba21",
+   "Rajam Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "2213e54b-3b35-4f5b-a38b-4e747783b5d7",
+   "Hridayam Heart Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "10f3985d-a8fc-4e9a-9835-da54218060ad",
+   "Sai Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "23aef02c-b9ca-4cd0-999b-46d07ff31ea6",
+   "Prime Speciality Clinics, Tadepalle, Vaddeswaram",
+   "hospital",
+   "private"
+  ],
+  [
+   "7af21095-83d9-490a-bada-a2ad3d412370",
+   "Nagalkar Nursing Home and Polyclinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "40c3ee04-faee-4f2c-b6eb-c05ab7fd95e4",
+   "Raza Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "3451b5f4-454c-4248-85aa-4e19847c0f26",
+   "Varun Cardiac Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "cddfa621-8c80-4898-9c93-f2336e0309f0",
+   "The Surgical Clinic and Nursing Home",
+   "hospital",
+   "private"
+  ],
+  [
+   "1d7568a2-63e6-430f-af30-550bcf698fd0",
+   "Asha Poly Clinic & Sheetal Nursing Home",
+   "hospital",
+   "private"
+  ],
+  [
+   "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+   "Baroda Pet Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "73c876e1-fda5-48eb-9a93-27e2763b25ff",
+   "Medica North Bengal Clinic Siliguri",
+   "hospital",
+   "private"
+  ]
+ ],
+ "name_nursing_home_typed_clinic": [
+  [
+   "51179ca4-f342-4014-92d7-c2d2ef1adbb1",
+   "Srinivasa Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "a8c51d98-a31b-4234-acf6-0a2d4cf67cac",
+   "Smile Gallery Dental Wellness Center Saurabh Nursing Home, 82 Marwari Road, Near Azad Market, Bhopal, M.P. 462001",
+   "clinic",
+   "private"
+  ],
+  [
+   "7ffd3ceb-ad59-4e84-bfa1-437b7e2b78c3",
+   "Anugraha Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "c163815e-27a6-4048-97ab-06a72bf3ce70",
+   "Krishna Nursing Home, Mumbai",
+   "clinic",
+   "private"
+  ],
+  [
+   "3f901408-6faf-4397-87b6-383fd66a9e49",
+   "Aditya Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "70a81149-9745-427f-a390-aeea4d7bdaad",
+   "Chandrama Clinic And Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "097bda74-beb6-4abb-a8cd-13099ed122a8",
+   "Sarthak Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "af88abd5-2fd0-4d69-9bef-0fbd3b159ab7",
+   "Ankur Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "4d814675-fb66-4d77-92b3-825a316e3774",
+   "Shree Ram Eye Care & Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "14159818-a738-4afa-90e9-62439c7101fa",
+   "Priyanka Nursing Home & Ultrasound Center",
+   "clinic",
+   "private"
+  ],
+  [
+   "d961e2b5-d956-4f49-aac6-c443631a5bd7",
+   "Anupama Maternity & Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "21b86627-0d09-40d8-8744-2a7137dd4615",
+   "Dr Y K Singh Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "dbbeb583-4d7a-4a8d-8b97-8b4e5c5f0cc0",
+   "Pandey Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "e7efa1e6-b270-4c6b-a6cb-d76066832324",
+   "Rohit Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "2ad9ce2a-9d8d-4373-915e-6017c28f9819",
+   "West End Clinic And Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "4ed894ac-cc90-4525-a9eb-62e96315137f",
+   "Chitransh Nursing Home Piles Ent Mother&Child Care",
+   "clinic",
+   "private"
+  ],
+  [
+   "87326781-b5df-4366-870a-0ea85ac4f994",
+   "Nivedita Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "b793505a-bcc5-49eb-aeb9-6fb9d098ff94",
+   "Dr.N.M.B.Baruah Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "f972760a-2809-4077-8cb9-f202febcbc1e",
+   "Mittal Nursing Home",
+   "clinic",
+   "private"
+  ],
+  [
+   "dd6c9d25-1b99-4afe-8d2a-7416c8cef929",
+   "Life Line Diagnostic Centre & Nursing Home",
+   "clinic",
+   "private"
+  ]
+ ],
+ "name_dental_typed_not_dentist": [
+  [
+   "ebbab3cc-bbdb-49fa-9cdc-a1c996e65b37",
+   "Kumar Smile Style Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "3f073d07-d85b-47b1-8fe2-4f4b5dc373e2",
+   "Stavya Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "87d5e58c-3674-44b7-ab0c-ffd9e64c8058",
+   "Sai Laser Dental Care",
+   "clinic",
+   "private"
+  ],
+  [
+   "4f8dd6cb-e098-474b-a93d-af663842959c",
+   "Oral White Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "5f2ad995-f8dc-4d56-841d-9cf650aa6355",
+   "Smile N Care Dental Clinics",
+   "clinic",
+   "private"
+  ],
+  [
+   "87c28100-ab0b-422e-a76a-258a7e0d6520",
+   "Amritsar Dental Clinic, Barnala",
+   "clinic",
+   "private"
+  ],
+  [
+   "f1aac4fb-88b7-4694-b188-3d6c474a594e",
+   "Sri Sai Kirupa Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "9fd173b8-8afe-4fba-9a7b-da5ccca35cac",
+   "Satya Shiv Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "41e09929-03fa-4fca-a203-1fd534e5589e",
+   "Shahi Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "7af7974c-7e42-4651-adcb-9f04f3a8435d",
+   "Floradent Dental Studio",
+   "clinic",
+   "private"
+  ],
+  [
+   "01bcd0f0-9de3-4003-acf7-08522b503643",
+   "Kaushik Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "fa083021-f5dc-4596-8ebb-1098cfec38f7",
+   "Brilliance Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "60e28e3d-8b20-435e-882f-3e32593f4795",
+   "Arun Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "68e447d6-729a-43be-ac54-fe8f5dc47f64",
+   "Galaxy Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "50c79e07-8e9e-4c4e-a348-f94ad33dd75b",
+   "Kritanjali Dental Implant And Physiotherapy Centre",
+   "clinic",
+   "private"
+  ],
+  [
+   "dc2b980e-68ba-48fa-8c1a-e994891637c6",
+   "Sriram Dental Clinic, Nanganallur",
+   "clinic",
+   "private"
+  ],
+  [
+   "1c5b8d0d-0269-4c28-b88f-b20970192bce",
+   "URBAN TOOTH Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "a9dd0fea-a532-4514-b7cb-1235f600ee1f",
+   "Kids Dental Town",
+   "clinic",
+   "private"
+  ],
+  [
+   "4f40d116-926d-4f3e-af6e-c0ad3de05725",
+   "The Dental Pearl Multispeciality Dental Clinic",
+   "clinic",
+   "private"
+  ],
+  [
+   "9b61d356-5cfd-46b8-9e97-fb8e326cc0ab",
+   "Jain Dental Clinic",
+   "clinic",
+   "private"
+  ]
+ ],
+ "name_dental_hospital_typed_hospital": [
+  [
+   "42fb3d41-4a19-43ec-902d-e6d978713a88",
+   "Target Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "1aa66ea8-3931-4a5a-accf-2d79b8c4cb9d",
+   "Awadh Dental College & Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "cc639575-1132-4ffa-a467-28c2fe986bce",
+   "Sharavathi Dental College & Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "0df1bded-e97f-40f3-ad7f-4a9550c49824",
+   "RVS Dental College and Hospital, Kumaran Kottam Campus, Kannampalayam, Coimbatore, Tamil Nadu, India",
+   "hospital",
+   "private"
+  ],
+  [
+   "2bf49c2a-61fe-496c-92fc-578b6e1de45f",
+   "Dr Amar Anupam Multi Speciality Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "a142ffb3-34f5-429a-bbbf-8ef8cb535979",
+   "Vignesh Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "ff43b1d5-902b-4b3b-aac2-9c8c782238fc",
+   "Life Kare Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "2aeb7382-e2f5-4ccc-8335-288a06aa318e",
+   "Malligai Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "d26a56ce-02bb-4604-baf8-2ffdc8de7efe",
+   "Ocean International Dental Hospitals",
+   "hospital",
+   "private"
+  ],
+  [
+   "092b1e7b-7c6e-4043-88ee-35ee4ab4b0eb",
+   "Government Dental College and Hospital",
+   "hospital",
+   "public"
+  ],
+  [
+   "67ca84cc-d95b-4078-97ea-0b384a6bab89",
+   "Chintamani Hospital And Dental Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "cb6c45cd-80ed-47ea-ba1c-6068d081b1b0",
+   "Star Dental Hospital & Root Canal Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "6be2e85f-8441-4257-85cd-aaf2425f542b",
+   "Gupta Maternity Hospital & Dental Clinic",
+   "hospital",
+   "private"
+  ],
+  [
+   "9ce89c30-1a87-4deb-bc63-3fd75ef058d6",
+   "Om Children and Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "e8eb5384-dc5d-41b1-b273-9a03d09ed811",
+   "Asan Memorial Dental College and Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "d25b05cb-f9f6-43d4-8506-3e872605fc2c",
+   "Sarojini Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "7c4bcb14-642a-4a73-9089-9f094392ec37",
+   "Shiv Dental Multi Speciality Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "8c16fabd-c494-45ff-a87c-5c80fc2fafcd",
+   "Saveetha Dental College and Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "260fc212-c4e2-4e0e-9bdb-01001dcb635f",
+   "City Dental Hospital",
+   "hospital",
+   "private"
+  ],
+  [
+   "1edf508e-6a55-41a0-ba7a-cf6e8778db96",
+   "Dr. Arya\u2019s Dental Hospitals-Rampally X Road",
+   "hospital",
+   "private"
+  ]
+ ],
+ "name_diagnostic_lab_typed_hospital": [
+  [
+   "6a9c97fc-d489-4b8e-bb4a-576e36ecc3fa",
+   "The Liver Unit and Monarch Liver Lab, Cochin Gastroenterology Group, Ernakulam Medical Centre, Kochi",
+   "hospital",
+   "private"
+  ],
+  [
+   "6980422d-c353-4166-ab73-dd359da490d5",
+   "Anderson Diagnostics & Labs",
+   "hospital",
+   "private"
+  ],
+  [
+   "ea239082-4a25-422a-809b-116309f4eff3",
+   "Modern Pathology & Diagnostic Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "98a98785-48af-41c1-bf0c-be2744c99222",
+   "Nidan Diagnostics",
+   "hospital",
+   "private"
+  ],
+  [
+   "e0b3adbe-2fa4-4e6f-82b6-af4b4fafeb15",
+   "Scientific Pathology",
+   "hospital",
+   "private"
+  ],
+  [
+   "1d04bb8f-b934-45f6-a5a0-522354206d6e",
+   "Reliable Diagnostic Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "940d2768-40b6-42c2-81b5-ab73c11823a9",
+   "Satya Diagnostics Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "ff4d38c5-ab12-4b16-ab52-7d14c897fff0",
+   "RB Diagnostics",
+   "hospital",
+   "private"
+  ],
+  [
+   "cb8367c2-e99e-4ebe-b9e5-e8213c8f423d",
+   "Metro Imaging Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "59e75fce-f892-4ce6-9156-17f1db61c156",
+   "Metropolis Lab",
+   "hospital",
+   "private"
+  ],
+  [
+   "46e3820a-fdcb-474b-94bf-0fb734c973d6",
+   "Apex Pathology Lab",
+   "hospital",
+   "private"
+  ],
+  [
+   "d2d94430-fe24-41a4-8c48-96a04aa33d0b",
+   "Assa Diagnostics & Nursing Home",
+   "hospital",
+   "private"
+  ],
+  [
+   "3f9e26eb-0a1a-457f-81a9-e29777a2dc3e",
+   "Global Laboratory",
+   "hospital",
+   "private"
+  ],
+  [
+   "3cf37130-c356-4a8c-880f-d2e5f1921d15",
+   "Balmatta Diagnostic and Research Centre",
+   "hospital",
+   "public"
+  ],
+  [
+   "4307d052-6772-4497-ae25-2d1b0e1a5464",
+   "Mediserv Diagnostics",
+   "hospital",
+   "null"
+  ],
+  [
+   "d3edcb41-d409-4def-9fae-4ad25a036855",
+   "The Muslim Ambulance Society Diagnostic Center",
+   "hospital",
+   "private"
+  ],
+  [
+   "6769ec50-e7c9-47a2-af86-a3dfd345bb44",
+   "Shyamal Imaging Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "4f1b6e2b-804d-4883-be04-e5ccd2a3c46b",
+   "Okay Diagnostic Center",
+   "hospital",
+   "private"
+  ],
+  [
+   "da54e349-fdd3-480c-a520-a76c8744e7d8",
+   "Genix Laboratory - Best Diagnostic lab near Kolkata | Best X-ray Centre in Kolkata",
+   "hospital",
+   "private"
+  ],
+  [
+   "3db0863c-bc66-4e6c-b818-1bc5fde2d4bc",
+   "Diagnoral Pathology & Clinic",
+   "hospital",
+   "private"
+  ]
+ ],
+ "name_pharmacy_typed_not_pharmacy": [
+  [
+   "add56f73-cbdd-4c65-a40e-9685e60b10f0",
+   "Vidhya Dental Hospital & Medicals",
+   "dentist",
+   "private"
+  ],
+  [
+   "195e1bb9-52fd-4eb1-bc5b-0a1297b11e0f",
+   "Dr. Pradip Doshi's Hospital & Pharmaceutical Research Institute",
+   "hospital",
+   "private"
+  ],
+  [
+   "121af94f-386c-4baa-b5eb-f015f0bb18d2",
+   "Arsh Polyclinic & Pharmacy",
+   "clinic",
+   "private"
+  ],
+  [
+   "2a2b39e4-1290-4a6c-ba98-105fb1e28a23",
+   "Globe Hospital And Pharmaceutical Research Centre",
+   "hospital",
+   "private"
+  ],
+  [
+   "09febafe-3c88-4d46-932d-b72e1adef19d",
+   "Ozone Pharmaceuticals (Analytical Lab)",
+   "null",
+   "private"
+  ],
+  [
+   "aa07dc77-d6d2-4be0-94cb-078724248add",
+   "Alchemist Hospital",
+   "hospital",
+   "private"
+  ]
+ ],
+ "name_government_typed_private": [
+  [
+   "c63d560f-2d07-44fd-96c0-a61cb41dffdd",
+   "S.N.M. District Hospital & Tuberculosis Sanatorium, Firozabad",
+   "hospital",
+   "private"
+  ],
+  [
+   "e41bcfdb-c9f7-4a52-89e0-ec91526667e8",
+   "Keshava ENT Hospital - Civil Hospital Road",
+   "hospital",
+   "private"
+  ],
+  [
+   "aee4f51b-2464-483e-90f0-a9417f4b296c",
+   "District Hospital, Kanhangad, India",
+   "hospital",
+   "private"
+  ],
+  [
+   "7687df38-39d2-487f-9df1-a91452c08996",
+   "Civil Hospital Barnala",
+   "hospital",
+   "private"
+  ]
+ ]
+}

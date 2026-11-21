@@ -1,0 +1,44 @@
+rows after dropping exact unique_id duplicates: 9959
+linked pairs: 7385
+  key name_city: pairs 8, records 16
+  key name_pin: pairs 5, records 10
+  key official_phone: pairs 1354, records 351
+  key any_phone: pairs 5471, records 1461
+  key official_domain: pairs 1709, records 722
+  key geo_name: pairs 40, records 79
+components strong(name_city|name_pin|geo_name): groups 47, records 95, max size 3
+components official_phone: groups 103, records 351, max size 34
+components official_domain: groups 234, records 722, max size 33
+components any_phone: groups 364, records 1461, max size 477
+components all keys: groups 428, records 1848, max size 593
+
+pair class by key combo (top 25):
+keys                                               cls                              
+any_phone                                          different_facility_shared_contact    4280
+official_domain                                    chain_branch_or_shared_site          1294
+any_phone+official_phone                           different_facility_shared_contact     674
+official_phone                                     different_facility_shared_contact     592
+any_phone+official_domain                          chain_branch_or_shared_site           310
+any_phone                                          same_name_different_place              84
+any_phone+official_domain+official_phone           chain_branch_or_shared_site            70
+any_phone+official_domain                          different_facility_shared_contact      10
+any_phone+geo_name+official_domain                 likely_true_duplicate                  10
+geo_name                                           likely_true_duplicate                  10
+any_phone+geo_name                                 likely_true_duplicate                   8
+any_phone+official_phone                           same_name_different_place               7
+any_phone+official_domain+official_phone           different_facility_shared_contact       6
+any_phone                                          likely_true_duplicate                   5
+geo_name                                           different_facility_shared_contact       5
+name_city                                          same_name_different_place               4
+official_domain                                    different_facility_shared_contact       2
+name_city+name_pin                                 same_name_different_place               2
+any_phone+official_domain                          likely_true_duplicate                   1
+name_city+name_pin                                 likely_true_duplicate                   1
+official_domain                                    likely_true_duplicate                   1
+any_phone+geo_name+official_domain+official_phone  likely_true_duplicate                   1
+name_pin                                           same_name_different_place               1
+geo_name+official_domain                           likely_true_duplicate                   1
+any_phone+geo_name+official_phone                  likely_true_duplicate                   1
+
+pair classes: {'different_facility_shared_contact': 5572, 'chain_branch_or_shared_site': 1674, 'same_name_different_place': 98, 'likely_true_duplicate': 41}
+likely_true_duplicate: pairs 41 records 82 | identical claim lists 0 | identical description 0

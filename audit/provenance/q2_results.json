@@ -1,0 +1,68 @@
+{
+ "records": 9959,
+ "chars_quantiles": {
+  "0.05": 21.0,
+  "0.25": 65.0,
+  "0.5": 115.0,
+  "0.75": 217.0,
+  "0.95": 531.1000000000004,
+  "0.99": 1010.0
+ },
+ "words_quantiles": {
+  "0.05": 3.0,
+  "0.25": 10.0,
+  "0.5": 16.0,
+  "0.75": 31.0,
+  "0.95": 76.0
+ },
+ "style_counts": {
+  "third_person_summary": 6909,
+  "first_person_marketing": 1185,
+  "extractor_meta": 1078,
+  "label_only": 688,
+  "scraped_truncated": 94,
+  "non_english": 5
+ },
+ "exact_duplicate_descriptions": {
+  "records_sharing_text": 569,
+  "distinct_shared_texts": 151,
+  "top": {
+   "Hospital": 40,
+   "Open 24 Hrs": 34,
+   "Dental Clinic": 30,
+   "Providing exceptional cardiac care to the community": 22,
+   "Diagnostic Center": 14,
+   "Clinic": 12,
+   "Pathology & Diagnostic Lab": 9,
+   "Dentist & Dental Office": 9
+  }
+ },
+ "repeats_name": 5368,
+ "repeats_city": 4454,
+ "repeats_both": 3189,
+ "state_known": 9685,
+ "desc_mentions_other_state": 40,
+ "desc_located_in_other_state_place_LOW_PRECISION": 38,
+ "beds": {
+  "desc_has_beds": 456,
+  "both_present": 425,
+  "conflict": 11,
+  "desc_only_capacity_missing": 31
+ },
+ "year": {
+  "desc_has_year": 767,
+  "both_present": 762,
+  "conflict": 20,
+  "desc_only_field_missing": 5
+ },
+ "doctors": {
+  "desc_has_doctors": 49,
+  "both_present": 46,
+  "conflict": 7
+ },
+ "desc_location_conflict_vs_q1_any_proxy": {
+  "conflict_records": 77,
+  "of_which_any_proxy": 17,
+  "base_any_proxy_rate_pct": 22.66
+ }
+}

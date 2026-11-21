@@ -1,0 +1,41 @@
+typed,layer_no_alias,layer_with_alias,n_points,spread_km_p90,states,fuzzy_district_or_city,ambiguous
+Jaipur,district,district,83,73.0,RAJASTHAN,jaipur (100),False
+Lucknow,district,district,42,24.0,UTTAR PRADESH,lucknow (100),False
+Patna,district,district,66,60.0,BIHAR,patna (100),False
+Gurgaon,city,district,28,24.0,HARYANA,gurugram (100),False
+Gurugram,district,district,28,24.0,HARYANA,gurugram (100),False
+Bombay,,district,33,6.0,MAHARASHTRA,mumbai (100),False
+Mumbai,district,district,33,6.0,MAHARASHTRA,mumbai (100),False
+Bangalore,city,city,102,16.0,KARNATAKA,bengaluru (100),False
+Bengaluru,city,city,102,16.0,KARNATAKA,bengaluru (100),False
+Madras,,district,78,25.0,TAMIL NADU,chennai (100),False
+Calcutta,,district,72,21.0,WEST BENGAL,kolkata (100),False
+Kolkata,district,district,72,21.0,WEST BENGAL,kolkata (100),False
+Trivandrum,city,district,133,30.0,KERALA,thiruvananthapuram (100),False
+Cochin,city,city,44,17.0,KERALA,kochi (100),False
+Kochi,city,city,44,17.0,KERALA,kochi (100),False
+Vizag,city,city,53,101.0,ANDHRA PRADESH,visakhapatnam (100),False
+Mysore,city,district,66,46.0,KARNATAKA,mysuru (100),False
+Allahabad,city,district,54,37.0,UTTAR PRADESH,prayagraj (100),False
+Prayagraj,district,district,54,37.0,UTTAR PRADESH,prayagraj (100),False
+Baroda,city,district,59,744.0,GUJARAT,vadodara (100),False
+Poona,,district,148,75.0,MAHARASHTRA,pune (100),False
+Noida,city,city,68,243.0,UTTAR PRADESH,noida (100),False
+Navi Mumbai,city,city,58,22.0,MAHARASHTRA,navi mumbai (100),False
+Secunderabad,city,city,15,25.0,TELANGANA,secunderabad (100),False
+Mohali,city,city,23,25.0,PUNJAB,mohali (100),False
+Darbhanga,district,district,38,69.0,BIHAR,darbhanga (100),False
+Muzaffarpur,district,district,38,32.0,BIHAR,muzaffarpur (100),False
+Aurangabad,district,district,65,1051.0,BIHAR|MAHARASHTRA,aurangabad (100),True
+Bilaspur,district,district,40,1160.0,CHHATTISGARH|HIMACHAL PRADESH,bilaspur (100),True
+Hamirpur,district,district,60,726.0,HIMACHAL PRADESH|UTTAR PRADESH,hamirpur (100),True
+Pratapgarh,district,district,49,752.0,RAJASTHAN|UTTAR PRADESH,pratapgarh (100),True
+Raigarh,district,district,17,53.0,CHHATTISGARH,raigarh (100),False
+Rampur,district,district,9,21.0,UTTAR PRADESH,rampur (100),False
+Balrampur,district,district,20,447.0,CHHATTISGARH|UTTAR PRADESH,balrampur (100),True
+Jaipur Rajasthan,,,0,,,jaipur (90),False
+Hydrabad,office,office,1,0.0,UTTAR PRADESH,hyderabad (94),False
+Lucknw,,,0,,,lucknow (92),False
+Bhubaneshwar,city,city,46,10.0,ODISHA,bhubaneswar (100),False
+Pondicherry,district,city,5,12.0,PUDUCHERRY,puducherry (100),False
+Thane,district,district,50,31.0,MAHARASHTRA,thane (100),False

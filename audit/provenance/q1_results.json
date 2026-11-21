@@ -1,0 +1,7630 @@
+{
+ "records": 9959,
+ "urls_total": 158444,
+ "records_with_zero_urls": 0,
+ "url_count_quantiles": {
+  "0.1": 3.0,
+  "0.25": 5.0,
+  "0.5": 8.0,
+  "0.75": 21.0,
+  "0.9": 50.0,
+  "0.99": 50.0
+ },
+ "distinct_source_ids_quantiles": {
+  "0.25": 1.0,
+  "0.5": 3.0,
+  "0.75": 8.0,
+  "0.9": 13.0
+ },
+ "records_gt1_distinct_source_id": 6444,
+ "list_page_urls": 19198,
+ "source_types_combos": {
+  "dynamic|overture": 3015,
+  "overture": 2359,
+  "constant|dynamic|overture": 2188,
+  "dynamic": 518,
+  "constant|dynamic|mongo_facility|overture": 498,
+  "dynamic|mongo_facility|overture": 389,
+  "constant|overture": 354,
+  "constant": 119,
+  "constant|dynamic|mongo_ngo|overture": 85,
+  "mongo_facility|overture": 82,
+  "dynamic|mongo_ngo|overture": 67,
+  "constant|dynamic": 65
+ },
+ "url_share_by_class": {
+  "official": {
+   "urls": 17290,
+   "pct_urls": 10.91,
+   "records_with": 4734
+  },
+  "official_like": {
+   "urls": 2698,
+   "pct_urls": 1.7,
+   "records_with": 1201
+  },
+  "other_health_site": {
+   "urls": 8358,
+   "pct_urls": 5.28,
+   "records_with": 2425
+  },
+  "government": {
+   "urls": 2154,
+   "pct_urls": 1.36,
+   "records_with": 1097
+  },
+  "wikipedia": {
+   "urls": 901,
+   "pct_urls": 0.57,
+   "records_with": 398
+  },
+  "research": {
+   "urls": 1480,
+   "pct_urls": 0.93,
+   "records_with": 435
+  },
+  "docs_repo": {
+   "urls": 669,
+   "pct_urls": 0.42,
+   "records_with": 583
+  },
+  "health_aggregator": {
+   "urls": 76301,
+   "pct_urls": 48.16,
+   "records_with": 7604
+  },
+  "insurance_scheme": {
+   "urls": 4692,
+   "pct_urls": 2.96,
+   "records_with": 1913
+  },
+  "business_dir": {
+   "urls": 9275,
+   "pct_urls": 5.85,
+   "records_with": 4197
+  },
+  "maps_geo": {
+   "urls": 3954,
+   "pct_urls": 2.5,
+   "records_with": 2564
+  },
+  "news": {
+   "urls": 802,
+   "pct_urls": 0.51,
+   "records_with": 547
+  },
+  "social": {
+   "urls": 20981,
+   "pct_urls": 13.24,
+   "records_with": 9018
+  },
+  "education": {
+   "urls": 696,
+   "pct_urls": 0.44,
+   "records_with": 353
+  },
+  "crowdfunding_ngo": {
+   "urls": 121,
+   "pct_urls": 0.08,
+   "records_with": 110
+  },
+  "other": {
+   "urls": 8072,
+   "pct_urls": 5.09,
+   "records_with": 3584
+  }
+ },
+ "base_p1_pin_state_mismatch": {
+  "flagged": 21,
+  "of": 9407,
+  "pct": 0.22
+ },
+ "base_p2_url_cross_state": {
+  "flagged": 388,
+  "of": 9948,
+  "pct": 3.9
+ },
+ "base_p3_foreign_name": {
+  "flagged": 1330,
+  "of": 9959,
+  "pct": 13.35
+ },
+ "base_p3c_foreign_claim": {
+  "flagged": 906,
+  "of": 9959,
+  "pct": 9.1
+ },
+ "base_p3s_similar_name": {
+  "flagged": 245,
+  "of": 9959,
+  "pct": 2.46
+ },
+ "base_p4_coord_far_from_pin": {
+  "flagged": 1394,
+  "of": 9497,
+  "pct": 14.68
+ },
+ "base_any_proxy": {
+  "flagged": 2257,
+  "of": 9959,
+  "pct": 22.66
+ },
+ "proxy_by_class": {
+  "official": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 5,
+     "of": 4454,
+     "pct": 0.11
+    },
+    "without": {
+     "flagged": 16,
+     "of": 4953,
+     "pct": 0.32
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 1104,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 1632,
+       "pct": 0.25
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 1474,
+       "pct": 0.2
+      },
+      "without": {
+       "flagged": 4,
+       "of": 1359,
+       "pct": 0.29
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 756,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 729,
+       "pct": 0.14
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 2,
+       "of": 1120,
+       "pct": 0.18
+      },
+      "without": {
+       "flagged": 7,
+       "of": 1233,
+       "pct": 0.57
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 150,
+     "of": 4730,
+     "pct": 3.17
+    },
+    "without": {
+     "flagged": 238,
+     "of": 5218,
+     "pct": 4.56
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 3,
+       "of": 1174,
+       "pct": 0.26
+      },
+      "without": {
+       "flagged": 5,
+       "of": 1715,
+       "pct": 0.29
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 8,
+       "of": 1554,
+       "pct": 0.51
+      },
+      "without": {
+       "flagged": 21,
+       "of": 1409,
+       "pct": 1.49
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 16,
+       "of": 802,
+       "pct": 2.0
+      },
+      "without": {
+       "flagged": 30,
+       "of": 777,
+       "pct": 3.86
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 123,
+       "of": 1200,
+       "pct": 10.25
+      },
+      "without": {
+       "flagged": 182,
+       "of": 1317,
+       "pct": 13.82
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 653,
+     "of": 4734,
+     "pct": 13.79
+    },
+    "without": {
+     "flagged": 677,
+     "of": 5225,
+     "pct": 12.96
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 66,
+       "of": 1174,
+       "pct": 5.62
+      },
+      "without": {
+       "flagged": 48,
+       "of": 1721,
+       "pct": 2.79
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 131,
+       "of": 1557,
+       "pct": 8.41
+      },
+      "without": {
+       "flagged": 103,
+       "of": 1410,
+       "pct": 7.3
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 113,
+       "of": 802,
+       "pct": 14.09
+      },
+      "without": {
+       "flagged": 120,
+       "of": 777,
+       "pct": 15.44
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 343,
+       "of": 1201,
+       "pct": 28.56
+      },
+      "without": {
+       "flagged": 406,
+       "of": 1317,
+       "pct": 30.83
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 419,
+     "of": 4734,
+     "pct": 8.85
+    },
+    "without": {
+     "flagged": 487,
+     "of": 5225,
+     "pct": 9.32
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 30,
+       "of": 1174,
+       "pct": 2.56
+      },
+      "without": {
+       "flagged": 19,
+       "of": 1721,
+       "pct": 1.1
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 61,
+       "of": 1557,
+       "pct": 3.92
+      },
+      "without": {
+       "flagged": 52,
+       "of": 1410,
+       "pct": 3.69
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 72,
+       "of": 802,
+       "pct": 8.98
+      },
+      "without": {
+       "flagged": 89,
+       "of": 777,
+       "pct": 11.45
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 256,
+       "of": 1201,
+       "pct": 21.32
+      },
+      "without": {
+       "flagged": 327,
+       "of": 1317,
+       "pct": 24.83
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 76,
+     "of": 4734,
+     "pct": 1.61
+    },
+    "without": {
+     "flagged": 169,
+     "of": 5225,
+     "pct": 3.23
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 1174,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 1721,
+       "pct": 0.12
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 4,
+       "of": 1557,
+       "pct": 0.26
+      },
+      "without": {
+       "flagged": 12,
+       "of": 1410,
+       "pct": 0.85
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 11,
+       "of": 802,
+       "pct": 1.37
+      },
+      "without": {
+       "flagged": 34,
+       "of": 777,
+       "pct": 4.38
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 61,
+       "of": 1201,
+       "pct": 5.08
+      },
+      "without": {
+       "flagged": 121,
+       "of": 1317,
+       "pct": 9.19
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 480,
+     "of": 4496,
+     "pct": 10.68
+    },
+    "without": {
+     "flagged": 914,
+     "of": 5001,
+     "pct": 18.28
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 51,
+       "of": 1107,
+       "pct": 4.61
+      },
+      "without": {
+       "flagged": 88,
+       "of": 1622,
+       "pct": 5.43
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 81,
+       "of": 1484,
+       "pct": 5.46
+      },
+      "without": {
+       "flagged": 158,
+       "of": 1365,
+       "pct": 11.58
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 87,
+       "of": 760,
+       "pct": 11.45
+      },
+      "without": {
+       "flagged": 193,
+       "of": 749,
+       "pct": 25.77
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 261,
+       "of": 1145,
+       "pct": 22.79
+      },
+      "without": {
+       "flagged": 475,
+       "of": 1265,
+       "pct": 37.55
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 902,
+     "of": 4734,
+     "pct": 19.05
+    },
+    "without": {
+     "flagged": 1355,
+     "of": 5225,
+     "pct": 25.93
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 83,
+       "of": 1174,
+       "pct": 7.07
+      },
+      "without": {
+       "flagged": 116,
+       "of": 1721,
+       "pct": 6.74
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 147,
+       "of": 1557,
+       "pct": 9.44
+      },
+      "without": {
+       "flagged": 221,
+       "of": 1410,
+       "pct": 15.67
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 160,
+       "of": 802,
+       "pct": 19.95
+      },
+      "without": {
+       "flagged": 278,
+       "of": 777,
+       "pct": 35.78
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 512,
+       "of": 1201,
+       "pct": 42.63
+      },
+      "without": {
+       "flagged": 740,
+       "of": 1317,
+       "pct": 56.19
+      }
+     }
+    }
+   }
+  },
+  "official_like": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 2,
+     "of": 1123,
+     "pct": 0.18
+    },
+    "without": {
+     "flagged": 19,
+     "of": 8284,
+     "pct": 0.23
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 219,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2517,
+       "pct": 0.16
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 293,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2540,
+       "pct": 0.28
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 200,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1285,
+       "pct": 0.08
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 2,
+       "of": 411,
+       "pct": 0.49
+      },
+      "without": {
+       "flagged": 7,
+       "of": 1942,
+       "pct": 0.36
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 52,
+     "of": 1198,
+     "pct": 4.34
+    },
+    "without": {
+     "flagged": 336,
+     "of": 8750,
+     "pct": 3.84
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 234,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2655,
+       "pct": 0.3
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 5,
+       "of": 308,
+       "pct": 1.62
+      },
+      "without": {
+       "flagged": 24,
+       "of": 2655,
+       "pct": 0.9
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 4,
+       "of": 214,
+       "pct": 1.87
+      },
+      "without": {
+       "flagged": 42,
+       "of": 1365,
+       "pct": 3.08
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 43,
+       "of": 442,
+       "pct": 9.73
+      },
+      "without": {
+       "flagged": 262,
+       "of": 2075,
+       "pct": 12.63
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 183,
+     "of": 1201,
+     "pct": 15.24
+    },
+    "without": {
+     "flagged": 1147,
+     "of": 8758,
+     "pct": 13.1
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 4,
+       "of": 236,
+       "pct": 1.69
+      },
+      "without": {
+       "flagged": 110,
+       "of": 2659,
+       "pct": 4.14
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 25,
+       "of": 309,
+       "pct": 8.09
+      },
+      "without": {
+       "flagged": 209,
+       "of": 2658,
+       "pct": 7.86
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 33,
+       "of": 214,
+       "pct": 15.42
+      },
+      "without": {
+       "flagged": 200,
+       "of": 1365,
+       "pct": 14.65
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 121,
+       "of": 442,
+       "pct": 27.38
+      },
+      "without": {
+       "flagged": 628,
+       "of": 2076,
+       "pct": 30.25
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 121,
+     "of": 1201,
+     "pct": 10.07
+    },
+    "without": {
+     "flagged": 785,
+     "of": 8758,
+     "pct": 8.96
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 236,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 49,
+       "of": 2659,
+       "pct": 1.84
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 15,
+       "of": 309,
+       "pct": 4.85
+      },
+      "without": {
+       "flagged": 98,
+       "of": 2658,
+       "pct": 3.69
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 25,
+       "of": 214,
+       "pct": 11.68
+      },
+      "without": {
+       "flagged": 136,
+       "of": 1365,
+       "pct": 9.96
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 81,
+       "of": 442,
+       "pct": 18.33
+      },
+      "without": {
+       "flagged": 502,
+       "of": 2076,
+       "pct": 24.18
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 32,
+     "of": 1201,
+     "pct": 2.66
+    },
+    "without": {
+     "flagged": 213,
+     "of": 8758,
+     "pct": 2.43
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 236,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2659,
+       "pct": 0.08
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 2,
+       "of": 309,
+       "pct": 0.65
+      },
+      "without": {
+       "flagged": 14,
+       "of": 2658,
+       "pct": 0.53
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 4,
+       "of": 214,
+       "pct": 1.87
+      },
+      "without": {
+       "flagged": 41,
+       "of": 1365,
+       "pct": 3.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 26,
+       "of": 442,
+       "pct": 5.88
+      },
+      "without": {
+       "flagged": 156,
+       "of": 2076,
+       "pct": 7.51
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 238,
+     "of": 1139,
+     "pct": 20.9
+    },
+    "without": {
+     "flagged": 1156,
+     "of": 8358,
+     "pct": 13.83
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 16,
+       "of": 221,
+       "pct": 7.24
+      },
+      "without": {
+       "flagged": 123,
+       "of": 2508,
+       "pct": 4.9
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 38,
+       "of": 296,
+       "pct": 12.84
+      },
+      "without": {
+       "flagged": 201,
+       "of": 2553,
+       "pct": 7.87
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 31,
+       "of": 202,
+       "pct": 15.35
+      },
+      "without": {
+       "flagged": 249,
+       "of": 1307,
+       "pct": 19.05
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 153,
+       "of": 420,
+       "pct": 36.43
+      },
+      "without": {
+       "flagged": 583,
+       "of": 1990,
+       "pct": 29.3
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 354,
+     "of": 1201,
+     "pct": 29.48
+    },
+    "without": {
+     "flagged": 1903,
+     "of": 8758,
+     "pct": 21.73
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 16,
+       "of": 236,
+       "pct": 6.78
+      },
+      "without": {
+       "flagged": 183,
+       "of": 2659,
+       "pct": 6.88
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 56,
+       "of": 309,
+       "pct": 18.12
+      },
+      "without": {
+       "flagged": 312,
+       "of": 2658,
+       "pct": 11.74
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 57,
+       "of": 214,
+       "pct": 26.64
+      },
+      "without": {
+       "flagged": 381,
+       "of": 1365,
+       "pct": 27.91
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 225,
+       "of": 442,
+       "pct": 50.9
+      },
+      "without": {
+       "flagged": 1027,
+       "of": 2076,
+       "pct": 49.47
+      }
+     }
+    }
+   }
+  },
+  "other_health_site": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 7,
+     "of": 2269,
+     "pct": 0.31
+    },
+    "without": {
+     "flagged": 14,
+     "of": 7138,
+     "pct": 0.2
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 212,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2524,
+       "pct": 0.16
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 464,
+       "pct": 0.65
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2369,
+       "pct": 0.17
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 440,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1045,
+       "pct": 0.1
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 4,
+       "of": 1153,
+       "pct": 0.35
+      },
+      "without": {
+       "flagged": 5,
+       "of": 1200,
+       "pct": 0.42
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 169,
+     "of": 2421,
+     "pct": 6.98
+    },
+    "without": {
+     "flagged": 219,
+     "of": 7527,
+     "pct": 2.91
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 227,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2662,
+       "pct": 0.3
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 482,
+       "pct": 0.21
+      },
+      "without": {
+       "flagged": 28,
+       "of": 2481,
+       "pct": 1.13
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 16,
+       "of": 476,
+       "pct": 3.36
+      },
+      "without": {
+       "flagged": 30,
+       "of": 1103,
+       "pct": 2.72
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 152,
+       "of": 1236,
+       "pct": 12.3
+      },
+      "without": {
+       "flagged": 153,
+       "of": 1281,
+       "pct": 11.94
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 575,
+     "of": 2425,
+     "pct": 23.71
+    },
+    "without": {
+     "flagged": 755,
+     "of": 7534,
+     "pct": 10.02
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 13,
+       "of": 229,
+       "pct": 5.68
+      },
+      "without": {
+       "flagged": 101,
+       "of": 2666,
+       "pct": 3.79
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 45,
+       "of": 484,
+       "pct": 9.3
+      },
+      "without": {
+       "flagged": 189,
+       "of": 2483,
+       "pct": 7.61
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 75,
+       "of": 476,
+       "pct": 15.76
+      },
+      "without": {
+       "flagged": 158,
+       "of": 1103,
+       "pct": 14.32
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 442,
+       "of": 1236,
+       "pct": 35.76
+      },
+      "without": {
+       "flagged": 307,
+       "of": 1282,
+       "pct": 23.95
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 423,
+     "of": 2425,
+     "pct": 17.44
+    },
+    "without": {
+     "flagged": 483,
+     "of": 7534,
+     "pct": 6.41
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 7,
+       "of": 229,
+       "pct": 3.06
+      },
+      "without": {
+       "flagged": 42,
+       "of": 2666,
+       "pct": 1.58
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 23,
+       "of": 484,
+       "pct": 4.75
+      },
+      "without": {
+       "flagged": 90,
+       "of": 2483,
+       "pct": 3.62
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 55,
+       "of": 476,
+       "pct": 11.55
+      },
+      "without": {
+       "flagged": 106,
+       "of": 1103,
+       "pct": 9.61
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 338,
+       "of": 1236,
+       "pct": 27.35
+      },
+      "without": {
+       "flagged": 245,
+       "of": 1282,
+       "pct": 19.11
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 112,
+     "of": 2425,
+     "pct": 4.62
+    },
+    "without": {
+     "flagged": 133,
+     "of": 7534,
+     "pct": 1.77
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 229,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2666,
+       "pct": 0.08
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 484,
+       "pct": 0.62
+      },
+      "without": {
+       "flagged": 13,
+       "of": 2483,
+       "pct": 0.52
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 10,
+       "of": 476,
+       "pct": 2.1
+      },
+      "without": {
+       "flagged": 35,
+       "of": 1103,
+       "pct": 3.17
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 99,
+       "of": 1236,
+       "pct": 8.01
+      },
+      "without": {
+       "flagged": 83,
+       "of": 1282,
+       "pct": 6.47
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 443,
+     "of": 2308,
+     "pct": 19.19
+    },
+    "without": {
+     "flagged": 951,
+     "of": 7189,
+     "pct": 13.23
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 14,
+       "of": 212,
+       "pct": 6.6
+      },
+      "without": {
+       "flagged": 125,
+       "of": 2517,
+       "pct": 4.97
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 36,
+       "of": 466,
+       "pct": 7.73
+      },
+      "without": {
+       "flagged": 203,
+       "of": 2383,
+       "pct": 8.52
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 69,
+       "of": 450,
+       "pct": 15.33
+      },
+      "without": {
+       "flagged": 211,
+       "of": 1059,
+       "pct": 19.92
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 324,
+       "of": 1180,
+       "pct": 27.46
+      },
+      "without": {
+       "flagged": 412,
+       "of": 1230,
+       "pct": 33.5
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 831,
+     "of": 2425,
+     "pct": 34.27
+    },
+    "without": {
+     "flagged": 1426,
+     "of": 7534,
+     "pct": 18.93
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 21,
+       "of": 229,
+       "pct": 9.17
+      },
+      "without": {
+       "flagged": 178,
+       "of": 2666,
+       "pct": 6.68
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 59,
+       "of": 484,
+       "pct": 12.19
+      },
+      "without": {
+       "flagged": 309,
+       "of": 2483,
+       "pct": 12.44
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 125,
+       "of": 476,
+       "pct": 26.26
+      },
+      "without": {
+       "flagged": 313,
+       "of": 1103,
+       "pct": 28.38
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 626,
+       "of": 1236,
+       "pct": 50.65
+      },
+      "without": {
+       "flagged": 626,
+       "of": 1282,
+       "pct": 48.83
+      }
+     }
+    }
+   }
+  },
+  "government": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 8,
+     "of": 1045,
+     "pct": 0.77
+    },
+    "without": {
+     "flagged": 13,
+     "of": 8362,
+     "pct": 0.16
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 58,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2678,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 165,
+       "pct": 0.61
+      },
+      "without": {
+       "flagged": 6,
+       "of": 2668,
+       "pct": 0.22
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 214,
+       "pct": 0.47
+      },
+      "without": {
+       "flagged": 0,
+       "of": 1271,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 6,
+       "of": 608,
+       "pct": 0.99
+      },
+      "without": {
+       "flagged": 3,
+       "of": 1745,
+       "pct": 0.17
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 97,
+     "of": 1097,
+     "pct": 8.84
+    },
+    "without": {
+     "flagged": 291,
+     "of": 8851,
+     "pct": 3.29
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 60,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2829,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 2,
+       "of": 167,
+       "pct": 1.2
+      },
+      "without": {
+       "flagged": 27,
+       "of": 2796,
+       "pct": 0.97
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 13,
+       "of": 226,
+       "pct": 5.75
+      },
+      "without": {
+       "flagged": 33,
+       "of": 1353,
+       "pct": 2.44
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 82,
+       "of": 644,
+       "pct": 12.73
+      },
+      "without": {
+       "flagged": 223,
+       "of": 1873,
+       "pct": 11.91
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 316,
+     "of": 1097,
+     "pct": 28.81
+    },
+    "without": {
+     "flagged": 1014,
+     "of": 8862,
+     "pct": 11.44
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 4,
+       "of": 60,
+       "pct": 6.67
+      },
+      "without": {
+       "flagged": 110,
+       "of": 2835,
+       "pct": 3.88
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 22,
+       "of": 167,
+       "pct": 13.17
+      },
+      "without": {
+       "flagged": 212,
+       "of": 2800,
+       "pct": 7.57
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 40,
+       "of": 226,
+       "pct": 17.7
+      },
+      "without": {
+       "flagged": 193,
+       "of": 1353,
+       "pct": 14.26
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 250,
+       "of": 644,
+       "pct": 38.82
+      },
+      "without": {
+       "flagged": 499,
+       "of": 1874,
+       "pct": 26.63
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 252,
+     "of": 1097,
+     "pct": 22.97
+    },
+    "without": {
+     "flagged": 654,
+     "of": 8862,
+     "pct": 7.38
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 2,
+       "of": 60,
+       "pct": 3.33
+      },
+      "without": {
+       "flagged": 47,
+       "of": 2835,
+       "pct": 1.66
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 15,
+       "of": 167,
+       "pct": 8.98
+      },
+      "without": {
+       "flagged": 98,
+       "of": 2800,
+       "pct": 3.5
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 30,
+       "of": 226,
+       "pct": 13.27
+      },
+      "without": {
+       "flagged": 131,
+       "of": 1353,
+       "pct": 9.68
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 205,
+       "of": 644,
+       "pct": 31.83
+      },
+      "without": {
+       "flagged": 378,
+       "of": 1874,
+       "pct": 20.17
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 67,
+     "of": 1097,
+     "pct": 6.11
+    },
+    "without": {
+     "flagged": 178,
+     "of": 8862,
+     "pct": 2.01
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 60,
+       "pct": 1.67
+      },
+      "without": {
+       "flagged": 1,
+       "of": 2835,
+       "pct": 0.04
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 167,
+       "pct": 1.8
+      },
+      "without": {
+       "flagged": 13,
+       "of": 2800,
+       "pct": 0.46
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 8,
+       "of": 226,
+       "pct": 3.54
+      },
+      "without": {
+       "flagged": 37,
+       "of": 1353,
+       "pct": 2.73
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 55,
+       "of": 644,
+       "pct": 8.54
+      },
+      "without": {
+       "flagged": 127,
+       "of": 1874,
+       "pct": 6.78
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 280,
+     "of": 1048,
+     "pct": 26.72
+    },
+    "without": {
+     "flagged": 1114,
+     "of": 8449,
+     "pct": 13.18
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 6,
+       "of": 56,
+       "pct": 10.71
+      },
+      "without": {
+       "flagged": 133,
+       "of": 2673,
+       "pct": 4.98
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 17,
+       "of": 164,
+       "pct": 10.37
+      },
+      "without": {
+       "flagged": 222,
+       "of": 2685,
+       "pct": 8.27
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 40,
+       "of": 218,
+       "pct": 18.35
+      },
+      "without": {
+       "flagged": 240,
+       "of": 1291,
+       "pct": 18.59
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 217,
+       "of": 610,
+       "pct": 35.57
+      },
+      "without": {
+       "flagged": 519,
+       "of": 1800,
+       "pct": 28.83
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 476,
+     "of": 1097,
+     "pct": 43.39
+    },
+    "without": {
+     "flagged": 1781,
+     "of": 8862,
+     "pct": 20.1
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 8,
+       "of": 60,
+       "pct": 13.33
+      },
+      "without": {
+       "flagged": 191,
+       "of": 2835,
+       "pct": 6.74
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 30,
+       "of": 167,
+       "pct": 17.96
+      },
+      "without": {
+       "flagged": 338,
+       "of": 2800,
+       "pct": 12.07
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 73,
+       "of": 226,
+       "pct": 32.3
+      },
+      "without": {
+       "flagged": 365,
+       "of": 1353,
+       "pct": 26.98
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 365,
+       "of": 644,
+       "pct": 56.68
+      },
+      "without": {
+       "flagged": 887,
+       "of": 1874,
+       "pct": 47.33
+      }
+     }
+    }
+   }
+  },
+  "wikipedia": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 3,
+     "of": 379,
+     "pct": 0.79
+    },
+    "without": {
+     "flagged": 18,
+     "of": 9028,
+     "pct": 0.2
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2734,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 34,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2799,
+       "pct": 0.25
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 62,
+       "pct": 1.61
+      },
+      "without": {
+       "flagged": 0,
+       "of": 1423,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 2,
+       "of": 281,
+       "pct": 0.71
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2072,
+       "pct": 0.34
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 46,
+     "of": 398,
+     "pct": 11.56
+    },
+    "without": {
+     "flagged": 342,
+     "of": 9550,
+     "pct": 3.58
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2887,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 36,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 29,
+       "of": 2927,
+       "pct": 0.99
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 3,
+       "of": 65,
+       "pct": 4.62
+      },
+      "without": {
+       "flagged": 43,
+       "of": 1514,
+       "pct": 2.84
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 43,
+       "of": 295,
+       "pct": 14.58
+      },
+      "without": {
+       "flagged": 262,
+       "of": 2222,
+       "pct": 11.79
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 166,
+     "of": 398,
+     "pct": 41.71
+    },
+    "without": {
+     "flagged": 1164,
+     "of": 9561,
+     "pct": 12.17
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 114,
+       "of": 2893,
+       "pct": 3.94
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 10,
+       "of": 36,
+       "pct": 27.78
+      },
+      "without": {
+       "flagged": 224,
+       "of": 2931,
+       "pct": 7.64
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 23,
+       "of": 65,
+       "pct": 35.38
+      },
+      "without": {
+       "flagged": 210,
+       "of": 1514,
+       "pct": 13.87
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 133,
+       "of": 295,
+       "pct": 45.08
+      },
+      "without": {
+       "flagged": 616,
+       "of": 2223,
+       "pct": 27.71
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 128,
+     "of": 398,
+     "pct": 32.16
+    },
+    "without": {
+     "flagged": 778,
+     "of": 9561,
+     "pct": 8.14
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 49,
+       "of": 2893,
+       "pct": 1.69
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 5,
+       "of": 36,
+       "pct": 13.89
+      },
+      "without": {
+       "flagged": 108,
+       "of": 2931,
+       "pct": 3.68
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 20,
+       "of": 65,
+       "pct": 30.77
+      },
+      "without": {
+       "flagged": 141,
+       "of": 1514,
+       "pct": 9.31
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 103,
+       "of": 295,
+       "pct": 34.92
+      },
+      "without": {
+       "flagged": 480,
+       "of": 2223,
+       "pct": 21.59
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 27,
+     "of": 398,
+     "pct": 6.78
+    },
+    "without": {
+     "flagged": 218,
+     "of": 9561,
+     "pct": 2.28
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2893,
+       "pct": 0.07
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 36,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 16,
+       "of": 2931,
+       "pct": 0.55
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 4,
+       "of": 65,
+       "pct": 6.15
+      },
+      "without": {
+       "flagged": 41,
+       "of": 1514,
+       "pct": 2.71
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 23,
+       "of": 295,
+       "pct": 7.8
+      },
+      "without": {
+       "flagged": 159,
+       "of": 2223,
+       "pct": 7.15
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 93,
+     "of": 386,
+     "pct": 24.09
+    },
+    "without": {
+     "flagged": 1301,
+     "of": 9111,
+     "pct": 14.28
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 139,
+       "of": 2727,
+       "pct": 5.1
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 35,
+       "pct": 2.86
+      },
+      "without": {
+       "flagged": 238,
+       "of": 2814,
+       "pct": 8.46
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 9,
+       "of": 64,
+       "pct": 14.06
+      },
+      "without": {
+       "flagged": 271,
+       "of": 1445,
+       "pct": 18.75
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 83,
+       "of": 285,
+       "pct": 29.12
+      },
+      "without": {
+       "flagged": 653,
+       "of": 2125,
+       "pct": 30.73
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 202,
+     "of": 398,
+     "pct": 50.75
+    },
+    "without": {
+     "flagged": 2055,
+     "of": 9561,
+     "pct": 21.49
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 199,
+       "of": 2893,
+       "pct": 6.88
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 6,
+       "of": 36,
+       "pct": 16.67
+      },
+      "without": {
+       "flagged": 362,
+       "of": 2931,
+       "pct": 12.35
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 25,
+       "of": 65,
+       "pct": 38.46
+      },
+      "without": {
+       "flagged": 413,
+       "of": 1514,
+       "pct": 27.28
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 171,
+       "of": 295,
+       "pct": 57.97
+      },
+      "without": {
+       "flagged": 1081,
+       "of": 2223,
+       "pct": 48.63
+      }
+     }
+    }
+   }
+  },
+  "research": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 2,
+     "of": 415,
+     "pct": 0.48
+    },
+    "without": {
+     "flagged": 19,
+     "of": 8992,
+     "pct": 0.21
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2734,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 24,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2809,
+       "pct": 0.25
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 54,
+       "pct": 1.85
+      },
+      "without": {
+       "flagged": 0,
+       "of": 1431,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 1,
+       "of": 335,
+       "pct": 0.3
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2018,
+       "pct": 0.4
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 51,
+     "of": 435,
+     "pct": 11.72
+    },
+    "without": {
+     "flagged": 337,
+     "of": 9513,
+     "pct": 3.54
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2887,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 24,
+       "pct": 4.17
+      },
+      "without": {
+       "flagged": 28,
+       "of": 2939,
+       "pct": 0.95
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 2,
+       "of": 57,
+       "pct": 3.51
+      },
+      "without": {
+       "flagged": 44,
+       "of": 1522,
+       "pct": 2.89
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 48,
+       "of": 352,
+       "pct": 13.64
+      },
+      "without": {
+       "flagged": 257,
+       "of": 2165,
+       "pct": 11.87
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 176,
+     "of": 435,
+     "pct": 40.46
+    },
+    "without": {
+     "flagged": 1154,
+     "of": 9524,
+     "pct": 12.12
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 114,
+       "of": 2893,
+       "pct": 3.94
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 4,
+       "of": 24,
+       "pct": 16.67
+      },
+      "without": {
+       "flagged": 230,
+       "of": 2943,
+       "pct": 7.82
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 17,
+       "of": 57,
+       "pct": 29.82
+      },
+      "without": {
+       "flagged": 216,
+       "of": 1522,
+       "pct": 14.19
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 155,
+       "of": 352,
+       "pct": 44.03
+      },
+      "without": {
+       "flagged": 594,
+       "of": 2166,
+       "pct": 27.42
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 142,
+     "of": 435,
+     "pct": 32.64
+    },
+    "without": {
+     "flagged": 764,
+     "of": 9524,
+     "pct": 8.02
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 49,
+       "of": 2893,
+       "pct": 1.69
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 24,
+       "pct": 4.17
+      },
+      "without": {
+       "flagged": 112,
+       "of": 2943,
+       "pct": 3.81
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 15,
+       "of": 57,
+       "pct": 26.32
+      },
+      "without": {
+       "flagged": 146,
+       "of": 1522,
+       "pct": 9.59
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 126,
+       "of": 352,
+       "pct": 35.8
+      },
+      "without": {
+       "flagged": 457,
+       "of": 2166,
+       "pct": 21.1
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 30,
+     "of": 435,
+     "pct": 6.9
+    },
+    "without": {
+     "flagged": 215,
+     "of": 9524,
+     "pct": 2.26
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2893,
+       "pct": 0.07
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 24,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 16,
+       "of": 2943,
+       "pct": 0.54
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 5,
+       "of": 57,
+       "pct": 8.77
+      },
+      "without": {
+       "flagged": 40,
+       "of": 1522,
+       "pct": 2.63
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 25,
+       "of": 352,
+       "pct": 7.1
+      },
+      "without": {
+       "flagged": 157,
+       "of": 2166,
+       "pct": 7.25
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 96,
+     "of": 409,
+     "pct": 23.47
+    },
+    "without": {
+     "flagged": 1298,
+     "of": 9088,
+     "pct": 14.28
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 139,
+       "of": 2727,
+       "pct": 5.1
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 2,
+       "of": 23,
+       "pct": 8.7
+      },
+      "without": {
+       "flagged": 237,
+       "of": 2826,
+       "pct": 8.39
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 5,
+       "of": 53,
+       "pct": 9.43
+      },
+      "without": {
+       "flagged": 275,
+       "of": 1456,
+       "pct": 18.89
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 89,
+       "of": 331,
+       "pct": 26.89
+      },
+      "without": {
+       "flagged": 647,
+       "of": 2079,
+       "pct": 31.12
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 221,
+     "of": 435,
+     "pct": 50.8
+    },
+    "without": {
+     "flagged": 2036,
+     "of": 9524,
+     "pct": 21.38
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 2,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 199,
+       "of": 2893,
+       "pct": 6.88
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 24,
+       "pct": 12.5
+      },
+      "without": {
+       "flagged": 365,
+       "of": 2943,
+       "pct": 12.4
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 19,
+       "of": 57,
+       "pct": 33.33
+      },
+      "without": {
+       "flagged": 419,
+       "of": 1522,
+       "pct": 27.53
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 199,
+       "of": 352,
+       "pct": 56.53
+      },
+      "without": {
+       "flagged": 1053,
+       "of": 2166,
+       "pct": 48.61
+      }
+     }
+    }
+   }
+  },
+  "docs_repo": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 3,
+     "of": 549,
+     "pct": 0.55
+    },
+    "without": {
+     "flagged": 18,
+     "of": 8858,
+     "pct": 0.2
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 24,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2712,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 78,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2755,
+       "pct": 0.25
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 115,
+       "pct": 0.87
+      },
+      "without": {
+       "flagged": 0,
+       "of": 1370,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 2,
+       "of": 332,
+       "pct": 0.6
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2021,
+       "pct": 0.35
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 64,
+     "of": 582,
+     "pct": 11.0
+    },
+    "without": {
+     "flagged": 324,
+     "of": 9366,
+     "pct": 3.46
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 2,
+       "of": 25,
+       "pct": 8.0
+      },
+      "without": {
+       "flagged": 6,
+       "of": 2864,
+       "pct": 0.21
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 81,
+       "pct": 3.7
+      },
+      "without": {
+       "flagged": 26,
+       "of": 2882,
+       "pct": 0.9
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 6,
+       "of": 122,
+       "pct": 4.92
+      },
+      "without": {
+       "flagged": 40,
+       "of": 1457,
+       "pct": 2.75
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 53,
+       "of": 354,
+       "pct": 14.97
+      },
+      "without": {
+       "flagged": 252,
+       "of": 2163,
+       "pct": 11.65
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 167,
+     "of": 583,
+     "pct": 28.64
+    },
+    "without": {
+     "flagged": 1163,
+     "of": 9376,
+     "pct": 12.4
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 25,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 114,
+       "of": 2870,
+       "pct": 3.97
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 10,
+       "of": 82,
+       "pct": 12.2
+      },
+      "without": {
+       "flagged": 224,
+       "of": 2885,
+       "pct": 7.76
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 32,
+       "of": 122,
+       "pct": 26.23
+      },
+      "without": {
+       "flagged": 201,
+       "of": 1457,
+       "pct": 13.8
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 125,
+       "of": 354,
+       "pct": 35.31
+      },
+      "without": {
+       "flagged": 624,
+       "of": 2164,
+       "pct": 28.84
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 139,
+     "of": 583,
+     "pct": 23.84
+    },
+    "without": {
+     "flagged": 767,
+     "of": 9376,
+     "pct": 8.18
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 25,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 49,
+       "of": 2870,
+       "pct": 1.71
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 9,
+       "of": 82,
+       "pct": 10.98
+      },
+      "without": {
+       "flagged": 104,
+       "of": 2885,
+       "pct": 3.6
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 28,
+       "of": 122,
+       "pct": 22.95
+      },
+      "without": {
+       "flagged": 133,
+       "of": 1457,
+       "pct": 9.13
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 102,
+       "of": 354,
+       "pct": 28.81
+      },
+      "without": {
+       "flagged": 481,
+       "of": 2164,
+       "pct": 22.23
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 46,
+     "of": 583,
+     "pct": 7.89
+    },
+    "without": {
+     "flagged": 199,
+     "of": 9376,
+     "pct": 2.12
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 25,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2870,
+       "pct": 0.07
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 3,
+       "of": 82,
+       "pct": 3.66
+      },
+      "without": {
+       "flagged": 13,
+       "of": 2885,
+       "pct": 0.45
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 11,
+       "of": 122,
+       "pct": 9.02
+      },
+      "without": {
+       "flagged": 34,
+       "of": 1457,
+       "pct": 2.33
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 32,
+       "of": 354,
+       "pct": 9.04
+      },
+      "without": {
+       "flagged": 150,
+       "of": 2164,
+       "pct": 6.93
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 137,
+     "of": 563,
+     "pct": 24.33
+    },
+    "without": {
+     "flagged": 1257,
+     "of": 8934,
+     "pct": 14.07
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 24,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 139,
+       "of": 2705,
+       "pct": 5.14
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 8,
+       "of": 80,
+       "pct": 10.0
+      },
+      "without": {
+       "flagged": 231,
+       "of": 2769,
+       "pct": 8.34
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 18,
+       "of": 118,
+       "pct": 15.25
+      },
+      "without": {
+       "flagged": 262,
+       "of": 1391,
+       "pct": 18.84
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 111,
+       "of": 341,
+       "pct": 32.55
+      },
+      "without": {
+       "flagged": 625,
+       "of": 2069,
+       "pct": 30.21
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 263,
+     "of": 583,
+     "pct": 45.11
+    },
+    "without": {
+     "flagged": 1994,
+     "of": 9376,
+     "pct": 21.27
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 2,
+       "of": 25,
+       "pct": 8.0
+      },
+      "without": {
+       "flagged": 197,
+       "of": 2870,
+       "pct": 6.86
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 20,
+       "of": 82,
+       "pct": 24.39
+      },
+      "without": {
+       "flagged": 348,
+       "of": 2885,
+       "pct": 12.06
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 45,
+       "of": 122,
+       "pct": 36.89
+      },
+      "without": {
+       "flagged": 393,
+       "of": 1457,
+       "pct": 26.97
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 196,
+       "of": 354,
+       "pct": 55.37
+      },
+      "without": {
+       "flagged": 1056,
+       "of": 2164,
+       "pct": 48.8
+      }
+     }
+    }
+   }
+  },
+  "health_aggregator": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 15,
+     "of": 7210,
+     "pct": 0.21
+    },
+    "without": {
+     "flagged": 6,
+     "of": 2197,
+     "pct": 0.27
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 1395,
+       "pct": 0.07
+      },
+      "without": {
+       "flagged": 3,
+       "of": 1341,
+       "pct": 0.22
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 5,
+       "of": 2217,
+       "pct": 0.23
+      },
+      "without": {
+       "flagged": 2,
+       "of": 616,
+       "pct": 0.32
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 1349,
+       "pct": 0.07
+      },
+      "without": {
+       "flagged": 0,
+       "of": 136,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 8,
+       "of": 2249,
+       "pct": 0.36
+      },
+      "without": {
+       "flagged": 1,
+       "of": 104,
+       "pct": 0.96
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 388,
+     "of": 7600,
+     "pct": 5.11
+    },
+    "without": {
+     "flagged": 0,
+     "of": 2348,
+     "pct": 0.0
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 8,
+       "of": 1443,
+       "pct": 0.55
+      },
+      "without": {
+       "flagged": 0,
+       "of": 1446,
+       "pct": 0.0
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 29,
+       "of": 2311,
+       "pct": 1.25
+      },
+      "without": {
+       "flagged": 0,
+       "of": 652,
+       "pct": 0.0
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 46,
+       "of": 1436,
+       "pct": 3.2
+      },
+      "without": {
+       "flagged": 0,
+       "of": 143,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 305,
+       "of": 2410,
+       "pct": 12.66
+      },
+      "without": {
+       "flagged": 0,
+       "of": 107,
+       "pct": 0.0
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 1157,
+     "of": 7604,
+     "pct": 15.22
+    },
+    "without": {
+     "flagged": 173,
+     "of": 2355,
+     "pct": 7.35
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 47,
+       "of": 1445,
+       "pct": 3.25
+      },
+      "without": {
+       "flagged": 67,
+       "of": 1450,
+       "pct": 4.62
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 167,
+       "of": 2312,
+       "pct": 7.22
+      },
+      "without": {
+       "flagged": 67,
+       "of": 655,
+       "pct": 10.23
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 212,
+       "of": 1436,
+       "pct": 14.76
+      },
+      "without": {
+       "flagged": 21,
+       "of": 143,
+       "pct": 14.69
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 731,
+       "of": 2411,
+       "pct": 30.32
+      },
+      "without": {
+       "flagged": 18,
+       "of": 107,
+       "pct": 16.82
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 800,
+     "of": 7604,
+     "pct": 10.52
+    },
+    "without": {
+     "flagged": 106,
+     "of": 2355,
+     "pct": 4.5
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 16,
+       "of": 1445,
+       "pct": 1.11
+      },
+      "without": {
+       "flagged": 33,
+       "of": 1450,
+       "pct": 2.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 76,
+       "of": 2312,
+       "pct": 3.29
+      },
+      "without": {
+       "flagged": 37,
+       "of": 655,
+       "pct": 5.65
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 142,
+       "of": 1436,
+       "pct": 9.89
+      },
+      "without": {
+       "flagged": 19,
+       "of": 143,
+       "pct": 13.29
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 566,
+       "of": 2411,
+       "pct": 23.48
+      },
+      "without": {
+       "flagged": 17,
+       "of": 107,
+       "pct": 15.89
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 237,
+     "of": 7604,
+     "pct": 3.12
+    },
+    "without": {
+     "flagged": 8,
+     "of": 2355,
+     "pct": 0.34
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 1445,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 1450,
+       "pct": 0.14
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 13,
+       "of": 2312,
+       "pct": 0.56
+      },
+      "without": {
+       "flagged": 3,
+       "of": 655,
+       "pct": 0.46
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 44,
+       "of": 1436,
+       "pct": 3.06
+      },
+      "without": {
+       "flagged": 1,
+       "of": 143,
+       "pct": 0.7
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 180,
+       "of": 2411,
+       "pct": 7.47
+      },
+      "without": {
+       "flagged": 2,
+       "of": 107,
+       "pct": 1.87
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 1238,
+     "of": 7297,
+     "pct": 16.97
+    },
+    "without": {
+     "flagged": 156,
+     "of": 2200,
+     "pct": 7.09
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 77,
+       "of": 1384,
+       "pct": 5.56
+      },
+      "without": {
+       "flagged": 62,
+       "of": 1345,
+       "pct": 4.61
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 182,
+       "of": 2229,
+       "pct": 8.17
+      },
+      "without": {
+       "flagged": 57,
+       "of": 620,
+       "pct": 9.19
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 264,
+       "of": 1376,
+       "pct": 19.19
+      },
+      "without": {
+       "flagged": 16,
+       "of": 133,
+       "pct": 12.03
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 715,
+       "of": 2308,
+       "pct": 30.98
+      },
+      "without": {
+       "flagged": 21,
+       "of": 102,
+       "pct": 20.59
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 2006,
+     "of": 7604,
+     "pct": 26.38
+    },
+    "without": {
+     "flagged": 251,
+     "of": 2355,
+     "pct": 10.66
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 102,
+       "of": 1445,
+       "pct": 7.06
+      },
+      "without": {
+       "flagged": 97,
+       "of": 1450,
+       "pct": 6.69
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 277,
+       "of": 2312,
+       "pct": 11.98
+      },
+      "without": {
+       "flagged": 91,
+       "of": 655,
+       "pct": 13.89
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 407,
+       "of": 1436,
+       "pct": 28.34
+      },
+      "without": {
+       "flagged": 31,
+       "of": 143,
+       "pct": 21.68
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 1220,
+       "of": 2411,
+       "pct": 50.6
+      },
+      "without": {
+       "flagged": 32,
+       "of": 107,
+       "pct": 29.91
+      }
+     }
+    }
+   }
+  },
+  "insurance_scheme": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 4,
+     "of": 1803,
+     "pct": 0.22
+    },
+    "without": {
+     "flagged": 17,
+     "of": 7604,
+     "pct": 0.22
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 87,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2649,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 319,
+       "pct": 0.31
+      },
+      "without": {
+       "flagged": 6,
+       "of": 2514,
+       "pct": 0.24
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 376,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1109,
+       "pct": 0.09
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 3,
+       "of": 1021,
+       "pct": 0.29
+      },
+      "without": {
+       "flagged": 6,
+       "of": 1332,
+       "pct": 0.45
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 138,
+     "of": 1912,
+     "pct": 7.22
+    },
+    "without": {
+     "flagged": 250,
+     "of": 8036,
+     "pct": 3.11
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 88,
+       "pct": 1.14
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2801,
+       "pct": 0.25
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 2,
+       "of": 333,
+       "pct": 0.6
+      },
+      "without": {
+       "flagged": 27,
+       "of": 2630,
+       "pct": 1.03
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 11,
+       "of": 400,
+       "pct": 2.75
+      },
+      "without": {
+       "flagged": 35,
+       "of": 1179,
+       "pct": 2.97
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 124,
+       "of": 1091,
+       "pct": 11.37
+      },
+      "without": {
+       "flagged": 181,
+       "of": 1426,
+       "pct": 12.69
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 442,
+     "of": 1913,
+     "pct": 23.11
+    },
+    "without": {
+     "flagged": 888,
+     "of": 8046,
+     "pct": 11.04
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 5,
+       "of": 88,
+       "pct": 5.68
+      },
+      "without": {
+       "flagged": 109,
+       "of": 2807,
+       "pct": 3.88
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 25,
+       "of": 333,
+       "pct": 7.51
+      },
+      "without": {
+       "flagged": 209,
+       "of": 2634,
+       "pct": 7.93
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 44,
+       "of": 400,
+       "pct": 11.0
+      },
+      "without": {
+       "flagged": 189,
+       "of": 1179,
+       "pct": 16.03
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 368,
+       "of": 1092,
+       "pct": 33.7
+      },
+      "without": {
+       "flagged": 381,
+       "of": 1426,
+       "pct": 26.72
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 346,
+     "of": 1913,
+     "pct": 18.09
+    },
+    "without": {
+     "flagged": 560,
+     "of": 8046,
+     "pct": 6.96
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 4,
+       "of": 88,
+       "pct": 4.55
+      },
+      "without": {
+       "flagged": 45,
+       "of": 2807,
+       "pct": 1.6
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 17,
+       "of": 333,
+       "pct": 5.11
+      },
+      "without": {
+       "flagged": 96,
+       "of": 2634,
+       "pct": 3.64
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 35,
+       "of": 400,
+       "pct": 8.75
+      },
+      "without": {
+       "flagged": 126,
+       "of": 1179,
+       "pct": 10.69
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 290,
+       "of": 1092,
+       "pct": 26.56
+      },
+      "without": {
+       "flagged": 293,
+       "of": 1426,
+       "pct": 20.55
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 122,
+     "of": 1913,
+     "pct": 6.38
+    },
+    "without": {
+     "flagged": 123,
+     "of": 8046,
+     "pct": 1.53
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 88,
+       "pct": 1.14
+      },
+      "without": {
+       "flagged": 1,
+       "of": 2807,
+       "pct": 0.04
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 4,
+       "of": 333,
+       "pct": 1.2
+      },
+      "without": {
+       "flagged": 12,
+       "of": 2634,
+       "pct": 0.46
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 10,
+       "of": 400,
+       "pct": 2.5
+      },
+      "without": {
+       "flagged": 35,
+       "of": 1179,
+       "pct": 2.97
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 107,
+       "of": 1092,
+       "pct": 9.8
+      },
+      "without": {
+       "flagged": 75,
+       "of": 1426,
+       "pct": 5.26
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 429,
+     "of": 1828,
+     "pct": 23.47
+    },
+    "without": {
+     "flagged": 965,
+     "of": 7669,
+     "pct": 12.58
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 3,
+       "of": 87,
+       "pct": 3.45
+      },
+      "without": {
+       "flagged": 136,
+       "of": 2642,
+       "pct": 5.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 19,
+       "of": 318,
+       "pct": 5.97
+      },
+      "without": {
+       "flagged": 220,
+       "of": 2531,
+       "pct": 8.69
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 61,
+       "of": 380,
+       "pct": 16.05
+      },
+      "without": {
+       "flagged": 219,
+       "of": 1129,
+       "pct": 19.4
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 346,
+       "of": 1043,
+       "pct": 33.17
+      },
+      "without": {
+       "flagged": 390,
+       "of": 1367,
+       "pct": 28.53
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 716,
+     "of": 1913,
+     "pct": 37.43
+    },
+    "without": {
+     "flagged": 1541,
+     "of": 8046,
+     "pct": 19.15
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 8,
+       "of": 88,
+       "pct": 9.09
+      },
+      "without": {
+       "flagged": 191,
+       "of": 2807,
+       "pct": 6.8
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 36,
+       "of": 333,
+       "pct": 10.81
+      },
+      "without": {
+       "flagged": 332,
+       "of": 2634,
+       "pct": 12.6
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 95,
+       "of": 400,
+       "pct": 23.75
+      },
+      "without": {
+       "flagged": 343,
+       "of": 1179,
+       "pct": 29.09
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 577,
+       "of": 1092,
+       "pct": 52.84
+      },
+      "without": {
+       "flagged": 675,
+       "of": 1426,
+       "pct": 47.34
+      }
+     }
+    }
+   }
+  },
+  "business_dir": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 5,
+     "of": 3960,
+     "pct": 0.13
+    },
+    "without": {
+     "flagged": 16,
+     "of": 5447,
+     "pct": 0.29
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 526,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2210,
+       "pct": 0.18
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 1017,
+       "pct": 0.1
+      },
+      "without": {
+       "flagged": 6,
+       "of": 1816,
+       "pct": 0.33
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 814,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 671,
+       "pct": 0.15
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 4,
+       "of": 1603,
+       "pct": 0.25
+      },
+      "without": {
+       "flagged": 5,
+       "of": 750,
+       "pct": 0.67
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 246,
+     "of": 4194,
+     "pct": 5.87
+    },
+    "without": {
+     "flagged": 142,
+     "of": 5754,
+     "pct": 2.47
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 549,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2340,
+       "pct": 0.34
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 13,
+       "of": 1065,
+       "pct": 1.22
+      },
+      "without": {
+       "flagged": 16,
+       "of": 1898,
+       "pct": 0.84
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 21,
+       "of": 866,
+       "pct": 2.42
+      },
+      "without": {
+       "flagged": 25,
+       "of": 713,
+       "pct": 3.51
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 212,
+       "of": 1714,
+       "pct": 12.37
+      },
+      "without": {
+       "flagged": 93,
+       "of": 803,
+       "pct": 11.58
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 780,
+     "of": 4197,
+     "pct": 18.58
+    },
+    "without": {
+     "flagged": 550,
+     "of": 5762,
+     "pct": 9.55
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 16,
+       "of": 551,
+       "pct": 2.9
+      },
+      "without": {
+       "flagged": 98,
+       "of": 2344,
+       "pct": 4.18
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 75,
+       "of": 1065,
+       "pct": 7.04
+      },
+      "without": {
+       "flagged": 159,
+       "of": 1902,
+       "pct": 8.36
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 128,
+       "of": 866,
+       "pct": 14.78
+      },
+      "without": {
+       "flagged": 105,
+       "of": 713,
+       "pct": 14.73
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 561,
+       "of": 1715,
+       "pct": 32.71
+      },
+      "without": {
+       "flagged": 188,
+       "of": 803,
+       "pct": 23.41
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 583,
+     "of": 4197,
+     "pct": 13.89
+    },
+    "without": {
+     "flagged": 323,
+     "of": 5762,
+     "pct": 5.61
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 8,
+       "of": 551,
+       "pct": 1.45
+      },
+      "without": {
+       "flagged": 41,
+       "of": 2344,
+       "pct": 1.75
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 40,
+       "of": 1065,
+       "pct": 3.76
+      },
+      "without": {
+       "flagged": 73,
+       "of": 1902,
+       "pct": 3.84
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 89,
+       "of": 866,
+       "pct": 10.28
+      },
+      "without": {
+       "flagged": 72,
+       "of": 713,
+       "pct": 10.1
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 446,
+       "of": 1715,
+       "pct": 26.01
+      },
+      "without": {
+       "flagged": 137,
+       "of": 803,
+       "pct": 17.06
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 185,
+     "of": 4197,
+     "pct": 4.41
+    },
+    "without": {
+     "flagged": 60,
+     "of": 5762,
+     "pct": 1.04
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 551,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2344,
+       "pct": 0.09
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 8,
+       "of": 1065,
+       "pct": 0.75
+      },
+      "without": {
+       "flagged": 8,
+       "of": 1902,
+       "pct": 0.42
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 25,
+       "of": 866,
+       "pct": 2.89
+      },
+      "without": {
+       "flagged": 20,
+       "of": 713,
+       "pct": 2.81
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 152,
+       "of": 1715,
+       "pct": 8.86
+      },
+      "without": {
+       "flagged": 30,
+       "of": 803,
+       "pct": 3.74
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 856,
+     "of": 4014,
+     "pct": 21.33
+    },
+    "without": {
+     "flagged": 538,
+     "of": 5483,
+     "pct": 9.81
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 25,
+       "of": 530,
+       "pct": 4.72
+      },
+      "without": {
+       "flagged": 114,
+       "of": 2199,
+       "pct": 5.18
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 107,
+       "of": 1017,
+       "pct": 10.52
+      },
+      "without": {
+       "flagged": 132,
+       "of": 1832,
+       "pct": 7.21
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 160,
+       "of": 827,
+       "pct": 19.35
+      },
+      "without": {
+       "flagged": 120,
+       "of": 682,
+       "pct": 17.6
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 564,
+       "of": 1640,
+       "pct": 34.39
+      },
+      "without": {
+       "flagged": 172,
+       "of": 770,
+       "pct": 22.34
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 1369,
+     "of": 4197,
+     "pct": 32.62
+    },
+    "without": {
+     "flagged": 888,
+     "of": 5762,
+     "pct": 15.41
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 33,
+       "of": 551,
+       "pct": 5.99
+      },
+      "without": {
+       "flagged": 166,
+       "of": 2344,
+       "pct": 7.08
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 155,
+       "of": 1065,
+       "pct": 14.55
+      },
+      "without": {
+       "flagged": 213,
+       "of": 1902,
+       "pct": 11.2
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 250,
+       "of": 866,
+       "pct": 28.87
+      },
+      "without": {
+       "flagged": 188,
+       "of": 713,
+       "pct": 26.37
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 931,
+       "of": 1715,
+       "pct": 54.29
+      },
+      "without": {
+       "flagged": 321,
+       "of": 803,
+       "pct": 39.98
+      }
+     }
+    }
+   }
+  },
+  "maps_geo": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 7,
+     "of": 2425,
+     "pct": 0.29
+    },
+    "without": {
+     "flagged": 14,
+     "of": 6982,
+     "pct": 0.2
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 332,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2404,
+       "pct": 0.17
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 2,
+       "of": 645,
+       "pct": 0.31
+      },
+      "without": {
+       "flagged": 5,
+       "of": 2188,
+       "pct": 0.23
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 523,
+       "pct": 0.19
+      },
+      "without": {
+       "flagged": 0,
+       "of": 962,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 4,
+       "of": 925,
+       "pct": 0.43
+      },
+      "without": {
+       "flagged": 5,
+       "of": 1428,
+       "pct": 0.35
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 142,
+     "of": 2564,
+     "pct": 5.54
+    },
+    "without": {
+     "flagged": 246,
+     "of": 7384,
+     "pct": 3.33
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 345,
+       "pct": 0.29
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2544,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 12,
+       "of": 666,
+       "pct": 1.8
+      },
+      "without": {
+       "flagged": 17,
+       "of": 2297,
+       "pct": 0.74
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 18,
+       "of": 553,
+       "pct": 3.25
+      },
+      "without": {
+       "flagged": 28,
+       "of": 1026,
+       "pct": 2.73
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 111,
+       "of": 1000,
+       "pct": 11.1
+      },
+      "without": {
+       "flagged": 194,
+       "of": 1517,
+       "pct": 12.79
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 489,
+     "of": 2564,
+     "pct": 19.07
+    },
+    "without": {
+     "flagged": 841,
+     "of": 7395,
+     "pct": 11.37
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 9,
+       "of": 345,
+       "pct": 2.61
+      },
+      "without": {
+       "flagged": 105,
+       "of": 2550,
+       "pct": 4.12
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 47,
+       "of": 666,
+       "pct": 7.06
+      },
+      "without": {
+       "flagged": 187,
+       "of": 2301,
+       "pct": 8.13
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 88,
+       "of": 553,
+       "pct": 15.91
+      },
+      "without": {
+       "flagged": 145,
+       "of": 1026,
+       "pct": 14.13
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 345,
+       "of": 1000,
+       "pct": 34.5
+      },
+      "without": {
+       "flagged": 404,
+       "of": 1518,
+       "pct": 26.61
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 372,
+     "of": 2564,
+     "pct": 14.51
+    },
+    "without": {
+     "flagged": 534,
+     "of": 7395,
+     "pct": 7.22
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 6,
+       "of": 345,
+       "pct": 1.74
+      },
+      "without": {
+       "flagged": 43,
+       "of": 2550,
+       "pct": 1.69
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 24,
+       "of": 666,
+       "pct": 3.6
+      },
+      "without": {
+       "flagged": 89,
+       "of": 2301,
+       "pct": 3.87
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 66,
+       "of": 553,
+       "pct": 11.93
+      },
+      "without": {
+       "flagged": 95,
+       "of": 1026,
+       "pct": 9.26
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 276,
+       "of": 1000,
+       "pct": 27.6
+      },
+      "without": {
+       "flagged": 307,
+       "of": 1518,
+       "pct": 20.22
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 139,
+     "of": 2564,
+     "pct": 5.42
+    },
+    "without": {
+     "flagged": 106,
+     "of": 7395,
+     "pct": 1.43
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 345,
+       "pct": 0.29
+      },
+      "without": {
+       "flagged": 1,
+       "of": 2550,
+       "pct": 0.04
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 6,
+       "of": 666,
+       "pct": 0.9
+      },
+      "without": {
+       "flagged": 10,
+       "of": 2301,
+       "pct": 0.43
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 27,
+       "of": 553,
+       "pct": 4.88
+      },
+      "without": {
+       "flagged": 18,
+       "of": 1026,
+       "pct": 1.75
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 105,
+       "of": 1000,
+       "pct": 10.5
+      },
+      "without": {
+       "flagged": 77,
+       "of": 1518,
+       "pct": 5.07
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 641,
+     "of": 2466,
+     "pct": 25.99
+    },
+    "without": {
+     "flagged": 753,
+     "of": 7031,
+     "pct": 10.71
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 22,
+       "of": 328,
+       "pct": 6.71
+      },
+      "without": {
+       "flagged": 117,
+       "of": 2401,
+       "pct": 4.87
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 67,
+       "of": 647,
+       "pct": 10.36
+      },
+      "without": {
+       "flagged": 172,
+       "of": 2202,
+       "pct": 7.81
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 148,
+       "of": 533,
+       "pct": 27.77
+      },
+      "without": {
+       "flagged": 132,
+       "of": 976,
+       "pct": 13.52
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 404,
+       "of": 958,
+       "pct": 42.17
+      },
+      "without": {
+       "flagged": 332,
+       "of": 1452,
+       "pct": 22.87
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 915,
+     "of": 2564,
+     "pct": 35.69
+    },
+    "without": {
+     "flagged": 1342,
+     "of": 7395,
+     "pct": 18.15
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 29,
+       "of": 345,
+       "pct": 8.41
+      },
+      "without": {
+       "flagged": 170,
+       "of": 2550,
+       "pct": 6.67
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 98,
+       "of": 666,
+       "pct": 14.71
+      },
+      "without": {
+       "flagged": 270,
+       "of": 2301,
+       "pct": 11.73
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 203,
+       "of": 553,
+       "pct": 36.71
+      },
+      "without": {
+       "flagged": 235,
+       "of": 1026,
+       "pct": 22.9
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 585,
+       "of": 1000,
+       "pct": 58.5
+      },
+      "without": {
+       "flagged": 667,
+       "of": 1518,
+       "pct": 43.94
+      }
+     }
+    }
+   }
+  },
+  "news": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 6,
+     "of": 519,
+     "pct": 1.16
+    },
+    "without": {
+     "flagged": 15,
+     "of": 8888,
+     "pct": 0.17
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 12,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2724,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 56,
+       "pct": 1.79
+      },
+      "without": {
+       "flagged": 6,
+       "of": 2777,
+       "pct": 0.22
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 96,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1389,
+       "pct": 0.07
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 5,
+       "of": 355,
+       "pct": 1.41
+      },
+      "without": {
+       "flagged": 4,
+       "of": 1998,
+       "pct": 0.2
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 51,
+     "of": 546,
+     "pct": 9.34
+    },
+    "without": {
+     "flagged": 337,
+     "of": 9402,
+     "pct": 3.58
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 13,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2876,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 58,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 29,
+       "of": 2905,
+       "pct": 1.0
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 3,
+       "of": 103,
+       "pct": 2.91
+      },
+      "without": {
+       "flagged": 43,
+       "of": 1476,
+       "pct": 2.91
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 48,
+       "of": 372,
+       "pct": 12.9
+      },
+      "without": {
+       "flagged": 257,
+       "of": 2145,
+       "pct": 11.98
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 196,
+     "of": 547,
+     "pct": 35.83
+    },
+    "without": {
+     "flagged": 1134,
+     "of": 9412,
+     "pct": 12.05
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 3,
+       "of": 13,
+       "pct": 23.08
+      },
+      "without": {
+       "flagged": 111,
+       "of": 2882,
+       "pct": 3.85
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 10,
+       "of": 58,
+       "pct": 17.24
+      },
+      "without": {
+       "flagged": 224,
+       "of": 2909,
+       "pct": 7.7
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 23,
+       "of": 103,
+       "pct": 22.33
+      },
+      "without": {
+       "flagged": 210,
+       "of": 1476,
+       "pct": 14.23
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 160,
+       "of": 373,
+       "pct": 42.9
+      },
+      "without": {
+       "flagged": 589,
+       "of": 2145,
+       "pct": 27.46
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 161,
+     "of": 547,
+     "pct": 29.43
+    },
+    "without": {
+     "flagged": 745,
+     "of": 9412,
+     "pct": 7.92
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 13,
+       "pct": 7.69
+      },
+      "without": {
+       "flagged": 48,
+       "of": 2882,
+       "pct": 1.67
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 7,
+       "of": 58,
+       "pct": 12.07
+      },
+      "without": {
+       "flagged": 106,
+       "of": 2909,
+       "pct": 3.64
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 18,
+       "of": 103,
+       "pct": 17.48
+      },
+      "without": {
+       "flagged": 143,
+       "of": 1476,
+       "pct": 9.69
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 135,
+       "of": 373,
+       "pct": 36.19
+      },
+      "without": {
+       "flagged": 448,
+       "of": 2145,
+       "pct": 20.89
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 39,
+     "of": 547,
+     "pct": 7.13
+    },
+    "without": {
+     "flagged": 206,
+     "of": 9412,
+     "pct": 2.19
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 13,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2882,
+       "pct": 0.07
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 58,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 16,
+       "of": 2909,
+       "pct": 0.55
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 3,
+       "of": 103,
+       "pct": 2.91
+      },
+      "without": {
+       "flagged": 42,
+       "of": 1476,
+       "pct": 2.85
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 36,
+       "of": 373,
+       "pct": 9.65
+      },
+      "without": {
+       "flagged": 146,
+       "of": 2145,
+       "pct": 6.81
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 140,
+     "of": 523,
+     "pct": 26.77
+    },
+    "without": {
+     "flagged": 1254,
+     "of": 8974,
+     "pct": 13.97
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 13,
+       "pct": 7.69
+      },
+      "without": {
+       "flagged": 138,
+       "of": 2716,
+       "pct": 5.08
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 8,
+       "of": 57,
+       "pct": 14.04
+      },
+      "without": {
+       "flagged": 231,
+       "of": 2792,
+       "pct": 8.27
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 16,
+       "of": 96,
+       "pct": 16.67
+      },
+      "without": {
+       "flagged": 264,
+       "of": 1413,
+       "pct": 18.68
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 115,
+       "of": 357,
+       "pct": 32.21
+      },
+      "without": {
+       "flagged": 621,
+       "of": 2053,
+       "pct": 30.25
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 266,
+     "of": 547,
+     "pct": 48.63
+    },
+    "without": {
+     "flagged": 1991,
+     "of": 9412,
+     "pct": 21.15
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 2,
+       "of": 13,
+       "pct": 15.38
+      },
+      "without": {
+       "flagged": 197,
+       "of": 2882,
+       "pct": 6.84
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 13,
+       "of": 58,
+       "pct": 22.41
+      },
+      "without": {
+       "flagged": 355,
+       "of": 2909,
+       "pct": 12.2
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 33,
+       "of": 103,
+       "pct": 32.04
+      },
+      "without": {
+       "flagged": 405,
+       "of": 1476,
+       "pct": 27.44
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 218,
+       "of": 373,
+       "pct": 58.45
+      },
+      "without": {
+       "flagged": 1034,
+       "of": 2145,
+       "pct": 48.21
+      }
+     }
+    }
+   }
+  },
+  "social": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 17,
+     "of": 8517,
+     "pct": 0.2
+    },
+    "without": {
+     "flagged": 4,
+     "of": 890,
+     "pct": 0.45
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 4,
+       "of": 2529,
+       "pct": 0.16
+      },
+      "without": {
+       "flagged": 0,
+       "of": 207,
+       "pct": 0.0
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 7,
+       "of": 2667,
+       "pct": 0.26
+      },
+      "without": {
+       "flagged": 0,
+       "of": 166,
+       "pct": 0.0
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 1403,
+       "pct": 0.07
+      },
+      "without": {
+       "flagged": 0,
+       "of": 82,
+       "pct": 0.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 5,
+       "of": 1918,
+       "pct": 0.26
+      },
+      "without": {
+       "flagged": 4,
+       "of": 435,
+       "pct": 0.92
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 324,
+     "of": 9007,
+     "pct": 3.6
+    },
+    "without": {
+     "flagged": 64,
+     "of": 941,
+     "pct": 6.8
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 8,
+       "of": 2676,
+       "pct": 0.3
+      },
+      "without": {
+       "flagged": 0,
+       "of": 213,
+       "pct": 0.0
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 26,
+       "of": 2788,
+       "pct": 0.93
+      },
+      "without": {
+       "flagged": 3,
+       "of": 175,
+       "pct": 1.71
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 41,
+       "of": 1489,
+       "pct": 2.75
+      },
+      "without": {
+       "flagged": 5,
+       "of": 90,
+       "pct": 5.56
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 249,
+       "of": 2054,
+       "pct": 12.12
+      },
+      "without": {
+       "flagged": 56,
+       "of": 463,
+       "pct": 12.1
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 1117,
+     "of": 9018,
+     "pct": 12.39
+    },
+    "without": {
+     "flagged": 213,
+     "of": 941,
+     "pct": 22.64
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 97,
+       "of": 2682,
+       "pct": 3.62
+      },
+      "without": {
+       "flagged": 17,
+       "of": 213,
+       "pct": 7.98
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 214,
+       "of": 2792,
+       "pct": 7.66
+      },
+      "without": {
+       "flagged": 20,
+       "of": 175,
+       "pct": 11.43
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 221,
+       "of": 1489,
+       "pct": 14.84
+      },
+      "without": {
+       "flagged": 12,
+       "of": 90,
+       "pct": 13.33
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 585,
+       "of": 2055,
+       "pct": 28.47
+      },
+      "without": {
+       "flagged": 164,
+       "of": 463,
+       "pct": 35.42
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 740,
+     "of": 9018,
+     "pct": 8.21
+    },
+    "without": {
+     "flagged": 166,
+     "of": 941,
+     "pct": 17.64
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 41,
+       "of": 2682,
+       "pct": 1.53
+      },
+      "without": {
+       "flagged": 8,
+       "of": 213,
+       "pct": 3.76
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 99,
+       "of": 2792,
+       "pct": 3.55
+      },
+      "without": {
+       "flagged": 14,
+       "of": 175,
+       "pct": 8.0
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 153,
+       "of": 1489,
+       "pct": 10.28
+      },
+      "without": {
+       "flagged": 8,
+       "of": 90,
+       "pct": 8.89
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 447,
+       "of": 2055,
+       "pct": 21.75
+      },
+      "without": {
+       "flagged": 136,
+       "of": 463,
+       "pct": 29.37
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 205,
+     "of": 9018,
+     "pct": 2.27
+    },
+    "without": {
+     "flagged": 40,
+     "of": 941,
+     "pct": 4.25
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 2682,
+       "pct": 0.04
+      },
+      "without": {
+       "flagged": 1,
+       "of": 213,
+       "pct": 0.47
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 11,
+       "of": 2792,
+       "pct": 0.39
+      },
+      "without": {
+       "flagged": 5,
+       "of": 175,
+       "pct": 2.86
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 43,
+       "of": 1489,
+       "pct": 2.89
+      },
+      "without": {
+       "flagged": 2,
+       "of": 90,
+       "pct": 2.22
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 150,
+       "of": 2055,
+       "pct": 7.3
+      },
+      "without": {
+       "flagged": 32,
+       "of": 463,
+       "pct": 6.91
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 1227,
+     "of": 8600,
+     "pct": 14.27
+    },
+    "without": {
+     "flagged": 167,
+     "of": 897,
+     "pct": 18.62
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 131,
+       "of": 2521,
+       "pct": 5.2
+      },
+      "without": {
+       "flagged": 8,
+       "of": 208,
+       "pct": 3.85
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 224,
+       "of": 2684,
+       "pct": 8.35
+      },
+      "without": {
+       "flagged": 15,
+       "of": 165,
+       "pct": 9.09
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 264,
+       "of": 1422,
+       "pct": 18.57
+      },
+      "without": {
+       "flagged": 16,
+       "of": 87,
+       "pct": 18.39
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 608,
+       "of": 1973,
+       "pct": 30.82
+      },
+      "without": {
+       "flagged": 128,
+       "of": 437,
+       "pct": 29.29
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 1946,
+     "of": 9018,
+     "pct": 21.58
+    },
+    "without": {
+     "flagged": 311,
+     "of": 941,
+     "pct": 33.05
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 183,
+       "of": 2682,
+       "pct": 6.82
+      },
+      "without": {
+       "flagged": 16,
+       "of": 213,
+       "pct": 7.51
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 340,
+       "of": 2792,
+       "pct": 12.18
+      },
+      "without": {
+       "flagged": 28,
+       "of": 175,
+       "pct": 16.0
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 411,
+       "of": 1489,
+       "pct": 27.6
+      },
+      "without": {
+       "flagged": 27,
+       "of": 90,
+       "pct": 30.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 1012,
+       "of": 2055,
+       "pct": 49.25
+      },
+      "without": {
+       "flagged": 240,
+       "of": 463,
+       "pct": 51.84
+      }
+     }
+    }
+   }
+  },
+  "education": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 0,
+     "of": 338,
+     "pct": 0.0
+    },
+    "without": {
+     "flagged": 21,
+     "of": 9069,
+     "pct": 0.23
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 21,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2715,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 55,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2778,
+       "pct": 0.25
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 73,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1412,
+       "pct": 0.07
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 0,
+       "of": 189,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 9,
+       "of": 2164,
+       "pct": 0.42
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 23,
+     "of": 353,
+     "pct": 6.52
+    },
+    "without": {
+     "flagged": 365,
+     "of": 9595,
+     "pct": 3.8
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 23,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2866,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 1,
+       "of": 55,
+       "pct": 1.82
+      },
+      "without": {
+       "flagged": 28,
+       "of": 2908,
+       "pct": 0.96
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 77,
+       "pct": 1.3
+      },
+      "without": {
+       "flagged": 45,
+       "of": 1502,
+       "pct": 3.0
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 21,
+       "of": 198,
+       "pct": 10.61
+      },
+      "without": {
+       "flagged": 284,
+       "of": 2319,
+       "pct": 12.25
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 118,
+     "of": 353,
+     "pct": 33.43
+    },
+    "without": {
+     "flagged": 1212,
+     "of": 9606,
+     "pct": 12.62
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 5,
+       "of": 23,
+       "pct": 21.74
+      },
+      "without": {
+       "flagged": 109,
+       "of": 2872,
+       "pct": 3.8
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 8,
+       "of": 55,
+       "pct": 14.55
+      },
+      "without": {
+       "flagged": 226,
+       "of": 2912,
+       "pct": 7.76
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 16,
+       "of": 77,
+       "pct": 20.78
+      },
+      "without": {
+       "flagged": 217,
+       "of": 1502,
+       "pct": 14.45
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 89,
+       "of": 198,
+       "pct": 44.95
+      },
+      "without": {
+       "flagged": 660,
+       "of": 2320,
+       "pct": 28.45
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 89,
+     "of": 353,
+     "pct": 25.21
+    },
+    "without": {
+     "flagged": 817,
+     "of": 9606,
+     "pct": 8.51
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 3,
+       "of": 23,
+       "pct": 13.04
+      },
+      "without": {
+       "flagged": 46,
+       "of": 2872,
+       "pct": 1.6
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 5,
+       "of": 55,
+       "pct": 9.09
+      },
+      "without": {
+       "flagged": 108,
+       "of": 2912,
+       "pct": 3.71
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 13,
+       "of": 77,
+       "pct": 16.88
+      },
+      "without": {
+       "flagged": 148,
+       "of": 1502,
+       "pct": 9.85
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 68,
+       "of": 198,
+       "pct": 34.34
+      },
+      "without": {
+       "flagged": 515,
+       "of": 2320,
+       "pct": 22.2
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 14,
+     "of": 353,
+     "pct": 3.97
+    },
+    "without": {
+     "flagged": 231,
+     "of": 9606,
+     "pct": 2.4
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 23,
+       "pct": 4.35
+      },
+      "without": {
+       "flagged": 1,
+       "of": 2872,
+       "pct": 0.03
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 55,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 16,
+       "of": 2912,
+       "pct": 0.55
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 77,
+       "pct": 1.3
+      },
+      "without": {
+       "flagged": 44,
+       "of": 1502,
+       "pct": 2.93
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 12,
+       "of": 198,
+       "pct": 6.06
+      },
+      "without": {
+       "flagged": 170,
+       "of": 2320,
+       "pct": 7.33
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 56,
+     "of": 338,
+     "pct": 16.57
+    },
+    "without": {
+     "flagged": 1338,
+     "of": 9159,
+     "pct": 14.61
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 1,
+       "of": 23,
+       "pct": 4.35
+      },
+      "without": {
+       "flagged": 138,
+       "of": 2706,
+       "pct": 5.1
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 5,
+       "of": 54,
+       "pct": 9.26
+      },
+      "without": {
+       "flagged": 234,
+       "of": 2795,
+       "pct": 8.37
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 7,
+       "of": 75,
+       "pct": 9.33
+      },
+      "without": {
+       "flagged": 273,
+       "of": 1434,
+       "pct": 19.04
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 43,
+       "of": 186,
+       "pct": 23.12
+      },
+      "without": {
+       "flagged": 693,
+       "of": 2224,
+       "pct": 31.16
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 134,
+     "of": 353,
+     "pct": 37.96
+    },
+    "without": {
+     "flagged": 2123,
+     "of": 9606,
+     "pct": 22.1
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 4,
+       "of": 23,
+       "pct": 17.39
+      },
+      "without": {
+       "flagged": 195,
+       "of": 2872,
+       "pct": 6.79
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 10,
+       "of": 55,
+       "pct": 18.18
+      },
+      "without": {
+       "flagged": 358,
+       "of": 2912,
+       "pct": 12.29
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 18,
+       "of": 77,
+       "pct": 23.38
+      },
+      "without": {
+       "flagged": 420,
+       "of": 1502,
+       "pct": 27.96
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 102,
+       "of": 198,
+       "pct": 51.52
+      },
+      "without": {
+       "flagged": 1150,
+       "of": 2320,
+       "pct": 49.57
+      }
+     }
+    }
+   }
+  },
+  "crowdfunding_ngo": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 0,
+     "of": 102,
+     "pct": 0.0
+    },
+    "without": {
+     "flagged": 21,
+     "of": 9305,
+     "pct": 0.23
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 5,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2731,
+       "pct": 0.15
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 9,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 7,
+       "of": 2824,
+       "pct": 0.25
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 15,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 1470,
+       "pct": 0.07
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 0,
+       "of": 73,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 9,
+       "of": 2280,
+       "pct": 0.39
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 18,
+     "of": 110,
+     "pct": 16.36
+    },
+    "without": {
+     "flagged": 370,
+     "of": 9838,
+     "pct": 3.76
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 6,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2883,
+       "pct": 0.28
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 29,
+       "of": 2953,
+       "pct": 0.98
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 16,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 46,
+       "of": 1563,
+       "pct": 2.94
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 18,
+       "of": 78,
+       "pct": 23.08
+      },
+      "without": {
+       "flagged": 287,
+       "of": 2439,
+       "pct": 11.77
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 33,
+     "of": 110,
+     "pct": 30.0
+    },
+    "without": {
+     "flagged": 1297,
+     "of": 9849,
+     "pct": 13.17
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 6,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 114,
+       "of": 2889,
+       "pct": 3.95
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 234,
+       "of": 2957,
+       "pct": 7.91
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 3,
+       "of": 16,
+       "pct": 18.75
+      },
+      "without": {
+       "flagged": 230,
+       "of": 1563,
+       "pct": 14.72
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 30,
+       "of": 78,
+       "pct": 38.46
+      },
+      "without": {
+       "flagged": 719,
+       "of": 2440,
+       "pct": 29.47
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 20,
+     "of": 110,
+     "pct": 18.18
+    },
+    "without": {
+     "flagged": 886,
+     "of": 9849,
+     "pct": 9.0
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 6,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 49,
+       "of": 2889,
+       "pct": 1.7
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 113,
+       "of": 2957,
+       "pct": 3.82
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 2,
+       "of": 16,
+       "pct": 12.5
+      },
+      "without": {
+       "flagged": 159,
+       "of": 1563,
+       "pct": 10.17
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 18,
+       "of": 78,
+       "pct": 23.08
+      },
+      "without": {
+       "flagged": 565,
+       "of": 2440,
+       "pct": 23.16
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 2,
+     "of": 110,
+     "pct": 1.82
+    },
+    "without": {
+     "flagged": 243,
+     "of": 9849,
+     "pct": 2.47
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 6,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2889,
+       "pct": 0.07
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 16,
+       "of": 2957,
+       "pct": 0.54
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 16,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 45,
+       "of": 1563,
+       "pct": 2.88
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 2,
+       "of": 78,
+       "pct": 2.56
+      },
+      "without": {
+       "flagged": 180,
+       "of": 2440,
+       "pct": 7.38
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 14,
+     "of": 101,
+     "pct": 13.86
+    },
+    "without": {
+     "flagged": 1380,
+     "of": 9396,
+     "pct": 14.69
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 5,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 139,
+       "of": 2724,
+       "pct": 5.1
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 239,
+       "of": 2839,
+       "pct": 8.42
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 1,
+       "of": 15,
+       "pct": 6.67
+      },
+      "without": {
+       "flagged": 279,
+       "of": 1494,
+       "pct": 18.67
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 13,
+       "of": 71,
+       "pct": 18.31
+      },
+      "without": {
+       "flagged": 723,
+       "of": 2339,
+       "pct": 30.91
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 39,
+     "of": 110,
+     "pct": 35.45
+    },
+    "without": {
+     "flagged": 2218,
+     "of": 9849,
+     "pct": 22.52
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 6,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 199,
+       "of": 2889,
+       "pct": 6.89
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 0,
+       "of": 10,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 368,
+       "of": 2957,
+       "pct": 12.45
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 3,
+       "of": 16,
+       "pct": 18.75
+      },
+      "without": {
+       "flagged": 435,
+       "of": 1563,
+       "pct": 27.83
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 36,
+       "of": 78,
+       "pct": 46.15
+      },
+      "without": {
+       "flagged": 1216,
+       "of": 2440,
+       "pct": 49.84
+      }
+     }
+    }
+   }
+  },
+  "other": {
+   "p1_pin_state_mismatch": {
+    "with": {
+     "flagged": 13,
+     "of": 3384,
+     "pct": 0.38
+    },
+    "without": {
+     "flagged": 8,
+     "of": 6023,
+     "pct": 0.13
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 378,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 4,
+       "of": 2358,
+       "pct": 0.17
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 6,
+       "of": 817,
+       "pct": 0.73
+      },
+      "without": {
+       "flagged": 1,
+       "of": 2016,
+       "pct": 0.05
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 0,
+       "of": 709,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 1,
+       "of": 776,
+       "pct": 0.13
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 7,
+       "of": 1480,
+       "pct": 0.47
+      },
+      "without": {
+       "flagged": 2,
+       "of": 873,
+       "pct": 0.23
+      }
+     }
+    }
+   },
+   "p2_url_cross_state": {
+    "with": {
+     "flagged": 235,
+     "of": 3582,
+     "pct": 6.56
+    },
+    "without": {
+     "flagged": 153,
+     "of": 6366,
+     "pct": 2.4
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 397,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 8,
+       "of": 2492,
+       "pct": 0.32
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 9,
+       "of": 856,
+       "pct": 1.05
+      },
+      "without": {
+       "flagged": 20,
+       "of": 2107,
+       "pct": 0.95
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 22,
+       "of": 744,
+       "pct": 2.96
+      },
+      "without": {
+       "flagged": 24,
+       "of": 835,
+       "pct": 2.87
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 204,
+       "of": 1585,
+       "pct": 12.87
+      },
+      "without": {
+       "flagged": 101,
+       "of": 932,
+       "pct": 10.84
+      }
+     }
+    }
+   },
+   "p3_foreign_name": {
+    "with": {
+     "flagged": 767,
+     "of": 3584,
+     "pct": 21.4
+    },
+    "without": {
+     "flagged": 563,
+     "of": 6375,
+     "pct": 8.83
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 21,
+       "of": 397,
+       "pct": 5.29
+      },
+      "without": {
+       "flagged": 93,
+       "of": 2498,
+       "pct": 3.72
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 82,
+       "of": 857,
+       "pct": 9.57
+      },
+      "without": {
+       "flagged": 152,
+       "of": 2110,
+       "pct": 7.2
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 131,
+       "of": 744,
+       "pct": 17.61
+      },
+      "without": {
+       "flagged": 102,
+       "of": 835,
+       "pct": 12.22
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 533,
+       "of": 1586,
+       "pct": 33.61
+      },
+      "without": {
+       "flagged": 216,
+       "of": 932,
+       "pct": 23.18
+      }
+     }
+    }
+   },
+   "p3c_foreign_claim": {
+    "with": {
+     "flagged": 552,
+     "of": 3584,
+     "pct": 15.4
+    },
+    "without": {
+     "flagged": 354,
+     "of": 6375,
+     "pct": 5.55
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 10,
+       "of": 397,
+       "pct": 2.52
+      },
+      "without": {
+       "flagged": 39,
+       "of": 2498,
+       "pct": 1.56
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 40,
+       "of": 857,
+       "pct": 4.67
+      },
+      "without": {
+       "flagged": 73,
+       "of": 2110,
+       "pct": 3.46
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 91,
+       "of": 744,
+       "pct": 12.23
+      },
+      "without": {
+       "flagged": 70,
+       "of": 835,
+       "pct": 8.38
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 411,
+       "of": 1586,
+       "pct": 25.91
+      },
+      "without": {
+       "flagged": 172,
+       "of": 932,
+       "pct": 18.45
+      }
+     }
+    }
+   },
+   "p3s_similar_name": {
+    "with": {
+     "flagged": 150,
+     "of": 3584,
+     "pct": 4.19
+    },
+    "without": {
+     "flagged": 95,
+     "of": 6375,
+     "pct": 1.49
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 0,
+       "of": 397,
+       "pct": 0.0
+      },
+      "without": {
+       "flagged": 2,
+       "of": 2498,
+       "pct": 0.08
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 4,
+       "of": 857,
+       "pct": 0.47
+      },
+      "without": {
+       "flagged": 12,
+       "of": 2110,
+       "pct": 0.57
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 23,
+       "of": 744,
+       "pct": 3.09
+      },
+      "without": {
+       "flagged": 22,
+       "of": 835,
+       "pct": 2.63
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 123,
+       "of": 1586,
+       "pct": 7.76
+      },
+      "without": {
+       "flagged": 59,
+       "of": 932,
+       "pct": 6.33
+      }
+     }
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "with": {
+     "flagged": 677,
+     "of": 3433,
+     "pct": 19.72
+    },
+    "without": {
+     "flagged": 717,
+     "of": 6064,
+     "pct": 11.82
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 17,
+       "of": 374,
+       "pct": 4.55
+      },
+      "without": {
+       "flagged": 122,
+       "of": 2355,
+       "pct": 5.18
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 64,
+       "of": 827,
+       "pct": 7.74
+      },
+      "without": {
+       "flagged": 175,
+       "of": 2022,
+       "pct": 8.65
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 122,
+       "of": 718,
+       "pct": 16.99
+      },
+      "without": {
+       "flagged": 158,
+       "of": 791,
+       "pct": 19.97
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 474,
+       "of": 1514,
+       "pct": 31.31
+      },
+      "without": {
+       "flagged": 262,
+       "of": 896,
+       "pct": 29.24
+      }
+     }
+    }
+   },
+   "any_proxy": {
+    "with": {
+     "flagged": 1177,
+     "of": 3584,
+     "pct": 32.84
+    },
+    "without": {
+     "flagged": 1080,
+     "of": 6375,
+     "pct": 16.94
+    },
+    "by_url_bucket": {
+     "0-5": {
+      "with": {
+       "flagged": 27,
+       "of": 397,
+       "pct": 6.8
+      },
+      "without": {
+       "flagged": 172,
+       "of": 2498,
+       "pct": 6.89
+      }
+     },
+     "6-10": {
+      "with": {
+       "flagged": 109,
+       "of": 857,
+       "pct": 12.72
+      },
+      "without": {
+       "flagged": 259,
+       "of": 2110,
+       "pct": 12.27
+      }
+     },
+     "11-20": {
+      "with": {
+       "flagged": 211,
+       "of": 744,
+       "pct": 28.36
+      },
+      "without": {
+       "flagged": 227,
+       "of": 835,
+       "pct": 27.19
+      }
+     },
+     "21+": {
+      "with": {
+       "flagged": 830,
+       "of": 1586,
+       "pct": 52.33
+      },
+      "without": {
+       "flagged": 422,
+       "of": 932,
+       "pct": 45.28
+      }
+     }
+    }
+   }
+  }
+ },
+ "proxy_by_url_bucket": {
+  "0-5": {
+   "p1_pin_state_mismatch": {
+    "flagged": 4,
+    "of": 2736,
+    "pct": 0.15
+   },
+   "p2_url_cross_state": {
+    "flagged": 8,
+    "of": 2889,
+    "pct": 0.28
+   },
+   "p3_foreign_name": {
+    "flagged": 114,
+    "of": 2895,
+    "pct": 3.94
+   },
+   "p3c_foreign_claim": {
+    "flagged": 49,
+    "of": 2895,
+    "pct": 1.69
+   },
+   "p3s_similar_name": {
+    "flagged": 2,
+    "of": 2895,
+    "pct": 0.07
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 139,
+    "of": 2729,
+    "pct": 5.09
+   },
+   "any_proxy": {
+    "flagged": 199,
+    "of": 2895,
+    "pct": 6.87
+   }
+  },
+  "6-10": {
+   "p1_pin_state_mismatch": {
+    "flagged": 7,
+    "of": 2833,
+    "pct": 0.25
+   },
+   "p2_url_cross_state": {
+    "flagged": 29,
+    "of": 2963,
+    "pct": 0.98
+   },
+   "p3_foreign_name": {
+    "flagged": 234,
+    "of": 2967,
+    "pct": 7.89
+   },
+   "p3c_foreign_claim": {
+    "flagged": 113,
+    "of": 2967,
+    "pct": 3.81
+   },
+   "p3s_similar_name": {
+    "flagged": 16,
+    "of": 2967,
+    "pct": 0.54
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 239,
+    "of": 2849,
+    "pct": 8.39
+   },
+   "any_proxy": {
+    "flagged": 368,
+    "of": 2967,
+    "pct": 12.4
+   }
+  },
+  "11-20": {
+   "p1_pin_state_mismatch": {
+    "flagged": 1,
+    "of": 1485,
+    "pct": 0.07
+   },
+   "p2_url_cross_state": {
+    "flagged": 46,
+    "of": 1579,
+    "pct": 2.91
+   },
+   "p3_foreign_name": {
+    "flagged": 233,
+    "of": 1579,
+    "pct": 14.76
+   },
+   "p3c_foreign_claim": {
+    "flagged": 161,
+    "of": 1579,
+    "pct": 10.2
+   },
+   "p3s_similar_name": {
+    "flagged": 45,
+    "of": 1579,
+    "pct": 2.85
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 280,
+    "of": 1509,
+    "pct": 18.56
+   },
+   "any_proxy": {
+    "flagged": 438,
+    "of": 1579,
+    "pct": 27.74
+   }
+  },
+  "21+": {
+   "p1_pin_state_mismatch": {
+    "flagged": 9,
+    "of": 2353,
+    "pct": 0.38
+   },
+   "p2_url_cross_state": {
+    "flagged": 305,
+    "of": 2517,
+    "pct": 12.12
+   },
+   "p3_foreign_name": {
+    "flagged": 749,
+    "of": 2518,
+    "pct": 29.75
+   },
+   "p3c_foreign_claim": {
+    "flagged": 583,
+    "of": 2518,
+    "pct": 23.15
+   },
+   "p3s_similar_name": {
+    "flagged": 182,
+    "of": 2518,
+    "pct": 7.23
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 736,
+    "of": 2410,
+    "pct": 30.54
+   },
+   "any_proxy": {
+    "flagged": 1252,
+    "of": 2518,
+    "pct": 49.72
+   }
+  }
+ },
+ "proxy_by_distinct_source_ids": {
+  "0": {
+   "p1_pin_state_mismatch": {
+    "flagged": 2,
+    "of": 689,
+    "pct": 0.29
+   },
+   "p2_url_cross_state": {
+    "flagged": 1,
+    "of": 728,
+    "pct": 0.14
+   },
+   "p3_foreign_name": {
+    "flagged": 36,
+    "of": 730,
+    "pct": 4.93
+   },
+   "p3c_foreign_claim": {
+    "flagged": 16,
+    "of": 730,
+    "pct": 2.19
+   },
+   "p3s_similar_name": {
+    "flagged": 0,
+    "of": 730,
+    "pct": 0.0
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 24,
+    "of": 683,
+    "pct": 3.51
+   },
+   "any_proxy": {
+    "flagged": 41,
+    "of": 730,
+    "pct": 5.62
+   }
+  },
+  "1": {
+   "p1_pin_state_mismatch": {
+    "flagged": 4,
+    "of": 2627,
+    "pct": 0.15
+   },
+   "p2_url_cross_state": {
+    "flagged": 8,
+    "of": 2782,
+    "pct": 0.29
+   },
+   "p3_foreign_name": {
+    "flagged": 142,
+    "of": 2785,
+    "pct": 5.1
+   },
+   "p3c_foreign_claim": {
+    "flagged": 60,
+    "of": 2785,
+    "pct": 2.15
+   },
+   "p3s_similar_name": {
+    "flagged": 5,
+    "of": 2785,
+    "pct": 0.18
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 166,
+    "of": 2629,
+    "pct": 6.31
+   },
+   "any_proxy": {
+    "flagged": 233,
+    "of": 2785,
+    "pct": 8.37
+   }
+  },
+  "2-3": {
+   "p1_pin_state_mismatch": {
+    "flagged": 3,
+    "of": 2180,
+    "pct": 0.14
+   },
+   "p2_url_cross_state": {
+    "flagged": 30,
+    "of": 2278,
+    "pct": 1.32
+   },
+   "p3_foreign_name": {
+    "flagged": 206,
+    "of": 2283,
+    "pct": 9.02
+   },
+   "p3c_foreign_claim": {
+    "flagged": 117,
+    "of": 2283,
+    "pct": 5.12
+   },
+   "p3s_similar_name": {
+    "flagged": 26,
+    "of": 2283,
+    "pct": 1.14
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 231,
+    "of": 2192,
+    "pct": 10.54
+   },
+   "any_proxy": {
+    "flagged": 353,
+    "of": 2283,
+    "pct": 15.46
+   }
+  },
+  "4-10": {
+   "p1_pin_state_mismatch": {
+    "flagged": 5,
+    "of": 2011,
+    "pct": 0.25
+   },
+   "p2_url_cross_state": {
+    "flagged": 79,
+    "of": 2127,
+    "pct": 3.71
+   },
+   "p3_foreign_name": {
+    "flagged": 341,
+    "of": 2127,
+    "pct": 16.03
+   },
+   "p3c_foreign_claim": {
+    "flagged": 252,
+    "of": 2127,
+    "pct": 11.85
+   },
+   "p3s_similar_name": {
+    "flagged": 70,
+    "of": 2127,
+    "pct": 3.29
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 409,
+    "of": 2049,
+    "pct": 19.96
+   },
+   "any_proxy": {
+    "flagged": 638,
+    "of": 2127,
+    "pct": 30.0
+   }
+  },
+  "11+": {
+   "p1_pin_state_mismatch": {
+    "flagged": 7,
+    "of": 1900,
+    "pct": 0.37
+   },
+   "p2_url_cross_state": {
+    "flagged": 270,
+    "of": 2033,
+    "pct": 13.28
+   },
+   "p3_foreign_name": {
+    "flagged": 605,
+    "of": 2034,
+    "pct": 29.74
+   },
+   "p3c_foreign_claim": {
+    "flagged": 461,
+    "of": 2034,
+    "pct": 22.66
+   },
+   "p3s_similar_name": {
+    "flagged": 144,
+    "of": 2034,
+    "pct": 7.08
+   },
+   "p4_coord_far_from_pin": {
+    "flagged": 564,
+    "of": 1944,
+    "pct": 29.01
+   },
+   "any_proxy": {
+    "flagged": 992,
+    "of": 2034,
+    "pct": 48.77
+   }
+  }
+ },
+ "research_vector": {
+  "records_with_research_url": 435,
+  "research_urls": 1480,
+  "claims_in_research_records": 39512,
+  "research_lang_claims_in_research_records": 330,
+  "claims_in_other_records": 411598,
+  "research_lang_claims_in_other_records": 81,
+  "p3_claims_in_research_records": 727,
+  "p3_claims_in_other_records": 2756,
+  "p3c_claims_in_research_records": 534,
+  "p3c_claims_in_other_records": 1949,
+  "median_urls_research_records": 50.0,
+  "records_with_research_lang_claim": 202,
+  "p3c_claim_rate_by_url_bucket": {
+   "0-5": {
+    "research": {
+     "p3c_claims": 0,
+     "claims": 37,
+     "records": 2
+    },
+    "no_research": {
+     "p3c_claims": 54,
+     "claims": 61799,
+     "records": 2893
+    }
+   },
+   "6-10": {
+    "research": {
+     "p3c_claims": 1,
+     "claims": 761,
+     "records": 24
+    },
+    "no_research": {
+     "p3c_claims": 144,
+     "claims": 109284,
+     "records": 2943
+    }
+   },
+   "11-20": {
+    "research": {
+     "p3c_claims": 21,
+     "claims": 2838,
+     "records": 57
+    },
+    "no_research": {
+     "p3c_claims": 261,
+     "claims": 77568,
+     "records": 1522
+    }
+   },
+   "21+": {
+    "research": {
+     "p3c_claims": 512,
+     "claims": 35876,
+     "records": 352
+    },
+    "no_research": {
+     "p3c_claims": 1490,
+     "claims": 162947,
+     "records": 2166
+    }
+   }
+  },
+  "median_urls_other_records": 8.0
+ },
+ "content_table_id": {
+  "distinct": 9040,
+  "equals_source_content_id": 9959,
+  "equals_unique_id": 0,
+  "records_sharing_with_other_records": 1324,
+  "groups_shared": 405,
+  "max_group_size": 27,
+  "proxy_shared_vs_not": {
+   "p1_pin_state_mismatch": {
+    "shared": {
+     "flagged": 3,
+     "of": 1245,
+     "pct": 0.24
+    },
+    "not": {
+     "flagged": 18,
+     "of": 8162,
+     "pct": 0.22
+    }
+   },
+   "p2_url_cross_state": {
+    "shared": {
+     "flagged": 98,
+     "of": 1324,
+     "pct": 7.4
+    },
+    "not": {
+     "flagged": 290,
+     "of": 8624,
+     "pct": 3.36
+    }
+   },
+   "p3_foreign_name": {
+    "shared": {
+     "flagged": 308,
+     "of": 1324,
+     "pct": 23.26
+    },
+    "not": {
+     "flagged": 1022,
+     "of": 8635,
+     "pct": 11.84
+    }
+   },
+   "p3c_foreign_claim": {
+    "shared": {
+     "flagged": 236,
+     "of": 1324,
+     "pct": 17.82
+    },
+    "not": {
+     "flagged": 670,
+     "of": 8635,
+     "pct": 7.76
+    }
+   },
+   "p3s_similar_name": {
+    "shared": {
+     "flagged": 78,
+     "of": 1324,
+     "pct": 5.89
+    },
+    "not": {
+     "flagged": 167,
+     "of": 8635,
+     "pct": 1.93
+    }
+   },
+   "p4_coord_far_from_pin": {
+    "shared": {
+     "flagged": 299,
+     "of": 1267,
+     "pct": 23.6
+    },
+    "not": {
+     "flagged": 1095,
+     "of": 8230,
+     "pct": 13.3
+    }
+   },
+   "any_proxy": {
+    "shared": {
+     "flagged": 496,
+     "of": 1324,
+     "pct": 37.46
+    },
+    "not": {
+     "flagged": 1761,
+     "of": 8635,
+     "pct": 20.39
+    }
+   }
+  }
+ },
+ "cluster_id_distinct": 9959,
+ "source_column_values": {
+  "kie": 9959
+ }
+}

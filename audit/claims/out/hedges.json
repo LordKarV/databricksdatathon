@@ -1,0 +1,47 @@
+{
+ "items": 451574,
+ "hedged_items": 175,
+ "facilities": 149,
+ "examples": [
+  [
+   "0dcce993-85a7-4d73-858b-fd6f9385c68f",
+   "equipment",
+   "Fundus fluorescein angiography equipment (implied by clinic capabilities)"
+  ],
+  [
+   "226266c6-d15a-41a6-bf6b-adb841f0a7d0",
+   "equipment",
+   "Laser equipment used for dermatology treatments (types not specified)"
+  ],
+  [
+   "2114b254-e87e-4973-aa5f-13e01863bcd4",
+   "equipment",
+   "In-house pharmacy storage and related equipment (as implied by in-house pharmacy)"
+  ],
+  [
+   "794f15ee-27ab-4596-a103-e4af8a880a7d",
+   "equipment",
+   "General hospital infrastructure not specified in the provided content."
+  ],
+  [
+   "3fac975d-8578-47b8-96f4-2712090ab39c",
+   "equipment",
+   "Community Health Centre Uskabazar, Siddharthnagar, Uttar Pradesh \u2014 CHC facility type (location implied by directory)"
+  ],
+  [
+   "fa445a1d-ff1a-40b5-95b4-7351e0cb7852",
+   "equipment",
+   "Operating theatre with anesthesia equipment (implied by surgical activity in image)"
+  ],
+  [
+   "651681b8-440e-40f4-8c64-528b7cec1a2d",
+   "procedure",
+   "Tracheal Shave (not confirmed as offered)"
+  ],
+  [
+   "546b1600-c198-42de-a1b8-fdaebdeab448",
+   "capability",
+   "Additional tests and consultations during Health Check Up may be billed separately"
+  ]
+ ]
+}

@@ -1,0 +1,1380 @@
+[
+ {
+  "service": "dialysis",
+  "grade": "strong",
+  "unique_id": "804cd688-8484-4c54-84ee-3ac6d1d27ab2",
+  "name": "The Medicity Hospital, Rudrapur",
+  "type": "hospital",
+  "beds": 150.0,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Dialysis: Operates a state-of-the-art Artificial Kidney Dialysis Unit with dedicated machines for specific cases",
+   "[equipment] Artificial Kidney Dialysis Unit with dedicated machines"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "strong",
+  "unique_id": "45a4db60-3363-4247-9840-8b2bef266a69",
+  "name": "Aadhya Hospital Kidney Care Center",
+  "type": "hospital",
+  "beds": 400.0,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Dialysis treatment is provided at Aadhya Kidney And Dialysis Center",
+   "[procedure] Provides dialysis treatment",
+   "[procedure] Provides kidney dialysis services",
+   "[procedure] Provides dialysis services at Aadhya Kidney And Dialysis Center"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "strong",
+  "unique_id": "d101bb2c-d4c7-423f-9196-8b0e7cd0e9f5",
+  "name": "Guru Nanak Hospital, Ranchi",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": true
+  },
+  "fields_own": 4,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Dialysis treatment performed in an 8-bed artificial kidney dialysis unit.",
+   "[procedure] Dialysis treatment is provided under supervision of senior nephrologists in the Artificial Kidney Dialysis Department.",
+   "[equipment] Dialysis unit with 8 beds.",
+   "[capability] Dialysis program with an 8-bed unit."
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "medium",
+  "unique_id": "56461029-32a7-4d5e-b6de-26ab3e3ecce5",
+  "name": "Narad Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers dialysis."
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "medium",
+  "unique_id": "8a5e6d99-a1d1-4950-852b-5975999ec241",
+  "name": "Radiant Children\u2019s Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Haemodialysis for pediatric patients",
+   "[procedure] Acute Chronic Ambulatory Peritoneal Dialysis (CAPD) for pediatric patients"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "medium",
+  "unique_id": "6b19d3a9-120d-479c-b773-3c99a202e88f",
+  "name": "Kavi Hospital And Neuro Foundation",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": false,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Provides kidney dialysis",
+   "[capability] Offers kidney dialysis services"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "weak",
+  "unique_id": "70f93ff8-d24e-4256-96b6-ecf3b1d83a96",
+  "name": "Maniktala Esi Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers IPD, OPD, Emergency, Dialysis, and Diagnostic Facilities {LIST}"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "weak",
+  "unique_id": "75a1818b-3879-4c34-a22e-dc0dd17846dc",
+  "name": "Agrim Hospitals",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "nephrology": true,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[description] Ambulance, CT Scan, Dialysis, EEG/NCV/EMG/BERA, Emergency, ICU/NICU/PICU, MRI, Pathology, Stroke Unit, Ultrasonography {LIST}"
+  ]
+ },
+ {
+  "service": "dialysis",
+  "grade": "weak",
+  "unique_id": "bc3bb6d6-419c-4db9-94d9-63f61e1d72a1",
+  "name": "Cheema Medical Complex",
+  "type": "hospital",
+  "beds": 500.0,
+  "prereqs": {
+   "nephrology": false,
+   "dialysis_unit_or_machine": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Dialysis"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "strong",
+  "unique_id": "6cd599ab-b8bd-4104-b01f-be37bff75feb",
+  "name": "District Hospital Hapur",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Special Newborn Care Unit (SNCU) for sick and small newborns housed at the District Women's Hospital (incubator care)",
+   "[capability] Houses a Special Newborn Care Unit (SNCU) for sick and small newborns"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "strong",
+  "unique_id": "5790feca-537c-4b3c-b6a3-3e78afa039ff",
+  "name": "Satyarthi Hospital",
+  "type": "hospital",
+  "beds": 50.0,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] ICU and NICU available",
+   "[capability] NICU",
+   "[description] Gaurav Satyarthi, it offers ICU, NICU, critical care, ventilator support, and general medical and surgical services. {LIST}"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "strong",
+  "unique_id": "358c7acc-3ffc-4220-a48c-913cd35c753f",
+  "name": "Unity Hospital",
+  "type": "hospital",
+  "beds": 300.0,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": true
+  },
+  "fields_own": 3,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Provides Neonatology and NICU care as part of the Birth & Beyond centre",
+   "[equipment] NICU with dedicated neonatal beds and fixed cameras",
+   "[equipment] Neonatal Intensive Care Unit (NICU) with fixed-camera beds",
+   "[capability] Pediatrics, Neonatology and NICU services"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "medium",
+  "unique_id": "a96d4572-8445-4eec-9fe5-41d32d88b92b",
+  "name": "Shri Maharaja Gulab Singh Hospital, Government Medical College Jammu",
+  "type": "hospital",
+  "beds": 100.0,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Specialty units include Gynecology & Obstetrics with COVID positive labour room, operations, and indoor wards; Pediatrics with COVID positive NICU, PICU, and wards {LIST}",
+   "[capability] Fourth floor includes NICU and PICU with ventilator capabilities; fourth floor also paediatric wards for COVID positive patients"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "medium",
+  "unique_id": "88bdcc68-50cc-4910-87da-9f3ec8ee7052",
+  "name": "SMS Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": false
+  },
+  "fields_own": 1,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] SSD Hospital has a 6-bed NICU"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "medium",
+  "unique_id": "750e49bf-6b9b-4de5-b300-5cd930d5c0ed",
+  "name": "Janani Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "paeds_or_neonatology": false,
+   "incubator_warmer_ventilator": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Neonatal incubator in NICU"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "weak",
+  "unique_id": "76fcd188-bca9-43de-8539-3afda0efd0ce",
+  "name": "Delhi Child Care and Dental Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": true,
+  "sentences": [
+   "[procedure] Newborn Intensive Care",
+   "[procedure] Special Neonatal Care - Babies that required admission to SNCU or NICU",
+   "[procedure] Special Newborn Care"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "weak",
+  "unique_id": "705cc566-7ec3-40f3-aaec-4b114fc6d2da",
+  "name": "Balrampur Hospital",
+  "type": "hospital",
+  "beds": 656.0,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers OPD, ICU, NICU, inpatient services, pathology, physiotherapy, radiodiagnosis, and 24/7 emergency services for obstetrics and gynecology {LIST}"
+  ]
+ },
+ {
+  "service": "nicu",
+  "grade": "weak",
+  "unique_id": "9b663dda-60a4-4413-a721-cf6e29786b34",
+  "name": "Saksham Hospital",
+  "type": "hospital",
+  "beds": 60.0,
+  "prereqs": {
+   "paeds_or_neonatology": true,
+   "incubator_warmer_ventilator": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Has ICU, ICCU, HDU, NICU, and PICU {LIST}"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "strong",
+  "unique_id": "6fb30f40-a08a-483c-be84-c6b8676c6c80",
+  "name": "Medipulse Hospital",
+  "type": "hospital",
+  "beds": 250.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Performs heart valve replacement surgery",
+   "[capability] Centers of Excellence in Cardiology and Cardiac Surgery"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "strong",
+  "unique_id": "1a62801f-4ddb-43e0-81cc-182cb1311171",
+  "name": "King Edward Memorial Hospital",
+  "type": "hospital",
+  "beds": 1800.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] India's first heart transplant was performed at King Edward Memorial Hospital on 16 February 1968 by P. K. Sen and Sharad Panday.",
+   "[procedure] Performs Transcatheter Mitral Valve Replacement (TMVR)",
+   "[procedure] Performs Transcatheter Aortic Valve Replacement (TAVR)",
+   "[procedure] Performs Transcatheter Pulmonary Valve Replacement (TPVR)"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "strong",
+  "unique_id": "54946f79-25d8-40a7-b43b-9e41b888fd5d",
+  "name": "Kamakshi Memorial Hospital",
+  "type": "hospital",
+  "beds": 300.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 3,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Cardio Thoracic Surgery",
+   "[procedure] Performs Cardio Thoracic Surgery",
+   "[procedure] Provides Paediatric Cardio Thoracic Surgery",
+   "[equipment] Cardiothoracic Intensive Care Unit (CTICU)"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "medium",
+  "unique_id": "daf2eec0-257c-4f35-a47e-9251e24d0432",
+  "name": "Ayushman Hospital",
+  "type": "hospital",
+  "beds": 31.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Complex Congenital Heart Defect Surgery",
+   "[procedure] Coronary artery bypass grafting (CABG), including intra operative balloon pump"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "medium",
+  "unique_id": "46d54262-3059-4e7f-9e14-543b5f37bfa3",
+  "name": "PVS Hospital",
+  "type": "hospital",
+  "beds": 310.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Performs heart surgery"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "medium",
+  "unique_id": "79490496-83f4-43c7-8531-c0139c723364",
+  "name": "Akshay Hospital",
+  "type": "hospital",
+  "beds": 30.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": false
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Bypass surgery for heart disease",
+   "[procedure] Heart valve replacement surgery",
+   "[capability] Cardiology department offering bypass surgery, angioplasty, pacemaker implantation, and valve replacement {LIST}"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "weak",
+  "unique_id": "28726757-41f1-43c5-9556-e3ce109a67b5",
+  "name": "Dr. Sai MultiSpeciality Hospital Bargarh",
+  "type": "hospital",
+  "beds": 25.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Super-specialities include neurosurgery, cardiology, gastroenterology, cardio-thoracic and vascular surgery, and psychiatry {LIST}"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "weak",
+  "unique_id": "0eba3391-79fb-4e4b-a53d-d4b167d4f657",
+  "name": "Max Neurocare And Superspeciality Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": false,
+   "cathlab_or_heart_lung": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Brain Bypass Surgery"
+  ]
+ },
+ {
+  "service": "cardiac_surgery",
+  "grade": "weak",
+  "unique_id": "8285a1cd-8c0d-4fda-82c2-ac4150c576ea",
+  "name": "Pawana Hospital",
+  "type": "hospital",
+  "beds": 203.0,
+  "prereqs": {
+   "cardiothoracic_surgeon_or_dept": true,
+   "cathlab_or_heart_lung": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Super-specialty care programs including Cardiology (Cathlab), Cardiothoracic surgery, Neurosurgery, Neurology, Urology, Nephrology, Gastroenterology, Plastic & Vascular surgery, Oncosurgery, Paediatric surgery, Spine & Joint Replacement Surgery {LIST}"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "strong",
+  "unique_id": "1a5b4647-6d70-4fa4-842f-0f7e5925be2d",
+  "name": "Help Hospital",
+  "type": "hospital",
+  "beds": 150.0,
+  "prereqs": {
+   "ventilator": true,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Air handling units powering isolation cubicles in the critical care facility",
+   "[capability] 24/7 trauma and critical care",
+   "[capability] Has a 60-bed intensive care unit",
+   "[capability] First state-of-the-art critical care unit in Andhra Pradesh with isolation cubicles and air handling units"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "strong",
+  "unique_id": "374d3fdf-4539-4899-b427-d26d2f2f0577",
+  "name": "Srimanta Sankardeva Hospital & Research Institute",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "ventilator": true,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Neurosurgical ICU with multiple ventilators, modern multi-parameter monitoring system, infusion pumps, defibrillator, and centralised monitoring {LIST}",
+   "[equipment] Operates state-of-the-art ICU units",
+   "[capability] On-site Neonatal ICU and Neurosurgical ICU",
+   "[capability] Neurology & Neurosurgery operates round the clock with a dedicated Stroke & Trauma Care ICU and rehabilitation unit"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "strong",
+  "unique_id": "fa1c244c-baaa-4848-8baf-74d9f830a93b",
+  "name": "Marble City Hospital & Reseach Centre",
+  "type": "hospital",
+  "beds": 150.0,
+  "prereqs": {
+   "ventilator": true,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 3,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Critical care nutrition assessment and management by dietitians",
+   "[procedure] Continuous Ryles Tube feeding initiated for critical care patients on enteral nutrition",
+   "[equipment] CT-ICU furnished with monitors and ventilators",
+   "[equipment] CT-ICU furnished with monitors and ventilators"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "medium",
+  "unique_id": "7fcd1e71-fa80-4108-9432-d9fd6a05d7bb",
+  "name": "P.D. Hinduja Sindhi Hospital",
+  "type": "hospital",
+  "beds": 110.0,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Level 3 ICU",
+   "[capability] Level 3 ICU",
+   "[capability] Level 3 Intensive Care Unit (ICU)",
+   "[capability] Neonatology center and dedicated pediatric ICU"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "medium",
+  "unique_id": "7855e27d-29e8-4df0-93de-7467dc6f4676",
+  "name": "Indu Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers emergency and critical care services for adults and children",
+   "[capability] Has intensive care units for adults, children and neonates",
+   "[description] Our hospital offers emergency and critical care services for both adults and children at an unimaginably low cost along with express outpatient services."
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "medium",
+  "unique_id": "08344cdb-f455-4c22-8d31-a0a8e849124b",
+  "name": "MOSC Medical College Hospital",
+  "type": "hospital",
+  "beds": 1100.0,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Inpatient and intensive care capabilities",
+   "[capability] Inpatient and intensive care capabilities"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "weak",
+  "unique_id": "8609281a-ddbb-4aec-810c-dc1e62f43ac7",
+  "name": "Tele Diagnostic Health Care Centre",
+  "type": "clinic",
+  "beds": NaN,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers pediatric outpatient services including neonatal and pediatric development assessment, growth and development evaluation/management, infant & child nutrition, ADHD treatment, newborn jaundice, genetic diseases, disorders of puberty, paediatrics - chest, paediatric critical care {LIST}"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "weak",
+  "unique_id": "25ae59f1-6634-48e7-a3bf-fab56cb48bf6",
+  "name": "Aastha Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Renal ICU",
+   "[capability] ICU dialysis"
+  ]
+ },
+ {
+  "service": "icu",
+  "grade": "weak",
+  "unique_id": "8c8cbb15-6b6b-4b4e-856a-2360c582fd48",
+  "name": "Kashmir Eye Hospital, Srinagar",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "ventilator": false,
+   "critical_care_or_anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": true,
+  "sentences": [
+   "[capability] ICU available"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "strong",
+  "unique_id": "daa8ef27-895d-4873-aef6-4087b174bf3f",
+  "name": "BRJ Ortho Centre & MAK Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": true,
+   "ct": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Operates 4 state-of-the-art operating theatres for joint replacement, neurosurgery, plastic surgery, trauma, and other surgeries {LIST}",
+   "[capability] 24/7 emergency care"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "strong",
+  "unique_id": "4b8e2383-2837-44fa-b514-6308dfd5eb8f",
+  "name": "SPARSH Hospital, Hennur Road",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": true,
+   "ct": true
+  },
+  "fields_own": 3,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Provides 24/7 emergency and trauma management in the SPARSH Hospital, Hennur Road Emergency Department",
+   "[procedure] Operates dedicated trauma operating theatres for trauma-related surgeries",
+   "[procedure] Trauma surgery performed in dedicated trauma operating theatres",
+   "[procedure] Cardiac emergency care with fast-track ECG, echocardiography (echo), and cath lab support"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "strong",
+  "unique_id": "8146f2e6-3f68-42e5-a54b-d8281aa05081",
+  "name": "Sparsh Hospital - Plot No 141, Sai Arcade, Mission Compound, Line Ali, Opposite Orion Mall, Panvel, Navi Mumbai, Maharashtra 410206",
+  "type": "hospital",
+  "beds": 35.0,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": true,
+   "ct": true
+  },
+  "fields_own": 3,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Accident & trauma care",
+   "[procedure] Emergency casualty care",
+   "[procedure] Polytrauma management with trauma unit",
+   "[procedure] Emergency and definitive management of all trauma patients 24 x 7"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "medium",
+  "unique_id": "104beb2e-286c-4847-97f8-c166a4c67e23",
+  "name": "Shri Hospitals",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": true,
+   "ct": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Operates 24/7 emergency/medical services",
+   "[capability] Provides 24/7 emergency care",
+   "[capability] Provides 24x7 open and emergency services including 24x7 availability of doctors and medical personnel",
+   "[capability] Offers 24x7 emergency and critical care"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "medium",
+  "unique_id": "ce6eae5b-db32-4f15-a9c3-9a03dbb224ec",
+  "name": "CHIRAG HOSPITAL",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": false,
+   "surgery_or_ortho": true,
+   "ct": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Operates a Trauma Unit with dedicated care",
+   "[capability] Casualty wards and Nursery (neonatal)",
+   "[capability] Trauma Unit"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "medium",
+  "unique_id": "43c512a6-2fd4-4e4a-acaf-2ca603b45cbe",
+  "name": "Usha Mission Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": true,
+   "ct": false
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Provides 24-hour trauma and critical care services",
+   "[capability] 24/7 emergency services",
+   "[capability] 24/7 emergency department",
+   "[capability] 24/7 trauma and critical care services"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "weak",
+  "unique_id": "3c1c3362-fa29-4e70-ac3b-b0a55c7b6e34",
+  "name": "New Kokila Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": true,
+   "surgery_or_ortho": false,
+   "ct": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Provides 24/7 emergency care"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "weak",
+  "unique_id": "5c5e4f24-f259-4d34-bda4-f50001dc1f3d",
+  "name": "Esthetica dental clinic",
+  "type": "clinic",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": false,
+   "surgery_or_ortho": false,
+   "ct": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": true,
+  "sentences": [
+   "[capability] Emergency care"
+  ]
+ },
+ {
+  "service": "trauma",
+  "grade": "weak",
+  "unique_id": "3a04b1a4-b928-43ec-8345-e9eff23d5eef",
+  "name": "Navjivan Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "emergency_24x7": false,
+   "surgery_or_ortho": true,
+   "ct": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers Accident Emergency and Trauma Care"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "strong",
+  "unique_id": "37546cf9-21de-4c8b-abb1-007e994de1fd",
+  "name": "SH Medical Centre",
+  "type": "clinic",
+  "beds": 250.0,
+  "prereqs": {
+   "mri_scanner": true
+  },
+  "fields_own": 2,
+  "qty": true,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] UMR 580 1.5T MRI (24-channel) installed February 25, 2025",
+   "[equipment] MRI: UMR 580 1.5T MRI (24-channel) installed February 25, 2025.",
+   "[capability] In February 25, 2025 SHMC installed a 1.5T MRI (UMR 580) to boost diagnostic imaging capacity"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "strong",
+  "unique_id": "7ae37791-7094-498f-a9bd-66fe1d3e8066",
+  "name": "Vyas Medicity Super Speciality Hospital",
+  "type": "hospital",
+  "beds": 330.0,
+  "prereqs": {
+   "mri_scanner": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Uses MRI, X-ray, and CT imaging for diagnosis and treatment planning {LIST}",
+   "[equipment] MRI machine depicted in site gallery.",
+   "[equipment] MRI imaging capability"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "strong",
+  "unique_id": "82e91e8c-4967-4a54-a1d4-3801174eaad4",
+  "name": "Manasa Hospitals",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "mri_scanner": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] MRI Scan",
+   "[equipment] MRI scanner (if applicable)"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "medium",
+  "unique_id": "8b89a5c7-7c12-449c-b616-5348e0e74a1a",
+  "name": "Gugale Memorial Hospital",
+  "type": "hospital",
+  "beds": 50.0,
+  "prereqs": {
+   "mri_scanner": false
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Provides Diagnostic Services including MRI, CT, ultrasound, and laboratory tests. {LIST}",
+   "[equipment] MRI, CT scan, and ultrasound equipment are used for diagnostic testing."
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "medium",
+  "unique_id": "61d99f46-2b8f-4b86-894b-3ec502d26192",
+  "name": "Career Institute of Medical Sciences",
+  "type": "hospital",
+  "beds": 100.0,
+  "prereqs": {
+   "mri_scanner": false
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Magnetic resonance imaging (MRI) services are available",
+   "[equipment] MRI services available at the center"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "medium",
+  "unique_id": "2532e264-96f4-4298-999e-24356f94531f",
+  "name": "Sri Amritsar Diagnostic Centre",
+  "type": "clinic",
+  "beds": NaN,
+  "prereqs": {
+   "mri_scanner": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] MRI scanner",
+   "[equipment] Mobile MRI scanner"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "weak",
+  "unique_id": "1d4df34c-60d2-4d77-b690-c8030bcbbed2",
+  "name": "Focus Diagnostics",
+  "type": "clinic",
+  "beds": NaN,
+  "prereqs": {
+   "mri_scanner": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Performs Magnetic Resonance Imaging (MRI) diagnostic imaging",
+   "[procedure] Mammogram and Fetal Echo are among imaging services offered; radiology tests include MRI, CT, ultrasound, CBCT, digital X-ray, DEXA scans, OBG tests, and other cardiology, neurology, and pulmonology tests {LIST}",
+   "[procedure] MRI options include Brain MRI, Spine MRI, MRI Knee / MRI Ankle, MRI Pelvis / MRI Abdomen, MR Angiography, MR Venography, Cardiac MRI, MRCP, Whole Body MRI Screening, MRI Breast {LIST}"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "weak",
+  "unique_id": "b88c8605-2fa0-4209-9aa5-5ccb15cdc212",
+  "name": "Shri Balaji Institute of Neuroscience and Trauma",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "mri_scanner": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Laboratory and radiology services including X-ray, USG, CT Scan, MRI {LIST}"
+  ]
+ },
+ {
+  "service": "mri",
+  "grade": "weak",
+  "unique_id": "4a235f61-c369-4ff8-823d-732585cb9cc1",
+  "name": "Arokya Hospital",
+  "type": "hospital",
+  "beds": 100.0,
+  "prereqs": {
+   "mri_scanner": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Nuclear magnetic resonance spectroscopy (NMR/MRS)"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "strong",
+  "unique_id": "d1d0c662-85c9-4782-8086-69c04e1a31f2",
+  "name": "Orchid Hospital",
+  "type": "hospital",
+  "beds": 50.0,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Caesarean delivery",
+   "[capability] Infertility management ( Obstetric & Gynecology: Delivery, Caesarean, Infertility )",
+   "[capability] Obstetric and gynecologic services including delivery and Caesarean section"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "strong",
+  "unique_id": "14510729-4176-4647-a353-fc6e5a119196",
+  "name": "Phoenix Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Offers cesarean delivery",
+   "[procedure] Cesarean delivery",
+   "[description] Phoenix Hospital in Prayagraj, Uttar Pradesh offers obstetrics and gynecology services, including normal delivery, painless vaginal delivery, cesarean delivery, ovarian and uterine surgeries, cryocautery, and infertility treatment. {LIST}"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "strong",
+  "unique_id": "cfe5573a-17a7-464b-9919-955d72fc2b9c",
+  "name": "N.G. Nursing Home, Kalighat",
+  "type": "clinic",
+  "beds": NaN,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Cesarean Delivery",
+   "[capability] Performs Cesarean Delivery, Hysterectomy, Skin Grafting, and Eye Exam {LIST}"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "medium",
+  "unique_id": "3c1cc7a7-e754-4fd0-82bc-c2fe975f9ca8",
+  "name": "V One Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Caesarean Section"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "medium",
+  "unique_id": "dd1f6150-c1c3-4ada-960a-c01633df9e42",
+  "name": "Ispat Cooperative Hospital",
+  "type": "hospital",
+  "beds": 100.0,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Cesarean delivery"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "medium",
+  "unique_id": "ad126438-6e34-43e7-a627-1432ccc65d36",
+  "name": "Vyas Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": true,
+   "anaesthesia": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Caesarean section delivery"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "weak",
+  "unique_id": "637598eb-a25b-464e-804f-c235443bcf6e",
+  "name": "Kumar Hospitals",
+  "type": "hospital",
+  "beds": 50.0,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": false,
+   "anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[description] Facility of normal delivery and cesarean section available."
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "weak",
+  "unique_id": "765748bf-d5f6-4aed-a8ad-f6be8c7d8360",
+  "name": "Care 24 Medical Centre And Hospital",
+  "type": "hospital",
+  "beds": 100.0,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": false,
+   "anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Delivers babies, including cesarean section deliveries (as reported by patients)"
+  ]
+ },
+ {
+  "service": "csection",
+  "grade": "weak",
+  "unique_id": "863a9801-8b0d-4ce0-b0e8-a7ab2d71d371",
+  "name": "Medansh Multispeciality Hospital",
+  "type": "hospital",
+  "beds": 15.0,
+  "prereqs": {
+   "obstetrics": true,
+   "operating_theatre": false,
+   "anaesthesia": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Cesarean delivery"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "strong",
+  "unique_id": "9dcac40a-eecb-49b3-b528-c602b9359eff",
+  "name": "G. S. Memorial Plastic Surgery Hospital And Trauma Center",
+  "type": "hospital",
+  "beds": 90.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Burns treatment",
+   "[capability] Departments include Burns, Cleft Lips and Palate Surgery, Cosmetic Plastic Surgery, General Plastic Surgery, Non-Surgical Aesthetics, Speech Therapy {LIST} {NONOFFER}",
+   "[capability] Provides meals and travel assistance to cleft and burn patients during hospital stay"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "strong",
+  "unique_id": "22add191-6446-4cf2-8ec8-556d487fb66d",
+  "name": "Harsha Hospitals",
+  "type": "hospital",
+  "beds": 50.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Burns treatment",
+   "[procedure] Provides burns treatment",
+   "[capability] Emergency care for burns and accident victims"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "strong",
+  "unique_id": "3f6542b5-2ab1-4602-aa55-45ac9fa77975",
+  "name": "Ashwini Hospital",
+  "type": "hospital",
+  "beds": 500.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Burns Unit",
+   "[capability] Specialties include Internal Medicine, General Surgery, Cardiology, Interventional Cardiology, Neurology & Neurosurgery, Partial / Complete Limb Prosthesis, Burns Unit, Dialysis Unit, Critical Care Unit- ICU, Modular Operation Theatres, Diagnostic Services, CATH LAB, MRI, CT Scan, Pulmonology, Orthopaedics, Plastic Surgery, and COVID and post COVID {LIST}",
+   "[capability] Specializes in Internal Medicine, General Surgery, Cardiology, Interventional Cardiology, Neurology & Neurosurgery, Partial / Complete Limb Prosthesis, Burns Unit, Dialysis Unit, Critical Care Unit- ICU, Diagnostic Services, Cath Lab, MRI, CT Scan, Pulmonology, Orthopaedics, Plastic Surgery, and COVID and post COVID {LIST}"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "medium",
+  "unique_id": "70537965-4b66-4821-931e-d893bb1cdfe3",
+  "name": "Singhal Surgical Hospital",
+  "type": "hospital",
+  "beds": 20.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers Burns Management"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "medium",
+  "unique_id": "5ed31c9d-d537-4d91-ade6-b2fcb485fa97",
+  "name": "Dinbandhu Charitable Hospital",
+  "type": "hospital",
+  "beds": 120.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Treatment of burn patients"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "medium",
+  "unique_id": "91638ee6-ea1c-489a-8f38-d55633258c92",
+  "name": "Shree Seva Hospital",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[procedure] Burns management (excluding cosmetic surgery)"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "weak",
+  "unique_id": "9332c8a3-42dc-4772-b006-6b939ec78bb8",
+  "name": "Aster MIMS Calicut",
+  "type": "hospital",
+  "beds": 600.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": false
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[equipment] Skin bank for burn treatment"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "weak",
+  "unique_id": "6a8e6299-020e-4d23-8d72-d181415594be",
+  "name": "Nightingale Hospital & Diagnostics",
+  "type": "hospital",
+  "beds": NaN,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 2,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Offers General Surgery, Gynecology and Obstetrics, Orthopedics, Pediatrics, Plastic Surgery, Maxillofacial Surgery, Internal Medicine, Urology, and Burn Management {LIST}",
+   "[capability] Offers General Surgery, Gynecology and Obstetrics, Orthopedics, Pediatrics, Plastic Surgery, Maxillofacial Surgery, Medicine, Urology Surgery, Burn Management {LIST}",
+   "[description] General Surgery, Gynae & Obst, Orthopedic, Pediatrics, Plastic Surgery, Maxillofacial Surgery, Medicine, Uro Surgery, Burn Management {LIST}"
+  ]
+ },
+ {
+  "service": "burns",
+  "grade": "weak",
+  "unique_id": "36e95944-27bc-4f1d-9524-688aaa62b309",
+  "name": "St. Joseph's Hospital",
+  "type": "hospital",
+  "beds": 250.0,
+  "prereqs": {
+   "burn_unit_or_plastic_surgery": true
+  },
+  "fields_own": 1,
+  "qty": false,
+  "scope_conflict": false,
+  "sentences": [
+   "[capability] Specialized medical services include Burns Management, Cardiology, General Medicine, Interventional Neuroradiology, Obstetrics and Gynecology, Ophthalmology, Orthopaedics, Otorhinolaryngology, Paediatric Medical Management, Plastic and Reconstructive Surgery, Polytrauma care, and Urology {LIST}"
+  ]
+ }
+]

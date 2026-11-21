@@ -1,0 +1,9 @@
+contamination by url-count bin: {'0-2': 0.042, '3-7': 0.084, '8-14': 0.223, '15-29': 0.415, '30+': 0.596}
+             category  records  contam_records  observed/expected contam (size-adjusted)  observed/expected q_share (size-adjusted)
+                  gov      956             484                                      1.24                                       1.73
+              railway      271             132                                      1.14                                       1.87
+            wikipedia      397             229                                      1.21                                       1.37
+       wikipedia_list      106              69                                      1.22                                       0.69
+empanelment_insurance     2874            1178                                      1.11                                       0.99
+ research_or_document      919             456                                      1.09                                       1.11
+            directory     7901            2233                                      1.01                                       1.57

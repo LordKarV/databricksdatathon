@@ -1,0 +1,456 @@
+{
+ "denominator_rows": 9970,
+ "numberDoctors": {
+  "null_like": 6340,
+  "non_null": 3630,
+  "parsed_int": 3630,
+  "parse_failures": 0,
+  "parse_failure_examples": [],
+  "pure_digit_strings": 3630
+ },
+ "capacity": {
+  "null_like": 7454,
+  "non_null": 2516,
+  "parsed_int": 2516,
+  "parse_failures": 0,
+  "parse_failure_examples": [],
+  "pure_digit_strings": 2516
+ },
+ "yearEstablished": {
+  "null_like": 5202,
+  "non_null": 4768,
+  "parsed_int": 4768,
+  "parse_failures": 0,
+  "parse_failure_examples": [],
+  "pure_digit_strings": 4768
+ },
+ "impossible": {
+  "doctors_zero": {
+   "count": 13,
+   "ids": [
+    "1d3f5f2e-e990-4bd8-abef-bd6c2b2b8d84",
+    "2cbd02ab-24e8-43f4-a2a8-920d4de6b7d2",
+    "35bd66f8-7f74-4af3-8511-4265744ec373",
+    "481d22ad-be9f-412a-9d5c-88ebd9b2822d",
+    "4a31771b-f230-412b-bedc-f2c2568e9c7d",
+    "64e4ae27-2377-42db-bea3-4652cf75eb3e",
+    "67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+    "7b01154a-6580-40ba-8ea6-11071b81dfc8",
+    "7c0feb51-7cf7-489e-bd08-ca3f28a03e6e",
+    "90f34ccf-50b9-4aeb-803b-1b2a38ff34a7",
+    "bf01bc89-9607-4a94-86c8-3b9cbae7079c",
+    "c645f160-5bdc-4215-8c82-2fbfe2025471",
+    "cfe73791-e3a2-44f3-889b-78b852b770b0"
+   ]
+  },
+  "doctors_gt_1000": {
+   "count": 11,
+   "ids": [
+    "2723785d-90a3-4239-8843-abdd36e60c80",
+    "3505de0d-1c6c-4b3f-8ca1-b87734cc83d8",
+    "3bcb46c8-4ec6-4a1d-9b49-937e575c2b94",
+    "4b7af570-9cf8-44a3-adec-a47b5d0b7715",
+    "5106028d-191f-4a51-a596-05d8b41e857b",
+    "5909c5f2-36da-4a26-a99d-c493d4277424",
+    "60d478ce-f2fd-4981-b18a-292785fdc401",
+    "784014e4-c762-4217-9fd5-5da72596042d",
+    "7b71adc1-9169-499c-9eef-161d7460972c",
+    "877e7f48-77d5-4e68-b7c6-40e2311b0f25",
+    "e0b3adbe-2fa4-4e6f-82b6-af4b4fafeb15"
+   ]
+  },
+  "capacity_zero": {
+   "count": 13,
+   "ids": [
+    "0a77c719-b39a-423f-821e-16a965dd95fb",
+    "124a528f-8b81-49a6-8629-545752883ffe",
+    "1d3f5f2e-e990-4bd8-abef-bd6c2b2b8d84",
+    "35bd66f8-7f74-4af3-8511-4265744ec373",
+    "38919ebc-1e89-4e91-ae22-c7e8dd86deb0",
+    "39cb01e0-fdf3-4359-9622-42802d326d3b",
+    "43a688a8-c135-4bf1-890a-2a5854f0a3a0",
+    "680f4477-f5e8-487f-87f9-28eb7ddff650",
+    "6f8a8416-e1a0-4b46-b15c-a8b52d47cf83",
+    "88024e31-9269-4987-91a5-57fe4a1fe2e4",
+    "b58565cb-e9e7-4eae-8371-674683ebd780",
+    "e330d865-2b8e-4a80-b2ef-98469eb2538e",
+    "e5da23e5-2a68-4ef0-af31-a610909958f8"
+   ]
+  },
+  "capacity_gt_5000": {
+   "count": 1,
+   "ids": [
+    "1774eb01-bb63-4cbb-b1ad-c9b4cf03c605"
+   ]
+  },
+  "year_lt_1800": {
+   "count": 7,
+   "ids": [
+    "00b0c116-2deb-4e9a-a77b-9ffd19e89396",
+    "1d3f5f2e-e990-4bd8-abef-bd6c2b2b8d84",
+    "5f23c957-e5fa-4c66-b850-079f66027342",
+    "9457fefd-c7b1-4e82-ad05-0a846aedf626",
+    "975e993b-d229-47c0-8a38-151685479592",
+    "d7190f77-1863-46ee-a8c0-c16bf9ce3704",
+    "f1dbb7e4-af01-42ee-a50b-bdd9060bf484"
+   ]
+  },
+  "year_lt_1000": {
+   "count": 5,
+   "ids": [
+    "1d3f5f2e-e990-4bd8-abef-bd6c2b2b8d84",
+    "5f23c957-e5fa-4c66-b850-079f66027342",
+    "9457fefd-c7b1-4e82-ad05-0a846aedf626",
+    "975e993b-d229-47c0-8a38-151685479592",
+    "d7190f77-1863-46ee-a8c0-c16bf9ce3704"
+   ]
+  },
+  "year_gt_2026": {
+   "count": 0,
+   "ids": []
+  },
+  "capacity_equals_year": {
+   "count": 1,
+   "ids": [
+    "1d3f5f2e-e990-4bd8-abef-bd6c2b2b8d84"
+   ]
+  },
+  "capacity_looks_like_year_1900_2026": {
+   "count": 7,
+   "ids": [
+    "2feb2607-d956-49ed-a957-85c34d1a61b7",
+    "39c6f2b8-806a-499c-9fac-a918e52cd191",
+    "3a559444-66f3-4e44-928e-6fc6f3434e11",
+    "74b2711c-2c96-4256-b45c-0a418ca0ad49",
+    "a83112ff-48ab-4c84-a3ca-89e3ed6fd23b",
+    "bbdf6de2-17ba-4029-a7e5-81e902b11067",
+    "fa445a1d-ff1a-40b5-95b4-7351e0cb7852"
+   ]
+  },
+  "doctors_looks_like_year_1900_2026": {
+   "count": 1,
+   "ids": [
+    "7b71adc1-9169-499c-9eef-161d7460972c"
+   ]
+  }
+ },
+ "doctors_eq_1_among_capacity_ge_300": {
+  "count": 28,
+  "denominator_capacity_ge_300_with_doctors": 231,
+  "ids": [
+   "0c199bdf-5e22-4906-af58-c055dad6aba7",
+   "231f141f-cc05-42a9-949a-accf4bab933c",
+   "3825b33f-8ad0-451c-9b06-cc5693d837c2",
+   "436c7e0a-fd63-4414-9a28-c39ff09d4775",
+   "49e0f69c-96c3-448a-af00-81dc0229035f",
+   "52e0e475-ae3e-4305-a05a-a3686eaee654",
+   "714cc04a-e087-4311-8fea-bbef440357b3",
+   "8aed4cd1-bd6b-42c5-8c69-5565e2acff7b",
+   "8b4d0b3f-896c-4010-8b7e-b5ebd781fb29",
+   "8cbb1ecd-e2ee-44d9-b3bd-08f3855fa18a",
+   "8df9ef6c-9ee6-41e9-a7c0-b52f45290f06",
+   "8f4135bd-21ff-4aa4-8fc5-d9c42a8b9c3e",
+   "94cfa2e6-28a9-4597-ac9b-8769b0743955",
+   "9790323a-5717-4137-abe6-e679f7980e50",
+   "99dcfec0-73c3-4159-a7a6-b9f9aef2a99b"
+  ]
+ },
+ "doctors_value_counts_top": {
+  "1.0": 1195,
+  "2.0": 673,
+  "3.0": 283,
+  "4.0": 163,
+  "5.0": 132,
+  "6.0": 92,
+  "10.0": 66,
+  "7.0": 62,
+  "8.0": 61,
+  "9.0": 43
+ },
+ "by_type": {
+  "clinic": {
+   "rows": 3770,
+   "numberDoctors": {
+    "coverage": 1269,
+    "n": 1269,
+    "min": 0,
+    "max": 3000,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 1.0,
+    "p75": 2.0,
+    "p90": 6.0,
+    "p99": 116.0
+   },
+   "capacity": {
+    "coverage": 124,
+    "n": 124,
+    "min": 0,
+    "max": 580,
+    "p10": 4.0,
+    "p25": 12.0,
+    "p50": 25.0,
+    "p75": 50.0,
+    "p90": 174.5,
+    "p99": 546.2
+   },
+   "yearEstablished": {
+    "coverage": 1486,
+    "n": 1486,
+    "min": 0,
+    "max": 2025,
+    "p10": 1987.0,
+    "p25": 2000.0,
+    "p50": 2009.0,
+    "p75": 2016.0,
+    "p90": 2020.0,
+    "p99": 2024.0
+   }
+  },
+  "dentist": {
+   "rows": 488,
+   "numberDoctors": {
+    "coverage": 175,
+    "n": 175,
+    "min": 1,
+    "max": 841,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 2.0,
+    "p75": 3.0,
+    "p90": 7.6,
+    "p99": 300.0
+   },
+   "capacity": {
+    "coverage": 4,
+    "n": 4,
+    "min": 1,
+    "max": 30,
+    "p10": 1.6,
+    "p25": 2.5,
+    "p50": 4.0,
+    "p75": 11.2,
+    "p90": 22.5,
+    "p99": 29.2
+   },
+   "yearEstablished": {
+    "coverage": 169,
+    "n": 169,
+    "min": 1917,
+    "max": 2023,
+    "p10": 1994.8,
+    "p25": 2004.0,
+    "p50": 2010.0,
+    "p75": 2015.0,
+    "p90": 2020.0,
+    "p99": 2023.0
+   }
+  },
+  "doctor": {
+   "rows": 21,
+   "numberDoctors": {
+    "coverage": 4,
+    "n": 4,
+    "min": 1,
+    "max": 3,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 1.5,
+    "p75": 2.2,
+    "p90": 2.7,
+    "p99": 3.0
+   },
+   "capacity": {
+    "coverage": 0,
+    "n": 0
+   },
+   "yearEstablished": {
+    "coverage": 4,
+    "n": 4,
+    "min": 1988,
+    "max": 2019,
+    "p10": 1990.4,
+    "p25": 1994.0,
+    "p50": 2006.0,
+    "p75": 2016.8,
+    "p90": 2018.1,
+    "p99": 2018.9
+   }
+  },
+  "farmacy": {
+   "rows": 10,
+   "numberDoctors": {
+    "coverage": 1,
+    "n": 1,
+    "min": 1,
+    "max": 1,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 1.0,
+    "p75": 1.0,
+    "p90": 1.0,
+    "p99": 1.0
+   },
+   "capacity": {
+    "coverage": 0,
+    "n": 0
+   },
+   "yearEstablished": {
+    "coverage": 4,
+    "n": 4,
+    "min": 1902,
+    "max": 2018,
+    "p10": 1917.3,
+    "p25": 1940.2,
+    "p50": 1984.0,
+    "p75": 2015.8,
+    "p90": 2017.1,
+    "p99": 2017.9
+   }
+  },
+  "hospital": {
+   "rows": 5621,
+   "numberDoctors": {
+    "coverage": 2179,
+    "n": 2179,
+    "min": 0,
+    "max": 15000,
+    "p10": 1.0,
+    "p25": 2.0,
+    "p50": 5.0,
+    "p75": 21.0,
+    "p90": 60.0,
+    "p99": 500.0
+   },
+   "capacity": {
+    "coverage": 2388,
+    "n": 2388,
+    "min": 0,
+    "max": 200000,
+    "p10": 20.0,
+    "p25": 40.0,
+    "p50": 100.0,
+    "p75": 200.0,
+    "p90": 500.0,
+    "p99": 1700.0
+   },
+   "yearEstablished": {
+    "coverage": 3075,
+    "n": 3075,
+    "min": 0,
+    "max": 2025,
+    "p10": 1971.0,
+    "p25": 1990.0,
+    "p50": 2003.0,
+    "p75": 2012.0,
+    "p90": 2018.0,
+    "p99": 2023.0
+   }
+  },
+  "null": {
+   "rows": 57,
+   "numberDoctors": {
+    "coverage": 1,
+    "n": 1,
+    "min": 2,
+    "max": 2,
+    "p10": 2.0,
+    "p25": 2.0,
+    "p50": 2.0,
+    "p75": 2.0,
+    "p90": 2.0,
+    "p99": 2.0
+   },
+   "capacity": {
+    "coverage": 0,
+    "n": 0
+   },
+   "yearEstablished": {
+    "coverage": 30,
+    "n": 30,
+    "min": 1974,
+    "max": 2025,
+    "p10": 1991.7,
+    "p25": 2000.0,
+    "p50": 2011.5,
+    "p75": 2017.8,
+    "p90": 2022.0,
+    "p99": 2024.7
+   }
+  },
+  "nursing_home": {
+   "rows": 1,
+   "numberDoctors": {
+    "coverage": 1,
+    "n": 1,
+    "min": 1,
+    "max": 1,
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 1.0,
+    "p75": 1.0,
+    "p90": 1.0,
+    "p99": 1.0
+   },
+   "capacity": {
+    "coverage": 0,
+    "n": 0
+   },
+   "yearEstablished": {
+    "coverage": 0,
+    "n": 0
+   }
+  },
+  "pharmacy": {
+   "rows": 2,
+   "numberDoctors": {
+    "coverage": 0,
+    "n": 0
+   },
+   "capacity": {
+    "coverage": 0,
+    "n": 0
+   },
+   "yearEstablished": {
+    "coverage": 0,
+    "n": 0
+   }
+  }
+ },
+ "year_by_decade": {
+  "0": 4,
+  "10": 1,
+  "1720": 1,
+  "1750": 1,
+  "1830": 1,
+  "1840": 4,
+  "1850": 2,
+  "1860": 7,
+  "1870": 4,
+  "1880": 6,
+  "1890": 10,
+  "1900": 15,
+  "1910": 12,
+  "1920": 24,
+  "1930": 26,
+  "1940": 49,
+  "1950": 77,
+  "1960": 100,
+  "1970": 193,
+  "1980": 416,
+  "1990": 761,
+  "2000": 1171,
+  "2010": 1470,
+  "2020": 413
+ },
+ "year_value_counts_top": {
+  "2010.0": 187,
+  "2012.0": 166,
+  "2013.0": 151,
+  "2014.0": 147,
+  "2011.0": 147,
+  "2017.0": 147,
+  "2015.0": 144,
+  "2018.0": 138
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "dialysis": {
+  "enum_hit": 25,
+  "enum_and_text": 22,
+  "enum_only": 3,
+  "text_without_enum": 1025
+ },
+ "cardiac_surgery": {
+  "enum_hit": 728,
+  "enum_and_text": 426,
+  "enum_only": 302,
+  "text_without_enum": 247
+ },
+ "burns": {
+  "enum_hit": 136,
+  "enum_and_text": 90,
+  "enum_only": 46,
+  "text_without_enum": 142
+ },
+ "trauma": {
+  "enum_hit": 2110,
+  "enum_and_text": 1741,
+  "enum_only": 369,
+  "text_without_enum": 1496
+ },
+ "icu": {
+  "enum_hit": 1693,
+  "enum_and_text": 1209,
+  "enum_only": 484,
+  "text_without_enum": 1135
+ },
+ "nephrology_enum_facilities": 2159,
+ "nephrology_enum_with_dialysis_text": 847,
+ "array_cap": {
+  "procedure": {
+   "at_50": 806,
+   "over_50": 0
+  },
+  "equipment": {
+   "at_50": 88,
+   "over_50": 0
+  },
+  "capability": {
+   "at_50": 1430,
+   "over_50": 0
+  },
+  "specialties": {
+   "at_50": 2877,
+   "over_50": 0
+  },
+  "specialties_at_50_mean_distinct": 20.99,
+  "specialties_below_50_mean_distinct": 8.18
+ },
+ "exact_duplicate_items_within_field": {
+  "procedure": 10042,
+  "equipment": 3724,
+  "capability": 8746
+ },
+ "total_items": {
+  "procedure": 163791,
+  "equipment": 56052,
+  "capability": 231731
+ }
+}

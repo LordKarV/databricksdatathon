@@ -1,0 +1,54 @@
+{
+ "core_topic_precision": {
+  "dialysis": "25/25",
+  "csection": "25/25",
+  "nicu": "25/25",
+  "cardiac_surgery": "25/25",
+  "mri": "25/25",
+  "burns": "23/25",
+  "trauma": "24/25",
+  "icu": "24/25"
+ },
+ "core_topic_precision_all": "196/200",
+ "nonoffer_v1_precision": "17/60",
+ "nonoffer_v2_precision": "34/40",
+ "named_other_v1_precision": "3/40",
+ "named_other_v3_precision": "9/40",
+ "cross_state_place_A": {
+  "true": 9,
+  "right_reason": 5,
+  "n": 40
+ },
+ "cross_state_place_B_precision": "8/14",
+ "grade_agreement": "64/72",
+ "changed_after_fixes": [
+  [
+   15,
+   "76fcd188",
+   "nicu",
+   "weak",
+   "medium"
+  ],
+  [
+   25,
+   "0eba3391",
+   "cardiac_surgery",
+   "weak",
+   "no_mention"
+  ],
+  [
+   47,
+   "82e91e8c",
+   "mri",
+   "strong",
+   "medium"
+  ],
+  [
+   61,
+   "765748bf",
+   "csection",
+   "weak",
+   "non_offer_only"
+  ]
+ ]
+}

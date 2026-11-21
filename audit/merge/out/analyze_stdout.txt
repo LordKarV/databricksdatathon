@@ -1,0 +1,66 @@
+== Q1 foreign facility names
+sentences with foreign name: 4918/469498 (1.0%)
+records with >=1 foreign-name sentence: 1952/9959 (19.6%)
+  context=alias sentences: 38/4918 (0.8%)
+  context=alias records: 33/9959 (0.3%)
+  context=credential sentences: 964/4918 (19.6%)
+  context=credential records: 644/9959 (6.5%)
+  context=direct sentences: 2761/4918 (56.1%)
+  context=direct records: 1151/9959 (11.6%)
+  context=relation sentences: 1155/4918 (23.5%)
+  context=relation records: 708/9959 (7.1%)
+  by field (sentences): {'capability': 3935, 'procedure': 401, 'description': 370, 'equipment': 212}
+sentences naming a same-brand other branch (sibling): 380/469498 (0.1%)
+records with sibling-branch sentence: 154/9959 (1.5%)
+sentences whose foreign name is a near-spelling of own name (ratio>=75): 310/469498 (0.1%)
+records with near-spelling foreign name: 107/9959 (1.1%)
+  examples: [('0020c82a-2608-406f-9298-779bdd657681', 'Srp Hospital', 'SP Hospital'), ('0035ebd7-6492-4691-a871-8640af2d3158', 'Orthodontic and Dental Clinic', 'Nayak Dental Clinic and Orthodontic Centre'), ('009bd786-fb16-42c9-a48d-c0e05ecfd267', 'Royal Hospital', 'Goyal Hospital'), ('00cde61f-929a-49ef-abf6-303a9e5fedad', 'Orocare Dental Clinics', 'Procare Dental Clinic'), ('0207488f-8c4a-4665-b08e-55897841a797', 'Prakash Dental Clinic', 'Akash Dental Clinic'), ('03fa4648-f3e3-4bae-b116-5cb45d76d3c2', 'Batra Hospital', 'Katra Hospital'), ('04b0ff52-30db-47b9-9b06-2fbbb9cb6759', 'Arasi Hospital', 'Rasi Hospital; Gynaecologist Clinic'), ('06a6ce96-7c07-4c70-9efe-2ede26265a51', 'S K Hospitals', 'Sk Hospital')]
+records with >=5 'performed/offered by Dr X' sentences (doctor-profile aggregation): 2/9959 (0.0%)
+== Q2 places in claims
+sentences has_other_state: 2030/469498 (0.4%)
+records has_other_state: 1005/9959 (10.1%)
+sentences has_other_district: 9667/469498 (2.1%)
+records has_other_district: 2189/9959 (22.0%)
+  other-place kind=chain sentences: 2573/11505 (22.4%)
+  other-place kind=chain records: 1154/9959 (11.6%)
+  other-place kind=credential sentences: 804/11505 (7.0%)
+  other-place kind=credential records: 566/9959 (5.7%)
+  other-place kind=location_assertion sentences: 5508/11505 (47.9%)
+  other-place kind=location_assertion records: 1611/9959 (16.2%)
+  other-place kind=other sentences: 2620/11505 (22.8%)
+  other-place kind=other records: 1291/9959 (13.0%)
+records asserting a location elsewhere (other state): 200/9959 (2.0%)
+== Q5 quarantine policy
+claim sentences quarantined: 9506/469498 (2.0%)
+claim sentences tagged (credential/relation/chain; kept): 5922/469498 (1.3%)
+  quarantined in capability: 8316/231465 (3.6%)
+  quarantined in description: 457/18388 (2.5%)
+  quarantined in equipment: 228/55998 (0.4%)
+  quarantined in procedure: 505/163647 (0.3%)
+records with >=1 quarantined sentence: 2489/9959 (25.0%)
+records with >=25% of sentences quarantined: 179/9959 (1.8%)
+== Q4 provenance
+baseline: records with >=1 quarantined sentence 2489/9959 (25.0%)
+             category  records  contam_records  contam_rate  contam_rate_without  mean_q_share  mean_q_share_without  foreign_rate  foreign_rate_without
+                  gov      956             484        0.506                0.223         0.049                 0.017         0.383                 0.176
+              railway      271             132        0.487                0.243         0.054                 0.019         0.343                 0.192
+            wikipedia      397             229        0.577                0.236         0.041                 0.020         0.521                 0.182
+       wikipedia_list      106              69        0.651                0.246         0.034                 0.020         0.547                 0.192
+empanelment_insurance     2874            1178        0.410                0.185         0.033                 0.015         0.287                 0.159
+ research_or_document      919             456        0.496                0.225         0.041                 0.018         0.428                 0.172
+            directory     7901            2233        0.283                0.124         0.024                 0.006         0.213                 0.130
+  distinct urls [0,3): records 333, contam rate 0.042, mean q_share 0.0056
+  distinct urls [3,8): records 4316, contam rate 0.084, mean q_share 0.0057
+  distinct urls [8,15): records 2201, contam rate 0.223, mean q_share 0.0159
+  distinct urls [15,30): records 1269, contam rate 0.415, mean q_share 0.0336
+  distinct urls [30,1000000): records 1840, contam rate 0.596, mean q_share 0.0538
+== Q6 cluster / source ids
+records whose source_content_id is shared with another record: 1324/9959 (13.3%)
+  max records per source_content_id 27
+  shared_content=False: records 8635, contam rate 0.227, foreign rate 0.179
+  shared_content=True: records 1324, contam rate 0.397, foreign rate 0.310
+  distinct source_ids [0,1): records 730, contam rate 0.067
+  distinct source_ids [1,2): records 2785, contam rate 0.084
+  distinct source_ids [2,5): records 2855, contam rate 0.172
+  distinct source_ids [5,10): records 1345, contam rate 0.376
+  distinct source_ids [10,100): records 2244, contam rate 0.539

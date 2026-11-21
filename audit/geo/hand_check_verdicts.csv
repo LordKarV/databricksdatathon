@@ -1,0 +1,41 @@
+sample,unique_id,name,stated_state_ok,pin_ok,coords_ok,verdict,note
+state,a33cd3af-c441-4c8f-814b-155bf32a0ef1,Sarvesh Dental Care,yes,yes,no,coords_wrong,Chennai 600087 address; coords in Puducherry 131 km away
+state,ba37fc5d-ab00-4b0c-987a-dfa6550bd9e8,Government Maternity Hospital Tirupati,yes,yes,no,coords_wrong,coords in Nirmal Telangana 618 km; phones +9140 and a Telangana govt URL also merged in
+state,ac18dda9-5acf-4446-add7-ebc725ef403a,V Care Dental Bhiwadi,yes,yes,yes,detector_fp_border,Bhiwadi Rajasthan sits on the Haryana border; nearest PIN centroid is in Rewari
+state,d46ea0bd-1dda-44b6-9eda-189e0df43d27,Root Care Dental Clinic Jammu,yes,yes,no,coords_wrong,coords in Srikakulam AP 1831 km away
+state,aba95c4a-3cda-410d-aa95-afe7d995006d,Goenkas ChikitSA Raipur,yes,yes,yes,detector_fp_directory,nearest PIN 230141 (Pratapgarh UP) was geocoded into Raipur by India Post; fixed by state-box rule
+state,6a02e407-308d-4fa9-ab4f-c29f11f107db,Vivekananda Eye Hospital Raipur,yes,yes,no,coords_wrong,coords in Chhindwara MP 309 km
+state,5cb454ef-4ff7-4948-b832-511ae126e526,Tanvir Hospital Hyderabad,no,yes,yes,stated_wrong,stated Andhra Pradesh for Hyderabad (pre-2014 state)
+state,e6e7c8da-62a6-46fe-8e21-b1a568782cdd,Aditya Hospitals Guntur,yes,no,no,merged,Guntur hospital text merged with an NH-16 Nirmal-Mancherial (Telangana) address and Luxettipet URL
+state,da51c57a-62b5-45fb-9997-43722b48cd95,District Hospital Mandya,yes,no,no,merged,Mandya (Karnataka) name merged with Mandla (MP) PIN 481661 coords and mpdoctors URL
+state,758acece-ec18-48aa-adc7-280bd73eb901,Parveen Medilab Panchkula,no,yes,yes,stated_wrong,Panchkula is Haryana; stated Chandigarh (tri-city)
+state,bf01bc89-9607-4a94-86c8-3b9cbae7079c,PHC Katarkhatav,yes,no,no,merged,Maharashtra PHC; PIN 261405 Sitapur UP; coords Noida; URLs Satara Nashik Sindhudurg Sitapur
+state,1eb2eee4-87b8-4619-bfe9-118a8ddbcbc8,Gayatri Hospital Ghaziabad,yes,no,no,merged,Ghaziabad (+91120 phone) merged with Jalgaon (PIN 425001 +91257 phone); coords Pilibhit match neither
+state,d89f790f-a217-4a8a-a253-dc1991506217,Vijayawada Nursing Home,yes,no,yes,pin_wrong,PIN 500002 is Hyderabad; Suryaraopet address and coords are Vijayawada
+state,239cfb6f-cfd6-4653-984d-aaeeceb1c05e,Smit Hospital Songadh,yes,no,yes,merged,PIN 425418 Nandurbar MH; Pandesara address and coords are Surat; description says Surendranagar
+state,40f9f8de-b064-4b43-b30f-64f88f104494,Kalika Diagnostic Centre Agartala,yes,yes,yes,detector_fp_directory,India Post labels 799001 TELANGANA/Nirmal; fixed by postal-zone relabel
+far_same_state,45f192ec-bdb1-48d5-a129-2862a025b596,Sanjivani Hospital Dewas,yes,yes,no,coords_wrong,coords in Rewa 562 km
+far_same_state,d356b7ca-0d3b-4586-b8b2-369157c1fec2,Meditrina Hospital,yes,yes,no,merged,city Thrissur; Ayathil Kollam PIN; coords Thiruvananthapuram; phones 0474 and 0471 (two Meditrina units)
+far_same_state,50c14ceb-71eb-4b3d-8e10-9f4826b53f90,Seven Sisters Hospital Jorhat,yes,yes,no,coords_wrong,coords Goalpara 364 km; the mappls source URL itself encodes 26.756 94.180 (Jorhat)
+far_same_state,f4e59208-5411-4232-bf6c-11493a8ee88b,Sanjeevani Hospital Unnao,yes,unclear,unclear,merged,city Unnao; address Sandila bus stop (Hardoi) and Pin Code-202001 (Aligarh); coords Lucknow
+far_same_state,9dd394ed-bce1-4cb7-bf16-b2a9c915fb52,Olympus Endoscopy Unit Jorhat,yes,yes,no,coords_wrong,coords 71 km east of Jorhat (Sivasagar)
+far_same_state,230bed98-862e-4677-b01f-4c39441dc0f3,Niramay Clinic Pune,yes,no,no,pin_and_coords_wrong,Kothrud Pune address; PIN 413304 Solapur; coords Palghar
+far_same_state,69a7e08c-7767-41d5-a756-1ffe30c92725,The Smile Center Ahmedabad,yes,yes,no,coords_wrong,SG Highway Ahmedabad; coords Bharuch 164 km
+far_same_state,2e8697d6-1d34-4834-8d2c-47435564bdf9,Tripathi Hospital,yes,unclear,unclear,merged,Sector 119 Noida and Faizabad HO Rekabganj (Ayodhya) in one address
+far_same_state,cd45cb29-b39c-4a69-8b8f-00ee98452522,Om Hospital Nashik,yes,yes,no,coords_wrong,Nasik Road address; coords Gondia 678 km
+far_same_state,e66893dc-4571-4442-ac28-09d725891f20,Smile Ever Dental Clinic Bengaluru,yes,yes,no,coords_wrong,Dollars Colony Bengaluru; coords Mysuru 127 km
+far_same_state,eac48a0c-ddae-43cc-acb9-659672cba293,RHC Maroli,yes,no,no,merged,Maroli (Navsari); PIN Gir Somnath; coords Bhavnagar; description is Rapar CHC (Kutch)
+far_same_state,62c5243b-baba-4fb7-b34b-90535cb01247,Vatsalya Hospital Dhule,yes,no,no,merged,city Dhule; PIN 421503 Thane; coords Pune; URLs Jalgaon and Dhule taluks
+far_same_state,d027fac1-2b1e-49f1-ac3f-e723f42aef7d,Vijay Dental Clinic,yes,unclear,unclear,merged,Lucknow address and coords vs Shankargarh (Prayagraj) city and PIN; two clinics
+far_same_state,29770a33-e6dc-40c6-b804-e07c22b5e574,OmShree Sidha Hospital Kottayam,yes,yes,yes,detector_fp_directory,2 coarse BOs outvoted Vayala SO in the 686587 centroid; fixed by preferring non-coarse offices
+far_same_state,b74426fe-c3dd-4247-b511-a473a54d2273,National Hospital,yes,unclear,unclear,merged,Kondhwa Pune address and PIN 411048 vs Mumbai city coords and Chembur description
+mid_band,88d44727-4c92-4cc9-afc2-8456361387e0,Green Heals Hospital Silchar,yes,yes,yes,pin_centroid_imprecise,coords are Meherpur Silchar; 788015 centroid 49 km off
+mid_band,de36a67d-82ae-42d9-9d48-07445e16f091,Siva Hospital,yes,yes,unclear,merged,city Tenkasi but Attur-Rasipuram road address; PIN Rasipuram; coords Salem side
+mid_band,2dfc406c-6be0-4fb1-8bb5-102a6f9a071d,Dento Miracles Jorhat,yes,yes,yes,pin_centroid_imprecise,coords are Jorhat town; 785001 centroid 17 km off
+mid_band,4727d4e8-9de8-4007-8fb7-a388dbf30ddb,Cachar Cancer Hospital Silchar,yes,yes,yes,pin_centroid_imprecise,coords are Meherpur Silchar; centroid 49 km off
+mid_band,f995d517-e18b-4337-a0a5-3cfebc68661b,Mittal Bhilai Hospital,yes,yes,yes,pin_centroid_imprecise,coords Bhilai; 490001 is a large PIN
+mid_band,a273b62d-b39a-4be5-8ca4-c46d651e27e4,Dr Sumesh Homoeopathic Kozhikode,yes,yes,yes,pin_centroid_imprecise,coords Malaparamba Kozhikode
+mid_band,c0d67e15-60db-4cc7-84bc-89f4f870c0bf,Kasturi Das Memorial Hospital,yes,yes,yes,pin_centroid_imprecise,coords Maheshtala; centroid 21 km off
+mid_band,a03289ff-9907-468a-ab84-a43e5fdb7db0,Woodland Hospital Shillong,yes,yes,no,merged,Dhankheti Shillong plus Amlarem Jowai-793150 in address; coords at Jowai
+mid_band,fb4d070b-884b-4714-b494-f7a9408e7e74,Apollo Gleneagles Kolkata,yes,yes,unclear,pin_centroid_imprecise,coords about 7 km from the real hospital; 700054 centroid 23 km off (Kolkata offices store degrees-minutes as decimals)
+mid_band,1abd52f3-879a-4c54-aba6-d59043d9f601,Sadar Hospital Blood Bank Gopalganj,yes,yes,no,coords_wrong,coords are Siwan town 38 km south

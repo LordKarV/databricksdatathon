@@ -1,0 +1,41 @@
+	key	cues	sentence
+20545	c1897c75|trauma|capa	negation	Joshi Hospital does not list trauma/emergency levels, units, clinical programs, accreditation, or patient capacity in the provided content
+12066	6f8a8416|mri|equi	partner	MRI facility (outsourced)
+20132	bc5212e6|dialysis|equi	future	Dialysis Room (Under Construction)
+6335	3cf722e8|trauma|desc	camp	Hemani Hospital is located in Bhaktinagar Society, Rajkot, Gujarat, India, and offers services including Blood Donation Camp Service and Hospital 24 Hour Emergency Service.
+14822	892e9f3c|mri|equi	partner	Outsourced Radiology & Diagnostics including X-Ray, MRI, CT, and USG
+3876	28041958|icu|proc	referral	Provides high dependency unit care for continuous monitoring after resuscitation until transfer to rooms or ICU
+10217	5eeb0152|dialysis|desc	negation	Services include Fibromyalgia Treatment; Neurological Brain Diseases Treatment; Lymphedema Treatment; Aplastic Anemia Treatment; Hepatitis B with Liver Cirrhosis Treatment without Surgery; Erectile Dysfunction; Kidney Renal Failure Cure Without Dialysis; Critical and Surgical Cases.
+5742	37e39295|nicu|capa	negation	NICU facility not available
+14006	813e5f2d|mri|capa	negation	MRI and CT scans are not available
+1134	0c5a8e83|icu|capa	future	From January 2026, DM Pediatric Critical Care will be started and new PDCC courses will commence in Pediatric Neurology, Pediatric Nephrology, and Pediatric Rheumatology
+12473	72b1bbcd|dialysis|capa	future	Upcoming Dialysis Wing
+4873	30494fe0|icu|capa	future	Plans to add new ICUs and operating theatres to achieve a 400-bed capacity by the end of 2024.
+24648	ecd07024|mri|equi	past	Orbit MRI with T2-weighted sequences used to measure posterior globe angle
+10594	62627348|icu|capa	future	Plans to open a 100-bed super-specialty tower block with dedicated ICUs, modular operating rooms, and a future cath lab in August 2025
+16736	9bef2a8e|trauma|capa	negation	Emergency services not available
+20585	c250d425|trauma|desc	future	Center of Excellence: Urology; 2D Echocardiography; Stress Test / TMT; Diabetes & Endocrinology; Cardiology; Diabetic Foot Treatment; Medicine; Orthopaedic; Gynaecology; Paediatric; General Surgery; Accident & Trauma; Ear-Nose-Throat (ENT); Upcoming Services.
+6499	3e4ba6fb|csection|capa	negation,referral	Caesarean section facility not available on-site; referrals to LNJP Kurukshetra
+8084	4d6c620f|trauma|capa	negation	Does not provide emergency services
+7017	43d4dca8|trauma|proc	referral	Provides initial emergency treatment in the casualty department; a duty doctor delivers preliminary care and initiates referral to a senior doctor.
+25427	f6e9dc6e|cardiac_surgery|proc	camp	Organizes a free pediatric heart surgery camp in Gorakhpur (Purvanchal) with Dr. Neeraj Awasthi of Max Super Specialty Hospital, Delhi
+25428	f6e9dc6e|cardiac_surgery|capa	camp	First free pediatric heart surgery camp in Purvanchal
+15385	8dcf50d8|mri|capa	future	MRI and CT scan services will be available 24x7 under the NHM project.
+25431	f7260649|trauma|capa	negation	Outpatient care facility; does not provide emergency services
+7348	469f772c|cardiac_surgery|proc	negation	Performs non-surgical valve replacement procedures
+17589	a4f28974|mri|desc	future	Upcoming RLJ Akhand Jyoti Eye Hospital Community Centre in Mastichak, Bihar; co-founded by Mrityunjay Tiwary (Co-Founder and CEO) of Akhand Jyoti Eye Hospital; designed to deliver more than 350,000 surgeries per year; in partnership with Sankara Eye Foundation USA.
+10216	5eeb0152|dialysis|proc	negation	Kidney renal failure cure without dialysis
+11259	685f1cac|cardiac_surgery|capa	negation	Does not have departments for cancer, heart surgery, or brain-related ailments
+11495	6a46bfc2|dialysis|desc	camp	It is operated by the Gita Bhawan Trust and provides OPD services, multiple operation theaters, ICCU, dialysis, obstetric services, epilepsy camps, and free meals.
+18290	acb49d43|mri|equi	partner	MRI services offered via outsourced provider
+24269	e85087f5|mri|proc	partner	MRI/CT imaging services (outsourced)
+15921	92dd37f1|trauma|capa	future	Multi-specialty trauma center is under construction at the hospital
+2625	1ad3a80d|mri|equi	negation	No CT scan or MRI facility on-site
+20133	bc5212e6|dialysis|equi	future	Dialysis room (under construction)
+22680	d8365c70|mri|equi	partner	MRI scanner (outsourced)
+10312	5f972072|cardiac_surgery|proc	negation	TAVI/TAVR (valve replacement without surgery)
+10560	62092a68|cardiac_surgery|capa	negation	Does not perform bypass surgery or angioplasty
+11186	679c721f|icu|capa	referral	Patients from Warora can be transferred to a Covid Hospital in Chandrapur with ICU
+6159	3ada0db8|mri|capa	partner	Outsources CT, MRI, stress echocardiography, and PET scans for imaging
+17959	a948a2d7|mri|capa	negation	No MRI facility at Civil Hospital Palwal
+871	093844ce|trauma|capa	partner	Tie-up with nearest allopathic hospital to provide emergency services

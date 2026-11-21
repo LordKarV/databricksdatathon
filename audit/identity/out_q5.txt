@@ -1,0 +1,146 @@
+rows 9970 distinct unique_id 9959 distinct cluster_id 9959
+cluster_id length dist {32: 6229, 36: 3741}
+cluster_id == unique_id: 358 of 9970
+cluster_id == source_content_id: 0
+source_content_id == content_table_id: 9970
+rows in shared cluster_id: 22 groups 11
+rows in shared unique_id: 22 groups 11
+same row set: True
+
+ 011683bd-933a-48ef-b897-aee0346bd4e8 n= 2 | differing cols: []
+                           unique_id                         name address_city    pin  latitude  longitude
+c9518151-2032-4f53-823b-d42acd0aad95 HCG Multi Specialty Hospital    Ahmedabad 380006 23.028898  72.564301
+c9518151-2032-4f53-823b-d42acd0aad95 HCG Multi Specialty Hospital    Ahmedabad 380006 23.028898  72.564301
+
+ 0196693f-7006-4213-a676-3a0bb41a9f35 n= 2 | differing cols: []
+                           unique_id           name address_city    pin  latitude  longitude
+c11d175a-ae2b-4b31-90b5-fe73b3a040cb Vanni Hospital Aruppukottai 626101  9.507139    78.0979
+c11d175a-ae2b-4b31-90b5-fe73b3a040cb Vanni Hospital Aruppukottai 626101  9.507139    78.0979
+
+ 04836a92-e5de-4f9b-a6e7-c130b259680a n= 2 | differing cols: []
+                           unique_id                             name address_city    pin  latitude  longitude
+b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60 Yadgire Super Specialty Hospital     Amravati 444606 20.927197  77.767342
+b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60 Yadgire Super Specialty Hospital     Amravati 444606 20.927197  77.767342
+
+ 04d0bc48-ec24-4b99-8eb2-0714c9c82d17 n= 2 | differing cols: []
+                           unique_id                name address_city    pin  latitude  longitude
+9264b21d-4aea-460a-9c77-613407df8439 Trustwell Hospitals    Bengaluru 560002 12.960761  77.583984
+9264b21d-4aea-460a-9c77-613407df8439 Trustwell Hospitals    Bengaluru 560002 12.960761  77.583984
+
+ 0511b2e7-084b-4e51-b473-a637201f6aa6 n= 2 | differing cols: []
+                           unique_id                             name address_city    pin  latitude  longitude
+c8aa3363-35eb-4c70-ae7a-0a86307f49c2 Durgapur Sub Divisional Hospital     Durgapur 713212  23.52603  87.342133
+c8aa3363-35eb-4c70-ae7a-0a86307f49c2 Durgapur Sub Divisional Hospital     Durgapur 713212  23.52603  87.342133
+
+ 066c3e2f-b765-4ed3-ad4c-102dd613213c n= 2 | differing cols: []
+                           unique_id                          name address_city    pin  latitude  longitude
+08344cdb-f455-4c22-8d31-a0a8e849124b MOSC Medical College Hospital   Kolenchery 682311  9.393335  76.578682
+08344cdb-f455-4c22-8d31-a0a8e849124b MOSC Medical College Hospital   Kolenchery 682311  9.393335  76.578682
+
+ 06b86208-2ffe-43af-8bb2-a9e694fc59bc n= 2 | differing cols: []
+                           unique_id         name address_city    pin  latitude  longitude
+fced074a-ce12-47a8-b52e-e40d876fc122 PPK Hospital   Marthandam 629165 11.078434  77.884155
+fced074a-ce12-47a8-b52e-e40d876fc122 PPK Hospital   Marthandam 629165 11.078434  77.884155
+
+ 07aebd15-c5aa-45a7-925d-aef2b813aaaa n= 2 | differing cols: []
+                           unique_id                               name address_city    pin  latitude  longitude
+1a0f7290-f227-49fe-9b92-a8c698a165d8 Malhotra Super Speciality Hospital        Baddi 173205 30.948971  76.831795
+1a0f7290-f227-49fe-9b92-a8c698a165d8 Malhotra Super Speciality Hospital        Baddi 173205 30.948971  76.831795
+
+ 08f3db3aaa8a271803a4c0eee1661cbe n= 2 | differing cols: []
+                           unique_id              name address_city    pin  latitude  longitude
+d643f869-169b-4597-bb15-1335ebaba9d7 Chanddni Hospital         Kota 324005 25.142376   75.83931
+d643f869-169b-4597-bb15-1335ebaba9d7 Chanddni Hospital         Kota 324005 25.142376   75.83931
+
+ 08f6031a3084587503fd18b589228fe0 n= 2 | differing cols: []
+                           unique_id                                name address_city    pin  latitude  longitude
+277e82f0-241a-458a-b9fc-e32d2b3dfcba Sabine Hospital and Research Centre Muvattupuzha 686674 10.014044  76.567657
+277e82f0-241a-458a-b9fc-e32d2b3dfcba Sabine Hospital and Research Centre Muvattupuzha 686674 10.014044  76.567657
+
+ 08f608b56a2642b1036dd8ed25ccd83b n= 2 | differing cols: []
+                           unique_id                    name address_city    pin  latitude  longitude
+fe23dd4d-7cca-47b3-aad4-293b62e32cb2 Shraddha Heart Hospital       Mumbai 400086 19.088112  72.905197
+fe23dd4d-7cca-47b3-aad4-293b62e32cb2 Shraddha Heart Hospital       Mumbai 400086 19.088112  72.905197
+
+rows sharing source_content_id: 1343 groups 413 max group 27
+source_content_id groups whose rows all share cluster_id: 8
+
+== differing values in the 11 duplicated unique_id pairs
+08344cdb-f455-4c22-8d31-a0a8e849124b {}
+1a0f7290-f227-49fe-9b92-a8c698a165d8 {}
+277e82f0-241a-458a-b9fc-e32d2b3dfcba {}
+9264b21d-4aea-460a-9c77-613407df8439 {}
+b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60 {}
+c11d175a-ae2b-4b31-90b5-fe73b3a040cb {}
+c8aa3363-35eb-4c70-ae7a-0a86307f49c2 {}
+c9518151-2032-4f53-823b-d42acd0aad95 {}
+d643f869-169b-4597-bb15-1335ebaba9d7 {}
+fced074a-ce12-47a8-b52e-e40d876fc122 {}
+fe23dd4d-7cca-47b3-aad4-293b62e32cb2 {}
+
+32-hex cluster_id found inside own source_ids: 398 of 6229
+uuid cluster_id equal to own unique_id: 358 of 3741 | equal to any unique_id: 358
+
+== largest source_content_id groups
+group size distribution: {2: 284, 3: 54, 4: 24, 5: 10, 6: 11, 7: 4, 8: 3, 9: 1, 10: 5, 11: 3, 12: 1, 14: 2, 15: 1, 16: 1, 17: 2, 18: 1, 19: 1, 22: 4, 27: 1}
+
+ cddadadb-259a-49d3-8240-e3bb9bbdc209 27
+                           unique_id                 name address_city    pin               officialWebsite
+019bb317-b4e2-42c3-8548-661888a5ded8        Apex Hospital     Varanasi 221004      apexhospitalvaranasi.com
+0580bb14-c959-499f-b390-9ecfa4589eb4      Pareek Hospital         Agra 282002                           NaN
+31625db4-d5c4-4448-b21d-008d8c444a82 Nirmala Nursing Home       Hardoi 241001     nirmalainstitutehardoi.in
+390fa6ee-297f-4063-8fbe-82f5e7db7258   Heritage Hospitals     Varanasi 221005 heritagehospitalgorakhpur.com
+521ae3a1-a4b0-4b56-9096-8dfe5a50d04f       Bhola Hospital    Allahabad 211002                           NaN
+547f6f09-3974-4a2f-b458-c9a4b664518f Katiyar Nursing Home       Hardoi 241001                           NaN
+54dc4aab-112a-44fc-935e-402832f2e5d9      Ganesh Hospital    Ghaziabad 201001           ganeshhospitals.com
+5a1d47b9-2256-470c-a0f7-9589f05ad913       Kashi Hospital     Varanasi 221005                           NaN
+  distinct names 27 distinct cities 14 distinct description 27 distinct capability 27
+
+ 92f4f4bf-7862-43f3-ae6e-f120cc59e49b 22
+                           unique_id                            name address_city    pin         officialWebsite
+001316e5-1cf1-4c5f-9c81-3f8d8118df3f     Samved Orthopaedic Hospital  Navrangpura 380009          samvedortho.in
+0e2b6172-7365-4314-bb34-1fb5d855ca9b                Navrang Hospital     Vadodara 390001     navranghospital.com
+10c112ee-2f4c-40cd-aa39-3c5044b2ded8 Maheshwari Orthopaedic Hospital     Jamnagar 361008     maheshwariortho.com
+1c23b3b4-d9e4-46ca-a6ec-498dbb03a42a                  Rathi Hospital     Jamnagar 361005        rathihospital.in
+23636b45-7a77-4c64-b0eb-afffe9c93ec9  Shrimati Jayaben Mody Hospital   Ankleshwar 393002 jayabenmodyhospital.org
+24ee20d1-acb0-43e7-9335-48b9733b5937              Sanjivani Hospital    Ahmedabad 380061  sanjivanihospitals.com
+52e0e475-ae3e-4305-a05a-a3686eaee654                    SAL Hospital    Ahmedabad 380054                     NaN
+7407a4ce-b283-41b5-8887-21f1d1f57955                  Anand Hospital     Rajpipla 393145       anandhospitals.in
+  distinct names 22 distinct cities 8 distinct description 22 distinct capability 22
+
+ 1f311955-3650-4ced-a2c9-6217a6e16cda 22
+                           unique_id                                        name address_city    pin             officialWebsite
+05773700-259f-4ce2-a83b-ea95c662ec1d        Royal Care Super Speciality Hospital   Coimbatore 641062                   mdcrc.org
+1d3eba0c-607c-4195-a818-11147ff5d301   Chettinad Hospital and Research Institute  Kelambakkam 603103     chettinadhealthcity.com
+30778b83-b236-490c-9e1e-ec34a562c229                   Muthu Meenakshi Hospitals   Pudukottai 622001 muthumeenakshihospitals.com
+49e0f69c-96c3-448a-af00-81dc0229035f                    Sri Ramakrishna Hospital   Coimbatore 641044  sriramakrishnahospital.com
+5048b210-d2dc-4dcd-b220-a029f41bbab9 Mahatma Gandhi Memorial Government Hospital       Trichy 620017                         NaN
+54946f79-25d8-40a7-b43b-9e41b888fd5d                  Kamakshi Memorial Hospital      Chennai 600100                   drkmh.com
+675aec61-780e-4cb1-a1db-adaa50defee4                             Sugam Hospitals      Chennai 600019           sugamhospital.com
+7545424e-5773-43ff-8e38-347d04a06874                            Galaxy Hospitals  Tirunelveli 627003                         NaN
+  distinct names 22 distinct cities 11 distinct description 22 distinct capability 22
+
+ 58c46c51-a37c-4384-8d7b-a20adde9650e 2
+                           unique_id                    name address_city    pin          officialWebsite
+00197d6a-8707-49fe-90a6-018c86b05903 Fortis Hospital, Kangra       Kangra 176001 fortishospitalkangra.com
+d966c3df-8bba-4d84-b513-9904cde555d4         Ameesh Hospital        Solan 173212                      NaN
+  distinct names 2 distinct cities 2 distinct description 2 distinct capability 2
+
+ 6a72f205-0d65-4ae1-9375-23c557d3ed66 2
+                           unique_id                          name address_city    pin officialWebsite
+0035ebd7-6492-4691-a871-8640af2d3158 Orthodontic and Dental Clinic    Mangalore 575001   rohanmasc.com
+c90f0fd7-42cf-43ce-b640-d6d7496bb3a6                 Vijaya Clinic      Kavital 577134             NaN
+  distinct names 2 distinct cities 2 distinct description 2 distinct capability 2
+
+ 0290f227-5f44-443c-a2d3-9b0ee45983f0 2
+                           unique_id                 name address_city    pin        officialWebsite
+0088ffdf-0639-4fdb-9788-c77bd029e964 Mahavir Ent Hospital         Kota 324009 mahavirenthospital.com
+e273f7f2-59f5-4426-9e4f-a20face60074      Rungta Hospital         Kota 302017     rungtahospital.com
+  distinct names 2 distinct cities 1 distinct description 2 distinct capability 2
+same source_content_id: pairs 3779, share a phone 143, share a source URL 3779, same state 3285
+random pairs: pairs 3779, share a phone 8, share a source URL 6, same state 271
+cddadadb-259a-49d3-8240-e3bb9bbdc209 27 URLs common to all members: ['http://www.healthinsuranceindia.org/cashless_hospital_india/uttar_pradesh.html']
+92f4f4bf-7862-43f3-ae6e-f120cc59e49b 22 URLs common to all members: ['http://www.healthinsuranceindia.org/cashless_hospital_india/gujrat.html']
+1f311955-3650-4ced-a2c9-6217a6e16cda 22 URLs common to all members: ['https://transtan.tn.gov.in/kidney-transplantation.php/address-and-contact-details-of-appropriate-authority-and-authorization-committee-for-tamil-nadu.php']
+cf231c64-dcca-425f-afe7-0bb737ade86b 22 URLs common to all members: ['http://www.healthinsuranceindia.org/cashless_hospital_india/maharashtra.html']
+TRANSTAN seed group: members 22 | claim kidney/renal transplant: 14

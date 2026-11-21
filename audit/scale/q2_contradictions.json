@@ -1,0 +1,423 @@
+{
+ "denominator_rows": 9970,
+ "clinic_capacity_ge_50": {
+  "count": 37,
+  "denominator_clinics_with_capacity": 124
+ },
+ "clinic_capacity_ge_100": {
+  "count": 20,
+  "denominator_clinics_with_capacity": 124
+ },
+ "clinic_capacity_ge_200": {
+  "count": 13,
+  "denominator_clinics_with_capacity": 124
+ },
+ "clinic_capacity_ge_100_examples": [
+  [
+   "279fa2c2-e4ef-4a9a-9285-888887133057",
+   "Chawla Nursing Home",
+   200.0,
+   1.0
+  ],
+  [
+   "29285bf8-a876-48b3-936f-d1b48b82f949",
+   "Nagarmal Modi Seva Sadan",
+   212.0,
+   1.0
+  ],
+  [
+   "2b302013-105b-43de-8877-721d1922d9cc",
+   "Kiran Rehab Centre",
+   100.0,
+   15.0
+  ],
+  [
+   "314a8de5-fb2f-4b70-a696-b45168e0eb83",
+   "The Heart Clinic",
+   200.0,
+   45.0
+  ],
+  [
+   "32f97788-fe6d-4a3a-8129-f8e9a3e87ef0",
+   "ESI SD Kamarhati",
+   350.0,
+   NaN
+  ],
+  [
+   "37546cf9-21de-4c8b-abb1-007e994de1fd",
+   "SH Medical Centre",
+   250.0,
+   NaN
+  ],
+  [
+   "4ecb0ef8-08ed-4353-88ef-ad0ab02c24ed",
+   "Dr VK Chawla Clinic - Skin care, 4, Anand Ashram Road, Opp. Mental Hospital, Rampur Garden, Bareilly",
+   200.0,
+   NaN
+  ],
+  [
+   "51242946-deb5-463e-9e78-e7fbb291d087",
+   "American Oncology Institute",
+   500.0,
+   450.0
+  ],
+  [
+   "5506f14e-e1e9-44a7-9e76-09304e2355d4",
+   "Park Clinic",
+   115.0,
+   NaN
+  ],
+  [
+   "7ca4ff5d-f4a4-4c93-b2ad-3b6e9ae10076",
+   "Attingal (Medical Centre)",
+   580.0,
+   NaN
+  ],
+  [
+   "8aa3360a-6e7f-4428-ae4c-0bc580f18007",
+   "Srikamatchi Medical Centre",
+   300.0,
+   NaN
+  ],
+  [
+   "9f25a38c-c40a-43df-bf27-180299e144e1",
+   "Techno India Dama Healthcare & Medical Research Centre",
+   100.0,
+   100.0
+  ]
+ ],
+ "hospital_1_doctor_ge_15_specialties": {
+  "count": 246,
+  "denominator_hospitals_with_1_doctor": 450
+ },
+ "hospital_1_doctor_ge_20_specialties": {
+  "count": 158,
+  "denominator_hospitals_with_1_doctor": 450
+ },
+ "hospital_1_doctor_ge_30_specialties": {
+  "count": 19,
+  "denominator_hospitals_with_1_doctor": 450
+ },
+ "hospital_1_doctor_ge_20_spec_examples": [
+  [
+   "00a604ee-9942-42e1-adee-6b7f6344b085",
+   "Vraj Children Hospital",
+   21,
+   NaN
+  ],
+  [
+   "02f048fa-2df2-4e47-a960-03cac5b429b8",
+   "Shalby Hospitals",
+   24,
+   NaN
+  ],
+  [
+   "040aa56e-8de4-49b3-9b75-89e6010f1871",
+   "Shree Raghunath Hospital",
+   27,
+   NaN
+  ],
+  [
+   "04b0ff52-30db-47b9-9b06-2fbbb9cb6759",
+   "Arasi Hospital",
+   23,
+   30.0
+  ],
+  [
+   "06b4c65b-de01-4307-88b4-756a376997e5",
+   "SRV Hospital",
+   27,
+   150.0
+  ],
+  [
+   "0afa0b00-0807-4d1d-9eec-d620eb199be0",
+   "Bhaskara hospital",
+   28,
+   NaN
+  ],
+  [
+   "0c199bdf-5e22-4906-af58-c055dad6aba7",
+   "IRIS Hospital",
+   29,
+   300.0
+  ],
+  [
+   "0e1258ae-8531-4c7f-bd90-c9c0a7564d69",
+   "Swadesh Basu Hospital",
+   20,
+   NaN
+  ],
+  [
+   "0e54a05c-5652-43e6-bdc1-09b7c4561efc",
+   "Jalaram Hospital",
+   22,
+   NaN
+  ],
+  [
+   "0e9707a4-a150-4a24-b8a3-c282d57894e1",
+   "Patliputra Hospital and Research Centre",
+   25,
+   NaN
+  ],
+  [
+   "0eba3391-79fb-4e4b-a53d-d4b167d4f657",
+   "Max Neurocare And Superspeciality Hospital",
+   21,
+   NaN
+  ],
+  [
+   "0efe603a-46ab-4316-a57d-87c74b9147dd",
+   "Deepam Hospital",
+   22,
+   12.0
+  ]
+ ],
+ "doctors_le_2_capacity_ge_200": {
+  "count": 57,
+  "denominator_both_present": 1334,
+  "examples": [
+   [
+    "0c199bdf-5e22-4906-af58-c055dad6aba7",
+    "IRIS Hospital",
+    1.0,
+    300.0
+   ],
+   [
+    "137fed76-fec1-4973-9b8c-7d2795862240",
+    "NKP Salve Institute of Medical Sciences and Research Centre, Nagpur",
+    1.0,
+    200.0
+   ],
+   [
+    "231f141f-cc05-42a9-949a-accf4bab933c",
+    "United CIIGMA Hospital",
+    1.0,
+    300.0
+   ],
+   [
+    "23cbeff2-444f-48e6-b185-4e3a43f65d09",
+    "Narayan Memorial Hospital",
+    1.0,
+    200.0
+   ],
+   [
+    "279fa2c2-e4ef-4a9a-9285-888887133057",
+    "Chawla Nursing Home",
+    1.0,
+    200.0
+   ],
+   [
+    "29285bf8-a876-48b3-936f-d1b48b82f949",
+    "Nagarmal Modi Seva Sadan",
+    1.0,
+    212.0
+   ],
+   [
+    "293fab7f-bc5a-4981-8e01-3706543218cc",
+    "Sir H. N. Reliance Foundation Hospital",
+    2.0,
+    345.0
+   ],
+   [
+    "314219b2-80a4-486b-b19e-b205d4eb9e22",
+    "Jubilee Memorial Hospital",
+    1.0,
+    200.0
+   ],
+   [
+    "3825b33f-8ad0-451c-9b06-cc5693d837c2",
+    "Care Institute of Medical Sciences, Ahmedabad",
+    1.0,
+    350.0
+   ],
+   [
+    "3846e58f-41e5-4d05-808c-da0dafe7e93a",
+    "Fortis Hospital",
+    1.0,
+    259.0
+   ],
+   [
+    "436c7e0a-fd63-4414-9a28-c39ff09d4775",
+    "Lilavati Hospital and Research Centre, Mumbai, India",
+    1.0,
+    314.0
+   ],
+   [
+    "49e0f69c-96c3-448a-af00-81dc0229035f",
+    "Sri Ramakrishna Hospital",
+    1.0,
+    950.0
+   ]
+  ]
+ },
+ "doctors_gt_3x_beds_and_ge_50": {
+  "count": 10,
+  "examples": [
+   [
+    "06bdf654-fc15-49eb-89c5-e3c14010ebe1",
+    "Rela Hospital",
+    130.0,
+    30.0
+   ],
+   [
+    "4b7af570-9cf8-44a3-adec-a47b5d0b7715",
+    "Narhari Hospital",
+    2860.0,
+    200.0
+   ],
+   [
+    "54302144-0ee3-4a36-8c92-fc647a6cdd8f",
+    "Sai Hospital",
+    260.0,
+    30.0
+   ],
+   [
+    "60d478ce-f2fd-4981-b18a-292785fdc401",
+    "Kims Hospital",
+    6000.0,
+    200.0
+   ],
+   [
+    "656efe71-c867-4df5-aeaf-7a1f8168fa8a",
+    "Eskag Sanjeevani Multispeciality Hospital",
+    350.0,
+    73.0
+   ],
+   [
+    "788a47ec-36ae-43ba-afb0-ae07df9b1579",
+    "Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)",
+    387.0,
+    75.0
+   ],
+   [
+    "982d5dfa-f74f-4a42-8858-4e2bab101c2f",
+    "Woodlands Multispeciality Hospital",
+    800.0,
+    200.0
+   ],
+   [
+    "997f8a87-31b8-427e-87da-667a2d53c861",
+    "City Hospital",
+    98.0,
+    31.0
+   ],
+   [
+    "af676ce0-cdb3-4997-9104-0963f09e48f0",
+    "Indiranagar - Refractive (Lasik & SMILE) & Dry Eye Hub",
+    800.0,
+    5.0
+   ],
+   [
+    "cac5afcc-759e-49e4-aa2f-5f5885cf3e0c",
+    "Shushrusha Hospital",
+    700.0,
+    160.0
+   ]
+  ]
+ },
+ "text_beds": {
+  "records_any_bed_mention": 1974,
+  "records_with_text_total_candidate": 1774,
+  "capacity_present": 2516,
+  "both_present": 1639,
+  "agree_within_10pct": 1522,
+  "disagree": 117,
+  "capacity_null_text_has_total": 135,
+  "capacity_present_no_text_total": 877,
+  "records_with_conflicting_text_totals_gt_1p5x": 166
+ },
+ "text_doctors": {
+  "records_with_field_and_text_count": 1936,
+  "field_in_text_numbers": 1592,
+  "field_not_in_text_numbers": 344,
+  "examples": [
+   [
+    "00154d81-ce6b-4c73-a49b-4bd3c20580f7",
+    5.0,
+    [
+     3
+    ]
+   ],
+   [
+    "00fd1dbd-dc4d-47ea-9ffa-68ddf7e5d13f",
+    1.0,
+    [
+     2
+    ]
+   ],
+   [
+    "02331520-e043-4073-ad2c-f649608a1890",
+    11.0,
+    [
+     7,
+     10
+    ]
+   ],
+   [
+    "040aa56e-8de4-49b3-9b75-89e6010f1871",
+    1.0,
+    [
+     3
+    ]
+   ],
+   [
+    "0564ac18-9b8c-412d-9423-404067c4f820",
+    2.0,
+    [
+     3,
+     89
+    ]
+   ],
+   [
+    "05f66d89-94e4-4828-a686-a89c475a5c5e",
+    3.0,
+    [
+     20
+    ]
+   ],
+   [
+    "07353fb9-4929-4000-9d1c-af63b1cb873b",
+    23.0,
+    [
+     5
+    ]
+   ],
+   [
+    "0865f018-f65a-46ef-8e2f-3fd771e25e0c",
+    1.0,
+    [
+     2,
+     5
+    ]
+   ],
+   [
+    "08caca6c-5284-47c9-acf6-6ddb37a93028",
+    13.0,
+    [
+     265
+    ]
+   ],
+   [
+    "08edf7a5-16ba-4967-b28b-aef17d362260",
+    1.0,
+    [
+     2
+    ]
+   ],
+   [
+    "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+    39.0,
+    [
+     43
+    ]
+   ],
+   [
+    "09386a96-719e-4ead-bf1e-4081ea2d2c8d",
+    2.0,
+    [
+     1
+    ]
+   ]
+  ]
+ }
+}

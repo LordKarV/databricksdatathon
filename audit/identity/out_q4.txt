@@ -1,0 +1,88 @@
+records 9959
+stated state resolvable: 9668 | PIN in directory: 9674 | both: 9391
+  a_pin_state: 64 of 9391 (0.7%)
+  a_pin_far: 1562 of 9673 (16.1%)
+  a_foreign: 2164 of 9959 (21.7%)
+  a_geo_copy: 38 of 9959 (0.4%)
+  any_anom: 2986 of 9959 (30.0%)
+
+officialWebsite class: {'own_domain': 7914, 'none': 1602, 'directory_or_host': 352, 'government_portal': 91}
+own-domain websites whose domain matches the name: 6327 of 7914
+officialPhone class: {'mobile': 7113, 'landline': 1966, 'none': 495, 'shared_3plus_cities': 348, 'tollfree': 32, 'invalid': 5}
+
+anomaly rate by officialWebsite presence:
+                n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+has_website                                                               
+False        1602        0.008      0.235      0.232       0.002      0.35
+True         8357        0.007      0.147      0.215       0.004      0.29
+
+by officialPhone presence:
+              n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+has_phone                                                               
+False       495        0.011      0.338      0.380       0.000     0.511
+True       9464        0.007      0.152      0.209       0.004     0.289
+
+by website class:
+                      n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+web                                                                             
+directory_or_host   352        0.000      0.125      0.145       0.000     0.216
+government_portal    91        0.011      0.236      0.407       0.000     0.473
+none               1602        0.008      0.235      0.232       0.002     0.350
+own_domain         7914        0.007      0.147      0.215       0.004     0.292
+
+by own-domain name match (1 = domain resembles the name):
+                   n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+name_dom_match                                                               
+0.0             1587        0.006      0.141      0.208       0.004     0.285
+1.0             6327        0.007      0.149      0.217       0.004     0.293
+
+by phone class:
+                        n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+phone                                                                             
+invalid                 5        0.000      0.000      0.400       0.000     0.400
+landline             1966        0.011      0.181      0.267       0.001     0.346
+mobile               7113        0.005      0.140      0.186       0.005     0.265
+none                  495        0.011      0.338      0.380       0.000     0.511
+shared_3plus_cities   348        0.018      0.236      0.333       0.006     0.434
+tollfree               32        0.000      0.097      0.406       0.000     0.438
+
+hospitals only, by website class:
+                      n  any_anom
+web                              
+directory_or_host    96     0.250
+government_portal    84     0.440
+none                969     0.417
+own_domain         4461     0.339
+
+own name-matching domain AND non-shared official phone: 5964 of 9959
+          n  a_pin_state  a_pin_far  a_foreign  a_geo_copy  any_anom
+both                                                                
+False  3995        0.008      0.186      0.228       0.003     0.324
+True   5964        0.006      0.145      0.210       0.004     0.284
+a_pin_state {False: '29/3791', True: '35/5600'}
+a_pin_far {False: '724/3889', True: '838/5784'}
+a_geo_copy {False: '13/3995', True: '25/5964'}
+a_foreign {False: '912/3995', True: '1252/5964'}
+
+sample of own domains that do NOT resemble the name (hand check):
+                           unique_id                                                           name    address_city                         dom
+e81d79d3-1d20-4bb2-9ad9-f5adb3f065f0                                          Jainam Shree Hospital          Bhopal    spinejointpainclinic.com
+79c1b1d6-c2f6-4b18-8c0a-8adff4860b08                                           Chennai Stone Clinic         Chennai       urologylaparoscopy.in
+7ff4f08b-72f6-4caa-a312-d39dc22ee6be Dr. Rajendra Prasad Government Medical College Kangra at Tanda Kangra At Tanda                 rpgmc.ac.in
+04b5852f-d562-4a45-a8d4-be57218b1d01                         Sunshine Counseling and Therapy Center          Nashik        sunshinemindcare.com
+371530ef-c0eb-4164-b451-49fad0ad73ed     JSS Medical College and Hospital, Mysore, Karnataka, India          Mysore                 jssamch.org
+6529e2b9-b8af-45b8-98e8-ce0c1b7de4db                               Ashwini Multispeciality Hospital          Nashik          autadehospitals.in
+2fe82ee3-58eb-45d4-925f-45b95224fbce                             Span ICU and Hospital – Chandlodia       Ahmedabad        spancriticalcare.com
+98a5cc2f-f95b-42bb-832e-6f513f0d34f1                                  IPSC: Pain and Spine Hospital          Dwarka               ipscindia.com
+9584e815-5b59-424a-b02b-cce6bf82692f                                       Nasha Mukti Kendra Satna           Satna      shrigksdeaddiction.org
+25047c38-718e-4ce3-8234-9c71507f1d56                           The Face Head & Neck Cancer Hospital        Amravati         thefacehospital.com
+b366b14a-9028-48aa-91e1-25b6b382a12a                    Vikash Multi Speciality Hospital, Sambalpur       Sambalpur  krishnavikashhospitals.com
+d5e71233-69d2-4739-9ee4-11fed392c7e6                                        KMC Hospital, Mangalore       Mangalore        manipalhospitals.com
+10d85e5c-dc9a-4c3e-994e-fa268e9efd94                                 ACE Heart & Vascular Institute          Mohali       aceheartinstitute.com
+3ed9fb9f-bb54-4306-b9fb-2a2dee83a9f4                                   SP Dental and Implant centre         Bellary          spdentalclinic.com
+a02207a1-89ef-46df-bbd6-a3dc29e82d91                        Virk Multispeciality Hospital in Karnal          Karnal           virkhospitals.com
+feb37f7c-2d2e-4ffe-9934-aff7b12c94a6                                   Angel Skin Hair Laser Clinic       Ahmedabad         angelskinclinic.com
+0615f9ba-0076-47fe-8e38-31b488638ef7                            Vijay Dental and Orthodontic Clinic         Aligarh drshivanitomar.getmy.clinic
+0b5b001f-be4a-4f93-9cce-daa51dbde2da                                              Clinic Sector 32D      Chandigarh     chhabradentalclinic.com
+b615dce4-ea51-4575-b5d3-1544737e3081                                    Sahyog Maxillofacial Centre           Thane           sahyogmcentre.com
+948461c5-ada6-4a99-bd4c-5e62709bfafc           Integrated Acupuncture Hospital Mumbai (Maharashtra)          Mumbai   rsmacupuncturecollege.com

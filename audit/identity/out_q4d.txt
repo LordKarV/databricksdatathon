@@ -1,0 +1,9 @@
+has_web a_pin_far {False: '366/1558 (23.5%)', True: '1196/8115 (14.7%)'}
+has_web a_pin_state {False: '12/1517 (0.8%)', True: '52/7874 (0.7%)'}
+has_web a_foreign {False: '371/1602 (23.2%)', True: '1793/8357 (21.5%)'}
+has_web any_anom {False: '560/1602 (35.0%)', True: '2426/8357 (29.0%)'}
+has_phone a_pin_far {False: '164/485 (33.8%)', True: '1398/9188 (15.2%)'}
+has_phone a_pin_state {False: '5/462 (1.1%)', True: '59/8929 (0.7%)'}
+has_phone a_foreign {False: '188/495 (38.0%)', True: '1976/9464 (20.9%)'}
+has_phone any_anom {False: '253/495 (51.1%)', True: '2733/9464 (28.9%)'}
+neither website nor phone: 271 | both: 8133

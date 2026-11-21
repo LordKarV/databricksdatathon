@@ -1,0 +1,990 @@
+[
+  {
+    "pair_id": "dialysis_strong_1",
+    "unique_id": "af99e7c6-44b0-44db-88b4-d78424f0651d",
+    "name": "Doctor A Kapoor's Diabetes Control Clinic at Lifeline Medicare Hospital",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "pin": "400097",
+    "service": "dialysis",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Provides round-the-clock hemodialysis services at Lifelline Medicare Hospitals (Dialysis Unit) \u2013 Triveni Nagar"
+      },
+      {
+        "field": "capability",
+        "text": "Provides round-the-clock dialysis services (24/7)"
+      },
+      {
+        "field": "procedure",
+        "text": "Provides dialysis services at Lifelline Medicare Hospitals \u2013 Kurar Village Dialysis Unit"
+      },
+      {
+        "field": "capability",
+        "text": "Offers subsidized dialysis for ESRD patients"
+      }
+    ],
+    "website": "lifelinemedicarehospitals.com",
+    "source_urls": [
+      "https://www.lybrate.com/mumbai/diabetology-clinics/dna-multispeciality-hospital-mumbai",
+      "https://www.practo.com/mumbai/clinic/shah-polyclinic-lbs-marg",
+      "https://www.practo.com/navi-mumbai/clinic/the-dental-lounge-oshiwara"
+    ],
+    "signals": "fields=2; mentions=6; prereq=Nephrolog; pin_centroid_km=1.1; pin_state=MAHARASHTRA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "dialysis_strong_2",
+    "unique_id": "1f08b2ae-c50f-423f-a6fa-ce40a723f592",
+    "name": "Keshlata Hospital",
+    "city": "Bareilly",
+    "state": "Uttar Pradesh",
+    "pin": "243122",
+    "service": "dialysis",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Dialysis"
+      },
+      {
+        "field": "capability",
+        "text": "Nephrology including dialysis"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "https://keshlata.com/",
+      "https://www.keshlata.com/about-us/",
+      "https://www.hexahealth.com/hospitals/insurance/shriram-general-insurance-hospital-list-bareilly"
+    ],
+    "signals": "fields=2; mentions=2; prereq=Nephrolog|nephrology; pin_centroid_km=2.1; pin_state=UTTAR PRADESH; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "dialysis_weak_1",
+    "unique_id": "d523ee35-c4c0-4c3b-a3f4-16310b59500e",
+    "name": "Venus Superspeciality Hospital",
+    "city": "Vadodara",
+    "state": "Gujarat",
+    "pin": "390020",
+    "service": "dialysis",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Dialysis Access Procedures"
+      }
+    ],
+    "website": "venushospital.org",
+    "source_urls": [
+      "https://www.justdial.com/Vadodara/Dr-Rakesh-Luhana-Venus-Super-Speciality-Hospital-Off-Old-Padra-Road-Opposite-Akota-Ward-Office-No-6-Akota/0265PX265-X265-140326130700-C6Z3_BZDET",
+      "https://www.practo.com/vadodara/hospital/saai-hospital-vadodara",
+      "https://aadicura.com/doctor/dr-surbhi-joshi-kapadia/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=3.1; pin_state=GUJARAT; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "dialysis_weak_2",
+    "unique_id": "d7b9aaf1-fb11-4a90-96be-78db26d7101f",
+    "name": "Doaba Hospital",
+    "city": "Jalandhar",
+    "state": "Punjab",
+    "pin": "144001",
+    "service": "dialysis",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Advanced Kidney Dialysis"
+      }
+    ],
+    "website": "doabahospitalpvtltd.com",
+    "source_urls": [
+      "https://www.doabahospitalpvtltd.com/",
+      "https://www.practo.com/jalandhar/clinic/genesis-fertility-and-surgical-center-model-town",
+      "https://www.angels-initiative.com/organizations/doaba-hospital"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=1.2; pin_state=PUNJAB; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "dialysis_suspect_1",
+    "unique_id": "1abd52f3-879a-4c54-aba6-d59043d9f601",
+    "name": "Rastra Kavi Dinkar Blood Bank, Sadar Hospital",
+    "city": "Gopalganj",
+    "state": "Bihar",
+    "pin": "841428",
+    "service": "dialysis",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Provides hemodialysis treatment"
+      },
+      {
+        "field": "equipment",
+        "text": "Two hemodialysis machines in the dialysis room"
+      },
+      {
+        "field": "capability",
+        "text": "Affiliated with Apollo Dialysis Private Limited"
+      },
+      {
+        "field": "procedure",
+        "text": "Offers peritoneal dialysis"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "https://www.myvisitinghours.org/blood-bank/sadar-hospital-gopalganj-334",
+      "https://www.justdial.com/Allahabad/Apollo-Dialysis-Clinic/nct-16118632",
+      "https://www.askaboutmadhepura.com/detail/47/sri-om-sai-hospital-and-endoscopy-centre"
+    ],
+    "signals": "fields=3; mentions=8; prereq=nephrology|pediatricNephrology; pin_centroid_km=38.2; pin_state=BIHAR; state_match=True; city_matches_pin=True; other_facility_named=Apollo Dialysis Clinic"
+  },
+  {
+    "pair_id": "dialysis_suspect_2",
+    "unique_id": "08c8f9bb-2e33-468e-8b09-0b1d235ce426",
+    "name": "Saravana Hospital",
+    "city": "Kuttalam",
+    "state": "Tamil Nadu",
+    "pin": "609810",
+    "service": "dialysis",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Dialysis"
+      }
+    ],
+    "website": "saravanahospitalchennai.com",
+    "source_urls": [
+      "http://www.onefivenine.com/india/Listing/Town/hospitals/Nagapattinam/Kuttalam",
+      "http://www.onefivenine.com/india/villages/Madurai/Madurai-West/S-Alangulam",
+      "https://watchdoq.com/blog/post/useful-information-about-doctor-and-hospitals-in-india"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=257.7; pin_state=TAMIL NADU; state_match=True; city_matches_pin=False"
+  },
+  {
+    "pair_id": "emergency_csection_strong_1",
+    "unique_id": "22f6c258-b765-4864-9f48-d5e365a5a0be",
+    "name": "Tata Main Hospital, Jamshedpur, Jharkhand, India",
+    "city": "Jamshedpur",
+    "state": "Jharkhand",
+    "pin": "831001",
+    "service": "emergency_csection",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Caesarean Section"
+      },
+      {
+        "field": "capability",
+        "text": "Provides obstetric emergency care"
+      }
+    ],
+    "website": "tatamainhospital.com",
+    "source_urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC11369921/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC10791574/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8081297/"
+    ],
+    "signals": "fields=2; mentions=2; prereq=operation theat|anesthesia; pin_centroid_km=3.1; pin_state=JHARKHAND; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "emergency_csection_strong_2",
+    "unique_id": "ae20b125-7b8f-4851-89a7-06480eea6bd4",
+    "name": "Nishamani Nursing Home",
+    "city": "Cuttack",
+    "state": "Odisha",
+    "pin": "753001",
+    "service": "emergency_csection",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Performs caesarean section deliveries; about 50 per month"
+      },
+      {
+        "field": "capability",
+        "text": "Caesarean section deliveries around 50 per month"
+      },
+      {
+        "field": "procedure",
+        "text": "Performs around 50 caesarean section deliveries per month"
+      }
+    ],
+    "website": "nishamani.org",
+    "source_urls": [
+      "http://nishamani.org/",
+      "https://nishamani.org/services.html",
+      "https://nishamani.org/"
+    ],
+    "signals": "fields=2; mentions=3; prereq=operation theat|anesthesia; pin_centroid_km=1.2; pin_state=ODISHA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "emergency_csection_weak_1",
+    "unique_id": "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+    "name": "Nandini Women\u2019s Clinic",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pin": "560073",
+    "service": "emergency_csection",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Delivers babies (delivery) and performs cesarean sections"
+      }
+    ],
+    "website": "nandiniwomensclinic.com",
+    "source_urls": [
+      "https://nandiniwomensclinic.com/about-us/",
+      "https://x.com/NandiniClinic",
+      "https://nandiniwomensclinic.com/book-an-appointment/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=13.2; pin_state=KARNATAKA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "emergency_csection_weak_2",
+    "unique_id": "5853b359-ea74-4613-83b1-062038f1a9cc",
+    "name": "Petals Family Clinic | Woman & Child Care | Infertility | Diagnostic Centre",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "pin": "700017",
+    "service": "emergency_csection",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Caesarean Section/Caesarean Delivery"
+      }
+    ],
+    "website": "petalshealth.in",
+    "source_urls": [
+      "https://indiaconnect.com/services/hospitals-and-clinics/petals-family-clinic-woman-child-care-infertility-diagnostic-centre_i208107",
+      "https://www.facebook.com/PetalsImaging/",
+      "https://www.mymediland.com/doctor/4774/1/india/kolkata/gynecologist-and-obstetrician/dr.-asma-parveen-samuel/MML-DOC-0004774/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=19.2; pin_state=WEST BENGAL; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "emergency_csection_suspect_1",
+    "unique_id": "e5cd0285-1da5-4156-88a5-1d10967931f3",
+    "name": "District Civil Hospital Kaithal",
+    "city": "Kaithal",
+    "state": "Haryana",
+    "pin": "132001",
+    "service": "emergency_csection",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "High-risk obstetric cases requiring C-section deliveries are referred to Kalpana Chawla Government Medical College (KCGMC)"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "https://eupchaarharyana.org.in/",
+      "https://www.angels-initiative.com/organizations/gmers-gandhinagar",
+      "https://www.instafinancials.com/company/general-healthlab-diagnostic-private-limited-U85100HR2019PTC080866"
+    ],
+    "signals": "fields=1; mentions=1; prereq=anesthesia; pin_centroid_km=1.2; pin_state=HARYANA; state_match=True; city_matches_pin=False; other_facility_named=Kalpana Chawla Government Medical College"
+  },
+  {
+    "pair_id": "emergency_csection_suspect_2",
+    "unique_id": "a41a2855-b81a-4248-9908-a2dbadabaa38",
+    "name": "Sri Rama Hospital, Mallikarjunpet, Vaddeswaram",
+    "city": "Mallikarjunpet",
+    "state": "Andhra Pradesh",
+    "pin": "522007",
+    "service": "emergency_csection",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Caesarean Section"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "https://www.hexahealth.com/vaddeswaram/hospital/sri-rama-hospital-mallikarjunpet",
+      "http://www.vizagdoctors.com/hospitals.html",
+      "https://www.justdial.com/Visakhapatnam/Sri-Rama-Hospital-Seethammapeta-Junction/0891PX891-X891-180321163655-J1M3_BZDET"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=140.6; pin_state=ANDHRA PRADESH; state_match=True; city_matches_pin=False"
+  },
+  {
+    "pair_id": "nicu_strong_1",
+    "unique_id": "e7cf3511-c4e1-41b0-9a86-b11a6bdfd0e7",
+    "name": "Cradle Children Hospital",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin": "302021",
+    "service": "nicu",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Provides neonatal intensive care unit (NICU) services for neonates of any gestational age or birth weight"
+      },
+      {
+        "field": "capability",
+        "text": "NICU available"
+      },
+      {
+        "field": "description",
+        "text": "Pediatric hospital located in Vaishali Nagar, Jaipur. Formerly known as Helping Hand Polyclinic. Opening Hours: 24x7. Head of Neonatology: Dr. Deepak Sharma. Departments include General Pediatrics, NICU, PICU, Pediatric Neurology, Neonatal & Pediatric Surgery, Gynae and Obs, Dental Surgery, Child Development Center, and Child Vaccination Schedule."
+      },
+      {
+        "field": "capability",
+        "text": "NICU"
+      }
+    ],
+    "website": "cradlehospital.com",
+    "source_urls": [
+      "https://www.practo.com/jaipur/clinic/vivanta-clinics-vaishali-nagar",
+      "https://www.practo.com/jaipur/clinic/perfect-hearing-solutions-jaipur-city",
+      "https://www.practo.com/jaipur/clinic/care-dental-skin-hair-transplant-center/doctors"
+    ],
+    "signals": "fields=3; mentions=6; prereq=Neonatolog|Pediatric|paediatric|pediatric; pin_centroid_km=1.0; pin_state=RAJASTHAN; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "nicu_strong_2",
+    "unique_id": "09c73691-739e-4b31-88ba-2d31c89f7af3",
+    "name": "Narmada Apna Hospital, Hoshangabad",
+    "city": "Hoshangabad",
+    "state": "Madhya Pradesh",
+    "pin": "461001",
+    "service": "nicu",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "equipment",
+        "text": "NICU with 4 beds equipped with advanced life support systems and ventilators"
+      },
+      {
+        "field": "description",
+        "text": "Narmada Apna Hospital is a 111 bedded multi-specialty hospital with Daycare, ICU, NICU, Burn Ward, OPD Dialysis Facilities, Casualty, Private suite, Deluxe rooms, Private rooms, Semi-private rooms, General Ward and recovery rooms etc."
+      }
+    ],
+    "website": "narmadahealthgroup.com",
+    "source_urls": [
+      "http://www.narmadahealthgroup.com/",
+      "https://www.narmadahealthgroup.com/",
+      "https://narmadahealthgroup.com/centers-and-services/hospital/narmada-apna-hospital/"
+    ],
+    "signals": "fields=2; mentions=2; prereq=Pediatric|ventilator|pediatrics; pin_centroid_km=4.1; pin_state=MADHYA PRADESH; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "nicu_weak_1",
+    "unique_id": "87a43ad2-d525-4629-9e60-99f17cbed5b5",
+    "name": "Orchid Hospitals",
+    "city": "Karimnagar",
+    "state": "Telangana",
+    "pin": "505001",
+    "service": "nicu",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "equipment",
+        "text": "NICU on-site"
+      }
+    ],
+    "website": "orchidhospitals.com",
+    "source_urls": [
+      "https://tgsouthernpower.org/creditcardlogin",
+      "https://www.skedoc.com/karimnagar/one-town-police-station/neurosurgeon",
+      "https://www.facebook.com/191652801004212"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=2.6; pin_state=TELANGANA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "nicu_weak_2",
+    "unique_id": "7fea71eb-1e73-4c9b-8723-0621aad3deb9",
+    "name": "Ananya Hospital & Research Center",
+    "city": "Kashipur",
+    "state": "Uttarakhand",
+    "pin": "244713",
+    "service": "nicu",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Scope of services includes ICU and NICU"
+      }
+    ],
+    "website": "https://ananya-hospital.kashipurlive.in/",
+    "source_urls": [
+      "https://www.justdial.com/Kashipur/ENT-Hospitals/nct-10189443",
+      "https://www.justdial.com/Kashipur/Ananya-Hospital-Research-Center-R-K-Puram-Manpur-Karanpur/9999P5947-5947-180825004939-K2J1_BZDET/photos",
+      "https://www.justdial.com/Kashipur/Ananya-Hospital-Research-Center-R-K-Puram-Manpur-Karanpur/9999P5947-5947-180825004939-K2J1_BZDET/reviews"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=5.1; pin_state=UTTARAKHAND; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "nicu_suspect_1",
+    "unique_id": "32177fd1-293a-4179-ae03-2a0d06d07ef3",
+    "name": "The Children\u2019s Hospital",
+    "city": "Shillong",
+    "state": "Meghalaya",
+    "pin": "793014",
+    "service": "nicu",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Entered into a partnership with Motherhood Hospitals to introduce NICU Live, a virtual neonatal monitoring system."
+      },
+      {
+        "field": "description",
+        "text": "The Children's Hospital, Shillong partnered with Motherhood Hospitals to launch NICU Live, a virtual monitoring system offering expert neonatal care and 24/7 remote support from top neonatologists."
+      },
+      {
+        "field": "capability",
+        "text": "NICU Live provides 24/7 remote support from top neonatologists for neonatal care."
+      }
+    ],
+    "website": "thechildrenhospital.com",
+    "source_urls": [
+      "https://eastkhasihills.gov.in/public-utility/the-childrens-hospital/",
+      "https://eastkhasihills.gov.in/kha/public-utility/the-childrens-hospital-kha/",
+      "https://www.justdial.com/Shillong/The-Children%E2%80%99s-Hospital-Near-St-John-White-Hall-School-Police-Bazar/9999PX364-X364-140304135647-L9U5_BZDET"
+    ],
+    "signals": "fields=2; mentions=3; prereq=pediatric|neonatologyPerinatalMedicine|pediatrics; pin_centroid_km=2.8; pin_state=MEGHALAYA; state_match=True; city_matches_pin=False; other_facility_named=Motherhood Hospital"
+  },
+  {
+    "pair_id": "nicu_suspect_2",
+    "unique_id": "20596c45-3ad4-409f-9dac-ab0fb319fee3",
+    "name": "Poyanil Yana IVF and Fertility Centre - Punalur, Kollam",
+    "city": "Punalur",
+    "state": "Kollam",
+    "pin": "682028",
+    "service": "nicu",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Has departments in Obstetrics and Gynaecology, Pediatrics/Neonatology/NICU, Fetal Medicine, Laparoscopy, General Surgery, Andrology & Sexology, and Child Development Health"
+      },
+      {
+        "field": "capability",
+        "text": "Neonatology and NICU services available"
+      }
+    ],
+    "website": "yanaivf.com",
+    "source_urls": [
+      "https://www.quickerala.com/kollam/kadappakada/kailas-super-speciality-dental-clinic/325702",
+      "https://doctorskerala.com/categories/allopathy/ivfcentres.html",
+      "https://www.doctorskerala.com/categories/allopathy/fertilitycentres.html"
+    ],
+    "signals": "fields=1; mentions=2; prereq=Pediatric|neonatologyPerinatalMedicine|pediatrics; pin_centroid_km=176.4; pin_state=KERALA; state_match=None; city_matches_pin=False"
+  },
+  {
+    "pair_id": "cardiac_surgery_strong_1",
+    "unique_id": "8bc595e4-98c0-4002-b3b8-8b2ac9d44d70",
+    "name": "Metromed International Cardiac Centre",
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "pin": "673014",
+    "service": "cardiac_surgery",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Bypass Surgery"
+      },
+      {
+        "field": "capability",
+        "text": "Specializes in Cardiothoracic surgery, Cardiology, and Minimally Invasive surgery"
+      },
+      {
+        "field": "specialties",
+        "text": "cardiacSurgery"
+      },
+      {
+        "field": "procedure",
+        "text": "Heart Valve Replacement"
+      }
+    ],
+    "website": "micc.in",
+    "source_urls": [
+      "https://www.proptiger.com/kozhikode/pantheerankave-52791/hospitals",
+      "https://www.hexahealth.com/kozhikode/hospital/national-hospital-kozhikode",
+      "https://www.hexahealth.com/kozhikode/hospital/jas-healthcare-mukkam"
+    ],
+    "signals": "fields=3; mentions=15; prereq=Catheterization Lab|cardiology; pin_centroid_km=7.1; pin_state=KERALA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "cardiac_surgery_strong_2",
+    "unique_id": "64b04955-1b6c-47d7-b22d-1c9a20af1c6b",
+    "name": "Elite Medcity Hospital",
+    "city": "Bilaspur",
+    "state": "Chhattisgarh",
+    "pin": "495001",
+    "service": "cardiac_surgery",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Interventional Cardiology and Cardiothoracic & Vascular Surgery department"
+      },
+      {
+        "field": "specialties",
+        "text": "cardiacSurgery"
+      },
+      {
+        "field": "capability",
+        "text": "Offers Cardiology & CTVS services"
+      }
+    ],
+    "website": "http://www.elitemedcity.in/",
+    "source_urls": [
+      "https://www.justdial.com/Bilaspur-Chhattisgarh/Elite-Medcity-Hospital-Near-Sbi-Car-N-Car-Vyapar-Vihar-Road/9999P7752-7752-220514094515-Y4W3_BZDET",
+      "https://www.justdial.com/Bilaspur-Chhattisgarh/24-Hours-Children-Hospitals-in-Ring-Road-2/nct-12411825",
+      "https://www.myhospitalnow.com/hospitals/city/bil%C4%81spur/radiology"
+    ],
+    "signals": "fields=2; mentions=3; prereq=cardiology; pin_centroid_km=2.1; pin_state=CHHATTISGARH; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "cardiac_surgery_weak_1",
+    "unique_id": "a96d4572-8445-4eec-9fe5-41d32d88b92b",
+    "name": "Shri Maharaja Gulab Singh Hospital, Government Medical College Jammu",
+    "city": "Jammu",
+    "state": "Jammu And Kashmir",
+    "pin": "180016",
+    "service": "cardiac_surgery",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Heart surgery and bypass surgery are performed at the hospital"
+      }
+    ],
+    "website": "gmcjammu.nic.in",
+    "source_urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC4904748/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC10721570/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC11665830/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=0.3; pin_state=JAMMU AND KASHMIR; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "cardiac_surgery_weak_2",
+    "unique_id": "7d528d2e-0bd3-4a89-9161-cbfbf8f50c69",
+    "name": "Raj Medicity",
+    "city": "Imphal",
+    "state": "Manipur",
+    "pin": "795001",
+    "service": "cardiac_surgery",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "specialties",
+        "text": "cardiacSurgery"
+      }
+    ],
+    "website": "rajmedicity.com",
+    "source_urls": [
+      "https://www.justdial.com/Imphal/Raj-Medicity-North-Aoc-Central-Jail-Road/9999P3852-3852-170724015011-N1L1_BZDET",
+      "https://rajmedicity.com/Paediatrics.aspx",
+      "http://www.rajmedicity.com/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=1.6; pin_state=MANIPUR; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "cardiac_surgery_suspect_1",
+    "unique_id": "5e6f6e25-8a5c-40b1-9733-6bfd0811b42f",
+    "name": "Singla Children Hospital",
+    "city": "Panipat",
+    "state": "Haryana",
+    "pin": "132108",
+    "service": "cardiac_surgery",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Cardiothoracic and vascular surgery (CTVS)"
+      },
+      {
+        "field": "description",
+        "text": "LHDM & Dr. Prem Hospital Private Limited offers services in Cardiology, CTVS, Gynaecological Oncology, Medical Oncology, Nephrology, Neurosurgery, Neonatology, Plastic & Reconstructive Surgery, Radiation Oncology, Surgical Oncology, and Urology."
+      },
+      {
+        "field": "specialties",
+        "text": "cardiacSurgery"
+      },
+      {
+        "field": "capability",
+        "text": "CTVS (Cardiothoracic & Vascular Surgery)"
+      }
+    ],
+    "website": "drpremhospital.com",
+    "source_urls": [
+      "http://www.onefivenine.com/india/Listing/Locality/doctors/Panipat/Panipat/Diwan-Nagar",
+      "https://roharyana.esic.gov.in/ro-sro-list-empanelled-centers",
+      "https://srogurugram.esic.gov.in/ro-sro-list-empanelled-centers"
+    ],
+    "signals": "fields=3; mentions=6; prereq=cardiology; pin_centroid_km=5.9; pin_state=HARYANA; state_match=True; city_matches_pin=True; other_facility_named=Dr. Prem Hospital"
+  },
+  {
+    "pair_id": "cardiac_surgery_suspect_2",
+    "unique_id": "2cbfa0f8-9049-4161-a8b4-9b4a9f9fb2ea",
+    "name": "Sri Manakula Vinayagar Medical College and Hospital",
+    "city": "Pondicherry",
+    "state": "Puducherry",
+    "pin": "605107",
+    "service": "cardiac_surgery",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Hospital offers Departmental Services in Anesthesiology, Cardiology, Cardiothoracic Surgery, Dental, Dermatology, ENT, General Medicine, Nephrology, Neurology, Neurosurgery, Medical Oncology, Obstetrics and Gynecology, Ophthalmology, Orthopaedics, Paediatrics, Plastic Surgery, Psychiatry, General Surgery, Pulmonary Medicine, Interventional Pulmonology, Radiology, Surgical Oncology, Urology"
+      },
+      {
+        "field": "specialties",
+        "text": "cardiothoracicSurgery"
+      }
+    ],
+    "website": "smvmch.ac.in",
+    "source_urls": [
+      "https://jascap.org/palliative-care-centres-in-india/cancer-palliative-care-centres-pondicherry/",
+      "https://mbbscouncil.com/listing/sri-manakula-vinayagar-medical-college-and-hospital-pondicherry/",
+      "https://www.facebook.com/169149919850639"
+    ],
+    "signals": "fields=2; mentions=2; prereq=cardiology; pin_centroid_km=0.5; pin_state=TAMIL NADU; state_match=False; city_matches_pin=True"
+  },
+  {
+    "pair_id": "mri_strong_1",
+    "unique_id": "222d6401-119d-4b00-b11c-ce3a311a238d",
+    "name": "Delhi Pain Management Centre",
+    "city": "Delhi",
+    "state": "Delhi",
+    "pin": "110027",
+    "service": "mri",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Performs 3T MRI scans"
+      },
+      {
+        "field": "equipment",
+        "text": "3T MRI scanner"
+      },
+      {
+        "field": "capability",
+        "text": "Diagnostic imaging capability including MRI, CT, PET-CT, X-ray, and ultrasound"
+      }
+    ],
+    "website": "painhospital.in",
+    "source_urls": [
+      "https://www.practo.com/delhi/clinic/dt-sharvi-dhamija-greater-kailash-part-1/about",
+      "https://www.justdial.com/Delhi/Health-Services-in-Derawal-Nagar/nct-10565079",
+      "https://www.docindia.org/doctors/delhi/dr-sudhir-chhabra-nutrition"
+    ],
+    "signals": "fields=3; mentions=3; prereq=CT scan; pin_centroid_km=16.8; pin_state=DELHI; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "mri_strong_2",
+    "unique_id": "4c94dfcb-fe8d-4595-86db-dc83b82c6e85",
+    "name": "Shri Vinoba Bhave Civil Hospital",
+    "city": "Silvassa",
+    "state": "Dadra And Nagar Haveli And Daman And Diu",
+    "pin": "396230",
+    "service": "mri",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Provides MRI imaging including brain/head full study, epilepsy protocol, MRCP, cardiac MRI, functional MRI, MR angiography, and MR venography"
+      },
+      {
+        "field": "equipment",
+        "text": "Advanced Imaging Centre featuring a 128-slice CT scanner, a 1.5 Tesla MRI machine, four ultrasound machines with lithotripsy center, and modern digital X-ray machines"
+      },
+      {
+        "field": "equipment",
+        "text": "MRI scanner capable of brain/head imaging with epilepsy protocol, MRCP, cardiac MRI, functional MRI, MR angiography, MR venography, spectroscopy, tractography, perfusion, and whole-body capabilities"
+      }
+    ],
+    "website": "vbch.dnh.nic.in",
+    "source_urls": [
+      "https://dnh.gov.in/public-utility/shri-vinoba-bhave-civil-hospital/",
+      "https://gynoveda.com/pages/gynaecologists/silvassa/",
+      "http://vbch.dnh.nic.in/content/e-aarogya-portal"
+    ],
+    "signals": "fields=2; mentions=3; prereq=CT|CT scan|Radiolog|radiology; pin_centroid_km=15.5; pin_state=THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "mri_weak_1",
+    "unique_id": "0b88e73f-787e-45c4-bcd3-ec8b27a53c74",
+    "name": "Care N Cure",
+    "city": "Bilaspur",
+    "state": "Chhattisgarh",
+    "pin": "495001",
+    "service": "mri",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "equipment",
+        "text": "Brain imaging capability evidenced by MRI imagery in site materials (neurosurgery context)"
+      }
+    ],
+    "website": "carencurehospital.com",
+    "source_urls": [
+      "http://www.carencurehospital.com/",
+      "https://www.justdial.com/Bilaspur-Chhattisgarh/Multispeciality-Hospitals-in-Railway-Colony/nct-10547585",
+      "https://www.justdial.com/Bilaspur-Chhattisgarh/Private-Hospitals-in-Pendra-Road/nct-10390288"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=0.5; pin_state=CHHATTISGARH; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "mri_weak_2",
+    "unique_id": "18aca974-cadb-4c0f-a4e1-efde9710c729",
+    "name": "Gujarat Gastro and Vascular Hospital, Adajan",
+    "city": "Surat",
+    "state": "Gujarat",
+    "pin": "395009",
+    "service": "mri",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "procedure",
+        "text": "Magnetic Resonance Cholangiopancreatography (MRCP)"
+      }
+    ],
+    "website": "gujarathospital.in",
+    "source_urls": [
+      "https://www.hexahealth.com/surat/doctor/dr-saumin-shah-medical-gastroenterologist",
+      "https://www.facebook.com/220850287778984",
+      "https://www.facebook.com/1941479339272231"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=0.7; pin_state=GUJARAT; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "mri_suspect_1",
+    "unique_id": "788a47ec-36ae-43ba-afb0-ae07df9b1579",
+    "name": "Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)",
+    "city": "Guwahati",
+    "state": "Assam",
+    "pin": "781006",
+    "service": "mri",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "equipment",
+        "text": "3 Tesla MRI (3T MRI) facility with budget allocation of \u20b930 crore"
+      },
+      {
+        "field": "capability",
+        "text": "PET CT scanner and PET MRI machine available"
+      },
+      {
+        "field": "equipment",
+        "text": "Artificial intelligence integration for MRI imaging (Neuroimaging, Cardiac Imaging, and Vascular Imaging)"
+      },
+      {
+        "field": "equipment",
+        "text": "Wide-bore MRI accommodating obese and claustrophobic patients"
+      }
+    ],
+    "website": "gmch.assam.gov.in",
+    "source_urls": [
+      "https://ayush.assam.gov.in/portlets/health-facility",
+      "https://gmch.assam.gov.in/information-and-services/cn-centre",
+      "https://atalamritabhiyan.assam.gov.in/about-us/district-officials"
+    ],
+    "signals": "fields=2; mentions=9; prereq=CT|CT scan|Radiolog|radiology; pin_centroid_km=3.9; pin_state=ASSAM; state_match=True; city_matches_pin=False; other_facility_named=State Cancer Institute"
+  },
+  {
+    "pair_id": "mri_suspect_2",
+    "unique_id": "66d812eb-a685-4bdc-956d-095e3b50e5d2",
+    "name": "Aadhar Hospital",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "pin": "411028",
+    "service": "mri",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "equipment",
+        "text": "SP Institute of Neurosciences, Solapur provides neuroimaging (CT scan, MRI) and neurophysiological investigations (EEG, evoked potentials)"
+      }
+    ],
+    "website": "aadharhospitalpune.com",
+    "source_urls": [
+      "https://www.zurichkotak.com/network-locator/cashless-hospitals/narsipatnam/sri-lalitha-nursing-home",
+      "https://www.zurichkotak.com/network-locator/cashless-hospitals/ahmedabad/pallav-j-m-desai-memorial-hospital-(better-health-pvt.-ltd.)",
+      "https://www.zurichkotak.com/network-locator/cashless-hospitals/chennai/y.v.k.-hospital-enterprises-pvt.ltd"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=165.0; pin_state=MAHARASHTRA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "trauma_emergency_strong_1",
+    "unique_id": "3e808597-0724-40e8-9e27-51b54440e9ca",
+    "name": "Mukat Hospital & Heart Institute",
+    "city": "Chandigarh",
+    "state": "Chandigarh",
+    "pin": "160022",
+    "service": "trauma_emergency",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "24/7 emergency care"
+      },
+      {
+        "field": "description",
+        "text": "Mukat Hospital and Heart Institute, a unit of City Clinic Pvt Ltd, is a NABH-accredited, multi-speciality hospital in Chandigarh. It has been serving humanity for three decades with modern infrastructure, 25+ healthcare services, advanced diagnosis, a fully-automated laboratory, 24x7 emergency services, 500000+ happy patients, and ACLS ambulance services in Tricity."
+      },
+      {
+        "field": "capability",
+        "text": "Provides 24x7 emergency care"
+      }
+    ],
+    "website": "mukathospital.com",
+    "source_urls": [
+      "http://www.healthinsuranceindia.org/cashless_hospital_india/punjab.html",
+      "https://www.mukathospital.com/",
+      "http://www.cashlesshospitalindia.com/cashless-hospital-india/punjab.html"
+    ],
+    "signals": "fields=2; mentions=3; prereq=Ambulance|Neurosurg|Orthoped|ambulance; pin_centroid_km=0.2; pin_state=CHANDIGARH; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "trauma_emergency_strong_2",
+    "unique_id": "404c60bb-c918-4d1e-896e-e98265bba0f5",
+    "name": "Redkar Hospital and Research Centre",
+    "city": "Dhargal",
+    "state": "Goa",
+    "pin": "403513",
+    "service": "trauma_emergency",
+    "stratum": "strong",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "24/7 emergency care"
+      },
+      {
+        "field": "description",
+        "text": "RHRC is a 43-bedded multi-specialty, advanced secondary care centre located at Mumbai-Goa National Highway, Oshalbag, Dhargal, Pernem, North Goa district, Goa. It provides 24x7 Emergency service and advanced ICU, with two fully equipped Operation Theatres, supported by a dedicated team of specialists."
+      },
+      {
+        "field": "specialties",
+        "text": "emergencyMedicine"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "https://redkarhospital.com/",
+      "https://www.zurichkotak.com/network-locator/cashless-hospitals/betul/vaishnavi-hospital-and-research-centre",
+      "https://www.zurichkotak.com/network-locator/cashless-hospitals/panvel/ornate-nursing-home"
+    ],
+    "signals": "fields=3; mentions=3; prereq=CT|ICU|Neurosurg|Orthopaed; pin_centroid_km=4.8; pin_state=GOA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "trauma_emergency_weak_1",
+    "unique_id": "c52d8c4a-4b5f-46f3-8877-90e7b16837f5",
+    "name": "Beena Home Nursing, Thrissur",
+    "city": "Thrissur",
+    "state": "Kerala",
+    "pin": "680004",
+    "service": "trauma_emergency",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "specialties",
+        "text": "emergencyMedicine"
+      }
+    ],
+    "website": "beenahomenursing.in",
+    "source_urls": [
+      "https://www.ypindia.com/homenursing.html",
+      "https://www.beenahomenursing.com/index.php/about",
+      "https://www.keralafind.com/categories/business/homenursing.html"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=0.1; pin_state=KERALA; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "trauma_emergency_weak_2",
+    "unique_id": "90dfc866-2ede-48f3-a683-b1004e996d4b",
+    "name": "Prabha Hospital",
+    "city": "Moga",
+    "state": "Punjab",
+    "pin": "142001",
+    "service": "trauma_emergency",
+    "stratum": "weak",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Emergency care available"
+      }
+    ],
+    "website": null,
+    "source_urls": [
+      "http://www.onefivenine.com/india/Listing/Town/doctors/Moga/Moga",
+      "https://prabhahospital.whitecoats.com/about-us/",
+      "https://prabhahospital.whitecoats.com/"
+    ],
+    "signals": "fields=1; mentions=1; prereq=none; pin_centroid_km=2.0; pin_state=PUNJAB; state_match=True; city_matches_pin=True"
+  },
+  {
+    "pair_id": "trauma_emergency_suspect_1",
+    "unique_id": "c63d560f-2d07-44fd-96c0-a61cb41dffdd",
+    "name": "S.N.M. District Hospital & Tuberculosis Sanatorium, Firozabad",
+    "city": "Firozabad",
+    "state": "Uttar Pradesh",
+    "pin": "202001",
+    "service": "trauma_emergency",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Open 24x7 emergency care"
+      },
+      {
+        "field": "description",
+        "text": "S R Critical Care Hospital & Trauma Centre is a dedicated hospital in Trauma Centres located in Green Park, Bareilly."
+      }
+    ],
+    "website": "rshsp.blogspot.in",
+    "source_urls": [
+      "http://wikimapia.org/1510021/Jai-Hospital",
+      "https://www.srinstitutions.org/s-r-critical-care-hospital",
+      "https://www.justdial.com/Aligarh/S-N-Hospital-Behind-Masudabad-Bus-Stand-Raghupuri-Masudabad-Raghuveer-Puri/9999PX571-X571-170928215941-X8A6_BZDET"
+    ],
+    "signals": "fields=2; mentions=2; prereq=CT|ICU|Neurosurg|blood bank; pin_centroid_km=146.5; pin_state=UTTAR PRADESH; state_match=True; city_matches_pin=False; other_facility_named=Critical Care Hospital"
+  },
+  {
+    "pair_id": "trauma_emergency_suspect_2",
+    "unique_id": "1ee06ace-37e0-47db-91c6-7a7d4ca9e286",
+    "name": "Blood Bank, District Hospital, Satna",
+    "city": "Satna",
+    "state": "Madhya Pradesh",
+    "pin": "483501",
+    "service": "trauma_emergency",
+    "stratum": "suspect",
+    "claim_quotes": [
+      {
+        "field": "capability",
+        "text": "Accident and emergency services"
+      },
+      {
+        "field": "specialties",
+        "text": "emergencyMedicine"
+      },
+      {
+        "field": "capability",
+        "text": "24/7 emergency care"
+      }
+    ],
+    "website": "dhkatni.org",
+    "source_urls": [
+      "https://www.deccanchronicle.com/nation/madhya-pradesh-thalassemia-patients-contracting-hiv-1925011",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3783661/",
+      "https://www.thehindu.com/news/national/madhya-pradesh/children-test-hiv-positive-in-satna-mp-govt-suspends-3-including-blood-bank-in-charge/article70414305.ece"
+    ],
+    "signals": "fields=2; mentions=3; prereq=Ambulance|Blood Bank|CT|blood bank; pin_centroid_km=93.6; pin_state=MADHYA PRADESH; state_match=True; city_matches_pin=False"
+  }
+]

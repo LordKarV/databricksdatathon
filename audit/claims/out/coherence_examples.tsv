@@ -1,0 +1,128 @@
+cat	unique_id	name	service	grade
+eye	0c36cc3b-7908-4d8b-a31c-559746ee3171	Harsha Sai Eye Hospital	nicu	weak
+eye	12fe95f9-0e07-4fbf-8320-8bbfb9d20315	GANDHI EYE HOSPITAL, ALIGARH	csection	weak
+eye	14166899-97dd-4340-b6d6-bdb3e7747b25	Netra Chikitsa Trust Ayurveda College hospital	dialysis	weak
+eye	14166899-97dd-4340-b6d6-bdb3e7747b25	Netra Chikitsa Trust Ayurveda College hospital	nicu	weak
+eye	177de524-ea48-4e98-83c2-02c31ae6da99	Deshmukh Eye Hospital	cardiac_surgery	weak
+eye	1ddb0dbe-da8f-4476-8360-2b679bf826cf	Maruthi Eye Hospital	nicu	weak
+eye	30698804-4128-46fe-bb1a-38bd135a6c9d	Somasundaram Eye Hospital	cardiac_surgery	weak
+eye	33de3de0-af94-43d7-9166-cdbcabf01d9b	Prasad Netralaya	cardiac_surgery	weak
+eye	3bcb46c8-4ec6-4a1d-9b49-937e575c2b94	Asian Eye Hospital	cardiac_surgery	weak
+eye	3d9d4079-9a80-4546-b244-03b1e7ca9f95	Raj Eye Hospital, Gorakhpur	dialysis	weak
+eye	3d9d4079-9a80-4546-b244-03b1e7ca9f95	Raj Eye Hospital, Gorakhpur	csection	weak
+eye	3d9d4079-9a80-4546-b244-03b1e7ca9f95	Raj Eye Hospital, Gorakhpur	nicu	weak
+eye	3d9d4079-9a80-4546-b244-03b1e7ca9f95	Raj Eye Hospital, Gorakhpur	burns	weak
+eye	519ae7e6-960b-44f0-a8e7-42fafbb8dab1	Precise Eye Care	burns	weak
+eye	5fe4b03b-9b0b-4c21-8004-04fdd08ed3c9	Sun Eye Hospital & Laser Centre	dialysis	weak
+eye	5fe4b03b-9b0b-4c21-8004-04fdd08ed3c9	Sun Eye Hospital & Laser Centre	cardiac_surgery	weak
+eye	61731339-a1d6-4384-92ee-fce2d11b3338	Sub Divisional Hospital Pusa	dialysis	medium
+eye	61731339-a1d6-4384-92ee-fce2d11b3338	Sub Divisional Hospital Pusa	csection	weak
+eye	7b4e2f09-08a1-4121-8c9b-9038368425d8	Sapthagiri Eye Care Centre	cardiac_surgery	weak
+eye	83bb8b54-e6d5-4517-95ba-ec138fcd948a	Sanidhya Eye Hospital	csection	weak
+eye	85215ecb-d10e-4760-8db8-ad9e30a33216	Dr. Sandeep Mithal Advanced Phaco-Refractive and Vitreo-Retina Centre	cardiac_surgery	weak
+eye	885c2504-a456-4b89-90b4-f70c9733086c	ASG Eye Hospitals	dialysis	weak
+eye	8b5d6123-2e89-4d88-9fb2-b92a652c60d6	Mittal Eye Hospital Betiahata Gorakhpur	csection	weak
+eye	8c0ec23b-2d96-4fd8-93dd-636129a77b29	iTek Vision Centre	csection	weak
+eye	9012e77c-b9ce-43e3-8c86-18406bf6fa90	Shree Netralaya and Maternity Clinic	csection	weak
+eye	94afefad-b6d1-4a89-936c-3af0b8aa4057	Laxmi Charitable Trust Eye Hospital, Panvel	nicu	weak
+eye	9778b758-7c44-40bb-9741-b0060e6215f5	Orbit Eye Hospital	dialysis	weak
+eye	acd22962-2d73-4e83-8f45-ff995a417c34	J J Eye Hospital	dialysis	weak
+eye	b178384f-a3bf-459b-96fd-87198d5df608	Kannika Hospital - Eye Hospital in Harsh Nagar	nicu	weak
+eye	b5d2c415-5f1b-424d-91d3-4654bc19dd12	Sri Krishna Eye Hospital	cardiac_surgery	weak
+eye	b8a5401f-42f1-422a-8cd9-686a15b4cb76	Aravind Eye Hospital	dialysis	weak
+eye	b8a5401f-42f1-422a-8cd9-686a15b4cb76	Aravind Eye Hospital	nicu	weak
+eye	b8a5401f-42f1-422a-8cd9-686a15b4cb76	Aravind Eye Hospital	burns	weak
+eye	ba614eea-a018-46ac-a052-a7e46721d85a	Kamalnayan Bajaj Hospital	dialysis	weak
+eye	ba614eea-a018-46ac-a052-a7e46721d85a	Kamalnayan Bajaj Hospital	cardiac_surgery	weak
+eye	bb3cd01a-c6fc-4678-8844-b1ba0849b0c8	Vision Multispeciality Hospital	dialysis	strong
+eye	da424446-f4fe-4e4b-ac78-795b3b1a8786	Anandrishiji Netralaya	dialysis	weak
+eye	da424446-f4fe-4e4b-ac78-795b3b1a8786	Anandrishiji Netralaya	nicu	weak
+eye	e2bea954-5ce2-4f75-b916-b019b980a903	Indriya Eye and ENT Hospital	dialysis	weak
+eye	f06f2719-8357-489c-87a1-902ddc44b42c	Vasu Eye Institute & Skin Centre	burns	weak
+eye	f3222b21-b511-42e2-87eb-d14ff01f26bb	R.K. Devi Eye Center, Swaroop Nagar, Kanpur	nicu	weak
+dental	0a77c719-b39a-423f-821e-16a965dd95fb	S.S. Dental Hospital	csection	weak
+dental	76fcd188-bca9-43de-8539-3afda0efd0ce	Delhi Child Care and Dental Hospital	dialysis	medium
+dental	76fcd188-bca9-43de-8539-3afda0efd0ce	Delhi Child Care and Dental Hospital	nicu	medium
+dental	9ce89c30-1a87-4deb-bc63-3fd75ef058d6	Om Children and Dental Hospital	nicu	medium
+dental	cedd91af-f3a8-4149-8d44-652093854d72	Aashirwad Ortho & Dental Care Centre, Dehradun	dialysis	weak
+dental	cedd91af-f3a8-4149-8d44-652093854d72	Aashirwad Ortho & Dental Care Centre, Dehradun	nicu	weak
+dental	cedd91af-f3a8-4149-8d44-652093854d72	Aashirwad Ortho & Dental Care Centre, Dehradun	cardiac_surgery	weak
+ivf_fertility	05dc37e2-b7d3-4a02-8c71-8c6652139272	Sonakshi Children Hospital & IVF Center	nicu	medium
+ivf_fertility	0b02d119-a409-4554-9979-39817ed38e3e	Smc Heart Institute And Ivf Research Center	csection	medium
+ivf_fertility	0b02d119-a409-4554-9979-39817ed38e3e	Smc Heart Institute And Ivf Research Center	cardiac_surgery	weak
+ivf_fertility	12b39830-08a7-4f4b-8555-cac1eb83b9bc	Mishka IVF Centre	csection	weak
+ivf_fertility	14721df7-2100-43d3-b8fa-0b0709cbefca	Currae Gynaec IVF Birthing Hospital	csection	weak
+ivf_fertility	1b093c98-8d1c-4715-a67b-4441e0d7e7ce	Orison Super Speciality Hospital Infertility & Trauma Centre	csection	medium
+ivf_fertility	1b093c98-8d1c-4715-a67b-4441e0d7e7ce	Orison Super Speciality Hospital Infertility & Trauma Centre	burns	strong
+ivf_fertility	1f464921-0ab6-41c9-bac6-807c40585731	Diva Hospital & IVF Center	csection	medium
+ivf_fertility	1f464921-0ab6-41c9-bac6-807c40585731	Diva Hospital & IVF Center	nicu	strong
+ivf_fertility	20596c45-3ad4-409f-9dac-ab0fb319fee3	Poyanil Yana IVF and Fertility Centre - Punalur, Kollam	nicu	medium
+ivf_fertility	24aa55f5-5346-415b-9fe3-e7a7bdef6d40	Sneh Mother Child and Infertility Clinic	csection	weak
+ivf_fertility	24aa55f5-5346-415b-9fe3-e7a7bdef6d40	Sneh Mother Child and Infertility Clinic	nicu	weak
+ivf_fertility	25c6a2b2-af5d-48c7-9ae7-605f04ee3b60	Javitri Test Tube Baby Center	dialysis	weak
+ivf_fertility	25c6a2b2-af5d-48c7-9ae7-605f04ee3b60	Javitri Test Tube Baby Center	nicu	medium
+ivf_fertility	2828b1dd-c7fa-4c67-a4da-3b193849d6c6	Umang IVF and Super Speciality Hospital	burns	medium
+ivf_fertility	33702f94-4a9b-4c41-98c9-a3b297e561df	Guru Nanak Hospital & Divine India IVF Centre	dialysis	weak
+ivf_fertility	33702f94-4a9b-4c41-98c9-a3b297e561df	Guru Nanak Hospital & Divine India IVF Centre	csection	medium
+ivf_fertility	39c27df7-5e07-4626-8115-e7676e114de1	Kinder Women’s Hospital and Fertility Centre	nicu	medium
+ivf_fertility	447a4cd7-fd86-4476-a606-126c8c35a08d	Chennai Fertility Center and Research Institute - Chennai	nicu	medium
+ivf_fertility	44b6ff8f-70cb-4406-a762-f864931503fa	Fertility Foundation	csection	weak
+ivf_fertility	4ee1bf0e-8cbf-407f-aed7-a86a708cd741	MAA Women's Hospital & IVF Center	csection	medium
+ivf_fertility	4f722256-a45c-4a1d-aee2-a7b1773fc9d8	Candor IVF Hospital & Maternity Home	nicu	medium
+ivf_fertility	50b62182-1b7d-4249-b600-23f353a70139	Narayani Women's Hospital & Fertility Center, Udaipur	nicu	weak
+ivf_fertility	532421e0-8744-40a0-b527-913422a84c5f	Sudha Fertility Centre	csection	medium
+ivf_fertility	55f6f4ae-cb92-421e-a8db-fd7c1cf5a9c0	Nivedita IVF & Endoscopy Centre	nicu	medium
+ivf_fertility	57ce5502-fc53-44cf-8210-616a629ef9ca	Shubham Hospital & IVF Center	csection	medium
+ivf_fertility	5853b359-ea74-4613-83b1-062038f1a9cc	Petals Family Clinic | Woman & Child Care | Infertility | Diagnostic Centre	csection	medium
+ivf_fertility	58d82919-60f7-4a74-a45f-0246f13d1b49	Samriddhi Hospital and Fertility Center - Plot No. 5, Mata Amritanandamayi Marg, opposite Indian Oil Petrol Pump, Sector 88, Faridabad, Haryana - 121002	csection	weak
+ivf_fertility	5e6fe7e7-8929-4b07-9687-a6054091f89c	Mishra Hospital Test Tube Baby Centre	csection	medium
+ivf_fertility	6132cee5-de8b-4734-a693-f143b778962c	Bagul Nursing Home & Dr. Bagul’s Hope IVF Center	csection	medium
+ivf_fertility	6507bff1-ddb6-41c8-abd3-a3c6d8019053	Doctor Today IVF and Multispeciality Hospital, Faridabad	cardiac_surgery	medium
+ivf_fertility	76eb1529-9e07-4ef8-abb9-c5524042146e	IVF Centre in Moga	csection	medium
+ivf_fertility	805f2cf5-99f5-49c3-9163-800ee25d8762	Golden City Hospital & Fertility Centre	csection	medium
+ivf_fertility	8306f89c-e2bd-402d-8797-42bd7e71f5b4	Sparsh Hospital & IVF Centre	csection	weak
+ivf_fertility	8b6bc0ff-ee35-4cff-a7f2-1a167888524e	Bundelkhand Fertility Center, Jhansi	csection	medium
+ivf_fertility	8ce5664b-c1b5-4f9e-8120-167986ed9f50	Test Tube Baby Centre in Bathinda	nicu	medium
+ivf_fertility	8d0b897f-a414-4127-8e85-f0a6e2676fdb	APS Nursing Home and IVF Centre	csection	weak
+ivf_fertility	94acaff7-7eb6-4fbd-9067-fcdbb0223ec3	Krishna IVF Clinic, Visakhapatnam	nicu	medium
+ivf_fertility	994003f4-9f32-4edf-b17a-0407dcdbd6c5	Sarkar Multi-Speciality Hospital & IVF Centre, Agra	csection	medium
+ivf_fertility	994003f4-9f32-4edf-b17a-0407dcdbd6c5	Sarkar Multi-Speciality Hospital & IVF Centre, Agra	nicu	medium
+ivf_fertility	aa63a318-1d1c-4e3c-97cb-d9b5d7efa060	Mannat IVF centre & Super Speciality Hospital	csection	weak
+ivf_fertility	b43315f5-dffd-4628-af31-75c869a60a48	Shivani Hospital and IVF, Shastri Nagar, Kanpur	csection	medium
+ivf_fertility	b5ca9bc8-6136-40df-91f0-dbb777cf4d85	Nova IVF Fertility Center - Raipur	csection	medium
+ivf_fertility	b5ca9bc8-6136-40df-91f0-dbb777cf4d85	Nova IVF Fertility Center - Raipur	nicu	medium
+ivf_fertility	c975a844-09b0-4eaa-88b4-8f2e40e4ec67	Ferty9 Fertility Center	csection	medium
+ivf_fertility	cb8336f2-ccf8-4688-82eb-82ec3b2569be	Talwar Hospital and IVF Centre	dialysis	weak
+ivf_fertility	cb8336f2-ccf8-4688-82eb-82ec3b2569be	Talwar Hospital and IVF Centre	csection	weak
+ivf_fertility	d750cfa3-e9eb-4c0a-98e2-d397eab3d747	Matrikas IVF Centre	csection	medium
+ivf_fertility	dd800ffb-0d15-418c-9169-3e857889dab9	Jindal IVF	nicu	medium
+ivf_fertility	ed44964c-fedf-4fdd-b27a-a587af7a27c3	S R Fertility Clinic	nicu	medium
+ivf_fertility	efad172f-dc2e-40ae-8b07-0d839be54a29	Aakash Fertility Centre & Hospital	dialysis	weak
+ivf_fertility	fc40ee1b-599e-48c5-a18a-44ef3f7b31a9	Burute Women's Hospital & Delta IVF	csection	weak
+skin_hair	450707bb-844c-4898-b528-fbe0208b6de7	The Skin Clinic	burns	weak
+skin_hair	484c3959-a4f7-4530-b569-1f9a207f3ef0	Suvarna Aesthetics	burns	weak
+skin_hair	69800946-d2f5-4db6-abe3-17b0f105bdca	Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery	dialysis	weak
+skin_hair	69800946-d2f5-4db6-abe3-17b0f105bdca	Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery	nicu	weak
+skin_hair	69800946-d2f5-4db6-abe3-17b0f105bdca	Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery	burns	weak
+skin_hair	731d1659-7ed5-4b62-beca-a2b307517ba5	Refine Aesthetic Clinic	burns	weak
+skin_hair	8c26363c-a22c-4c33-97c8-5a4bf34dd4ca	Poise Skin Clinic	burns	weak
+skin_hair	9be13dfe-0a66-4a93-8888-4874d7b55cf2	Dr. Rajesh Rajput Hair Clinic	burns	weak
+skin_hair	a7c4c7c8-386b-4e5a-b355-ae09125b64da	Restore Plastic & Cosmetic Surgery Clinic	burns	weak
+skin_hair	ae85282a-ce5f-45e6-9364-12649386c317	Essence Cosmetic Surgery	burns	weak
+skin_hair	c83a5566-4957-4a53-8e32-c9c814101c10	Agrawal Plastic Cosmetic Surgery and Burns Center	burns	weak
+skin_hair	f06f2719-8357-489c-87a1-902ddc44b42c	Vasu Eye Institute & Skin Centre	burns	weak
+ent	353a387a-dbd0-4cea-98d5-e2392db0abf8	Chandra Superspecialty Hospital And Niranjan ENT Care	cardiac_surgery	medium
+ent	e2bea954-5ce2-4f75-b916-b019b980a903	Indriya Eye and ENT Hospital	dialysis	weak
+physio_rehab	0a71e623-2551-4a4e-b0cf-36159216f675	ApoKos Rehabilitation Hospital	dialysis	weak
+ayush	07cc65ed-e2e3-41bb-b6ca-832835a9dffa	Divine Homeopathic Clinic	csection	weak
+ayush	0e388917-7155-454b-82fc-8db4e501588c	Dhanvantri Ayurveda	burns	weak
+ayush	13a84ca8-4d6f-45b8-96e6-27d3f3f1d338	Siddharth Hospital	burns	weak
+ayush	14166899-97dd-4340-b6d6-bdb3e7747b25	Netra Chikitsa Trust Ayurveda College hospital	dialysis	weak
+ayush	14166899-97dd-4340-b6d6-bdb3e7747b25	Netra Chikitsa Trust Ayurveda College hospital	nicu	weak
+ayush	24677213-129e-4e76-8ec1-a59a3f262c41	Sri Siddhartha Medical College, Tumakuru	csection	strong
+ayush	24677213-129e-4e76-8ec1-a59a3f262c41	Sri Siddhartha Medical College, Tumakuru	nicu	weak
+ayush	4c6e0f30-2dc5-4aa9-8663-d18c7b3e337f	Siddharth Hospital Ad	csection	weak
+ayush	55b66a16-df78-4a23-9d06-0f8484b8d91f	Amarjit Ayurvedic Clinic	dialysis	weak
+ayush	5eeb0152-89de-4891-9731-a0abe332beae	Aarogya Super Speciality Modern Homoeopathic Clinic	dialysis	non_offer_only
+ayush	788a47ec-36ae-43ba-afb0-ae07df9b1579	Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)	cardiac_surgery	weak
+ayush	ff608b82-3a26-4ba7-bb78-b84fd0ed93c2	Gabani Kidney Hospital - Dhan-Laxmi Complex, Nr. Ayurved College, Station-Lal Darwaja Road, Surat-395 003, Gujarat, India	dialysis	weak

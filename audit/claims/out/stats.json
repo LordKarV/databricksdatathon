@@ -1,0 +1,850 @@
+{
+ "denominator_wellformed_rows": 9970,
+ "rows_with_field_at_50_items": {
+  "procedure": 806,
+  "equipment": 88,
+  "capability": 1430,
+  "specialties": 2877
+ },
+ "rows_any_text_field_at_50": 1789,
+ "services": {
+  "dialysis": {
+   "facilities_any_mention_text_or_enum": 1050,
+   "facilities_text_mention": 1047,
+   "facilities_enum_only": 3,
+   "facilities_enum_hit": 25,
+   "facilities_by_field": {
+    "procedure": 716,
+    "equipment": 477,
+    "capability": 593,
+    "description": 106
+   },
+   "mention_sentences": 3079,
+   "sentences_by_field": {
+    "procedure": 1227,
+    "equipment": 746,
+    "capability": 996,
+    "description": 110
+   },
+   "sentence_cues": {
+    "negation": 4,
+    "referral": 0,
+    "future": 4,
+    "partner": 0,
+    "parttime": 6,
+    "camp": 2,
+    "past": 1,
+    "hedge": 0,
+    "named_other": 97,
+    "foreign": 4,
+    "is_list": 273,
+    "staff": 26,
+    "directory": 18,
+    "qty": 167,
+    "nonoffer_v1": 28,
+    "nonoffer": 11,
+    "specific": 2760
+   },
+   "facilities_with_any_nonoffer_sentence": 7,
+   "facilities_non_offer_only": 3,
+   "facilities_2plus_fields_clean": 573,
+   "facilities_2plus_fields_own": 573,
+   "facilities_with_any_foreign_sentence": 2,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 103,
+   "prereq_rates_among_text_mentions": {
+    "nephrology": 904,
+    "dialysis_unit_or_machine": 550
+   },
+   "facilities_all_prereqs": 486,
+   "grades": {
+    "medium": 566,
+    "strong": 355,
+    "weak": 123,
+    "enum_only": 3,
+    "non_offer_only": 3
+   },
+   "grades_before_scope_cap": {
+    "medium": 574,
+    "strong": 363,
+    "weak": 107,
+    "enum_only": 3,
+    "non_offer_only": 3
+   },
+   "strong_if_no_corroboration_rule": 464,
+   "strong_with_named_other_sentence": 30,
+   "scope_conflict_capped": 16
+  },
+  "csection": {
+   "facilities_any_mention_text_or_enum": 462,
+   "facilities_text_mention": 462,
+   "facilities_enum_only": 0,
+   "facilities_enum_hit": 0,
+   "facilities_by_field": {
+    "procedure": 439,
+    "equipment": 7,
+    "capability": 109,
+    "description": 14
+   },
+   "mention_sentences": 725,
+   "sentences_by_field": {
+    "procedure": 576,
+    "equipment": 7,
+    "capability": 127,
+    "description": 15
+   },
+   "sentence_cues": {
+    "negation": 1,
+    "referral": 2,
+    "future": 0,
+    "partner": 0,
+    "parttime": 0,
+    "camp": 0,
+    "past": 0,
+    "hedge": 2,
+    "named_other": 5,
+    "foreign": 0,
+    "is_list": 48,
+    "staff": 4,
+    "directory": 2,
+    "qty": 4,
+    "nonoffer_v1": 4,
+    "nonoffer": 4,
+    "specific": 668
+   },
+   "facilities_with_any_nonoffer_sentence": 4,
+   "facilities_non_offer_only": 4,
+   "facilities_2plus_fields_clean": 102,
+   "facilities_2plus_fields_own": 102,
+   "facilities_with_any_foreign_sentence": 0,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 4,
+   "prereq_rates_among_text_mentions": {
+    "obstetrics": 457,
+    "operating_theatre": 216,
+    "anaesthesia": 166
+   },
+   "facilities_all_prereqs": 110,
+   "grades": {
+    "medium": 283,
+    "weak": 152,
+    "strong": 23,
+    "non_offer_only": 4
+   },
+   "grades_before_scope_cap": {
+    "medium": 287,
+    "weak": 148,
+    "strong": 23,
+    "non_offer_only": 4
+   },
+   "strong_if_no_corroboration_rule": 109,
+   "strong_with_named_other_sentence": 1,
+   "scope_conflict_capped": 4
+  },
+  "nicu": {
+   "facilities_any_mention_text_or_enum": 748,
+   "facilities_text_mention": 748,
+   "facilities_enum_only": 0,
+   "facilities_enum_hit": 0,
+   "facilities_by_field": {
+    "procedure": 79,
+    "equipment": 258,
+    "capability": 640,
+    "description": 69
+   },
+   "mention_sentences": 1558,
+   "sentences_by_field": {
+    "procedure": 97,
+    "equipment": 368,
+    "capability": 1023,
+    "description": 70
+   },
+   "sentence_cues": {
+    "negation": 1,
+    "referral": 0,
+    "future": 1,
+    "partner": 0,
+    "parttime": 0,
+    "camp": 0,
+    "past": 0,
+    "hedge": 1,
+    "named_other": 20,
+    "foreign": 0,
+    "is_list": 191,
+    "staff": 7,
+    "directory": 9,
+    "qty": 196,
+    "nonoffer_v1": 11,
+    "nonoffer": 3,
+    "specific": 1359
+   },
+   "facilities_with_any_nonoffer_sentence": 3,
+   "facilities_non_offer_only": 1,
+   "facilities_2plus_fields_clean": 256,
+   "facilities_2plus_fields_own": 256,
+   "facilities_with_any_foreign_sentence": 0,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 123,
+   "prereq_rates_among_text_mentions": {
+    "paeds_or_neonatology": 715,
+    "incubator_warmer_ventilator": 231
+   },
+   "facilities_all_prereqs": 226,
+   "grades": {
+    "medium": 532,
+    "strong": 125,
+    "weak": 90,
+    "non_offer_only": 1
+   },
+   "grades_before_scope_cap": {
+    "medium": 539,
+    "strong": 128,
+    "weak": 80,
+    "non_offer_only": 1
+   },
+   "strong_if_no_corroboration_rule": 211,
+   "strong_with_named_other_sentence": 1,
+   "scope_conflict_capped": 10
+  },
+  "cardiac_surgery": {
+   "facilities_any_mention_text_or_enum": 975,
+   "facilities_text_mention": 673,
+   "facilities_enum_only": 302,
+   "facilities_enum_hit": 728,
+   "facilities_by_field": {
+    "procedure": 484,
+    "equipment": 43,
+    "capability": 417,
+    "description": 44
+   },
+   "mention_sentences": 1961,
+   "sentences_by_field": {
+    "procedure": 1158,
+    "equipment": 63,
+    "capability": 694,
+    "description": 46
+   },
+   "sentence_cues": {
+    "negation": 2,
+    "referral": 0,
+    "future": 0,
+    "partner": 0,
+    "parttime": 1,
+    "camp": 3,
+    "past": 0,
+    "hedge": 0,
+    "named_other": 39,
+    "foreign": 2,
+    "is_list": 284,
+    "staff": 86,
+    "directory": 11,
+    "qty": 35,
+    "nonoffer_v1": 24,
+    "nonoffer": 5,
+    "specific": 1604
+   },
+   "facilities_with_any_nonoffer_sentence": 4,
+   "facilities_non_offer_only": 3,
+   "facilities_2plus_fields_clean": 272,
+   "facilities_2plus_fields_own": 272,
+   "facilities_with_any_foreign_sentence": 2,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 23,
+   "prereq_rates_among_text_mentions": {
+    "cardiothoracic_surgeon_or_dept": 522,
+    "cathlab_or_heart_lung": 281
+   },
+   "facilities_all_prereqs": 233,
+   "grades": {
+    "medium": 348,
+    "enum_only": 302,
+    "weak": 186,
+    "strong": 136,
+    "non_offer_only": 3
+   },
+   "grades_before_scope_cap": {
+    "medium": 355,
+    "enum_only": 302,
+    "weak": 178,
+    "strong": 137,
+    "non_offer_only": 3
+   },
+   "strong_if_no_corroboration_rule": 211,
+   "strong_with_named_other_sentence": 9,
+   "scope_conflict_capped": 8
+  },
+  "mri": {
+   "facilities_any_mention_text_or_enum": 964,
+   "facilities_text_mention": 964,
+   "facilities_enum_only": 0,
+   "facilities_enum_hit": 0,
+   "facilities_by_field": {
+    "procedure": 456,
+    "equipment": 886,
+    "capability": 345,
+    "description": 74
+   },
+   "mention_sentences": 3165,
+   "sentences_by_field": {
+    "procedure": 823,
+    "equipment": 1709,
+    "capability": 554,
+    "description": 79
+   },
+   "sentence_cues": {
+    "negation": 3,
+    "referral": 0,
+    "future": 10,
+    "partner": 16,
+    "parttime": 0,
+    "camp": 0,
+    "past": 2,
+    "hedge": 5,
+    "named_other": 27,
+    "foreign": 1,
+    "is_list": 297,
+    "staff": 16,
+    "directory": 9,
+    "qty": 589,
+    "nonoffer_v1": 56,
+    "nonoffer": 36,
+    "specific": 2819
+   },
+   "facilities_with_any_nonoffer_sentence": 24,
+   "facilities_non_offer_only": 9,
+   "facilities_2plus_fields_clean": 540,
+   "facilities_2plus_fields_own": 540,
+   "facilities_with_any_foreign_sentence": 1,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 240,
+   "prereq_rates_among_text_mentions": {
+    "mri_scanner": 699
+   },
+   "facilities_all_prereqs": 699,
+   "grades": {
+    "strong": 534,
+    "medium": 230,
+    "weak": 191,
+    "non_offer_only": 9
+   },
+   "grades_before_scope_cap": {
+    "strong": 542,
+    "medium": 233,
+    "weak": 180,
+    "non_offer_only": 9
+   },
+   "strong_if_no_corroboration_rule": 683,
+   "strong_with_named_other_sentence": 11,
+   "scope_conflict_capped": 11
+  },
+  "burns": {
+   "facilities_any_mention_text_or_enum": 278,
+   "facilities_text_mention": 232,
+   "facilities_enum_only": 46,
+   "facilities_enum_hit": 136,
+   "facilities_by_field": {
+    "procedure": 111,
+    "equipment": 29,
+    "capability": 156,
+    "description": 22
+   },
+   "mention_sentences": 424,
+   "sentences_by_field": {
+    "procedure": 138,
+    "equipment": 39,
+    "capability": 224,
+    "description": 23
+   },
+   "sentence_cues": {
+    "negation": 2,
+    "referral": 0,
+    "future": 1,
+    "partner": 0,
+    "parttime": 1,
+    "camp": 0,
+    "past": 0,
+    "hedge": 1,
+    "named_other": 6,
+    "foreign": 0,
+    "is_list": 120,
+    "staff": 7,
+    "directory": 0,
+    "qty": 11,
+    "nonoffer_v1": 11,
+    "nonoffer": 4,
+    "specific": 300
+   },
+   "facilities_with_any_nonoffer_sentence": 4,
+   "facilities_non_offer_only": 2,
+   "facilities_2plus_fields_clean": 73,
+   "facilities_2plus_fields_own": 73,
+   "facilities_with_any_foreign_sentence": 0,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 9,
+   "prereq_rates_among_text_mentions": {
+    "burn_unit_or_plastic_surgery": 208
+   },
+   "facilities_all_prereqs": 208,
+   "grades": {
+    "medium": 91,
+    "weak": 77,
+    "strong": 62,
+    "enum_only": 46,
+    "non_offer_only": 2
+   },
+   "grades_before_scope_cap": {
+    "medium": 95,
+    "strong": 68,
+    "weak": 67,
+    "enum_only": 46,
+    "non_offer_only": 2
+   },
+   "strong_if_no_corroboration_rule": 151,
+   "strong_with_named_other_sentence": 3,
+   "scope_conflict_capped": 10
+  },
+  "trauma": {
+   "facilities_any_mention_text_or_enum": 3606,
+   "facilities_text_mention": 3237,
+   "facilities_enum_only": 369,
+   "facilities_enum_hit": 2110,
+   "facilities_by_field": {
+    "procedure": 948,
+    "equipment": 195,
+    "capability": 3037,
+    "description": 425
+   },
+   "mention_sentences": 9041,
+   "sentences_by_field": {
+    "procedure": 1400,
+    "equipment": 220,
+    "capability": 6969,
+    "description": 452
+   },
+   "sentence_cues": {
+    "negation": 6,
+    "referral": 2,
+    "future": 7,
+    "partner": 5,
+    "parttime": 13,
+    "camp": 1,
+    "past": 0,
+    "hedge": 1,
+    "named_other": 112,
+    "foreign": 2,
+    "is_list": 798,
+    "staff": 160,
+    "directory": 91,
+    "qty": 99,
+    "nonoffer_v1": 44,
+    "nonoffer": 22,
+    "specific": 8046
+   },
+   "facilities_with_any_nonoffer_sentence": 19,
+   "facilities_non_offer_only": 7,
+   "facilities_2plus_fields_clean": 1161,
+   "facilities_2plus_fields_own": 1161,
+   "facilities_with_any_foreign_sentence": 2,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 83,
+   "prereq_rates_among_text_mentions": {
+    "emergency_24x7": 2262,
+    "surgery_or_ortho": 2842,
+    "ct": 1024
+   },
+   "facilities_all_prereqs": 719,
+   "grades": {
+    "medium": 2075,
+    "weak": 801,
+    "enum_only": 369,
+    "strong": 354,
+    "non_offer_only": 7
+   },
+   "grades_before_scope_cap": {
+    "medium": 2152,
+    "weak": 717,
+    "enum_only": 369,
+    "strong": 361,
+    "non_offer_only": 7
+   },
+   "strong_if_no_corroboration_rule": 702,
+   "strong_with_named_other_sentence": 16,
+   "scope_conflict_capped": 84
+  },
+  "icu": {
+   "facilities_any_mention_text_or_enum": 2828,
+   "facilities_text_mention": 2344,
+   "facilities_enum_only": 484,
+   "facilities_enum_hit": 1693,
+   "facilities_by_field": {
+    "procedure": 212,
+    "equipment": 899,
+    "capability": 2061,
+    "description": 267
+   },
+   "mention_sentences": 6088,
+   "sentences_by_field": {
+    "procedure": 270,
+    "equipment": 1340,
+    "capability": 4198,
+    "description": 280
+   },
+   "sentence_cues": {
+    "negation": 0,
+    "referral": 2,
+    "future": 6,
+    "partner": 0,
+    "parttime": 5,
+    "camp": 1,
+    "past": 0,
+    "hedge": 0,
+    "named_other": 92,
+    "foreign": 5,
+    "is_list": 936,
+    "staff": 144,
+    "directory": 44,
+    "qty": 428,
+    "nonoffer_v1": 34,
+    "nonoffer": 9,
+    "specific": 5017
+   },
+   "facilities_with_any_nonoffer_sentence": 9,
+   "facilities_non_offer_only": 2,
+   "facilities_2plus_fields_clean": 937,
+   "facilities_2plus_fields_own": 936,
+   "facilities_with_any_foreign_sentence": 5,
+   "facilities_other_facility_only": 0,
+   "facilities_with_qty": 309,
+   "prereq_rates_among_text_mentions": {
+    "ventilator": 420,
+    "critical_care_or_anaesthesia": 1816
+   },
+   "facilities_all_prereqs": 347,
+   "grades": {
+    "medium": 1593,
+    "weak": 528,
+    "enum_only": 484,
+    "strong": 221,
+    "non_offer_only": 2
+   },
+   "grades_before_scope_cap": {
+    "medium": 1638,
+    "enum_only": 484,
+    "weak": 477,
+    "strong": 227,
+    "non_offer_only": 2
+   },
+   "strong_if_no_corroboration_rule": 328,
+   "strong_with_named_other_sentence": 9,
+   "scope_conflict_capped": 51
+  }
+ },
+ "cross_field_echo": {
+  "dialysis": {
+   "facilities_2plus_fields": 573,
+   "with_near_duplicate_sentence_across_fields_ratio85": 154
+  },
+  "csection": {
+   "facilities_2plus_fields": 102,
+   "with_near_duplicate_sentence_across_fields_ratio85": 29
+  },
+  "nicu": {
+   "facilities_2plus_fields": 255,
+   "with_near_duplicate_sentence_across_fields_ratio85": 85
+  },
+  "cardiac_surgery": {
+   "facilities_2plus_fields": 272,
+   "with_near_duplicate_sentence_across_fields_ratio85": 64
+  },
+  "mri": {
+   "facilities_2plus_fields": 538,
+   "with_near_duplicate_sentence_across_fields_ratio85": 144
+  },
+  "burns": {
+   "facilities_2plus_fields": 73,
+   "with_near_duplicate_sentence_across_fields_ratio85": 24
+  },
+  "trauma": {
+   "facilities_2plus_fields": 1158,
+   "with_near_duplicate_sentence_across_fields_ratio85": 293
+  },
+  "icu": {
+   "facilities_2plus_fields": 935,
+   "with_near_duplicate_sentence_across_fields_ratio85": 284
+  }
+ },
+ "specialties": {
+  "distinct_raw": 2927,
+  "distinct_normalised": 2476,
+  "singletons_raw": 1971,
+  "values_used_by_10plus_facilities": 301,
+  "rows_with_duplicate_values": 9848,
+  "rows_nonempty": 9970,
+  "camelcase_share_of_facility_uses": 0.9833,
+  "mean_items": 27.98,
+  "mean_distinct_items": 11.87
+ },
+ "inflation": {
+  "facilityTypeId": {
+   "hospital": {
+    "facilities": 5621,
+    "share_claiming": {
+     "dialysis": 0.1759,
+     "csection": 0.0696,
+     "nicu": 0.1258,
+     "cardiac_surgery": 0.1133,
+     "mri": 0.1325,
+     "burns": 0.0361,
+     "trauma": 0.5177,
+     "icu": 0.3914
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.335,
+     "csection": 0.054,
+     "nicu": 0.171,
+     "cardiac_surgery": 0.207,
+     "mri": 0.519,
+     "burns": 0.3,
+     "trauma": 0.119,
+     "icu": 0.097
+    },
+    "mean_services_claimed": 1.566,
+    "claim_6plus_of_8": 79
+   },
+   "clinic": {
+    "facilities": 3770,
+    "share_claiming": {
+     "dialysis": 0.0154,
+     "csection": 0.0186,
+     "nicu": 0.0103,
+     "cardiac_surgery": 0.0095,
+     "mri": 0.056,
+     "burns": 0.0077,
+     "trauma": 0.079,
+     "icu": 0.0358
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.414,
+     "csection": 0.029,
+     "nicu": 0.128,
+     "cardiac_surgery": 0.111,
+     "mri": 0.687,
+     "burns": 0.034,
+     "trauma": 0.02,
+     "icu": 0.044
+    },
+    "mean_services_claimed": 0.232,
+    "claim_6plus_of_8": 2
+   },
+   "dentist": {
+    "facilities": 488,
+    "share_claiming": {
+     "dialysis": 0.0,
+     "csection": 0.0,
+     "nicu": 0.0,
+     "cardiac_surgery": 0.0,
+     "mri": 0.0,
+     "burns": 0.0,
+     "trauma": 0.0369,
+     "icu": 0.002
+    },
+    "strong_share_of_claims": {
+     "dialysis": null,
+     "csection": null,
+     "nicu": null,
+     "cardiac_surgery": null,
+     "mri": null,
+     "burns": null,
+     "trauma": 0.0,
+     "icu": 0.0
+    },
+    "mean_services_claimed": 0.039,
+    "claim_6plus_of_8": 0
+   },
+   "null": {
+    "facilities": 57,
+    "share_claiming": {
+     "dialysis": 0.0,
+     "csection": 0.0,
+     "nicu": 0.0,
+     "cardiac_surgery": 0.0,
+     "mri": 0.0351,
+     "burns": 0.0,
+     "trauma": 0.0175,
+     "icu": 0.0351
+    },
+    "strong_share_of_claims": {
+     "dialysis": null,
+     "csection": null,
+     "nicu": null,
+     "cardiac_surgery": null,
+     "mri": 1.0,
+     "burns": null,
+     "trauma": 0.0,
+     "icu": 0.0
+    },
+    "mean_services_claimed": 0.088,
+    "claim_6plus_of_8": 0
+   },
+   "doctor": {
+    "facilities": 21,
+    "share_claiming": {
+     "dialysis": 0.0,
+     "csection": 0.0476,
+     "nicu": 0.0,
+     "cardiac_surgery": 0.0,
+     "mri": 0.0476,
+     "burns": 0.0,
+     "trauma": 0.0952,
+     "icu": 0.0
+    },
+    "strong_share_of_claims": {
+     "dialysis": null,
+     "csection": 0.0,
+     "nicu": null,
+     "cardiac_surgery": null,
+     "mri": 1.0,
+     "burns": null,
+     "trauma": 0.0,
+     "icu": null
+    },
+    "mean_services_claimed": 0.19,
+    "claim_6plus_of_8": 0
+   }
+  },
+  "size": {
+   "NA": {
+    "facilities": 7454,
+    "share_claiming": {
+     "dialysis": 0.0499,
+     "csection": 0.0309,
+     "nicu": 0.0413,
+     "cardiac_surgery": 0.0272,
+     "mri": 0.0563,
+     "burns": 0.013,
+     "trauma": 0.2155,
+     "icu": 0.1206
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.328,
+     "csection": 0.061,
+     "nicu": 0.167,
+     "cardiac_surgery": 0.089,
+     "mri": 0.589,
+     "burns": 0.247,
+     "trauma": 0.051,
+     "icu": 0.067
+    },
+    "mean_services_claimed": 0.556,
+    "claim_6plus_of_8": 9
+   },
+   "50-199": {
+    "facilities": 1088,
+    "share_claiming": {
+     "dialysis": 0.3309,
+     "csection": 0.1011,
+     "nicu": 0.1967,
+     "cardiac_surgery": 0.1746,
+     "mri": 0.1875,
+     "burns": 0.0579,
+     "trauma": 0.7215,
+     "icu": 0.6415
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.364,
+     "csection": 0.027,
+     "nicu": 0.145,
+     "cardiac_surgery": 0.258,
+     "mri": 0.498,
+     "burns": 0.238,
+     "trauma": 0.18,
+     "icu": 0.118
+    },
+    "mean_services_claimed": 2.415,
+    "claim_6plus_of_8": 30
+   },
+   "200+": {
+    "facilities": 677,
+    "share_claiming": {
+     "dialysis": 0.3427,
+     "csection": 0.0768,
+     "nicu": 0.2142,
+     "cardiac_surgery": 0.3501,
+     "mri": 0.4195,
+     "burns": 0.0665,
+     "trauma": 0.7194,
+     "icu": 0.644
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.345,
+     "csection": 0.077,
+     "nicu": 0.159,
+     "cardiac_surgery": 0.27,
+     "mri": 0.555,
+     "burns": 0.289,
+     "trauma": 0.205,
+     "icu": 0.109
+    },
+    "mean_services_claimed": 2.842,
+    "claim_6plus_of_8": 40
+   },
+   "10-49": {
+    "facilities": 677,
+    "share_claiming": {
+     "dialysis": 0.1211,
+     "csection": 0.0931,
+     "nicu": 0.1137,
+     "cardiac_surgery": 0.0606,
+     "mri": 0.0724,
+     "burns": 0.0355,
+     "trauma": 0.5037,
+     "icu": 0.4357
+    },
+    "strong_share_of_claims": {
+     "dialysis": 0.256,
+     "csection": 0.032,
+     "nicu": 0.262,
+     "cardiac_surgery": 0.122,
+     "mri": 0.571,
+     "burns": 0.375,
+     "trauma": 0.085,
+     "icu": 0.095
+    },
+    "mean_services_claimed": 1.437,
+    "claim_6plus_of_8": 2
+   },
+   "1-9": {
+    "facilities": 61,
+    "share_claiming": {
+     "dialysis": 0.0164,
+     "csection": 0.0984,
+     "nicu": 0.0164,
+     "cardiac_surgery": 0.0,
+     "mri": 0.0328,
+     "burns": 0.0492,
+     "trauma": 0.0984,
+     "icu": 0.1311
+    },
+    "strong_share_of_claims": {
+     "dialysis": 1.0,
+     "csection": 0.0,
+     "nicu": 0.0,
+     "cardiac_surgery": null,
+     "mri": 0.0,
+     "burns": 0.333,
+     "trauma": 0.0,
+     "icu": 0.0
+    },
+    "mean_services_claimed": 0.443,
+    "claim_6plus_of_8": 0
+   }
+  }
+ },
+ "small_lt20_beds_claiming_tertiary": {
+  "cardiac_surgery": 6,
+  "mri": 12,
+  "nicu": 13,
+  "burns": 9
+ },
+ "small_lt20_beds_denominator": 235
+}

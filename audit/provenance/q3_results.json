@@ -1,0 +1,130 @@
+{
+ "rows": 165627,
+ "distinct_pincodes": 19586,
+ "lat_lon": {
+  "lat_literal_NA": 12007,
+  "lon_literal_NA": 12002,
+  "lat_null": 0,
+  "lat_unparseable_non_NA": 6,
+  "lon_unparseable_non_NA": 6,
+  "both_numeric": 153612,
+  "zero_coords": 13,
+  "in_india_bbox": 151001,
+  "swapped_lat_lon": 791,
+  "numeric_outside_bbox_not_swapped": 1820
+ },
+ "admin_NA": {
+  "district": 715,
+  "statename": 715
+ },
+ "pins_multi_district": 1258,
+ "pins_multi_state": 52,
+ "pins_only_NA_admin": 100,
+ "multi_state_examples": {
+  "110025": [
+   "DELHI",
+   "UTTAR PRADESH"
+  ],
+  "244923": [
+   "UTTAR PRADESH",
+   "UTTARAKHAND"
+  ],
+  "244924": [
+   "UTTAR PRADESH",
+   "UTTARAKHAND"
+  ],
+  "247662": [
+   "UTTAR PRADESH",
+   "UTTARAKHAND"
+  ],
+  "305402": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ],
+  "311601": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ],
+  "332028": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ],
+  "333022": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ],
+  "335513": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ],
+  "335526": [
+   "RAJASTHAN",
+   "TELANGANA"
+  ]
+ },
+ "circle_state_mismatch_rows": 48,
+ "circle_state_mismatch_pins": 23,
+ "circle_state_mismatch_by_pair": {
+  "ANDHRA PRADESH -> TELANGANA": 1,
+  "APS CIRCLE -> UTTAR PRADESH": 1,
+  "APS CIRCLE -> WEST BENGAL": 1,
+  "BIHAR -> JHARKHAND": 2,
+  "BIHAR -> UTTAR PRADESH": 1,
+  "DELHI -> UTTAR PRADESH": 1,
+  "GUJARAT -> RAJASTHAN": 1,
+  "NORTH EASTERN -> TELANGANA": 4,
+  "ODISHA -> TELANGANA": 1,
+  "RAJASTHAN -> CHHATTISGARH": 1,
+  "RAJASTHAN -> TELANGANA": 8,
+  "TAMILNADU -> KERALA": 1,
+  "TELANGANA -> ANDHRA PRADESH": 19,
+  "UTTAR PRADESH -> UTTARAKHAND": 6
+ },
+ "pins_with_coords": 19558,
+ "pins_without_any_coord": 28,
+ "pins_office_gt_50km_from_pin_median": 4836,
+ "office_rows_gt_50km_from_pin_median": 12098,
+ "office_rows_gt_200km_from_pin_median": 3931,
+ "facility_pins": {
+  "rows": 9959,
+  "null_like": 10,
+  "valid_6digit": 9879,
+  "valid_after_space_strip_only": 153,
+  "invalid_format_non_null": 70,
+  "valid_in_directory": 9674,
+  "valid_not_in_directory": 205,
+  "valid_in_directory_with_centroid": 9497,
+  "valid_pin_has_circle_state_mismatch": 14,
+  "distinct_facility_pins": 3018,
+  "not_in_directory_examples": [
+   500063,
+   560052,
+   390015,
+   363631,
+   263129,
+   390015,
+   500025,
+   600029,
+   492011,
+   400062,
+   422400,
+   382029,
+   302014,
+   144400,
+   843001
+  ]
+ },
+ "facility_coord_vs_pin_centroid_km": {
+  "compared": 9497,
+  "quantiles": {
+   "0.5": 2.2,
+   "0.75": 10.2,
+   "0.9": 129.3,
+   "0.95": 266.5,
+   "0.99": 552.7
+  },
+  "gt_25km": 1759,
+  "gt_50km": 1394,
+  "gt_200km": 670
+ }
+}

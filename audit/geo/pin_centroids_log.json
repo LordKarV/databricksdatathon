@@ -1,0 +1,268 @@
+{
+ "rows_total": 165627,
+ "distinct_pins": 19586,
+ "dropped_unparsed": 12015,
+ "dropped_unparsed_literal_NA": 12009,
+ "dropped_zero": 13,
+ "swapped_fixed": 791,
+ "dropped_outside_india_bbox": 1804,
+ "outside_examples": [
+  [
+   "110018",
+   "Chaukhandi B.O",
+   "24.8671830",
+   "67.2736150"
+  ],
+  [
+   "110043",
+   "Kair B.O",
+   "30.0444200",
+   "31.2357120"
+  ],
+  [
+   "121102",
+   "Chant BO",
+   "41.7994510",
+   "87.5886960"
+  ],
+  [
+   "121103",
+   "Hurithal BO",
+   "46.9332280",
+   "8.7618880"
+  ],
+  [
+   "121105",
+   "Manpur BO",
+   "27.3842940",
+   "30.7477710"
+  ],
+  [
+   "123001",
+   "Narnaul HO",
+   "228.04489",
+   "76.117029"
+  ],
+  [
+   "126101",
+   "Budda Khera Lather B.O",
+   "29.3000000",
+   "25.3000000"
+  ],
+  [
+   "126101",
+   "Deorer B.O",
+   "33.3000000",
+   "36.3000000"
+  ]
+ ],
+ "offices_on_shared_coarse_point": 13904,
+ "dropped_far_from_pin_median": 13729,
+ "far_examples": [
+  [
+   "110005",
+   "Bank Street SO Central Delhi",
+   "CENTRAL",
+   "22.0000000",
+   "77.0000000",
+   "739.9"
+  ],
+  [
+   "110010",
+   "COD SO South West Delhi",
+   "NEW DELHI",
+   "25.59",
+   "77.15",
+   "332.8"
+  ],
+  [
+   "110043",
+   "Daulatpur B.O",
+   "WEST",
+   "31.774749",
+   "75.998544999999993",
+   "364.8"
+  ],
+  [
+   "110043",
+   "Khaira B.O",
+   "WEST",
+   "24.8715350",
+   "86.2071060",
+   "1005.4"
+  ],
+  [
+   "110045",
+   "Indira Park B.O",
+   "SOUTH WEST",
+   "17.4136550",
+   "78.4838330",
+   "1251.0"
+  ],
+  [
+   "110059",
+   "Uttam Nagar S.O",
+   "WEST",
+   "28.6270833",
+   "77.8844167",
+   "81.3"
+  ],
+  [
+   "110064",
+   "Mayapuri Shopping Centre S.O",
+   "WEST",
+   "28.6147560",
+   "71.1129200",
+   "585.4"
+  ],
+  [
+   "110071",
+   "Qutub Vihar SO",
+   "SOUTH WEST",
+   "28.5748060",
+   "77.6276850",
+   "61.7"
+  ]
+ ],
+ "offices_kept": 138066,
+ "offices_kept_but_not_used_coarse": 7911,
+ "pins_with_centroid": 19346,
+ "pins_without_centroid": 240,
+ "pins_multi_state": 52,
+ "pins_state_unknown": 100,
+ "pins_state_label_outside_zone": 4,
+ "pins_state_label_outside_zone_examples": [
+  [
+   "334002",
+   "CHHATTISGARH",
+   "RAIPUR"
+  ],
+  [
+   "799001",
+   "TELANGANA",
+   "Nirmal"
+  ],
+  [
+   "900056",
+   "UTTAR PRADESH",
+   "KUSHI NAGAR"
+  ],
+  [
+   "900099",
+   "WEST BENGAL",
+   "KOLKATA"
+  ]
+ ],
+ "pins_state_relabelled": 2,
+ "pins_outside_state_box": 93,
+ "pins_outside_state_box_by_state": {
+  "UTTAR PRADESH/PRATAPGARH": 30,
+  "KERALA/PALAKKAD": 14,
+  "BIHAR/AURANGABAD": 4,
+  "WEST BENGAL/MEDINIPUR EAST": 4,
+  "KERALA/KOTTAYAM": 3,
+  "WEST BENGAL/HOWRAH": 2,
+  "BIHAR/PATNA": 2,
+  "BIHAR/SARAN": 2,
+  "UTTARAKHAND/PAURI GARHWAL": 2,
+  "BIHAR/ARWAL": 2,
+  "UTTAR PRADESH/BIJNOR": 2,
+  "JAMMU AND KASHMIR/RAJOURI": 2
+ },
+ "pins_misplaced_knn_only": 129,
+ "pins_misplaced_total": 184,
+ "pins_misplaced_examples": [
+  [
+   "110072",
+   "DELHI",
+   "SOUTH WEST",
+   "28.644252350000002",
+   "77.45851865",
+   "0.06666666666666667"
+  ],
+  [
+   "121009",
+   "HARYANA",
+   "FARIDABAD",
+   "28.4881111",
+   "77.2945833",
+   "0.13333333333333333"
+  ],
+  [
+   "121010",
+   "HARYANA",
+   "FARIDABAD",
+   "28.51061945",
+   "77.6399639",
+   "0.13333333333333333"
+  ],
+  [
+   "122413",
+   "HARYANA",
+   "GURUGRAM",
+   "29.387631",
+   "77.446429",
+   "0.06666666666666667"
+  ],
+  [
+   "123110",
+   "HARYANA",
+   "REWARI",
+   "28.2335556",
+   "77.8032778",
+   "0.06666666666666667"
+  ],
+  [
+   "125052",
+   "HARYANA",
+   "HISAR",
+   "28.2817778",
+   "75.4726389",
+   "0.06666666666666667"
+  ],
+  [
+   "125121",
+   "HARYANA",
+   "HISAR",
+   "29.356295",
+   "74.079947",
+   "0.0"
+  ],
+  [
+   "131022",
+   "HARYANA",
+   "SONIPAT",
+   "21.15",
+   "81.71",
+   "0.0"
+  ],
+  [
+   "132157",
+   "HARYANA",
+   "KARNAL",
+   "20.8370278",
+   "76.7370278",
+   "0.06666666666666667"
+  ],
+  [
+   "140507",
+   "PUNJAB",
+   "S.A.S Nagar",
+   "30.4601667",
+   "76.8762778",
+   "0.06666666666666667"
+  ]
+ ],
+ "pins_coarse_majority": 677,
+ "pins_best_point_source": {
+  "pin_median": 19162,
+  "district_median": 413,
+  "prefix3_median": 9,
+  "nan": 2
+ },
+ "spread_p90_km_quantiles": [
+  5.8,
+  26.0,
+  44.5
+ ]
+}

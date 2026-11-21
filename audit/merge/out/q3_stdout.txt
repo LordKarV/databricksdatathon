@@ -1,0 +1,47 @@
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:44: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  hit = nm.str.contains(rx, regex=True) & ~nm.str.contains(MULTI, regex=True)
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:44: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  hit = nm.str.contains(rx, regex=True) & ~nm.str.contains(MULTI, regex=True)
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+/Users/karthikvattem/projects/datathon/audit/merge/q3_name_content.py:53: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m = s.text.str.contains(rx, case=False, regex=True) & ~s.text.map(lambda t: bool(ORGAN_OK.search(t)))
+single-specialty-named records: {'dental': 1710, 'lab': 598, 'eye': 591, 'ivf': 215, 'skin': 157, 'ent': 151, 'physio': 63} total 3485 of 9959
+        service name_class  records  sentences  sentences_quarantined  sentences_any_flag
+       dialysis     dental        1          2                      0                   0
+       dialysis        eye        9         42                      3                   3
+       dialysis        ivf        4         21                      0                   2
+       dialysis        lab        7         17                      0                   0
+       dialysis     physio        1          2                      0                   0
+       dialysis       skin        1          2                      0                   0
+cardiac_surgery     dental        1          3                      0                   0
+cardiac_surgery        ent        1          2                      0                   0
+cardiac_surgery        eye        6          8                      0                   0
+cardiac_surgery        ivf        2          4                      0                   0
+cardiac_surgery        lab        4          5                      0                   0
+           nicu     dental        3          9                      3                   3
+           nicu        eye        9         17                      0                   0
+           nicu        ivf       14         37                      0                   0
+           nicu        lab        5         10                      0                   0
+         trauma     dental       18         28                      0                   0
+         trauma        ent        3          4                      0                   0
+         trauma        eye       21         35                      0                   0
+         trauma        ivf        5          5                      0                   0
+         trauma        lab        5          9                      0                   0
+         trauma     physio        4         12                      0                   0
+         trauma       skin        3          4                      0                   0
+      c_section        eye        4          5                      0                   0
+      c_section        lab        2          2                      0                   0
+           burn        eye        2          5                      0                   0
+           burn       skin        7         12                      0                   0
+records with >=1 contradiction: 111 of 3485 single-specialty-named records; sentences 297
+  of these sentences, already quarantined by Q5 policy: 6 ; carrying any merge flag: 8
+  by name_class (records): {'eye': 37, 'ivf': 22, 'dental': 20, 'lab': 16, 'skin': 8, 'physio': 5, 'ent': 3}

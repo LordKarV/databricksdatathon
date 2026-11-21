@@ -1,0 +1,242 @@
+{
+ "denominator_rows": 9970,
+ "vocabulary_size": 2932,
+ "top_specialties_record_share": {
+  "internalMedicine": 6847,
+  "familyMedicine": 5178,
+  "gynecologyAndObstetrics": 4497,
+  "dentistry": 4192,
+  "orthopedicSurgery": 3526,
+  "pediatrics": 3438,
+  "generalSurgery": 3198,
+  "cardiology": 3011,
+  "radiology": 2999,
+  "ophthalmology": 2828,
+  "otolaryngology": 2702,
+  "urology": 2628
+ },
+ "records_with_duplicated_specialty_items": 9848,
+ "raw_items_total": 278994,
+ "distinct_items_total": 118378,
+ "distinct_by_type": {
+  "clinic": {
+   "rows": 3770,
+   "p50_p90_p99": [
+    7.0,
+    15.0,
+    27.0
+   ],
+   "max": 38
+  },
+  "dentist": {
+   "rows": 488,
+   "p50_p90_p99": [
+    7.0,
+    13.0,
+    26.0
+   ],
+   "max": 35
+  },
+  "doctor": {
+   "rows": 21,
+   "p50_p90_p99": [
+    5.0,
+    12.0,
+    14.6
+   ],
+   "max": 15
+  },
+  "farmacy": {
+   "rows": 10,
+   "p50_p90_p99": [
+    5.0,
+    17.3,
+    19.7
+   ],
+   "max": 20
+  },
+  "hospital": {
+   "rows": 5621,
+   "p50_p90_p99": [
+    14.0,
+    28.0,
+    38.0
+   ],
+   "max": 50
+  },
+  "null": {
+   "rows": 57,
+   "p50_p90_p99": [
+    3.0,
+    8.4,
+    14.9
+   ],
+   "max": 16
+  },
+  "nursing_home": {
+   "rows": 1,
+   "p50_p90_p99": [
+    4.0,
+    4.0,
+    4.0
+   ],
+   "max": 4
+  },
+  "pharmacy": {
+   "rows": 2,
+   "p50_p90_p99": [
+    3.0,
+    4.6,
+    5.0
+   ],
+   "max": 5
+  }
+ },
+ "distinct_by_doctor_bucket": {
+  "0-1": {
+   "rows": 1208,
+   "p50_p90": [
+    9.0,
+    22.0
+   ]
+  },
+  "2-5": {
+   "rows": 1251,
+   "p50_p90": [
+    11.0,
+    24.0
+   ]
+  },
+  "6-20": {
+   "rows": 586,
+   "p50_p90": [
+    17.0,
+    29.0
+   ]
+  },
+  "21-100": {
+   "rows": 429,
+   "p50_p90": [
+    22.0,
+    32.0
+   ]
+  },
+  ">100": {
+   "rows": 156,
+   "p50_p90": [
+    24.5,
+    35.5
+   ]
+  }
+ },
+ "distinct_doctors_missing": {
+  "rows": 6340,
+  "p50_p90": [
+   8.0,
+   23.0
+  ]
+ },
+ "distinct_by_source_url_bucket": {
+  "0-1": {
+   "rows": 13,
+   "p50_p90": [
+    3.0,
+    7.6
+   ]
+  },
+  "2-3": {
+   "rows": 1050,
+   "p50_p90": [
+    4.0,
+    11.0
+   ]
+  },
+  "4-6": {
+   "rows": 2854,
+   "p50_p90": [
+    6.0,
+    15.0
+   ]
+  },
+  "7-12": {
+   "rows": 2592,
+   "p50_p90": [
+    9.0,
+    22.0
+   ]
+  },
+  ">12": {
+   "rows": 3461,
+   "p50_p90": [
+    18.0,
+    29.0
+   ]
+  }
+ },
+ "spearman_nspec_vs_nurls": 0.594,
+ "spearman_nspec_vs_doctors": 0.431,
+ "claims_everything": {
+  "ge_30_distinct_any": {
+   "count": 417,
+   "ids": [
+    "00e877a0-930f-49f2-8cd9-f2c55c11c9cb",
+    "01ebcc64-4666-4062-aa8e-70cede39fa68",
+    "02331520-e043-4073-ad2c-f649608a1890",
+    "027972c1-8235-4690-95d4-0cbff3bcb3bb",
+    "0360b38b-339c-4e59-a13d-cad7fca05ed2",
+    "039bcc45-f15f-4419-9a04-2aae8ab20bef",
+    "04560a89-f23b-4532-a658-36edc91503ce",
+    "04747dd8-799d-41b9-b652-190583e03dee",
+    "047c54d5-0ecb-4353-9e5c-e39c6bbf59ea",
+    "06bdf654-fc15-49eb-89c5-e3c14010ebe1"
+   ]
+  },
+  "clinic_ge_15_distinct": {
+   "count": 436,
+   "ids": [
+    "00052555-6558-42ad-bc9e-cf398414209c",
+    "00154d81-ce6b-4c73-a49b-4bd3c20580f7",
+    "00a95ae5-e99b-44f1-9cc3-ab97a1f53590",
+    "00cde61f-929a-49ef-abf6-303a9e5fedad",
+    "00fadd88-df09-4a1e-a3ad-95c5a431b2d1",
+    "01da102f-8e41-456d-a2fb-3c87124af1f1",
+    "01e5cba5-fa14-44cd-a852-bc6939697ff1",
+    "02068f46-df3d-405b-a5be-f660d1b58664",
+    "02d77467-9415-4e72-98c5-118761328c89",
+    "031c4526-647c-4fb6-9bef-08eef74f79bd"
+   ]
+  },
+  "dentist_ge_10_distinct": {
+   "count": 150,
+   "ids": [
+    "01de6837-b53b-4c4c-8015-877ced8a6d1f",
+    "01ebcc64-4666-4062-aa8e-70cede39fa68",
+    "02244f1f-0257-4c14-a88d-bdd6171c66d4",
+    "0280c810-0aa0-4a29-82d2-e25875640538",
+    "0346cea9-e519-46ab-a88a-19dc553aa574",
+    "042ebbab-e9e2-489f-b6d5-60467be20e6b",
+    "0472157c-67c5-4e77-94e7-ebbfd963ed07",
+    "04d619b5-28fc-4a99-adc0-ee5782fb63c1",
+    "0d9b665a-45ee-46a6-88e7-d3934be1c13f",
+    "0f31fc3e-cc87-4341-8c32-715eb06dccdb"
+   ]
+  },
+  "small_ge_15_distinct": {
+   "count": 708,
+   "ids": [
+    "00a604ee-9942-42e1-adee-6b7f6344b085",
+    "00a95ae5-e99b-44f1-9cc3-ab97a1f53590",
+    "01678c78-a4b0-4230-a421-43924c932227",
+    "01b48e00-7414-4452-94b8-8506a25fb50b",
+    "02068f46-df3d-405b-a5be-f660d1b58664",
+    "02d77467-9415-4e72-98c5-118761328c89",
+    "02f048fa-2df2-4e47-a960-03cac5b429b8",
+    "040aa56e-8de4-49b3-9b75-89e6010f1871",
+    "04309af6-5084-4273-ba40-df461eb616fd",
+    "04b0ff52-30db-47b9-9b06-2fbbb9cb6759"
+   ]
+  }
+ },
+ "claims_everything_union": 1500,
+ "claims_everything_union_excluding_large": 1266
+}

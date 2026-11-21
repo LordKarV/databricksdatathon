@@ -1,0 +1,384 @@
+{
+ "denominator_rows": 9970,
+ "recency_of_page_update": {
+  "non_null": 3543,
+  "iso_date": 3532,
+  "non_iso": 11,
+  "non_iso_values": {
+   "2024": 2,
+   "2 months ago": 2,
+   "2025": 1,
+   "3 years before": 1,
+   "8 months ago": 1,
+   "October 2025": 1,
+   "1 month ago": 1,
+   "April 2025": 1,
+   "3 weeks ago": 1
+  },
+  "min": "2003-09-04",
+  "max": "2027-07-20",
+  "by_year": {
+   "2003.0": 2,
+   "2006.0": 2,
+   "2009.0": 3,
+   "2010.0": 2,
+   "2011.0": 1,
+   "2012.0": 11,
+   "2013.0": 11,
+   "2014.0": 40,
+   "2015.0": 18,
+   "2016.0": 21,
+   "2017.0": 25,
+   "2018.0": 21,
+   "2019.0": 53,
+   "2020.0": 95,
+   "2021.0": 82,
+   "2022.0": 80,
+   "2023.0": 264,
+   "2024.0": 555,
+   "2025.0": 2241,
+   "2026.0": 4,
+   "2027.0": 1
+  },
+  "top_dates": {
+   "2025-12-20": 270,
+   "2025-12-19": 166,
+   "2025-12-18": 91,
+   "2023-02-13": 84,
+   "2025-12-21": 69,
+   "2025-04-21": 57
+  },
+  "in_dec_2025": 976,
+  "after_2025_12_31": 5
+ },
+ "post_metrics_most_recent_social_media_post_date": {
+  "non_null": 4932,
+  "iso_date": 4914,
+  "non_iso": 18,
+  "non_iso_values": {
+   "2 months ago": 3,
+   "November 13": 1,
+   "13 March": 1,
+   "April 6": 1,
+   "February 17": 1,
+   "6 January": 1,
+   "April 9 at 5:54 AM": 1,
+   "April 10": 1,
+   "October 20": 1,
+   "February 25": 1,
+   "January 10": 1,
+   "12 February": 1,
+   "February 13": 1,
+   "9h": 1,
+   "September 6": 1
+  },
+  "min": "2009-06-29",
+  "max": "2026-01-22",
+  "by_year": {
+   "2009.0": 6,
+   "2010.0": 2,
+   "2011.0": 5,
+   "2012.0": 8,
+   "2013.0": 12,
+   "2014.0": 40,
+   "2015.0": 35,
+   "2016.0": 67,
+   "2017.0": 88,
+   "2018.0": 177,
+   "2019.0": 229,
+   "2020.0": 349,
+   "2021.0": 385,
+   "2022.0": 562,
+   "2023.0": 833,
+   "2024.0": 1514,
+   "2025.0": 560,
+   "2026.0": 42
+  },
+  "top_dates": {
+   "2023-02-13": 62,
+   "2024-10-31": 24,
+   "2025-12-19": 21,
+   "2024-12-31": 20,
+   "2025-12-18": 18,
+   "2025-12-20": 18
+  },
+  "in_dec_2025": 145,
+  "after_2025_12_31": 42
+ },
+ "distinct_social_media_presence_count": {
+  "non_null": 9965,
+  "zero": 434,
+  "p50_p90_p99_max": [
+   4.0,
+   6.0,
+   9.0,
+   11.0
+  ]
+ },
+ "number_of_facts_about_the_organization": {
+  "non_null": 2757,
+  "zero": 21,
+  "p50_p90_p99_max": [
+   5.0,
+   10.0,
+   31.440000000000055,
+   442.0
+  ]
+ },
+ "post_metrics_post_count": {
+  "non_null": 3784,
+  "zero": 2518,
+  "p50_p90_p99_max": [
+   0.0,
+   3.0,
+   270.970000000003,
+   59000.0
+  ]
+ },
+ "engagement_metrics_n_followers": {
+  "non_null": 8884,
+  "zero": 1191,
+  "p50_p90_p99_max": [
+   244.5,
+   2600.0,
+   35323.68000000014,
+   15000000.0
+  ]
+ },
+ "engagement_metrics_n_likes": {
+  "non_null": 7800,
+  "zero": 1550,
+  "p50_p90_p99_max": [
+   69.0,
+   1800.0,
+   18000.0,
+   384000.0
+  ]
+ },
+ "engagement_metrics_n_engagements": {
+  "non_null": 4887,
+  "zero": 2464,
+  "p50_p90_p99_max": [
+   0.0,
+   93.40000000000055,
+   2776.5400000000036,
+   121855.0
+  ]
+ },
+ "affiliated_staff_presence": {
+  "true": 9260,
+  "false": 697,
+  "null": 13
+ },
+ "custom_logo_presence": {
+  "true": 8611,
+  "false": 998,
+  "null": 361
+ },
+ "followers_rounding": {
+  "ge_1000": 2262,
+  "ge_1000_multiple_of_100": 2018
+ },
+ "consistency": {
+  "facebookLink_present": 9852,
+  "no_facebookLink_but_followers_gt_0": 63,
+  "social_count_0_but_followers_gt_0": 201,
+  "post_count_0_but_post_date_present": 965,
+  "post_count_gt_0_but_no_post_date": 146,
+  "post_date_present": 4914
+ },
+ "engagement_metrics_n_followers_ge_10000_shared_by_2plus_records": {
+  "records_ge_10000": 273,
+  "records_ge_10000_non_round": 70,
+  "non_round_records_whose_exact_value_is_shared": 24,
+  "examples": [
+   [
+    182277.0,
+    [
+     "Government Medical College, Thoothukudi",
+     "SCB Medical College and Hospital, Cuttack",
+     "Osmania General Hospital"
+    ]
+   ],
+   [
+    4756342.0,
+    [
+     "Kidwai Memorial Institute of Oncology",
+     "Shankar Super Speciality Hospital",
+     "Fortis Hospital"
+    ]
+   ],
+   [
+    28931.0,
+    [
+     "Dr. Agarwal\u2019s Eye Hospital",
+     "Indiranagar - Refractive (Lasik & SMILE) & Dry Eye Hub"
+    ]
+   ],
+   [
+    13313.0,
+    [
+     "American Oncology Institute",
+     "KD Hospital"
+    ]
+   ],
+   [
+    917947.0,
+    [
+     "Apollo Hospital, Bhubaneswar",
+     "Apollo Hospitals - Kakinada"
+    ]
+   ],
+   [
+    44248.0,
+    [
+     "Sterling Hospitals",
+     "SGVP Holistic Hospital"
+    ]
+   ]
+  ]
+ },
+ "engagement_metrics_n_likes_ge_10000_shared_by_2plus_records": {
+  "records_ge_10000": 163,
+  "records_ge_10000_non_round": 2,
+  "non_round_records_whose_exact_value_is_shared": 0,
+  "examples": []
+ },
+ "top_followers": [
+  [
+   "27071ec4-6465-41a1-86c6-f5c9f728ee5b",
+   "Shiromany Dental Care",
+   "Agra",
+   15000000.0
+  ],
+  [
+   "acd22962-2d73-4e83-8f45-ff995a417c34",
+   "J J Eye Hospital",
+   "Mumbai",
+   15000000.0
+  ],
+  [
+   "c4f65c3f-6f9b-45a3-b8ff-dddaa9d7cad6",
+   "Kidwai Memorial Institute of Oncology",
+   "Bengaluru",
+   4756342.0
+  ],
+  [
+   "f753dfec-71dd-4669-8a66-8888c599c730",
+   "Fortis Hospital",
+   "Bangalore",
+   4756342.0
+  ],
+  [
+   "f3b09829-a5ec-4585-8e3e-eee7d8e98ee8",
+   "Shankar Super Speciality Hospital",
+   "Bangalore",
+   4756342.0
+  ],
+  [
+   "670529f0-5845-4956-a8db-cc65e860d98d",
+   "Primary Health Centre Trown",
+   "Trown",
+   1751900.0
+  ],
+  [
+   "a96c189f-783b-4d8c-95cf-abbc2e5cc8a6",
+   "Sher-I-Kashmir Institute of Medical Sciences",
+   "Srinagar",
+   1751900.0
+  ],
+  [
+   "46eb3b50-ccca-4214-8729-475296eaba5e",
+   "Richfeel Trichology Centre",
+   "Mumbai",
+   1582400.0
+  ],
+  [
+   "526c3801-6003-4bc1-9c99-9ad1730dc31a",
+   "Apollo Hospital, Bhubaneswar",
+   "Bhubaneswar",
+   917947.0
+  ],
+  [
+   "d74c3a09-f55a-4b6a-94f8-8448056c1345",
+   "Apollo Hospitals - Kakinada",
+   "Kakinada",
+   917947.0
+  ],
+  [
+   "e3279475-58c3-451b-b37b-5f9333d83380",
+   "Nahar Medical Centre",
+   "Mumbai",
+   902000.0
+  ],
+  [
+   "1fdc391b-91c9-45b8-8328-7818f29683a9",
+   "Harsh Hospital",
+   "Surat",
+   779570.0
+  ],
+  [
+   "7cda1c5c-d6ae-4ace-890d-d476ead2b6e1",
+   "Handa Health Care Centre",
+   "Ludhiana",
+   647000.0
+  ],
+  [
+   "b77ac271-e6d0-4502-beb0-d38853ced86c",
+   "Metro Umkal Hospital & Heart Institute",
+   "Rewari",
+   538813.0
+  ],
+  [
+   "6a9c97fc-d489-4b8e-bb4a-576e36ecc3fa",
+   "The Liver Unit and Monarch Liver Lab, Cochin Gastroenterology Group, Ernakulam Medical Centre, Kochi",
+   "Kochi",
+   430000.0
+  ]
+ ],
+ "by_social_count": {
+  "0": {
+   "rows": 434,
+   "has_official_website_pct": 72.6,
+   "has_official_phone_pct": 93.5,
+   "median_source_urls": 6.0,
+   "post_date_2025_pct": 1.6
+  },
+  "1-2": {
+   "rows": 2809,
+   "has_official_website_pct": 83.9,
+   "has_official_phone_pct": 96.9,
+   "median_source_urls": 6.0,
+   "post_date_2025_pct": 4.7
+  },
+  "3-4": {
+   "rows": 2961,
+   "has_official_website_pct": 85.8,
+   "has_official_phone_pct": 95.6,
+   "median_source_urls": 8.0,
+   "post_date_2025_pct": 6.7
+  },
+  "5-6": {
+   "rows": 3452,
+   "has_official_website_pct": 84.5,
+   "has_official_phone_pct": 93.9,
+   "median_source_urls": 16.0,
+   "post_date_2025_pct": 6.1
+  },
+  "7+": {
+   "rows": 309,
+   "has_official_website_pct": 73.8,
+   "has_official_phone_pct": 86.7,
+   "median_source_urls": 13.0,
+   "post_date_2025_pct": 4.9
+  }
+ },
+ "activity_tiers": {
+  "post_date_in_2025": 560,
+  "post_date_2023_2024": 2347,
+  "post_date_before_2023": 1965,
+  "no_post_date": 5056,
+  "page_update_in_2025": 2241,
+  "neither_post_nor_page_date": 3325
+ }
+}

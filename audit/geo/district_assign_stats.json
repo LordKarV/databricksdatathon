@@ -1,0 +1,46 @@
+{
+ "facilities": 9970,
+ "district_src": {
+  "pin": 8274,
+  "pin_conflict": 1259,
+  "coords": 278,
+  "coords_city": 150,
+  "none": 9
+ },
+ "district_assigned": 9961,
+ "directory_districts": 747,
+ "directory_districts_matched_by_name": 701,
+ "nfhs_districts": 706,
+ "nfhs_districts_hit": 701,
+ "knn_parent_agrees_with_table": [
+  22,
+  44
+ ],
+ "directory_districts_by_how": {
+  "exact": 666,
+  "parent_table": 44,
+  "fuzzy": 35,
+  "spatial_parent": 2
+ },
+ "unmatched_directory_districts": [],
+ "spatial_parent_rows": [
+  [
+   "RAJASTHAN",
+   "RAIPUR",
+   "bikaner"
+  ],
+  [
+   "TRIPURA",
+   "Nirmal",
+   "west tripura"
+  ]
+ ],
+ "facility_nfhs_how": {
+  "exact": 9470,
+  "fuzzy": 297,
+  "parent_table": 188,
+  "no_district": 9,
+  "spatial_parent": 6
+ },
+ "facility_nfhs_joined": 9961
+}

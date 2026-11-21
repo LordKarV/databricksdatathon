@@ -1,0 +1,353 @@
+{
+ "rows": 706,
+ "columns": 109,
+ "name_whitespace": {
+  "district_name_leading_or_trailing_space": 704,
+  "state_ut_leading_or_trailing_space": 1
+ },
+ "states_in_nfhs": 36,
+ "duplicate_state_district": 0,
+ "district_name_len_max": 28,
+ "district_names_at_max_len": [
+  "Sri Potti Sriramulu Nello",
+  "Sahibzada Ajit Singh Nagar",
+  "Shahid Bhagat Singh Nagar",
+  "Jayashankar Bhupalapally",
+  "Sant Ravidas Nagar (Bhadohi)",
+  "North Twenty Four Pargana",
+  "South Twenty Four Pargana"
+ ],
+ "indicator_columns": 107,
+ "double_columns": 58,
+ "string_columns": 49,
+ "double_columns_with_nan": {},
+ "cell_flags_all_indicators": {
+  "ok": 66349,
+  "small_n_25_49": 5068,
+  "suppressed_lt25": 4125
+ },
+ "string_cells_trailing_space": 25401,
+ "most_small_sample_columns": {
+  "child_6_8m_receiving_solid_or_semi_solid_food_and_breastmil_pct": {
+   "suppressed_lt25": 642,
+   "small_n_25_49": 62,
+   "ok": 2
+  },
+  "non_breastfeeding_child_6_23m_receiving_an_adequate_diet16_pct": {
+   "suppressed_lt25": 643,
+   "small_n_25_49": 59,
+   "ok": 4
+  },
+  "children_with_diarrhoea_2wk_who_received_oral_rehydration_s_pct": {
+   "suppressed_lt25": 492,
+   "small_n_25_49": 162,
+   "ok": 52
+  },
+  "children_with_diarrhoea_2wk_who_received_zinc_child_u5_pct": {
+   "suppressed_lt25": 492,
+   "small_n_25_49": 162,
+   "ok": 52
+  },
+  "children_with_diarrhoea_2wk_taken_to_a_health_facility_or_h_pct": {
+   "suppressed_lt25": 492,
+   "small_n_25_49": 162,
+   "ok": 52
+  },
+  "child_u6m_exclusively_breastfed_pct": {
+   "small_n_25_49": 347,
+   "suppressed_lt25": 261,
+   "ok": 98
+  },
+  "children_born_at_home_who_were_taken_to_a_health_facility_f_pct": {
+   "suppressed_lt25": 422,
+   "ok": 143,
+   "small_n_25_49": 141
+  },
+  "pregnant_w15_49_who_are_anaemic_lt_11_0_g_dl_22_pct": {
+   "small_n_25_49": 421,
+   "ok": 151,
+   "suppressed_lt25": 134
+  },
+  "children_with_fever_or_symptoms_of_ari_2wk_taken_to_a_healt_pct": {
+   "small_n_25_49": 264,
+   "suppressed_lt25": 224,
+   "ok": 218
+  },
+  "child_12_23m_fully_vaccinated_based_on_information_from_vax_pct": {
+   "ok": 361,
+   "small_n_25_49": 323,
+   "suppressed_lt25": 22
+  },
+  "births_in_a_private_fac_that_were_delivered_by_csection_5y_pct": {
+   "ok": 434,
+   "suppressed_lt25": 150,
+   "small_n_25_49": 122
+  },
+  "child_12_23m_who_received_most_of_their_vaccinations_in_a_p_pct": {
+   "ok": 438,
+   "small_n_25_49": 252,
+   "suppressed_lt25": 16
+  }
+ },
+ "identical_indicator_rows": [
+  "Manipur / Chandel",
+  "Mizoram / Chandel"
+ ],
+ "need_indicators": {
+  "births_delivered_by_csection_5y_pct": {
+   "use": "C-section / obstetric surgery demand (all births)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 1.4,
+   "median": 18.6,
+   "max": 82.4
+  },
+  "births_in_a_public_fac_that_were_delivered_by_csection_5y_pct": {
+   "use": "public-sector C-section access",
+   "dtype": "str",
+   "flags": {
+    "ok": 700,
+    "small_n_25_49": 6
+   },
+   "min": 0.7,
+   "median": 12.95,
+   "max": 73.0
+  },
+  "births_in_a_private_fac_that_were_delivered_by_csection_5y_pct": {
+   "use": "private C-section share",
+   "dtype": "str",
+   "flags": {
+    "ok": 434,
+    "suppressed_lt25": 150,
+    "small_n_25_49": 122
+   },
+   "min": 6.3,
+   "median": 46.1,
+   "max": 94.2
+  },
+  "institutional_birth_5y_pct": {
+   "use": "low value = home births, high unmet need for delivery care",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 21.4,
+   "median": 92.2,
+   "max": 100.0
+  },
+  "institutional_birth_in_public_facility_5y_pct": {
+   "use": "reliance on public facilities",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 18.1,
+   "median": 66.5,
+   "max": 96.7
+  },
+  "home_birth_that_were_conducted_by_skilled_hp_5y_10_pct": {
+   "use": "home-birth skilled attendance",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 0.0,
+   "median": 2.1,
+   "max": 19.9
+  },
+  "mothers_who_had_at_least_4_anc_visits_lb5y_pct": {
+   "use": "antenatal coverage (high-risk pregnancy detection)",
+   "dtype": "str",
+   "flags": {
+    "ok": 705,
+    "small_n_25_49": 1
+   },
+   "min": 4.4,
+   "median": 62.4,
+   "max": 98.7
+  },
+  "pregnant_w15_49_who_are_anaemic_lt_11_0_g_dl_22_pct": {
+   "use": "obstetric risk (anaemia in pregnancy)",
+   "dtype": "str",
+   "flags": {
+    "small_n_25_49": 421,
+    "ok": 151,
+    "suppressed_lt25": 134
+   },
+   "min": 2.0,
+   "median": 51.9,
+   "max": 87.6
+  },
+  "w15_19_who_were_already_mothers_or_pregnant_at_the_time_of_pct": {
+   "use": "adolescent pregnancy risk",
+   "dtype": "str",
+   "flags": {
+    "ok": 705,
+    "small_n_25_49": 1
+   },
+   "min": 0.0,
+   "median": 4.8,
+   "max": 27.3
+  },
+  "w15_plus_with_high_or_very_high_gt_140_mg_dl_blood_sugar_or_pct": {
+   "use": "diabetes proxy (dialysis, cardiac)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 4.1,
+   "median": 11.7,
+   "max": 32.1
+  },
+  "m15_plus_with_high_or_very_high_gt_140_mg_dl_blood_sugar_or_pct": {
+   "use": "diabetes proxy (dialysis, cardiac)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 4.8,
+   "median": 14.1,
+   "max": 36.2
+  },
+  "w15_plus_with_high_bp_sys_gte_140_mmhg_and_or_dia_gte_90_mm_pct": {
+   "use": "hypertension proxy (dialysis, cardiac, stroke)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 8.5,
+   "median": 21.0,
+   "max": 42.1
+  },
+  "m15_plus_with_high_bp_sys_gte_140_mmhg_and_or_dia_gte_90_mm_pct": {
+   "use": "hypertension proxy (dialysis, cardiac, stroke)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 10.0,
+   "median": 24.4,
+   "max": 49.6
+  },
+  "hh_member_covered_health_insurance_pct": {
+   "use": "ability to pay / PM-JAY reach",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 1.2,
+   "median": 35.7,
+   "max": 97.8
+  },
+  "average_out_of_pocket_expenditure_per_delivery_in_a_public_fac": {
+   "use": "cost barrier for delivery (rupees)",
+   "dtype": "str",
+   "flags": {
+    "ok": 691,
+    "small_n_25_49": 14,
+    "suppressed_lt25": 1
+   },
+   "min": 193.0,
+   "median": 2830.0,
+   "max": 20101.0
+  },
+  "child_u5_who_are_wasted_weight_for_height_18_pct": {
+   "use": "paediatric / NICU-adjacent need",
+   "dtype": "str",
+   "flags": {
+    "ok": 705,
+    "small_n_25_49": 1
+   },
+   "min": 4.5,
+   "median": 18.1,
+   "max": 48.0
+  },
+  "child_u5_who_are_severe_wasted_weight_for_height_19_pct": {
+   "use": "severe acute malnutrition, paediatric admissions",
+   "dtype": "str",
+   "flags": {
+    "ok": 705,
+    "small_n_25_49": 1
+   },
+   "min": 0.5,
+   "median": 6.9,
+   "max": 30.5
+  },
+  "all_w15_49_who_are_anaemic_pct": {
+   "use": "general anaemia burden",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 14.9,
+   "median": 57.2,
+   "max": 93.5
+  },
+  "women_age_30_49_years_ever_undergone_a_cervical_screen_pct": {
+   "use": "cancer screening reach (oncology)",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 0.0,
+   "median": 0.6,
+   "max": 23.2
+  },
+  "m15_plus_who_use_any_kind_of_tobacco_pct": {
+   "use": "oral cancer / cardiac risk",
+   "dtype": "float64",
+   "flags": {
+    "ok": 706
+   },
+   "min": 6.8,
+   "median": 42.5,
+   "max": 80.6
+  },
+  "children_with_fever_or_symptoms_of_ari_2wk_taken_to_a_healt_pct": {
+   "use": "paediatric care seeking",
+   "dtype": "str",
+   "flags": {
+    "small_n_25_49": 264,
+    "suppressed_lt25": 224,
+    "ok": 218
+   },
+   "min": 13.8,
+   "median": 67.8,
+   "max": 97.3
+  }
+ },
+ "pin_districts_total": 754,
+ "pin_district_match_tiers": {
+  "exact": 606,
+  "manual_split_parent": 47,
+  "manual_rename": 42,
+  "fuzzy_ge80": 41,
+  "normalized": 10,
+  "prefix_truncated": 6,
+  "unmatched": 2
+ },
+ "nfhs_rows_matched_by_some_pin_district": 705,
+ "nfhs_rows_unmatched": 1,
+ "pin_unmatched_by_state": {
+  "WEST BENGAL": 1,
+  "MIZORAM": 1
+ },
+ "facility_join": {
+  "facilities": 9959,
+  "with_valid_pin": 9879,
+  "pin_in_directory_with_district": 9670,
+  "reach_nfhs_row": 9659,
+  "by_tier": {
+   "exact": 8139,
+   "manual_rename": 924,
+   "no_pin_or_district": 289,
+   "fuzzy_ge80": 262,
+   "manual_split_parent": 169,
+   "normalized": 103,
+   "prefix_truncated": 62,
+   "unmatched": 11
+  }
+ }
+}

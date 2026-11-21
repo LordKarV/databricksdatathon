@@ -1,0 +1,61 @@
+	key	cues	sentence
+19028	b2db2916|burns|capa	partner	Burn Care Unit (in collaboration with burn care foundation)
+3021	1fecf8f2|burns|desc	partner	It is officially empanelled under the Ayushman Bharat – PMJAY scheme (Ayushman Card) and provides cashless treatment to eligible patients in various specialties including General Surgery, Orthopaedics, Genitourinary Surgery, Critical Care, Neurology, General Medicine, Paediatrics, Neuro Surgery, Polytrauma, ENT, Neonatology, Burns, Plastic & reconstructive Surgery, Chest diseases and respiratory medicine (Pulmonology), and Obstetrics & Gynecology.
+24303	e93a7ae0|burns|equi	partner	Burn Care Unit in collaboration with Burn Care Foundation
+24305	e93a7ae0|burns|capa	partner	Burn Care Unit in collaboration with Burn Care Foundation
+11578	6b064699|burns|capa	negation	Uses non-thermal VenaSeal method with no burns and no scars
+5998	39c6f2b8|burns|capa	referral	Burns unit is a high-referral center for complex burns (thermal, electric and chemical) in coastal and central Karnataka
+23627	e17d7b20|burns|desc	partner	Tie-up hospital for ESIC; Specialties include Cardiology, Cardiothoracic Vascular Surgery, Neurology, Neurosurgery, Pediatric Surgery, Medical Oncology, Onco Surgery, Urology, Nephrology, Dialysis, Gastroenterology, Gastrointestinal surgery, Endocrinology, Burns and Plastic Surgery (excluding cosmetic surgery), Vitreous retinal management surgery; NICU Level-3; Level-2 Ultrasound; Blood Bank; CT Scan; MRI; Echo; TMT cardiography; In-house diagnostic facilities.
+19027	b2db2916|burns|equi	partner	Burn Care Unit (in collaboration with burn care foundation)
+11259	685f1cac|cardiac_surgery|capa	negation	Does not have departments for cancer, heart surgery, or brain-related ailments
+22532	d6ed2253|cardiac_surgery|capa	partner	Empanelled with Divisional Railway Hospital Kalyaan (Mumbai Division, Central Railway) for Cardiology & CTVS
+1588	10d85e5c|cardiac_surgery|proc	negation	MitraClip for mitral valve repair without surgery
+25400	f6e9dc6e|cardiac_surgery|proc	camp	Organizes a free pediatric heart surgery camp in Gorakhpur (Purvanchal) with Dr. Neeraj Awasthi of Max Super Specialty Hospital, Delhi
+16174	95f42d73|cardiac_surgery|proc	past	Closed heart surgery
+14690	880b51e0|cardiac_surgery|desc	past	Another aspect which sets CVR hospitals apart is the Cardiology wing which was started almost 10 years back with superior class Interventional Cardiology, Cardiothoracic surgery and preventive cardiology as well.
+19898	ba5ff135|cardiac_surgery|proc	past	Closed heart surgery (C.M.V., P.D.A. ligation)
+3083	2085253f|cardiac_surgery|capa	partner	ESIC empanelment for select high-end procedures in Cardiology and Cardiothoracic Vascular Surgery
+18104	aa63a318|csection|proc	future	High-risk obstetric care is provided, including delivery and cesarean sections, with options for painless delivery and family planning and sterilization
+23983	e5cd0285|csection|proc	referral	High-risk obstetric cases requiring C-section deliveries are referred to Kalpana Chawla Government Medical College (KCGMC)
+6496	3e4ba6fb|csection|capa	negation,referral	Caesarean section facility not available on-site; referrals to LNJP Kurukshetra
+18363	acde9be7|csection|proc	negation	Caesarean deliveries continued without disruption at Panipat Civil Hospital during the strike.
+10217	5eeb0152|dialysis|desc	negation	Services include Fibromyalgia Treatment; Neurological Brain Diseases Treatment; Lymphedema Treatment; Aplastic Anemia Treatment; Hepatitis B with Liver Cirrhosis Treatment without Surgery; Erectile Dysfunction; Kidney Renal Failure Cure Without Dialysis; Critical and Surgical Cases.
+23619	e17d7b20|dialysis|desc	partner	Tie-up hospital for ESIC; Specialties include Cardiology, Cardiothoracic Vascular Surgery, Neurology, Neurosurgery, Pediatric Surgery, Medical Oncology, Onco Surgery, Urology, Nephrology, Dialysis, Gastroenterology, Gastrointestinal surgery, Endocrinology, Burns and Plastic Surgery (excluding cosmetic surgery), Vitreous retinal management surgery; NICU Level-3; Level-2 Ultrasound; Blood Bank; CT Scan; MRI; Echo; TMT cardiography; In-house diagnostic facilities.
+10216	5eeb0152|dialysis|proc	negation	Kidney renal failure cure without dialysis
+20749	c3e51c9e|dialysis|capa	referral	Nephrology services with dialysis unit and kidney transplant referral
+384	039bcc45|dialysis|capa	referral	End-to-end kidney failure management including diagnostics, dialysis, and transplant referrals
+12473	72b1bbcd|dialysis|capa	future	Upcoming Dialysis Wing
+15031	8acb10cf|dialysis|capa	past	The Dialysis Centre was established in association with Rotary Club Mathura Central.
+21859	cfea7236|dialysis|proc	future	Hemodialysis and peritoneal dialysis planning, initiation, and maintenance
+12099	6fbda6ad|icu|capa	partner	Interdisciplinary collaboration with Intensive Care and medical specialties
+12695	75224790|icu|desc	past	Anand Orthopaedic Hospital, Anand was set up in 2006 at Anand and offers a Trauma HDU facility.
+19190	b3b4b4dc|icu|desc	partner	100-bed charitable hospital; unit of Chunilal Mangalji Choksi Charitable Trust; largest multispeciality hospital in Banaskantha and southern Rajasthan; serves patients from Banaskantha, Patan, Sirohi (Rajasthan), Jalor (Rajasthan), Badmer (Rajasthan) and Pali (Rajasthan); inaugurated on March 1, 2015; equipped with Philips cathlab, 30-bed ICU with 11 invasive ventilators, three modular operation theatres with microscope, in-house CT Scan; provides 10% discount on pharmacy; empaneled with MA Yojana and Ayushman Bharat schemes.
+16481	9913a22f|icu|capa	referral	700-bed multi-specialty acute-cum-critical care referral hospital
+7064	4455f2c4|icu|capa	past	ICCU is closed on Thursdays from 2:30 PM to 4:00 PM
+13901	8047a7a4|icu|capa	partner	Indo Australian Fellowship in Critical Care Medicine offered in collaboration with Critical Care Education Foundation, Mumbai
+13075	795e3aed|icu|desc	referral	Central Referral Hospital (CRH) is a 24x7 hospital offering round-the-clock emergency services, a 46-bed ICU complex (ICU, SICU, NICU, PICU, CCU, NSICU & ITU) and imaging facilities including a 64-slice CT with cardiac angiography.
+11186	679c721f|icu|capa	referral	Patients from Warora can be transferred to a Covid Hospital in Chandrapur with ICU
+1162	0cbdef30|mri|proc	future	Knee replacement planning involves imaging tests such as X-rays and MRIs
+2535	1a5c40b0|mri|capa	partner	Imaging services (X-ray, CT, MRI) outsourced
+18285	acb49d43|mri|equi	partner	Outsourced MRI services
+8634	526c3801|mri|capa	future	Imaging-guided diagnosis and treatment planning using MRI and CT
+12199	70a57f42|mri|equi	future	CT and MRI data reformatted into 3D models for planning and fabrication
+24621	ecd07024|mri|equi	past	Orbit MRI with T2-weighted sequences used to measure posterior globe angle
+19119	b36f3f71|mri|proc	future	Online dashboard will be available for project management of PPP MRI/CT services.
+15388	8dcf50d8|mri|equi	future	A new MRI machine will be installed at District Hospital Jalna under the NHM MRI PPP program.
+12536	7346f35c|nicu|capa	referral	Referral centre for maternity and neonatal intensive care
+2711	1c776e87|nicu|capa	referral	NICU serves as a referral center for over 100 obstetric hospitals
+23622	e17d7b20|nicu|desc	partner	Tie-up hospital for ESIC; Specialties include Cardiology, Cardiothoracic Vascular Surgery, Neurology, Neurosurgery, Pediatric Surgery, Medical Oncology, Onco Surgery, Urology, Nephrology, Dialysis, Gastroenterology, Gastrointestinal surgery, Endocrinology, Burns and Plastic Surgery (excluding cosmetic surgery), Vitreous retinal management surgery; NICU Level-3; Level-2 Ultrasound; Blood Bank; CT Scan; MRI; Echo; TMT cardiography; In-house diagnostic facilities.
+24152	e7aa29b7|nicu|desc	future	Obstetrics and Gynecology department facilities: Well equipped Labour Room with CTG monitoring, Painless delivery; Well equipped NICU; Well equipped separate Operation Theatres for Obstetrics and Gynaec cases; Diagnostic and Operative Laparoscopy; Antenatal / Postnatal clinics; Colposcopy; Infertility clinic; Pre conceptional and Anetenatal counselling; Urinary incontinence clinic; Management of High Risk Pregnancy; Labour suite; Separate Gynaecology Ward; Special Delivery Packages for BPL patients; Intensive Therapy Unit for Mothers; Menopause clinic; Well equipped blood bank; Screening for malignancy; Respectful Maternity care; Urogynaecological procedures; Hysterectomy - Laparoscopy abdominal & Vaginal; Myomectomy; Conservative management for various gynaecological conditions; Family planning services.
+5035	32177fd1|nicu|desc	partner	The Children's Hospital, Shillong partnered with Motherhood Hospitals to launch NICU Live, a virtual monitoring system offering expert neonatal care and 24/7 remote support from top neonatologists.
+5033	32177fd1|nicu|capa	partner	Entered into a partnership with Motherhood Hospitals to introduce NICU Live, a virtual neonatal monitoring system.
+21455	cbff204e|nicu|capa	referral	In 2012 Bowring and Lady Curzon Hospital served as a NICU referral destination for NICU-requiring babies from HSIS Gosha Hospital.
+12478	72b1bbcd|nicu|desc	future	A 5-storey facility with 50 beds, inaugurated in 2020, offers 24/7 emergency services, ICU, operation theater, delivery room, NICU, burn ward, general and private wards, oxygen plant, and an upcoming dialysis wing.
+21190	c95a790c|trauma|desc	past	Relief Hospital Trauma & Critical Care was established in 2006 in the City of Lucknow; ISO 9001:2015 certified; a well-equipped multi-speciality hospital delivering trauma and emergency care.
+15909	92dd37f1|trauma|capa	future	A multi-specialty trauma center is under construction
+15910	92dd37f1|trauma|capa	future	Multi-specialty trauma center is under construction at the hospital
+20767	c455ae67|trauma|desc	past	Formerly known as Kasare Orthopaedic and Trauma Centre.
+20525	c1897c75|trauma|capa	negation	Joshi Hospital does not list trauma/emergency levels, units, clinical programs, accreditation, or patient capacity in the provided content
+22120	d26cdb42|trauma|capa	negation	Bihar's No.1 neuro and trauma care hospital
+529	05506c2e|trauma|desc	negation	NABH Certified | 24x7 Happy to Heal; Experience Complete Peace Of Mind At Indore Multi Speciality Hospital, Where Emergency Services, Advanced Diagnostics, Specialized Surgeries, And Joint Replacements Come Together Under One Roof To Offer You And Your Family Quality Healthcare Without The Hassle Of Traveling Far—Because Trusted Care Should Always Be Close, Convenient, And Compassionate!
+7014	43d4dca8|trauma|proc	referral	Provides initial emergency treatment in the casualty department; a duty doctor delivers preliminary care and initiates referral to a senior doctor.

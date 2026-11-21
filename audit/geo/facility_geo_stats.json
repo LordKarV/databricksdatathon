@@ -1,0 +1,70 @@
+{
+ "facilities": 9970,
+ "pin_valid_format": 9893,
+ "pin_in_directory": 9687,
+ "pin_valid_but_not_in_directory": 206,
+ "coord_zero": 0,
+ "coord_swapped": 0,
+ "coord_outside": 6,
+ "coord_json_mismatch": 0,
+ "coord_points_shared_by_2plus": 49,
+ "facilities_on_shared_point_2plus": 103,
+ "facilities_on_shared_point_3plus_distinct_names": 13,
+ "facilities_on_shared_point_5plus_distinct_names": 0,
+ "top_shared_points": [],
+ "pin_distance_denominator": 9682,
+ "pin_distance_bins": {
+  "(-0.01, 2.0]": 4539,
+  "(2.0, 5.0]": 1870,
+  "(5.0, 10.0]": 781,
+  "(10.0, 25.0]": 698,
+  "(25.0, 50.0]": 385,
+  "(50.0, 100.0]": 283,
+  "(100.0, 250.0]": 593,
+  "(250.0, 500.0]": 416,
+  "(500.0, 1000.0]": 110,
+  "(1000.0, 5000.0]": 7
+ },
+ "pin_distance_quantiles": {
+  "0.5": 2.3,
+  "0.75": 10.8,
+  "0.9": 130.1,
+  "0.95": 265.8,
+  "0.99": 542.6
+ },
+ "near_km_quantiles": {
+  "0.5": 1.0,
+  "0.9": 2.9,
+  "0.99": 9.9,
+  "1.0": 109.2
+ },
+ "state_how": {
+  "exact": 9605,
+  "district_name": 185,
+  "alias": 98,
+  "unresolved": 81,
+  "multi": 1
+ },
+ "zone_check_denominator": 9811,
+ "zone_mismatch": 24,
+ "state_vs_pin_denominator": 9608,
+ "state_vs_pin_mismatch": 61,
+ "pin_vs_coord_state_denominator": 9682,
+ "pin_vs_coord_state_mismatch": 111,
+ "state_vs_coord_denominator": 9882,
+ "state_vs_coord_mismatch": 147,
+ "city_check_denominator": 9687,
+ "city_match_pin": 8288,
+ "city_match_near_only": 222,
+ "city_match_neither": 1177,
+ "state_verdict": {
+  "all_agree": 9448,
+  "two_agree_one_missing": 355,
+  "odd_one_out:coord": 94,
+  "odd_one_out:stated": 45,
+  "odd_one_out:pin": 15,
+  "all_differ_or_split": 9,
+  "insufficient": 4
+ },
+ "geo_conflict_any": 1496
+}
