@@ -125,8 +125,9 @@ def main() -> None:
          "(git-ignored, local only): every tracked file except those in `tools/public_exclude.txt`, as one fresh "
          "commit with no history (this repo's history still holds the excluded files). The copy has no `derived/`, "
          "so its notebook and app need `derived/v1` rebuilt from the Marketplace table on Databricks first. That "
-         "step does not exist yet: `make derived` reads `data/raw/` with paths on the lead's machine. It is the "
-         "remaining work for option B. Numbers quoted from hand checks stay in the docs; their samples do not."),
+         "step does not exist yet: `make derived` reads `data/raw/` with paths on the lead's machine. **Waiting for "
+         "lead:** the Databricks-side pipeline comes with #11 / #57. Numbers quoted from hand checks stay in the "
+         "docs; their samples do not."),
         "",
         ("Known gap: the rules find record ids, sentence ids and coordinates, not facility names written in prose. "
          "A few docs (REPORT.md, model/MODEL_SPEC.md, app_design/, and external/*/README.md for the lists that are "

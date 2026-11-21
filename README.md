@@ -7,11 +7,16 @@ instead of guessing, and it keeps working offline on a cheap phone.
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 
-- **Video demo:** link to come (#12)
-- **Notebook with all our code and outputs:** [`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb)
-  (how to run it: [`submission/README.md`](submission/README.md))
-- **The app:** a Databricks App, `referral-saathi`, in the team's workspace. Judges log in as workspace users;
-  start from the "How this works" link in its header.
+The submission is three things:
+
+- **Video demo:** the app on a phone, start to finish. Link to come (#12).
+- **This repository**, with the code for every step from audit to app.
+- **The notebook**, with all our code and its outputs:
+  [`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb). It is readable on GitHub as is, and runs
+  on Databricks Free Edition ([`submission/README.md`](submission/README.md)).
+
+The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
+tells the same story as the notebook, in plain words.
 
 ## How it works
 
