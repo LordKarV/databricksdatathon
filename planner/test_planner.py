@@ -262,7 +262,11 @@ def test_store_roundtrip_without_pandas(tmp_path):
     assert st.capability_p("b", "icu") == (0.8, ["b:1", "b:2"])
     with pytest.raises(KeyError):
         st.capability_p("a", "not_a_capability")
-    assert st.state_near(O) == "PLAINS" and st.state_near((O[0] + 1.0, O[1])) == "SIKKIM"
+    assert st.state_near(O) == "PLAINS" and st.state_near((O[0] + 1.0, O[1])) == "SIKKIM"   # no PINs: nearest facility
+    doc = synthetic_doc()
+    doc["pins"] = {"states": ["BIHAR", "SIKKIM"], "lat": [O[0], O[0] + 1.0], "lon": [O[1], O[1]], "s": [0, 1]}
+    with_pins = Store(doc)
+    assert with_pins.state_near((O[0] + 0.2, O[1])) == "BIHAR" and with_pins.state_near((O[0] + 0.9, O[1])) == "SIKKIM"
     assert Store.load(tmp_path / "missing.json.gz") is None
     assert "pandas" not in sys.modules
 
@@ -300,3 +304,20 @@ def test_stub_warning_is_on_by_default():
     r = core.plan(O, pathway(stages=1), f, caps({"d": FULL}), travel_60)
     assert any("placeholder" in x for x in to_options(r)[0]["flags"])
     assert not any("placeholder" in x for x in to_options(r, stub=False)[0]["flags"])
+
+
+def test_service_applies_the_origin_state_to_travel():
+    from planner import service
+    everything = {c: 0.9 for p in service.pathways().values() for s in p["stages"]
+                  for c in s["requires_all"] + [x for g in s["requires_any"] for x in g]}
+    f = [fac("d", 40, state="SIKKIM")]
+    kw = dict(capability_p=caps({"d": everything}), facilities=f)
+    hill = service.plan_for_service("burn_care", O[0], O[1], state="Sikkim", **kw)
+    plain = service.plan_for_service("burn_care", O[0], O[1], state="Bihar", **kw)
+    derived = service.plan_for_service("burn_care", O[0], O[1], **kw)
+    leg = lambda out: out["options"][0]["travel"]  # noqa: E731
+    assert leg(hill)["terrain"] == "hill" and leg(plain)["terrain"] == "plain"
+    assert leg(hill)["minutes"] > leg(plain)["minutes"]
+    assert (hill["meta"]["origin_state"], hill["meta"]["origin_state_source"], hill["meta"]["terrain"]) == ("Sikkim", "caller", "hill")
+    assert (derived["meta"]["origin_state"], derived["meta"]["origin_state_source"]) == ("SIKKIM", "nearest facility")
+    assert leg(derived)["terrain"] == "hill"

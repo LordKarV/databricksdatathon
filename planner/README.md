@@ -26,7 +26,7 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 18 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 19 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
 
 ## Calling it from the app
 
@@ -37,7 +37,7 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
 #  "instructions": [...], "considered": {...}, "assumptions": {...}, "meta": {"stub": True, ...}}
 ```
 
-- Build the data once: `.venv/bin/python planner/export_v1.py` (778 KB, git-ignored). At run time
+- Build the data once: `.venv/bin/python planner/export_v1.py` (about 0.9 MB, git-ignored). At run time
   nothing but the standard library is imported. Measured on this machine with system Python and no
   pandas installed: 0.1 s for the first call including the load, then 8 to 22 ms per plan.
 - A service with no pathway returns `{"pathway": None}`: keep the single-destination ranking.
@@ -46,8 +46,10 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
   `stemi` and `snakebite` if tiles are added. `mri` and `cardiac_surgery` have no pathway.
 - Pass `capability_p=` (and `facilities=`) to use the model instead of the stub. `meta.stub` then
   turns false and the placeholder warning leaves `flags`.
-- The origin's state is taken from the nearest facility, so hill-road travel constants apply
-  without the app passing a state.
+- `state=` (optional): the origin's state, e.g. from the app's PIN index. It selects the hill-road
+  travel constants. When it is not passed, the state of the nearest PIN centroid in the export is
+  used (near a border this can be the neighbouring state). `meta.origin_state`,
+  `meta.origin_state_source` and `meta.terrain` say what was applied.
 - If the export is missing, the call raises `RuntimeError` naming the build step.
 
 ## The swap point
