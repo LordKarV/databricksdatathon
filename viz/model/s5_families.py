@@ -18,6 +18,7 @@ import style as S
 FAMS = [("text", S.CATEGORICAL[0]), ("hints", S.CATEGORICAL[1]), ("web", S.CATEGORICAL[2]),
         ("type_size", S.INK_2), ("flags", S.MUTED)]
 LS = {"flags": (0, (4, 2))}
+LINE_LABEL = {**I.FAMILY_LABEL, "flags": "Flags"}  # short end-of-line label; the source note spells the family out
 T_NAMES = {0: "0 none", 1: "1 tag/list", 2: "2 one sent.", 3: "3 2+ sent.", 4: "4 2+ fields", 5: "5 + unit"}
 TERMS = [  # (term, label) service head, global terms, grouped by family
     ("t1", "t1 any own mention"), ("t2", "t2 one own sentence"), ("t3", "t3 2+ sentences"),
@@ -59,17 +60,15 @@ def levels_chart(t, out):
     gs = fig.add_gridspec(1, 2, width_ratios=[1.45, 1])
     ax, bx = fig.add_subplot(gs[0]), fig.add_subplot(gs[1])
     x = t["T"].values
-    nudge = {"flags": 9, "type_size": -9}  # points; keeps the two near-zero end labels apart
+    nudge = {"flags": 15, "type_size": -9}  # points; keeps the two near-zero end labels apart and off the zero line
     for f, c in FAMS:
-        ax.plot(x, t[f], color=c, marker="o", ms=8, mec=S.SURFACE, mew=1.5, ls=LS.get(f, "-"),
-                label=I.FAMILY_LABEL[f])
-        ax.annotate(I.FAMILY_LABEL[f], (x[-1], t[f].iloc[-1]), xytext=(10, nudge.get(f, 0)),
+        ax.plot(x, t[f], color=c, marker="o", ms=8, mec=S.SURFACE, mew=1.5, ls=LS.get(f, "-"))
+        ax.annotate(LINE_LABEL[f], (x[-1], t[f].iloc[-1]), xytext=(10, nudge.get(f, 0)),  # direct labels, no legend
                     textcoords="offset points", va="center", fontsize=10.5, color=S.INK)
     sh = t.share_hints_gt_text
     ax.annotate("Own text: " + ", ".join(f"{v:.1f}" for v in t.text[1:]) + " points at levels 1 to 5.\n"
                 f"Hints beat text for {sh[1:5].min():.0%} to {sh[1:5].max():.0%} of pairs at levels 1 to 4",
                 (-0.1, 16.5), fontsize=10.5, color=S.INK, va="center")
-    ax.legend(loc="lower right", fontsize=9.5, frameon=True, facecolor=S.SURFACE, edgecolor="none")
     ax.axhline(0, color=S.INK_2, lw=0.9)
     labels = [f"{T_NAMES[v]}\nn = {n:,}" for v, n in zip(x, t.n_pairs)]
     ax.set_xticks(x, labels, fontsize=9.5)
