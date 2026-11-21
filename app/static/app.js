@@ -307,6 +307,22 @@ function card(o, label, i) {
       <a class="btn" href="#/why/${o.rank}">Why this? <span class="visually-hidden">${F(P + '.name', o.name)}</span></a></div>
   </article>`;
 }
+// Lead's rule on #42: when the nearest verified option is far and nearer ones are not verified, say so up front.
+function farVerifiedNote(p) {
+  const opts = p.options;
+  if (!opts.length || opts[0].band === 'likely') return '';
+  const likely = opts.filter(o => o.band === 'likely').sort((a, b) => a.travel.minutes - b.travel.minutes)[0];
+  if (!likely) return '';
+  const nearer = opts.filter(o => o.band !== 'likely' && o.travel.minutes < likely.travel.minutes);
+  if (!nearer.length) return '';
+  const k = opts.indexOf(likely);
+  const r = o => F(`options.${opts.indexOf(o)}.rank`, o.rank, 'num');
+  const which = nearer.length === 1 ? `Option ${r(nearer[0])} is` : nearer.length === 2
+    ? `Options ${r(nearer[0])} and ${r(nearer[1])} are` : `Options ${nearer.map(r).join(', ')} are`;
+  return `<p class="card"><strong>The nearest verified ${F('query.service_label.en', p.query.service_label.en)} is
+    ${F(`options.${k}.travel.km`, Math.round(likely.travel.km), 'num')} km away (option ${r(likely)}).</strong>
+    ${which} closer but not verified: call first.</p>`;
+}
 function planScreen() {
   const s = svc(state.service);
   if (!s || !state.loc) return home();
@@ -332,7 +348,7 @@ function planScreen() {
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = '<h2>Options to call</h2>' + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
+    body = '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
       ${p.why_not.map((w, k) => `<p><strong>${F(`why_not.${k}.name`, w.name)}</strong>,
         ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');
