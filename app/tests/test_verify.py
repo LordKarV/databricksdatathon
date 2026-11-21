@@ -142,30 +142,135 @@ def test_no_website_on_record():
     assert r["status"] == "no_website" and r["status_text"] == "no official website on record"
 
 
-def test_transport_sends_user_agent_and_blocks_private_hosts(monkeypatch):
+# ---------- transport hardening (#40): http(s) only, pinned checked addresses ----------
+DNS = {"hospital.example": ["203.0.113.7"], "private.example": ["10.0.0.5"],
+       "mixed.example": ["203.0.113.8", "192.168.1.9"], "cdn.example": ["198.51.100.4"]}
+# 203.0.113.0/24 and 198.51.100.0/24 are documentation ranges (not global); treat them as public in this stub.
+PUBLIC_DOC = ("203.0.113.", "198.51.100.")
+
+
+class FakeResp:
+    def __init__(self, status: int, headers: dict, body: bytes) -> None:
+        self.status, self._h, self._b = status, headers, body
+
+    def getheader(self, k):
+        return self._h.get(k)
+
+    def read(self, n):
+        return self._b[:n]
+
+
+class Wire:
+    """Stub DNS plus fake pinned connections; responses keyed by (host, path)."""
+
+    def __init__(self, monkeypatch, responses: dict) -> None:
+        self.responses, self.opened, self.sent = responses, [], []
+        real_ip = V.ipaddress.ip_address
+
+        class Addr:
+            def __init__(self, a):
+                self._ip = real_ip(a)
+                self.is_global = self._ip.is_global or a.startswith(PUBLIC_DOC)
+
+        monkeypatch.setattr(V.ipaddress, "ip_address", Addr)
+        monkeypatch.setattr(V.socket, "getaddrinfo", self.getaddrinfo)
+        monkeypatch.setattr(V, "open_connection", self.open)
+
+    def getaddrinfo(self, host, port, *a, **k):
+        try:
+            addrs = [str(V.ipaddress.ip_address(host)._ip)]
+        except ValueError:
+            if host not in DNS:
+                raise OSError("NXDOMAIN") from None
+            addrs = DNS[host]
+        return [(2, 1, 6, "", (x, port)) for x in addrs]
+
+    def open(self, scheme, host, ip, port, timeout):
+        self.opened.append((scheme, host, ip, port))
+        wire = self
+
+        class Conn:
+            def request(self, method, path, headers):
+                wire.sent.append((host, path, headers))
+                self.path = path
+
+            def getresponse(self):
+                status, headers, body = wire.responses[(host, self.path)]
+                return FakeResp(status, headers, body)
+
+            def close(self):
+                pass
+
+        return Conn()
+
+
+def test_connects_to_the_checked_address_with_hostname_headers(monkeypatch):
+    w = Wire(monkeypatch, {("hospital.example", "/x?a=1"): (200, {"Content-Type": "text/html"}, b"<p>ok</p>")})
+    page = V.http_transport("https://hospital.example/x?a=1", 2)
+    assert page.status == 200 and page.body == b"<p>ok</p>"
+    assert w.opened == [("https", "hospital.example", "203.0.113.7", 443)]  # one lookup, pinned IP, hostname for SNI
+    assert w.sent[0][2]["User-Agent"] == V.USER_AGENT == "datathon-facility-check/0.1"
+
+
+@pytest.mark.parametrize("target", ["ftp://hospital.example/file", "http://127.0.0.1/", "http://169.254.169.254/latest",
+                                    "http://private.example/", "http://mixed.example/", "file:///etc/passwd",
+                                    "http://[::1]/"])
+def test_bad_redirect_is_refused_before_any_connection(monkeypatch, target):
+    w = Wire(monkeypatch, {("hospital.example", "/"): (302, {"Location": target}, b"")})
     with pytest.raises(OSError):
-        V.urllib_transport("http://127.0.0.1:9/", 1)
-    seen = {}
+        V.http_transport("https://hospital.example/", 2)
+    assert [o[1] for o in w.opened] == ["hospital.example"]  # never connected to the redirect target
 
-    class Resp:
-        status, headers = 200, {"Content-Type": "text/html"}
 
-        def geturl(self):
-            return "https://example.org/"
+@pytest.mark.parametrize("start", ["ftp://hospital.example/", "http://private.example/", "http://mixed.example/",
+                                   "http://10.1.2.3/", "http://nowhere.example/"])
+def test_bad_start_url_never_connects(monkeypatch, start):
+    w = Wire(monkeypatch, {})
+    with pytest.raises(OSError):
+        V.http_transport(start, 2)
+    assert w.opened == []
 
-        def read(self, n):
-            return b"ok"
 
-        def __enter__(self):
-            return self
+def test_redirect_hops_are_each_pinned_and_capped(monkeypatch):
+    w = Wire(monkeypatch, {("hospital.example", "/"): (301, {"Location": "https://cdn.example/home"}, b""),
+                           ("cdn.example", "/home"): (200, {}, b"hi")})
+    assert V.http_transport("http://hospital.example/", 2).url == "https://cdn.example/home"
+    assert [(o[0], o[2]) for o in w.opened] == [("http", "203.0.113.7"), ("https", "198.51.100.4")]
+    loop = Wire(monkeypatch, {("hospital.example", "/"): (302, {"Location": "/"}, b"")})
+    with pytest.raises(OSError, match="too many redirects"):
+        V.http_transport("http://hospital.example/", 2)
+    assert len(loop.opened) == V.MAX_REDIRECTS + 1
 
-        def __exit__(self, *a):
-            return False
 
-    monkeypatch.setattr(V, "_public_host", lambda h: True)
-    monkeypatch.setattr(V._OPENER, "open", lambda req, timeout: seen.update(ua=req.get_header("User-agent")) or Resp())
-    assert V.urllib_transport("https://example.org/", 1).body == b"ok"
-    assert seen["ua"] == V.USER_AGENT == "datathon-facility-check/0.1"
+@pytest.mark.parametrize("target", ["ftp://x.example/", "http://127.0.0.1/", "http://169.254.169.254/"])
+def test_checker_reports_unreachable_for_bad_redirects(monkeypatch, target):
+    w = Wire(monkeypatch, {("hospital.example", "/robots.txt"): (302, {"Location": target}, b""),
+                           ("hospital.example", "/"): (302, {"Location": target}, b"")})
+    t = [0.0]
+    polite = V.Polite(V.http_transport, clock=lambda: t[0], sleep=lambda d: t.__setitem__(0, t[0] + d))
+    ch = V.Checker({FID: {**SITE, "urls": ["https://hospital.example/"]}}, V.Lexicon.load(FIX / "lexicon.json"),
+                   polite=polite)
+    assert ch.check(FID, "dialysis")["status"] == "unreachable"
+    assert {o[1] for o in w.opened} == {"hospital.example"}
+
+
+def test_pinned_connections_dial_the_ip_and_keep_sni(monkeypatch):
+    dialed, wrapped = [], []
+    monkeypatch.setattr(V.socket, "create_connection", lambda addr, timeout: dialed.append(addr) or "raw-sock")
+
+    class Ctx:
+        def wrap_socket(self, sock, server_hostname):
+            wrapped.append((sock, server_hostname))
+            return "tls-sock"
+
+    c = V._PinnedHTTPS("hospital.example", "203.0.113.7", 443, 2)
+    c._context = Ctx()
+    c.connect()
+    h = V._PinnedHTTP("hospital.example", "203.0.113.7", 80, 2)
+    h.connect()
+    assert dialed == [("203.0.113.7", 443), ("203.0.113.7", 80)]
+    assert wrapped == [("raw-sock", "hospital.example")] and c.sock == "tls-sock"
+    assert c.host == "hospital.example"  # Host header comes from this, not the IP
 
 
 def test_endpoint(monkeypatch):
