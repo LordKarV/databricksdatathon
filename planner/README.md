@@ -21,9 +21,34 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 |---|---|
 | `core.py` | The planner. Standard library only; data and probabilities are passed in |
 | `data_v1.py` | Stub inputs from `derived/v1`: facility list and `capability_p` (needs pandas) |
+| `export_v1.py` | Build step: writes `planner/out/planner_v1.json.gz` from the stub (needs pandas, about 6 s) |
+| `store.py` | Loads that file with the standard library: `facilities()`, `capability_p`, `state_near` |
+| `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 14 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 18 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+
+## Calling it from the app
+
+```python
+from planner.service import plan_for_service
+out = plan_for_service("trauma_emergency", 26.45, 85.95)
+# {"pathway": "major_trauma", "options": [...], "abstain": None, "thresholds": {...},
+#  "instructions": [...], "considered": {...}, "assumptions": {...}, "meta": {"stub": True, ...}}
+```
+
+- Build the data once: `.venv/bin/python planner/export_v1.py` (778 KB, git-ignored). At run time
+  nothing but the standard library is imported. Measured on this machine with system Python and no
+  pandas installed: 0.1 s for the first call including the load, then 8 to 22 ms per plan.
+- A service with no pathway returns `{"pathway": None}`: keep the single-destination ranking.
+- Service ids: `emergency_csection -> obstetric_emergency`, `nicu -> sick_newborn`,
+  `trauma_emergency -> major_trauma`, `burn_care -> burns`, `dialysis -> dialysis_start`, plus
+  `stemi` and `snakebite` if tiles are added. `mri` and `cardiac_surgery` have no pathway.
+- Pass `capability_p=` (and `facilities=`) to use the model instead of the stub. `meta.stub` then
+  turns false and the placeholder warning leaves `flags`.
+- The origin's state is taken from the nearest facility, so hill-road travel constants apply
+  without the app passing a state.
+- If the export is missing, the call raises `RuntimeError` naming the build step.
 
 ## The swap point
 
@@ -131,8 +156,8 @@ pathway (9,959 facilities, estimate travel):
 - One-stop plans never appear for STEMI or sick newborn in the benchmark. Whether that is because
   a definitive candidate was always within the threshold, or because no nearer stabilising
   candidate had evidence, was not broken down.
-- Not wired into the app. `/api/plan` does not call the planner yet, and the app runs without
-  pandas, so it needs a `capability_p` over its own facts export.
+- The planner side of the app wiring is in place (`service.py`, `store.py`). `/api/plan` does not
+  call it yet; that change and the faithfulness markers are in `app/` (#47).
 - Patient-specific rules (burn size, birth weight, prior stroke) are returned as `instructions`
   text; the planner does not evaluate them because the app collects no patient details.
 - Windows are checked against the estimate; `met_at_high_estimate` shows when the range crosses

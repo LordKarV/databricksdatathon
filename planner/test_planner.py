@@ -237,3 +237,66 @@ def test_real_pathways_load_and_plan_with_fixtures():
     assert r["plans"][0]["type"] == "one_stop"
     assert r["plans"][0]["stops"][0]["dwell_minutes"] == 90
     assert any(i["type"] == "caution" for i in r["instructions"])
+
+
+# ---- run-time store and the one-call service (issue #47) ----
+
+def synthetic_doc():
+    return {"version": 1, "built_utc": "2026-01-01T00:00:00Z", "probabilities": {"source": "test"}, "no_mention_p": 0.02,
+            "facilities": {"id": ["a", "b"], "name": ["A", "B"], "lat": [O[0] + 0.1, O[0] + 0.9], "lon": [O[1], O[1]],
+                           "town": ["T", "T"], "district": ["D", "D"], "state": ["PLAINS", "SIKKIM"], "flags": [[], ["check"]]},
+            "capabilities": {"emergency_24x7": {"i": [0], "p": [0.9], "e": [["a:1"]]},
+                             "icu": {"i": [1], "p": [0.8], "e": [["b:1", "b:2"]]}}}
+
+
+def test_store_roundtrip_without_pandas(tmp_path):
+    import gzip
+    from planner.store import Store
+    path = tmp_path / "p.json.gz"
+    with gzip.open(path, "wt", encoding="utf-8") as fh:
+        json.dump(synthetic_doc(), fh)
+    st = Store.load(path)
+    assert [f["id"] for f in st.facilities()] == ["a", "b"] and st.facilities()[1]["flags"] == ["check"]
+    assert st.capability_p("a", "emergency_24x7") == (0.9, ["a:1"])
+    assert st.capability_p("b", "emergency_24x7") == (0.02, [])      # no mention
+    assert st.capability_p("b", "icu") == (0.8, ["b:1", "b:2"])
+    with pytest.raises(KeyError):
+        st.capability_p("a", "not_a_capability")
+    assert st.state_near(O) == "PLAINS" and st.state_near((O[0] + 1.0, O[1])) == "SIKKIM"
+    assert Store.load(tmp_path / "missing.json.gz") is None
+    assert "pandas" not in sys.modules
+
+
+def test_service_maps_app_services_and_passes_other_services_through():
+    from planner import service
+    assert service.plan_for_service("mri", 20.0, 78.0) == {"pathway": None}
+    assert service.plan_for_service("cardiac_surgery", 20.0, 78.0) == {"pathway": None}
+    for app_id, pid in service.SERVICE_TO_PATHWAY.items():
+        assert pid in service.pathways(), app_id
+    everything = {c: 0.9 for p in service.pathways().values() for s in p["stages"]
+                  for c in s["requires_all"] + [x for g in s["requires_any"] for x in g]}
+    f = [fac("big", 140), fac("small", 15)]
+    only_first = {"emergency_24x7": 0.9}
+    out = service.plan_for_service("trauma_emergency", O[0], O[1], capability_p=caps({"big": everything, "small": only_first}),
+                                   facilities=f, travel_fn=travel_60)
+    assert out["pathway"] == "major_trauma" and out["meta"]["stub"] is False and out["abstain"] is None
+    o = out["options"][0]
+    assert o["route"]["type"] == "one_stop" and [s["facility_id"] for s in o["route"]["stops"]] == ["small", "big"]
+    assert o["flags"] == [] or all("placeholder" not in x for x in o["flags"])   # a real capability_p drops the stub warning
+    assert out["thresholds"]["add_stop_only_if_definitive_beyond_minutes"] == 60
+    assert any(i["type"] == "never_delay" for i in out["instructions"])
+    json.dumps(out)
+
+
+def test_service_says_when_the_export_is_missing(monkeypatch):
+    from planner import service
+    monkeypatch.setitem(service._cache, "store", None)
+    with pytest.raises(RuntimeError, match="export_v1"):
+        service.plan_for_service("dialysis", 20.0, 78.0)
+
+
+def test_stub_warning_is_on_by_default():
+    f = [fac("d", 30)]
+    r = core.plan(O, pathway(stages=1), f, caps({"d": FULL}), travel_60)
+    assert any("placeholder" in x for x in to_options(r)[0]["flags"])
+    assert not any("placeholder" in x for x in to_options(r, stub=False)[0]["flags"])
