@@ -1,0 +1,3 @@
+# Databricks Apps entry point. --no-access-log: query strings carry rounded coordinates and the
+# service, which must not be logged together (spec section 8, Safety 7.3).
+command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

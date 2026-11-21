@@ -1,0 +1,3 @@
+# Runtime: FastAPI 0.115 and uvicorn are pre-installed on Databricks Apps; pinned here for local runs.
+fastapi==0.115.14
+uvicorn==0.54.0
