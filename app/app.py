@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from stub_data import SERVICES, area_stub, recommend_stub
+from verify.check import Checker
 
 LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
 Depth = Literal["quick", "compare", "area"]
@@ -99,6 +100,29 @@ def area(req: AreaRequest) -> dict:
     if req.service not in SERVICES:
         raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
     return area_stub(req.service, round(req.lat, 2), round(req.lon, 2))
+
+
+class VerifyRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    facility_id: str = Field(min_length=1, max_length=64, pattern=r"^[\w-]+$")
+    service_id: str
+
+
+@functools.lru_cache(maxsize=1)
+def _checker() -> Checker | None:
+    return Checker.from_out()  # None until app/verify/build_sites.py has run
+
+
+@app.post("/api/verify")
+def verify(req: VerifyRequest) -> JSONResponse:
+    """Live check of the facility's official website for the service (#37). Never changes the band."""
+    if req.service_id not in SERVICES:
+        raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
+    ch = _checker()
+    if ch is None:
+        return JSONResponse({"error": "website check is not set up on this server"}, status_code=503)
+    return JSONResponse(ch.check(req.facility_id, req.service_id), headers={"Cache-Control": "no-store"})
 
 
 @app.get("/api/recommend")

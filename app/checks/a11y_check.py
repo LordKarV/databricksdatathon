@@ -103,6 +103,19 @@ def why(page: Page) -> None:
     page.get_by_text("How we decided").wait_for()
 
 
+def website_check(page: Page) -> None:
+    """Why page after "Check website now" (#37), with a recorded 'found' answer so quotes and links render."""
+    import json
+    import time
+    why(page)
+    body = json.dumps({"status": "found", "status_text": "website lists", "checked_at_ms": int(time.time() * 1000),
+                       "quotes": [{"text": "Dialysis unit with 10 machines, open 24 hours.",
+                                   "url": "https://example.org/dialysis", "says": "yes"}]})
+    page.route("**/api/verify", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.get_by_role("button", name="Check website now").click()
+    page.locator("#verify-out blockquote").wait_for()
+
+
 def call_ahead(page: Page) -> None:
     plan_for("Accident")(page)
     page.get_by_role("link", name="Call ahead").first.click()
@@ -214,6 +227,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "results_dialysis": plan_for("Dialysis"),
     "abstention_csection": plan_for("Emergency C-section"),
     "why_and_how": why,
+    "website_check": website_check,
     "call_ahead_trauma": call_ahead,
     "slip_english": slip_for("en"),
     "slip_hindi": slip_for("hi"),

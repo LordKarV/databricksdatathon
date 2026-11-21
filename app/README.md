@@ -113,3 +113,22 @@ The service worker keeps each saved state pack in IndexedDB (`rs-packs` database
 `{body, sha256, built, saved_at}`); the pack format is unchanged and `/api/pack/<slug>` is answered from there when
 the network fails. Packs saved before #32 in Cache Storage (`rs-packs-v1`) move over on activate. After the first
 save the page calls `navigator.storage.persist()` once and records the answer in `localStorage['rs.pack'].persisted`.
+
+## Live website check (`POST /api/verify`, #37)
+
+Body `{facility_id, service_id}`. The server fetches the facility's official website and looks for the service.
+- It reads up to 4 pages: the home page, then links about the service, departments, contact or emergency.
+- It is polite: robots.txt is honoured, at most 1 request per second per domain, 8 s total, User-Agent `datathon-facility-check/0.1`, and only public addresses are fetched.
+- Matching uses the claims lexicon. Sentences that say the service is not offered here and now (negation, referral, future, past, camp) never count as found.
+
+Returns:
+```
+{"facility_id", "service_id", "status": "found | not_mentioned | unreachable | wrong_site | no_website",
+ "status_text", "quotes": [{"text", "url", "says": "yes | no"}],   // at most 2, verbatim
+ "pages_checked": [...], "checked_at", "checked_at_ms", "cached", "note"}
+```
+- Results are cached in memory for 24 h. The cache holds quotes and URLs only; page bodies are dropped after matching.
+- The why page shows the result as a dated line, and it never changes the band.
+- The endpoint returns 503 until the inputs are built:
+  `.venv-app/bin/python app/verify/build_sites.py` writes `app/verify/out/` (git-ignored, about 350 KB, from `derived/v1/source_urls.parquet` and `cleaning/claims/lexicon.py`).
+- Tests replay recorded pages from `app/verify/fixtures/` and make no network calls.
