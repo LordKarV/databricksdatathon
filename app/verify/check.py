@@ -10,14 +10,14 @@ Network, clock and sleep are injectable so tests replay recorded pages with no n
 from __future__ import annotations
 
 import gzip
+import http.client
 import ipaddress
 import json
 import re
 import socket
+import ssl
 import threading
 import time
-import urllib.error
-import urllib.request
 import urllib.robotparser
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -61,34 +61,70 @@ Transport = Callable[[str, float], Page]
 
 
 # ---------- network ----------
-def _public_host(host: str) -> bool:
-    """Block loopback, private and link-local targets: the URLs come from scraped data and page links."""
-    try:
-        infos = socket.getaddrinfo(host, None)
-    except OSError:
-        return False
-    return all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
+# Hardening (#40): only http(s), on the first URL and on every redirect; each hop resolves its host once, every
+# address must be global, and the socket connects to that checked address (no second lookup, so no DNS-rebinding
+# window). TLS keeps the hostname for SNI and certificate checks; the Host header stays the hostname.
+SCHEMES = {"http": 80, "https": 443}
+MAX_REDIRECTS = 5
+REDIRECTS = {301, 302, 303, 307, 308}
+_TLS = ssl.create_default_context()
 
 
-class _NoPrivateRedirects(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: PLR0913
-        if not _public_host(urlsplit(newurl).hostname or ""):
-            raise urllib.error.URLError("redirect to a non-public address")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+def resolve_public(host: str, port: int) -> str:
+    """The address to connect to, or OSError if the name does not resolve or any address is not global."""
+    if not host:
+        raise OSError("no host")
+    infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
+    addrs = [i[4][0] for i in infos]
+    if not addrs or not all(ipaddress.ip_address(a.split("%")[0]).is_global for a in addrs):
+        raise OSError(f"non-public address for {host}")
+    return addrs[0]
 
 
-_OPENER = urllib.request.build_opener(_NoPrivateRedirects)
+class _PinnedHTTP(http.client.HTTPConnection):
+    def __init__(self, host: str, ip: str, port: int, timeout: float) -> None:
+        super().__init__(host, port, timeout=timeout)
+        self.ip = ip
+
+    def connect(self) -> None:
+        self.sock = socket.create_connection((self.ip, self.port), self.timeout)
 
 
-def urllib_transport(url: str, timeout: float) -> Page:
-    if not _public_host(urlsplit(url).hostname or ""):
-        raise OSError("non-public address")
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html,text/plain;q=0.9"})
-    try:
-        with _OPENER.open(req, timeout=timeout) as r:
-            return Page(r.status, r.geturl(), r.headers.get("Content-Type", ""), r.read(MAX_BYTES))
-    except urllib.error.HTTPError as e:
-        return Page(e.code, url, e.headers.get("Content-Type", "") if e.headers else "", b"")
+class _PinnedHTTPS(http.client.HTTPSConnection):
+    def __init__(self, host: str, ip: str, port: int, timeout: float) -> None:
+        super().__init__(host, port, timeout=timeout, context=_TLS)
+        self.ip = ip
+
+    def connect(self) -> None:
+        raw = socket.create_connection((self.ip, self.port), self.timeout)
+        self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
+
+
+def open_connection(scheme: str, host: str, ip: str, port: int, timeout: float) -> http.client.HTTPConnection:
+    return (_PinnedHTTPS if scheme == "https" else _PinnedHTTP)(host, ip, port, timeout)
+
+
+def http_transport(url: str, timeout: float) -> Page:
+    """GET with pinned, checked addresses and manual http(s)-only redirects."""
+    for _ in range(MAX_REDIRECTS + 1):
+        u = urlsplit(url)
+        if u.scheme not in SCHEMES:
+            raise OSError(f"scheme not allowed: {u.scheme!r}")
+        port = u.port or SCHEMES[u.scheme]
+        ip = resolve_public(u.hostname or "", port)
+        conn = open_connection(u.scheme, u.hostname, ip, port, timeout)
+        try:
+            conn.request("GET", urlunsplit(("", "", u.path or "/", u.query, "")),
+                         headers={"User-Agent": USER_AGENT, "Accept": "text/html,text/plain;q=0.9"})
+            r = conn.getresponse()
+            loc = r.getheader("Location")
+            if r.status in REDIRECTS and loc:
+                url = urljoin(url, loc)
+                continue
+            return Page(r.status, url, r.getheader("Content-Type") or "", r.read(MAX_BYTES))
+        finally:
+            conn.close()
+    raise OSError("too many redirects")
 
 
 # ---------- HTML to text ----------
@@ -204,7 +240,7 @@ def looks_like(name: str, city: str | None, host: str, title: str, text: str) ->
 class Polite:
     """Per-domain spacing (shared across requests), robots.txt per host, and a total time budget per check."""
 
-    def __init__(self, transport: Transport = urllib_transport, clock: Callable[[], float] = time.monotonic,
+    def __init__(self, transport: Transport = http_transport, clock: Callable[[], float] = time.monotonic,
                  sleep: Callable[[float], None] = time.sleep) -> None:
         self.transport, self.clock, self.sleep = transport, clock, sleep
         self._last: dict[str, float] = {}

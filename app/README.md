@@ -118,7 +118,7 @@ save the page calls `navigator.storage.persist()` once and records the answer in
 
 Body `{facility_id, service_id}`. The server fetches the facility's official website and looks for the service.
 - It reads up to 4 pages: the home page, then links about the service, departments, contact or emergency.
-- It is polite: robots.txt is honoured, at most 1 request per second per domain, 8 s total, User-Agent `datathon-facility-check/0.1`, and only public addresses are fetched.
+- It is polite: robots.txt is honoured, at most 1 request per second per domain, 8 s total, User-Agent `datathon-facility-check/0.1`. Only http(s) is fetched, on the first URL and on every redirect (at most 5 redirects). Each hop resolves its host once, every address must be global, and the socket connects to that checked address, so there is no second DNS lookup. TLS keeps the hostname for SNI and certificate checks.
 - Matching uses the claims lexicon. Sentences that say the service is not offered here and now (negation, referral, future, past, camp) never count as found.
 
 Returns:
