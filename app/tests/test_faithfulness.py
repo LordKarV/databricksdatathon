@@ -187,13 +187,14 @@ def decimals(shown: str) -> int:
 
 
 def number(shown: str) -> float:
-    m = re.fullmatch(r"[+-]?\d+(?:\.\d+)?", shown.strip())
+    shown = shown.strip().replace(",", "")  # digit grouping, e.g. 9,959 or 1,58,444
+    m = re.fullmatch(r"[+-]?\d+(?:\.\d+)?", shown)
     assert m, f"not a number: {shown!r}"
     return float(shown)
 
 
 def within_precision(shown: str, stored: float) -> bool:
-    return abs(number(shown) - float(stored)) <= 0.5 * 10 ** -decimals(shown.strip()) + 1e-9
+    return abs(number(shown) - float(stored)) <= 0.5 * 10 ** -decimals(shown.strip().replace(",", "")) + 1e-9
 
 
 def check_item(payload: dict, it: dict) -> str | None:
@@ -365,3 +366,34 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
     print(f"{name}: {report}")
     assert report["values_checked"] > 0
     assert not errs, "\n".join(errs[:40]) + (f"\n... {len(errs) - 40} more" if len(errs) > 40 else "")
+
+
+# ---------- 'How this works' page (#45): every number comes from how.json, every source is a repo file ----------
+HOW_JSON = APP / "howto" / "out" / "how.json"
+
+
+@pytest.mark.skipif(not HOW_JSON.is_file(), reason="how.json not built (app/howto/build.py)")
+def test_how_page_every_number_is_from_how_json(base_url, browser):
+    how = json.loads(HOW_JSON.read_text())
+    report = {"values_checked": 0}
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+    page = ctx.new_page()
+    try:
+        page.goto(base_url + "/#/how")
+        page.wait_for_selector("text=Page data built")
+        got = page.evaluate(COLLECT_JS)
+        links = page.eval_on_selector_all("#main a[href^='http']", "as => as.map(a => a.href)")
+    finally:
+        ctx.close()
+    errs = check_screen("how", how, got, report)
+    shown = {it["path"] for it in got["items"]}
+    errs += [f"how: fact {k} not shown" for k, f in how["facts"].items() if f"facts.{k}.value" not in shown]
+    for k, t in how["tables"].items():
+        errs += [f"how: table {k} cell {i}.{j} not shown" for i, r in enumerate(t["rows"]) for j in range(len(r))
+                 if f"tables.{k}.rows.{i}.{j}" not in shown]
+    for href in links:
+        rel = href.removeprefix(how["repo_url"])
+        if rel == href or not (ROOT / rel).exists():
+            errs.append(f"how: link {href} is not a file in this repo")
+    print(f"how: {report}, {len(links)} source links")
+    assert not errs, "\n".join(errs[:40])

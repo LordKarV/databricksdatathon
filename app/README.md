@@ -169,3 +169,21 @@ now a test fixture only).
   - `operator` is "unknown" for every option: derived/v1 has no public/private field, and the spec allows
     "public" only when a field says so.
   - Quotes link to the record's best source URL (official home page first), not a per-sentence page.
+
+## How this works page (`#/how`, #45)
+
+A plain-language global HOW for judges and planners, reached from the header link. The sections are: the data
+problem, what was fixed / flagged / could not be fixed, how a recommendation is made, how good it is (including
+what did not work), sources and licences, and limits.
+
+- **No hand-typed numbers.** `.venv-app/bin/python app/howto/build.py` writes `app/howto/out/how.json`
+  (git-ignored, about 20 KB) after `app/facts/build.py`.
+  - Counts are computed from `derived/v1`, the facts export and `kb/pathways`.
+  - Ranking constants are read from `app/facts/engine.py`.
+  - Tables and the "did not work" list are copied verbatim from `REPORT.md`, `model/MODEL_SPEC.md` and
+    `research/DATASETS.md`, found by heading. A missing heading or table fails the build.
+  - Every entry names its source file. When #11 lands, point `EVAL` in the build at its results file.
+- **Served by** `GET /api/how` (503 until built). The renderer `how.js` loads only on this route, so it is
+  never on the critical path.
+- **Tested:** the faithfulness test checks every number and table cell on the page against how.json, requires
+  every fact and cell to be shown, and requires every source link to point at a file that exists in the repo.

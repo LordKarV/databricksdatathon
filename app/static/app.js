@@ -665,6 +665,32 @@ async function bindSlip() {
   $('#slip-print').addEventListener('click', () => window.print());
 }
 
+// ---------- How this works (#45): how.js and /api/how load only on this route ----------
+function howScreen() {
+  return `<h1 tabindex="-1">How this works</h1><div id="how-out"><p>Loading...</p></div>`;
+}
+function loadScript(src, name) {
+  if (window[name]) return Promise.resolve();
+  return new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = ok;
+    s.onerror = fail;
+    document.head.appendChild(s);
+  });
+}
+async function bindHow() {
+  try {
+    const [, r] = await Promise.all([loadScript('/how.js', 'RSHow'), fetch('/api/how', {redirect: 'manual'})]);
+    if (!r.ok) throw new Error();
+    const html = RSHow.render(await r.json());
+    $('#main').innerHTML = html;
+    $('#main h1').focus();
+  } catch {
+    $('#how-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+  }
+}
+
 // ---------- router ----------
 function render() {
   const h = location.hash || '#/';
@@ -674,6 +700,7 @@ function render() {
   else if (h === '#/plan') [html, bind] = [planScreen(), bindPlan];
   else if (h.startsWith('#/why/')) [html, bind] = [whyScreen(parseInt(h.split('/')[2], 10)), bindWhy];
   else if (h.startsWith('#/slip/')) [html, bind] = [slipScreen(parseInt(h.split('/')[2], 10)), bindSlip];
+  else if (h === '#/how') [html, bind] = [howScreen(), bindHow];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
   document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));
