@@ -268,7 +268,16 @@ def test_store_roundtrip_without_pandas(tmp_path):
     with_pins = Store(doc)
     assert with_pins.state_near((O[0] + 0.2, O[1])) == "BIHAR" and with_pins.state_near((O[0] + 0.9, O[1])) == "SIKKIM"
     assert Store.load(tmp_path / "missing.json.gz") is None
-    assert "pandas" not in sys.modules
+    # the run-time path must not pull in pandas; checked in a fresh interpreter because other tests
+    # in the same process may already have imported it
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); "
+            "from planner.store import Store; from planner import service, core, app_contract; "
+            "st = Store.load(%r); assert st.capability_p('a', 'emergency_24x7')[0] == 0.9; "
+            "bad = [m for m in ('pandas', 'numpy', 'pyarrow') if m in sys.modules]; assert not bad, bad"
+            % (str(ROOT), str(path)))
+    done = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr
 
 
 def test_service_maps_app_services_and_passes_other_services_through():
