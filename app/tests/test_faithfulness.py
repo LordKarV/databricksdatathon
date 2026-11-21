@@ -36,10 +36,17 @@ pw = pytest.importorskip("playwright.sync_api")
 APP = Path(__file__).resolve().parents[1]
 ROOT = APP.parent
 sys.path.insert(0, str(APP))
-from stub_data import SERVICES, recommend_stub  # noqa: E402
+from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY"}
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\bin 10 listings\b"]
+# Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
+AREA_ROW_FIELDS = {
+    "Access now": "area.summary.access_now",
+    "If calls confirm the listings": "area.summary.access_if_confirmed",
+    "Calls could close": "area.summary.calls_could_close",
+    "No public evidence of care": "area.summary.no_public_evidence",
+}
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 
 
@@ -49,11 +56,14 @@ def load_payloads() -> list[tuple[str, dict]]:
     if src:
         files = sorted(Path(src).glob("*.json"))
         assert files, f"FAITH_PLANS={src} has no .json files"
+        # A plan file may carry its area payload under "area_plan" (S11); otherwise the Area screen uses the stub.
         return [(f.stem, json.loads(f.read_text())) for f in files]
     out = []
     for svc in sorted(SERVICES):
         for name, (lat, lon) in {"sitamarhi": (26.6, 85.48), "pune": (18.52, 73.86)}.items():
-            out.append((f"stub-{svc}-{name}", recommend_stub(svc, lat, lon, 40, "gps")))
+            plan = recommend_stub(svc, lat, lon, 40, "gps")
+            plan["area_plan"] = area_stub(svc, lat, lon)
+            out.append((f"stub-{svc}-{name}", plan))
     return out
 
 
@@ -64,7 +74,11 @@ def claim_texts() -> dict[str, str]:
     path = ROOT / "derived" / "v1" / "claims.parquet"
     if not path.is_file():
         return {}
-    import pandas as pd
+    try:
+        import pandas as pd
+    except ImportError:  # claim-text check needs pandas + pyarrow (app/requirements-dev.txt); the rest still runs
+        print("pandas missing: quotes not checked against derived/v1 claims")
+        return {}
     c = pd.read_parquet(path, columns=["claim_id", "text"])
     return dict(zip(c.claim_id, c.text, strict=True))
 
@@ -117,7 +131,10 @@ COLLECT_JS = """() => {
     text: visible(el)}));
   const rest = main.cloneNode(true);
   rest.querySelectorAll('[data-f], [data-device], [aria-hidden], script').forEach(x => x.remove());
-  return {items, rest: rest.textContent.replace(/\\s+/g, ' ')};
+  const rows = [...main.querySelectorAll('tr')].map(tr => ({
+    label: (tr.querySelector('th[scope=row]') || {}).textContent,
+    paths: [...tr.querySelectorAll('td [data-f]')].map(e => e.dataset.f)}));
+  return {items, rest: rest.textContent.replace(/\\s+/g, ' '), rows};
 }"""
 
 
@@ -156,6 +173,8 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = isinstance(stored, (int, float)) and within_precision(shown, stored)
     elif kind == "sum":
         ok = int(number(shown)) == sum(c["points"] for c in stored)
+    elif kind == "atleast":
+        ok = within_precision(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
         ok = int(number(shown)) == round(10 * stored["k_confirmed"] / stored["n"])
     elif kind == "band":
@@ -167,7 +186,7 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = bool(m) and math.isclose(float(m[1]), stored["lat"]) and math.isclose(float(m[2]), stored["lon"])
     else:
         return f"{path}: unknown kind {kind!r}"
-    return None if ok else f"{path} ({kind}): shown {shown!r}, stored {stored!r}"
+    return None if ok else f"{path} ({kind}): shown {shown!r}, stored {repr(stored)[:120]}"
 
 
 def stray_digits(rest: str) -> list[str]:
@@ -216,6 +235,9 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
     page.add_init_script(
         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
         " source: 'gps', t: Date.now(), label: null}))")
+    area = payload.get("area_plan") or area_stub(payload["query"]["service"], 26.6, 85.48)
+    page.route("**/api/area", lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(area)))
+    full = {**payload, "area": area}  # data-f paths on the Area screen start with "area."
     errs: list[str] = []
     try:
         page.goto(base_url + "/#/")
@@ -248,6 +270,34 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                     page.locator("[data-slip-lang=en]").click()  # reset for the next option
             page.evaluate("h => { location.hash = h; }", "#/plan")
             page.wait_for_selector("article.card")
+        # Compare (S10): asks "patient here?" with no default, then every option side by side.
+        page.locator("[data-depth=compare]").click()
+        page.locator("input[name=here][value=yes]").click()
+        page.wait_for_selector(".compare-cards")
+        got = page.evaluate(COLLECT_JS)
+        errs += check_screen("compare", payload, got, report)
+        errs += check_quotes("compare", payload, got["items"], claims, report)
+        shown = {it["path"] for it in got["items"]}
+        for i in range(len(payload["options"])):
+            for f in ("p", "p_lo", "p_hi", "p_e", "p_l", "travel.km"):
+                if f"options.{i}.{f}" not in shown:
+                    errs.append(f"compare: options.{i}.{f} not shown")
+        # Area (S11, S12): per-PIN plan, gap split and ten calls.
+        page.locator("[data-depth=area]").click()
+        page.wait_for_selector("#ten-calls")
+        got = page.evaluate(COLLECT_JS)
+        errs += check_screen("area", full, got, report)
+        rows = {r["label"]: r["paths"] for r in got["rows"] if r["label"]}
+        for label, path in AREA_ROW_FIELDS.items():
+            if rows.get(label) != [path]:
+                errs.append(f"area: row {label!r} shows {rows.get(label)}, expected [{path!r}]")
+        shown = {it["path"] for it in got["items"]}
+        for k in range(len(area["pins"])):
+            if f"area.pins.{k}.pin" not in shown:
+                errs.append(f"area: pin row {k} not shown")
+        for k in range(len(area["ten_calls"])):
+            if f"area.ten_calls.{k}.access_gain" not in shown:
+                errs.append(f"area: call {k} not shown")
     finally:
         ctx.close()
     print(f"{name}: {report}")

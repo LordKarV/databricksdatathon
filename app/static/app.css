@@ -119,3 +119,14 @@ body.slip-big header.top, body.slip-big #bar108 { display: none; }
 .stale-red { border-left: 6px solid var(--bad); padding-left: 8px; }
 select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--muted); border-radius: 8px;
   background: var(--bg); color: var(--fg); padding: 6px; }
+
+/* Compare (S10): identical card rows on phone; a real table on desk. Area (S11) tables scroll inside themselves. */
+.compare-table { display: none; overflow-x: auto; }
+.rows { display: grid; grid-template-columns: 9rem 1fr; gap: 4px 8px; margin: 6px 0; }
+.rows dt { font-weight: 600; }
+.rows dd { margin: 0; overflow-wrap: anywhere; }
+@media (min-width: 60rem) {
+  body.wide { max-width: 72rem; }
+  body.wide .compare-table { display: block; }
+  body.wide .compare-cards { display: none; }
+}
