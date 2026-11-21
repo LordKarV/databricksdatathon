@@ -14,9 +14,11 @@ Layout (pack format v1, JSON, gzip on the wire):
   one small integer per (service, PIN) pointing into a table of distinct lists.
 The loader in app/static/pack.js decodes it.
 
-Bands are a PLACEHOLDER until the model (#11) exports its own: likely = verified true, or grade strong
-with score_lo >= 0.6; everything else that is a candidate is not_verified. Ranking is straight-line
-distance, not the decision layer's expected time to treatment; the model export replaces both.
+Bands: when derived/v2/facility_service_scores.parquet exists (published from #11), band, p, lo and hi come
+from it and pairs the model calls unlikely are dropped. Until then a conservative PLACEHOLDER applies:
+likely only for pairs verified true by the gold web checks; every other candidate is not_verified, with the
+derived/v1 score and interval. Each pack records its band source. Ranking is straight-line distance, not
+the decision layer's expected time to treatment.
 
 Run from the repo root:  .venv-app/bin/python app/packs/build_packs.py [--states BIHAR,...]
 Writes app/packs/out/<slug>.json.gz (git-ignored: facility data), out/index.json, app/packs/sizes.json
@@ -45,7 +47,7 @@ TOP_K = 3
 QUOTE_MAX = 160  # characters on a phone card; longer quotes are cut with "..."
 FAC_SCALE = 10_000  # facility coordinates in 1e-4 degree (about 11 m)
 PIN_SCALE = 1_000  # PIN centroids in 1e-3 degree (about 110 m)
-LIKELY_MIN_LO = 0.6
+MODEL_SCORES = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
 
 # derived/v1 service names -> app service keys (app/stub_data.py). "icu" has no app tile, so it is dropped.
 SERVICE_MAP = {
@@ -78,8 +80,7 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
               & ~dps.grade.isin(EXCLUDED_GRADES) & (dps.status != "verified_false")].copy()
     svc["service"] = svc.service.map(SERVICE_MAP)
     svc = svc[svc.unique_id.isin(fac.unique_id)]
-    svc["likely"] = ((svc.status == "verified_true")
-                     | ((svc.grade == "strong") & (svc.score_lo >= LIKELY_MIN_LO))).astype(int)
+    svc = apply_bands(svc.reset_index(drop=True), MODEL_SCORES)
 
     # Sentence text -> claim id, so every quote cites the claim it came from.
     sent = dps[dps.dp_type == "claim_attribution"][["unique_id", "claim_id", "original_value"]]
@@ -90,6 +91,30 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     pins = pins.dropna(subset=["state", "lat", "lon"])
     pins["district"] = pins.district.fillna("")
     return fac.reset_index(drop=True), svc.reset_index(drop=True), pins.reset_index(drop=True)
+
+
+def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
+    """Set likely/score/score_lo/score_hi from the model table if published, else the placeholder.
+
+    The source used is kept in svc.attrs["band_source"] and written into every pack.
+    """
+    if not model_path.is_file():
+        out = svc.assign(likely=(svc.status == "verified_true").astype(int))
+        out.attrs["band_source"] = "placeholder: likely only for pairs verified true; model scores not published yet"
+        return out
+    m = pd.read_parquet(model_path, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "as_of"])
+    # Accept derived/v1 service names or app keys for service_id.
+    m["service"] = m.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+    m = m[m.service.isin(SERVICES)].drop_duplicates(["unique_id", "service"])
+    unknown = set(m.band) - {"likely", "not_verified", "unlikely"}
+    if unknown:
+        raise ValueError(f"unknown bands in {model_path}: {sorted(unknown)}")
+    out = svc.drop(columns=["score", "score_lo", "score_hi"]).merge(
+        m[["unique_id", "service", "band", "p", "lo", "hi"]], on=["unique_id", "service"], how="inner")
+    out = out[out.band != "unlikely"].rename(columns={"p": "score", "lo": "score_lo", "hi": "score_hi"})
+    out = out.assign(likely=(out.band == "likely").astype(int)).drop(columns=["band"]).reset_index(drop=True)
+    out.attrs["band_source"] = f"model: {model_path.name} as of {m.as_of.max()}"
+    return out
 
 
 def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
@@ -161,7 +186,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
 
     return {
         "v": FORMAT_VERSION, "state": state, "built": built, "source": "derived/v1",
-        "band_note": "placeholder bands from derived/v1 grades until the model (#11) exports its own",
+        "band_note": svc.attrs.get("band_source", "unknown"),
         "ranking_note": "nearest by straight line from the PIN centroid; not the decision layer's ranking",
         "services": SERVICES,
         "fac": {
