@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="576pt" viewBox="0 0 864 576" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-21T16:51:09.497395</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 576 
+L 864 576 
+L 864 0 
+L 0 0 
+z
+" style="fill: #fcfcfb"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 10.991842 516.38928 
+L 853.008158 516.38928 
+L 853.008158 91.33574 
+L 10.991842 91.33574 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 10.991842 516.38928 
+L 10.991842 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="ma5d248b3f9" d="M 0 0 
+L 0 3.5 
+" style="stroke: #898781; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="10.991842" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="10.991842" y="534.33728" transform="rotate(-0 10.991842 534.33728)">0.0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 104.54921 516.38928 
+L 104.54921 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="104.54921" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="104.54921" y="534.33728" transform="rotate(-0 104.54921 534.33728)">0.1</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 198.106579 516.38928 
+L 198.106579 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="198.106579" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="198.106579" y="534.33728" transform="rotate(-0 198.106579 534.33728)">0.2</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 291.663947 516.38928 
+L 291.663947 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="291.663947" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="291.663947" y="534.33728" transform="rotate(-0 291.663947 534.33728)">0.3</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 385.221316 516.38928 
+L 385.221316 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="385.221316" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="385.221316" y="534.33728" transform="rotate(-0 385.221316 534.33728)">0.4</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 478.778684 516.38928 
+L 478.778684 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="478.778684" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="478.778684" y="534.33728" transform="rotate(-0 478.778684 534.33728)">0.5</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_13">
+      <path d="M 572.336053 516.38928 
+L 572.336053 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="572.336053" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="572.336053" y="534.33728" transform="rotate(-0 572.336053 534.33728)">0.6</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_15">
+      <path d="M 665.893421 516.38928 
+L 665.893421 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="665.893421" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="665.893421" y="534.33728" transform="rotate(-0 665.893421 534.33728)">0.7</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_17">
+      <path d="M 759.45079 516.38928 
+L 759.45079 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="759.45079" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="759.45079" y="534.33728" transform="rotate(-0 759.45079 534.33728)">0.8</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_19">
+      <path d="M 853.008158 516.38928 
+L 853.008158 91.33574 
+" clip-path="url(#p98f738e0f1)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#ma5d248b3f9" x="853.008158" y="516.38928" style="fill: #898781; stroke: #898781; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 11.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="853.008158" y="534.33728" transform="rotate(-0 853.008158 534.33728)">0.9</text>
+     </g>
+    </g>
+    <g id="text_11">
+     <text style="font-size: 13px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #52514e" x="432" y="553.16278" transform="rotate(-0 432 553.16278)">Isolation-forest anomaly score (higher = more isolated)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_3">
+    <path d="M 10.991842 497.068665 
+L 594.802802 497.068665 
+L 594.802802 481.456046 
+L 10.991842 481.456046 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 10.991842 477.552891 
+L 594.965275 477.552891 
+L 594.965275 461.940273 
+L 10.991842 461.940273 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 10.991842 458.037118 
+L 595.10532 458.037118 
+L 595.10532 442.4245 
+L 10.991842 442.4245 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 10.991842 438.521345 
+L 597.425662 438.521345 
+L 597.425662 422.908726 
+L 10.991842 422.908726 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 10.991842 419.005572 
+L 598.004158 419.005572 
+L 598.004158 403.392953 
+L 10.991842 403.392953 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 10.991842 399.489799 
+L 598.749676 399.489799 
+L 598.749676 383.87718 
+L 10.991842 383.87718 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 10.991842 379.974025 
+L 599.833811 379.974025 
+L 599.833811 364.361407 
+L 10.991842 364.361407 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 10.991842 360.458252 
+L 601.636401 360.458252 
+L 601.636401 344.845634 
+L 10.991842 344.845634 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 10.991842 340.942479 
+L 602.112268 340.942479 
+L 602.112268 325.329861 
+L 10.991842 325.329861 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 10.991842 321.426706 
+L 602.420298 321.426706 
+L 602.420298 305.814087 
+L 10.991842 305.814087 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 10.991842 301.910933 
+L 605.22743 301.910933 
+L 605.22743 286.298314 
+L 10.991842 286.298314 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 10.991842 282.395159 
+L 606.494615 282.395159 
+L 606.494615 266.782541 
+L 10.991842 266.782541 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 10.991842 262.879386 
+L 607.083031 262.879386 
+L 607.083031 247.266768 
+L 10.991842 247.266768 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 10.991842 243.363613 
+L 609.171891 243.363613 
+L 609.171891 227.750995 
+L 10.991842 227.750995 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 10.991842 223.84784 
+L 610.32764 223.84784 
+L 610.32764 208.235221 
+L 10.991842 208.235221 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 10.991842 204.332067 
+L 610.794027 204.332067 
+L 610.794027 188.719448 
+L 10.991842 188.719448 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 10.991842 184.816294 
+L 617.661073 184.816294 
+L 617.661073 169.203675 
+L 10.991842 169.203675 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 10.991842 165.30052 
+L 618.433779 165.30052 
+L 618.433779 149.687902 
+L 10.991842 149.687902 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 10.991842 145.784747 
+L 620.032812 145.784747 
+L 620.032812 130.172129 
+L 10.991842 130.172129 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #2a78d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 10.991842 126.268974 
+L 625.126739 126.268974 
+L 625.126739 110.656355 
+L 10.991842 110.656355 
+z
+" clip-path="url(#p98f738e0f1)" style="fill: #eda100; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 10.991842 516.38928 
+L 10.991842 91.33574 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 10.991842 516.38928 
+L 853.008158 516.38928 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="492.292255" transform="rotate(-0 15.66971 492.292255)">Medipulse Hospital: 250-bed tertiary hospital with a complete record</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="472.776482" transform="rotate(-0 15.66971 472.776482)">Sanjivani Multi Speciality Hospital: coordinates outside India; postcode centre used</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="453.260709" transform="rotate(-0 15.66971 453.260709)">Samraksha Multi Super Speciality Hospital: 200 beds stated but only 3 sentences of text</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="433.744936" transform="rotate(-0 15.66971 433.744936)">Dr. Morris Mathias Hospital: 120-bed hospital with a complete record</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="414.229163" transform="rotate(-0 15.66971 414.229163)">Kailash Hospital: pin 242 km from its PIN; text places it in Agra</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="394.713389" transform="rotate(-0 15.66971 394.713389)">Buddha Hospital and Research Institute: 228 beds and 125 doctors in Gaya; large for Bihar (not verified)</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="375.197616" transform="rotate(-0 15.66971 375.197616)">Yashoda Hospitals - Secunderabad: 810-bed flagship with a complete record</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="355.681843" transform="rotate(-0 15.66971 355.681843)">Redkar Hospital and Research Centre: Goa hospital record says cashless hospital in Panipat; 50 URLs</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="336.16607" transform="rotate(-0 15.66971 336.16607)">Baby Memorial Hospital: address city 115 km from pin and PIN; oncology institute text merged in</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="316.650297" transform="rotate(-0 15.66971 316.650297)">Aarogyam Hospitals: 50 doctors for 30 beds</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="297.134523" transform="rotate(-0 15.66971 297.134523)">Perundurai Government Hospital: pin 177 km from its Erode PIN; no service sentences</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="277.61875" transform="rotate(-0 15.66971 277.61875)">KLE Centenary Charitable Hospital: society-wide bed figures (4000 beds) attached to one site</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="258.102977" transform="rotate(-0 15.66971 258.102977)">Akshaya Hospitals: pin 66 km from its Bengaluru PIN; 50 doctors for 25 beds</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="238.587204" transform="rotate(-0 15.66971 238.587204)">Criticare Lifeline Hospital: over 150 doctors for 70 beds</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="219.071431" transform="rotate(-0 15.66971 219.071431)">Techno India Dama Healthcare &amp; Medical Research Centre: typed clinic with 100 beds and 100 doctors</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="199.555657" transform="rotate(-0 15.66971 199.555657)">Krishna Rajendra Hospital: 1050-bed public teaching hospital founded 1927</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="180.039884" transform="rotate(-0 15.66971 180.039884)">Saraswati Multispeciality Hospital: 150 doctors for 110 beds; likely visiting consultants counted</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="160.524111" transform="rotate(-0 15.66971 160.524111)">Nelson Hospital: 150 beds with unit-level ICU and NICU bed counts; complete record</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="141.008338" transform="rotate(-0 15.66971 141.008338)">GCS Medical College Hospital &amp; Research Centre: 750-bed teaching hospital with a complete record</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 8.2px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="15.66971" y="121.492565" transform="rotate(-0 15.66971 121.492565)">Narhari Hospital: 2860 doctors stated for 200 beds; another sentence says 8 doctors</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 12px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #52514e" x="10.991842" y="80.278669" transform="rotate(-0 10.991842 80.278669)">Top 20 of 6,970 discovery records, classified by hand. Top 5% by score: another facility's text 34% vs 25% for the rest</text>
+   </g>
+   <g id="text_33">
+    <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(10.991842 19.82174)">12 of the 20 most anomalous records are data errors, mostly doctors</text>
+    <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(10.991842 40.57874)">exceeding beds or a pin in another town; the rest are large hospitals</text>
+    <text style="font-weight: 700; font-size: 17px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #0b0b0b" transform="translate(10.991842 61.33574)">with unusually complete records</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_25">
+     <path d="M 705.526283 491.38728 
+L 723.526283 491.38728 
+L 723.526283 485.08728 
+L 705.526283 485.08728 
+z
+" style="fill: #eda100"/>
+    </g>
+    <g id="text_34">
+     <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="730.726283" y="491.38728" transform="rotate(-0 730.726283 491.38728)">Data error (12)</text>
+    </g>
+    <g id="patch_26">
+     <path d="M 705.526283 506.37228 
+L 723.526283 506.37228 
+L 723.526283 500.07228 
+L 705.526283 500.07228 
+z
+" style="fill: #2a78d6"/>
+    </g>
+    <g id="text_35">
+     <text style="font-size: 9px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0b0b0b" x="730.726283" y="506.37228" transform="rotate(-0 730.726283 506.37228)">Genuinely unusual facility (8)</text>
+    </g>
+   </g>
+  </g>
+  <g id="text_36">
+   <text style="font-size: 9.5px; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #898781" x="8.64" y="570.97626" transform="rotate(-0 8.64 570.97626)">Source: viz/patterns/p6_anomalies.py; data/p6_top20_classified.csv (hand verdicts from the record text)</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p98f738e0f1">
+   <rect x="10.991842" y="91.33574" width="842.016317" height="425.05354"/>
+  </clipPath>
+ </defs>
+</svg>
