@@ -161,23 +161,23 @@
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1051,
-    "gzip": 563
+    "raw": 1061,
+    "gzip": 571
    },
    "/app.css": {
     "raw": 6741,
     "gzip": 2241
    },
    "/app.js": {
-    "raw": 42287,
-    "gzip": 13423
+    "raw": 42307,
+    "gzip": 13435
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 16363,
+  "gzip_total": 16383,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

@@ -132,3 +132,40 @@ Returns:
 - The endpoint returns 503 until the inputs are built:
   `.venv-app/bin/python app/verify/build_sites.py` writes `app/verify/out/` (git-ignored, about 350 KB, from `derived/v1/source_urls.parquet` and `cleaning/claims/lexicon.py`).
 - Tests replay recorded pages from `app/verify/fixtures/` and make no network calls.
+
+## Real data behind the contract (#42)
+
+`/api/plan`, `/api/area` and the slip read real facilities from `derived/v1` (the stub in `stub_data.py` is
+now a test fixture only).
+- **Build:** `.venv-app/bin/python app/facts/build.py` writes `app/facts/out/facts.json.gz` (git-ignored, about
+  1.4 MB, under a second). It holds 9,947 facilities, 8,012 facility-service pairs, the 13,829 cited claims,
+  the PIN gazetteer and the evidence-rule hand-check counts, all copied unchanged.
+- **Runtime:** the app loads that file once at start-up using only the standard library. Until it is built,
+  both endpoints return 503.
+- **Measured locally:** start-up to first response 0.31 s, process RSS 108 MB. Plan requests take 1.5-2.6 ms
+  and area requests 12-20 ms (p50 over HTTP).
+- **Candidates:** pairs the claims lexicon found (`grades` + `data_point_scores`) within 150 km straight line.
+  The nearest 40 get a `geo/travel.py` estimate. Ranking is p x exp(-minutes / scale), where the scale is
+  45 / 60 / 120 / 240 min by urgency, for every band: a confirmed listing far away does not outrank a nearer one
+  by default, but the best Likely option in reach always takes the last slot if it did not make the list.
+- **Scores:** everything model-like is in `Engine.score(facility_id, service_id) -> (band, p, lo, hi,
+  contributions, evidence_ids)`.
+  - Interim: Likely only for pairs verified true by a second source. Unlikely when verified false or graded
+    attributed-elsewhere / counter-evidence; such pairs are never offered as options. Everything else is Not
+    verified.
+  - p, lo and hi are `data_point_scores` score / score_lo / score_hi. The contributions split that stored score
+    in log-odds x 10 (evidence rule, then sources, then the second-source check), so the total maps back to p.
+  - When `derived/v2/facility_service_scores.parquet` exists, `build.py` exports its band / p / lo / hi and
+    `score()` uses them; nothing else changes.
+- **Evidence:** verbatim `claims.text` with claim ids, at most 3. Sentences with a non-offer cue or attributed
+  to another facility are left out; the latter are shown as "Ignored: ..." flags.
+- **Flags and checks:** flags come from `record_trust.trust_reasons` (already plain English) and the grade's
+  risk columns. `where_check` comes from the location rule, and `track_record` from the evidence rule's
+  hand-check and gold-dev counts.
+- **Abstention:** when no option is Likely (the common case until the model publishes), the response abstains
+  and lists the Not verified options to call. The outside option is the nearest district hospital or medical
+  college by name, within 150 km.
+- **Known gaps:**
+  - `operator` is "unknown" for every option: derived/v1 has no public/private field, and the spec allows
+    "public" only when a field says so.
+  - Quotes link to the record's best source URL (official home page first), not a per-sentence page.
