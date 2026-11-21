@@ -12,7 +12,8 @@ data-k="<kind>". This test then checks:
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text.
 
-Payloads: the stub by default. Set FAITH_PLANS=<dir> to run against a directory of plan JSON files (for example
+Payloads: three real plans from derived/v1 (#42; when app/facts/out is built) plus the stub fixtures.
+Set FAITH_PLANS=<dir> to run against a directory of plan JSON files (for example
 the model export from #11): no test changes needed.
 """
 from __future__ import annotations
@@ -71,6 +72,11 @@ def json_reply(obj: Any):
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 
 
+REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
+                "maharashtra_csection": ("emergency_csection", 19.88, 75.34),
+                "nh19_trauma_mohania": ("trauma_emergency", 25.15, 83.68)}
+
+
 # ---------- payloads ----------
 def load_payloads() -> list[tuple[str, dict]]:
     src = os.environ.get("FAITH_PLANS")
@@ -80,6 +86,14 @@ def load_payloads() -> list[tuple[str, dict]]:
         # A plan file may carry its area payload under "area_plan" (S11); otherwise the Area screen uses the stub.
         return [(f.stem, json.loads(f.read_text())) for f in files]
     out = []
+    # Real rows (#42): the three release queries from derived/v1, with their real area plans.
+    from facts.engine import Engine
+    eng = Engine.load()
+    if eng is not None:
+        for name, (svc, lat, lon) in REAL_QUERIES.items():
+            plan = eng.plan(svc, lat, lon, 40, "gps")
+            plan["area_plan"] = eng.area(svc, lat, lon)
+            out.append((f"real-{name}", plan))
     for svc in sorted(SERVICES):
         for name, (lat, lon) in {"sitamarhi": (26.6, 85.48), "pune": (18.52, 73.86)}.items():
             plan = recommend_stub(svc, lat, lon, 40, "gps")

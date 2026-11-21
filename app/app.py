@@ -17,7 +17,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from stub_data import SERVICES, area_stub, recommend_stub
+from facts.engine import Engine
+from services import SERVICES
 from verify.check import Checker
 
 LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
@@ -70,12 +71,24 @@ class PlanRequest(BaseModel):
     depth: Depth = "quick"
 
 
+@functools.lru_cache(maxsize=1)
+def _engine() -> Engine | None:
+    return Engine.load()  # None until app/facts/build.py has run; facts load once (about 0.05 s, 80 MB)
+
+
+def _need_engine() -> Engine:
+    e = _engine()
+    if e is None:
+        raise HTTPException(503, "facility data is not built on this server (run app/facts/build.py)")
+    return e
+
+
 def _plan(req: PlanRequest) -> dict:
     if req.service not in SERVICES:
         raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
     # Round to 0.01 deg (~1.1 km) before anything else touches the point (spec section 8).
     acc = None if req.accuracy_m is None else round(req.accuracy_m)
-    plan = recommend_stub(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source)
+    plan = _need_engine().plan(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source)
     plan["query"]["depth"] = req.depth
     return plan
 
@@ -96,10 +109,10 @@ class AreaRequest(BaseModel):
 
 @app.post("/api/area")
 def area(req: AreaRequest) -> dict:
-    """Standing referral plan for the area around a point (S11) and the ten calls (S12). Stub until #11."""
+    """Standing referral plan for the area around a point (S11) and the ten calls (S12), from real rows."""
     if req.service not in SERVICES:
         raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
-    return area_stub(req.service, round(req.lat, 2), round(req.lon, 2))
+    return _need_engine().area(req.service, round(req.lat, 2), round(req.lon, 2))
 
 
 class VerifyRequest(BaseModel):
@@ -200,3 +213,6 @@ def static_file(name: str) -> FileResponse:
     if name not in SHELL_FILES:
         raise HTTPException(404)
     return _shell(name)
+
+
+_engine()  # load the facts at start-up, not on the first request

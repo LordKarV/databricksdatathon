@@ -1,4 +1,4 @@
-"""Contract tests for the stub API. Run from app/: python -m pytest tests -q"""
+"""Contract tests for the plan API on real derived/v1 rows (#42). Run from app/: python -m pytest tests -q"""
 import sys
 from pathlib import Path
 
@@ -6,10 +6,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import app as app_module
 from app import app
-from stub_data import SERVICES
+from services import SERVICES
 
 client = TestClient(app)
+needs_data = pytest.mark.skipif(app_module._engine() is None, reason="facility data not built (app/facts/build.py)")
 OPTION_KEYS = {"facility_id", "name", "lat", "lon", "travel", "band", "band_word", "p", "p_lo", "p_hi",
                "evidence", "contributions", "flags", "call_ahead"}
 
@@ -19,15 +21,16 @@ def get(**params):
     return client.post("/api/plan", json=params)
 
 
+@needs_data
 @pytest.mark.parametrize("service", sorted(SERVICES))
 def test_contract_shape(service):
     r = get(service=service, lat=26.5951, lon=85.4808, accuracy_m=40.4)
     assert r.status_code == 200
     j = r.json()
     assert j["location"] == {"lat": 26.6, "lon": 85.48, "accuracy_m": 40, "source": "gps", "rounded_to_deg": 0.01}
-    assert j["as_of"] and j["meta"]["stub"] is True
+    assert j["as_of"] and j["meta"]["stub"] is False
     assert j["emergency_numbers"][0]["number"] == "108"
-    assert j["options"], "every service returns at least one option to call"
+    assert j["options"] or j["abstain"], "either options to call or a clean abstention"
     for o in j["options"]:
         assert OPTION_KEYS <= o.keys()
         assert o["band"] in {"likely", "not_verified", "unlikely"}
@@ -42,6 +45,7 @@ def test_contract_shape(service):
     assert len(r.content) < 20_000, "plan JSON budget is 20 KB (spec section 7)"
 
 
+@needs_data
 def test_abstention_shape():
     j = get(service="emergency_csection", lat=20.2, lon=78.4).json()
     assert j["abstain"]["text"]
@@ -49,6 +53,7 @@ def test_abstention_shape():
     assert {n["number"] for n in j["emergency_numbers"]} == {"108", "102"}
 
 
+@needs_data
 def test_coordinates_rounded_before_use():
     j = get(service="dialysis", lat=26.59951, lon=85.48049, source="pin").json()
     assert (j["location"]["lat"], j["location"]["lon"], j["location"]["source"]) == (26.6, 85.48, "pin")
@@ -76,6 +81,7 @@ def test_shell_allowlist():
     assert client.get("/docs").status_code == 404
 
 
+@needs_data
 def test_dev_alias_matches_post():
     params = {"service": "mri", "lat": 26.5951, "lon": 85.4808, "accuracy_m": 12, "source": "manual"}
     a, b = client.post("/api/plan", json=params).json(), client.get("/api/recommend", params=params).json()

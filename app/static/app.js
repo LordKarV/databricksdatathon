@@ -391,7 +391,7 @@ function areaHtml(a) {
     const R = `area.pins.${i}`;
     return r.first
       ? `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td>${F(R + '.first.name', r.first.name)}</td>
-          <td>${F(R + '.backup.name', r.backup.name)}</td>
+          <td>${r.backup ? F(R + '.backup.name', r.backup.name) : 'none'}</td>
           <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td>
           <td>${F(R + '.call_first', r.call_first)}</td></tr>`
       : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
