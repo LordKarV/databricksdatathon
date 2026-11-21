@@ -1,0 +1,142 @@
+{
+ "build_date": "2026-11-21",
+ "pipeline": "source_scoring 0.1",
+ "builder": "pipelines/source_scoring/run_all.sh",
+ "tables": {
+  "claims.parquet": {
+   "rows": 469498,
+   "bytes": 14754823
+  },
+  "data_point_scores.parquet": {
+   "rows": 518191,
+   "bytes": 14191755
+  },
+  "evidence_rules.parquet": {
+   "rows": 20,
+   "bytes": 8626
+  },
+  "facility_groups.parquet": {
+   "rows": 9959,
+   "bytes": 563039
+  },
+  "facility_location.parquet": {
+   "rows": 9959,
+   "bytes": 1330469
+  },
+  "facility_trust.parquet": {
+   "rows": 9959,
+   "bytes": 1810715
+  },
+  "gold_pairs.parquet": {
+   "rows": 176,
+   "bytes": 24262
+  },
+  "grades.parquet": {
+   "rows": 10799,
+   "bytes": 1491588
+  },
+  "grades_v1.parquet": {
+   "rows": 10799,
+   "bytes": 1482612
+  },
+  "pin_gazetteer.parquet": {
+   "rows": 19713,
+   "bytes": 945561
+  },
+  "place_gazetteer.parquet": {
+   "rows": 147345,
+   "bytes": 2312023
+  },
+  "record_trust.parquet": {
+   "rows": 9959,
+   "bytes": 1021793
+  },
+  "source_classes.parquet": {
+   "rows": 16,
+   "bytes": 10780
+  },
+  "source_domains.parquet": {
+   "rows": 10951,
+   "bytes": 1271360
+  },
+  "source_page_checks.parquet": {
+   "rows": 6492,
+   "bytes": 294731
+  },
+  "source_urls.parquet": {
+   "rows": 158444,
+   "bytes": 5222435
+  },
+  "specialties.parquet": {
+   "rows": 117964,
+   "bytes": 819320
+  }
+ },
+ "csv_copies": {
+  "facility_trust.csv": {
+   "rows": 9959,
+   "bytes": 5465597
+  },
+  "source_classes.csv": {
+   "rows": 16,
+   "bytes": 3092
+  },
+  "source_domains.csv": {
+   "rows": 10951,
+   "bytes": 6499192
+  }
+ },
+ "raw_input_sha256": {
+  "MANIFEST.json": "924528c078cd75f703930b358466dce398c49d1df4b47217d2b37d9154de1a45",
+  "PROFILE.json": "96b8c5e63f3715667053d1f2caf270564259f12c12136700d62bf1a19475ecaf",
+  "_export_meta.json": "362e96a8004568d9f653a2ff5cfca0e85a1a28d8e47f86af74a427303ba758ba",
+  "facilities.parquet": "7aca5cb1780faa6323d1612a84a27daf69b53433fc15f829b7ee43b37bb0c95e",
+  "india_post_pincode_directory.parquet": "7c49f107da241591176ed88ae9612cf86c65e44da6f5819789ed6fbdc71b9b1b",
+  "nfhs_5_district_health_indicators.parquet": "34faa9d37ae139a05577389c11f45dfb0c4ec8e095474dd109cc32a1dea3f7ac"
+ },
+ "other_input_sha256": {
+  "audit/provenance/domains.py": "a3f7b5984c3ab0614a125682a6a2826a9209056cc2eab1e154d571d66f209a2a",
+  "audit/provenance/q1_sources.py": "bbed6107d05f40a7add16981a1308d37166b98efad4ab557aeeb994098756dd8",
+  "audit/provenance/common.py": "6674a8ed7b089fa9ed9a47628b2cc350df15dddb07cceb813f620c6bb4a4c46e",
+  "audit/ground_truth/web_1.json": "756032d383e62ce19c1567ad054b55e29be972e471b93652fbd55a65ec47b603",
+  "audit/ground_truth/web_2.json": "42e6eebca7ff1cef810a600d4761826700474643999bd654d4b1759137e80850",
+  "audit/ground_truth/web_3.json": "c1dd47b4306eeb44db3b44b7cc1d0042f9e590a0cb42bdfa8466b4a951b6b05e",
+  "model/gold/splits.json": "3c80de27aeab8ba7c0650deadbacabf383ee559e39110b8fa8c8f086fee77fb4",
+  "model/gold/labels_o1.json": "0c0c167bf91fe4bd4dbed5bdb7143b0a30f280e7108332c6e2db16e6af362bfb",
+  "model/gold/labels_o2.json": "2e8680a0890f83ec423410ca81118f798200047dcfa4a06e017756254e7859f8",
+  "model/gold/labels_p1.json": "006bc010da01dbf8361317fe65f6455db194b14bf4fa572d61bfb2c4337ddf3a",
+  "model/gold/labels_p2.json": "12c6fbbbd245cf473e8ace14755cadc977e30e632a673315e5e1133482ad9f02",
+  "model/gold/labels_p3.json": "bf3ab1e1874ff9278abbed47e48065ed83340e1aa985d93a879077b9bf36ac0d",
+  "model/gold/labels_p4.json": "b3ccb861bd2dfa08646e0a381ccc1f08fb0fe37cf797020838caffc2a5163980",
+  "model/gold/labels_p5.json": "72dc4a5edcedc66b50505f8c97f874e3ab88dc81290ddf1b6961ff63e9d2a0e6",
+  "model/gold/labels_p6.json": "13af1754f47ff05eab04be2208bee536e12716f17b9093f501a7a61ddbd9716a",
+  "model/gold/labels_p7.json": "c8406794301bd29cd8ff8438e92f087580647d50eee8763fa8d79b08b58ab728",
+  "cleaning/claims/out/handcheck.json": "85b510207c59bc8dcb77a8b9eed57a3b5599750a3c3254a4a6609d11169849b0",
+  "cleaning/geo_identity/handcheck_location.csv": "127ebb212a349114019cdb47d611b4cdd918c52be9f142feb28c6be72e026ab3",
+  "audit/geo/hand_check_verdicts.csv": "b3e845a5263b05f355ab1713d0365a0cda8e092d9aada09793f8d59ec2c796fd",
+  "cleaning/geo_identity/facility_location.parquet": "e2d140490ce169c09cd0d6ad4fa351a30860d767deb72049585febaeb16bf5ef",
+  "cleaning/geo_identity/record_trust.parquet": "fd02549b56eab38fe5b98c5a4d5f2b9506927633a0c91e800c32b1e975656f7f",
+  "cleaning/geo_identity/facility_groups.parquet": "41ef2a4bcd10033ae0e0a79d0e61f2350254bd3dbe89fb5a7f58124ce97ce1a6",
+  "cleaning/geo_identity/pin_gazetteer.parquet": "e0e6ab64aec9aece12530b722c8aeb3df5b1f567d53c28c43d5c6d91b1a8608c",
+  "cleaning/geo_identity/place_gazetteer.parquet": "46d7d429270b0e406c02260970ff5f7e18afe1f48c970b7b4a6ceed173f52a5f",
+  "cleaning/claims/out/claims.parquet": "e233088e021b81c34fa0dc81adddb158307c06542a69322d17c13fa7dbc1b206",
+  "cleaning/claims/out/specialties.parquet": "cb6b22d3568fddea18284469b1e563133a12552bf9c3b5dae254699c09d0bd7f",
+  "cleaning/claims/out/grades.parquet": "b5ccde356858e783b938655a9101f824809cd76529472d9c1873914a3a6e7e4c",
+  "cleaning/claims/out/grades_v1.parquet": "e7c02dc00af2a21a2c8d60879bdc0564cdb90c1c770bc262d2a7109585ad6113"
+ },
+ "script_sha256": {
+  "package.py": "e3f83b7e72609f8c2ba93af8bea0df327d1165ffe82b6e70eedbb65bdf6e906c",
+  "run_all.sh": "9eecc919af6994523ba082befe45adb54814ab027ac9d62e59804538618a1c0b",
+  "s1_sources.py": "c0f622813703fbbd2cae6c492396ef4e1cbde646f57b63ef91c02f579b1b67ad",
+  "s2_gold.py": "b177b37bf1d53382fc06f126231e1aaa9d5f2e727332e966bf1fff04466af88a",
+  "s3_pagecheck.py": "4b886b4381c9c3deffc2c9aa402011bb6859fff65b5d95db855ca798967acac0",
+  "s4_datapoints.py": "918c1cdc0fe51dd51404683affefed94130935cf7584c56029c857749086a41c",
+  "s5_fit.py": "ea31747f0f8a1a8047d3f6ad536a68eff3d7cfd3b6b374a2a0d41e8321305602",
+  "s6_score.py": "c6fa416aa5ea18db329189f93816e2da8ed3b98dce43945d3d08dc7cb27f83f0",
+  "s7_eval.py": "58913b469efddee00ec7dedd4fd26b212dff9991843ca8b8003573fceb652a02",
+  "selfcheck.py": "e59bd69e8e268014e84e374aeb9c938df6976e0dc43cea12e08738652c344c6a",
+  "ss_common.py": "ab7cd6a76080594bc26eed5769aee1307672056552f6e5451b657d69cb876d73"
+ },
+ "canonical_grades": "grades.parquet = cleaning/claims grade.py v2, quarantine on; grader-leak fix not applied",
+ "licence": "Facility data: Databricks Marketplace consumer terms (Virtue Foundation share), keep the repo private. PIN directory and NFHS-5: GODL-India."
+}

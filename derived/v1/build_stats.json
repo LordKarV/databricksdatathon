@@ -1,0 +1,152 @@
+{
+ "s1_stats": {
+  "rows": 158444,
+  "records": 9959,
+  "distinct_urls": 109501,
+  "distinct_hosts": 12144,
+  "distinct_domains": 10951,
+  "url_kind": {
+   "unverified": 96670,
+   "about": 44434,
+   "list": 17340
+  },
+  "source_class": {
+   "health_aggregator": 76578,
+   "social": 21010,
+   "official": 16714,
+   "business_dir": 9275,
+   "other_health_site": 8358,
+   "other": 8072,
+   "insurance_scheme": 4703,
+   "maps_geo": 3954,
+   "official_like": 2698,
+   "government": 2406,
+   "research": 1480,
+   "wikipedia": 901,
+   "news": 809,
+   "education": 696,
+   "docs_repo": 669,
+   "crowdfunding_ngo": 121
+  }
+ },
+ "s2_stats": {
+  "pairs_in_splits": 176,
+  "pairs_with_labels": 176,
+  "service_verdict_by_split": {
+   "dev": {
+    "confirmed": 24,
+    "contradicted": 5,
+    "no_info": 59
+   },
+   "test": {
+    "confirmed": 26,
+    "contradicted": 7,
+    "no_info": 55
+   }
+  },
+  "location_ok_by_split": {
+   "dev": {
+    "no": 13,
+    "unclear": 32,
+    "yes": 43
+   },
+   "test": {
+    "no": 10,
+    "unclear": 32,
+    "yes": 46
+   }
+  },
+  "exists_by_split": {
+   "dev": {
+    "unclear": 28,
+    "yes": 60
+   },
+   "test": {
+    "unclear": 32,
+    "yes": 56
+   }
+  }
+ },
+ "s5_stats": {
+  "iterations": 12,
+  "final_delta": 7.56449344385679e-07,
+  "domains": 10951,
+  "groups": 45957,
+  "page_attributed_points": 6121,
+  "gamma": 1.0,
+  "kappa": 10.0,
+  "class_prior_mean": {
+   "business_dir": 0.8748,
+   "crowdfunding_ngo": 0.8464,
+   "docs_repo": 0.8822,
+   "education": 0.8585,
+   "government": 0.835,
+   "health_aggregator": 0.8517,
+   "insurance_scheme": 0.8859,
+   "maps_geo": 0.8314,
+   "news": 0.8517,
+   "official": 0.8666,
+   "official_like": 0.8284,
+   "other": 0.8844,
+   "other_health_site": 0.8779,
+   "research": 0.8624,
+   "social": 0.9172,
+   "wikipedia": 0.8391
+  },
+  "mean_logit_sigma_by_type": {
+   "claim_attribution": 1.907,
+   "email": 1.8896,
+   "existence": 1.8763,
+   "location": 1.8763,
+   "phone": 1.8854,
+   "service_claim": 1.8336
+  }
+ },
+ "s6_stats": {
+  "data_points": {
+   "claim_attribution": 469498,
+   "service_claim": 10799,
+   "location": 9959,
+   "existence": 9959,
+   "phone": 9464,
+   "email": 8512
+  },
+  "status_by_type": {
+   "claim_attribution": {
+    "unverified": 469498,
+    "verified_false": 0,
+    "verified_true": 0
+   },
+   "email": {
+    "unverified": 8152,
+    "verified_false": 360,
+    "verified_true": 0
+   },
+   "existence": {
+    "unverified": 9843,
+    "verified_false": 0,
+    "verified_true": 116
+   },
+   "location": {
+    "unverified": 9847,
+    "verified_false": 23,
+    "verified_true": 89
+   },
+   "phone": {
+    "unverified": 9464,
+    "verified_false": 0,
+    "verified_true": 0
+   },
+   "service_claim": {
+    "unverified": 10743,
+    "verified_false": 11,
+    "verified_true": 45
+   }
+  },
+  "verified_false_by_source": {
+   "gold_dev": 18,
+   "gold_test": 16,
+   "deterministic": 360
+  }
+ }
+}
