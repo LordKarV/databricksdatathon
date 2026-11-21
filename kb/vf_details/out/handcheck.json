@@ -1,0 +1,143 @@
+{
+ "n": 50,
+ "correct": 46,
+ "precision": 0.92,
+ "wilson95": [
+  0.812,
+  0.968
+ ],
+ "by_type": {
+  "accreditation": {
+   "n": 5,
+   "correct": 4,
+   "wilson95": [
+    0.376,
+    0.964
+   ]
+  },
+  "ambulance": {
+   "n": 4,
+   "correct": 4,
+   "wilson95": [
+    0.51,
+    1.0
+   ]
+  },
+  "blood_centre": {
+   "n": 4,
+   "correct": 4,
+   "wilson95": [
+    0.51,
+    1.0
+   ]
+  },
+  "empanelment": {
+   "n": 6,
+   "correct": 6,
+   "wilson95": [
+    0.61,
+    1.0
+   ]
+  },
+  "equipment_count": {
+   "n": 4,
+   "correct": 4,
+   "wilson95": [
+    0.51,
+    1.0
+   ]
+  },
+  "free_or_government": {
+   "n": 4,
+   "correct": 3,
+   "wilson95": [
+    0.301,
+    0.954
+   ]
+  },
+  "hours_24x7": {
+   "n": 6,
+   "correct": 6,
+   "wilson95": [
+    0.61,
+    1.0
+   ]
+  },
+  "hours_dialysis_shifts": {
+   "n": 2,
+   "correct": 2,
+   "wilson95": [
+    0.342,
+    1.0
+   ]
+  },
+  "opd_hours": {
+   "n": 4,
+   "correct": 4,
+   "wilson95": [
+    0.51,
+    1.0
+   ]
+  },
+  "staffing": {
+   "n": 5,
+   "correct": 3,
+   "wilson95": [
+    0.231,
+    0.882
+   ]
+  },
+  "unit_beds": {
+   "n": 6,
+   "correct": 6,
+   "wilson95": [
+    0.61,
+    1.0
+   ]
+  }
+ },
+ "by_status": {
+  "flagged": {
+   "n": 9,
+   "correct": 8,
+   "wilson95": [
+    0.565,
+    0.98
+   ]
+  },
+  "ok": {
+   "n": 41,
+   "correct": 38,
+   "wilson95": [
+    0.806,
+    0.975
+   ]
+  }
+ },
+ "errors": [
+  {
+   "fact_id": "f14cec09:capa:30:staffing:doctors:0",
+   "fact_type": "staffing",
+   "attribute": "doctors",
+   "note": "department count (7 ENT doctors) stored as facility doctors at a large hospital"
+  },
+  {
+   "fact_id": "831fc382:capa:15:staffing:doctors:0",
+   "fact_type": "staffing",
+   "attribute": "doctors",
+   "note": "department count (2 dermatologists) stored as facility doctors"
+  },
+  {
+   "fact_id": "b0e6c53b:capa:39:accreditation:NABH:0",
+   "fact_type": "accreditation",
+   "attribute": "NABH",
+   "note": "sentence is an award or programme title, not hospital NABH accreditation"
+  },
+  {
+   "fact_id": "9a5cb946:capa:7:free_or_government:free_care:0",
+   "fact_type": "free_or_government",
+   "attribute": "free_care",
+   "note": "free consultation inside a paid dental plan, not free care"
+  }
+ ]
+}

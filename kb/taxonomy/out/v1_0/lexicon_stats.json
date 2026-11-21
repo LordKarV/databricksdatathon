@@ -1,0 +1,53 @@
+{
+ "core_tag_diff_vs_claims_parquet": {
+  "burn_care": {
+   "only_claims_parquet": 1,
+   "only_kb": 0,
+   "both": 401
+  },
+  "cardiac_surgery": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 1953
+  },
+  "dialysis": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 3079
+  },
+  "emergency_csection": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 691
+  },
+  "icu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 5965
+  },
+  "mri": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 3135
+  },
+  "nicu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 1555
+  },
+  "trauma_emergency": {
+   "only_claims_parquet": 75,
+   "only_kb": 0,
+   "both": 8798
+  }
+ },
+ "claims": 469498,
+ "matched_sentence_service_pairs": 62910,
+ "sentences_with_any_match": 57324,
+ "services_in_taxonomy": 29,
+ "candidates_not_included": [
+  "anti_rabies",
+  "snakebite_antivenom",
+  "nutrition_rehabilitation"
+ ]
+}

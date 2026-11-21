@@ -1,0 +1,31 @@
+specialty,normalized,service_id,method,n_facilities,prereq_for,verdict,note
+internalMedicine,internal medicine,too_general,rule,6836,,correct,
+familyMedicine,family medicine,too_general,rule,5175,,correct,
+gynecologyAndObstetrics,gynecology and obstetrics,too_general,rule,4489,emergency_csection;institutional_delivery;high_risk_pregnancy,correct,
+dentistry,dentistry,out_of_scope,rule,4190,,correct,
+orthopedicSurgery,orthopedic surgery,too_general,rule,3519,orthopaedic_trauma_surgery,correct,"too_general by rule; consider a weak prior, nearly every ortho department fixes fractures"
+pediatrics,pediatrics,too_general,rule,3429,nicu;picu,correct,
+generalSurgery,general surgery,too_general,rule,3191,trauma_emergency,correct,
+cardiology,cardiology,too_general,rule,3003,cath_lab_angioplasty;cardiac_surgery,correct,
+radiology,radiology,too_general,rule,2993,ct_scan;mri;ultrasound,correct,
+ophthalmology,ophthalmology,too_general,rule,2823,cataract_surgery;eye_emergency,correct,
+otolaryngology,otolaryngology,out_of_scope,rule,2699,,correct,
+urology,urology,out_of_scope,rule,2624,,correct,label fine; should be prereq_for kidney_transplant (required capability names a urologist)
+gastroenterology,gastroenterology,out_of_scope,rule,2419,,correct,
+dermatology,dermatology,out_of_scope,rule,2328,,correct,
+pathology,pathology,out_of_scope,rule,2248,,correct,label fine; should be prereq_for surgical_oncology and chemotherapy (histopathology)
+nephrology,nephrology,too_general,rule,2153,dialysis;kidney_transplant,correct,
+emergencyMedicine,emergency medicine,trauma_emergency,rule,2079,,correct,
+neurology,neurology,too_general,rule,1958,stroke_care;neurosurgery,correct,prereq_for neurosurgery is wrong (neurologists do not operate); keep stroke_care
+reproductiveEndocrinologyAndInfertility,reproductive endocrinology and infertility,out_of_scope,rule,1845,,correct,
+endocrinologyAndDiabetesAndMetabolism,endocrinology and diabetes and metabolism,out_of_scope,rule,1838,,correct,
+endodontics,endodontics,out_of_scope,rule,1799,,correct,
+neurosurgery,neurosurgery,neurosurgery,rule,1690,,correct,
+orthodontics,orthodontics,out_of_scope,rule,1679,,correct,
+criticalCareMedicine,critical care medicine,icu,rule,1673,,correct,service label while nephrology/cardiology are too_general; corroboration 0.71 supports it
+oralAndMaxillofacialSurgery,oral and maxillofacial surgery,out_of_scope,rule,1669,,correct,
+physicalMedicineAndRehabilitation,physical medicine and rehabilitation,out_of_scope,rule,1592,,correct,
+pulmonology,pulmonology,too_general,rule,1589,ventilator_support;tb_care,correct,
+plasticSurgery,plastic surgery,too_general,rule,1582,burn_care,correct,
+medicalOncology,medical oncology,chemotherapy,rule,1435,,correct,"service label but corroboration 0.267, below radiology->ct_scan 0.344 (too_general)"
+prosthodontics,prosthodontics,out_of_scope,rule,1360,,correct,

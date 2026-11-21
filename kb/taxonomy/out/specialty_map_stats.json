@@ -1,0 +1,23 @@
+{
+ "distinct_values": 2933,
+ "unlabelled": 0,
+ "by_method": {
+  "rule": 2356,
+  "llm": 532,
+  "manual": 24,
+  "fuzzy": 21
+ },
+ "by_label_kind": {
+  "out_of_scope": 1964,
+  "too_general": 465,
+  "service": 461,
+  "not_a_service": 43
+ },
+ "facility_weighted_by_method": {
+  "fuzzy": 30,
+  "llm": 1334,
+  "manual": 217,
+  "rule": 116641
+ },
+ "llm_statements_used": 1
+}
