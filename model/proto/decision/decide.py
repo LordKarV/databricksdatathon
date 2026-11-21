@@ -150,8 +150,10 @@ def phone_note(r):
     c = r.phone_class
     if c == "shared_3plus_cities":
         return "may be a directory number (shared by listings in 3+ cities)"
-    if c in ("none", "invalid") or not r.phone_display:
+    if not r.phone_display:
         return "no phone in our data"
+    if c in ("none", "invalid"):
+        return "number found in the listing text, not checked"
     if c == "tollfree":
         return "toll-free number, may be a central helpline"
     return f"{c} number from the listing"
@@ -286,7 +288,8 @@ def answer_u(q, system, t, cand, R, likely_any, fac, res):
     par = set(pareto(cand)) if elective else set()
     out_uid = out_km = None
     if svc in OUTSIDE_SERVICES:
-        dh = t[t.level.eq("dh")]
+        # same location bar as the Likely rule (P_L >= 0.7) and inside R_max, so a misplaced record is never offered
+        dh = t[t.level.eq("dh") & (t.P_L >= LIKELY_PL) & (t.d1 <= RMAX)]
         if len(dh):
             r = dh.loc[dh.d1.idxmin()]
             out_uid, out_km = r.unique_id, float(r.d1)

@@ -1,0 +1,580 @@
+{
+ "status": "partial",
+ "results": [
+  {
+   "pair_id": "e2e_003",
+   "exists": "yes",
+   "location_ok": "no",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.shardacare.com/blogs/trauma-medicine-lifesaving-emergency-care-at-shardacare-healthcity"
+   ],
+   "quote": "24x7 Emergency Unit - Always ready to receive and stabilize patients.",
+   "notes": "Real address Knowledge Park III, Greater Noida 201310; record PIN 270001 is not a Greater Noida PIN (absent from local India Post directory; Basti range)."
+  },
+  {
+   "pair_id": "e2e_006",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/garhwa/parmeshwari-medical-centre-chiniya-road",
+    "https://www.drlogy.com/ayushman-bharat/hospitals/jharkhand/garhwa/parmeshwari-medical-centre"
+   ],
+   "quote": "",
+   "notes": "Chiniya Road, Garhwa 822114, PM-JAY empanelled, general medicine. Only one blog claims 24-hour emergency/ICU (CIPACA tie-up); no trauma-specific source."
+  },
+  {
+   "pair_id": "e2e_009",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/vaishali/new-b-k-hospital-purani-gandak-pul-road",
+    "https://www.publicservicesmap.in/hospitals/centre/new-bk-hospital-vaishali-bihar-hosp10p116395"
+   ],
+   "quote": "",
+   "notes": "30-50 bed hospital, Jauhari Bazar, Vaishali 844101; cardiology listed as a specialty, no cardiac surgeon, cath lab or cardiac surgery found."
+  },
+  {
+   "pair_id": "e2e_012",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.hexahealth.com/jalna/hospital/nephroplus-unit-of-vivekanand-hospital-gyatri-nagar"
+   ],
+   "quote": "",
+   "notes": "Listing is a NephroPlus dialysis unit of Vivekanand Hospital, Gyatri Nagar, Jalna 431203, open 24x7. Trauma mentioned only in directory reviews, not by the facility."
+  },
+  {
+   "pair_id": "e2e_015",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://m.indiamart.com/soni-hospital",
+    "https://www.sonihospitals.com/"
+   ],
+   "quote": "",
+   "notes": "IndiaMart listing (JLN Marg, Jaipur) says OTs used for cardiac surgeries; hospital's own homepage lists no CTVS, bypass or valve service and no cardiac surgeon."
+  },
+  {
+   "pair_id": "e2e_018",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://en.wikipedia.org/wiki/Christian_Hospital,_Bissam_Cuttack"
+   ],
+   "quote": "CHB was one of the first hospitals in the state to introduce incubators for Neonatal Care.",
+   "notes": "Rayagada district, consistent with PIN 765019. Historical incubator claim on an article flagged for citations; no current NICU description found."
+  },
+  {
+   "pair_id": "e2e_021",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://aiimsbhubaneswar.nic.in/all-departments/",
+    "https://aiimsbhubaneswar.nic.in/category_department/ctvs/"
+   ],
+   "quote": "CTVS ... Dr. Siddhartha Sathia (Addl. Prof. & HOD In-Charge) ... Dr. Rudra Pratap Mahapatra (Assoc. Prof.)",
+   "notes": "Official institute site lists a CTVS department with faculty; no case volumes published. Medium because department page has no service text."
+  },
+  {
+   "pair_id": "e2e_024",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.publicservicesmap.in/hospitals/centre/pushpanjali-hospital-gorakhpur-uttar-pradesh-hosp9p25169835"
+   ],
+   "quote": "",
+   "notes": "Private PM-JAY hospital in Gorakhpur per directory (search snippet; page fetch failed DNS). No dialysis mention; Pushpanjali dialysis results belong to Agra and East Delhi namesakes."
+  },
+  {
+   "pair_id": "e2e_027",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/raigarh/panvel-hospital-panvel"
+   ],
+   "quote": "",
+   "notes": "Uran Naka, Old Panvel 410206; emergency phone listed but OPD hours only, no trauma or 24-hour emergency statement."
+  },
+  {
+   "pair_id": "e2e_030",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.publicservicesmap.in/hospitals/centre/buddha-hospital-and-research-institute-gaya-bihar-hosp10p189209",
+    "https://www.policybazaar.com/hospitals/pmjay/gaya/"
+   ],
+   "quote": "",
+   "notes": "Secondary-care PM-JAY hospital, Gaya 823001; listed services ortho, general medicine/surgery, OBGY, emergency. No NICU found."
+  },
+  {
+   "pair_id": "e2e_033",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.myhospitalnow.com/hospitals/jyoti-hospital"
+   ],
+   "quote": "",
+   "notes": "Charitable multispecialty hospital of the Diocese of Balasore at Kuruda (PIN 756056 is Baleshwar). Specialties general surgery, ortho; no burn unit or plastic surgery found."
+  },
+  {
+   "pair_id": "e2e_036",
+   "exists": "yes",
+   "location_ok": "unclear",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.medicoverhospitals.in/hospitals/andhra-pradesh/woman-and-child-visakhapatnam/gynecology",
+    "https://www.medicoverhospitals.in/hospitals/andhra-pradesh/woman-and-child-visakhapatnam/"
+   ],
+   "quote": "LSCS",
+   "notes": "Own page lists LSCS under procedures; search snippet of same site says OTs prepared for planned and emergency Caesarean. Real PIN 530002 (Jagadamba) vs record 530022; both Visakhapatnam."
+  },
+  {
+   "pair_id": "e2e_039",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "No hospital of this name found in Sikar (closest: Amit Neuro Brain and Spine Care clinic; Arya Neuro Spine hospital is in Ajmer). No burn care evidence."
+  },
+  {
+   "pair_id": "e2e_042",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://yappe.in/uttar-pradesh/lucknow/aiman-nursing-home/317717"
+   ],
+   "quote": "",
+   "notes": "Directory: Balvihar Colony, Kukrail, Lucknow 226015, open 24 hours. No caesarean or obstetric service statement found."
+  },
+  {
+   "pair_id": "e2e_045",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.publicservicesmap.in/hospitals/centre/maa-ganga-memorial-baheti-hospital-washim-maharashtra-hosp27p121592",
+    "https://www.policybazaar.com/hospitals/pmjay/washim/"
+   ],
+   "quote": "",
+   "notes": "Akola Naka, Washim 444505, PM-JAY. Listed services are neonatal/OBGY/paediatric; nothing on trauma."
+  },
+  {
+   "pair_id": "e2e_048",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.policybazaar.com/hospitals/pmjay/chandrapur/",
+    "https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2021-0824_5th Edition.pdf"
+   ],
+   "quote": "",
+   "notes": "NABH and CGHS listed, Ekori Ward, Chandrapur (NABH PIN 442402 vs record 442401, same city). PM-JAY aggregator lists neonatal care packages; no NICU statement by facility."
+  },
+  {
+   "pair_id": "e2e_051",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_054",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_057",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_060",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): a dental clinic is an unrelated single-specialty facility for dialysis"
+  },
+  {
+   "pair_id": "e2e_063",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_066",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_069",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; local India Post directory maps PIN 416310 to Sangli district while record city Mahalung is in Malshiras (Solapur), internal inconsistency only"
+  },
+  {
+   "pair_id": "e2e_072",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_075",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_078",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; guessed domain shahiglobalhospital.com returned expired certificate"
+  },
+  {
+   "pair_id": "e2e_081",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.utkalhospital.com/"
+   ],
+   "quote": "Institute of Cardiac Sciences ... Cardiology ... CTVS",
+   "notes": "Own site: Niladri Vihar, Bhubaneswar, Odisha 751021; CTVS department plus testimonial on valve operation by CTVS surgeon."
+  },
+  {
+   "pair_id": "e2e_084",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_087",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_090",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; bansalhospital.com returned HTTP 403"
+  },
+  {
+   "pair_id": "e2e_093",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_096",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.parashospitals.com/darbhanga"
+   ],
+   "quote": "",
+   "notes": "Own site: VIP Road, Allalpatti, Darbhanga 846003; nephrology consultant and nephrology award listed, but dialysis not stated."
+  },
+  {
+   "pair_id": "e2e_099",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): a dental clinic is an unrelated single-specialty facility for burn care"
+  },
+  {
+   "pair_id": "e2e_102",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://en.wikipedia.org/wiki/Rajendra_Institute_of_Medical_Sciences",
+    "https://www.rimsranchi.org/"
+   ],
+   "quote": "",
+   "notes": "Government medical college at Bariatu, Ranchi with an OBST and Gynae department in its department list; no page states caesarean/emergency obstetric service."
+  },
+  {
+   "pair_id": "e2e_105",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_108",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; ckshospital.com did not resolve"
+  },
+  {
+   "pair_id": "e2e_111",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_114",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): an eye hospital is an unrelated single-specialty facility for NICU"
+  },
+  {
+   "pair_id": "e2e_117",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_120",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_123",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): a netralaya (eye hospital) is an unrelated single-specialty facility for trauma"
+  },
+  {
+   "pair_id": "e2e_126",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_129",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.khetanhospital.com/"
+   ],
+   "quote": "cardiac surgeons",
+   "notes": "Own site: Khetan Chauraha, Sikar Road, Jaipur 302039; team includes cardiac surgeons, FAQ lists TAVI. Bypass/valve surgery not explicitly named."
+  },
+  {
+   "pair_id": "e2e_132",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_135",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): a diagnostic centre normally has no operating theatre for caesarean section"
+  },
+  {
+   "pair_id": "e2e_138",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_141",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "name-only judgment, no page fetched (search budget exhausted): a dental clinic is an unrelated single-specialty facility for NICU"
+  },
+  {
+   "pair_id": "e2e_144",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://en.wikipedia.org/wiki/Visakha_Institute_of_Medical_Sciences",
+    "https://vimsvskp.com/"
+   ],
+   "quote": "",
+   "notes": "Government hospital at Hanumanthavaka, Visakhapatnam (PIN 530040 is Visakhapatnam). No department or maternity information found; official site offline."
+  },
+  {
+   "pair_id": "e2e_147",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.nemcarehospital.in/"
+   ],
+   "quote": "Facility of Medical ICU, Surgical ICU, ICCU, CTVS ICU, PICU, NICU.",
+   "notes": "Own site: G.S. Road, Bhangagarh, Guwahati 781005."
+  },
+  {
+   "pair_id": "e2e_150",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  },
+  {
+   "pair_id": "e2e_153",
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.drrmlims.ac.in/department/ObstetricsGynaecology",
+    "https://www.drrmlims.ac.in/"
+   ],
+   "quote": "24 hours emergency care ... state of art facility for gynaecological, obstetric and laparoscopic surgeries",
+   "notes": "Official site: Vibhuti Khand, Gomtinagar, Lucknow 226010. Caesarean not named explicitly; inferred from 24h emergency plus obstetric surgery OT."
+  },
+  {
+   "pair_id": "e2e_156",
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair"
+  }
+ ]
+}

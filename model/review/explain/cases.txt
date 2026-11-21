@@ -1,0 +1,113 @@
+########## S1 (strong) demo_panipat: dialysis near Panipat district, Haryana -> Civil Hospital, Panipat (rank 1 of 12, R 25 km, abstained False, plan p_any 0.83)
+plan: Civil Hospital, Panipat -> Ravindra Hospital, Panipat -> Singla Children Hospital
+[1] LIKELY offers dialysis - Civil Hospital, Panipat, Panipat        [band, name]
+    About 9 km by road (13 to 21 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.70 (range 0.38 to 0.97).
+    Track record: no checked test facility fell in this band yet, so we cannot say how often it is right.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Hemodialysis facility run under Public-Private Partnership"
+    [equipment] "Haemodialysis facility run in PPP mode"
+    [procedure] "Provides haemodialysis treatment"
+    Sources: one of these pages: https://panipat.gov.in/public-utility-category/hospitals/, https://www.tribuneindia.com/news/haryana/indefinite-doctors-strike-hits-civil-hospitals-across-state/ ... (13 pages)
+[4] Is it real: website none; phone none. P_E = 0.71 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, place in the name, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 1802630102 (number found in the listing text, not checked)
+    Ranking arithmetic: U = P_E x P_S x G = 0.711 x 0.702 x 0.5558 = 0.2775; G = 0.99 exp(-8.7/15)
+    Counterfactual: without the quoted sentences P_S would be 0.64.
+    hidden logit by group: {'base': -1.2142, 'context': 1.4407, 'evidence': 0.6322}  (T=4 C=0 P=1 bucket=mid)
+
+########## S2 (strong) q35: dialysis near Patna -> Satyavrat Hospital (rank 1 of 81, R 25 km, abstained True, plan p_any 0.89)
+plan: Satyavrat Hospital -> Big Apollo Spectra Hospitals -> Indira Gandhi Institute of Medical Sciences
+[1] Not verified: call to confirm dialysis - Satyavrat Hospital, Patna        [band, name]
+    About 5 km by road (7 to 11 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.65 (range 0.37 to 0.94).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Hemodialysis unit available"
+    [procedure] "Hemodialysis is performed in the Hemodialysis Unit"
+    [procedure] "Hemodialysis treatment is provided"
+    Sources: one of these pages: http://satyavrathospital.com/, https://satyavrathospital.com/ ... (11 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.88 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 9386156183, 9711471836 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.881 x 0.648 x 0.7246 = 0.4134; G = 0.99 exp(-4.7/15)
+    Counterfactual: without the quoted sentences P_S would be 0.55.
+    hidden logit by group: {'base': -1.2142, 'context': 0.7829, 'evidence': 1.0406}  (T=5 C=0 P=1 bucket=mid)
+
+########## U1 (uncertain) q01: emergency_csection near Singwahini village, Sitamarhi district, Bihar -> Referal Hospital (rank 1 of 5, R 100 km, abstained True, plan p_any 0.44)
+plan: Referal Hospital -> Rahmania Medical Centre Private Limited -> Dhanwantari Allergy & Asthma Clinic
+[1] Not verified: call to confirm emergency C-section - Referal Hospital, Nalanda        [band, name]
+    About 267 km by road (400 to 641 min, rough estimate: straight line x 1.3)
+    Or 55 km if it is at its second recorded location (we put 64% of the location belief there)
+[2] How sure it offers the service: 0.24 (range 0.04 to 0.47).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    (no sentence of its own names the service: the score rests on facility type and size)
+    Sources: one of these pages: https://nalanda.nic.in/en/health/, https://www.justdial.com/Barbigha/Referral-Hospital-Sheikhpura-Barbigha/9999P6341-6341-220519224439-P6I1_BZDET ... (24 pages)
+[4] Is it real: website none; phone none. P_E = 0.71 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.36 that it is at the point we use. Agree: stated state. Point elsewhere: map point, stated city.
+    Warning: Listing coordinates are 173 km from postcode 811101 (SHEIKHPURA, BIHAR); address city is 'Nalanda'. 'Nalanda' lies near the postcode, so the postcode centre is used (accurate to about 30 km).
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: no phone in our data (no phone in our data)
+    Ranking arithmetic: U = P_E x P_S x G = 0.711 x 0.235 x 0.1045 = 0.0175; G = 0.36 exp(-266.9/30) + 0.64 exp(-54.6/30)
+    Counterfactual: without the quoted sentences P_S would be 0.24.
+    hidden logit by group: {'base': -1.2354, 'context': -0.3282, 'evidence': 0.3847}  (T=0 C=0 P=1 bucket=high)
+
+########## U2 (uncertain) q12: trauma_emergency near Palamu district, Jharkhand -> Smile Kraft Dental Clinic (rank 1 of 3, R 50 km, abstained True, plan p_any 0.48)
+plan: Smile Kraft Dental Clinic -> Parmeshwari Medical Centre -> Roop Dev Eye And Dental Hospital
+[1] Not verified: call to confirm trauma and emergency care - Smile Kraft Dental Clinic, Palamu        [band, name]
+    About 2 km by road (4 to 6 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.22 (range 0.03 to 0.47).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    (no sentence of its own names the service: the score rests on facility type and size)
+    Sources: one of these pages: https://smile-kraft-dental-clinic.ueniweb.com/, http://www.smilekraftdentalclinic.com/ ... (9 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.88 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 7762926170, 7979933143 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.881 x 0.222 x 0.9123 = 0.1786; G = 0.99 exp(-2.5/30)
+    Counterfactual: without the quoted sentences P_S would be 0.22.
+    hidden logit by group: {'base': -1.2855, 'context': -0.3534, 'evidence': 0.3861}  (T=0 C=0 P=1 bucket=mid)
+
+########## C1 (contaminated) demo_nagpur: dialysis near Nagpur -> Wockhardt Hospital Nagpur (rank 51 of 63, R 25 km, abstained True, plan p_any 0.87)
+plan: Meditrina Institute of Medical Sciences -> Viveka Hospitals -> Nelson Hospital
+[1] Not verified: call to confirm dialysis - Wockhardt Hospital Nagpur, Nagpur        [band, name]
+    About 890 km by road (1335 to 2136 min, rough estimate: straight line x 1.3)
+    Or 10 km if it is at its second recorded location (we put 42% of the location belief there)
+[2] How sure it offers the service: 0.54 (range 0.29 to 0.85).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [equipment] "In-house dialysis units"
+    [capability] "Offers dialysis services at concessional pricing (Rs. 350 or less per session) including blood tubing and dialyser"
+    Sources: one of these pages: https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp, https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp ... (50 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.58 that it is at the point we use. Agree: PIN centre, stated state. Point elsewhere: stated city, place in the name.
+    Warning: Listing coordinates and postcode 400078 agree (MUMBAI SUBURBAN), but the address city 'Nagpur' is a place 677 km away. Confirm which town before travelling.
+[6] What we ignored:
+    "Provides dialysis treatment at Nair Hospital, Mumbai Central" - names other facility: Nair Hospital, Mumbai Central
+    "Dialysis machines donated by Jivan Jyot Drug Bank are used at Nair Hospital, Mumbai Central" - names other facility: Nair Hospital, Mumbai Central
+[8] Call first: 8554954315, 2261784400 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.540 x 0.2159 = 0.1061; G = 0.58 exp(-890.0/15) + 0.42 exp(-10.0/15)
+    Counterfactual: without the quoted sentences P_S would be 0.40.
+    hidden logit by group: {'base': -1.2142, 'context': 0.5567, 'evidence': 0.8195}  (T=5 C=1 P=1 bucket=high)
+
+########## C2 (contaminated) q29: trauma_emergency near 25.1546, 83.6814 -> Sharda Hospital (rank 1 of 43, R 100 km, abstained True, plan p_any 0.85)
+plan: Sharda Hospital -> Ford Hospital -> G. S. Memorial Plastic Surgery Hospital And Trauma Center
+[1] Not verified: call to confirm trauma and emergency care - Sharda Hospital, Greater Noida        [band, name]
+    About 60 km by road (91 to 145 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.49 (range 0.31 to 0.91).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "24/7 emergency care"
+    [procedure] "Pediatric trauma care."
+    Sources: one of these pages: https://pubmed.ncbi.nlm.nih.gov/33767501/, http://www.healthinsuranceindia.org/cashless_hospital_india/uttar_pradesh.html ... (50 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.77 that it is at the point we use. Agree: stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 8447333999, 1202333999 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.493 x 0.1022 = 0.0458; G = 0.77 exp(-60.4/30)
+    Counterfactual: without the quoted sentences P_S would be 0.44.
+    hidden logit by group: {'base': -1.2855, 'context': 0.4017, 'evidence': 0.8556}  (T=4 C=0 P=2 bucket=high)

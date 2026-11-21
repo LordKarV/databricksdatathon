@@ -1,0 +1,246 @@
+{
+ "n_queries": 40,
+ "top1_abstained": {
+  "k": 40,
+  "n": 40,
+  "share": 1.0,
+  "wilson95": [
+   0.912,
+   1.0
+  ]
+ },
+ "top1_no_own_sentence_T_lt_2": {
+  "k": 22,
+  "n": 40,
+  "share": 0.55,
+  "wilson95": [
+   0.398,
+   0.693
+  ]
+ },
+ "top1_context_logit_exceeds_evidence_logit": {
+  "k": 12,
+  "n": 40,
+  "share": 0.3,
+  "wilson95": [
+   0.181,
+   0.454
+  ]
+ },
+ "plan_members": 117,
+ "plan_off_type_name": {
+  "k": 11,
+  "n": 117,
+  "share": 0.094,
+  "wilson95": [
+   0.053,
+   0.161
+  ]
+ },
+ "plan_off_type_examples": [
+  {
+   "query_id": "q01",
+   "service": "emergency_csection",
+   "name": "Dhanwantari Allergy & Asthma Clinic",
+   "plan_role": "backup2"
+  },
+  {
+   "query_id": "q03",
+   "service": "dialysis",
+   "name": "Sarjug Dental College & Hospital",
+   "plan_role": "list"
+  },
+  {
+   "query_id": "q06",
+   "service": "emergency_csection",
+   "name": "Nayan Jyoti Eye Hospital",
+   "plan_role": "primary"
+  },
+  {
+   "query_id": "q07",
+   "service": "nicu",
+   "name": "Dev Eye Hospital (Dr Arun Pathak)",
+   "plan_role": "backup1"
+  },
+  {
+   "query_id": "q12",
+   "service": "trauma_emergency",
+   "name": "Smile Kraft Dental Clinic",
+   "plan_role": "primary"
+  },
+  {
+   "query_id": "q12",
+   "service": "trauma_emergency",
+   "name": "Roop Dev Eye And Dental Hospital",
+   "plan_role": "backup2"
+  },
+  {
+   "query_id": "q13",
+   "service": "emergency_csection",
+   "name": "V Dental Care",
+   "plan_role": "backup2"
+  },
+  {
+   "query_id": "q19",
+   "service": "emergency_csection",
+   "name": "Totey Eye Hospital",
+   "plan_role": "backup2"
+  },
+  {
+   "query_id": "q24",
+   "service": "dialysis",
+   "name": "Dhanwantari Ayurvedic Hospital And Panchkarma Centre",
+   "plan_role": "list"
+  },
+  {
+   "query_id": "q30",
+   "service": "mri",
+   "name": "Shri Gajanan Heart &Eye Hospital",
+   "plan_role": "primary"
+  },
+  {
+   "query_id": "q37",
+   "service": "burn_care",
+   "name": "Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)",
+   "plan_role": "backup2"
+  }
+ ],
+ "plan_P_location_inside_radius_lt_0_5": {
+  "k": 10,
+  "n": 117,
+  "share": 0.085,
+  "wilson95": [
+   0.047,
+   0.15
+  ]
+ },
+ "plan_primary_point_outside_radius": {
+  "k": 16,
+  "n": 117,
+  "share": 0.137,
+  "wilson95": [
+   0.086,
+   0.211
+  ]
+ },
+ "plan_primary_point_outside_radius_examples": [
+  {
+   "query_id": "q01",
+   "name": "Referal Hospital",
+   "d1_km": 266.91,
+   "d2_km": 54.55,
+   "P_L": 0.36,
+   "R_used": 100
+  },
+  {
+   "query_id": "q03",
+   "name": "Paras Hospital",
+   "d1_km": 125.68,
+   "d2_km": 15.14,
+   "P_L": 0.58,
+   "R_used": 25
+  },
+  {
+   "query_id": "q04",
+   "name": "Sadar Hospital",
+   "d1_km": 471.46,
+   "d2_km": 10.41,
+   "P_L": 0.59,
+   "R_used": 50
+  },
+  {
+   "query_id": "q04",
+   "name": "Harsh Hospital",
+   "d1_km": 363.69,
+   "d2_km": 10.56,
+   "P_L": 0.89,
+   "R_used": 50
+  },
+  {
+   "query_id": "q06",
+   "name": "Nayan Jyoti Eye Hospital",
+   "d1_km": 323.05,
+   "d2_km": 93.79,
+   "P_L": 0.36,
+   "R_used": 150
+  },
+  {
+   "query_id": "q12",
+   "name": "Roop Dev Eye And Dental Hospital",
+   "d1_km": 339.02,
+   "d2_km": 35.15,
+   "P_L": 0.99,
+   "R_used": 50
+  },
+  {
+   "query_id": "q13",
+   "name": "Padmaja Hospital",
+   "d1_km": 156.7,
+   "d2_km": 64.16,
+   "P_L": 0.42,
+   "R_used": 150
+  },
+  {
+   "query_id": "q14",
+   "name": "Padmaja Hospital",
+   "d1_km": 326.19,
+   "d2_km": 183.68,
+   "P_L": 0.42,
+   "R_used": 200
+  },
+  {
+   "query_id": "q17",
+   "name": "Shreyash Hospital",
+   "d1_km": 561.24,
+   "d2_km": 43.55,
+   "P_L": 0.4,
+   "R_used": 100
+  },
+  {
+   "query_id": "q17",
+   "name": "Medicare Hospital",
+   "d1_km": 406.59,
+   "d2_km": 34.22,
+   "P_L": 0.98,
+   "R_used": 100
+  }
+ ],
+ "cards_T_lt_2": 113,
+ "cards_T_lt_2_where_P_prereq_fires": {
+  "k": 64,
+  "n": 113,
+  "share": 0.566,
+  "wilson95": [
+   0.474,
+   0.654
+  ]
+ },
+ "cards_T_lt_2_where_context_logit_negative": {
+  "k": 22,
+  "n": 113,
+  "share": 0.195,
+  "wilson95": [
+   0.132,
+   0.277
+  ]
+ },
+ "cards_phone_class_none_but_number_shown": {
+  "k": 1,
+  "n": 181,
+  "share": 0.006,
+  "wilson95": [
+   0.001,
+   0.031
+  ]
+ },
+ "cards_city_vote_abstained_unresolved_city": {
+  "k": 22,
+  "n": 181,
+  "share": 0.122,
+  "wilson95": [
+   0.082,
+   0.177
+  ]
+ },
+ "plan_p_any_when_abstained_mean": 0.624
+}

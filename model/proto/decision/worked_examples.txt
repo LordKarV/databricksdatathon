@@ -1,0 +1,185 @@
+=================== Example: strong (demo_panipat: dialysis near Panipat district, Haryana) ===================
+Using Panipat (district layer, median of 13 PIN points), Haryana. Urgency: scheduled. Search radius used: 25 km (starts at 25, doubles until 3 options, max 100).
+Distance scale D_s = 15 km for dialysis (assumption, a slider in the App).
+Plan: Civil Hospital, Panipat (9 km, P_succ 0.49) -> Ravindra Hospital, Panipat (6 km, P_succ 0.40) -> Singla Children Hospital (8 km, P_succ 0.43)
+P(at least one of these works) = 0.83, assuming the options fail independently (options from one copied-content group are never paired).
+Trade-off: Nearest option: D.N. Hospital at 6 km (U 0.1951, Unverified). Top option: Civil Hospital, Panipat at 9 km (U 0.2775, Likely).
+Also: district hospital Civil Hospital, Panipat (9 km): the public standard (IPHS 2022) says this level should offer it; not verified in our data.
+--- card 1 ---
+[1] LIKELY offers dialysis - Civil Hospital, Panipat, Panipat        [band, name]
+    About 9 km by road (13 to 21 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.70 (range 0.38 to 0.97).
+    Track record: no checked test facility fell in this band yet, so we cannot say how often it is right.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Hemodialysis facility run under Public-Private Partnership"
+    [equipment] "Haemodialysis facility run in PPP mode"
+    [procedure] "Provides haemodialysis treatment"
+    Sources: one of these pages: https://panipat.gov.in/public-utility-category/hospitals/, https://www.tribuneindia.com/news/haryana/indefinite-doctors-strike-hits-civil-hospitals-across-state/ ... (13 pages)
+[4] Is it real: website none; phone none. P_E = 0.71 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, place in the name, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 1802630102 (number found in the listing text, not checked)
+    Ranking arithmetic: U = P_E x P_S x G = 0.711 x 0.702 x 0.5558 = 0.2775; G = 0.99 exp(-8.7/15)
+    Counterfactual: without the quoted sentences P_S would be 0.64.
+--- card 2 ---
+[1] Not verified: call to confirm dialysis - Ravindra Hospital, Panipat, Panipat        [band, name]
+    About 6 km by road (10 to 15 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.45 (range 0.24 to 0.78).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Nephrology including dialysis services"
+    Sources: one of these pages: https://panipat.gov.in/public-utility/06-ravindra-hospital-panipat/, https://panipat.gov.in/public-utility-category/hospitals/ ... (11 pages)
+[4] Is it real: website own domain; phone landline. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, place in the name, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[7] Why Civil Hospital, Panipat is listed above this one: Ravindra Hospital, Panipat is 2 km nearer. Distance alone favours it by 1.2x (exp(2/15)). Civil Hospital, Panipat's evidence is 1.2x stronger (P_E x P_S 0.50 vs 0.41); location-and-distance ratio 0.86; 1.23 x 0.86 = 1.06 = U ratio 0.2775 / 0.2625. So Civil Hospital, Panipat ranks first.
+[8] Call first: 1802650380, 9812387104 (landline number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.448 x 0.6453 = 0.2625; G = 0.99 exp(-6.4/15)
+    Counterfactual: without the quoted sentences P_S would be 0.45.
+--- card 3 ---
+[1] Not verified: call to confirm dialysis - Singla Children Hospital, Panipat        [band, name]
+    About 8 km by road (13 to 20 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.48 (range 0.28 to 0.81).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [equipment] "Latest ultramodern hemodialysis machines with bicarbonate dialysis"
+    [equipment] "Dialysis unit with isolation capability"
+    [equipment] "Dialysis supervision by nephrologists"
+    Sources: one of these pages: http://www.onefivenine.com/india/Listing/Locality/doctors/Panipat/Panipat/Diwan-Nagar, https://roharyana.esic.gov.in/ro-sro-list-empanelled-centers ... (50 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[7] Why Civil Hospital, Panipat is listed above this one: Singla Children Hospital is 0 km nearer. Distance alone favours it by 1.0x (exp(0/15)). Civil Hospital, Panipat's evidence is 1.1x stronger (P_E x P_S 0.50 vs 0.44); location-and-distance ratio 0.99; 1.15 x 0.99 = 1.13 = U ratio 0.2775 / 0.2456. So Civil Hospital, Panipat ranks first.
+[8] Call first: 8295300191, 9896900191 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.479 x 0.5639 = 0.2456; G = 0.99 exp(-8.5/15)
+    Counterfactual: without the quoted sentences P_S would be 0.48.
+
+=================== Example: uncertain (q35: dialysis near Patna) ===================
+Using Patna (district layer, median of 66 PIN points), Bihar. Urgency: scheduled. Search radius used: 25 km (starts at 25, doubles until 3 options, max 100).
+Distance scale D_s = 15 km for dialysis (assumption, a slider in the App).
+ABSTAIN: No facility within 100 km has enough public evidence that it offers dialysis. The options below are not verified: call to confirm.
+Plan: Satyavrat Hospital (6 km, P_succ 0.57) -> Rajeshwar Hospital (7 km, P_succ 0.54) -> Pulse Emergency Hospital (4 km, P_succ 0.40)
+P(at least one of these works) = 0.88, assuming the options fail independently (options from one copied-content group are never paired).
+Trade-off: Nearest option: Pulse Emergency Hospital at 4 km (U 0.3079, Unverified). Top option: Satyavrat Hospital at 6 km (U 0.3758, Unverified).
+Also: no district hospital record within 100 km whose location we trust (P_L >= 0.7).
+--- card 1 ---
+[1] Not verified: call to confirm dialysis - Satyavrat Hospital, Patna        [band, name]
+    About 6 km by road (9 to 15 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.65 (range 0.37 to 0.94).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Hemodialysis unit available"
+    [procedure] "Hemodialysis is performed in the Hemodialysis Unit"
+    [procedure] "Hemodialysis treatment is provided"
+    Sources: one of these pages: http://satyavrathospital.com/, https://satyavrathospital.com/ ... (11 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.88 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 9386156183, 9711471836 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.881 x 0.648 x 0.6587 = 0.3758; G = 0.99 exp(-6.1/15)
+    Counterfactual: without the quoted sentences P_S would be 0.55.
+--- card 2 ---
+[1] Not verified: call to confirm dialysis - Rajeshwar Hospital, Patna        [band, name]
+    About 7 km by road (10 to 16 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.59 (range 0.35 to 0.90).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [equipment] "CRRT machines for renal replacement therapy"
+    [capability] "Renal Replacement Therapy facility (CRRT)"
+    [procedure] "Dialysis and Continuous Renal Replacement Therapy (CRRT)"
+    Sources: one of these pages: https://www.sulekha.com/multi-speciality-hospitals/kankarbagh-patna, https://www.justvisitonline.com/company/advanced-physiotherapy-and-rehabilitation-centre/Patna/physiotherapist ... (50 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 8877700023, 8877700024 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.595 x 0.6294 = 0.3401; G = 0.99 exp(-6.8/15)
+    Counterfactual: without the quoted sentences P_S would be 0.45.
+--- card 3 ---
+[1] Not verified: call to confirm dialysis - Pulse Emergency Hospital, Patna        [band, name]
+    About 4 km by road (6 to 9 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.44 (range 0.21 to 0.67).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    (no sentence of its own names the service: the score rests on facility type and size)
+    Sources: one of these pages: https://dir.indiamart.com/patna/blood-pressure-testing-service.html, https://www.justdial.com/Patna/Urologist-Doctors-for-Cystoscopy-in-Transport-Nagar/nct-10892687-att-hos271 ... (23 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[7] Why Satyavrat Hospital is listed above this one: Pulse Emergency Hospital is 2 km nearer. Distance alone favours it by 1.2x (exp(2/15)). Satyavrat Hospital's evidence is 1.4x stronger (P_E x P_S 0.57 vs 0.40); location-and-distance ratio 0.86; 1.43 x 0.86 = 1.22 = U ratio 0.3758 / 0.3079. So Satyavrat Hospital ranks first.
+[8] Call first: 8867823990, 9386049762 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.440 x 0.7695 = 0.3079; G = 0.99 exp(-3.8/15)
+    Counterfactual: without the quoted sentences P_S would be 0.44.
+
+=================== Example: contaminated (demo_nagpur: dialysis near Nagpur) ===================
+Using Nagpur (district layer, median of 64 PIN points), Maharashtra. Urgency: scheduled. Search radius used: 25 km (starts at 25, doubles until 3 options, max 100).
+Distance scale D_s = 15 km for dialysis (assumption, a slider in the App).
+ABSTAIN: No facility within 100 km has enough public evidence that it offers dialysis. The options below are not verified: call to confirm.
+Plan: Meditrina Institute of Medical Sciences (4 km, P_succ 0.46) -> Viveka Hospitals (7 km, P_succ 0.57) -> Nelson Hospital (4 km, P_succ 0.46)
+P(at least one of these works) = 0.87, assuming the options fail independently (options from one copied-content group are never paired).
+Trade-off: Nearest option: Mure Memorial Hospital at 2 km (U 0.2741, Unverified). Top option: Meditrina Institute of Medical Sciences at 4 km (U 0.3581, Unverified).
+Also: no district hospital record within 100 km whose location we trust (P_L >= 0.7).
+Focus record 3ac5ae50: rank 51 of 63 candidates.
+--- card 1 ---
+[1] Not verified: call to confirm dialysis - Meditrina Institute of Medical Sciences, Nagpur        [band, name]
+    About 4 km by road (6 to 9 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.53 (range 0.30 to 0.87).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [equipment] "Dialysis unit"
+    [procedure] "Dialysis treatment sessions"
+    Sources: one of these pages: https://lifesaversambulance.com/rail-ambulance-service-in-nagpur/, https://www.vaidam.com/hospitals/meditrina-institute-medical-sciences-nagpur ... (11 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.88 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 7126669600, 8390110578 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.881 x 0.527 x 0.7711 = 0.3581; G = 0.99 exp(-3.8/15)
+    Counterfactual: without the quoted sentences P_S would be 0.43.
+--- card 2 ---
+[1] Not verified: call to confirm dialysis - Viveka Hospitals, Nagpur        [band, name]
+    About 7 km by road (10 to 17 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.65 (range 0.37 to 0.94).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [capability] "Day-care dialysis unit"
+    [equipment] "Dialysis unit equipment as part of comprehensive day-care dialysis"
+    [procedure] "Dialysis procedures"
+    Sources: one of these pages: http://www.vivekahospitals.com/, http://www.drambardaware.com/ ... (10 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.88 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 7447441468, 7447441469 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.881 x 0.648 x 0.6236 = 0.3558; G = 0.99 exp(-6.9/15)
+    Counterfactual: without the quoted sentences P_S would be 0.55.
+--- card 3 ---
+[1] Not verified: call to confirm dialysis - Nelson Hospital, Nagpur        [band, name]
+    About 4 km by road (6 to 10 min, rough estimate: straight line x 1.3)
+[2] How sure it offers the service: 0.51 (range 0.29 to 0.78).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    (no sentence of its own names the service: the score rests on facility type and size)
+    Sources: one of these pages: https://nelsonhospitals.com/best-critical-care-hospital-in-nagpur/, https://nelsonhospitals.com/the-best-multispeciality-hospital-in-india/ ... (14 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.99 that it is at the point we use. Agree: PIN centre, stated city, stated state. Point elsewhere: none.
+[6] What we ignored: nothing (no sentence about another facility or place)
+[8] Call first: 9518951959, 7507701177 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.509 x 0.7589 = 0.3514; G = 0.99 exp(-4.0/15)
+    Counterfactual: without the quoted sentences P_S would be 0.51.
+--- card 4 ---
+[1] Not verified: call to confirm dialysis - Wockhardt Hospital Nagpur, Nagpur        [band, name]
+    About 890 km by road (1335 to 2136 min, rough estimate: straight line x 1.3)
+    Or 10 km if it is at its second recorded location (we put 42% of the location belief there)
+[2] How sure it offers the service: 0.54 (range 0.29 to 0.85).
+    Track record: of 35 checked test facilities in this band, 16 were confirmed, 0 were wrong, 19 had no public information.
+[3] Why we think it offers it (sentences from its own listing):
+    [equipment] "In-house dialysis units"
+    [capability] "Offers dialysis services at concessional pricing (Rs. 350 or less per session) including blood tubing and dialyser"
+    Sources: one of these pages: https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp, https://indianrailways.gov.in/railwayboard/print_hospital_list.jsp ... (50 pages)
+[4] Is it real: website own domain; phone mobile. P_E = 0.91 (existence weights are expert settings, not learned).
+[5] Where: P_L = 0.58 that it is at the point we use. Agree: PIN centre, stated state. Point elsewhere: stated city, place in the name.
+    Warning: Listing coordinates and postcode 400078 agree (MUMBAI SUBURBAN), but the address city 'Nagpur' is a place 677 km away. Confirm which town before travelling.
+[6] What we ignored:
+    "Provides dialysis treatment at Nair Hospital, Mumbai Central" - names other facility: Nair Hospital, Mumbai Central
+    "Dialysis machines donated by Jivan Jyot Drug Bank are used at Nair Hospital, Mumbai Central" - names other facility: Nair Hospital, Mumbai Central
+[8] Call first: 8554954315, 2261784400 (mobile number from the listing)
+    Ranking arithmetic: U = P_E x P_S x G = 0.909 x 0.540 x 0.2159 = 0.1061; G = 0.58 exp(-890.0/15) + 0.42 exp(-10.0/15)
+    Counterfactual: without the quoted sentences P_S would be 0.40.
