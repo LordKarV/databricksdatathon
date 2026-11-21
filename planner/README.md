@@ -128,8 +128,9 @@ pathway (9,959 facilities, estimate travel):
 - Sparse tags make multi-requirement stages scarce: thrombolysis is mentioned by 48 records, SNCU
   by 19, burns dressing by 33, blood by 606. A definitive stage that needs four tags multiplies
   four stub probabilities, so near facilities with thin text lose to far ones with long text.
-- One-stop plans never appear for STEMI or sick newborn in the benchmark because a definitive
-  candidate was found within the threshold, or no closer stabilising candidate had evidence.
+- One-stop plans never appear for STEMI or sick newborn in the benchmark. Whether that is because
+  a definitive candidate was always within the threshold, or because no nearer stabilising
+  candidate had evidence, was not broken down.
 - Not wired into the app. `/api/plan` does not call the planner yet, and the app runs without
   pandas, so it needs a `capability_p` over its own facts export.
 - Patient-specific rules (burn size, birth weight, prior stroke) are returned as `instructions`
