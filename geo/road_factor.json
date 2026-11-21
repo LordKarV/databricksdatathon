@@ -1,0 +1,84 @@
+{
+ "measured_utc": "2026-11-21T19:34:18Z",
+ "n_pairs": 2162,
+ "n_origins": 233,
+ "factor": 1.349,
+ "factor_ci95": [
+  1.325,
+  1.38
+ ],
+ "kmh_free_flow": 65.1,
+ "kmh_free_flow_ci95": [
+  63.609,
+  66.705
+ ],
+ "bands": [
+  {
+   "from_km": 2,
+   "to_km": 10,
+   "mid_km": 5.5,
+   "factor": 1.352,
+   "kmh_free_flow": 50.0,
+   "minutes_ratio_p10_p90": [
+    0.734,
+    1.58
+   ],
+   "n_pairs": 344
+  },
+  {
+   "from_km": 10,
+   "to_km": 25,
+   "mid_km": 18.2,
+   "factor": 1.285,
+   "kmh_free_flow": 58.2,
+   "minutes_ratio_p10_p90": [
+    0.796,
+    1.518
+   ],
+   "n_pairs": 349
+  },
+  {
+   "from_km": 25,
+   "to_km": 50,
+   "mid_km": 35.4,
+   "factor": 1.325,
+   "kmh_free_flow": 64.9,
+   "minutes_ratio_p10_p90": [
+    0.812,
+    1.636
+   ],
+   "n_pairs": 529
+  },
+  {
+   "from_km": 50,
+   "to_km": 100,
+   "mid_km": 72.1,
+   "factor": 1.403,
+   "kmh_free_flow": 72.1,
+   "minutes_ratio_p10_p90": [
+    0.805,
+    1.794
+   ],
+   "n_pairs": 630
+  },
+  {
+   "from_km": 100,
+   "to_km": 150,
+   "mid_km": 110.1,
+   "factor": 1.408,
+   "kmh_free_flow": 73.6,
+   "minutes_ratio_p10_p90": [
+    0.799,
+    1.682
+   ],
+   "n_pairs": 310
+  }
+ ],
+ "fallback_error": {
+  "mape": 0.208,
+  "median_ape": 0.17,
+  "p90_ape": 0.436,
+  "share_within_20pct": 0.577
+ },
+ "note": "factor = road km / straight-line km; kmh_free_flow = OSRM road km / OSRM hours (no traffic). Built by geo/measure_road_factor.py; details in geo/out/road_factor_summary.json."
+}

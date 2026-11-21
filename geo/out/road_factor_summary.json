@@ -1,0 +1,1074 @@
+{
+ "measured_utc": "2026-11-21T19:34:18Z",
+ "source": "https://router.project-osrm.org table service, car profile, free flow (no traffic)",
+ "sampling": {
+  "seed": 7,
+  "origins_per_state_stratum": 4,
+  "targets_km": [
+   5,
+   10,
+   20,
+   35,
+   50,
+   75,
+   110
+  ],
+  "urban_proxy": "other PIN centroids within 10 km >= 8 (national 75th percentile)",
+  "origins_sampled": 242,
+  "origins_failed_or_not_cached": 0,
+  "states": 34
+ },
+ "pairs": {
+  "requested": 2420,
+  "unrouted": 0,
+  "dropped_snap_over_2km": 95,
+  "used": 2162,
+  "min_hav_km": 2.0
+ },
+ "all": {
+  "n_pairs": 2162,
+  "n_origins": 233,
+  "factor_median": 1.349,
+  "factor_ci95": [
+   1.325,
+   1.38
+  ],
+  "factor_p10_p90": [
+   1.144,
+   2.011
+  ],
+  "kmh_median": 65.1,
+  "kmh_ci95": [
+   63.609,
+   66.705
+  ],
+  "kmh_p10_p90": [
+   46.1,
+   79.5
+  ]
+ },
+ "by_stratum": {
+  "rural": {
+   "n_pairs": 1189,
+   "n_origins": 120,
+   "factor_median": 1.415,
+   "factor_ci95": [
+    1.359,
+    1.463
+   ],
+   "factor_p10_p90": [
+    1.173,
+    2.196
+   ],
+   "kmh_median": 67.4,
+   "kmh_ci95": [
+    65.05,
+    69.135
+   ],
+   "kmh_p10_p90": [
+    48.8,
+    79.5
+   ]
+  },
+  "urban": {
+   "n_pairs": 973,
+   "n_origins": 113,
+   "factor_median": 1.293,
+   "factor_ci95": [
+    1.275,
+    1.323
+   ],
+   "factor_p10_p90": [
+    1.121,
+    1.78
+   ],
+   "kmh_median": 62.2,
+   "kmh_ci95": [
+    60.528,
+    63.833
+   ],
+   "kmh_p10_p90": [
+    44.8,
+    79.5
+   ]
+  }
+ },
+ "by_distance_band": {
+  "[10, 25)": {
+   "n_pairs": 349,
+   "n_origins": 142,
+   "factor_median": 1.285,
+   "factor_ci95": [
+    1.26,
+    1.332
+   ],
+   "factor_p10_p90": [
+    1.137,
+    1.897
+   ],
+   "kmh_median": 58.2,
+   "kmh_ci95": [
+    55.379,
+    60.994
+   ],
+   "kmh_p10_p90": [
+    45.1,
+    71.4
+   ]
+  },
+  "[100, 150)": {
+   "n_pairs": 310,
+   "n_origins": 220,
+   "factor_median": 1.408,
+   "factor_ci95": [
+    1.333,
+    1.455
+   ],
+   "factor_p10_p90": [
+    1.159,
+    2.16
+   ],
+   "kmh_median": 73.6,
+   "kmh_ci95": [
+    70.795,
+    75.806
+   ],
+   "kmh_p10_p90": [
+    60.8,
+    81.7
+   ]
+  },
+  "[2, 10)": {
+   "n_pairs": 344,
+   "n_origins": 117,
+   "factor_median": 1.352,
+   "factor_ci95": [
+    1.313,
+    1.38
+   ],
+   "factor_p10_p90": [
+    1.14,
+    1.724
+   ],
+   "kmh_median": 50.0,
+   "kmh_ci95": [
+    47.578,
+    51.676
+   ],
+   "kmh_p10_p90": [
+    35.9,
+    62.9
+   ]
+  },
+  "[25, 50)": {
+   "n_pairs": 529,
+   "n_origins": 182,
+   "factor_median": 1.325,
+   "factor_ci95": [
+    1.297,
+    1.355
+   ],
+   "factor_p10_p90": [
+    1.131,
+    1.963
+   ],
+   "kmh_median": 64.9,
+   "kmh_ci95": [
+    62.83,
+    67.753
+   ],
+   "kmh_p10_p90": [
+    50.9,
+    78.2
+   ]
+  },
+  "[50, 100)": {
+   "n_pairs": 630,
+   "n_origins": 223,
+   "factor_median": 1.403,
+   "factor_ci95": [
+    1.341,
+    1.478
+   ],
+   "factor_p10_p90": [
+    1.161,
+    2.132
+   ],
+   "kmh_median": 72.1,
+   "kmh_ci95": [
+    70.091,
+    73.62
+   ],
+   "kmh_p10_p90": [
+    57.4,
+    81.2
+   ]
+  }
+ },
+ "weighted_by_state_facility_share": {
+  "factor_median": 1.29,
+  "kmh_median": 64.1
+ },
+ "fallback_ratio_osrm_over_estimate": {
+  "all": {
+   "n_pairs": 2162,
+   "ratio_median": 1.031,
+   "ratio_p10_p90": [
+    0.792,
+    1.636
+   ],
+   "ape_median": 0.167,
+   "ape_p90": 0.43
+  },
+  "rural": {
+   "n_pairs": 1189,
+   "ratio_median": 1.084,
+   "ratio_p10_p90": [
+    0.833,
+    1.841
+   ],
+   "ape_median": 0.166,
+   "ape_p90": 0.469
+  },
+  "urban": {
+   "n_pairs": 973,
+   "ratio_median": 0.977,
+   "ratio_p10_p90": [
+    0.755,
+    1.482
+   ],
+   "ape_median": 0.169,
+   "ape_p90": 0.398
+  }
+ },
+ "by_state": {
+  "ANDHRA PRADESH": {
+   "n_pairs": 75,
+   "n_origins": 8,
+   "factor_median": 1.195,
+   "factor_ci95": [
+    1.166,
+    1.309
+   ],
+   "factor_p10_p90": [
+    1.134,
+    1.457
+   ],
+   "kmh_median": 67.9,
+   "kmh_ci95": [
+    61.699,
+    73.623
+   ],
+   "kmh_p10_p90": [
+    55.2,
+    77.9
+   ]
+  },
+  "ARUNACHAL PRADESH": {
+   "n_pairs": 20,
+   "n_origins": 2,
+   "factor_median": 2.382,
+   "factor_ci95": [
+    2.266,
+    3.026
+   ],
+   "factor_p10_p90": [
+    1.717,
+    3.083
+   ],
+   "kmh_median": 80.0,
+   "kmh_ci95": [
+    79.035,
+    82.241
+   ],
+   "kmh_p10_p90": [
+    76.0,
+    83.3
+   ]
+  },
+  "ASSAM": {
+   "n_pairs": 76,
+   "n_origins": 8,
+   "factor_median": 1.315,
+   "factor_ci95": [
+    1.267,
+    1.85
+   ],
+   "factor_p10_p90": [
+    1.107,
+    1.993
+   ],
+   "kmh_median": 72.3,
+   "kmh_ci95": [
+    64.275,
+    77.545
+   ],
+   "kmh_p10_p90": [
+    55.4,
+    79.7
+   ]
+  },
+  "BIHAR": {
+   "n_pairs": 80,
+   "n_origins": 8,
+   "factor_median": 1.336,
+   "factor_ci95": [
+    1.301,
+    1.377
+   ],
+   "factor_p10_p90": [
+    1.136,
+    1.638
+   ],
+   "kmh_median": 71.6,
+   "kmh_ci95": [
+    68.14,
+    77.635
+   ],
+   "kmh_p10_p90": [
+    60.5,
+    79.2
+   ]
+  },
+  "CHANDIGARH": {
+   "n_pairs": 28,
+   "n_origins": 4,
+   "factor_median": 1.209,
+   "factor_ci95": [
+    1.196,
+    1.296
+   ],
+   "factor_p10_p90": [
+    1.133,
+    1.528
+   ],
+   "kmh_median": 69.2,
+   "kmh_ci95": [
+    67.38,
+    73.691
+   ],
+   "kmh_p10_p90": [
+    53.5,
+    78.1
+   ]
+  },
+  "CHHATTISGARH": {
+   "n_pairs": 74,
+   "n_origins": 8,
+   "factor_median": 1.205,
+   "factor_ci95": [
+    1.141,
+    1.411
+   ],
+   "factor_p10_p90": [
+    1.092,
+    1.738
+   ],
+   "kmh_median": 71.1,
+   "kmh_ci95": [
+    60.503,
+    77.277
+   ],
+   "kmh_p10_p90": [
+    45.9,
+    83.0
+   ]
+  },
+  "DELHI": {
+   "n_pairs": 70,
+   "n_origins": 8,
+   "factor_median": 1.265,
+   "factor_ci95": [
+    1.243,
+    1.33
+   ],
+   "factor_p10_p90": [
+    1.132,
+    1.512
+   ],
+   "kmh_median": 54.0,
+   "kmh_ci95": [
+    50.926,
+    55.694
+   ],
+   "kmh_p10_p90": [
+    40.3,
+    71.7
+   ]
+  },
+  "GOA": {
+   "n_pairs": 69,
+   "n_origins": 7,
+   "factor_median": 1.37,
+   "factor_ci95": [
+    1.299,
+    1.528
+   ],
+   "factor_p10_p90": [
+    1.152,
+    1.722
+   ],
+   "kmh_median": 51.9,
+   "kmh_ci95": [
+    46.865,
+    56.071
+   ],
+   "kmh_p10_p90": [
+    34.4,
+    72.0
+   ]
+  },
+  "GUJARAT": {
+   "n_pairs": 73,
+   "n_origins": 8,
+   "factor_median": 1.296,
+   "factor_ci95": [
+    1.211,
+    1.378
+   ],
+   "factor_p10_p90": [
+    1.128,
+    1.761
+   ],
+   "kmh_median": 66.1,
+   "kmh_ci95": [
+    63.169,
+    71.922
+   ],
+   "kmh_p10_p90": [
+    55.3,
+    80.0
+   ]
+  },
+  "HARYANA": {
+   "n_pairs": 69,
+   "n_origins": 8,
+   "factor_median": 1.27,
+   "factor_ci95": [
+    1.213,
+    1.355
+   ],
+   "factor_p10_p90": [
+    1.124,
+    1.542
+   ],
+   "kmh_median": 60.2,
+   "kmh_ci95": [
+    54.986,
+    64.621
+   ],
+   "kmh_p10_p90": [
+    42.7,
+    75.7
+   ]
+  },
+  "HIMACHAL PRADESH": {
+   "n_pairs": 80,
+   "n_origins": 8,
+   "factor_median": 1.971,
+   "factor_ci95": [
+    1.854,
+    2.065
+   ],
+   "factor_p10_p90": [
+    1.54,
+    3.216
+   ],
+   "kmh_median": 59.0,
+   "kmh_ci95": [
+    52.076,
+    64.837
+   ],
+   "kmh_p10_p90": [
+    45.3,
+    73.0
+   ]
+  },
+  "JAMMU AND KASHMIR": {
+   "n_pairs": 68,
+   "n_origins": 7,
+   "factor_median": 1.391,
+   "factor_ci95": [
+    1.296,
+    1.562
+   ],
+   "factor_p10_p90": [
+    1.21,
+    1.881
+   ],
+   "kmh_median": 59.9,
+   "kmh_ci95": [
+    55.302,
+    64.957
+   ],
+   "kmh_p10_p90": [
+    49.4,
+    71.9
+   ]
+  },
+  "JHARKHAND": {
+   "n_pairs": 79,
+   "n_origins": 8,
+   "factor_median": 1.311,
+   "factor_ci95": [
+    1.24,
+    1.447
+   ],
+   "factor_p10_p90": [
+    1.166,
+    2.098
+   ],
+   "kmh_median": 66.5,
+   "kmh_ci95": [
+    53.659,
+    69.298
+   ],
+   "kmh_p10_p90": [
+    47.4,
+    77.3
+   ]
+  },
+  "KARNATAKA": {
+   "n_pairs": 76,
+   "n_origins": 8,
+   "factor_median": 1.222,
+   "factor_ci95": [
+    1.174,
+    1.285
+   ],
+   "factor_p10_p90": [
+    1.123,
+    1.485
+   ],
+   "kmh_median": 63.9,
+   "kmh_ci95": [
+    61.516,
+    67.646
+   ],
+   "kmh_p10_p90": [
+    53.9,
+    71.9
+   ]
+  },
+  "KERALA": {
+   "n_pairs": 66,
+   "n_origins": 7,
+   "factor_median": 1.399,
+   "factor_ci95": [
+    1.325,
+    1.471
+   ],
+   "factor_p10_p90": [
+    1.231,
+    1.707
+   ],
+   "kmh_median": 55.2,
+   "kmh_ci95": [
+    52.406,
+    56.443
+   ],
+   "kmh_p10_p90": [
+    49.2,
+    61.7
+   ]
+  },
+  "LADAKH": {
+   "n_pairs": 20,
+   "n_origins": 2,
+   "factor_median": 1.609,
+   "factor_ci95": [
+    1.607,
+    1.611
+   ],
+   "factor_p10_p90": [
+    1.467,
+    2.014
+   ],
+   "kmh_median": 65.2,
+   "kmh_ci95": [
+    64.822,
+    65.503
+   ],
+   "kmh_p10_p90": [
+    64.3,
+    68.2
+   ]
+  },
+  "MADHYA PRADESH": {
+   "n_pairs": 61,
+   "n_origins": 7,
+   "factor_median": 1.253,
+   "factor_ci95": [
+    1.193,
+    1.311
+   ],
+   "factor_p10_p90": [
+    1.119,
+    1.482
+   ],
+   "kmh_median": 68.2,
+   "kmh_ci95": [
+    60.389,
+    73.465
+   ],
+   "kmh_p10_p90": [
+    51.2,
+    80.3
+   ]
+  },
+  "MAHARASHTRA": {
+   "n_pairs": 73,
+   "n_origins": 8,
+   "factor_median": 1.339,
+   "factor_ci95": [
+    1.27,
+    1.435
+   ],
+   "factor_p10_p90": [
+    1.199,
+    1.649
+   ],
+   "kmh_median": 65.7,
+   "kmh_ci95": [
+    61.709,
+    69.411
+   ],
+   "kmh_p10_p90": [
+    50.6,
+    75.2
+   ]
+  },
+  "MANIPUR": {
+   "n_pairs": 80,
+   "n_origins": 8,
+   "factor_median": 1.635,
+   "factor_ci95": [
+    1.424,
+    2.177
+   ],
+   "factor_p10_p90": [
+    1.274,
+    2.868
+   ],
+   "kmh_median": 66.6,
+   "kmh_ci95": [
+    55.718,
+    76.573
+   ],
+   "kmh_p10_p90": [
+    46.8,
+    80.1
+   ]
+  },
+  "MEGHALAYA": {
+   "n_pairs": 64,
+   "n_origins": 8,
+   "factor_median": 1.559,
+   "factor_ci95": [
+    1.449,
+    1.838
+   ],
+   "factor_p10_p90": [
+    1.352,
+    1.999
+   ],
+   "kmh_median": 68.6,
+   "kmh_ci95": [
+    61.104,
+    80.354
+   ],
+   "kmh_p10_p90": [
+    57.6,
+    83.5
+   ]
+  },
+  "MIZORAM": {
+   "n_pairs": 40,
+   "n_origins": 4,
+   "factor_median": 1.457,
+   "factor_ci95": [
+    1.422,
+    2.652
+   ],
+   "factor_p10_p90": [
+    1.416,
+    2.839
+   ],
+   "kmh_median": 80.5,
+   "kmh_ci95": [
+    75.268,
+    81.883
+   ],
+   "kmh_p10_p90": [
+    71.8,
+    82.4
+   ]
+  },
+  "NAGALAND": {
+   "n_pairs": 40,
+   "n_origins": 4,
+   "factor_median": 1.878,
+   "factor_ci95": [
+    1.642,
+    2.011
+   ],
+   "factor_p10_p90": [
+    1.506,
+    2.213
+   ],
+   "kmh_median": 71.4,
+   "kmh_ci95": [
+    62.182,
+    74.535
+   ],
+   "kmh_p10_p90": [
+    58.3,
+    79.1
+   ]
+  },
+  "ODISHA": {
+   "n_pairs": 74,
+   "n_origins": 8,
+   "factor_median": 1.278,
+   "factor_ci95": [
+    1.216,
+    1.345
+   ],
+   "factor_p10_p90": [
+    1.14,
+    1.427
+   ],
+   "kmh_median": 71.6,
+   "kmh_ci95": [
+    65.08,
+    76.39
+   ],
+   "kmh_p10_p90": [
+    53.6,
+    81.2
+   ]
+  },
+  "PUDUCHERRY": {
+   "n_pairs": 64,
+   "n_origins": 7,
+   "factor_median": 1.253,
+   "factor_ci95": [
+    1.22,
+    1.288
+   ],
+   "factor_p10_p90": [
+    1.133,
+    1.493
+   ],
+   "kmh_median": 58.4,
+   "kmh_ci95": [
+    49.7,
+    62.766
+   ],
+   "kmh_p10_p90": [
+    34.7,
+    79.8
+   ]
+  },
+  "PUNJAB": {
+   "n_pairs": 77,
+   "n_origins": 8,
+   "factor_median": 1.291,
+   "factor_ci95": [
+    1.231,
+    1.369
+   ],
+   "factor_p10_p90": [
+    1.123,
+    1.595
+   ],
+   "kmh_median": 60.0,
+   "kmh_ci95": [
+    52.205,
+    63.239
+   ],
+   "kmh_p10_p90": [
+    42.8,
+    71.7
+   ]
+  },
+  "RAJASTHAN": {
+   "n_pairs": 58,
+   "n_origins": 7,
+   "factor_median": 1.279,
+   "factor_ci95": [
+    1.24,
+    1.394
+   ],
+   "factor_p10_p90": [
+    1.158,
+    1.617
+   ],
+   "kmh_median": 66.2,
+   "kmh_ci95": [
+    57.147,
+    70.729
+   ],
+   "kmh_p10_p90": [
+    45.9,
+    77.0
+   ]
+  },
+  "SIKKIM": {
+   "n_pairs": 40,
+   "n_origins": 4,
+   "factor_median": 2.192,
+   "factor_ci95": [
+    2.104,
+    2.455
+   ],
+   "factor_p10_p90": [
+    1.637,
+    2.947
+   ],
+   "kmh_median": 68.0,
+   "kmh_ci95": [
+    63.991,
+    71.987
+   ],
+   "kmh_p10_p90": [
+    58.0,
+    74.6
+   ]
+  },
+  "TAMIL NADU": {
+   "n_pairs": 65,
+   "n_origins": 7,
+   "factor_median": 1.265,
+   "factor_ci95": [
+    1.241,
+    1.296
+   ],
+   "factor_p10_p90": [
+    1.155,
+    1.481
+   ],
+   "kmh_median": 60.4,
+   "kmh_ci95": [
+    54.388,
+    61.706
+   ],
+   "kmh_p10_p90": [
+    50.1,
+    70.2
+   ]
+  },
+  "TELANGANA": {
+   "n_pairs": 73,
+   "n_origins": 8,
+   "factor_median": 1.35,
+   "factor_ci95": [
+    1.258,
+    1.435
+   ],
+   "factor_p10_p90": [
+    1.205,
+    1.639
+   ],
+   "kmh_median": 66.5,
+   "kmh_ci95": [
+    53.706,
+    72.175
+   ],
+   "kmh_p10_p90": [
+    43.8,
+    78.6
+   ]
+  },
+  "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU": {
+   "n_pairs": 40,
+   "n_origins": 4,
+   "factor_median": 1.473,
+   "factor_ci95": [
+    1.442,
+    1.67
+   ],
+   "factor_p10_p90": [
+    1.148,
+    1.714
+   ],
+   "kmh_median": 78.4,
+   "kmh_ci95": [
+    71.283,
+    79.135
+   ],
+   "kmh_p10_p90": [
+    46.8,
+    81.9
+   ]
+  },
+  "TRIPURA": {
+   "n_pairs": 72,
+   "n_origins": 8,
+   "factor_median": 1.345,
+   "factor_ci95": [
+    1.297,
+    1.548
+   ],
+   "factor_p10_p90": [
+    1.234,
+    1.659
+   ],
+   "kmh_median": 74.2,
+   "kmh_ci95": [
+    68.667,
+    80.925
+   ],
+   "kmh_p10_p90": [
+    53.9,
+    83.1
+   ]
+  },
+  "UTTAR PRADESH": {
+   "n_pairs": 73,
+   "n_origins": 8,
+   "factor_median": 1.24,
+   "factor_ci95": [
+    1.196,
+    1.281
+   ],
+   "factor_p10_p90": [
+    1.101,
+    1.353
+   ],
+   "kmh_median": 69.6,
+   "kmh_ci95": [
+    66.363,
+    72.44
+   ],
+   "kmh_p10_p90": [
+    40.6,
+    79.9
+   ]
+  },
+  "UTTARAKHAND": {
+   "n_pairs": 71,
+   "n_origins": 8,
+   "factor_median": 1.947,
+   "factor_ci95": [
+    1.397,
+    2.099
+   ],
+   "factor_p10_p90": [
+    1.254,
+    2.819
+   ],
+   "kmh_median": 57.0,
+   "kmh_ci95": [
+    46.227,
+    60.324
+   ],
+   "kmh_p10_p90": [
+    42.2,
+    65.7
+   ]
+  },
+  "WEST BENGAL": {
+   "n_pairs": 74,
+   "n_origins": 8,
+   "factor_median": 1.274,
+   "factor_ci95": [
+    1.209,
+    1.362
+   ],
+   "factor_p10_p90": [
+    1.096,
+    1.606
+   ],
+   "kmh_median": 69.1,
+   "kmh_ci95": [
+    57.792,
+    75.007
+   ],
+   "kmh_p10_p90": [
+    38.0,
+    78.7
+   ]
+  }
+ },
+ "states_highest_factor": [
+  [
+   2.382,
+   "ARUNACHAL PRADESH",
+   20
+  ],
+  [
+   2.192,
+   "SIKKIM",
+   40
+  ],
+  [
+   1.971,
+   "HIMACHAL PRADESH",
+   80
+  ],
+  [
+   1.947,
+   "UTTARAKHAND",
+   71
+  ],
+  [
+   1.878,
+   "NAGALAND",
+   40
+  ],
+  [
+   1.635,
+   "MANIPUR",
+   80
+  ]
+ ],
+ "state_factor_median_range": [
+  1.195,
+  2.382
+ ],
+ "fallback_error_leave_origin_out": {
+  "global_constants": {
+   "mape": 0.224,
+   "median_ape": 0.191,
+   "p90_ape": 0.452,
+   "share_within_20pct": 0.519
+  },
+  "by_stratum": {
+   "mape": 0.227,
+   "median_ape": 0.196,
+   "p90_ape": 0.455,
+   "share_within_20pct": 0.51
+  },
+  "by_distance_band": {
+   "mape": 0.208,
+   "median_ape": 0.17,
+   "p90_ape": 0.436,
+   "share_within_20pct": 0.577
+  },
+  "by_state": {
+   "mape": 0.205,
+   "median_ape": 0.162,
+   "p90_ape": 0.438,
+   "share_within_20pct": 0.586
+  }
+ },
+ "old_assumptions_vs_osrm_minutes": {
+  "spec_1.3_at_40": {
+   "median_ratio": 1.498,
+   "mape": 0.532
+  },
+  "spec_1.3_at_25": {
+   "median_ratio": 2.397,
+   "mape": 1.366
+  },
+  "feasibility_1.26_at_69.4": {
+   "median_ratio": 0.837,
+   "mape": 0.233
+  },
+  "feasibility_1.26_at_40": {
+   "median_ratio": 1.452,
+   "mape": 0.494
+  }
+ }
+}
