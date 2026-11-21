@@ -393,8 +393,7 @@ function routeHtml(p) {
   if (!it.plans.length) return '';
   const best = `<article class="card route" aria-labelledby="route-1"><h3 id="route-1">Route
     ${F('itinerary.plans.0.rank', it.plans[0].rank, 'num')}</h3>${routePlanHtml(it.plans[0], 'itinerary.plans.0')}</article>`;
-  const more = it.plans.slice(1).map((r, k) => `<details><summary>Route ${F(`itinerary.plans.${k + 1}.rank`, r.rank, 'num')}:
-    ${F(`itinerary.plans.${k + 1}.type_word`, r.type_word)}</summary>${routePlanHtml(r, `itinerary.plans.${k + 1}`)}</details>`).join('');
+  const more = it.plans.slice(1).map((r, k) => `<details><summary>Route&nbsp;${F(`itinerary.plans.${k + 1}.rank`, r.rank, 'num')}:&nbsp;${F(`itinerary.plans.${k + 1}.type_word`, r.type_word)}</summary>${routePlanHtml(r, `itinerary.plans.${k + 1}`)}</details>`).join('');
   return head + best + more;
 }
 

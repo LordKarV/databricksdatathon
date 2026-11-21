@@ -187,3 +187,46 @@ what did not work), sources and licences, and limits.
   never on the critical path.
 - **Tested:** the faithfulness test checks every number and table cell on the page against how.json, requires
   every fact and cell to be shown, and requires every source link to point at a file that exists in the repo.
+
+## Multi-stop route (`itinerary` in `/api/plan`, #47)
+
+For services with a care pathway (`kb/pathways/care_pathways.json`: trauma, emergency C-section, burns, sick
+newborn, dialysis start), `/api/plan` adds `itinerary`. It holds the planner's routes (`planner/`, tm-Art4v):
+where to go and in what order. The single-destination `options` are unchanged and stay the list of whom to
+call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
+
+- **Source and fallback.** `app/itinerary.py` calls `planner.service.plan_for_service`. It returns null if
+  the planner is not shipped, if `planner/out` is not built (`RuntimeError`), or if there is no pathway.
+  The page then shows the options alone.
+- **What the module adds.** It only reshapes the planner's output and joins the app's own facts: phone,
+  place, and up to 2 verbatim own-offer sentences per stop (claim ids from the planner; text from the
+  facts export). It never changes an order, a time or a probability.
+- **Swap point.** `capability_p` inside `planner.service` remains the single swap point for the model (#11).
+- **Shape.**
+  ```
+  {pathway, pathway_name, urgency, abstain: text|null,
+   plans: [{rank, type, type_word,
+            stops: [{facility_id, name, place, purpose, purpose_word, eta_low, eta_high, dwell_minutes, p,
+                     weakest_capability, weakest_capability_p, question, evidence: [{claim_id, quote}],
+                     n_evidence, phone, fallback: {facility_id, name, eta_minutes, p}|null, flags}],
+            totals: {minutes_to_definitive, low, high, p_first_care, p_treated},
+            window_checks: [{check, limit_minutes, eta_minutes, met}],
+            vs_direct: {direct_name, direct_minutes, direct_p_objective, plan_p_objective,
+                        direct_p_first_care, plan_p_first_care}|null}],
+   meta: {stub, origin_state, terrain, plans_considered}}
+  ```
+- **Results screen.** A "Suggested route" card shows route 1 as numbered stops. Stages at the same hospital
+  (dialysis: assessment, fistula, sessions) nest under it. The other routes sit in expandable sections.
+- **Slip.** The slip and the WhatsApp text list route 1's stops, with phone and arrival range.
+- **Comparison against going direct.** The page builds this sentence from the structured fields, so every
+  number in it is marked and checked.
+- **Build order.** Run `planner/export_v1.py` before `app/facts/build.py`, because the facts export copies
+  the claims the planner cites (about 45k claims, 2.1 MB gz in total). `tools/deploy/deploy.sh` runs them
+  in that order.
+- **Tests.**
+  - The faithfulness test checks every route value on the results screen and the slip. Two new kinds:
+    `dur` (minutes shown as min, h or days) and `met`.
+  - `test_every_route_field_is_shown` fails when an itinerary field is neither rendered nor listed in
+    `ROUTE_NOT_SHOWN`.
+  - `test_engine.py` checks latency, size and verbatim quotes, that the options are unchanged, and the
+    null fallbacks.

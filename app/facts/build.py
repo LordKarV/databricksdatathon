@@ -4,7 +4,8 @@ The app reads only that file at start-up (standard library, no pandas), the same
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
 counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
 derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v1.py (the claims it cites are copied, so route stops show quotes):
+engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v1.py
+(the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
 from __future__ import annotations
