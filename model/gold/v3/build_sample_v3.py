@@ -41,7 +41,7 @@ ROOT = Path(__file__).resolve().parents[3]
 HERE = Path(__file__).resolve().parent
 V1 = ROOT / "derived" / "v1"
 sys.path.insert(0, str(ROOT / "app"))
-from facts.build import facilities
+from facts.build import facilities  # noqa: E402, RUF100
 
 SEED = 20261121
 CORE = {"dialysis": "dialysis", "emergency_csection": "csection", "nicu": "nicu", "cardiac_surgery": "cardiac_surgery",
