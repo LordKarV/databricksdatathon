@@ -60,6 +60,7 @@ Response:
                "cached", "factor", "kmh", "terrain", "label"},
     "band": "likely | not_verified | unlikely", "band_word": "Likely", "band_reason": null | "...",
     "p": 0.81, "p_lo": 0.70, "p_hi": 0.89,
+    "p_e": 0.97, "p_l": 0.95,   // MODEL: P(facility exists), P(map point is right); Compare depth (S10)
     "evidence": [{"claim_id", "field", "quote", "source_url"}],
     "contributions": [{"label", "points"}],
     "flags": ["plain-English warning", ...],
@@ -75,6 +76,26 @@ Response:
 }
 ```
 
+### `POST /api/area` (Area depth, S11/S12; stub until #11)
+
+Body `{service, lat, lon}` (0.01 deg). Every number below is MODEL-supplied (area_metrics and ten-call lists, tier 3);
+the stub returns invented sample values.
+
+```
+{
+  "query": {"service", "service_label": {"en", "hi"}},
+  "area": {"district", "state", "window_min": 60},
+  "as_of": "YYYY-MM-DD",
+  "summary": {"n_pins", "n_without_option", "access_now", "access_if_confirmed",
+              "calls_could_close", "no_public_evidence"},          // MODEL: shares of the area, 0..1
+  "caveat": "Low web presence looks like a gap. Verify before deciding.",
+  "pins": [{"pin", "lat", "lon", "first": null | {"facility_id", "name"}, "backup": null | {...},
+            "travel": null | {"low", "high"}, "call_first": null | "name", "nearest_km": null | 96.0}],
+  "ten_calls": [{"rank", "facility_id", "name", "phone_kind", "areas", "access_gain"}],   // MODEL
+  "meta": {"stub", "model_hash"}
+}
+```
+
 The page reads only these fields. `travel` is one row of `geo/travel.py` (#7, PR #13) passed through unchanged;
 the stub calls `geo.travel.estimate` (measured factor and percentile range, no OSRM call) and falls back to
 straight-line x 1.35 only if `geo/` is not importable.
@@ -82,7 +103,7 @@ straight-line x 1.35 only if `geo/` is not importable.
 ## Not done here
 
 PIN/place lookup (`/api/resolve`), note scan,
-free-text mapping, read aloud, Compare and Area depths, referral slip, outcome storage, the in-browser faithfulness
+free-text mapping, read aloud, outcome storage, the in-browser faithfulness
 recompute (spec 5.4), Hindi UI strings beyond the tile labels (#10), and a test on a real phone or behind the
 Databricks Apps proxy (#4).
 

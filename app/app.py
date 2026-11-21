@@ -17,7 +17,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from stub_data import SERVICES, recommend_stub
+from stub_data import SERVICES, area_stub, recommend_stub
 
 LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
 Depth = Literal["quick", "compare", "area"]
@@ -83,6 +83,22 @@ def _plan(req: PlanRequest) -> dict:
 def plan(req: PlanRequest) -> dict:
     """The page's endpoint: the point travels in the body, so it stays out of proxy URL logs."""
     return _plan(req)
+
+
+class AreaRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    service: str
+    lat: float = Field(ge=6.0, le=37.5)
+    lon: float = Field(ge=68.0, le=97.5)
+
+
+@app.post("/api/area")
+def area(req: AreaRequest) -> dict:
+    """Standing referral plan for the area around a point (S11) and the ten calls (S12). Stub until #11."""
+    if req.service not in SERVICES:
+        raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
+    return area_stub(req.service, round(req.lat, 2), round(req.lon, 2))
 
 
 @app.get("/api/recommend")

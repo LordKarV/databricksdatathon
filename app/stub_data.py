@@ -130,6 +130,7 @@ def _option(rank: int, fid: str, name: str, operator: str, band: Band, p: tuple[
         "band_word": BAND_WORDS[band],
         "band_reason": None if band == "likely" else "own-sentence evidence below threshold",
         "p": p[0], "p_lo": p[1], "p_hi": p[2],
+        "p_e": 0.97 if band == "likely" else 0.88, "p_l": 0.95 if band == "likely" else 0.62,  # model: exists / where
         "evidence": [{"claim_id": f"stub-{fid}-{i}", "field": f, "quote": t,
                       "source_url": "https://example.org/sample-listing"} for i, (f, t) in enumerate(quotes)],
         "contributions": [
@@ -220,4 +221,46 @@ def recommend_stub(service: str, lat: float, lon: float, accuracy_m: float | Non
         "query": query, "location": location, "as_of": as_of, "profile": profile,
         "emergency_numbers": emergency_numbers, "abstain": None,
         "options": options, "why_not": why_not, "meta": meta,
+    }
+
+
+def area_stub(service: str, lat: float, lon: float) -> dict:
+    """Placeholder standing referral plan for the area around a point (spec S11/S12), contract proposal for #31.
+
+    Everything here is invented sample data; the model export (#11, area_metrics and ten-call lists) replaces it.
+    """
+    label = SERVICES[service]["label_en"]
+    first = {"facility_id": "stub-101", "name": "Sample Care Centre (sample)"}
+    backup = {"facility_id": "stub-103", "name": "Sample Specialty Centre (sample)"}
+    pins = []
+    for k in range(6):
+        plat, plon = round(lat + 0.04 * (k - 2), 4), round(lon + 0.05 * ((k % 3) - 1), 4)
+        travel = _travel(plat, plon, lat + 0.15, lon + 0.08)
+        within = k % 3 != 2  # every third sample PIN has no option with public evidence in reach
+        pins.append({
+            "pin": 843300 + k, "lat": plat, "lon": plon,
+            "first": first if within else None, "backup": backup if within else None,
+            "travel": travel if within else None,
+            "call_first": first["name"] if within else None,
+            "nearest_km": None if within else round(travel["km"] * 2, 1),
+        })
+    n_without = sum(p["first"] is None for p in pins)
+    return {
+        "query": {"service": service, "service_label": {"en": label, "hi": SERVICES[service]["label_hi"]}},
+        "area": {"district": "Sample district", "state": "Sample state", "window_min": 60},
+        "as_of": "2026-11-21",
+        "summary": {
+            "n_pins": len(pins), "n_without_option": n_without,
+            "access_now": 0.11, "access_if_confirmed": 0.22,
+            "calls_could_close": 0.11, "no_public_evidence": 0.78,
+        },
+        "caveat": "Low web presence looks like a gap. Verify before deciding.",
+        "pins": pins,
+        "ten_calls": [
+            {"rank": i + 1, "facility_id": f"stub-4{i:02d}", "name": f"Sample Hospital {i + 1} (sample)",
+             "phone_kind": ["landline", "own mobile", "shared x3"][i % 3], "areas": 4 - i % 4,
+             "access_gain": round(0.06 - 0.005 * i, 3)}
+            for i in range(10)
+        ],
+        "meta": {"stub": True, "model_hash": "stub-0000"},
     }
