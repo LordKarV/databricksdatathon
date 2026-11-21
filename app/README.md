@@ -81,7 +81,14 @@ straight-line x 1.35 only if `geo/` is not importable.
 
 ## Not done here
 
-PIN/place lookup (`/api/resolve`), offline packs and IndexedDB (#9; last fix uses localStorage for now), note scan,
+PIN/place lookup (`/api/resolve`), note scan,
 free-text mapping, read aloud, Compare and Area depths, referral slip, outcome storage, the in-browser faithfulness
 recompute (spec 5.4), Hindi UI strings beyond the tile labels (#10), and a test on a real phone or behind the
 Databricks Apps proxy (#4).
+
+## Offline pack storage
+
+The service worker keeps each saved state pack in IndexedDB (`rs-packs` database, `packs` store, keyed by slug:
+`{body, sha256, built, saved_at}`); the pack format is unchanged and `/api/pack/<slug>` is answered from there when
+the network fails. Packs saved before #32 in Cache Storage (`rs-packs-v1`) move over on activate. After the first
+save the page calls `navigator.storage.persist()` once and records the answer in `localStorage['rs.pack'].persisted`.

@@ -1,5 +1,5 @@
 // Offline answer (spec S9, section 3.2.3; issue #23). Plain script, attaches window.RSOffline.
-// Loaded lazily by app.js (never on the critical path); the service worker precaches it with pack.js.
+// Packs live in IndexedDB, kept by the service worker (sw.js). Loaded lazily by app.js (never on the critical path); the service worker precaches it with pack.js.
 // Answers only from the state pack saved on this phone; shows no number the pack does not contain.
 'use strict';
 (function (root) {
@@ -42,10 +42,21 @@
     if (res.status === 'saved' || res.status === 'unchanged') {
       const old = meta();
       const fresh = res.status === 'saved' || !old || old.slug !== loc.slug;
-      setMeta({slug: loc.slug, state: loc.state, sha256: res.sha256,
+      // Ask once that the browser not evict the pack under storage pressure (#32). Chrome grants it silently
+      // for installed or engaged sites; Firefox may prompt. A refusal changes nothing else.
+      const persisted = old && old.persisted ? true : await persist();
+      setMeta({slug: loc.slug, state: loc.state, sha256: res.sha256, persisted,
         saved_at: fresh ? Date.now() : old.saved_at, built: old && !fresh ? old.built : null});
     }
     return res;
+  }
+
+  async function persist() {
+    try {
+      const sm = navigator.storage;
+      if (!sm || !sm.persist) return false;
+      return (await sm.persisted()) || (await sm.persist());
+    } catch { return false; }
   }
 
   async function loadPack() {
