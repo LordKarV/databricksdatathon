@@ -6,7 +6,7 @@ Writes <erk_dir>/erk_centres.parquet (one row per hospitalCode, no phones or
 emails) and <erk_dir>/erk_vf_matches.parquet, prints the stats used in README.
 
 Matching rule (per e-RaktKosh centre, best VF candidate):
-  location gate: both have coordinates and are <= 5 km apart, or (no coords on
+  location gate: both have coordinates and are <= 5 km + VF loc_radius (cap 15 km) apart, or (no coords on
     either side) same state and same district name;
   name gate: rapidfuzz token_sort_ratio >= 85 on blood-word-stripped names, or
     token_set_ratio >= 90 AND the names share a distinctive (non-generic) token.
@@ -32,9 +32,13 @@ GENERIC = {"hospital", "hospitals", "district", "govt", "government", "general",
            "clinic", "sciences", "science", "mch", "community", "primary", "area", "referral", "dist",
            "dh", "sdh", "gh", "mc", "rmc", "cottage", "nursing", "home", "centres", "services", "service",
            "rural", "urban", "new", "city", "red", "cross", "indian", "lions", "rotary", "voluntary",
-           "foundation", "hosp", "main", "station", "national", "state", "municipal", "corporation"}
+           "foundation", "hosp", "main", "station", "national", "state", "municipal", "corporation",
+           "cancer", "heart", "eye", "multispecialty", "superspeciality", "unit", "dr", "sri", "shri", "st"}
 MAX_KM = 5.0
-BLOOD_RE = re.compile(r"blood\s*(bank|cent(re|er)|storage)|transfusion|bloodbank", re.I)
+MAX_GATE_KM = 15.0
+OLD_CITY = frozenset({"calcutta", "madras", "bombay", "bangalore", "bengaluru", "delhi", "poona", "baroda", "trivandrum",
+                      "cochin", "mysore", "calicut", "mangalore", "benaras", "banaras", "gurgaon", "allahabad"})
+BLOOD_RE = re.compile(r"blood\s*(?:bank|cent(?:re|er)|storage)|transfusion|bloodbank", re.I)
 
 
 def norm(s: str) -> list[str]:
@@ -42,14 +46,21 @@ def norm(s: str) -> list[str]:
     return [t for t in s.split() if t not in BLOOD_WORDS]
 
 
-def name_ok(a: list[str], b: list[str]) -> tuple[bool, float]:
+def name_ok(a: list[str], b: list[str], places: frozenset = frozenset()) -> tuple[bool, float]:
+    """Fuzzy score plus a distinctive-token test. Place names (district, city)
+    and generic words do not count as distinctive, so "PSP Medical College
+    Hospital" never matches "Meenakshi Medical College Hospital"."""
     sa, sb = " ".join(a), " ".join(b)
     if not sa or not sb:
         return False, 0.0
-    sort_r, set_r = fuzz.token_sort_ratio(sa, sb), fuzz.token_set_ratio(sa, sb)
-    distinctive = (set(a) & set(b)) - GENERIC
-    ok = sort_r >= 85 or (set_r >= 90 and len(distinctive) > 0)
-    return ok, max(sort_r, set_r if distinctive else 0)
+    da = {t for t in a if len(t) > 1 and t not in GENERIC and t not in places}
+    db = {t for t in b if len(t) > 1 and t not in GENERIC and t not in places}
+    shared = da & db
+    # reject when both names carry distinctive words the other lacks ("Madras Egmore" vs "Madras ENT")
+    if not shared or (da - shared and db - shared) or len(shared) / max(len(da), len(db)) < 0.5:
+        return False, 0.0
+    set_r = fuzz.token_set_ratio(sa, sb)
+    return set_r >= 85, float(set_r)
 
 
 def hav_km(lat1, lon1, lat2, lon2):
@@ -66,10 +77,20 @@ def load_erk(d: Path) -> pd.DataFrame:
     rows = pd.read_parquet(d / "state_mode_rows.parquet")
     dists = pd.read_parquet(d / "districts.parquet")
     coords = pd.read_parquet(d / "nearest_coords.parquet")
-    e = rows.drop_duplicates("hospital_code").merge(
+    # 46 rows have no hospitalCode (no camp/stock links); keep them, dedupe the rest
+    rows = pd.concat([rows[rows.hospital_code.notna()].drop_duplicates("hospital_code"),
+                      rows[rows.hospital_code.isna()]], ignore_index=True).assign(source="state_list")
+    # /nearest also returns centres the state list omits (562 on 2026-11-21); keep them, flagged
+    extra = coords[~coords.hospitalCode.isin(rows.hospital_code)].rename(columns={
+        "hospitalCode": "hospital_code", "hospitalType": "category", "distId": "dist_id", "stateCode": "state_id"})
+    extra = extra[["hospital_code", "name", "address", "category", "type", "dist_id", "state_id"]].assign(
+        source="nearest_only", query_state_code=extra.state_id)
+    rows = pd.concat([rows, extra], ignore_index=True)
+    e = rows.merge(
         dists.rename(columns={"state_code": "state_id"}), on=["state_id", "dist_id"], how="left")
     c = coords.rename(columns={"hospitalCode": "hospital_code"})[["hospital_code", "latitude", "longitude"]]
     e = e.merge(c, on="hospital_code", how="left")
+    e["category"] = e.category.str.strip()
     return e.drop(columns=["sno"])
 
 
@@ -77,7 +98,7 @@ def load_vf(fac_path: str, loc_path: str) -> pd.DataFrame:
     raw = pd.read_parquet(fac_path, columns=["unique_id", "specialties", "procedure", "equipment",
                                              "capability", "description", "facilityTypeId"])
     loc = pd.read_parquet(loc_path, columns=["unique_id", "name", "address_city", "state_final", "district",
-                                             "loc_lat", "loc_lon", "loc_conf"])
+                                             "loc_lat", "loc_lon", "loc_conf", "loc_radius"])
     v = loc.merge(raw, on="unique_id", how="left")
     text = v[["specialties", "procedure", "equipment", "capability", "description"]].fillna("").agg(" ".join, axis=1)
     v["vf_claims_blood"] = text.str.contains(BLOOD_RE)
@@ -87,20 +108,36 @@ def load_vf(fac_path: str, loc_path: str) -> pd.DataFrame:
     return v
 
 
+def state_names(e: pd.DataFrame, v: pd.DataFrame) -> dict:
+    """e-RaktKosh state code -> VF state_final, by majority vote over VF rows
+    whose district name appears in that state's e-RaktKosh district list."""
+    out = {}
+    for code, g in e.groupby("state_id"):
+        hits = v[v.dkey.isin({dist_key(x) for x in g.district.dropna()})].state_final.dropna()
+        if len(hits):
+            out[code] = hits.mode().iat[0]
+    return out
+
+
 def match(e: pd.DataFrame, v: pd.DataFrame) -> pd.DataFrame:
     vlat, vlon = v.loc_lat.to_numpy(), v.loc_lon.to_numpy()
+    # VF locations placed at a PIN centroid carry a radius; widen the gate by it, capped
+    gate_km = np.minimum(MAX_KM + v.loc_radius.fillna(0).to_numpy(), MAX_GATE_KM)
+    st = state_names(e, v)
+    vstate = v.state_final.to_numpy()
     out = []
     for r in e.itertuples():
         et = norm(r.name)
         has_xy = not (pd.isna(r.latitude) or pd.isna(r.longitude))
         km = hav_km(r.latitude, r.longitude, vlat, vlon) if has_xy else np.full(len(v), np.nan)
-        near = np.where(km <= MAX_KM)[0] if has_xy else np.array([], int)
+        near = np.where(km <= gate_km)[0] if has_xy else np.array([], int)
         dk = dist_key(r.district)
         no_xy_pair = np.isnan(vlat) | (not has_xy)  # district gate only when distance is unknown
-        same_d = np.where((v.dkey.to_numpy() == dk) & no_xy_pair)[0] if dk else np.array([], int)
+        same_d = np.where((v.dkey.to_numpy() == dk) & no_xy_pair & (vstate == st.get(r.state_id)))[0] if dk else np.array([], int)
         best = None
         for i in np.unique(np.concatenate([near, same_d])):
-            ok, sc = name_ok(et, v.toks.iat[i])
+            places = frozenset(norm(r.district) + norm(v.address_city.iat[i]) + norm(v.district.iat[i])) | OLD_CITY
+            ok, sc = name_ok(et, v.toks.iat[i], places)
             if ok and (best is None or (sc, -np.nan_to_num(km[i], nan=99)) > (best[1], -np.nan_to_num(km[best[0]], nan=99))):
                 best = (i, sc)
         if best:
@@ -117,7 +154,9 @@ def match(e: pd.DataFrame, v: pd.DataFrame) -> pd.DataFrame:
 def selfcheck():
     assert norm("Goa Medical College, Blood Centre") == ["goa", "medical", "college"]
     assert name_ok(norm("District Hospital Peddem"), norm("District Hospital"))[0] is False
-    assert name_ok(norm("Manipal Hospital, Blood Centre (Bcsu)"), norm("Manipal Hospital Goa"))[0] is True
+    assert name_ok(norm("Manipal Hospital, Blood Centre (Bcsu)"), norm("Manipal Hospital Goa"), frozenset({"goa"}))[0] is True
+    assert name_ok(norm("Meenakshi Medical College Hospital"), norm("PSP Medical College Hospital"))[0] is False
+    assert name_ok(norm("North Western Railway, Jaipur"), norm("Jaipur"), frozenset({"jaipur"}))[0] is False
 
 
 def main(erk_dir, fac_path, loc_path):
@@ -127,13 +166,17 @@ def main(erk_dir, fac_path, loc_path):
     v = load_vf(fac_path, loc_path)
     e.to_parquet(d / "erk_centres.parquet", index=False)
     stats = {"erk_rows_state_mode": int(len(pd.read_parquet(d / "state_mode_rows.parquet"))),
+             "erk_centres": int(len(e)),
              "erk_unique_hospital_codes": int(e.hospital_code.nunique()),
+             "erk_without_hospital_code": int(e.hospital_code.isna().sum()),
+                          "erk_at_india_centroid": int(((e.latitude.round(4) == 22.3511) & (e.longitude.round(4) == 78.6677)).sum()),
+             "erk_by_source": e["source"].value_counts().to_dict(),
              "erk_by_type": e["type"].value_counts(dropna=False).to_dict(),
              "erk_by_category": e["category"].value_counts(dropna=False).to_dict(),
              "erk_with_coords": int(e.latitude.notna().sum()),
              "erk_with_district_name": int(e.district.notna().sum()),
              "erk_states": int(e.state_id.nunique()),
-             "null_rate": {c: round(float(e[c].isna().mean() | (e[c].astype(str).str.strip().isin(["", "-"])).mean()), 4)
+             "null_rate": {c: round(float((e[c].isna() | e[c].astype(str).str.strip().isin(["", "-", "nan", "None"])).mean()), 4)
                            for c in ["name", "address", "category", "type", "hospital_code", "dist_id", "latitude"]},
              "erk_coords_outside_india_bbox": int((~e.latitude.between(6, 37.5) | ~e.longitude.between(68, 98))[e.latitude.notna()].sum()),
              "erk_duplicate_coords": int(e[e.latitude.notna()].duplicated(["latitude", "longitude"], keep=False).sum()),

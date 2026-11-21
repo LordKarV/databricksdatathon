@@ -21,6 +21,7 @@ BLOCK_KM = 2.0
 CLOSE_KM = 0.5
 NAME_MIN = 90
 NAME_MIN_CLOSE = 80
+RAW_MIN_SINGLE = 85
 # Generic words carry no identity; removing them stops "X Hospital" matching "Y Hospital".
 GENERIC = set("""hospital hospitals pvt private ltd limited the and of a unit centre center clinic clinics
 multispeciality multi speciality specialty super superspeciality health healthcare care medical
@@ -48,19 +49,24 @@ SERVICE_RE = {
 
 def norm_name(s: str) -> str:
     s = re.sub(r"\(.*?\)", " ", str(s).lower())  # drop "(a unit of ...)"
+    s = re.sub(r"['\u2019]s\b", "", s)  # "madaan's" -> "madaan", not "madaan s"
     s = re.sub(r"[^a-z0-9 ]+", " ", s)
+    s = re.sub(r"\b([a-z]) (?=[a-z]\b)", r"\1", s)  # join initials: "r s gaur" -> "rs gaur"
     return " ".join(t for t in s.split() if t not in GENERIC)
 
 
 def name_score(a: str, b: str) -> float:
-    """token_sort on generic-stripped names; token_set (subset match) only when both keep 2+ tokens,
-    otherwise "Aditya Dental" would score 100 against "Aditya"."""
+    """token_sort on generic-stripped names. A subset match ("ahana" in "ahana llp") scores 100 only
+    when every token of the shorter name (2+ tokens) appears in the longer one, so partial overlaps
+    like "sky dental koramangala" vs "dental ... koramangala" do not pass."""
     if not a or not b:
         return 0.0
-    s = fuzz.token_sort_ratio(a, b)
-    if min(len(a.split()), len(b.split())) >= 2:
-        s = max(s, fuzz.token_set_ratio(a, b))
-    return s
+    ta, tb = a.split(), b.split()
+    short, long_ = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    # the subset path needs a real word in the shorter name: "m n" must not match "m n excellency"
+    if len(short) >= 2 and max(map(len, short)) >= 3 and set(short) <= set(long_):
+        return 100.0
+    return float(fuzz.token_sort_ratio(a, b))
 
 
 def haversine_km(lat1, lon1, lat2, lon2):
@@ -92,7 +98,10 @@ def score(pairs: pd.DataFrame) -> pd.DataFrame:
     pairs["name_score"] = [name_score(a, b) for a, b in zip(pairs.norm_vf, pairs.norm_nb)]
     pairs["raw_score"] = [fuzz.WRatio(a, b) for a, b in zip(pairs.name_vf, pairs.name_nb)]
     close = pairs.same_pin & (pairs.dist_km <= CLOSE_KM)
-    pairs["accept"] = (pairs.name_score >= NAME_MIN) | (close & (pairs.name_score >= NAME_MIN_CLOSE))
+    # One distinctive token left ("garg") is weak: also require the raw names to agree.
+    single = (pairs.norm_vf.str.split().str.len() <= 1) | (pairs.norm_nb.str.split().str.len() <= 1)
+    strong = (pairs.name_score >= NAME_MIN) | (close & (pairs.name_score >= NAME_MIN_CLOSE))
+    pairs["accept"] = strong & (~single | (pairs.raw_score >= RAW_MIN_SINGLE))
     return pairs
 
 
@@ -103,7 +112,8 @@ def load_vf(fac_path: str, geo_path: str) -> pd.DataFrame:
     fac = pd.read_parquet(fac_path, columns=["unique_id", "specialties", "procedure", "capability", "description",
                                              "equipment"])
     fac["text"] = fac[["specialties", "procedure", "capability", "description", "equipment"]].fillna("").agg(" ".join, axis=1)
-    vf = geo.merge(fac[["unique_id", "text"]], on="unique_id", how="left")
+    # ponytail: facilities.parquet repeats some unique_ids; keep the first text per id
+    vf = geo.merge(fac[["unique_id", "text"]].drop_duplicates("unique_id"), on="unique_id", how="left")
     vf["claims_nabh"] = vf.text.str.contains("nabh", case=False) | vf.name.str.contains("nabh", case=False)
     vf["norm"] = vf.name.map(norm_name)
     return vf
@@ -121,7 +131,8 @@ def geo_qc(nb: pd.DataFrame, pin_path: str) -> pd.DataFrame:
     pc["pin"] = pc.pincode.astype(str)
     q = nb.merge(pc[["pin", "best_lat", "best_lon", "state"]], on="pin", how="left")
     q["d_pin_km"] = haversine_km(q.lat, q.lon, q.best_lat, q.best_lon)
-    return q[["nabh_id", "acc_no", "pin", "lat", "lon", "d_pin_km", "state"]]
+    q["in_india_bbox"] = q.lat.between(6, 37.5) & q.lon.between(68, 98)
+    return q[["nabh_id", "acc_no", "pin", "lat", "lon", "best_lat", "d_pin_km", "in_india_bbox", "state"]]
 
 
 def main(nabh_dir, fac_path, geo_path, pin_path):
@@ -131,7 +142,7 @@ def main(nabh_dir, fac_path, geo_path, pin_path):
     pairs = score(candidates(vf[["unique_id", "name", "norm", "pin", "lat", "lon"]], nb[cols_nb]))
     best = (pairs[pairs.accept].sort_values(["name_score", "raw_score", "dist_km"], ascending=[False, False, True])
             .drop_duplicates("unique_id"))
-    best = best.merge(vf[["unique_id", "claims_nabh", "text", "geo_conflict"]], on="unique_id")
+    best = best.merge(vf[["unique_id", "claims_nabh", "text", "geo_conflict"]].drop_duplicates("unique_id"), on="unique_id")
     spec_path = d / "nabh_hco_specialty.parquet"
     if spec_path.exists():
         sp = pd.read_parquet(spec_path)
@@ -157,12 +168,20 @@ def main(nabh_dir, fac_path, geo_path, pin_path):
         "nabh_geo_d_pin_km_quantiles": qc.d_pin_km.quantile([0.5, 0.9, 0.95, 0.99]).round(2).to_dict(),
         "nabh_geo_far_gt_25km": int((qc.d_pin_km > 25).sum()),
         "nabh_geo_with_both": int(qc.d_pin_km.notna().sum()),
+        "nabh_coords_present": int(qc.lat.notna().sum()),
+        "nabh_coords_outside_india_bbox": int((qc.lat.notna() & ~qc.in_india_bbox).sum()),
+        "nabh_pin_present": int(qc.pin.notna().sum()),
+        "nabh_pin_not_in_directory": int((qc.pin.notna() & qc.best_lat.isna()).sum()),
     }
     if "nabh_specs" in best:
         svc = {}
+        # Only matched records that carry some scope code are comparable; dental or eye listings
+        # never get these codes, so their absence says nothing.
+        scoped = best[best.nabh_specs.map(lambda s: isinstance(s, list) and len(s) > 0)]
+        stats["matched_with_scope_codes"] = int(len(scoped))
         for code, rx in SERVICE_RE.items():
-            has = best.nabh_specs.map(lambda s: isinstance(s, list) and code in s)
-            claims = best.text.fillna("").str.contains(rx, case=False, regex=True)
+            has = scoped.nabh_specs.map(lambda s: code in s)
+            claims = scoped.text.fillna("").str.contains(rx, case=False, regex=True)
             if has.any():
                 svc[code] = {"nabh_lists": int(has.sum()), "vf_claims_too": int((has & claims).sum()),
                              "vf_silent": int((has & ~claims).sum()),
@@ -172,13 +191,19 @@ def main(nabh_dir, fac_path, geo_path, pin_path):
     print(json.dumps(stats, indent=1, default=str))
     cols = ["name_vf", "name_nb", "pin_vf", "pin_nb", "dist_km", "name_score", "acc_no", "status", "address"]
     best.sample(min(20, len(best)), random_state=7)[cols].to_csv(d / "handcheck_sample.csv", index=False)
+    best.sample(min(20, len(best)), random_state=11)[cols].to_csv(d / "handcheck_sample2.csv", index=False)
 
 
 def _selfcheck() -> None:
     assert norm_name("Aditya Ashwini Hospital (Unit of Cuttack Hospital Pvt. Ltd.)") == "aditya ashwini"
+    assert norm_name("R.S. Gaur Hospital") == "rs gaur" and norm_name("Dr. Madaan's Clinic") == "dr madaan"
+    assert name_score(norm_name("R.R. Hospital"), norm_name("R K Hospital")) < NAME_MIN
     assert name_score(norm_name("Aditya Dental Clinic"), norm_name("Aditya Multispeciality Hospital")) < NAME_MIN
     assert name_score(norm_name("Ahana Hospitals"), norm_name("Ahana Hospitals LLP")) == 100
     assert name_score(norm_name("Multispeciality Hospital"), norm_name("Care Hospital")) == 0
+    assert name_score(norm_name("Sky Dental Clinic - Koramangala"),
+                      norm_name("Dental Health Clinic, No. 150, 5th Cross, KHB Colony, Koramangala")) < NAME_MIN
+    assert name_score(norm_name("M.N. Excellency Center Of Physiotherapy"), norm_name("M N Hospital")) < NAME_MIN
     assert abs(haversine_km(28.6, 77.2, 28.6, 77.3) - 9.76) < 0.1
 
 
