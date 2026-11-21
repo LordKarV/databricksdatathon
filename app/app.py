@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from facts.engine import Engine
+from itinerary import attach
 from services import SERVICES
 from verify.check import Checker
 
@@ -89,7 +90,8 @@ def _plan(req: PlanRequest) -> dict:
         raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
     # Round to 0.01 deg (~1.1 km) before anything else touches the point (spec section 8).
     acc = None if req.accuracy_m is None else round(req.accuracy_m)
-    plan = _need_engine().plan(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source)
+    eng = _need_engine()
+    plan = attach(eng.plan(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source), eng)
     plan["query"]["depth"] = req.depth
     return plan
 

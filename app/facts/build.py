@@ -4,7 +4,7 @@ The app reads only that file at start-up (standard library, no pandas), the same
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
 counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
 derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root:
+engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v1.py (the claims it cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
 from __future__ import annotations
@@ -22,6 +22,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
+PLANNER = ROOT / "planner" / "out" / "planner_v1.json.gz"  # its cited claims ride along, so route stops show quotes
 OUT = Path(__file__).resolve().parent / "out"
 # app service id -> derived/v1 service name (cleaning/claims lexicon keys)
 SERVICE_MAP = {"burn_care": "burns", "cardiac_surgery": "cardiac_surgery", "dialysis": "dialysis",
@@ -112,6 +113,16 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     return out, cited
 
 
+def planner_cited() -> set[str]:
+    """Claim ids the multi-stop planner cites (#47). Build planner/export_v1.py first, or stops show ids only."""
+    if not PLANNER.is_file():
+        print("note: planner/out not built; route stops will carry claim ids without quotes")
+        return set()
+    with gzip.open(PLANNER, "rt", encoding="utf-8") as fh:
+        caps = json.load(fh)["capabilities"]
+    return {cid for c in caps.values() for ids in c["e"] for cid in ids}
+
+
 def claims(ids: set[str]) -> dict[str, list]:
     c = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "field", "text", "nonoffer", "attribution"])
     c = c[c.claim_id.isin(ids)]
@@ -155,7 +166,7 @@ def main() -> None:
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
                 "public_standard": [bool(x) for x in f.public_standard]},
         "pairs": pr,
-        "claims": claims(cited),
+        "claims": claims(cited | planner_cited()),
         "pins": pins(),
     }
     # The hash covers the data only (not built_at), so model_hash changes only when the data does.

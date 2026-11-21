@@ -15,9 +15,10 @@ UV_DEPS=(--with duckdb --with pandas --with pyarrow)
 cd "$ROOT"
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
   echo "== build data files from derived/"
+  # Planner first: app/facts/build.py copies the claims the planner cites, so route stops show quotes (#47).
+  uv run --no-project "${UV_DEPS[@]}" python planner/export_v1.py
   uv run --no-project "${UV_DEPS[@]}" python app/facts/build.py
   uv run --no-project "${UV_DEPS[@]}" python app/packs/build_packs.py
-  uv run --no-project "${UV_DEPS[@]}" python planner/export_v1.py
   # 'How this works' page data (#45): reads REPORT.md, model/MODEL_SPEC.md, research/DATASETS.md and the facts
   # export at build time, writes app/howto/out/how.json (the docs themselves are not bundled).
   uv run --no-project "${UV_DEPS[@]}" python app/howto/build.py

@@ -89,10 +89,11 @@ def load_payloads() -> list[tuple[str, dict]]:
     out = []
     # Real rows (#42): the three release queries from derived/v1, with their real area plans.
     from facts.engine import Engine
+    from itinerary import attach
     eng = Engine.load()
     if eng is not None:
         for name, (svc, lat, lon) in REAL_QUERIES.items():
-            plan = eng.plan(svc, lat, lon, 40, "gps")
+            plan = attach(eng.plan(svc, lat, lon, 40, "gps"), eng)  # with the planner's route (#47) when built
             plan["area_plan"] = eng.area(svc, lat, lon)
             out.append((f"real-{name}", plan))
     for svc in sorted(SERVICES):
@@ -223,6 +224,12 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = shown == BAND_WORDS.get(stored)
     elif kind == "method":
         ok = shown == ("road route" if stored == "osrm" else "rough")
+    elif kind == "dur":  # minutes shown as 'N min', 'N h' or 'N day(s)', rounded to that unit
+        m = re.fullmatch(r"(\d+) (min|h|days?)", shown.strip())
+        unit = {"min": 1, "h": 60, "day": 1440, "days": 1440}[m[2]] if m else 0
+        ok = bool(m) and abs(int(m[1]) * unit - stored) <= unit / 2
+    elif kind == "met":
+        ok = shown == ("met" if stored is True else "not met" if stored is False else None)
     elif kind == "mapsurl":
         m = re.search(r"destination=(-?[\d.]+),(-?[\d.]+)", shown)
         ok = bool(m) and math.isclose(float(m[1]), stored["lat"]) and math.isclose(float(m[2]), stored["lon"])
@@ -397,3 +404,63 @@ def test_how_page_every_number_is_from_how_json(base_url, browser):
             errs.append(f"how: link {href} is not a file in this repo")
     print(f"how: {report}, {len(links)} source links")
     assert not errs, "\n".join(errs[:40])
+
+
+# ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
+ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings"}
+
+
+def route_leaves(obj: Any, path: str) -> list[str]:
+    if isinstance(obj, dict):
+        return [p for k, v in obj.items() if k not in ROUTE_NOT_SHOWN for p in route_leaves(v, f"{path}.{k}")]
+    if isinstance(obj, list):
+        return [p for i, v in enumerate(obj) for p in route_leaves(v, f"{path}.{i}")]
+    return [] if obj is None else [path]
+
+
+def route_expected(it: dict) -> set[str]:
+    """Leaf paths the plan screen must show. A stage at the same hospital as the stop before it shares that stop's
+    name, place, arrival time and phone, so those are shown once per hospital."""
+    want = set()
+    for k, r in enumerate(it["plans"]):
+        P = f"itinerary.plans.{k}"
+        for j, s in enumerate(r["stops"]):
+            S, cont = f"{P}.stops.{j}", j > 0 and r["stops"][j - 1]["facility_id"] == s["facility_id"]
+            for leaf in route_leaves(s, S):
+                key = leaf[len(S) + 1:]
+                if cont and key.split(".")[0] in ("name", "place", "eta_low", "eta_high", "phone"):
+                    continue
+                if key == "phone.e164" and s["phone"].get("display"):
+                    continue  # the listing's own spelling of the number is shown, and dialled as e164
+                if key == "place" and not s["place"]:
+                    continue
+                want.add(leaf)
+        for key in ("rank", "type_word", "totals", "window_checks", "vs_direct"):
+            want |= set(route_leaves(r.get(key), f"{P}.{key}"))
+    want |= {"itinerary.pathway_name"} | ({"itinerary.abstain"} if it.get("abstain") else set())
+    return want
+
+
+ROUTED = [(n, p) for n, p in PAYLOADS if p.get("itinerary")]
+
+
+@pytest.mark.skipif(not ROUTED, reason="no payload with a route (planner/out or app/facts/out not built)")
+@pytest.mark.parametrize("name, payload", ROUTED, ids=[n for n, _ in ROUTED])
+def test_every_route_field_is_shown(name, payload, base_url, browser):
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+    page = ctx.new_page()
+    page.route("**/api/plan", json_reply(payload))
+    page.add_init_script(
+        "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+        " source: 'gps', t: Date.now(), label: null}))")
+    try:
+        page.goto(base_url + "/#/")
+        page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+        page.wait_for_selector("text=Suggested route")
+        got = page.evaluate(COLLECT_JS)
+    finally:
+        ctx.close()
+    shown = {it["path"] for it in got["items"]}
+    missing = sorted(route_expected(payload["itinerary"]) - shown)
+    assert not missing, f"{name}: route fields not shown: {missing[:20]}"
+    assert not check_screen("route", payload, got, {"values_checked": 0})
