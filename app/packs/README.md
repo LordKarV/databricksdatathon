@@ -37,8 +37,13 @@ These three choices brought Uttar Pradesh from 228 KB in the prototype to about 
 coordinates, dictionary-encoded quotes, and deduplicated top lists. Post-office names are not included; the picker
 offers PIN and district only. Sizes for every state are in `SIZES.md`.
 
-## Placeholders until the model lands (#11)
+## Bands: model table or conservative placeholder
 
-- Band: `likely` = verified true, or grade strong with `score_lo >= 0.6`; every other candidate is not verified.
-  This is much looser than the model's band rule. The model export should replace `likely`, `p`, `lo`, `hi`.
-- Ranking: straight-line distance from the PIN centroid, not expected time to treatment.
+- When `derived/v2/facility_service_scores.parquet` exists (columns `unique_id, service_id, band, p, lo, hi, as_of`,
+  published from #11), the builder takes band, p, lo and hi from it. `service_id` may be a derived/v1 name
+  (`csection`) or an app key (`emergency_csection`). Pairs the model calls unlikely, and pairs it did not score,
+  are left out of the pack.
+- Until then the placeholder marks `likely` only for pairs verified true by the gold web checks (12 of 386 rows
+  in the Bihar pack); every other candidate is not verified, with the derived/v1 score and interval.
+- Each pack's `band_note` says which source was used.
+- Ranking is still straight-line distance from the PIN centroid, not expected time to treatment.
