@@ -26,7 +26,7 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 19 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 20 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
 
 ## Calling it from the app
 
@@ -111,8 +111,9 @@ The stub in `data_v1.py` is a placeholder, not a fitted model:
                "expected_minutes", "minutes_if_treated"},
     "window_checks": [{"check", "limit_minutes", "basis", "at_facility_id", "eta_minutes", "met",
                        "met_at_high_estimate"}],
-    "vs_direct": {"direct_facility_id", "direct_minutes", "direct_p_objective", "plan_p_objective",
-                  "gain", "text"}
+    "vs_direct": {"direct_facility_id", "direct_name", "direct_minutes", "direct_p_objective",
+                  "direct_p_first_care", "plan_p_objective", "plan_p_first_care", "gain", "text",
+                  "text_numbers": {<every number quoted in text, rounded as printed>}}
   }],
   "abstain": null | {"text"},
   "instructions": [{"rule", "type", "when", "then", "basis", "source"}],
