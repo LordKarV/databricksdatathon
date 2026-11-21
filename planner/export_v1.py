@@ -4,6 +4,8 @@ Writes planner/out/planner_v1.json.gz (git-ignored: it holds facility data):
   facilities    columns id, name, lat, lon, town, district, state, conf
   capabilities  per capability tag: facility indexes with evidence, their stub probability and
                 up to 3 evidence claim ids
+  pins          PIN centroids with their state, to find the state of an origin (hill-road
+                travel constants are chosen by state)
 Probabilities are the stub described in planner/data_v1.py, not the fitted model.
 
 Run: .venv/bin/python planner/export_v1.py        (needs pandas and pyarrow; about 10 s)
@@ -17,9 +19,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from planner.data_v1 import NO_MENTION_P, V1Store  # noqa: E402
+import pandas as pd  # noqa: E402
+
+from planner.data_v1 import NO_MENTION_P, V1, V1Store  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "planner_v1.json.gz"
+
+
+def pins():
+    g = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["state", "lat", "lon"]).dropna()
+    states = sorted(g.state.unique())
+    code = {s: i for i, s in enumerate(states)}
+    return {"states": states, "lat": [round(float(x), 3) for x in g.lat], "lon": [round(float(x), 3) for x in g.lon],
+            "s": [code[s] for s in g.state]}
 
 
 def main():
@@ -40,11 +52,12 @@ def main():
                           "lat": [round(f["lat"], 5) for f in fac], "lon": [round(f["lon"], 5) for f in fac],
                           "town": [f["town"] for f in fac], "district": [f["district"] for f in fac],
                           "state": [f["state"] for f in fac], "flags": [f["flags"] for f in fac]},
-           "capabilities": caps}
+           "capabilities": caps, "pins": pins()}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with gzip.open(OUT, "wt", encoding="utf-8") as fh:
         json.dump(doc, fh, separators=(",", ":"))
-    print(f"wrote {OUT.relative_to(ROOT)}: {len(fac)} facilities, {len(caps)} capabilities, {OUT.stat().st_size / 1024:.0f} KB")
+    print(f"wrote {OUT.relative_to(ROOT)}: {len(fac)} facilities, {len(caps)} capabilities, {len(doc['pins']['s'])} PIN "
+          f"centroids, {OUT.stat().st_size / 1024:.0f} KB")
     for cap, c in caps.items():
         print(f"  {cap:26s} {len(c['i']):5d} facilities with evidence")
 
