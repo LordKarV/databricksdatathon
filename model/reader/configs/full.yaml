@@ -1,0 +1,27 @@
+# Full run, sized for an Apple M5 Pro with 48 GB (MPS). Falls back to CPU with READER_DEVICE=cpu.
+# python -m model.reader.run --config model/reader/configs/full.yaml
+#
+# Three backbones are trained one after the other on all 124k training examples. The one with the
+# lowest validation loss (facility-grouped split, weak labels) is used to score all claims. The
+# hand-labelled eval set is reported for all three and never used to choose.
+name: full
+backbones:
+  - {name: minilm-l12, backbone: microsoft/MiniLM-L12-H384-uncased}   # 33M parameters, English, general purpose
+  - {name: bge-small, backbone: BAAI/bge-small-en-v1.5}               # 33M, English, trained for sentence matching
+  - {name: me5-small, backbone: intfloat/multilingual-e5-small}       # 118M, multilingual (Hindi and transliterated names)
+  # microsoft/deberta-v3-small is left out: on MPS with torch 2.15.0 it aborts the process with a Metal
+  # assertion in matrix multiplication (seen on an Apple M5). It can be tried with READER_DEVICE=cpu:
+  # - {name: deberta-v3-small, backbone: microsoft/deberta-v3-small, overrides: {bs: 64}}
+epochs: 3
+bs: 128
+max_len: 192
+lr: 3.0e-5
+eps: 0.05             # label smoothing for the weak labels
+seed: 7
+checkpoint_every: 500 # steps; an interrupted run resumes from the last checkpoint with the same command
+eval_bs: 512
+log_every: 100
+# Memory guard: rows x padded_length^2 per chunk on the device. 64 x 160^2 (1638400) is what a
+# 16 GB M5 trains without swapping; 3x that for 48 GB. A batch is split into chunks under this
+# budget and the gradients are added up, so the batch size above is unchanged.
+max_cells: 4915200

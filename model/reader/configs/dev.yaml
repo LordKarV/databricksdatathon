@@ -1,0 +1,15 @@
+# Small run to prove the pipeline end to end on a laptop (about 3 minutes on an Apple M5, 16 GB).
+# python -m model.reader.run --config model/reader/configs/dev.yaml --skip-score
+name: dev
+backbones:
+  - {name: dev-minilm, backbone: microsoft/MiniLM-L12-H384-uncased}
+epochs: 1
+bs: 64
+max_len: 160
+lr: 3.0e-5
+eps: 0.05
+seed: 7
+limit: 20000          # training examples used
+checkpoint_every: 100
+max_cells: 1638400    # memory guard for 16 GB (rows x padded_length^2 per chunk)
+score_limit: 5000     # claims scored when --skip-score is not given (no parquet is written with a limit)
