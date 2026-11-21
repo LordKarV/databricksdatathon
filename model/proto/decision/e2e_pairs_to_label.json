@@ -1,0 +1,2937 @@
+[
+ {
+  "pair_id": "e2e_001",
+  "unique_id": "28726757-41f1-43c5-9556-e3ce109a67b5",
+  "name": "Dr. Sai MultiSpeciality Hospital Bargarh",
+  "city": "Bargarh",
+  "state": "Odisha",
+  "pin": "768028",
+  "service": "dialysis",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "B5_M0",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q16"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_002",
+  "unique_id": "f8e46a92-1286-459f-a170-7e5118508d14",
+  "name": "Life Line Hospital & Research Center",
+  "city": "Azamgarh",
+  "state": "Uttar Pradesh",
+  "pin": "276001",
+  "service": "mri",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q09"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_003",
+  "unique_id": "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b",
+  "name": "Sharda Hospital",
+  "city": "Greater Noida",
+  "state": "Uttar Pradesh",
+  "pin": "270001",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q29"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_004",
+  "unique_id": "ac382cdf-8ff9-4539-a453-00bec0989719",
+  "name": "Orchid Medical Centre",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834001",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q10",
+   "q39"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_005",
+  "unique_id": "ba5ff135-5768-41a9-844e-d6fd7cd99ed2",
+  "name": "Shri Sant Acchyut Maharaj Heart Hospital, Mardi Road, Amravati 444601",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444601",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q20"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_006",
+  "unique_id": "28c7548d-840d-496f-9fe2-8c14d2209f7a",
+  "name": "Parmeshwari Medical Centre",
+  "city": "Garhwa",
+  "state": "Jharkhand",
+  "pin": "822114",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q12"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_007",
+  "unique_id": "6c4a75be-44f2-4747-9aca-631feb5aa9d1",
+  "name": "Jagdale Mama Hospital",
+  "city": "Barshi",
+  "state": "Maharashtra",
+  "pin": "413401",
+  "service": "mri",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q21"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_008",
+  "unique_id": "22f6c258-b765-4864-9f48-d5e365a5a0be",
+  "name": "Tata Main Hospital, Jamshedpur, Jharkhand, India",
+  "city": "Jamshedpur",
+  "state": "Jharkhand",
+  "pin": "831001",
+  "service": "burn_care",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q15",
+   "q32"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_009",
+  "unique_id": "846902e8-a53b-42af-bc3c-e729cdc31931",
+  "name": "New B K Hospital",
+  "city": "Hajipur",
+  "state": "Bihar",
+  "pin": "844101",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q05"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_010",
+  "unique_id": "d14ca718-7f44-4ae0-8556-106ccaaac7f1",
+  "name": "Reynolds Memorial Hospital and Affiliated Clinics",
+  "city": "Washim",
+  "state": "Maharashtra",
+  "pin": "444505",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "B4_prior_only",
+   "B5_M0",
+   "WL",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q23"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_011",
+  "unique_id": "fc8fe2c3-9244-4ff6-96c5-885d7d1843d6",
+  "name": "Dr M. L. Dhawale Memorial Trust Hospital, Palghar",
+  "city": "Palghar",
+  "state": "Maharashtra",
+  "pin": "400060",
+  "service": "dialysis",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q24"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_012",
+  "unique_id": "3ad8df40-a285-413a-a75e-6839188f5110",
+  "name": "Vivekanand Hospital",
+  "city": "Jalna",
+  "state": "Maharashtra",
+  "pin": "431203",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q31"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_013",
+  "unique_id": "90bab675-3b99-4123-a205-e2923f37fff1",
+  "name": "Bharati Hospital",
+  "city": "Chandrapur",
+  "state": "Maharashtra",
+  "pin": "442402",
+  "service": "nicu",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_M2",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q18"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_014",
+  "unique_id": "ac5314ce-7ebd-4388-b7f4-0c94b0ac3002",
+  "name": "Asha Kiran Hospital, Lamtaput, Odisha",
+  "city": "Lamtaput",
+  "state": "Odisha",
+  "pin": "764081",
+  "service": "emergency_csection",
+  "methods": [
+   "B2_rule_grade",
+   "B5_M0",
+   "WL",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q13"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_015",
+  "unique_id": "ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa",
+  "name": "Soni Hospital",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pin": "302004",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B4_prior_only",
+   "B5_M0",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q33"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_016",
+  "unique_id": "f75d5250-6df0-46f5-8548-aa5705be2725",
+  "name": "Marwari Hospitals",
+  "city": "Guwahati",
+  "state": "Assam",
+  "pin": "781008",
+  "service": "nicu",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL",
+   "WL_fallback",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q36"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_017",
+  "unique_id": "16d9d5a6-ee35-4281-8a95-b280c1829886",
+  "name": "Naraina Medical College & Research Centre",
+  "city": "Kanpur",
+  "state": "Uttar Pradesh",
+  "pin": "208020",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q28"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_018",
+  "unique_id": "e3209079-d461-41f2-8ceb-581a2c893c48",
+  "name": "Christian Hospital Bissamcuttack",
+  "city": "Bissamcuttack",
+  "state": "Odisha",
+  "pin": "765019",
+  "service": "nicu",
+  "methods": [
+   "B4_prior_only",
+   "WL",
+   "abl_M2",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q14"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_019",
+  "unique_id": "04309af6-5084-4273-ba40-df461eb616fd",
+  "name": "Medox Hospital",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226021",
+  "service": "mri",
+  "methods": [
+   "B4_prior_only",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q34"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_020",
+  "unique_id": "5515df89-1c57-41a4-bb40-a2bc8d936dac",
+  "name": "Mehra Hospital",
+  "city": "Chandrapur",
+  "state": "Maharashtra",
+  "pin": "442402",
+  "service": "mri",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q30"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_021",
+  "unique_id": "66812208-efc9-4703-a55e-eab19c58a3b5",
+  "name": "All India Institute of Medical Sciences",
+  "city": "Bhubaneshwar",
+  "state": "Odisha",
+  "pin": "751024",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q38"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_022",
+  "unique_id": "6e5a5251-1622-4130-814f-3a2fd10513f4",
+  "name": "Nayan Jyoti Eye Hospital",
+  "city": "Auraiya",
+  "state": "Uttar Pradesh",
+  "pin": "206122",
+  "service": "emergency_csection",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_M2",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q06"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_023",
+  "unique_id": "7fa87636-fa2a-47fe-8240-c676b11d0599",
+  "name": "Katihar Medical College and Hospital, Katihar",
+  "city": "Katihar",
+  "state": "Bihar",
+  "pin": "854106",
+  "service": "nicu",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q11"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_024",
+  "unique_id": "8f65e34f-83cd-4dba-82bd-c67b645f18ec",
+  "name": "Pushpanjali Hospital",
+  "city": "Gorakhpur",
+  "state": "Uttar Pradesh",
+  "pin": "273001",
+  "service": "dialysis",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback",
+   "abl_M2",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q08"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_025",
+  "unique_id": "b347999d-583e-4a4c-94ef-2e577017999f",
+  "name": "Vardaan Hospital & Research Centre",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "835222",
+  "service": "emergency_csection",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q10"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_026",
+  "unique_id": "bbe21556-3364-4fdf-9784-f8e1ba11152b",
+  "name": "Shri Shyam Hospital",
+  "city": "Kotputli",
+  "state": "Rajasthan",
+  "pin": "303108",
+  "service": "burn_care",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q27"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_027",
+  "unique_id": "ccb0004a-70c8-4f28-b667-d2d4f73970d1",
+  "name": "Panvel Hospital",
+  "city": "Panvel",
+  "state": "Maharashtra",
+  "pin": "410206",
+  "service": "trauma_emergency",
+  "methods": [
+   "B3_llm_judge",
+   "B5_M0",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q25"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_028",
+  "unique_id": "1774eb01-bb63-4cbb-b1ad-c9b4cf03c605",
+  "name": "Harsh Hospital",
+  "city": "Motihari",
+  "state": "Bihar",
+  "pin": "854301",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WLpost_T2gate",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q01"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_029",
+  "unique_id": "2ffa0638-ea61-4e7c-98f3-4d7b24f8d0bd",
+  "name": "Apex Hospital",
+  "city": "Palwal",
+  "state": "Haryana",
+  "pin": "121102",
+  "service": "trauma_emergency",
+  "methods": [
+   "B3_llm_judge",
+   "B5_M0",
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_030",
+  "unique_id": "3732a3f9-08a8-493b-acf7-7b66d5fa2b0c",
+  "name": "Buddha Hospital and Research Institute",
+  "city": "Gaya",
+  "state": "Bihar",
+  "pin": "823001",
+  "service": "nicu",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback",
+   "abl_M2",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q02"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_031",
+  "unique_id": "3dd77c71-8a4f-4030-be7d-a1058b035d49",
+  "name": "Darbhanga Children Hospital",
+  "city": "Darbhanga",
+  "state": "Bihar",
+  "pin": "846001",
+  "service": "dialysis",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho"
+  ],
+  "query_ids": [
+   "q03"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_032",
+  "unique_id": "68355ae5-c75e-4624-aa07-2d03b3ccbdc5",
+  "name": "Sheshraj Medicare",
+  "city": "Malda",
+  "state": "West Bengal",
+  "pin": "732101",
+  "service": "nicu",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q11"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_033",
+  "unique_id": "ad479b83-beac-437a-b1f6-c8d1dd14cf0d",
+  "name": "Jyothi Hospital",
+  "city": "Kuruda",
+  "state": "Odisha",
+  "pin": "756056",
+  "service": "burn_care",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q15",
+   "q32"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_034",
+  "unique_id": "d6a60d83-5524-4010-91a6-b618bd4cf673",
+  "name": "Parijat Hospital",
+  "city": "Trimbak",
+  "state": "Nashik",
+  "pin": "444603",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q19"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_035",
+  "unique_id": "fccc2b9a-9df1-4883-a05e-d35a6de669f7",
+  "name": "Green City Hospital",
+  "city": "Bhopal",
+  "state": "Madhya Pradesh",
+  "pin": "462001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q40"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_036",
+  "unique_id": "257efb93-0148-431c-a2d0-c81e8dbff406",
+  "name": "Medicover Woman & Child Hospitals",
+  "city": "Visakhapatnam",
+  "state": "Andhra Pradesh",
+  "pin": "530022",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B3_llm_judge",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q13"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_037",
+  "unique_id": "37831f8b-ebbe-4dce-99ff-16d09921820d",
+  "name": "Purvanchal Metrocity Hospital",
+  "city": "Gorakhpur",
+  "state": "Uttar Pradesh",
+  "pin": "273002",
+  "service": "dialysis",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "WLpost_T2gate",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q08"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_038",
+  "unique_id": "5e0b96cf-e221-4e1f-bd1f-e9b49d3eca7e",
+  "name": "R. B. Memorial Hospital",
+  "city": "Darbhanga",
+  "state": "Bihar",
+  "pin": "846003",
+  "service": "dialysis",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q03"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_039",
+  "unique_id": "78b1a621-4c44-4b8f-8cf1-416cd87c73c8",
+  "name": "Neuro Spine & Super Speciality Hospital",
+  "city": "Sikar",
+  "state": "Rajasthan",
+  "pin": "332001",
+  "service": "burn_care",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "B4_prior_only",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q27"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_040",
+  "unique_id": "830706f4-456c-4a54-8ab3-e9a730f3c531",
+  "name": "Referal Hospital",
+  "city": "Nalanda",
+  "state": "Bihar",
+  "pin": "811101",
+  "service": "emergency_csection",
+  "methods": [
+   "WL",
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q01"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_041",
+  "unique_id": "a52cd60a-a5c0-427e-bfbc-e9c63dc9410a",
+  "name": "Satyavrat Hospital",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800020",
+  "service": "dialysis",
+  "methods": [
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_042",
+  "unique_id": "adfecbb0-816b-432f-b063-67ad8c6b0203",
+  "name": "Aiman Nursing Home",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226015",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B3_llm_judge",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q06"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_043",
+  "unique_id": "e93a7ae0-8d8f-49d1-9536-e2a2c0759a10",
+  "name": "Nemcare SuperSpeciality Hospital",
+  "city": "Guwahati",
+  "state": "Assam",
+  "pin": "781005",
+  "service": "burn_care",
+  "methods": [
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q37"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_044",
+  "unique_id": "f115e7cd-6441-4993-9cc5-08335a7c57f0",
+  "name": "Dr. A Barkat Multispeciality Hospital",
+  "city": "Gaya",
+  "state": "Bihar",
+  "pin": "823001",
+  "service": "nicu",
+  "methods": [
+   "WL",
+   "WLpost_T2gate",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q02"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_045",
+  "unique_id": "f52051e0-fbd4-4b16-bdf3-c1eb5ee67902",
+  "name": "Maa Ganga Memorial Baheti Hospital",
+  "city": "Washim",
+  "state": "Maharashtra",
+  "pin": "444505",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q23"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_046",
+  "unique_id": "05e535b3-d6b2-4b91-bf6a-d6dfd8505296",
+  "name": "Smile Kraft Dental Clinic",
+  "city": "Palamu",
+  "state": "Jharkhand",
+  "pin": "822110",
+  "service": "trauma_emergency",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q12"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_047",
+  "unique_id": "18a41f66-0543-4c65-b1ef-e94ab09858a7",
+  "name": "Hamidia Hospital",
+  "city": "Bhopal",
+  "state": "Madhya Pradesh",
+  "pin": "462001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q40"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_048",
+  "unique_id": "1f4a73fe-3442-4f03-8255-d27abcd967fd",
+  "name": "Manwatkar Multispeciality Hospital",
+  "city": "Chandrapur",
+  "state": "Maharashtra",
+  "pin": "442401",
+  "service": "nicu",
+  "methods": [
+   "WL",
+   "abl_PL1",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q18"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_049",
+  "unique_id": "3f6542b5-2ab1-4602-aa55-45ac9fa77975",
+  "name": "Ashwini Hospital",
+  "city": "Cuttack",
+  "state": "Odisha",
+  "pin": "753014",
+  "service": "burn_care",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q32"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_050",
+  "unique_id": "4f8a97c0-b755-483c-b846-45af9f0f1c98",
+  "name": "Jansewa Hospital",
+  "city": "Balrampur",
+  "state": "Uttar Pradesh",
+  "pin": "221107",
+  "service": "nicu",
+  "methods": [
+   "abl_nobucket",
+   "abl_nocontext",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_051",
+  "unique_id": "79490496-83f4-43c7-8531-c0139c723364",
+  "name": "Akshay Hospital",
+  "city": "Osmanabad",
+  "state": "Maharashtra",
+  "pin": "413507",
+  "service": "burn_care",
+  "methods": [
+   "abl_M2",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_052",
+  "unique_id": "8705e450-49f5-4e48-bdb1-906e49a6e655",
+  "name": "Park Hospital, Faridabad",
+  "city": "Faridabad",
+  "state": "Haryana",
+  "pin": "121006",
+  "service": "trauma_emergency",
+  "methods": [
+   "B4_prior_only",
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_053",
+  "unique_id": "8a522979-8cd7-4b38-8048-6beddc7afc39",
+  "name": "Dr. Panjabrao Deshmukh Memorial Medical College and Hospital",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444602",
+  "service": "emergency_csection",
+  "methods": [
+   "WL",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q19"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_054",
+  "unique_id": "9226ba4b-c128-413e-91df-632e02b26dd6",
+  "name": "Blue Wheel Hospital",
+  "city": "Bhubaneshwar",
+  "state": "Odisha",
+  "pin": "751010",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B0_nearest_mention",
+   "abl_M2",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q38"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_055",
+  "unique_id": "b5a57699-76c4-4ba4-9936-713c233e752a",
+  "name": "King George's Medical University, Lucknow",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226003",
+  "service": "mri",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q34"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_056",
+  "unique_id": "c4674762-6691-404b-ac94-86b03d47fa4d",
+  "name": "Meghana Nursing Home",
+  "city": "Punit Nagar Palghar",
+  "state": "Maharashtra",
+  "pin": "401404",
+  "service": "dialysis",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q24"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_057",
+  "unique_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+  "name": "Advanced Neuro Hospital",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800001",
+  "service": "dialysis",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_058",
+  "unique_id": "fd558b5c-5389-4006-b813-6eb29af563f2",
+  "name": "Shri Gajanan Heart &Eye Hospital",
+  "city": "Jalgaon",
+  "state": "Maharashtra",
+  "pin": "431508",
+  "service": "mri",
+  "methods": [
+   "WL",
+   "abl_PL1",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q30"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_059",
+  "unique_id": "2a4f2404-c9c3-4878-bd3a-a344d83fc3f3",
+  "name": "Bani Park Hospital",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pin": "302016",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B2_rule_grade",
+   "B3_llm_judge",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q33"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_060",
+  "unique_id": "32fd429c-dc2f-4ff6-bdc6-c3cd6e9cd8f0",
+  "name": "Patel Dental Clinic",
+  "city": "Taloda",
+  "state": "Maharashtra",
+  "pin": "425413",
+  "service": "dialysis",
+  "methods": [
+   "B2_rule_grade",
+   "B5_M0",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q17"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_061",
+  "unique_id": "3f0d836c-9e5b-4e24-add9-c217bcf684df",
+  "name": "Dr. Panjabrao Alias Bhausaheb Deshmukh Memorial Medical College, Amravati",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444603",
+  "service": "emergency_csection",
+  "methods": [
+   "B4_prior_only",
+   "abl_nobucket",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q19"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_062",
+  "unique_id": "51179ca4-f342-4014-92d7-c2d2ef1adbb1",
+  "name": "Srinivasa Nursing Home",
+  "city": "Adilabad",
+  "state": "Andhra Pradesh",
+  "pin": "504001",
+  "service": "mri",
+  "methods": [
+   "B5_M0",
+   "abl_M2",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q30"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_063",
+  "unique_id": "52e36201-402e-4326-9e12-28816c9c58ef",
+  "name": "Jeevan Deep Chikitsalay",
+  "city": "Gonda",
+  "state": "Uttar Pradesh",
+  "pin": "271002",
+  "service": "nicu",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_064",
+  "unique_id": "547f6f09-3974-4a2f-b458-c9a4b664518f",
+  "name": "Katiyar Nursing Home",
+  "city": "Hardoi",
+  "state": "Uttar Pradesh",
+  "pin": "241001",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q28"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_065",
+  "unique_id": "5cabe1f7-e4f4-427c-b44a-be34e57f11ba",
+  "name": "Healing Touch Superspeciality Hospital",
+  "city": "Bhagalpur",
+  "state": "Bihar",
+  "pin": "812001",
+  "service": "burn_care",
+  "methods": [
+   "abl_nobucket",
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_066",
+  "unique_id": "64808c12-b9ed-4e98-bf22-0e5c984d5cde",
+  "name": "Jalna Mission Hospital",
+  "city": "Jalna",
+  "state": "Maharashtra",
+  "pin": "431203",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q31"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_067",
+  "unique_id": "7fa87636-fa2a-47fe-8240-c676b11d0599",
+  "name": "Katihar Medical College and Hospital, Katihar",
+  "city": "Katihar",
+  "state": "Bihar",
+  "pin": "854106",
+  "service": "burn_care",
+  "methods": [
+   "B4_prior_only",
+   "WL",
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_068",
+  "unique_id": "8146f2e6-3f68-42e5-a54b-d8281aa05081",
+  "name": "Sparsh Hospital - Plot No 141, Sai Arcade, Mission Compound, Line Ali, Opposite Orion Mall, Panvel, Navi Mumbai, Maharashtra 410206",
+  "city": "Panvel",
+  "state": "Maharashtra",
+  "pin": "410206",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q25"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_069",
+  "unique_id": "88801874-5e1d-4348-bd03-425d2f3cecb6",
+  "name": "Shreyash Hospital",
+  "city": "Mahalung",
+  "state": "Malshiras",
+  "pin": "416310",
+  "service": "dialysis",
+  "methods": [
+   "WL",
+   "abl_nobucket",
+   "abl_noecho"
+  ],
+  "query_ids": [
+   "q17"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_070",
+  "unique_id": "8d5ed75d-35a7-4ab7-a39e-cd3b397cd971",
+  "name": "Baibhav Shishu Care",
+  "city": "Gaya",
+  "state": "Bihar",
+  "pin": "823001",
+  "service": "nicu",
+  "methods": [
+   "B1_keyword_count",
+   "B4_prior_only",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q02"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_071",
+  "unique_id": "8ed2e983-dadf-4caf-b9fa-821975ef8394",
+  "name": "CritiCare Asia Multispeciality Hospital Kurla",
+  "city": "Kurla",
+  "state": "Maharashtra",
+  "pin": "400039",
+  "service": "burn_care",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_072",
+  "unique_id": "9d67abc9-4dd2-4909-b011-0fdfe36a74e9",
+  "name": "Aruna Memorial Hospital",
+  "city": "Kamrup Metro",
+  "state": "Assam",
+  "pin": "781005",
+  "service": "burn_care",
+  "methods": [
+   "B5_M0",
+   "abl_M2",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q37"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_073",
+  "unique_id": "ae711d74-537e-4b53-9d44-84e17eb89a53",
+  "name": "Shanti Nursing Home",
+  "city": "Siliguri",
+  "state": "West Bengal",
+  "pin": "734001",
+  "service": "burn_care",
+  "methods": [
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_074",
+  "unique_id": "b6a873ce-095b-4b66-8605-387951737ad3",
+  "name": "Dr. Lal\u2019s Hospital & Research Centre",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834002",
+  "service": "emergency_csection",
+  "methods": [
+   "B0_nearest_mention",
+   "B1_keyword_count",
+   "B3_llm_judge"
+  ],
+  "query_ids": [
+   "q10"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_075",
+  "unique_id": "d5e69311-c95f-476f-98cc-92e20b668260",
+  "name": "Ekveera Hospital",
+  "city": "Aurangabad",
+  "state": "Maharashtra",
+  "pin": "431001",
+  "service": "burn_care",
+  "methods": [
+   "B1_keyword_count",
+   "B2_rule_grade",
+   "B3_llm_judge"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_076",
+  "unique_id": "e03a7d10-c0eb-4d3e-9696-b1218359ed3d",
+  "name": "Divine Heart & Multispeciality Hospital",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226010",
+  "service": "nicu",
+  "methods": [
+   "B0_nearest_mention",
+   "B3_llm_judge",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_077",
+  "unique_id": "e27fe48f-5ca8-4fae-a5bf-d70058262e21",
+  "name": "Big Apollo Spectra Hospitals",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800020",
+  "service": "dialysis",
+  "methods": [
+   "B5_M0",
+   "abl_M2",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_078",
+  "unique_id": "f6e9dc6e-61b3-4d4c-b2f5-01d7ba091510",
+  "name": "Shahi Global Hospital",
+  "city": "Gorakhpur",
+  "state": "Uttar Pradesh",
+  "pin": "273016",
+  "service": "dialysis",
+  "methods": [
+   "B5_M0",
+   "WL",
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q08"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_079",
+  "unique_id": "fe64c718-2b54-4740-b78a-fa0f1911389d",
+  "name": "Mhatre Accident Hospital",
+  "city": "Panvel",
+  "state": "Maharashtra",
+  "pin": "410206",
+  "service": "trauma_emergency",
+  "methods": [
+   "B2_rule_grade",
+   "WL_fallback",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q25"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_080",
+  "unique_id": "0971a1ce-0f7b-4f74-87c2-1c749970f128",
+  "name": "Kush Eye Care",
+  "city": "Bhabua",
+  "state": "Bihar",
+  "pin": "821101",
+  "service": "trauma_emergency",
+  "methods": [
+   "B5_M0",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q29"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_081",
+  "unique_id": "18825020-18e2-4aea-be88-ff91bf64d3c0",
+  "name": "Utkal Hospital",
+  "city": "Bhubaneswar",
+  "state": "Odisha",
+  "pin": "751021",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q38"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_082",
+  "unique_id": "2b5d4240-8105-4e60-adb7-01f8cee3a622",
+  "name": "Charak Hospital",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226003",
+  "service": "mri",
+  "methods": [
+   "B5_M0",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q34"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_083",
+  "unique_id": "3141a21e-ce41-4080-8915-3a8af6b8e610",
+  "name": "Nikam Parmar Hospital",
+  "city": "Panvel",
+  "state": "Maharashtra",
+  "pin": "410206",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q25"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_084",
+  "unique_id": "31625db4-d5c4-4448-b21d-008d8c444a82",
+  "name": "Nirmala Nursing Home",
+  "city": "Hardoi",
+  "state": "Uttar Pradesh",
+  "pin": "241001",
+  "service": "trauma_emergency",
+  "methods": [
+   "B3_llm_judge",
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q28"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_085",
+  "unique_id": "35af3912-21f2-4df5-b2d4-d14bc3e5bd9e",
+  "name": "Chintamani Dental Clinic",
+  "city": "Yavatmal",
+  "state": "Maharashtra",
+  "pin": "445001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B5_M0",
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q20"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_086",
+  "unique_id": "46443b00-ba14-48c0-9070-b2e0b74eef45",
+  "name": "Kalahandi Dental Clinic",
+  "city": "Bhawanipatna",
+  "state": "Odisha",
+  "pin": "766001",
+  "service": "nicu",
+  "methods": [
+   "B2_rule_grade",
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q14"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_087",
+  "unique_id": "52e80a01-c62b-4cd2-b699-2a2b1806ef78",
+  "name": "Narmada Truama Centre",
+  "city": "Bhopal",
+  "state": "Madhya Pradesh",
+  "pin": "462016",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B5_M0",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q40"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_088",
+  "unique_id": "5ab66909-41a2-4699-969c-3cbe8b127a6b",
+  "name": "Parbhani Icu And Trauma Care, New Mondha",
+  "city": "Parbhani",
+  "state": "New Mondha",
+  "pin": "431401",
+  "service": "burn_care",
+  "methods": [
+   "B0_nearest_mention",
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_089",
+  "unique_id": "6a8e6299-020e-4d23-8d72-d181415594be",
+  "name": "Nightingale Hospital & Diagnostics",
+  "city": "Matigara",
+  "state": "West Bengal",
+  "pin": "734010",
+  "service": "burn_care",
+  "methods": [
+   "B0_nearest_mention",
+   "B3_llm_judge"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_090",
+  "unique_id": "708de7d6-5f66-48e5-a722-d1253d560e2c",
+  "name": "Bansal Hospital",
+  "city": "Bhopal",
+  "state": "Madhya Pradesh",
+  "pin": "462016",
+  "service": "cardiac_surgery",
+  "methods": [
+   "abl_noecho",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q40"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_091",
+  "unique_id": "77d53507-d649-41f2-a65c-571bf146ce0b",
+  "name": "Yasko Dental Hospital",
+  "city": "Sursand",
+  "state": "Bihar",
+  "pin": "843331",
+  "service": "emergency_csection",
+  "methods": [
+   "B2_rule_grade",
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q01"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_092",
+  "unique_id": "79490496-83f4-43c7-8531-c0139c723364",
+  "name": "Akshay Hospital",
+  "city": "Osmanabad",
+  "state": "Maharashtra",
+  "pin": "413507",
+  "service": "mri",
+  "methods": [
+   "B5_M0",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q21"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_093",
+  "unique_id": "7ada90ef-2c08-442f-ad2f-283360f27582",
+  "name": "Dr. Global Healthcare & Diabetes Centre (Dr. Naween Kumar)",
+  "city": "Darbhanga",
+  "state": "Bihar",
+  "pin": "846004",
+  "service": "dialysis",
+  "methods": [
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q03"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_094",
+  "unique_id": "9d67abc9-4dd2-4909-b011-0fdfe36a74e9",
+  "name": "Aruna Memorial Hospital",
+  "city": "Kamrup Metro",
+  "state": "Assam",
+  "pin": "781005",
+  "service": "nicu",
+  "methods": [
+   "B5_M0",
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q36"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_095",
+  "unique_id": "a45cac41-6d27-41ab-878b-7dfb89ec8f33",
+  "name": "Charak Hospital And Research Centre",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226003",
+  "service": "mri",
+  "methods": [
+   "B1_keyword_count",
+   "abl_nobucket"
+  ],
+  "query_ids": [
+   "q34"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_096",
+  "unique_id": "b668392a-bc18-4bee-b17e-0155f07e966a",
+  "name": "Paras Global Darbhanga",
+  "city": "Darbhanga",
+  "state": "Bihar",
+  "pin": "846003",
+  "service": "dialysis",
+  "methods": [
+   "abl_M2",
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q03"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_097",
+  "unique_id": "befcb04b-473b-4be0-9292-1fe3cfffc415",
+  "name": "Sahdeo Hospital",
+  "city": "Greater Noida",
+  "state": "Uttar Pradesh",
+  "pin": "201310",
+  "service": "trauma_emergency",
+  "methods": [
+   "B2_rule_grade",
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_098",
+  "unique_id": "050479fe-82a8-404b-a41b-a61d15eb9577",
+  "name": "Jindal Hospital & Cancer Centre",
+  "city": "Palwal",
+  "state": "Haryana",
+  "pin": "121102",
+  "service": "trauma_emergency",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_099",
+  "unique_id": "12a7f108-100c-4b7f-af8c-928e94a870e4",
+  "name": "Keshav Dental Care",
+  "city": "Purnia",
+  "state": "Bihar",
+  "pin": "854304",
+  "service": "burn_care",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_100",
+  "unique_id": "13e882f3-0534-4fff-b524-016a3babe907",
+  "name": "Mantri Surgical & Maternity Hospital",
+  "city": "Jalna",
+  "state": "Maharashtra",
+  "pin": "431203",
+  "service": "trauma_emergency",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q31"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_101",
+  "unique_id": "167912b9-1a1e-4345-a524-1608bb9f9658",
+  "name": "Kohinoor Hospital",
+  "city": "Kurla",
+  "state": "Maharashtra",
+  "pin": "400070",
+  "service": "burn_care",
+  "methods": [
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_102",
+  "unique_id": "1f84bdca-6d7d-4064-bea1-8f487fbf67a4",
+  "name": "Rajendra Institute of Medical Sciences",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834009",
+  "service": "emergency_csection",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q10",
+   "q39"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_103",
+  "unique_id": "239cfb6f-cfd6-4653-984d-aaeeceb1c05e",
+  "name": "Smit Hospital",
+  "city": "Songadh",
+  "state": "Gujarat",
+  "pin": "425418",
+  "service": "dialysis",
+  "methods": [
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q17"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_104",
+  "unique_id": "242efdf5-0709-4acd-9c04-7e4f2665a803",
+  "name": "Arsh Superspeciality Hospital",
+  "city": "Gaya",
+  "state": "Bihar",
+  "pin": "823001",
+  "service": "nicu",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q02"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_105",
+  "unique_id": "2e26fd09-43d5-41e6-89d3-ebc631868e57",
+  "name": "Sunshine Superspeciality Hospital",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444606",
+  "service": "emergency_csection",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q19"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_106",
+  "unique_id": "2e5f9d46-fb08-450b-9c8b-294009f0025b",
+  "name": "Prashant Memorial Charitable Hospital",
+  "city": "Muzaffarpur",
+  "state": "Bihar",
+  "pin": "842001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q05"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_107",
+  "unique_id": "3603f591-274c-4f01-a807-5ae2d71c7fe4",
+  "name": "Diamond Harbour Government Medical College and Hospital",
+  "city": "Diamond Harbour",
+  "state": "West Bengal",
+  "pin": "743331",
+  "service": "burn_care",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q32"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_108",
+  "unique_id": "3973f354-7588-4375-a5c1-f85957185077",
+  "name": "CKS Hospital",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pin": "302013",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q33"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_109",
+  "unique_id": "39aaf176-b31f-4906-8c8e-f72a2049cb6c",
+  "name": "Dr. Saudamini Mohapatra - Maternity Care Hospital & IVF Centre",
+  "city": "Bhubaneshwar",
+  "state": "Odisha",
+  "pin": "751007",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q38"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_110",
+  "unique_id": "39bd7760-9103-4936-8f37-c968c6f7c5aa",
+  "name": "Tula Hospital",
+  "city": "Palwal",
+  "state": "Haryana",
+  "pin": "121102",
+  "service": "trauma_emergency",
+  "methods": [
+   "B0_nearest_mention"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_111",
+  "unique_id": "3ca09c01-2f2c-4c4a-8bad-bff2d2b6ae4b",
+  "name": "Arya Hospital",
+  "city": "Delhi",
+  "state": "Delhi",
+  "pin": "110059",
+  "service": "burn_care",
+  "methods": [
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q27"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_112",
+  "unique_id": "43d0e338-a916-4791-8823-50c671a22ebf",
+  "name": "Wellsun Medicity Hospital",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226029",
+  "service": "nicu",
+  "methods": [
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_113",
+  "unique_id": "4616c935-ae1b-4d40-ae5a-3d6c31a90206",
+  "name": "Government Medical College And Hospital Chandrapur",
+  "city": "Chandrapur",
+  "state": "Maharashtra",
+  "pin": "440018",
+  "service": "nicu",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q18"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_114",
+  "unique_id": "49c1c293-cab9-4586-be17-938004208f0f",
+  "name": "Drishti Eye Hospital",
+  "city": "Tukum",
+  "state": "Maharashtra",
+  "pin": "442401",
+  "service": "nicu",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q18"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_115",
+  "unique_id": "4afa8b92-64c8-4921-a3a8-6c8a81e6c786",
+  "name": "Runwal Accident and Maternity Hospital",
+  "city": "Jalna",
+  "state": "Maharashtra",
+  "pin": "431203",
+  "service": "trauma_emergency",
+  "methods": [
+   "B3_llm_judge"
+  ],
+  "query_ids": [
+   "q31"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_116",
+  "unique_id": "4ddde88c-fb72-4ed5-bfa0-8bf647bb3044",
+  "name": "Skin Hair Laser Clinic",
+  "city": "Purnea",
+  "state": "Bihar",
+  "pin": "846004",
+  "service": "burn_care",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_117",
+  "unique_id": "52e36201-402e-4326-9e12-28816c9c58ef",
+  "name": "Jeevan Deep Chikitsalay",
+  "city": "Gonda",
+  "state": "Uttar Pradesh",
+  "pin": "271002",
+  "service": "emergency_csection",
+  "methods": [
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q06"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_118",
+  "unique_id": "5378eabd-e500-4a0a-8b55-c23b9129c647",
+  "name": "Dr Sanjay Jamdade Dental Clinic",
+  "city": "Boisar",
+  "state": "Palghar District",
+  "pin": "401501",
+  "service": "dialysis",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q24"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_119",
+  "unique_id": "57259542-c079-4028-a504-8201fc7401a3",
+  "name": "Medicare Hospital",
+  "city": "Mumbai",
+  "state": "Maharashtra",
+  "pin": "400059",
+  "service": "dialysis",
+  "methods": [
+   "abl_noown"
+  ],
+  "query_ids": [
+   "q17"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_120",
+  "unique_id": "59b6c976-2d44-4705-bcff-a83605983487",
+  "name": "RAM HOSPITAL & RESEARCH CENTRE, KANPUR",
+  "city": "Kanpur",
+  "state": "Uttar Pradesh",
+  "pin": "209217",
+  "service": "trauma_emergency",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q28"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_121",
+  "unique_id": "5cba6b57-d99a-4c81-82d8-5d328666d44b",
+  "name": "Ranchi Cancer Hospital & Research Centre(Tata Trusts),Ranchi,Jharkhand",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834006",
+  "service": "emergency_csection",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q10"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_122",
+  "unique_id": "5e6fe7e7-8929-4b07-9687-a6054091f89c",
+  "name": "Mishra Hospital Test Tube Baby Centre",
+  "city": "Muzaffarpur",
+  "state": "Bihar",
+  "pin": "842001",
+  "service": "emergency_csection",
+  "methods": [
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q01"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_123",
+  "unique_id": "69686f67-e52c-48a8-8ac1-d837423bc81d",
+  "name": "Shri Ganpati Netralaya, Jalna",
+  "city": "Jalna",
+  "state": "Maharashtra",
+  "pin": "431203",
+  "service": "trauma_emergency",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q31"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_124",
+  "unique_id": "776c147a-d38d-466b-8909-e0ef3df36877",
+  "name": "Rahmania Medical Centre Private Limited",
+  "city": "Motihari",
+  "state": "Bihar",
+  "pin": "845401",
+  "service": "emergency_csection",
+  "methods": [
+   "abl_PL1"
+  ],
+  "query_ids": [
+   "q01"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_125",
+  "unique_id": "788a47ec-36ae-43ba-afb0-ae07df9b1579",
+  "name": "Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)",
+  "city": "Guwahati",
+  "state": "Assam",
+  "pin": "781006",
+  "service": "burn_care",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q37"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_126",
+  "unique_id": "7e48608f-183e-4af3-9c0e-60eb1f8c21e4",
+  "name": "Gomati Hospital",
+  "city": "Farrukhabad",
+  "state": "Uttar Pradesh",
+  "pin": "209625",
+  "service": "trauma_emergency",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q28"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_127",
+  "unique_id": "7f0a880d-249c-471f-a02b-7c0dffd0caa4",
+  "name": "Raj Hospital & Research Centre",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834001",
+  "service": "emergency_csection",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q39"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_128",
+  "unique_id": "812054bf-6c53-4f85-bbfc-cedc18fda605",
+  "name": "National Super Speciality Hospital And Trauma Centre",
+  "city": "Azamgarh",
+  "state": "Uttar Pradesh",
+  "pin": "276001",
+  "service": "mri",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q09"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_129",
+  "unique_id": "84caa9ff-3265-4bcd-882e-6e285d92cb66",
+  "name": "Khetan Heart & Super Specialty Hospital",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pin": "302039",
+  "service": "cardiac_surgery",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q33"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_130",
+  "unique_id": "8a522979-8cd7-4b38-8048-6beddc7afc39",
+  "name": "Dr. Panjabrao Deshmukh Memorial Medical College and Hospital",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444602",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q20"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_131",
+  "unique_id": "8b89a5c7-7c12-449c-b616-5348e0e74a1a",
+  "name": "Gugale Memorial Hospital",
+  "city": "Latur",
+  "state": "Maharashtra",
+  "pin": "413512",
+  "service": "mri",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q21"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_132",
+  "unique_id": "8dc34944-6693-4615-b6d7-0968c332c852",
+  "name": "Shri Ram Singh MultiSpeciality Hospital",
+  "city": "Noida",
+  "state": "Uttar Pradesh",
+  "pin": "201301",
+  "service": "burn_care",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q27"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_133",
+  "unique_id": "8f8d8925-c4a2-460b-9bf1-128a4737e275",
+  "name": "K.C.Memorial Eye Hospital, Jaipur",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pin": "302001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B0_nearest_mention"
+  ],
+  "query_ids": [
+   "q33"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_134",
+  "unique_id": "90bab675-3b99-4123-a205-e2923f37fff1",
+  "name": "Bharati Hospital",
+  "city": "Chandrapur",
+  "state": "Maharashtra",
+  "pin": "442402",
+  "service": "mri",
+  "methods": [
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q30"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_135",
+  "unique_id": "916f1d0b-68fc-47cb-89da-918983e85501",
+  "name": "Bahraich Diagnostic Centre",
+  "city": "Bahraich",
+  "state": "Uttar Pradesh",
+  "pin": "271801",
+  "service": "emergency_csection",
+  "methods": [
+   "B2_rule_grade"
+  ],
+  "query_ids": [
+   "q06"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_136",
+  "unique_id": "948a0b3c-182d-4d78-b0bf-1537a7982e3a",
+  "name": "ANVI Newborn and Child Hospital",
+  "city": "Ranchi",
+  "state": "Jharkhand",
+  "pin": "834001",
+  "service": "emergency_csection",
+  "methods": [
+   "B5_M0"
+  ],
+  "query_ids": [
+   "q39"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_137",
+  "unique_id": "96605aef-2fe1-4da6-a81f-c38537a08713",
+  "name": "Patna Dialysis Centre",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800016",
+  "service": "dialysis",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_138",
+  "unique_id": "98d3ab22-db5b-4913-90b7-7c2147a1cba7",
+  "name": "Yadav Super Speciality Hospital",
+  "city": "Chhatrapati Sambhaji Nagar",
+  "state": "Maharashtra",
+  "pin": "431005",
+  "service": "burn_care",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_139",
+  "unique_id": "9aee17a7-9e57-4b5e-9804-97c0c2177c2f",
+  "name": "ANS Super Speciality Hospital",
+  "city": "Greater Noida",
+  "state": "Uttar Pradesh",
+  "pin": "201308",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q26"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_140",
+  "unique_id": "9dcac40a-eecb-49b3-b528-c602b9359eff",
+  "name": "G. S. Memorial Plastic Surgery Hospital And Trauma Center",
+  "city": "Varanasi",
+  "state": "Uttar Pradesh",
+  "pin": "221010",
+  "service": "trauma_emergency",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q29"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_141",
+  "unique_id": "a0c357ba-ca01-41f8-8428-b36a94a35096",
+  "name": "Yadav Dental Care Clinic - Balrampur, Balrampur",
+  "city": "Balrampur",
+  "state": "Balrampur",
+  "pin": "271200",
+  "service": "nicu",
+  "methods": [
+   "B2_rule_grade"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_142",
+  "unique_id": "a122e838-90c4-4be0-a4cc-0b66e0ea62a0",
+  "name": "Desun Hospital",
+  "city": "Siliguri",
+  "state": "West Bengal",
+  "pin": "734012",
+  "service": "burn_care",
+  "methods": [
+   "WLpost_T2gate"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_143",
+  "unique_id": "a2865ee0-10ce-4b35-8a45-43600d9de794",
+  "name": "Onkar Hospital",
+  "city": "Supa",
+  "state": "Maharashtra",
+  "pin": "414301",
+  "service": "burn_care",
+  "methods": [
+   "WL_fallback"
+  ],
+  "query_ids": [
+   "q22"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_144",
+  "unique_id": "a39093c2-60d1-4457-8963-8f5ce704ed86",
+  "name": "Visakha Institute of Medical Sciences",
+  "city": "Visakhapatnam",
+  "state": "Andhra Pradesh",
+  "pin": "530040",
+  "service": "emergency_csection",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q13"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_145",
+  "unique_id": "a8f21439-6a36-4a87-b67f-71ed343e05f3",
+  "name": "City Dialysis Centre",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800014",
+  "service": "dialysis",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_146",
+  "unique_id": "adfecbb0-816b-432f-b063-67ad8c6b0203",
+  "name": "Aiman Nursing Home",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226015",
+  "service": "nicu",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_147",
+  "unique_id": "b2db2916-a5db-42ab-87f4-5f9581695f4e",
+  "name": "Nemcare Hospital",
+  "city": "Guwahati",
+  "state": "Kamrup",
+  "pin": "781005",
+  "service": "nicu",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q36"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_148",
+  "unique_id": "b94c3b56-febe-41cc-9219-3ba755fe2d4c",
+  "name": "Sadar Hospital",
+  "city": "Jamshedpur",
+  "state": "Jharkhand",
+  "pin": "814133",
+  "service": "burn_care",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q04"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_149",
+  "unique_id": "c5d3f408-4674-4e52-95c8-40871e5ed3f3",
+  "name": "Chintamani Hospital",
+  "city": "Amravati",
+  "state": "Maharashtra",
+  "pin": "444604",
+  "service": "emergency_csection",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q19"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_150",
+  "unique_id": "c80ad4c1-cdaa-4254-a07b-7cc0364d7c5d",
+  "name": "Krishna Medical Centre",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226001",
+  "service": "nicu",
+  "methods": [
+   "B1_keyword_count"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_151",
+  "unique_id": "d2726883-b75f-4292-93ad-7b88fc74e311",
+  "name": "Indira Gandhi Institute of Medical Sciences",
+  "city": "Patna",
+  "state": "Bihar",
+  "pin": "800014",
+  "service": "dialysis",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q35"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_152",
+  "unique_id": "d35ebef2-dc29-4656-a598-c338731ff3f2",
+  "name": "Malda Medical College and Hospital",
+  "city": "Malda",
+  "state": "West Bengal",
+  "pin": "732101",
+  "service": "nicu",
+  "methods": [
+   "abl_nocontext"
+  ],
+  "query_ids": [
+   "q11"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_153",
+  "unique_id": "d4066f5a-ad1f-48b9-92cf-6b32431939a8",
+  "name": "Dr Ram Manohar Lohia Institute of Medical Sciences",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226010",
+  "service": "emergency_csection",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q06"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_154",
+  "unique_id": "d4066f5a-ad1f-48b9-92cf-6b32431939a8",
+  "name": "Dr Ram Manohar Lohia Institute of Medical Sciences",
+  "city": "Lucknow",
+  "state": "Uttar Pradesh",
+  "pin": "226010",
+  "service": "nicu",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q07"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_155",
+  "unique_id": "dc642127-603b-4dc7-8681-14686cf0c5c3",
+  "name": "Chirayu Health Medi Care",
+  "city": "Bhopal",
+  "state": "Madhya Pradesh",
+  "pin": "462001",
+  "service": "cardiac_surgery",
+  "methods": [
+   "B0_nearest_mention"
+  ],
+  "query_ids": [
+   "q40"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_156",
+  "unique_id": "de22190c-09b3-47fa-8882-77d3fd20c336",
+  "name": "Gitaram Hospital",
+  "city": "Murshidabad",
+  "state": "West Bengal",
+  "pin": "742187",
+  "service": "nicu",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q11"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_157",
+  "unique_id": "e3c4aeae-33c7-4dbc-9726-787dbf3aba8e",
+  "name": "Sethi Children Hospital",
+  "city": "Alwar",
+  "state": "Rajasthan",
+  "pin": "301001",
+  "service": "burn_care",
+  "methods": [
+   "abl_M2"
+  ],
+  "query_ids": [
+   "q27"
+  ],
+  "has_unchecked_label_record": false
+ },
+ {
+  "pair_id": "e2e_158",
+  "unique_id": "f1ebdde7-6ede-45bc-85c0-8adb7128f26a",
+  "name": "Lifeline Superspeciality Hospital, Pandharpur",
+  "city": "Pandharpur",
+  "state": "Maharashtra",
+  "pin": "413304",
+  "service": "mri",
+  "methods": [
+   "B4_prior_only"
+  ],
+  "query_ids": [
+   "q21"
+  ],
+  "has_unchecked_label_record": false
+ }
+]

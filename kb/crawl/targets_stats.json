@@ -1,0 +1,146 @@
+{
+ "usable_records": 9959,
+ "url_class_counts_all_candidate_fields": {
+  "health_aggregator": 151234,
+  "official": 67952,
+  "social": 41820,
+  "business_dir": 18460,
+  "other_health_site": 17539,
+  "other": 16432,
+  "insurance_scheme": 9296,
+  "maps_geo": 7840,
+  "official_like": 7271,
+  "government": 5610,
+  "research": 2913,
+  "wikipedia": 1766,
+  "news": 1621,
+  "education": 1500,
+  "dropped_not_a_site_or_bad_url": 1390,
+  "docs_repo": 1315,
+  "crowdfunding_ngo": 238
+ },
+ "records_with_official_candidate": 8015,
+ "records_without_official_candidate": 1944,
+ "records_with_candidate_by_type": {
+  "hospital": [
+   4583,
+   5610
+  ],
+  "clinic": [
+   2987,
+   3770
+  ],
+  "dentist": [
+   374,
+   488
+  ],
+  "null": [
+   48,
+   57
+  ],
+  "doctor": [
+   15,
+   21
+  ],
+  "farmacy": [
+   6,
+   10
+  ],
+  "pharmacy": [
+   1,
+   2
+  ],
+  "nursing_home": [
+   1,
+   1
+  ]
+ },
+ "sites": 9037,
+ "registrable_domains": 8918,
+ "shared_sites": 219,
+ "targets_by_kind": {
+  "site": 8818,
+  "branch": 368,
+  "shared_home": 219
+ },
+ "targets_total": 9405,
+ "targets_by_tier": {
+  "0.0": 5392,
+  "0.5": 176,
+  "1.0": 3306,
+  "1.5": 40,
+  "2.0": 412,
+  "2.5": 3,
+  "3.0": 76
+ },
+ "records_with_candidate_by_state": {
+  "MAHARASHTRA": 1356,
+  "GUJARAT": 779,
+  "UTTAR PRADESH": 729,
+  "TAMIL NADU": 682,
+  "KERALA": 465,
+  "KARNATAKA": 433,
+  "PUNJAB": 392,
+  "TELANGANA": 383,
+  "WEST BENGAL": 382,
+  "HARYANA": 376,
+  "RAJASTHAN": 326,
+  "DELHI": 301,
+  "ANDHRA PRADESH": 270,
+  "MADHYA PRADESH": 247,
+  "BIHAR": 194,
+  "JHARKHAND": 117,
+  "CHHATTISGARH": 114,
+  "UTTARAKHAND": 107,
+  "ODISHA": 92,
+  "ASSAM": 84,
+  "CHANDIGARH": 43,
+  "JAMMU AND KASHMIR": 41,
+  "GOA": 32,
+  "HIMACHAL PRADESH": 27,
+  "PUDUCHERRY": 15,
+  "MEGHALAYA": 8,
+  "MANIPUR": 7,
+  "TRIPURA": 5,
+  "SIKKIM": 2,
+  "NAGALAND": 2,
+  "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU": 1,
+  "MIZORAM": 1,
+  "ANDAMAN AND NICOBAR ISLANDS": 1,
+  "ARUNACHAL PRADESH": 1
+ },
+ "largest_shared_sites": {
+  "apolloclinic.com": 13,
+  "indiraivf.in": 11,
+  "manipalhospitals.com": 11,
+  "asgeyehospital.com": 11,
+  "indiraivf.com": 11,
+  "apollohospitals.com": 11,
+  "fortishealthcare.com": 10,
+  "redcliffelabs.com": 10,
+  "maxlab.co.in": 10,
+  "narayanahealth.org": 9,
+  "novaivffertility.com": 8,
+  "medanta.org": 7,
+  "sabkadentist.com": 7,
+  "agilus.in": 6,
+  "parashospitals.com": 6,
+  "kimshospitals.com": 6,
+  "pathkindlabs.com": 6,
+  "parthadental.com": 5,
+  "carehospitals.com": 5,
+  "dragarwal.com": 5,
+  "hcgoncology.com": 5,
+  "seedsofinnocence.com": 4,
+  "agilusdiagnostics.com": 4,
+  "askapollo.com": 4,
+  "charakhospital.org": 4
+ },
+ "gov_probe_candidates": [
+  "https://thrissur.nic.in/en/public-utility/maria-theresa-hospital/",
+  "https://morbi.nic.in/public-utility/gokul-hospital/",
+  "https://morbi.nic.in/public-utility-category/hospitals/",
+  "https://kpme.karnataka.gov.in/AllapplicationList.aspx/Catg_Fees.aspx",
+  "https://gmcjammu.jk.gov.in/cdhospital.aspx"
+ ]
+}

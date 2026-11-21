@@ -67,8 +67,8 @@ def record_table():
         lv.append(next((k for k, rx in LEVELS if rx.search(n)), "none"))
     r["level"] = lv
     r["public"] = r.optype.isin(["public", "government"]) | (r.level != "none")
-    r["beds_bin"] = pd.cut(r.beds, [-1, 29.5, 99.5, 1e9], labels=["lt30", "30_99", "100p"]).astype(str).replace("nan", "missing")
-    r["doctors_bin"] = pd.cut(r.doctors, [-1, 4.5, 19.5, 1e9], labels=["lt5", "5_19", "20p"]).astype(str).replace("nan", "missing")
+    r["beds_bin"] = pd.cut(r.beds, [-1, 29.5, 99.5, 1e9], labels=["lt30", "30_99", "100p"]).astype(object).fillna("missing").astype(str)
+    r["doctors_bin"] = pd.cut(r.doctors, [-1, 4.5, 19.5, 1e9], labels=["lt5", "5_19", "20p"]).astype(object).fillna("missing").astype(str)
     sp = pd.read_parquet(SNAP / "specialties.parquet")
     breadth = sp.groupby("unique_id").spec.nunique()
     r["n_specialties"] = r.unique_id.map(breadth).fillna(0).astype(int)

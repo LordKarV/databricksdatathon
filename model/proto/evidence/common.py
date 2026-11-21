@@ -47,13 +47,15 @@ GOLD_SERVICES = list(SVC_MAP.values())
 LEX_KEY = {v: k for k, v in SVC_MAP.items()}
 
 # cleaning/claims lexicon module (read-only import): prereq tag sets, scope rule, specialty core tags
-sys.path.insert(0, str(ROOT / "cleaning/claims"))
+sys.path.append(str(ROOT / "cleaning/claims"))  # append: that folder also has an evaluate.py
 import lexicon as LEX  # noqa: E402
 
 OWN_CLASSES = ("own_anchored", "unanchored")
 COUNTING_ROLES = ("offer", "unit_or_equipment", "quantity")
 # rejected for ownership: these drive family C
-OWNERSHIP_REJECT = ("names_other_facility", "other_state_place", "other_district_place", "quarantined_merge", "sibling_branch")
+# ambiguous_reference added after the dev sentence check (7 of 10 dev ambiguous sentences were about another facility)
+OWNERSHIP_REJECT = ("names_other_facility", "other_state_place", "other_district_place", "quarantined_merge", "sibling_branch",
+                    "ambiguous_reference")
 
 
 def sha256_file(p) -> str:

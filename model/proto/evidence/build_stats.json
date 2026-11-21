@@ -1,14 +1,14 @@
 {
  "atoms": 22787,
- "atoms_counting": 17389,
- "units": 15538,
+ "atoms_counting": 17403,
+ "units": 15550,
  "ownership": {
-  "unanchored": 21830,
-  "own_anchored": 762,
+  "unanchored": 21842,
+  "own_anchored": 771,
   "ambiguous": 81,
-  "other_facility": 79,
+  "other_facility": 70,
   "sibling": 21,
-  "other_place": 14
+  "other_place": 2
  },
  "role": {
   "offer": 11545,
@@ -22,29 +22,28 @@
   "hedge": 7
  },
  "rejected": {
-  "directory_or_list": 5064,
+  "directory_or_list": 5071,
   "ambiguous_reference": 81,
-  "names_other_facility": 79,
+  "names_other_facility": 70,
   "staff_only": 66,
   "nonoffer_cue": 51,
   "sibling_branch": 21,
   "research_or_template": 16,
-  "other_district_place": 12,
   "hedge": 6,
   "other_state_place": 2
  },
  "T": {
-  "0": 61746,
-  "1": 1084,
-  "2": 3176,
-  "3": 1390,
-  "4": 884,
-  "5": 1433
+  "0": 61744,
+  "1": 1083,
+  "2": 3178,
+  "3": 1388,
+  "4": 883,
+  "5": 1437
  },
  "C": {
-  "0": 69629,
-  "1": 57,
-  "2": 27
+  "0": 69589,
+  "1": 86,
+  "2": 38
  },
  "N": 43,
  "S": 20531,

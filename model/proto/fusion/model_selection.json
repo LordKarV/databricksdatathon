@@ -1,141 +1,108 @@
 {
- "model_hash": "f4c2f361d903e1df-fallback",
+ "model_hash": "de82eeee9ea0d0f6-fallback",
  "labels_sha256": "f3afb0cb2b4ec298204ffc031e1569954ff95d092bd95cc01ea9ef77e6cb973d",
- "created_at": "2026-11-21T13:41:12",
+ "created_at": "2026-11-21T13:53:18",
  "service": {
   "weighting": "uniform",
-  "prior": "M0@0.25",
+  "prior": "M1@1",
   "constant_rate_logloss_in_sample": 0.6619439760154051,
   "candidates": {
    "ipw|M0@1": {
-    "oof_logloss": 1.015589711242714
-   },
-   "ipw|M0@0.5": {
-    "oof_logloss": 0.8929200794367489
-   },
-   "ipw|M0@0.25": {
-    "oof_logloss": 0.80056423860141
+    "oof_logloss": 0.8585540187886069
    },
    "ipw|M1@1": {
-    "oof_logloss": 0.9215180911665043
+    "oof_logloss": 0.8556759954522899
    },
    "ipw|M1@0.5": {
-    "oof_logloss": 0.8302773536545713
+    "oof_logloss": 0.8101405557847646
    },
    "ipw|M1@0.25": {
-    "oof_logloss": 0.7578423393753447
+    "oof_logloss": 0.7543128095991225
    },
    "ipw|M2@1": {
-    "oof_logloss": 1.2218061975015053
+    "oof_logloss": 0.9504599293466828
    },
    "ipw|M2@0.5": {
-    "oof_logloss": 1.254933076268589
+    "oof_logloss": 1.0071978465877263
    },
    "ipw|M2@0.25": {
-    "oof_logloss": 1.2547370090169154
+    "oof_logloss": 1.0621987591600786
    },
    "uniform|M0@1": {
-    "oof_logloss": 0.8454539322823991
-   },
-   "uniform|M0@0.5": {
-    "oof_logloss": 0.776516600450477
-   },
-   "uniform|M0@0.25": {
-    "oof_logloss": 0.727058209657695
+    "oof_logloss": 0.8166842265951413
    },
    "uniform|M1@1": {
-    "oof_logloss": 0.7062313733464335
+    "oof_logloss": 0.6936397905563723
    },
    "uniform|M1@0.5": {
-    "oof_logloss": 0.6764070573846702
+    "oof_logloss": 0.6747834433644371
    },
    "uniform|M1@0.25": {
-    "oof_logloss": 0.6708866329247978
+    "oof_logloss": 0.6728346254442008
    },
    "uniform|M2@1": {
-    "oof_logloss": 0.7867970866103777
+    "oof_logloss": 0.7255682019830884
    },
    "uniform|M2@0.5": {
-    "oof_logloss": 0.8524385290665814
+    "oof_logloss": 0.7720739410684109
    },
    "uniform|M2@0.25": {
-    "oof_logloss": 0.9946931170468163
+    "oof_logloss": 0.8681885007719189
    }
   },
   "paired_vs_M0": {
    "M0@1": {
-    "oof_logloss": 0.8454539322823991,
-    "diff_vs_best_M0": 0.1183957226247041,
-    "se_diff": 0.12283034362984287
-   },
-   "M0@0.5": {
-    "oof_logloss": 0.776516600450477,
-    "diff_vs_best_M0": 0.04945839079278215,
-    "se_diff": 0.05195613646272483
-   },
-   "M0@0.25": {
-    "oof_logloss": 0.727058209657695,
+    "oof_logloss": 0.8166842265951413,
     "diff_vs_best_M0": 0.0,
-    "se_diff": 0.0
+    "se_diff": 0.0,
+    "eligible": true
    },
    "M1@1": {
-    "oof_logloss": 0.7062313733464335,
-    "diff_vs_best_M0": -0.020826836311261265,
-    "se_diff": 0.0886052373579828
+    "oof_logloss": 0.6936397905563723,
+    "diff_vs_best_M0": -0.1230444360387691,
+    "se_diff": 0.10680052569734766,
+    "eligible": true
    },
    "M1@0.5": {
-    "oof_logloss": 0.6764070573846702,
-    "diff_vs_best_M0": -0.050651152273024684,
-    "se_diff": 0.09750703977345188
+    "oof_logloss": 0.6747834433644371,
+    "diff_vs_best_M0": -0.1419007832307041,
+    "se_diff": 0.15222469060441224,
+    "eligible": false
    },
    "M1@0.25": {
-    "oof_logloss": 0.6708866329247978,
-    "diff_vs_best_M0": -0.056171576732897084,
-    "se_diff": 0.11190025402662022
+    "oof_logloss": 0.6728346254442008,
+    "diff_vs_best_M0": -0.14384960115094056,
+    "se_diff": 0.17275987323876374,
+    "eligible": false
    },
    "M2@1": {
-    "oof_logloss": 0.7867970866103777,
-    "diff_vs_best_M0": 0.05973887695268268,
-    "se_diff": 0.18686377666272383
+    "oof_logloss": 0.7255682019830884,
+    "diff_vs_best_M0": -0.09111602461205297,
+    "se_diff": 0.21336142507832526,
+    "eligible": false
    },
    "M2@0.5": {
-    "oof_logloss": 0.8524385290665814,
-    "diff_vs_best_M0": 0.12538031940888641,
-    "se_diff": 0.22960957379294566
+    "oof_logloss": 0.7720739410684109,
+    "diff_vs_best_M0": -0.04461028552673044,
+    "se_diff": 0.2595852488109482,
+    "eligible": false
    },
    "M2@0.25": {
-    "oof_logloss": 0.9946931170468163,
-    "diff_vs_best_M0": 0.26763490738912166,
-    "se_diff": 0.29007141987615775
+    "oof_logloss": 0.8681885007719189,
+    "diff_vs_best_M0": 0.05150427417677758,
+    "se_diff": 0.31596635619540187,
+    "eligible": false
    }
   },
-  "rule": "lowest OOF IPW log loss; M0 unless another prior beats it by >= 1 paired SE; weighting chosen by M0's OOF loss",
+  "rule": "eligible = M0 or a candidate beating M0 by >= 1 paired SE of OOF IPW log loss; lowest-loss eligible ships; weighting (ipw vs uniform) chosen by M0's OOF loss; kappa scales informative prior sds",
   "n_train": 76,
   "n_pos": 28,
   "ess": 21.97853332864121,
   "folds": 5,
-  "draw_acceptance": 0.0011404494382022473,
+  "draw_acceptance": 0.014428571428571428,
   "active_constraints": [
    [
-    "t1"
-   ],
-   [
-    "t2"
-   ],
-   [
-    "t4"
-   ],
-   [
-    "tb_mid"
-   ],
-   [
-    "tb_high"
-   ],
-   [
-    "trunc0"
-   ],
-   [
-    "n1"
+    "t3"
    ],
    [
     "t2",
@@ -150,10 +117,6 @@
     "t2",
     "tb_high",
     "t2@dialysis"
-   ],
-   [
-    "t2",
-    "t2@emergency_csection"
    ],
    [
     "t2",
@@ -181,10 +144,6 @@
    ],
    [
     "t2",
-    "t2@cardiac_surgery"
-   ],
-   [
-    "t2",
     "tb_mid",
     "t2@cardiac_surgery"
    ],
@@ -195,10 +154,6 @@
    ],
    [
     "t2",
-    "t2@mri"
-   ],
-   [
-    "t2",
     "tb_mid",
     "t2@mri"
    ],
@@ -206,10 +161,6 @@
     "t2",
     "tb_high",
     "t2@mri"
-   ],
-   [
-    "t2",
-    "t2@burn_care"
    ],
    [
     "t2",
@@ -234,14 +185,17 @@
     "t2",
     "tb_high",
     "t2@trauma_emergency"
+   ],
+   [
+    "c2"
+   ],
+   [
+    "t4",
+    "t4@dialysis"
    ],
    [
     "t4",
     "t4@emergency_csection"
-   ],
-   [
-    "t4",
-    "t4@cardiac_surgery"
    ],
    [
     "t4",
@@ -250,17 +204,6 @@
    [
     "t4",
     "t4@burn_care"
-   ],
-   [
-    "p1",
-    "p1@emergency_csection"
-   ],
-   [
-    "p1",
-    "p1@burn_care"
-   ],
-   [
-    "t3"
    ]
   ]
  },
@@ -309,48 +252,56 @@
    "active_constraints": 7
   },
   "M0": {
-   "prior": "M0@0.25",
-   "oof_logloss": 0.727058209657695,
+   "prior": "M0@1",
+   "oof_logloss": 0.8166842265951413,
    "platt": [
-    0.0,
-    -0.5006127551407005
+    0.20466343054789826,
+    -0.39265654967196784
    ]
   },
   "M1": {
-   "prior": "M1@0.25",
-   "oof_logloss": 0.6708866329247978,
+   "prior": "M1@1",
+   "oof_logloss": 0.6936397905563723,
    "platt": [
-    1.0,
-    0.0
+    0.379885730618284,
+    -0.25459560333074516
    ]
   },
   "M2": {
-   "prior": "M2@0.25",
-   "oof_logloss": 0.9946931170468163,
+   "prior": "M2@1",
+   "oof_logloss": 0.7255682019830884,
    "platt": [
-    0.21146572582996423,
-    -0.3224738549915354
+    0.37676489180174566,
+    0.057635380550598525
    ]
   },
-  "M0_sd2.5": {
-   "prior": "M0@1",
-   "oof_logloss": 0.8454539322823991,
+  "M1_k1": {
+   "prior": "M1@1",
+   "oof_logloss": 0.6936397905563723,
    "platt": [
-    0.061306049834552255,
-    -0.48225163992914305
+    0.379885730618284,
+    -0.25459560333074516
+   ]
+  },
+  "M2_k1": {
+   "prior": "M2@1",
+   "oof_logloss": 0.7255682019830884,
+   "platt": [
+    0.37676489180174566,
+    0.057635380550598525
    ]
   },
   "abl_noown": {
-   "oof_logloss": 0.7019593938590369
+   "oof_logloss": 0.6629554572674566
   },
   "abl_noecho": {
-   "oof_logloss": 0.7194852888529314
+   "oof_logloss": 0.678958898139137
   },
   "abl_nobucket": {
-   "oof_logloss": 0.677083285241375
+   "oof_logloss": 0.6881898205905951
   },
   "abl_nocontext": {
-   "oof_logloss": 0.7011824989491577
+   "oof_logloss": 0.6718937605415533
   }
  },
  "kappa_dev_overlap": {
@@ -379,7 +330,8 @@
   "v2_burn_care_weak_5"
  ],
  "band_counts_all_pairs": {
-  "Unverified": 69673,
-  "Unlikely": 40
+  "Unlikely": 37108,
+  "Unverified": 32603,
+  "Likely": 2
  }
 }

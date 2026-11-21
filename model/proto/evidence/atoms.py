@@ -46,17 +46,31 @@ def record_table() -> pd.DataFrame:
     return rs.drop(columns=["source_urls"]).merge(tr, on="unique_id", how="left")
 
 
-def _ownership(r) -> tuple:
-    """(ownership, rejected_reason_if_ownership, named_entity) for one claim row."""
+RULES_VERSION = "v1"   # v0 = cleaning attribution as-is; v1 = two fixes chosen on the dev sentence labels
+
+
+def _is_self(entity: str, name: str) -> bool:
+    """A 'foreign' name that is really this facility's own name, misspelled or re-ordered (dev label s194)."""
+    return any(fuzz.token_set_ratio(norm_text(e), norm_text(name)) >= 90 for e in entity.split(";") if e.strip())
+
+
+def _ownership(r, version: str = RULES_VERSION) -> tuple:
+    """(ownership, rejected_reason_if_ownership, named_entity) for one claim row.
+    v1 changes against the cleaning attribution, both fitted on dev sentence labels only:
+      - a place in another district of the same state no longer rejects the sentence (dev: 0 of 4 such
+        rejections were right; they were the facility's own locality, e.g. 'Kandivali West, Mumbai');
+      - a named entity that fuzzy-matches the facility's own name is a self-reference, not another facility."""
     if r.attribution == "other_facility":
-        if r.foreign_names:
+        if r.foreign_names and not (version == "v1" and _is_self(r.foreign_names, r.name)):
             return "other_facility", "names_other_facility", r.foreign_names
         if r.sibling_names:
             return "sibling", "sibling_branch", r.sibling_names
         if r.places_other_state:
             return "other_place", "other_state_place", r.places_other_state
-        if r.places_other_district:
+        if r.places_other_district and version == "v0":
             return "other_place", "other_district_place", r.places_other_district
+        if r.foreign_names or r.places_other_district:
+            return ("own_anchored" if r.foreign_names else "unanchored"), None, None
         return "quarantined", "quarantined_merge", None
     if r.attribution == "ambiguous":
         ent = r.foreign_names or r.places_other_state or r.places_other_district or r.sibling_names or None
@@ -84,8 +98,10 @@ ROLE_REJECT = {"nonoffer": "nonoffer_cue", "directory": "directory_or_list", "li
                "staff": "staff_only", "hedge": "hedge", "research_or_template": "research_or_template"}
 
 
-def claim_atoms_from_claims() -> pd.DataFrame:
+def claim_atoms_from_claims(version: str = RULES_VERSION) -> pd.DataFrame:
     c = pd.read_parquet(INPUTS["claims"])
+    names = pd.read_parquet(INPUTS["record_scores"], columns=["unique_id", "name"])
+    c = c.merge(names, on="unique_id", how="left")
     c = c[c.services.str.len() > 0].copy()
     sd = pd.read_parquet(INPUTS["sentence_decisions"], columns=["unique_id", "field", "idx", "quarantine"])
     c = c.merge(sd, on=["unique_id", "field", "idx"], how="left", validate="one_to_one")
@@ -96,7 +112,7 @@ def claim_atoms_from_claims() -> pd.DataFrame:
         svcs = [SVC_MAP[s] for s in split_cell(r.services) if s in SVC_MAP]
         if not svcs:
             continue
-        own, own_rej, ent = _ownership(r)
+        own, own_rej, ent = _ownership(r, version)
         spec = "unit" if UNIT_RX.search(r.text) else ("quantity" if pd.notna(r.qty_value) else "generic")
         role = _role(r, spec)
         counts = own in OWN_CLASSES and role in COUNTING_ROLES
@@ -248,8 +264,8 @@ def pair_families(atoms: pd.DataFrame, facilities: pd.Series, ownership_filter: 
                         N=int(((g.role == "nonoffer") & own_cls).any()), n_atoms=len(g), n_units_own=len(reps),
                         n_fields_own=reps.field.nunique(), n_rejected=int(g.rejected_reason.notna().sum()),
                         n_rejected_ownership=nC, n_tagged_sentences=int((g.field != "specialties").sum()),
-                        cited_atom_ids="|".join(g.loc[cited, "atom_id"]),
-                        rejected_atom_ids="|".join(g[g.rejected_reason.notna()].sort_values("spec_rank").atom_id),
+                        cited_atom_ids=";".join(g.loc[cited, "atom_id"]),
+                        rejected_atom_ids=";".join(g[g.rejected_reason.notna()].sort_values("spec_rank").atom_id),
                         t_without_cited=t_wo))
     fam = pd.DataFrame(out)
     grid = pd.MultiIndex.from_product([facilities, GOLD_SERVICES], names=["unique_id", "service"]).to_frame(index=False)

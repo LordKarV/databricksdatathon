@@ -28,7 +28,7 @@ def log(*a):
     print(f"[{time.time() - T0:6.1f}s]", *a, flush=True)
 
 
-KAPPAS = (1.0, 0.5, 0.25)  # prior-strength multiplier on every non-deviation sd, chosen by dev CV (REPORT.md)
+KAPPAS = (1.0, 0.5, 0.25)  # strength multiplier on informative (M1, M2) prior sds, chosen by dev CV; M0 stays sd 2.5
 
 
 def split_prior(pc):
@@ -99,7 +99,7 @@ def service_head(pf, gold, m1, variant=(), weighting=None, prior_choice=None, pl
 
     cands = {}
     weightings = [weighting] if weighting else ["ipw", "uniform"]
-    priors_list = [prior_choice] if prior_choice else [f"{m}@{k:g}" for m in ("M0", "M1", "M2") for k in KAPPAS]
+    priors_list = [prior_choice] if prior_choice else ["M0@1"] + [f"{m}@{k:g}" for m in ("M1", "M2") for k in KAPPAS]
     for wt in weightings:
         w_fit = w_eval if wt == "ipw" else np.ones(len(y))
         for pc in priors_list:
@@ -119,8 +119,12 @@ def service_head(pf, gold, m1, variant=(), weighting=None, prior_choice=None, pl
     if prior_choice:
         pc = prior_choice
     else:
-        best = min(sel_rows, key=lambda k: sel_rows[k]["oof_logloss"])
-        pc = best if best.startswith("M0") or -sel_rows[best]["diff_vs_best_M0"] >= sel_rows[best]["se_diff"] else m0_best
+        # eligible = M0, or a candidate that beats M0 by >= 1 paired SE; the lowest-loss eligible candidate ships.
+        # (With one candidate per prior this is the contract rule; it keeps the kappa grid from overturning it.)
+        elig = [k for k in sel_rows if k.startswith("M0") or -sel_rows[k]["diff_vs_best_M0"] >= sel_rows[k]["se_diff"]]
+        pc = min(elig, key=lambda k: sel_rows[k]["oof_logloss"])
+        for k in sel_rows:
+            sel_rows[k]["eligible"] = k in elig
     base = (w_eval * y).sum() / w_eval.sum()
     out.update(constant_rate_oof_logloss=M.mean_loss(np.full(len(y), base), y, w_eval), weighting=wt, prior=pc, selection={f"{a}|{b}": dict(oof_logloss=v["loss"]) for (a, b), v in cands.items()},
                selection_paired=sel_rows)
@@ -440,6 +444,9 @@ def main():
     rel["hand_check_ref"] = [ref.get((f, v)) for f, v in zip(rel.family, rel.value)]
     rel.to_parquet(HERE / "reliability.parquet", index=False)
 
+    tr.assign(p_oof=S["p_oof"], z_oof=S["z_oof"], fold=S["folds"])[
+        ["pair_id", "unique_id", "service", "stratum", "version", "label_service", "y", "w_ipw", "leakage_group_id", "fold", "z_oof", "p_oof"]
+    ].to_parquet(HERE / "dev_oof.parquet", index=False)
     # ---- calibration and band record on dev out-of-fold
     dd = tr.assign(w=tr.w_ipw)
     calib = pd.DataFrame(calib_rows(S["p_oof"], dd.reset_index(drop=True), "dev_oof"))
@@ -457,13 +464,15 @@ def main():
     var_info = {"B4_prior_only": dict(active_constraints=len(b4.active))}
     kap = split_prior(S["prior"])[1]
     for src_ in ["M0", "M1", "M2"]:
-        pc_ = f"{src_}@{kap:g}"  # B5 = M0 at the shipped prior strength; M0 at sd 2.5 is p_M0_sd2.5
+        pc_ = "M0@1" if src_ == "M0" else f"{src_}@{kap:g}"  # B5 = M0 exactly as the contract defines it
         h = service_head(pf, gold, m1["service"], weighting=S["weighting"], prior_choice=pc_, platt_use=None, ds_cache=ds_cache)
         var[f"p_{src_}"] = sigmoid(h["platt"]["a"] * (h["X"] @ h["fit"].beta) + h["platt"]["c"])
         var_info[src_] = dict(prior=pc_, oof_logloss=h["selection_paired"][pc_]["oof_logloss"], platt=[h["platt"]["a"], h["platt"]["c"]])
-    h = service_head(pf, gold, m1["service"], weighting=S["weighting"], prior_choice="M0@1", platt_use=None, ds_cache=ds_cache)
-    var["p_M0_sd2.5"] = sigmoid(h["platt"]["a"] * (h["X"] @ h["fit"].beta) + h["platt"]["c"])
-    var_info["M0_sd2.5"] = dict(prior="M0@1", oof_logloss=h["selection_paired"]["M0@1"]["oof_logloss"], platt=[h["platt"]["a"], h["platt"]["c"]])
+    for src_ in ["M1", "M2"]:  # the informative priors at kappa = 1, for the prior-strength sensitivity row
+        h = service_head(pf, gold, m1["service"], weighting=S["weighting"], prior_choice=f"{src_}@1", platt_use=None, ds_cache=ds_cache)
+        var[f"p_{src_}_k1"] = sigmoid(h["platt"]["a"] * (h["X"] @ h["fit"].beta) + h["platt"]["c"])
+        var_info[f"{src_}_k1"] = dict(prior=f"{src_}@1", oof_logloss=h["selection_paired"][f"{src_}@1"]["oof_logloss"],
+                                      platt=[h["platt"]["a"], h["platt"]["c"]])
     for v in [("noown",), ("noecho",), ("nobucket",), ("nocontext",)]:
         h = service_head(pf, gold, m1["service"], variant=v, weighting=S["weighting"], prior_choice=S["prior"],
                          platt_use=S["platt"]["use"], ds_cache=ds_cache)
@@ -480,7 +489,8 @@ def main():
               location=Lh["platt"], existence=Eh["platt"]), HERE / "platt.json")
     dump(dict(model_hash=model_hash, labels_sha256=labels_sha, created_at=datetime.datetime.now().isoformat(timespec="seconds"),
               service=dict(weighting=S["weighting"], prior=S["prior"], constant_rate_logloss_in_sample=S["constant_rate_oof_logloss"], candidates=S["selection"], paired_vs_M0=S["selection_paired"],
-                           rule="lowest OOF IPW log loss; M0 unless another prior beats it by >= 1 paired SE; weighting chosen by M0's OOF loss",
+                           rule=("eligible = M0 or a candidate beating M0 by >= 1 paired SE of OOF IPW log loss; lowest-loss eligible ships; "
+                                 "weighting (ipw vs uniform) chosen by M0's OOF loss; kappa scales informative prior sds"),
                            n_train=len(tr), n_pos=int(S["y"].sum()), ess=float(S["w_eval"].sum() ** 2 / (S["w_eval"] ** 2).sum()),
                            folds=5, draw_acceptance=rate, active_constraints=[[terms[j].name for j in np.nonzero(A[i])[0]] for i in fit.active]),
               location=dict(prior=Lh["prior"], fitted=Lh["fitted"], n_train=Lh["n_train"], n_pos=Lh["n_pos"], selection=Lh["selection"],

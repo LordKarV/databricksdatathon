@@ -52,6 +52,8 @@ class App(BaseHTTPRequestHandler):
         if not has:
             cb = quote(f"{APP}/.auth/callback?next={quote(u.path)}", safe="")
             return self.send(302, headers=[("Location", f"{IDP}/authorize?redirect_uri={cb}")])
+        if u.query == "stopped=1":  # the proxy's answer while the app is stopped (shape assumed, not observed)
+            return self.send(503, b"App is not available", "text/html")
         if u.path == "/api/ping":
             return self.send(200, b'{"ok":true}', "application/json")
         p = FILES.get(u.path)

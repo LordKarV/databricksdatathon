@@ -1,0 +1,31 @@
+{
+ "n": 76,
+ "n_pos": 28,
+ "note": "dev = v1 36 + v2 dev, checked labels only; B4 priors used the v1 rates, so B4 on v1 rows is not out of sample",
+ "auroc": {
+  "shipped_oof": {
+   "raw": 0.6108630952380952,
+   "ipw": 0.6654969884962839
+  },
+  "B0_any_mention": {
+   "raw": 0.5684523809523809,
+   "ipw": 0.6909448129565426
+  },
+  "B1_keyword_count": {
+   "raw": 0.6941964285714286,
+   "ipw": 0.7175497973825959
+  },
+  "B2_rule_grade": {
+   "raw": 0.6677827380952381,
+   "ipw": 0.7072180230148946
+  },
+  "B4_prior_only": {
+   "raw": 0.6785714285714286,
+   "ipw": 0.7269203297106073
+  },
+  "B3_llm_judge": {
+   "raw": 0.5896577380952381,
+   "ipw": 0.7036484132834401
+  }
+ }
+}

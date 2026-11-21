@@ -14,7 +14,7 @@ from rapidfuzz import fuzz
 
 from common import GEOI, INPUTS, ROOT, hav_km, jlist, norm
 
-sys.path.insert(0, str(ROOT / "audit/geo"))
+sys.path.append(str(ROOT / "audit/geo"))
 from geo_common import CITY_ALIAS, nearest  # noqa: E402
 
 VOTE_KM = 25.0

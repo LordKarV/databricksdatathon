@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline probe</title>
+<link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+<style>body{font:17px/1.5 system-ui,sans-serif;margin:0 auto;max-width:40rem;padding:16px}
+button{font:inherit;min-height:48px;width:100%;margin:6px 0}pre{white-space:pre-wrap;font-size:13px}</style></head>
+<body><h1>Offline probe</h1>
+<p>1. Open online, wait for "SW controls page: true" (reload once). 2. Turn on airplane mode, keep Location on,
+go outdoors. 3. Reload: the page must still appear. 4. Tap the GPS buttons. 5. Turn data back on, tap Upload.</p>
+<button id="hi" type="button">GPS high accuracy (timeout 120 s)</button>
+<button id="lo" type="button">GPS low accuracy (timeout 60 s)</button>
+<button id="cached" type="button">Cached position only (maximumAge 1 h, timeout 0)</button>
+<button id="up" type="button">Upload results</button>
+<pre id="log" role="status"></pre>
+<script>
+const R = JSON.parse(localStorage.getItem('probe') || '[]');
+const log = (k, v) => { R.push({k, v, t: new Date().toISOString(), online: navigator.onLine});
+  localStorage.setItem('probe', JSON.stringify(R)); document.getElementById('log').textContent = JSON.stringify(R, null, 1); };
+log('load', {ua: navigator.userAgent, controlled: !!navigator.serviceWorker?.controller, secure: isSecureContext});
+navigator.serviceWorker?.register('/sw.js').then(r => log('sw_register', 'ok scope ' + r.scope), e => log('sw_register', String(e)));
+caches.open('probe-v1').then(c => c.keys()).then(k => log('cached', k.map(r => new URL(r.url).pathname)));
+fetch('/api/ping', {redirect: 'manual'}).then(r => r.type === 'opaqueredirect' ? log('ping', 'redirect (session expired)')
+  : r.json().then(j => log('ping', j)), e => log('ping', 'network error ' + e));
+navigator.permissions?.query({name: 'geolocation'}).then(p => log('geo_permission', p.state));
+function geo(id, opts) { const t0 = performance.now();
+  navigator.geolocation.getCurrentPosition(
+    p => log(id, {ms: Math.round(performance.now() - t0), acc_m: Math.round(p.coords.accuracy),
+                  age_s: Math.round((Date.now() - p.timestamp) / 1000)}),
+    e => log(id, {ms: Math.round(performance.now() - t0), error: e.code + ' ' + e.message}), opts); }
+document.getElementById('hi').onclick = () => geo('gps_high', {enableHighAccuracy: true, timeout: 120000, maximumAge: 0});
+document.getElementById('lo').onclick = () => geo('gps_low', {enableHighAccuracy: false, timeout: 60000, maximumAge: 0});
+document.getElementById('cached').onclick = () => geo('gps_cached', {enableHighAccuracy: true, timeout: 0, maximumAge: 3600000});
+document.getElementById('up').onclick = () => fetch('/api/result', {method: 'POST', headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify(R)}).then(r => log('upload', r.status), e => log('upload', String(e)));
+</script></body></html>
