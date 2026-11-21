@@ -268,7 +268,16 @@ def test_store_roundtrip_without_pandas(tmp_path):
     with_pins = Store(doc)
     assert with_pins.state_near((O[0] + 0.2, O[1])) == "BIHAR" and with_pins.state_near((O[0] + 0.9, O[1])) == "SIKKIM"
     assert Store.load(tmp_path / "missing.json.gz") is None
-    assert "pandas" not in sys.modules
+    # the run-time path must not pull in pandas; checked in a fresh interpreter because other tests
+    # in the same process may already have imported it
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); "
+            "from planner.store import Store; from planner import service, core, app_contract; "
+            "st = Store.load(%r); assert st.capability_p('a', 'emergency_24x7')[0] == 0.9; "
+            "bad = [m for m in ('pandas', 'numpy', 'pyarrow') if m in sys.modules]; assert not bad, bad"
+            % (str(ROOT), str(path)))
+    done = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert done.returncode == 0, done.stderr
 
 
 def test_service_maps_app_services_and_passes_other_services_through():
@@ -321,3 +330,27 @@ def test_service_applies_the_origin_state_to_travel():
     assert (hill["meta"]["origin_state"], hill["meta"]["origin_state_source"], hill["meta"]["terrain"]) == ("Sikkim", "caller", "hill")
     assert (derived["meta"]["origin_state"], derived["meta"]["origin_state_source"]) == ("SIKKIM", "nearest facility")
     assert leg(derived)["terrain"] == "hill"
+
+
+def numbers_in(text):
+    import re
+    return sorted(float(x) for x in re.findall(r"(?<![A-Za-z])\d+(?:\.\d+)?", text))
+
+
+def test_every_number_in_the_comparison_sentence_is_a_field():
+    # emergency: stop wins on care in time; stop wins only on first care; a different direct facility
+    f = [fac("far_d", 100), fac("clinic", 20), fac("other_d", 110, km_east=30)]
+    table = {"far_d": FULL, "clinic": {"first_aid": 0.9}, "other_d": {"surgery": 0.6, "blood": 0.9}}
+    cases = [core.plan(O, pathway(gate=60), f, caps(table), travel_60),
+             core.plan(O, pathway(gate=60, t2=30), f, caps(table), travel_60),
+             core.plan(O, scheduled_pathway(), [fac("all_in_one", 60), fac("near_unit", 10), fac("near_clinic", 5), fac("near_surgery", 8)],
+                       caps({"all_in_one": {"clinic": 0.8, "surgery": 0.8, "unit": 0.8}, "near_unit": {"unit": 0.9},
+                             "near_clinic": {"clinic": 0.9}, "near_surgery": {"surgery": 0.9}}), travel_60)]
+    seen = set()
+    for r in cases:
+        for p in r["plans"]:
+            vs = p["vs_direct"]
+            text = vs["text"].replace(vs.get("direct_name") or "\0", "")
+            assert numbers_in(text) == sorted(float(v) for v in vs["text_numbers"].values()), vs
+            seen.add(tuple(sorted(vs["text_numbers"])))
+    assert len(seen) >= 4   # the sentence variants were all exercised
