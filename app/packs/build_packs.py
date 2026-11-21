@@ -236,6 +236,18 @@ def self_check(pack: dict, n_pins: int) -> None:
                 assert q == -1 or pack["q"][q][0], "empty quote"
 
 
+def write_pin_index(pins: pd.DataFrame) -> None:
+    """All-India PIN -> state table for /api/pack/locate, written on every build (also partial ones), so the
+    server resolves the right state even when that state's pack is not built."""
+    p = pins.sort_values("pin").reset_index(drop=True)
+    states = sorted(p.state.unique())
+    sidx = {st: i for i, st in enumerate(states)}
+    obj = {"v": FORMAT_VERSION, "scale": PIN_SCALE, "states": [[slug(st), st] for st in states],
+           "pin": delta(p.pin), "lat": delta(np.round(p.lat * PIN_SCALE)), "lon": delta(np.round(p.lon * PIN_SCALE)),
+           "s": [sidx[st] for st in p.state]}
+    (OUT / "pin_index.json").write_text(json.dumps(obj, separators=(",", ":")) + "\n")
+
+
 def write_report(rows: list[dict]) -> None:
     (HERE / "sizes.json").write_text(json.dumps(rows, indent=1) + "\n")
     over = [r for r in rows if r["gzip_bytes"] > BUDGET_GZIP]
@@ -279,7 +291,13 @@ def main() -> int:
                      "facilities": len(pack["fac"]["name"]), "evidence_rows": len(pack["ev"]["s"]),
                      "quotes": len(pack["q"]), "lists": len(pack["lists"]),
                      "raw_bytes": len(raw), "gzip_bytes": len(gz)})
+    # A partial build keeps the index entries of packs built earlier whose files are still there.
+    old_index = OUT / "index.json"
+    if args.states and old_index.is_file():
+        prev = json.loads(old_index.read_text()).get("packs", {})
+        index = {**{k: v for k, v in prev.items() if (OUT / f"{k}.json.gz").is_file()}, **index}
     (OUT / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "packs": index}, indent=1) + "\n")
+    write_pin_index(pins)
     rows.sort(key=lambda r: -r["gzip_bytes"])
     if not args.states:
         write_report(rows)

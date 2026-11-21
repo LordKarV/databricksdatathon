@@ -6,7 +6,7 @@ fill from the model (see stub_data.py and README.md).
 """
 from __future__ import annotations
 
-import gzip
+import functools
 import json
 import math
 from pathlib import Path
@@ -124,39 +124,35 @@ class LocateRequest(BaseModel):
     lon: float = Field(ge=68.0, le=97.5)
 
 
-_PIN_STATES: tuple[list[str], list[float], list[float]] | None = None
-
-
-def _pin_states() -> tuple[list[str], list[float], list[float]]:
-    """(slug, lat, lon) per PIN centroid across all built packs, decoded once."""
-    global _PIN_STATES
-    if _PIN_STATES is None:
-        slugs: list[str] = []
-        lats: list[float] = []
-        lons: list[float] = []
-        for slug in (_pack_index() or {"packs": {}})["packs"]:
-            pack = json.loads(gzip.decompress((PACKS / f"{slug}.json.gz").read_bytes()))
-            scale = pack["scale"]["pin"]
-            la = lo = 0
-            for dla, dlo in zip(pack["pins"]["lat"], pack["pins"]["lon"], strict=True):
-                la, lo = la + dla, lo + dlo
-                slugs.append(slug)
-                lats.append(la / scale)
-                lons.append(lo / scale)
-        _PIN_STATES = (slugs, lats, lons)
-    return _PIN_STATES
+@functools.lru_cache(maxsize=4)
+def _pin_index(path: Path, mtime: float) -> tuple[list[tuple[str, str]], list[int], list[float], list[float]]:
+    """(states, state index, lat, lon) per PIN from packs/out/pin_index.json (all India, written by every build)."""
+    j = json.loads(path.read_text())
+    lats, lons, la, lo = [], [], 0, 0
+    for dla, dlo in zip(j["lat"], j["lon"], strict=True):
+        la, lo = la + dla, lo + dlo
+        lats.append(la / j["scale"])
+        lons.append(lo / j["scale"])
+    return [tuple(x) for x in j["states"]], j["s"], lats, lons
 
 
 @app.post("/api/pack/locate")
-def pack_locate(req: LocateRequest) -> dict:
-    """Which state pack covers this point: the state of the nearest PIN centroid. Point in the body, never logged."""
-    slugs, lats, lons = _pin_states()
-    if not slugs:
-        raise HTTPException(404, "no packs built")
+def pack_locate(req: LocateRequest) -> JSONResponse:
+    """State of the nearest PIN centroid (from the all-India PIN index), then whether its pack is built.
+
+    The point travels in the body and is never logged.
+    """
+    path = PACKS / "pin_index.json"
+    if not path.is_file():
+        return JSONResponse({"error": "no packs built"}, 404)
+    states, sidx, lats, lons = _pin_index(path, path.stat().st_mtime)
     lat, lon = round(req.lat, 2), round(req.lon, 2)
     k = math.cos(math.radians(lat))
-    i = min(range(len(slugs)), key=lambda j: (lats[j] - lat) ** 2 + ((lons[j] - lon) * k) ** 2)
-    return {"slug": slugs[i], "state": (_pack_index() or {})["packs"][slugs[i]]["state"]}
+    i = min(range(len(lats)), key=lambda j: (lats[j] - lat) ** 2 + ((lons[j] - lon) * k) ** 2)
+    slug, state = states[sidx[i]]
+    if slug not in (_pack_index() or {"packs": {}})["packs"]:
+        return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
+    return JSONResponse({"slug": slug, "state": state})
 
 
 @app.get("/{name}")
