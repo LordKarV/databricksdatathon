@@ -68,8 +68,9 @@
   function mapsUrl(o) {
     return `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}`;
   }
-  function place(o) {
-    return {name: o.name, town: o.town, address: o.address || o.town,
+  function place(o, path) {
+    return {path, addrKey: o.address ? 'address' : 'town',
+      phoneKey: o.phone && o.phone.display ? 'display' : 'e164', name: o.name, town: o.town, address: o.address || o.town,
       phone: o.phone && o.phone.e164 ? (o.phone.display || o.phone.e164) : null,
       km: Math.round(o.travel.km), low: Math.round(o.travel.low), high: Math.round(o.travel.high),
       method: o.travel.method, label: o.travel.label, map: mapsUrl(o)};
@@ -84,9 +85,10 @@
       asOf: plan.as_of,
       service: {en: service.en, hi: service.hi || service.en},
       has102: nums.includes('102'),
-      go: place(option),
-      backup: backup ? place(backup) : null,
-      quotes: (option.evidence || []).slice(0, 3).map(e => ({text: e.quote, source: e.source_url})),
+      go: place(option, `options.${plan.options.indexOf(option)}`),
+      backup: backup ? place(backup, `options.${plan.options.indexOf(backup)}`) : null,
+      quotes: (option.evidence || []).slice(0, 3).map((e, j) => ({text: e.quote, source: e.source_url, claim: e.claim_id,
+        path: `options.${plan.options.indexOf(option)}.evidence.${j}`})),
       outcome: callOutcome && OUTCOME_KEY[callOutcome.said]
         ? {key: OUTCOME_KEY[callOutcome.said], at: stamp(new Date(callOutcome.at)).slice(-5)} : null,
       stub: !!(plan.meta && plan.meta.stub),
@@ -145,30 +147,41 @@
     return {text, url: 'sms:?body=' + encodeURIComponent(text)};
   }
 
+  // Faithfulness markers (#30): same data-f / data-k / data-device convention as app.js.
+  function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+  function phoneHtml(g) {
+    return g.phone ? `<a href="tel:${esc(g.phone.replace(/[^+\d]/g, ''))}">${F(g.path + '.phone.' + g.phoneKey, g.phone)}</a>` : null;
+  }
+  function travelHtml(g, t) {
+    return `${F(g.path + '.travel.km', g.km, 'num')} ${esc(t.km)}, ${esc(t.about)} ${F(g.path + '.travel.low', g.low, 'num')}-` +
+      `${F(g.path + '.travel.high', g.high, 'num')} ${esc(t.min)} (${F(g.path + '.travel.label', g.label)})`;
+  }
+
   /** Printable slip markup (one A5/A4 page with the print stylesheet). */
   function toHtml(m, lang) {
     const t = T[lang] || T.en;
     const row = (k, v) => `<tr><th scope="row">${esc(k)}</th><td>${v}</td></tr>`;
     const go = m.go;
+    const svcKey = m.service[lang] && lang === 'hi' ? 'hi' : 'en';
     return `<article class="slip" lang="${lang === 'hi' ? 'hi' : 'en'}" aria-labelledby="slip-title">
-      <h2 id="slip-title">${esc(t.title)} <span class="small">${esc(m.made)}</span></h2>
+      <h2 id="slip-title">${esc(t.title)} <span class="small" data-device>${esc(m.made)}</span></h2>
       ${t.draft ? `<p class="small" lang="en">${esc(t.draft)}</p>` : ''}
       ${m.stub ? '<p class="small" lang="en"><strong>Sample data, not a real referral.</strong></p>' : ''}
       <table class="slip-table"><tbody>
-        ${row(t.service, esc(m.service[lang] || m.service.en))}
-        ${row(t.go, `<strong>${esc(go.name)}</strong><br>${esc(go.address)}`)}
-        ${row(t.phone, go.phone ? `<a href="tel:${esc(go.phone.replace(/[^+\d]/g, ''))}">${esc(go.phone)}</a>` : esc(t.noPhone))}
-        ${row(t.travel, esc(travelText(go, t)))}
-        ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer">${esc(go.map)}</a>`)}
-        ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="und">${esc(q.text)}</span>"
-          <span class="small">(${esc(t.source)}: ${esc(q.source)})</span></li>`).join('')}</ul>`) : ''}
-        ${row(t.call, esc(outcomeText(m, t)))}
-        ${m.backup ? row(t.ifNot, `${esc(m.backup.name)}, ${m.backup.km} ${esc(t.km)}. ${esc(t.phone)}: ${esc(m.backup.phone || t.noPhone)}`) : ''}
+        ${row(t.service, F('query.service_label.' + svcKey, m.service[svcKey]))}
+        ${row(t.go, `<strong>${F(go.path + '.name', go.name)}</strong><br>${F(go.path + '.' + go.addrKey, go.address)}`)}
+        ${row(t.phone, phoneHtml(go) || esc(t.noPhone))}
+        ${row(t.travel, travelHtml(go, t))}
+        ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer">${F(go.path, go.map, 'mapsurl')}</a>`)}
+        ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="und">${F(q.path + '.quote', q.text)}</span>"
+          <span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)}; ${F(q.path + '.claim_id', q.claim)})</span></li>`).join('')}</ul>`) : ''}
+        ${row(t.call, `<span data-device>${esc(outcomeText(m, t))}</span>`)}
+        ${m.backup ? row(t.ifNot, `${F(m.backup.path + '.name', m.backup.name)}, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
       </tbody></table>
       <p><strong>${esc(t.numbers)}</strong>${m.has102 ? ' ' + esc(t.n102) : ''}</p>
       <p>${esc(t.worse)} ${esc(t.note)}</p>
       <p class="slip-name">${esc(t.name)}</p>
-      <p class="small">${esc(t.made)}: ${esc(m.made)}. ${esc(t.asOf)}: ${esc(m.asOf)}. ${esc(t.old)}</p>
+      <p class="small"><span data-device>${esc(t.made)}: ${esc(m.made)}.</span> ${esc(t.asOf)}: ${F('as_of', m.asOf)}. ${esc(t.old)}</p>
     </article>`;
   }
 
