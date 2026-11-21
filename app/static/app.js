@@ -256,30 +256,41 @@ async function districtPicker() {
   } catch { /* no saved pack */ }
 }
 
-function trackWords(tr) {
-  if (!tr || tr.n < 10) return `Listings like this: too few checks yet (${tr ? tr.n : 0} checked)`;
-  return `About ${Math.round(10 * tr.k_confirmed / tr.n)} in 10 listings like this checked out (${tr.n} checked)`;
+// Faithfulness markers (spec 5.4, #30): every value shown from the plan carries its source path in data-f and a
+// kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
+// location, clock times, call outcomes) is wrapped in data-device instead.
+function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+function trackHtml(tr, P) {
+  if (!tr) return 'Listings like this: not checked yet';
+  if (tr.n < 10) return `Listings like this: too few checks yet (${F(P + '.n', tr.n, 'num')} checked)`;
+  return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
+    `(${F(P + '.n', tr.n, 'num')} checked)`;
 }
-function travelWords(t) {
-  const how = t.method === 'osrm' ? 'road route' : 'rough';
-  return `${Math.round(t.km)} km, about ${t.low}-${t.high} min (${how})`;
+function travelHtml(t, P) {
+  return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
+    `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
 }
-function bandHtml(o) {
+function bandHtml(o, P) {
   const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  return `<span class="band band-${o.band}"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
 }
-function card(o, label) {
+function quoteHtml(e, P) {
+  return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
+    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>`;
+}
+function card(o, label, i) {
+  const P = `options.${i}`;
   const q = o.evidence[0];
   return `<article class="card" aria-labelledby="opt-${o.rank}">
     ${o.call_first ? '<p class="call-first">Call first</p>' : ''}
-    <p>${o.rank}. ${bandHtml(o)}</p>
-    <h3 id="opt-${o.rank}">${esc(o.name)}</h3>
-    <p class="small">${esc(o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
-    <p>${esc(travelWords(o.travel))}</p>
-    ${q ? `<blockquote>"${esc(q.quote)}" <span class="tag">${esc(q.field)}</span></blockquote>` : ''}
-    <p class="small">${esc(trackWords(o.track_record))}. About the listing, not about today. Call to check a slot.</p>
+    <p>${F(P + '.rank', o.rank, 'num')}. ${bandHtml(o, P)}</p>
+    <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
+    <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
+    <p>${travelHtml(o.travel, P + '.travel')}</p>
+    ${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
+    <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
-      <a class="btn" href="#/why/${o.rank}">Why this? <span class="visually-hidden">${esc(o.name)}</span></a></div>
+      <a class="btn" href="#/why/${o.rank}">Why this? <span class="visually-hidden">${F(P + '.name', o.name)}</span></a></div>
   </article>`;
 }
 function planScreen() {
@@ -287,22 +298,25 @@ function planScreen() {
   if (!s || !state.loc) return home();
   const p = state.plan;
   if (p && p.offline) return offlineScreen(s);
-  const head = `<h1 tabindex="-1">${esc(s.en)} near you</h1><p class="small">${locLine(state.loc)}</p>`;
+  const head = `<h1 tabindex="-1">${esc(s.en)} near you</h1><p class="small" data-device>${locLine(state.loc)}</p>`;
   if (!p) return head + '<p>Finding options...</p>';
   if (p.error) return head + `<p class="card" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">Back</a>`;
   const label = p.query.service_label.en;
   let body;
   if (p.abstain) {
     const oo = p.abstain.outside_option;
-    body = `<p class="card"><strong>${esc(p.abstain.text)}</strong></p>
-      <h2>Call to confirm</h2>${p.options.map(o => card(o, label)).join('')}
-      ${oo ? `<article class="card"><h3>${esc(oo.name)}</h3><p>${esc(oo.text)}</p><p>${esc(travelWords(oo.travel))}</p></article>` : ''}`;
+    body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
+      <h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${oo ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
+        <p>${F('abstain.outside_option.text', oo.text)}</p>
+        <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = '<h2>Options to call</h2>' + p.options.map(o => card(o, label)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
-      ${p.why_not.map(w => `<p><strong>${esc(w.name)}</strong>, ${Math.round(w.travel.km)} km: ${esc(w.reason)}</p>`).join('')}
+    body = '<h2>Options to call</h2>' + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
+      ${p.why_not.map((w, k) => `<p><strong>${F(`why_not.${k}.name`, w.name)}</strong>,
+        ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');
   }
-  return head + body + `<p class="small muted">Data as of ${esc(p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
+  return head + body + `<p class="small muted">Data as of ${F('as_of', p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
     <a class="btn btn-block" href="#/">New search</a>`;
 }
 async function bindPlan() {
@@ -352,45 +366,54 @@ function whyScreen(rank) {
   const p = state.plan;
   const o = p && !p.error && p.options.find(x => x.rank === rank);
   if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const P = `options.${p.options.indexOf(o)}`;
   const label = p.query.service_label.en;
+  const L = F('query.service_label.en', label);
   const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const width = o.p_hi - o.p_lo;
+  const sign = n => (n > 0 ? '+' : '');
   const phone = o.phone && o.phone.e164
-    ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${esc(o.phone.display)}</a>`
+    ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${F(P + '.phone.display', o.phone.display)}</a>`
     : '<p class="card">No dialable number in our data for this listing.</p>';
   const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
+  const split = o.track_record && o.track_record.split === 'test' ? 'final test' : 'dev, not final test';
   return `<a class="btn" href="#/plan">&larr; Plan</a>
-    <h1 tabindex="-1">${esc(o.name)} ${bandHtml(o)}</h1>
-    <h2>Say this to the family</h2><p>"${esc(o.say_to_family.en)}"</p>
+    <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
+    <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
     <h2>From its own listing</h2>
-    ${o.evidence.length ? o.evidence.map(e => `<blockquote>"${esc(e.quote)}" <span class="tag">${esc(e.field)}</span>
+    ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
-      : `<p>Our data has no own sentence about ${esc(label)} for this listing.</p>`}
-    <h2>Is it real</h2><p>${esc(o.is_real.join('; '))}</p>
-    <h2>Where</h2><p>${esc(o.where_check)}</p>
-    ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${esc(o.band_word)} (${o.p.toFixed(2)}, range ${o.p_lo.toFixed(2)} to ${o.p_hi.toFixed(2)}).
-      ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${esc(trackWords(o.track_record))} (dev, not final test).</p>
-    ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${esc(o.why_first_text)}</p>` : ''}
-    <h2>Distance</h2><p>${o.travel.km} km by road, ${o.travel.low}-${o.travel.high} min (${esc(o.travel.label)}).</p>
+      : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
+    <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
+    <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
+    ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
+    <h2>How sure</h2><p>${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, range
+      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}).
+      ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
+    ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
+    <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
+      (${F(P + '.travel.label', o.travel.label)}).</p>
     <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">Directions in Google Maps</a>
     <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
 
     <h2 id="how">How we decided</h2>
-    <table><caption>Points for "offers ${esc(label)}"</caption>
+    <table><caption>Points for "offers ${L}"</caption>
       <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
-      <tbody>${o.contributions.map(c => `<tr><td>${esc(c.label)}</td><td class="num">${c.points > 0 ? '+' : ''}${c.points}</td></tr>`).join('')}</tbody>
-      <tfoot><tr><th scope="row">Total</th><td class="num">${total > 0 ? '+' : ''}${total} &rarr; ${o.p.toFixed(2)}</td></tr></tfoot>
+      <tbody>${o.contributions.map((c, j) => `<tr><td>${F(`${P}.contributions.${j}.label`, c.label)}</td>
+        <td class="num">${F(`${P}.contributions.${j}.points`, sign(c.points) + c.points, 'num')}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', sign(total) + total, 'sum')} &rarr;
+        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
     </table>
-    <p class="small muted">Model ${esc(p.meta.model_hash)}. Facility id ${esc(o.facility_id)}.</p>
+    <p class="small muted">Model ${F('meta.model_hash', p.meta.model_hash)}. Facility id ${F(P + '.facility_id', o.facility_id)}.</p>
 
     <h2 id="call" tabindex="-1">Call ahead</h2>
     ${isEmergency() ? '<p><strong>Call 108 first. Do not wait for this call to send the patient.</strong></p>' : ''}
     ${phone}
     <ol class="script">
-      <li>"Is this ${esc(o.name)}, ${esc(o.town)}?"</li>
-      <li>"I have a patient who needs ${esc(label)}."</li>
-      ${o.call_ahead.map(c => `<li>"${esc(c.question)}" <span class="small muted">(asked because: ${esc(c.asked_because)})</span></li>`).join('')}
+      <li>"Is this ${F(P + '.name', o.name)}, ${F(P + '.town', o.town)}?"</li>
+      <li>"I have a patient who needs ${L}."</li>
+      ${o.call_ahead.map((c, j) => `<li>"${F(`${P}.call_ahead.${j}.question`, c.question)}" <span class="small muted">(asked because:
+        ${F(`${P}.call_ahead.${j}.asked_because`, c.asked_because)})</span></li>`).join('')}
       <li>"If you cannot, which hospital nearby can?"</li>
       <li>"Whom should we ask for when we arrive?"</li>
     </ol>
