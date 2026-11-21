@@ -1,0 +1,40 @@
+{
+ "services": {
+  "burn_care": {
+   "core": "\\bburns?\\b",
+   "exclude": "heart ?burn|sun ?burn|burn ?out|burning|razor burn|calorie|\\bfat\\b|burn prevention|post[- ]?burns?|burns? (scar|contracture|reconstruct)"
+  },
+  "cardiac_surgery": {
+   "core": "\\bCABG|bypass (graft|surg)|open[- ]heart|valve (replace|repair|surg)|\\b(AVR|MVR|DVR)\\b|cardiac surg|heart surg|cardio[- ]?thoracic|cardio[- ]vascular (and|&) thoracic|\\bCTVS\\b|\\bCVTS\\b|heart transplant|congenital heart (surg|defect surg)|cardiac (OT|operation theat)",
+   "exclude": "cardio[- ]?thoracic radiolog|cardiac an(a)?esthe(s|t)|cardiothoracic imaging|bariatric|gastric bypass|transcatheter|\\bTAVR|\\bTAVI|\\bTMVR|percutaneous|balloon valv|brain bypass|EC-IC|without surgery|non[- ]surgical|glaucoma|trabeculectomy|neurovascular|neuro[- ]?vascular bypass"
+  },
+  "dialysis": {
+   "core": "dialy[sz]|haemodialy|hemodialy|\\bCAPD\\b|\\bCRRT\\b|\\bSLED\\b|renal replacement|artificial kidney|\\bPMNDP\\b|national dialysis",
+   "exclude": "dialysis profile|profile test|fistula|dialysis access|access (creation|salvage|surgery)"
+  },
+  "emergency_csection": {
+   "core": "caesar|cesar|c-? ?section|\\bLSCS\\b|lower segment|\\bCEmONC\\b|comprehensive emergency obstetric",
+   "exclude": "after (c|caes|ces)\\w*[- ]?section|VBAC|scar (endometriosis|ectopic)|cesarean scar|post[- ]?caesarean (wound|scar)"
+  },
+  "mri": {
+   "core": "\\bMRIs?\\b|magnetic resonance|\\bMRA\\b|\\bMR (scan|imaging|angio)",
+   "exclude": "MRI[- ]compatible|MRI[- ]guided"
+  },
+  "nicu": {
+   "core": "\\bNICU|\\bNICCU|\\bSNCU|neonatal (intensive|icu|critical)|newborn (intensive|icu|care unit)|special newborn care|level[- ]?(ii|iii|2|3)\\b.{0,20}(nicu|neonat)|neonatal ventilat",
+   "exclude": "ambulance|transport"
+  },
+  "trauma_emergency": {
+   "core": "\\btrauma|polytrauma|casualty|accident (and|&) emergenc|\\bA ?& ?E\\b|emergency (department|room|ward|service|care|unit|medicine|surg)|\\bER\\b|24 ?(x|/|\u00d7|\\*|hours?|hrs?|-hour) ?7?.{0,25}emergenc|emergenc.{0,25}24 ?(x|/|\u00d7|\\*|hours?|hrs?)",
+   "exclude": "dental|dentist|tooth|teeth|eye|ocular|ophthalm|psychiatric|emotional|psycholog|veterinar|contracept|maxillofacial trauma|facial trauma|trauma[- ]informed|childhood trauma|ptsd|^(?!.*(emergency (department|room|ward|unit)|casualty|trauma)).*ambulance"
+  }
+ },
+ "nonoffer": {
+  "negation": "\\bnot (available|offered|provided|present|performed|listed|done|equipped)|\\bdo(es)? not (have|offer|provide|list|perform)|n't (have|offer|provide)|unavailable|\\bno [a-z ]{0,25}(facility|facilities|services?|units?|available|on[- ]?site)\\b|\\bwithout (dialysis|surgery|open|the need|incision|scar|cuts?)|\\bno (burns?|scars?|surgery|cuts?)\\b|non[- ]surgical",
+  "referral": "\\breferred (out |elsewhere )?to\\b|\\brefers? (patients |cases )?(out |elsewhere )?to\\b|\\breferrals? to\\b|transfer(red)? to|shifted to|send(s)? (patients )?to",
+  "future": "\\b(is|are|being) planned|plans? to (start|open|set|launch|add|install)|upcoming|coming soon|\\bproposed\\b|under construction|will be (installed|started|set up|opened|launched|available|commissioned|added)|to be (started|set up|established|launched|opened|commissioned|installed)|in the pipeline|\\bplanned\\b",
+  "past": "\\b(shut|closed) down|discontinued|no longer|\\bceased\\b|\\bused to (be|have|offer|provide|run|perform)\\b|\\bdefunct\\b",
+  "camp": "\\bcamps?\\b"
+ },
+ "source": "cleaning/claims/lexicon.py"
+}

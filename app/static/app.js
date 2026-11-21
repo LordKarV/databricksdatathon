@@ -507,6 +507,10 @@ function whyScreen(rank) {
     ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
       : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
+    <h2>Check the website now</h2>
+    <p class="small">Opens this facility's own website now (a few pages, a few seconds). It does not change the label above.</p>
+    <button type="button" id="verify-btn" class="btn-block">Check website now</button>
+    <div id="verify-out" aria-live="polite">${verifyHtml((state.verify || {})[o.facility_id])}</div>
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
@@ -544,7 +548,45 @@ function whyScreen(rank) {
       ${['Said yes', 'Said no', 'No answer', 'Wrong number'].map(x => `<button type="button" data-outcome="${x}">${x}</button>`).join('')}
     </div>`;
 }
+// ---------- live website check (#37): a dated line next to the plan; never changes the band ----------
+function verifyHtml(v) {
+  if (!v) return '';
+  if (v.loading) return '<p>Checking the website...</p>';
+  if (v.error) return `<p class="card">${esc(v.error)}</p>`;
+  const d = new Date(v.checked_at_ms);
+  const day = d.toDateString() === new Date().toDateString() ? 'today' : d.toLocaleDateString([], {day: 'numeric', month: 'short'});
+  const when = `Checked ${F('verify.checked_at_ms', timeStr(v.checked_at_ms), 'clock')} ${esc(day)}`;
+  const q = (x, j) => `<blockquote>"${F(`verify.quotes.${j}.text`, x.text)}"
+    <br><a class="small" href="${esc(x.url)}" rel="noopener noreferrer">${F(`verify.quotes.${j}.url`, x.url)}</a></blockquote>`;
+  if (v.status === 'found') {
+    return `<p class="card">${when}: ${F('verify.status_text', v.status_text)}:</p>${v.quotes.map(q).join('')}`;
+  }
+  const said = v.quotes.length ? `<p>It mentions it only like this:</p>${v.quotes.map(q).join('')}` : '';
+  return `<p class="card">${when}: ${F('verify.status_text', v.status_text)}.</p>${said}`;
+}
+async function runVerify(o) {
+  const key = o.facility_id;
+  (state.verify ||= {})[key] = {loading: true};
+  $('#verify-out').innerHTML = verifyHtml(state.verify[key]);
+  try {
+    const r = await fetch('/api/verify', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({facility_id: o.facility_id, service_id: state.service}), redirect: 'manual'});
+    const body = r.ok || r.status === 503 ? await r.json() : null;
+    state.verify[key] = r.ok ? body : {error: body && body.error ? 'Website check not available: ' + body.error + '.'
+      : `Website check failed (${r.status || 'signed out'}).`};
+  } catch {
+    state.verify[key] = {error: 'Website check needs internet.'};
+  }
+  const out = $('#verify-out');
+  if (out) {
+    out.innerHTML = verifyHtml(state.verify[key]);
+    announce(state.verify[key].error || `Website checked: ${state.verify[key].status_text}.`);
+  }
+}
 function bindWhy() {
+  const rank = parseInt(location.hash.split('/')[2], 10);
+  const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
+  if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
     // Kept in page memory only, for the slip (#24); never sent or stored.
     (state.outcomes ||= {})[parseInt(location.hash.split('/')[2], 10)] = {said: b.dataset.outcome, at: Date.now()};
@@ -627,7 +669,7 @@ function render() {
 }
 window.addEventListener('hashchange', () => {
   if (location.hash === '#/' || location.hash === '#/change') {
-    state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; stopWatch();
+    state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; state.verify = {}; stopWatch();
   }
   document.body.classList.remove('slip-big');
   render();

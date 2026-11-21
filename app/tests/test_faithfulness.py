@@ -26,6 +26,7 @@ import subprocess
 import sys
 import time
 import urllib.request
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,26 @@ AREA_ROW_FIELDS = {
     "Calls could close": "area.summary.calls_could_close",
     "No public evidence of care": "area.summary.no_public_evidence",
 }
+IST = timezone(timedelta(hours=5, minutes=30))  # the browser context runs in Asia/Kolkata
+
+
+def verify_fixture(o: dict) -> dict:
+    """A website-check result (#37) as /api/verify returns it; real results replace it with FAITH_PLANS runs."""
+    t = int(time.time() * 1000)
+    return {"facility_id": o["facility_id"], "service_id": "x", "status": "found",
+            "status_text": "website lists",
+            "quotes": [{"text": f"{o['name']} has a dialysis unit with 10 machines, open 24 hours.",
+                        "url": "https://example.org/services/dialysis", "says": "yes"},
+                       {"text": "Haemodialysis 6 days a week, 2 shifts.", "url": "https://example.org/",
+                        "says": "yes"}],
+            "pages_checked": ["https://example.org/"], "checked_at": "", "checked_at_ms": t, "cached": False}
+
+
+def json_reply(obj: Any):
+    body = json.dumps(obj)
+    return lambda route: route.fulfill(status=200, content_type="application/json", body=body)
+
+
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 
 
@@ -173,6 +194,11 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = isinstance(stored, (int, float)) and within_precision(shown, stored)
     elif kind == "sum":
         ok = int(number(shown)) == sum(c["points"] for c in stored)
+    elif kind == "clock":
+        m = re.fullmatch(r"(\d{1,2}):(\d{2})\s*([AaPp][Mm])?", shown.strip())
+        when = datetime.fromtimestamp(stored / 1000, IST)
+        h = int(m[1]) % 12 + (12 if m[3] and m[3].lower() == "pm" else 0) if m and m[3] else int(m[1]) if m else -1
+        ok = bool(m) and (h, int(m[2])) == (when.hour, when.minute)
     elif kind == "atleast":
         ok = within_precision(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
@@ -228,6 +254,7 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
     report = {"values_checked": 0, "quotes_matched_to_claims": 0, "quotes_without_claim_row": 0}
     ctx = browser.new_context(viewport={"width": 360, "height": 780}, geolocation=SITAMARHI,
+                              timezone_id="Asia/Kolkata", locale="en-IN",
                               permissions=["geolocation"], service_workers="block")
     page = ctx.new_page()
     page.route("**/api/plan", lambda r: r.fulfill(status=200, content_type="application/json",
@@ -257,6 +284,18 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             for j in range(len(o["contributions"])):
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
+            # Live website check (#37): the dated line and its quotes must equal the /api/verify answer.
+            ver = verify_fixture(o)
+            page.route("**/api/verify", json_reply(ver))
+            page.locator("#verify-btn").click()
+            page.wait_for_selector("#verify-out blockquote")
+            got = page.evaluate(COLLECT_JS)
+            errs += check_screen(f"why/{o['rank']}/website", {**payload, "verify": ver}, got, report)
+            vshown = {it["path"] for it in got["items"]}
+            for need in ("verify.checked_at_ms", "verify.status_text", "verify.quotes.0.text", "verify.quotes.1.url"):
+                if need not in vshown:
+                    errs.append(f"why/{o['rank']}/website: {need} not shown")
+            page.unroute("**/api/verify")
             for lang in ("en", "hi"):
                 page.evaluate("h => { location.hash = h; }", f"#/slip/{o['rank']}")
                 page.wait_for_selector(".slip")
