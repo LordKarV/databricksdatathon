@@ -1,0 +1,752 @@
+[
+ {
+  "pair_id": "v3t_001",
+  "unique_id": "7ee52893-65a1-44e0-934f-546e7ed1cb5b",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_002",
+  "unique_id": "8c505cc4-10f5-4139-8164-0aead4edb58c",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_003",
+  "unique_id": "b5421384-abc8-44e8-a369-f023463fdf8f",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_004",
+  "unique_id": "e144639d-0552-4f50-9382-32a5f7ddc996",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_005",
+  "unique_id": "87d885ff-b0ac-4195-a311-92a753d34f41",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_006",
+  "unique_id": "8dc34944-6693-4615-b6d7-0968c332c852",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_007",
+  "unique_id": "ae711d74-537e-4b53-9d44-84e17eb89a53",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_008",
+  "unique_id": "d71e18cb-97d8-4c08-84c7-1eb44c0e87fa",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_009",
+  "unique_id": "74977724-1f9a-44e2-bdc5-25e1dca7bd4c",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_010",
+  "unique_id": "b03c3eff-9860-476f-a744-fc983aa5d7f1",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_011",
+  "unique_id": "b8a5401f-42f1-422a-8cd9-686a15b4cb76",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_012",
+  "unique_id": "fa1e1e71-94ee-48eb-9954-4cf05b2c0c0b",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_013",
+  "unique_id": "050479fe-82a8-404b-a41b-a61d15eb9577",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_014",
+  "unique_id": "52e36201-402e-4326-9e12-28816c9c58ef",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_015",
+  "unique_id": "a7757509-519c-42f9-a60d-62573825fbb8",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_016",
+  "unique_id": "ac087d5a-715e-47ef-9d0d-15f646789d3c",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_017",
+  "unique_id": "d695ba46-a9a1-43b9-a54f-9b0e8fa4c463",
+  "service": "burn_care"
+ },
+ {
+  "pair_id": "v3t_018",
+  "unique_id": "481d22ad-be9f-412a-9d5c-88ebd9b2822d",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_019",
+  "unique_id": "7687df38-39d2-487f-9df1-a91452c08996",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_020",
+  "unique_id": "9431cfef-7a68-4a34-a7ef-fac57a61a3a6",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_021",
+  "unique_id": "b6c26a78-022d-4624-8435-59034f8a897c",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_022",
+  "unique_id": "3ef783e8-3f3d-416a-bf7b-4bd9781e9286",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_023",
+  "unique_id": "43d0e338-a916-4791-8823-50c671a22ebf",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_024",
+  "unique_id": "8fbc9910-dbec-4ca7-82d0-53d68c5ef8f3",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_025",
+  "unique_id": "b2ae8404-88c9-4a43-8fab-b7edf09ee96f",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_026",
+  "unique_id": "1647008a-aca8-44ff-8507-914e3b166ac4",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_027",
+  "unique_id": "23143224-b500-460b-bd6f-ecaf6c412468",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_028",
+  "unique_id": "b288467c-117e-47fe-81b5-7bb8dcf494b3",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_029",
+  "unique_id": "f6e9dc6e-61b3-4d4c-b2f5-01d7ba091510",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_030",
+  "unique_id": "0b86653e-a1dd-4ebf-b336-130075e2a31a",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_031",
+  "unique_id": "8ff226be-de9f-4fe1-ac8e-3f7f640806e4",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_032",
+  "unique_id": "ab8d406d-9230-4aa1-9d68-bfc0c44a36ca",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_033",
+  "unique_id": "ad3649ac-8a62-4906-b881-6bdb48f70216",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_034",
+  "unique_id": "adddf489-18ad-41d0-a611-3da80f1ec058",
+  "service": "cardiac_surgery"
+ },
+ {
+  "pair_id": "v3t_035",
+  "unique_id": "2b4c984c-2c3b-4667-9d90-b3a9c5b74053",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_036",
+  "unique_id": "6d11c931-7396-462f-90a1-ef58eeed1c83",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_037",
+  "unique_id": "f6c79271-3979-48ba-8991-752621f6310c",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_038",
+  "unique_id": "fa445a1d-ff1a-40b5-95b4-7351e0cb7852",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_039",
+  "unique_id": "2f915a8d-7a22-4426-9f6b-256f7bfed230",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_040",
+  "unique_id": "804cd688-8484-4c54-84ee-3ac6d1d27ab2",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_041",
+  "unique_id": "9526592c-3f0e-4970-8ddd-d7be11947443",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_042",
+  "unique_id": "c57fbffb-29af-4533-9ea3-6a3fb73715cb",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_043",
+  "unique_id": "72b1bbcd-4cc4-403f-9df8-6a44ac724885",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_044",
+  "unique_id": "79a6ad9f-f84a-4f3a-aae1-625336111f3a",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_045",
+  "unique_id": "7b664acd-844f-46f3-b1f7-444ae5caf8b1",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_046",
+  "unique_id": "acd22962-2d73-4e83-8f45-ff995a417c34",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_047",
+  "unique_id": "30ed41d1-ce7e-4936-9569-cb59d2990443",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_048",
+  "unique_id": "5d59971c-41a3-4719-993f-c5478eea60f8",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_049",
+  "unique_id": "696a8ec0-b720-467f-b57b-86fc2cb80493",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_050",
+  "unique_id": "da424446-f4fe-4e4b-ac78-795b3b1a8786",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_051",
+  "unique_id": "f57175c1-2ac3-4977-87c6-4d1f1fad3095",
+  "service": "dialysis"
+ },
+ {
+  "pair_id": "v3t_052",
+  "unique_id": "52a6c5d4-c609-45d1-aeca-c7ef7d1d7838",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_053",
+  "unique_id": "87d1fee8-13d0-4b80-a0d5-4b7105d85425",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_054",
+  "unique_id": "d1fe6343-2b77-455e-bbe6-20a2a163d573",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_055",
+  "unique_id": "d4785333-dacb-4db9-8c3f-b875b953ff6f",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_056",
+  "unique_id": "0d974ba8-c81f-4570-9e53-cb7d8c70578e",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_057",
+  "unique_id": "40649422-32ee-4ec5-ac26-682062014981",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_058",
+  "unique_id": "78deec32-1b06-455e-a102-7aa03d1bb712",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_059",
+  "unique_id": "d93e5058-3819-47e3-aaae-49e6d9cfbafb",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_060",
+  "unique_id": "02b8c9bf-79d5-4d46-adf9-615ed75f80aa",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_061",
+  "unique_id": "0c1c7bad-3b9d-4f67-b281-a282a10f7ffc",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_062",
+  "unique_id": "5fe4b03b-9b0b-4c21-8004-04fdd08ed3c9",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_063",
+  "unique_id": "8b1f6969-a3ce-492a-b855-2c04199f2e5c",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_064",
+  "unique_id": "4d482e1f-2970-484e-a94d-6e228458798f",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_065",
+  "unique_id": "5716ce4c-b545-446b-903c-17d2b86218ee",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_066",
+  "unique_id": "77819ec7-f4cc-47df-adff-ecbc24868491",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_067",
+  "unique_id": "a2d0d233-1d13-4236-9882-b682edd1f382",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_068",
+  "unique_id": "da544a5e-8889-4dea-b095-0586d37c4ceb",
+  "service": "emergency_24x7"
+ },
+ {
+  "pair_id": "v3t_069",
+  "unique_id": "6720cccc-3f42-4bf6-9bc7-33a16492741c",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_070",
+  "unique_id": "85cb0818-b8ac-49c2-a5c5-9565a5a54817",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_071",
+  "unique_id": "9fe35c6f-7526-46d6-946f-19b41e7fb59e",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_072",
+  "unique_id": "f7cd06a2-e695-473f-9b6c-0759e1b65264",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_073",
+  "unique_id": "14510729-4176-4647-a353-fc6e5a119196",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_074",
+  "unique_id": "338be233-2942-4f55-a9a5-1b70dcb32c95",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_075",
+  "unique_id": "76c77c05-0978-4e19-b41f-1fc23b28cfe0",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_076",
+  "unique_id": "94cf9f27-4538-43b3-9514-fc13ba49e661",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_077",
+  "unique_id": "4a235f61-c369-4ff8-823d-732585cb9cc1",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_078",
+  "unique_id": "8c0ec23b-2d96-4fd8-93dd-636129a77b29",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_079",
+  "unique_id": "a122e838-90c4-4be0-a4cc-0b66e0ea62a0",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_080",
+  "unique_id": "b0e2b9d2-1b6d-4270-bce6-d7f1b4f1bff0",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_081",
+  "unique_id": "24aa55f5-5346-415b-9fe3-e7a7bdef6d40",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_082",
+  "unique_id": "7b62c5dd-eb55-49fe-885d-9c6aa579acf4",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_083",
+  "unique_id": "8b6bc0ff-ee35-4cff-a7f2-1a167888524e",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_084",
+  "unique_id": "cba994e0-0c4b-4521-b343-f5db61f6bc0c",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_085",
+  "unique_id": "e7934891-4d67-4225-902f-b4dedd6ad768",
+  "service": "emergency_csection"
+ },
+ {
+  "pair_id": "v3t_086",
+  "unique_id": "16d9d5a6-ee35-4281-8a95-b280c1829886",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_087",
+  "unique_id": "9c5537f1-5c81-4c7d-a7c9-12d606778780",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_088",
+  "unique_id": "bbb196df-2240-4cba-82fd-5ea4578a105c",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_089",
+  "unique_id": "f9139402-d36c-4e9a-820c-8a9582d094fe",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_090",
+  "unique_id": "764025d8-bfd6-4c0d-84f8-5e7bf4d80255",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_091",
+  "unique_id": "88e98821-511f-4a17-84dd-c8207b9fb108",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_092",
+  "unique_id": "d7538a44-e283-4994-981d-e9ebaa8559e6",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_093",
+  "unique_id": "ebb4d2d3-4c1d-436d-b270-2e0f4498cfaa",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_094",
+  "unique_id": "225a4f43-4762-4226-8b83-ea6dc828ab30",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_095",
+  "unique_id": "52bb8240-d5e4-4e6c-a1f4-9a5832d1cf08",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_096",
+  "unique_id": "90bab675-3b99-4123-a205-e2923f37fff1",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_097",
+  "unique_id": "c4db8a1a-c7e0-4f79-96dc-fbe4df69391d",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_098",
+  "unique_id": "0dc6cd25-5907-4ae5-9f1c-258c27658325",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_099",
+  "unique_id": "13c5eb42-9b34-4eb6-9155-5b59f0c8bbb8",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_100",
+  "unique_id": "5b4a8ebb-3f70-4f74-aadb-b05bc6aef2ec",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_101",
+  "unique_id": "5de90c4f-6d17-4173-a4ab-9c32bb5f2217",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_102",
+  "unique_id": "e7f45d40-a5f7-4d3b-ae82-0c5f8501458d",
+  "service": "mri"
+ },
+ {
+  "pair_id": "v3t_103",
+  "unique_id": "0cf03fec-f7a4-48c3-a3de-71ca4a054def",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_104",
+  "unique_id": "6e79eb1b-3815-4c77-bee8-e4d3d97ea284",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_105",
+  "unique_id": "81b069d5-fd79-49e8-a520-2731f8c77504",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_106",
+  "unique_id": "fecd201c-2f67-40bb-8956-ca4f423a0ad2",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_107",
+  "unique_id": "72535fdd-808a-4092-937d-4d613709aa5d",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_108",
+  "unique_id": "8cbb1ecd-e2ee-44d9-b3bd-08f3855fa18a",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_109",
+  "unique_id": "a56291bc-94f6-4536-9946-a7e1f7bbc570",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_110",
+  "unique_id": "f47b9450-f80d-45ac-87df-c29ef999ce2e",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_111",
+  "unique_id": "12d318d4-1082-4ec7-a58b-d6258ad8c05f",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_112",
+  "unique_id": "579fc8ac-6953-4ec5-a864-1bf7d3cb3845",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_113",
+  "unique_id": "8882a726-59ee-4ec1-b7a4-6f2feb0930d1",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_114",
+  "unique_id": "c99f8d45-94ca-41b4-95d4-f3d7e55479e9",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_115",
+  "unique_id": "24677213-129e-4e76-8ec1-a59a3f262c41",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_116",
+  "unique_id": "25c6a2b2-af5d-48c7-9ae7-605f04ee3b60",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_117",
+  "unique_id": "b4e0b960-ad16-4c18-b756-ed42ea6a9f39",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_118",
+  "unique_id": "dc44e562-bef9-4f3b-8ba7-c1181676b072",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_119",
+  "unique_id": "f3222b21-b511-42e2-87eb-d14ff01f26bb",
+  "service": "nicu"
+ },
+ {
+  "pair_id": "v3t_120",
+  "unique_id": "4090d10a-5dcd-4887-abea-06b1daab53d7",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_121",
+  "unique_id": "bbf46f87-47c0-4be1-a0ea-808e6f889df5",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_122",
+  "unique_id": "c6bb3bf2-63a7-4f7f-ab10-901f641c04ce",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_123",
+  "unique_id": "f904b115-9432-489d-b86a-898977baee55",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_124",
+  "unique_id": "83703c0d-906a-4dac-9581-9bf47f9d3e94",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_125",
+  "unique_id": "af612410-073f-4a62-98dd-a8ac412dbd5c",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_126",
+  "unique_id": "f69e771e-4f81-4c6f-b8a4-4fc27b2e0344",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_127",
+  "unique_id": "4b8e2383-2837-44fa-b514-6308dfd5eb8f",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_128",
+  "unique_id": "feac6fe2-dc57-4798-b03d-473761c03640",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_129",
+  "unique_id": "5963d98d-4120-44f1-9772-a4e2b0774a3d",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_130",
+  "unique_id": "64f2848d-e9df-4e74-956d-ab95a1537040",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_131",
+  "unique_id": "d29c85e9-2a08-40ab-9231-5cebf160cd5d",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_132",
+  "unique_id": "efc76d32-da5c-4e79-830b-4c91a5b9b37f",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_133",
+  "unique_id": "f901fdda-e148-4322-bfc5-5c38d91f61f9",
+  "service": "stemi_thrombolysis"
+ },
+ {
+  "pair_id": "v3t_134",
+  "unique_id": "3ba2d4c3-6651-4009-9c81-293583383f92",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_135",
+  "unique_id": "8867cdb5-e383-4c5c-8b3e-a4183aa02dcf",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_136",
+  "unique_id": "bdbb53ef-65e6-4741-ba2e-ef4315c5faef",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_137",
+  "unique_id": "d9ad5390-e954-4ddf-8ee9-2386b0b4e9c4",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_138",
+  "unique_id": "37d6e184-df9f-4118-973a-d9aa9d384ae4",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_139",
+  "unique_id": "8b0f4cdc-8e6e-43a1-b3d4-14dde039b97b",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_140",
+  "unique_id": "b5a57699-76c4-4ba4-9936-713c233e752a",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_141",
+  "unique_id": "fc9cdea1-23bf-4180-872a-44335e348fb4",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_142",
+  "unique_id": "2b6dbdc8-0fb7-4dc3-8875-95ba241d9e1d",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_143",
+  "unique_id": "2c691652-dcea-4c8a-852f-9a44d2d9ea14",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_144",
+  "unique_id": "320add3e-1571-45a1-b56f-27736f35c4aa",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_145",
+  "unique_id": "7eeefa2d-4a25-4a04-8166-15b98186fa25",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_146",
+  "unique_id": "1ee7a591-ec3e-4a97-907b-ebb4e04d7447",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_147",
+  "unique_id": "5ab66909-41a2-4699-969c-3cbe8b127a6b",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_148",
+  "unique_id": "8695047f-54d5-4b25-8a7c-58c6121d8a78",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_149",
+  "unique_id": "cc681184-ccf1-48e7-b985-8766ff9968ac",
+  "service": "trauma_care"
+ },
+ {
+  "pair_id": "v3t_150",
+  "unique_id": "da43869b-6479-4d8d-b44c-f3382e8d6c99",
+  "service": "trauma_care"
+ }
+]

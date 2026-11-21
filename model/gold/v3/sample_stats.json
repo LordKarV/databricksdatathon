@@ -1,0 +1,434 @@
+{
+ "seed": 20261121,
+ "frame_facilities": 7826,
+ "all_facilities": 9947,
+ "excluded_earlier_gold": 181,
+ "n_dev": 300,
+ "n_test": 150,
+ "n_overlap": {
+  "dev": 75,
+  "test": 38
+ },
+ "dev_by_service_stratum": {
+  "burn_care": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "cardiac_surgery": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "dialysis": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "emergency_24x7": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "emergency_csection": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "mri": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "nicu": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  },
+  "stemi_thrombolysis": {
+   "no_mention": 9,
+   "strong": 7,
+   "suspect": 4,
+   "weak": 8
+  },
+  "trauma_care": {
+   "no_mention": 9,
+   "strong": 9,
+   "suspect": 8,
+   "weak": 8
+  }
+ },
+ "focus_share": {
+  "dev": 0.43,
+  "test": 0.433
+ },
+ "cells": {
+  "dialysis|strong|focus": {
+   "pool": 116,
+   "picked": 6,
+   "inclusion_prob": 0.051724
+  },
+  "dialysis|strong|rest": {
+   "pool": 497,
+   "picked": 7,
+   "inclusion_prob": 0.014085
+  },
+  "dialysis|weak|focus": {
+   "pool": 19,
+   "picked": 7,
+   "inclusion_prob": 0.368421
+  },
+  "dialysis|weak|rest": {
+   "pool": 105,
+   "picked": 6,
+   "inclusion_prob": 0.057143
+  },
+  "dialysis|suspect|focus": {
+   "pool": 33,
+   "picked": 6,
+   "inclusion_prob": 0.181818
+  },
+  "dialysis|suspect|rest": {
+   "pool": 125,
+   "picked": 6,
+   "inclusion_prob": 0.048
+  },
+  "dialysis|no_mention|focus": {
+   "pool": 35,
+   "picked": 6,
+   "inclusion_prob": 0.171429
+  },
+  "dialysis|no_mention|rest": {
+   "pool": 146,
+   "picked": 7,
+   "inclusion_prob": 0.047945
+  },
+  "emergency_csection|strong|focus": {
+   "pool": 25,
+   "picked": 6,
+   "inclusion_prob": 0.24
+  },
+  "emergency_csection|strong|rest": {
+   "pool": 140,
+   "picked": 7,
+   "inclusion_prob": 0.05
+  },
+  "emergency_csection|weak|focus": {
+   "pool": 20,
+   "picked": 7,
+   "inclusion_prob": 0.35
+  },
+  "emergency_csection|weak|rest": {
+   "pool": 115,
+   "picked": 6,
+   "inclusion_prob": 0.052174
+  },
+  "emergency_csection|suspect|focus": {
+   "pool": 22,
+   "picked": 6,
+   "inclusion_prob": 0.272727
+  },
+  "emergency_csection|suspect|rest": {
+   "pool": 43,
+   "picked": 6,
+   "inclusion_prob": 0.139535
+  },
+  "emergency_csection|no_mention|focus": {
+   "pool": 40,
+   "picked": 6,
+   "inclusion_prob": 0.15
+  },
+  "emergency_csection|no_mention|rest": {
+   "pool": 166,
+   "picked": 7,
+   "inclusion_prob": 0.042169
+  },
+  "nicu|strong|focus": {
+   "pool": 113,
+   "picked": 6,
+   "inclusion_prob": 0.053097
+  },
+  "nicu|strong|rest": {
+   "pool": 328,
+   "picked": 7,
+   "inclusion_prob": 0.021341
+  },
+  "nicu|weak|focus": {
+   "pool": 11,
+   "picked": 7,
+   "inclusion_prob": 0.636364
+  },
+  "nicu|weak|rest": {
+   "pool": 55,
+   "picked": 6,
+   "inclusion_prob": 0.109091
+  },
+  "nicu|suspect|focus": {
+   "pool": 36,
+   "picked": 6,
+   "inclusion_prob": 0.166667
+  },
+  "nicu|suspect|rest": {
+   "pool": 91,
+   "picked": 6,
+   "inclusion_prob": 0.065934
+  },
+  "nicu|no_mention|focus": {
+   "pool": 37,
+   "picked": 6,
+   "inclusion_prob": 0.162162
+  },
+  "nicu|no_mention|rest": {
+   "pool": 152,
+   "picked": 7,
+   "inclusion_prob": 0.046053
+  },
+  "cardiac_surgery|strong|focus": {
+   "pool": 28,
+   "picked": 6,
+   "inclusion_prob": 0.214286
+  },
+  "cardiac_surgery|strong|rest": {
+   "pool": 281,
+   "picked": 7,
+   "inclusion_prob": 0.024911
+  },
+  "cardiac_surgery|weak|focus": {
+   "pool": 45,
+   "picked": 7,
+   "inclusion_prob": 0.155556
+  },
+  "cardiac_surgery|weak|rest": {
+   "pool": 331,
+   "picked": 6,
+   "inclusion_prob": 0.018127
+  },
+  "cardiac_surgery|suspect|focus": {
+   "pool": 22,
+   "picked": 6,
+   "inclusion_prob": 0.272727
+  },
+  "cardiac_surgery|suspect|rest": {
+   "pool": 140,
+   "picked": 6,
+   "inclusion_prob": 0.042857
+  },
+  "cardiac_surgery|no_mention|focus": {
+   "pool": 37,
+   "picked": 6,
+   "inclusion_prob": 0.162162
+  },
+  "cardiac_surgery|no_mention|rest": {
+   "pool": 147,
+   "picked": 7,
+   "inclusion_prob": 0.047619
+  },
+  "mri|strong|focus": {
+   "pool": 65,
+   "picked": 6,
+   "inclusion_prob": 0.092308
+  },
+  "mri|strong|rest": {
+   "pool": 414,
+   "picked": 7,
+   "inclusion_prob": 0.016908
+  },
+  "mri|weak|focus": {
+   "pool": 34,
+   "picked": 7,
+   "inclusion_prob": 0.205882
+  },
+  "mri|weak|rest": {
+   "pool": 175,
+   "picked": 6,
+   "inclusion_prob": 0.034286
+  },
+  "mri|suspect|focus": {
+   "pool": 27,
+   "picked": 6,
+   "inclusion_prob": 0.222222
+  },
+  "mri|suspect|rest": {
+   "pool": 114,
+   "picked": 6,
+   "inclusion_prob": 0.052632
+  },
+  "mri|no_mention|focus": {
+   "pool": 32,
+   "picked": 6,
+   "inclusion_prob": 0.1875
+  },
+  "mri|no_mention|rest": {
+   "pool": 144,
+   "picked": 7,
+   "inclusion_prob": 0.048611
+  },
+  "burn_care|strong|focus": {
+   "pool": 17,
+   "picked": 6,
+   "inclusion_prob": 0.352941
+  },
+  "burn_care|strong|rest": {
+   "pool": 72,
+   "picked": 7,
+   "inclusion_prob": 0.097222
+  },
+  "burn_care|weak|focus": {
+   "pool": 15,
+   "picked": 7,
+   "inclusion_prob": 0.466667
+  },
+  "burn_care|weak|rest": {
+   "pool": 62,
+   "picked": 6,
+   "inclusion_prob": 0.096774
+  },
+  "burn_care|suspect|focus": {
+   "pool": 10,
+   "picked": 6,
+   "inclusion_prob": 0.6
+  },
+  "burn_care|suspect|rest": {
+   "pool": 33,
+   "picked": 6,
+   "inclusion_prob": 0.181818
+  },
+  "burn_care|no_mention|focus": {
+   "pool": 41,
+   "picked": 6,
+   "inclusion_prob": 0.146341
+  },
+  "burn_care|no_mention|rest": {
+   "pool": 169,
+   "picked": 7,
+   "inclusion_prob": 0.04142
+  },
+  "trauma_care|strong|focus": {
+   "pool": 78,
+   "picked": 6,
+   "inclusion_prob": 0.076923
+  },
+  "trauma_care|strong|rest": {
+   "pool": 346,
+   "picked": 7,
+   "inclusion_prob": 0.020231
+  },
+  "trauma_care|weak|focus": {
+   "pool": 310,
+   "picked": 7,
+   "inclusion_prob": 0.022581
+  },
+  "trauma_care|weak|rest": {
+   "pool": 1649,
+   "picked": 6,
+   "inclusion_prob": 0.003639
+  },
+  "trauma_care|suspect|focus": {
+   "pool": 121,
+   "picked": 6,
+   "inclusion_prob": 0.049587
+  },
+  "trauma_care|suspect|rest": {
+   "pool": 465,
+   "picked": 6,
+   "inclusion_prob": 0.012903
+  },
+  "trauma_care|no_mention|focus": {
+   "pool": 14,
+   "picked": 2,
+   "inclusion_prob": 0.142857
+  },
+  "trauma_care|no_mention|rest": {
+   "pool": 55,
+   "picked": 11,
+   "inclusion_prob": 0.2
+  },
+  "emergency_24x7|strong|focus": {
+   "pool": 250,
+   "picked": 6,
+   "inclusion_prob": 0.024
+  },
+  "emergency_24x7|strong|rest": {
+   "pool": 1190,
+   "picked": 7,
+   "inclusion_prob": 0.005882
+  },
+  "emergency_24x7|weak|focus": {
+   "pool": 121,
+   "picked": 7,
+   "inclusion_prob": 0.057851
+  },
+  "emergency_24x7|weak|rest": {
+   "pool": 677,
+   "picked": 6,
+   "inclusion_prob": 0.008863
+  },
+  "emergency_24x7|suspect|focus": {
+   "pool": 99,
+   "picked": 6,
+   "inclusion_prob": 0.060606
+  },
+  "emergency_24x7|suspect|rest": {
+   "pool": 347,
+   "picked": 6,
+   "inclusion_prob": 0.017291
+  },
+  "emergency_24x7|no_mention|focus": {
+   "pool": 19,
+   "picked": 0,
+   "inclusion_prob": 0.0
+  },
+  "emergency_24x7|no_mention|rest": {
+   "pool": 76,
+   "picked": 13,
+   "inclusion_prob": 0.171053
+  },
+  "stemi_thrombolysis|strong|focus": {
+   "pool": 0,
+   "picked": 0,
+   "inclusion_prob": null
+  },
+  "stemi_thrombolysis|strong|rest": {
+   "pool": 10,
+   "picked": 10,
+   "inclusion_prob": 1.0
+  },
+  "stemi_thrombolysis|weak|focus": {
+   "pool": 3,
+   "picked": 2,
+   "inclusion_prob": 0.666667
+  },
+  "stemi_thrombolysis|weak|rest": {
+   "pool": 20,
+   "picked": 11,
+   "inclusion_prob": 0.55
+  },
+  "stemi_thrombolysis|suspect|focus": {
+   "pool": 2,
+   "picked": 1,
+   "inclusion_prob": 0.5
+  },
+  "stemi_thrombolysis|suspect|rest": {
+   "pool": 6,
+   "picked": 5,
+   "inclusion_prob": 0.833333
+  },
+  "stemi_thrombolysis|no_mention|focus": {
+   "pool": 44,
+   "picked": 1,
+   "inclusion_prob": 0.022727
+  },
+  "stemi_thrombolysis|no_mention|rest": {
+   "pool": 180,
+   "picked": 12,
+   "inclusion_prob": 0.066667
+  }
+ }
+}
