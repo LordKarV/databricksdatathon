@@ -1,0 +1,1044 @@
+{
+ "version": 2,
+ "config": {
+  "sample_questions": [
+   {
+    "id": "13e677d214266e6827e8d9726ea68323",
+    "question": [
+     "What share of trauma claims is confirmed by a second source, by state?"
+    ]
+   },
+   {
+    "id": "4c40dc290a51c1d09f330c162b84e135",
+    "question": [
+     "Which districts in Bihar have no corroborated dialysis?"
+    ]
+   },
+   {
+    "id": "6d24a3ed7f14043a6c4ed1093527e6ed",
+    "question": [
+     "How many people live in high-need districts far from confirmed dialysis?"
+    ]
+   },
+   {
+    "id": "9cc10ae55869bf9299105612569831d2",
+    "question": [
+     "Which NABH-listed facilities near Patna have a nephrology service?"
+    ]
+   },
+   {
+    "id": "dd7233241acf4fffaa47d94343b9ca6c",
+    "question": [
+     "Which Bihar districts have the fewest facility records per million people?"
+    ]
+   }
+  ]
+ },
+ "data_sources": {
+  "tables": [
+   {
+    "identifier": "workspace.referral_saathi.claims",
+    "column_configs": [
+     {
+      "column_name": "attribution",
+      "description": [
+       "own_anchored, unanchored, ambiguous or other_facility."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "claim_id",
+      "description": [
+       "Claim sentence id uid8:field4:idx; the id to cite."
+      ]
+     },
+     {
+      "column_name": "foreign_names",
+      "exclude": true
+     },
+     {
+      "column_name": "idx",
+      "exclude": true
+     },
+     {
+      "column_name": "nonoffer",
+      "description": [
+       "True when the sentence does not offer the service (referral, future, camp, negation ...)."
+      ]
+     },
+     {
+      "column_name": "places_other_district",
+      "exclude": true
+     },
+     {
+      "column_name": "places_other_state",
+      "exclude": true
+     },
+     {
+      "column_name": "prereqs",
+      "exclude": true
+     },
+     {
+      "column_name": "qty_unit",
+      "exclude": true
+     },
+     {
+      "column_name": "qty_value",
+      "exclude": true
+     },
+     {
+      "column_name": "self_names",
+      "exclude": true
+     },
+     {
+      "column_name": "sibling_names",
+      "exclude": true
+     },
+     {
+      "column_name": "text",
+      "description": [
+       "The claim sentence as written in the record."
+      ]
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.facility_list_facts",
+    "column_configs": [
+     {
+      "column_name": "citation_url",
+      "description": [
+       "Where the fact can be checked. '#' or 'Not Found' means no usable link."
+      ]
+     },
+     {
+      "column_name": "licence_note",
+      "exclude": true
+     },
+     {
+      "column_name": "list_slug",
+      "description": [
+       "nabh, laqshya, nmc, mohfw_trauma, eraktkosh or pmndp_goa."
+      ],
+      "synonyms": [
+       "official list",
+       "accreditation list"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "service",
+      "description": [
+       "Service the list fact is about (trauma_emergency, emergency_csection, dialysis, icu ...). NULL means a facility-level fact (all NABH rows): it does not confirm any one service."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "status",
+      "description": [
+       "What the list says: NABH Accredited, Certified, Renewed or Empaneled; LaQshya 'certified, valid' or 'certified, expired'; MoHFW trauma level and functional status."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     },
+     {
+      "column_name": "valid_to",
+      "description": [
+       "Certificate end date (LaQshya)."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.facility_trust",
+    "column_configs": [
+     {
+      "column_name": "drivers",
+      "description": [
+       "Plain-English reasons for the score."
+      ]
+     },
+     {
+      "column_name": "existence_score",
+      "description": [
+       "P(facility exists), 0 to 1."
+      ]
+     },
+     {
+      "column_name": "location_score",
+      "description": [
+       "P(cleaned location is right), 0 to 1."
+      ]
+     },
+     {
+      "column_name": "overall_score",
+      "description": [
+       "existence x location x attribution, 0 to 1. A record-quality score, not a service score."
+      ],
+      "synonyms": [
+       "trust score"
+      ]
+     },
+     {
+      "column_name": "top_sources",
+      "exclude": true
+     },
+     {
+      "column_name": "trust_level_cleaning",
+      "description": [
+       "no_concerns, minor, caution or exclude_review."
+      ],
+      "synonyms": [
+       "trust level"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.geo_dialysis_district",
+    "column_configs": [
+     {
+      "column_name": "burden_q",
+      "description": [
+       "Need quartile of ncd."
+      ]
+     },
+     {
+      "column_name": "cx",
+      "exclude": true
+     },
+     {
+      "column_name": "cy",
+      "exclude": true
+     },
+     {
+      "column_name": "hot",
+      "description": [
+       "Top need quarter AND under half the people within 60 minutes of confirmed dialysis."
+      ]
+     },
+     {
+      "column_name": "median_min",
+      "description": [
+       "Population-weighted median drive minutes to confirmed dialysis."
+      ]
+     },
+     {
+      "column_name": "n_claim",
+      "description": [
+       "Facilities in the district whose records claim dialysis."
+      ]
+     },
+     {
+      "column_name": "n_corr",
+      "description": [
+       "Facilities with confirmed dialysis (claimed plus a second source)."
+      ],
+      "synonyms": [
+       "confirmed dialysis"
+      ]
+     },
+     {
+      "column_name": "ncd",
+      "description": [
+       "Dialysis need proxy in percent: mean of four NFHS-5 high blood pressure and blood sugar rates."
+      ]
+     },
+     {
+      "column_name": "nfhs_district",
+      "description": [
+       "NFHS-5 district (704 districts)."
+      ],
+      "synonyms": [
+       "district"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "nfhs_state",
+      "description": [
+       "NFHS-5 state, title case (Bihar)."
+      ],
+      "synonyms": [
+       "state"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "pop",
+      "description": [
+       "People (WorldPop 2025)."
+      ]
+     },
+     {
+      "column_name": "share60",
+      "description": [
+       "Share of people (0 to 1) within 60 minutes' drive of confirmed dialysis."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.geo_district",
+    "column_configs": [
+     {
+      "column_name": "cx",
+      "exclude": true
+     },
+     {
+      "column_name": "cy",
+      "exclude": true
+     },
+     {
+      "column_name": "dtname",
+      "description": [
+       "LGD district (784 districts, including those with no records)."
+      ],
+      "synonyms": [
+       "district"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "per_m",
+      "description": [
+       "Records per million people."
+      ],
+      "synonyms": [
+       "records per million",
+       "density"
+      ]
+     },
+     {
+      "column_name": "pop",
+      "description": [
+       "People (WorldPop 2025)."
+      ]
+     },
+     {
+      "column_name": "records",
+      "description": [
+       "Facility records whose point falls in the district."
+      ]
+     },
+     {
+      "column_name": "stname",
+      "description": [
+       "LGD state, UPPER CASE."
+      ],
+      "synonyms": [
+       "state"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.geo_facility",
+    "column_configs": [
+     {
+      "column_name": "col",
+      "exclude": true
+     },
+     {
+      "column_name": "csection_claimed",
+      "description": [
+       "A dataset sentence names emergency C-section for this facility, with non-offer, negated, other-facility, staff and directory lines removed. A claim, not a fact."
+      ]
+     },
+     {
+      "column_name": "csection_corroborated",
+      "description": [
+       "Claimed AND at least one second check agrees: the evidence level planners call confirmed."
+      ],
+      "synonyms": [
+       "confirmed",
+       "verified by a second source",
+       "corroborated"
+      ]
+     },
+     {
+      "column_name": "csection_independent",
+      "description": [
+       "At least one second check (website, OSM, official list) mentions emergency C-section."
+      ]
+     },
+     {
+      "column_name": "csection_laqshya",
+      "description": [
+       "Holds an NHSRC LaQshya maternity OT certificate (C-section only)."
+      ]
+     },
+     {
+      "column_name": "csection_osm",
+      "description": [
+       "OpenStreetMap feature matched to this facility supports emergency C-section."
+      ]
+     },
+     {
+      "column_name": "csection_tcf",
+      "description": [
+       "Matched to the MoHFW list of 196 trauma care facilities (trauma only)."
+      ]
+     },
+     {
+      "column_name": "csection_web",
+      "description": [
+       "The facility's own website states emergency C-section (quote-verified). Not fully independent of the dataset."
+      ]
+     },
+     {
+      "column_name": "degurba",
+      "description": [
+       "Settlement class of the point: 3 urban centre, 2 town or semi-dense, 1 rural."
+      ]
+     },
+     {
+      "column_name": "dialysis_claimed",
+      "description": [
+       "A dataset sentence names dialysis for this facility, with non-offer, negated, other-facility, staff and directory lines removed. A claim, not a fact."
+      ]
+     },
+     {
+      "column_name": "dialysis_corroborated",
+      "description": [
+       "Claimed AND at least one second check agrees: the evidence level planners call confirmed."
+      ],
+      "synonyms": [
+       "confirmed",
+       "verified by a second source",
+       "corroborated"
+      ]
+     },
+     {
+      "column_name": "dialysis_independent",
+      "description": [
+       "At least one second check (website, OSM, official list) mentions dialysis."
+      ]
+     },
+     {
+      "column_name": "dialysis_laqshya",
+      "description": [
+       "Holds an NHSRC LaQshya maternity OT certificate (C-section only)."
+      ]
+     },
+     {
+      "column_name": "dialysis_osm",
+      "description": [
+       "OpenStreetMap feature matched to this facility supports dialysis."
+      ]
+     },
+     {
+      "column_name": "dialysis_tcf",
+      "description": [
+       "Matched to the MoHFW list of 196 trauma care facilities (trauma only)."
+      ]
+     },
+     {
+      "column_name": "dialysis_web",
+      "description": [
+       "The facility's own website states dialysis (quote-verified). Not fully independent of the dataset."
+      ]
+     },
+     {
+      "column_name": "district",
+      "exclude": true
+     },
+     {
+      "column_name": "dtname",
+      "description": [
+       "LGD district of the facility's cleaned point, title case (Patna)."
+      ],
+      "synonyms": [
+       "district"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "facilityTypeId",
+      "description": [
+       "hospital, clinic, dentist, doctor or farmacy; may be the string 'null'."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "grid_id",
+      "exclude": true
+     },
+     {
+      "column_name": "is_canonical",
+      "description": [
+       "False for 77 duplicate records; filter is_canonical = true to count facilities once."
+      ]
+     },
+     {
+      "column_name": "loc_conf",
+      "description": [
+       "Location confidence: high, medium, low or disputed."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "loc_lat",
+      "description": [
+       "Cleaned latitude used for distance."
+      ]
+     },
+     {
+      "column_name": "loc_lon",
+      "description": [
+       "Cleaned longitude used for distance."
+      ]
+     },
+     {
+      "column_name": "name",
+      "description": [
+       "Facility name as the record writes it."
+      ],
+      "synonyms": [
+       "facility",
+       "hospital"
+      ]
+     },
+     {
+      "column_name": "nfhs_district",
+      "description": [
+       "NFHS-5 district key; joins geo_dialysis_district."
+      ]
+     },
+     {
+      "column_name": "nfhs_district_name",
+      "exclude": true
+     },
+     {
+      "column_name": "nfhs_state",
+      "description": [
+       "NFHS-5 state key, title case (Bihar); joins geo_dialysis_district."
+      ]
+     },
+     {
+      "column_name": "nfhs_state_ut",
+      "exclude": true
+     },
+     {
+      "column_name": "on_grid",
+      "exclude": true
+     },
+     {
+      "column_name": "operatorTypeId",
+      "description": [
+       "Owner: private, public, or the string 'null' when unknown."
+      ],
+      "synonyms": [
+       "ownership"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "row",
+      "exclude": true
+     },
+     {
+      "column_name": "snapped",
+      "exclude": true
+     },
+     {
+      "column_name": "state_final",
+      "exclude": true
+     },
+     {
+      "column_name": "stname",
+      "description": [
+       "LGD state of the facility's cleaned point, UPPER CASE (BIHAR)."
+      ],
+      "synonyms": [
+       "state"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "trauma_claimed",
+      "description": [
+       "A dataset sentence names trauma or 24x7 emergency for this facility, with non-offer, negated, other-facility, staff and directory lines removed. A claim, not a fact."
+      ]
+     },
+     {
+      "column_name": "trauma_corroborated",
+      "description": [
+       "Claimed AND at least one second check agrees: the evidence level planners call confirmed."
+      ],
+      "synonyms": [
+       "confirmed",
+       "verified by a second source",
+       "corroborated"
+      ]
+     },
+     {
+      "column_name": "trauma_independent",
+      "description": [
+       "At least one second check (website, OSM, official list) mentions trauma or 24x7 emergency."
+      ]
+     },
+     {
+      "column_name": "trauma_laqshya",
+      "description": [
+       "Holds an NHSRC LaQshya maternity OT certificate (C-section only)."
+      ]
+     },
+     {
+      "column_name": "trauma_osm",
+      "description": [
+       "OpenStreetMap feature matched to this facility supports trauma or 24x7 emergency."
+      ]
+     },
+     {
+      "column_name": "trauma_tcf",
+      "description": [
+       "Matched to the MoHFW list of 196 trauma care facilities (trauma only)."
+      ]
+     },
+     {
+      "column_name": "trauma_web",
+      "description": [
+       "The facility's own website states trauma or 24x7 emergency (quote-verified). Not fully independent of the dataset."
+      ]
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id; joins every facility-level table."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.grades",
+    "column_configs": [
+     {
+      "column_name": "cite_counter",
+      "description": [
+       "JSON array of claim sentences that argue against the service."
+      ]
+     },
+     {
+      "column_name": "cite_evidence",
+      "description": [
+       "JSON array of {claim_id, field, text}: the claim sentences behind the grade. Cite these claim_ids."
+      ],
+      "synonyms": [
+       "citations",
+       "claim ids",
+       "evidence"
+      ]
+     },
+     {
+      "column_name": "grade",
+      "description": [
+       "Text evidence grade from the dataset alone: strong, moderate, weak, tag_only (a specialty tag only), counter_evidence, attributed_elsewhere (the text is about another facility)."
+      ],
+      "synonyms": [
+       "evidence grade",
+       "evidence strength"
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "n_own",
+      "description": [
+       "Sentences attributed to this facility that name the service."
+      ]
+     },
+     {
+      "column_name": "risks",
+      "description": [
+       "Comma list of risk flags (location, name collision, service elsewhere ...)."
+      ]
+     },
+     {
+      "column_name": "rule",
+      "description": [
+       "Grader rule that fired (G_strong, G_mod, G_scope ...)."
+      ]
+     },
+     {
+      "column_name": "service",
+      "description": [
+       "Service key: trauma (trauma or 24x7 emergency), dialysis, csection, icu, nicu, mri, cardiac_surgery, burns."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.services",
+    "column_configs": [
+     {
+      "column_name": "aliases",
+      "description": [
+       "JSON list of the older ids used in grades and geo_facility (trauma, csection, burns)."
+      ]
+     },
+     {
+      "column_name": "name_en",
+      "description": [
+       "Plain name of the service."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "service_id",
+      "description": [
+       "Taxonomy service id (dialysis, emergency_24x7, trauma_care, emergency_csection ...)."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.specialties",
+    "column_configs": [
+     {
+      "column_name": "spec",
+      "description": [
+       "Specialty tag from the record, lower case without spaces (nephrology, cardiology ...). A tag is the weakest evidence: a claim with no sentence."
+      ],
+      "synonyms": [
+       "specialty",
+       "department"
+      ]
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     }
+    ]
+   },
+   {
+    "identifier": "workspace.referral_saathi.web_service_summary",
+    "column_configs": [
+     {
+      "column_name": "best_quote",
+      "description": [
+       "Exact quote from the website."
+      ]
+     },
+     {
+      "column_name": "best_url",
+      "description": [
+       "Page the quote was read from; cite it."
+      ]
+     },
+     {
+      "column_name": "service_id",
+      "description": [
+       "Taxonomy service id (dialysis, icu, emergency_24x7, trauma_care ...)."
+      ],
+      "enable_format_assistance": true,
+      "enable_entity_matching": true
+     },
+     {
+      "column_name": "unique_id",
+      "description": [
+       "Facility record id."
+      ]
+     },
+     {
+      "column_name": "web_positive",
+      "description": [
+       "The facility's own website states the service (attributable page)."
+      ]
+     },
+     {
+      "column_name": "web_positive_strong",
+      "description": [
+       "Website statement is strong (explicit, on a services page or sentence)."
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "instructions": {
+  "text_instructions": [
+   {
+    "id": "1cb251ec0d568de6a929b520c4aed8d1",
+    "content": [
+     "## PURPOSE\n- District planners asking where facilities show public evidence of a service and how strong it is.\n- Every row is a claim from the Virtue Foundation records (88% private), not a verified fact.\n\n## DISAMBIGUATION\n- \"Confirmed\", \"corroborated\" or \"second source\" means the *_corroborated flags in geo_facility or n_corr in geo_dialysis_district. \"Claims\" means *_claimed or grades rows.\n- \"Trauma\" in geo_facility and grades means trauma or 24x7 emergency.\n- \"Near X\" with no radius: 50 km straight line from the facility point; say so.\n- geo_facility and geo_district states are UPPER CASE (BIHAR); NFHS tables use title case (Bihar).\n\n## DATA QUALITY NOTES\n- NABH rows are facility-level (service null): a NABH listing confirms the facility, not a service.\n- citation_url of '#' or 'Not Found' means no usable link.\n- operatorTypeId uses the string 'null' for unknown owner.\n\n## CONSTRAINTS\n- Never rank or recommend facilities on dataset claims alone. Order by evidence level first (official list or confirmed, then grade strong, moderate, weak, tag_only), then distance, and show the level.\n- Never say a place has \"no care\" or \"no facility\". Say \"no public evidence in this dataset\" and give n.\n\n## Instructions you must follow when providing summaries\n- Always state n (facilities, claims or districts) and the evidence level behind each number.\n- When naming a facility-service claim, cite claim_ids from grades.cite_evidence, and citation_url for list facts.\n- Give percentages to one decimal with numerator and denominator."
+    ]
+   }
+  ],
+  "example_question_sqls": [
+   {
+    "id": "1d260366631bcd4217f3b2ef65887a5c",
+    "question": [
+     "How are trauma claims graded in Bihar?"
+    ],
+    "sql": [
+     "SELECT gr.grade, COUNT(*) AS n_facilities\nFROM workspace.referral_saathi.grades gr\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = gr.unique_id\nWHERE gr.service = 'trauma' AND g.stname = 'BIHAR'\nGROUP BY gr.grade\nORDER BY CASE gr.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 WHEN 'weak' THEN 3 WHEN 'tag_only' THEN 4 ELSE 5 END"
+    ],
+    "usage_guidance": [
+     "Grade distribution: strong and moderate rest on the facility's own sentences; tag_only is a specialty tag."
+    ]
+   },
+   {
+    "id": "531112fb944de0ecb994ccad6041f9db",
+    "question": [
+     "What share of trauma claims is confirmed by a second source, by state?"
+    ],
+    "sql": [
+     "SELECT g.stname, COUNT(*) AS n_trauma_claims,\n  SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END) AS n_confirmed,\n  ROUND(100 * SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END) / COUNT(*), 1) AS pct_confirmed\nFROM workspace.referral_saathi.geo_facility g\nWHERE g.trauma_claimed\nGROUP BY g.stname\nORDER BY n_trauma_claims DESC"
+    ],
+    "usage_guidance": [
+     "Confirmation share: denominator is claimed facilities, numerator corroborated. Same shape for dialysis_ and csection_ flags."
+    ]
+   },
+   {
+    "id": "6f3a9937ffbe622497f96241e7e489aa",
+    "question": [
+     "What is the evidence for emergency C-section at each facility in Patna district?"
+    ],
+    "sql": [
+     "SELECT g.name, gr.grade AS text_grade, g.csection_claimed, g.csection_corroborated, g.csection_web,\n  g.csection_laqshya, ROUND(t.overall_score, 2) AS record_trust, gr.cite_evidence\nFROM workspace.referral_saathi.geo_facility g\nLEFT JOIN workspace.referral_saathi.grades gr ON gr.unique_id = g.unique_id AND gr.service = 'csection'\nLEFT JOIN workspace.referral_saathi.facility_trust t ON t.unique_id = g.unique_id\nWHERE g.dtname = 'Patna' AND (g.csection_claimed OR gr.grade IS NOT NULL)\nORDER BY g.csection_corroborated DESC,\n  CASE gr.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 WHEN 'weak' THEN 3 ELSE 4 END, g.name"
+    ],
+    "usage_guidance": [
+     "Evidence ladder for one service in one district: grade, claimed, confirmed and which second source."
+    ]
+   },
+   {
+    "id": "7ddc25dad8d869751ec8820c39cc11a1",
+    "question": [
+     "Show the claim sentences behind dialysis claims in Patna district"
+    ],
+    "sql": [
+     "WITH cited AS (\n  SELECT gr.unique_id, gr.grade,\n    EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) AS e\n  FROM workspace.referral_saathi.grades gr WHERE gr.service = 'dialysis')\nSELECT g.name, cited.grade, cited.e.claim_id AS claim_id, cited.e.field AS field, cited.e.text AS claim_text,\n  c.attribution\nFROM cited\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = cited.unique_id\nLEFT JOIN workspace.referral_saathi.claims c ON c.claim_id = cited.e.claim_id\nWHERE g.dtname = 'Patna'\nORDER BY CASE cited.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 ELSE 3 END, g.name"
+    ],
+    "usage_guidance": [
+     "Citing claim_ids: explode grades.cite_evidence; join claims for attribution."
+    ]
+   },
+   {
+    "id": "96de2b5925c60f5b19469741e95cd9d7",
+    "question": [
+     "Which ICUs in Patna district are confirmed on the facility's own website?"
+    ],
+    "sql": [
+     "SELECT g.name, w.web_positive_strong, w.best_quote, w.best_url, gr.grade AS text_grade, gr.cite_evidence\nFROM workspace.referral_saathi.web_service_summary w\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = w.unique_id\nLEFT JOIN workspace.referral_saathi.grades gr ON gr.unique_id = w.unique_id AND gr.service = 'icu'\nWHERE w.service_id = 'icu' AND w.web_positive AND g.dtname = 'Patna'\nORDER BY w.web_positive_strong DESC, g.name"
+    ],
+    "usage_guidance": [
+     "Website evidence for services other than trauma, dialysis and C-section: web_service_summary with taxonomy service_id; cite best_url."
+    ]
+   },
+   {
+    "id": "aa6fa294ee08cc52745acb199d34c962",
+    "question": [
+     "How many people live in high-need districts far from confirmed dialysis, by state?"
+    ],
+    "sql": [
+     "SELECT d.nfhs_state, COUNT(*) AS hot_districts, ROUND(SUM(d.pop) / 1e6, 1) AS pop_millions,\n  SUM(CASE WHEN d.n_corr = 0 THEN 1 ELSE 0 END) AS hot_districts_with_no_confirmed_facility\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.hot\nGROUP BY d.nfhs_state\nORDER BY pop_millions DESC"
+    ],
+    "usage_guidance": [
+     "Need against access: hot = top need quarter and under half within 60 minutes of confirmed dialysis."
+    ]
+   },
+   {
+    "id": "b4b63dbba481ce04869152d48755e0cd",
+    "question": [
+     "Which facilities with a NABH listing and a nephrology service are near Patna?"
+    ],
+    "sql": [
+     "WITH nabh AS (\n  SELECT l.unique_id, l.status AS nabh_status, l.citation_url AS nabh_citation\n  FROM workspace.referral_saathi.facility_list_facts l WHERE l.list_slug = 'nabh'),\nneph AS (\n  SELECT s.unique_id, CONCAT_WS(', ', COLLECT_SET(s.spec)) AS nephrology_tags\n  FROM workspace.referral_saathi.specialties s WHERE s.spec ILIKE '%nephro%' GROUP BY s.unique_id)\nSELECT g.unique_id, g.name, g.dtname, ROUND(2 * 6371 * ASIN(SQRT(POWER(SIN(RADIANS(g.loc_lat - 25.5941) / 2), 2) + COS(RADIANS(25.5941)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(RADIANS(g.loc_lon - 85.1376) / 2), 2))), 1) AS km_from_patna,\n  nabh.nabh_status, nabh.nabh_citation, neph.nephrology_tags,\n  gr.grade AS dialysis_text_grade, gr.cite_evidence AS dialysis_cited_claims,\n  g.dialysis_corroborated, ROUND(t.overall_score, 2) AS record_trust\nFROM workspace.referral_saathi.geo_facility g\nJOIN nabh ON nabh.unique_id = g.unique_id\nJOIN neph ON neph.unique_id = g.unique_id\nLEFT JOIN workspace.referral_saathi.grades gr ON gr.unique_id = g.unique_id AND gr.service = 'dialysis'\nLEFT JOIN workspace.referral_saathi.facility_trust t ON t.unique_id = g.unique_id\nWHERE 2 * 6371 * ASIN(SQRT(POWER(SIN(RADIANS(g.loc_lat - 25.5941) / 2), 2) + COS(RADIANS(25.5941)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(RADIANS(g.loc_lon - 85.1376) / 2), 2))) <= 50\nORDER BY g.dialysis_corroborated DESC,\n  CASE gr.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 WHEN 'weak' THEN 3 ELSE 4 END,\n  km_from_patna"
+    ],
+    "usage_guidance": [
+     "Facility list near a place: NABH is facility-level, the service comes from specialties, grades and geo_facility flags. Order by evidence level, then distance."
+    ]
+   },
+   {
+    "id": "cb3797ba1d80a8379e5273a1346ef409",
+    "question": [
+     "How many LaQshya certificates are still valid, by state?"
+    ],
+    "sql": [
+     "SELECT g.stname,\n  COUNT(DISTINCT CASE WHEN l.status = 'certified, valid' THEN l.unique_id END) AS facilities_valid,\n  COUNT(DISTINCT CASE WHEN l.status = 'certified, expired' THEN l.unique_id END) AS facilities_with_expired,\n  COUNT(DISTINCT l.unique_id) AS facilities_listed\nFROM workspace.referral_saathi.facility_list_facts l\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id\nWHERE l.list_slug = 'laqshya'\nGROUP BY g.stname\nORDER BY facilities_listed DESC"
+    ],
+    "usage_guidance": [
+     "Official list counts by state: count distinct facilities, a facility has one row per certified department."
+    ]
+   },
+   {
+    "id": "da6aa685fde6e6dff9e2b3bf3979fc00",
+    "question": [
+     "Which districts in Bihar have no corroborated dialysis?"
+    ],
+    "sql": [
+     "SELECT d.nfhs_district, ROUND(d.pop / 1e6, 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis,\n  d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Bihar' AND d.n_corr = 0\nORDER BY d.pop DESC"
+    ],
+    "usage_guidance": [
+     "District with no corroborated service: use geo_dialysis_district for dialysis; report n districts, people, and that zero means no public evidence, not no care."
+    ]
+   },
+   {
+    "id": "f1c7f3518d54551ca7fde9040759a251",
+    "question": [
+     "Which districts in Bihar have the fewest facility records per million people?"
+    ],
+    "sql": [
+     "SELECT d.dtname, ROUND(d.pop / 1e6, 2) AS pop_millions, d.records, ROUND(d.per_m, 2) AS records_per_million\nFROM workspace.referral_saathi.geo_district d\nWHERE d.stname = 'BIHAR'\nORDER BY d.per_m ASC, d.pop DESC\nLIMIT 10"
+    ],
+    "usage_guidance": [
+     "Coverage of the dataset by district; zero records means the dataset is thin there, not that care is absent."
+    ]
+   }
+  ],
+  "join_specs": [
+   {
+    "id": "01511a806dcb8cbb64ecfba58a96469b",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.claims",
+     "alias": "claims"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `claims`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   },
+   {
+    "id": "067e2c99f70884430d810c9cbee83b15",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.geo_dialysis_district",
+     "alias": "geo_dialysis_district"
+    },
+    "sql": [
+     "`geo_facility`.`nfhs_district` = `geo_dialysis_district`.`nfhs_district` AND `geo_facility`.`nfhs_state` = `geo_dialysis_district`.`nfhs_state`",
+     "--rt=FROM_RELATIONSHIP_TYPE_MANY_TO_ONE--"
+    ]
+   },
+   {
+    "id": "7fd384c74def7a0251a6a975c259d8f8",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.grades",
+     "alias": "grades"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `grades`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   },
+   {
+    "id": "9d7a5be593c332dca09a4aaf1d0870dd",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.facility_list_facts",
+     "alias": "facility_list_facts"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `facility_list_facts`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   },
+   {
+    "id": "ca14327625bfb1864d0afdca39a0997f",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.specialties",
+     "alias": "specialties"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `specialties`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   },
+   {
+    "id": "e749302093c28b1ea8580d67dd313619",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.facility_trust",
+     "alias": "facility_trust"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `facility_trust`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_ONE--"
+    ]
+   },
+   {
+    "id": "f31d2560770add2f94c572a94a55adf2",
+    "left": {
+     "identifier": "workspace.referral_saathi.geo_facility",
+     "alias": "geo_facility"
+    },
+    "right": {
+     "identifier": "workspace.referral_saathi.web_service_summary",
+     "alias": "web_service_summary"
+    },
+    "sql": [
+     "`geo_facility`.`unique_id` = `web_service_summary`.`unique_id`",
+     "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   }
+  ]
+ }
+}

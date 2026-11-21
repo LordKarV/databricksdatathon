@@ -1,4 +1,4 @@
-data/
+/data/
 .venv/
 *.parquet
 .playwright-mcp/
@@ -13,3 +13,7 @@ app_design/feasibility/*/ext_*/
 # derived/ is the team dataset (private repo only, see derived/v1/README.md)
 !derived/**/*.parquet
 build/
+# caches and bulky dumps inside non-root data folders
+viz/*/data/_cache/
+viz/*/data/*.gz
+geo/data/

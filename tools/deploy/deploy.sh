@@ -34,6 +34,13 @@ rsync -a kb/pathways "$BUNDLE/kb/"
 cp app/requirements.txt "$BUNDLE/requirements.txt"
 cat > "$BUNDLE/app.yaml" <<'YAML'
 command: ["python", "app/main.py"]
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: SERVING_ENDPOINT_TEXT
+    valueFrom: serving-endpoint-text
+  - name: SERVING_ENDPOINT_VISION
+    valueFrom: serving-endpoint-vision
 YAML
 du -sh "$BUNDLE"
 

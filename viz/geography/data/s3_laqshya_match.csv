@@ -1,0 +1,903 @@
+lq_id,state,district,ftype,valid_until,matched,lgd_dtname,nfhs_state,nfhs_district
+1,Andhra Pradesh,Anantapur,SDH,2026-04-25,True,Anantapur,Andhra Pradesh,Anantapur
+3,Andhra Pradesh,Annamaya,CHC,2026-10-26,True,Annamayya,Andhra Pradesh,Y.S.R.
+5,Andhra Pradesh,Chittoor,SDH,2025-09-01,True,Chittoor,Andhra Pradesh,Chittoor
+6,Andhra Pradesh,Chittoor,DH,2022-05-31,True,Chittoor,Andhra Pradesh,Chittoor
+7,Andhra Pradesh,Chittoor,DH,2024-03-19,True,Chittoor,Andhra Pradesh,Chittoor
+8,Andhra Pradesh,East Godavari,SDH,2024-01-30,True,East Godavari,Andhra Pradesh,East Godavari
+9,Andhra Pradesh,East Godavari,SDH,2023-02-09,True,East Godavari,Andhra Pradesh,East Godavari
+10,Andhra Pradesh,East Godavari,CHC,2024-09-19,True,East Godavari,Andhra Pradesh,East Godavari
+11,Andhra Pradesh,East Godavari,CHC,2025-02-09,True,East Godavari,Andhra Pradesh,East Godavari
+12,Andhra Pradesh,East Godavari,DH,2024-01-30,True,East Godavari,Andhra Pradesh,East Godavari
+13,Andhra Pradesh,East Godavari,DH,2022-05-31,True,East Godavari,Andhra Pradesh,East Godavari
+14,Andhra Pradesh,Eluru,SDH,2026-03-19,True,Eluru,Andhra Pradesh,West Godavari
+15,Andhra Pradesh,Eluru,SDH,2026-11-23,True,Eluru,Andhra Pradesh,West Godavari
+16,Andhra Pradesh,Eluru,CHC,2026-03-19,True,Eluru,Andhra Pradesh,West Godavari
+18,Andhra Pradesh,Guntur,DH,2026-04-20,True,Guntur,Andhra Pradesh,Guntur
+19,Andhra Pradesh,Hindupur,SDH,2022-05-13,False,,,
+23,Andhra Pradesh,Krishna,CHC,2022-07-11,True,Krishna,Andhra Pradesh,Krishna
+24,Andhra Pradesh,Kurnool,CHC,2025-02-09,True,Kurnool,Andhra Pradesh,Kurnool
+28,Andhra Pradesh,Kurnool,DH,2022-07-11,True,Kurnool,Andhra Pradesh,Kurnool
+29,Andhra Pradesh,Kurnool,DH,2022-05-13,True,Kurnool,Andhra Pradesh,Kurnool
+31,Andhra Pradesh,Machilipatnan,DH,2022-05-13,False,,,
+33,Andhra Pradesh,Nandyal,SDH,2028-06-17,True,Nandyal,Andhra Pradesh,Kurnool
+39,Andhra Pradesh,Prakasam,CHC,2022-07-29,True,Prakasam,Andhra Pradesh,Prakasam
+41,Andhra Pradesh,Prakasam,DH,2022-09-12,True,Prakasam,Andhra Pradesh,Prakasam
+42,Andhra Pradesh,Prakasam,DH,2022-08-15,True,Prakasam,Andhra Pradesh,Prakasam
+43,Andhra Pradesh,Proddatur,DH,2026-03-19,False,,,
+44,Andhra Pradesh,Srikakulam,CHC,2022-09-12,True,Srikakulam,Andhra Pradesh,Srikakulam
+45,Andhra Pradesh,Srikakulam,MC,2026-09-19,True,Srikakulam,Andhra Pradesh,Srikakulam
+46,Andhra Pradesh,Tirupati,SDH,2022-02-24,True,Tirupati,Andhra Pradesh,Chittoor
+47,Andhra Pradesh,Tirupati,DH,2023-01-27,True,Tirupati,Andhra Pradesh,Chittoor
+48,Andhra Pradesh,Vijayanagaram,CHC,2026-12-18,False,,,
+51,Andhra Pradesh,Vishakhapatnam,CHC,2024-04-25,True,Visakhapatanam,Andhra Pradesh,Visakhapatnam
+52,Andhra Pradesh,Vishakhapatnam,DH,2022-05-31,True,Visakhapatanam,Andhra Pradesh,Visakhapatnam
+53,Andhra Pradesh,Vishakhapatnam,DH,2022-12-30,True,Visakhapatanam,Andhra Pradesh,Visakhapatnam
+54,Andhra Pradesh,Vishakhapatnam,SDH,2024-04-25,True,Visakhapatanam,Andhra Pradesh,Visakhapatnam
+55,Andhra Pradesh,Vizianagaram,SDH,2022-09-12,True,Vizianagaram,Andhra Pradesh,Vizianagaram
+57,Andhra Pradesh,West Godavari,SDH,2024-03-19,True,West Godavari,Andhra Pradesh,West Godavari
+58,Andhra Pradesh,West Godavari,SDH,2026-03-19,True,West Godavari,Andhra Pradesh,West Godavari
+60,Andhra Pradesh,West Godavari,CHC,2024-01-30,True,West Godavari,Andhra Pradesh,West Godavari
+62,Andhra Pradesh,West Godavari,DH,2022-07-11,True,West Godavari,Andhra Pradesh,West Godavari
+63,Arunachal Pradesh,East Siang,DH,2022-12-12,True,East Siang,Arunachal Pradesh,East Siang
+64,Arunachal Pradesh,East Siang,CHC,2025-07-03,True,East Siang,Arunachal Pradesh,East Siang
+66,Arunachal Pradesh,West Siang,DH,2027-03-31,True,West Siang,Arunachal Pradesh,West Siang
+68,Assam,Baksa,DH,2025-02-24,True,Baksa,Assam,Baksa
+72,Assam,Biswanath,SDH,2026-08-11,True,Biswanath,Assam,Biswanath
+74,Assam,Cachar,DH,2025-07-09,True,Cachar,Assam,Cachar
+75,Assam,Darrang,CHC,2025-05-17,True,Darrang,Assam,Darrang
+77,Assam,Darrang,DH,2022-09-24,True,Darrang,Assam,Darrang
+78,Assam,Dhemaji,DH,2028-05-13,True,Dhemaji,Assam,Dhemaji
+80,Assam,Dibrugarh,CHC,2026-09-19,True,Dibrugarh,Assam,Dibrugarh
+81,Assam,Dima Hasao,DH,2022-06-03,True,Dima Hasao,Assam,Dima Hasao
+83,Assam,Goalpara,DH,2021-10-15,True,Goalpara,Assam,Goalpara
+85,Assam,Guwahati,MC,2026-09-19,False,,,
+90,Assam,Kamrup,CHC,2027-08-21,True,Kamrup,Assam,Kamrup
+91,Assam,Kamrup Metropolitan,DH,2020-09-24,True,Kamrup,Assam,Kamrup
+93,Assam,Marigaon,DH,2025-11-13,True,Marigaon,Assam,Morigaon
+94,Assam,Nagaon,DH,2025-05-01,True,Nagaon,Assam,Nagaon
+95,Assam,Nagoan,CHC,2028-03-05,False,,,
+97,Assam,Nalbari,DH,2022-03-07,True,Nalbari,Assam,Nalbari
+99,Assam,Sivasagar,DH,2025-10-06,True,Sivasagar,Assam,Sivasagar
+101,Assam,Sonitpur,DH,2025-07-03,True,Sonitpur,Assam,Sonitpur
+104,Assam,Udalguri,DH,2025-02-24,True,Udalguri,Assam,Udalguri
+108,Bihar,Banka,DH,2024-11-22,True,Banka,Bihar,Banka
+109,Bihar,Begusarai,DH,2026-04-26,True,Begusarai,Bihar,Begusarai
+110,Bihar,Bhagalpur,DH,2022-12-17,True,Bhagalpur,Bihar,Bhagalpur
+115,Bihar,Gaya,DH,2023-03-16,True,Gaya,Bihar,Gaya
+117,Bihar,Gaya,DH,2027-03-31,True,Gaya,Bihar,Gaya
+122,Bihar,Khagaria,DH,2027-01-17,True,Khagaria,Bihar,Khagaria
+124,Bihar,Madhepura,DH,2026-09-10,True,Madhepura,Bihar,Madhepura
+126,Bihar,Munger,SDH,2029-01-13,True,Munger,Bihar,Munger
+128,Bihar,Nalanda,DH,2026-07-02,True,Nalanda,Bihar,Nalanda
+130,Bihar,Patna,DH,2021-03-01,True,Patna,Bihar,Patna
+132,Bihar,Purnia,DH,2023-03-01,True,Purnia,Bihar,Purnia
+135,Bihar,Samastipur,DH,2024-12-17,True,Samastipur,Bihar,Samastipur
+136,Bihar,Samsatipur,DH,2028-03-02,True,Samastipur,Bihar,Samastipur
+139,Bihar,Sheikhpura,DH,2023-03-16,True,Sheikhpura,Bihar,Sheikhpura
+140,Bihar,Sheikhpura,CHC,2026-07-14,True,Sheikhpura,Bihar,Sheikhpura
+141,Bihar,Sheikhpura,DH,2026-08-24,True,Sheikhpura,Bihar,Sheikhpura
+142,Bihar,Sitamarhi,DH,2024-03-19,True,Sitamarhi,Bihar,Sitamarhi
+144,Bihar,Vaishali,DH,2021-03-16,True,Vaishali,Bihar,Vaishali
+146,Chandigarh,Chandigarh,SDH,2020-10-31,True,Chandigarh,Chandigarh,Chandigarh
+147,Chandigarh,Chandigarh,DH,2022-10-31,True,Chandigarh,Chandigarh,Chandigarh
+148,Chandigarh,Chandigarh,CHC,2020-10-31,True,Chandigarh,Chandigarh,Chandigarh
+149,Chandigarh,Chandigarh,DH,2022-10-31,True,Chandigarh,Chandigarh,Chandigarh
+150,Chandigarh,Chandigarh,DH,2028-10-16,True,Chandigarh,Chandigarh,Chandigarh
+151,Chhattisgarh,Balod,DH,2027-03-17,True,Balod,Chhattisgarh,Balod
+152,Chhattisgarh,Balodabazar,DH,2025-07-11,True,Baloda Bazar,Chhattisgarh,Baloda Bazar
+155,Chhattisgarh,Bastar,DH,2026-07-11,True,Bastar,Chhattisgarh,Bastar
+156,Chhattisgarh,Bemetara,DH,2027-07-29,True,Bemetara,Chhattisgarh,Bemetara
+158,Chhattisgarh,Bilaspur,DH,2025-01-05,True,Bilaspur,Chhattisgarh,Bilaspur
+160,Chhattisgarh,Dhamtari,CHC,2026-07-23,True,Dhamtari,Chhattisgarh,Dhamtari
+161,Chhattisgarh,Durg,DH,2026-05-03,True,Durg,Chhattisgarh,Durg
+162,Chhattisgarh,Jagdalpur,DH,2023-03-07,False,,,
+163,Chhattisgarh,Janjgir,DH,2026-07-23,True,Janjgir-Champa,Chhattisgarh,Janjgir - Champa
+164,Chhattisgarh,Jashpur,DH,2028-01-26,True,Jashpur,Chhattisgarh,Jashpur
+165,Chhattisgarh,Jashpur,DH,2020-08-04,True,Jashpur,Chhattisgarh,Jashpur
+167,Chhattisgarh,Kanker,DH,2022-03-17,True,Kanker,Chhattisgarh,Raipur
+168,Chhattisgarh,Kawardha,DH,2022-05-23,False,,,
+169,Chhattisgarh,Kondagaon,DH,2024-12-14,True,Kondagaon,Chhattisgarh,Kodagaon
+170,Chhattisgarh,Korba,CHC,2026-07-11,True,Korba,Chhattisgarh,Korba
+171,Chhattisgarh,Korba,CHC,2020-04-07,True,Korba,Chhattisgarh,Korba
+172,Chhattisgarh,Korba,DH,2022-03-17,True,Korba,Chhattisgarh,Korba
+173,Chhattisgarh,Mungeli,CHC,2025-08-06,True,Mungeli,Chhattisgarh,Mungeli
+174,Chhattisgarh,Mungeli,DH,2026-07-23,True,Mungeli,Chhattisgarh,Mungeli
+175,Chhattisgarh,Narayanpur,DH,2025-09-22,True,Narayanpur,Chhattisgarh,Narayanpur
+176,Chhattisgarh,Raipur,DH,2021-01-27,True,Raipur,Chhattisgarh,Raipur
+177,Chhattisgarh,Raipur,MC,2021-03-31,True,Raipur,Chhattisgarh,Raipur
+178,Chhattisgarh,Rajnandgaon,CHC,2023-03-16,True,Rajnandgaon,Chhattisgarh,Rajnandgaon
+179,Chhattisgarh,Sukuma,DH,2026-05-01,True,Sukma,Chhattisgarh,Sukma
+180,Chhattisgarh,Surajpur,DH,2025-09-01,True,Surajpur,Chhattisgarh,Surajpur
+181,Chhattisgarh,Surguja,MC,2026-07-23,True,Surguja,Chhattisgarh,Surguja
+184,"DNH, D&D",Daman,CHC,2025-08-04,True,Daman,Dadra and Nagar Haveli & Daman and Diu,Daman
+185,"DNH, D&D",Daman,DH,2023-03-31,True,Daman,Dadra and Nagar Haveli & Daman and Diu,Daman
+186,"DNH, D&D",Diu,DH,2027-07-17,True,Diu,Dadra and Nagar Haveli & Daman and Diu,Diu
+187,Delhi,,DH,2026-08-01,False,,,
+188,Delhi,North,DH,2028-08-05,True,North East,NCT of Delhi,North East
+189,Delhi,North Delhi,DH,2028-05-05,True,North,NCT of Delhi,North
+190,Delhi,North West,DH,2028-08-05,True,North,NCT of Delhi,North
+191,Delhi,North West Delhi,DH,2027-02-13,True,North,NCT of Delhi,North
+192,Delhi,North-West Delhi,DH,2025-07-07,True,North,NCT of Delhi,North
+193,Delhi,South Delhi,CHC,2025-09-28,True,South,NCT of Delhi,South
+196,Delhi,West Delhi,DH,2024-10-17,True,West,NCT of Delhi,West
+198,Delhi,West Delhi,DH,2025-03-20,True,West,NCT of Delhi,West
+199,Delhi,West Delhi,DH,2024-07-03,True,West,NCT of Delhi,West
+201,Goa,North Goa,DH,2021-01-27,True,North Goa,Goa,North Goa
+202,Goa,North Goa,DH,2026-03-19,True,North Goa,Goa,North Goa
+204,Goa,South Goa,DH,2027-06-23,True,South Goa,Goa,South Goa
+205,Goa,South Goa,SDH,2024-03-13,True,South Goa,Goa,South Goa
+207,Gujarat,Ahmedabad,MC,2021-08-13,True,Ahmadabad,Gujarat,Ahmadabad
+209,Gujarat,Ahmedabad,DH,2028-03-02,True,Ahmadabad,Gujarat,Ahmadabad
+211,Gujarat,Ahmedabad,DH,2023-02-11,True,Ahmadabad,Gujarat,Ahmadabad
+212,Gujarat,Anand,CHC,2022-02-15,True,Anand,Gujarat,Anand
+213,Gujarat,Anand,CHC,2023-03-31,True,Anand,Gujarat,Anand
+214,Gujarat,Anand,CHC,2022-09-25,True,Anand,Gujarat,Anand
+215,Gujarat,Anand,DH,2028-04-06,True,Anand,Gujarat,Anand
+216,Gujarat,Anand,CHC,2021-09-21,True,Anand,Gujarat,Anand
+217,Gujarat,Anand,DH,2022-08-27,True,Anand,Gujarat,Anand
+218,Gujarat,Banaskantha,CHC,2025-06-09,True,Banas Kantha,Gujarat,Banas Kantha
+219,Gujarat,Banaskantha,SDH,2020-07-30,True,Banas Kantha,Gujarat,Banas Kantha
+221,Gujarat,Bharuch,DH,2022-11-07,True,Bharuch,Gujarat,Bharuch
+222,Gujarat,Bharuch,DH,2023-02-11,True,Bharuch,Gujarat,Bharuch
+223,Gujarat,Bhavnagar,MC,2019-08-06,True,Bhavnagar,Gujarat,Bhavnagar
+224,Gujarat,Chhotaudepur,DH,2025-07-17,True,Chhotaudepur,Gujarat,Chhota Udaipur
+225,Gujarat,Dang,DH,2022-09-24,True,Dang,Gujarat,The Dangs
+226,Gujarat,Dwarka,DH,2022-02-25,True,Devbhumi Dwarka,Gujarat,Devbhumi Dwarka
+227,Gujarat,Gandhi Nagar,MC,2021-08-13,True,Gandhinagar,Gujarat,Gandhinagar
+228,Gujarat,Gandhi Nagar,DH,2028-03-25,True,Gandhinagar,Gujarat,Gandhinagar
+229,Gujarat,Gandhi Nagar,SDH,2022-02-25,True,Gandhinagar,Gujarat,Gandhinagar
+234,Gujarat,Jamnagar,DH,2022-10-16,True,Jamnagar,Gujarat,Jamnagar
+236,Gujarat,Jamnagar,MC,2025-06-09,True,Jamnagar,Gujarat,Jamnagar
+237,Gujarat,Junagarh,MC,2022-02-25,True,Junagadh,Gujarat,Junagadh
+238,Gujarat,Kachchh,MC,2022-02-15,True,Kachchh,Gujarat,Kachchh
+239,Gujarat,Kheda,CHC,2023-01-19,True,Kheda,Gujarat,Kheda
+242,Gujarat,Kheda,DH,2025-07-17,True,Kheda,Gujarat,Kheda
+244,Gujarat,Kheda,SDH,2023-09-21,True,Kheda,Gujarat,Kheda
+247,Gujarat,Mahesana,DH,2028-03-25,True,Mahesana,Gujarat,Mahesana
+248,Gujarat,Mahisagar,DH,2022-02-15,True,Mahisagar,Gujarat,Mahisagar
+249,Gujarat,Mehsana,DH,2022-02-25,False,,,
+250,Gujarat,Mehsana,MC,2021-12-10,False,,,
+252,Gujarat,Morbi,DH,2022-02-25,True,Morbi,Gujarat,Morbi
+253,Gujarat,Nadiad,SDH,2022-10-16,False,,,
+254,Gujarat,Narmada,DH,2022-02-15,True,Narmada,Gujarat,Narmada
+256,Gujarat,Navsari,DH,2022-08-15,True,Navsari,Gujarat,Navsari
+257,Gujarat,Navsari,SDH,2022-02-25,True,Navsari,Gujarat,Navsari
+258,Gujarat,Navsari,DH,2022-07-30,True,Navsari,Gujarat,Navsari
+259,Gujarat,Navsari,DH,2028-12-01,True,Navsari,Gujarat,Navsari
+260,Gujarat,Panchmahal,DH,2021-12-19,False,,,
+262,Gujarat,Patan,MC,2022-10-16,True,Patan,Gujarat,Patan
+263,Gujarat,Patan,MC,2027-12-31,True,Patan,Gujarat,Patan
+264,Gujarat,Patan,DH,2023-03-31,True,Patan,Gujarat,Patan
+266,Gujarat,Patan,SDH,2027-08-20,True,Patan,Gujarat,Patan
+269,Gujarat,Rajkot,DH,2026-05-15,True,Rajkot,Gujarat,Rajkot
+270,Gujarat,Rajkot,DH,2022-08-27,True,Rajkot,Gujarat,Rajkot
+271,Gujarat,Rajkot,MC,2022-07-30,True,Rajkot,Gujarat,Rajkot
+272,Gujarat,Rajkot,SDH,2025-04-06,True,Rajkot,Gujarat,Rajkot
+275,Gujarat,Sabarkantha,MC,2021-08-06,False,,,
+276,Gujarat,Sabarkantha,SDH,2023-09-01,False,,,
+277,Gujarat,Sabarkantha,SDH,2024-03-19,False,,,
+278,Gujarat,Surat,CHC,2022-02-21,True,Surat,Gujarat,Surat
+279,Gujarat,Surat,DH,2022-10-16,True,Surat,Gujarat,Surat
+280,Gujarat,Surendranagar,DH,2023-03-31,True,Surendranagar,Gujarat,Surendranagar
+281,Gujarat,Tapi,DH,2022-10-10,True,Tapi,Gujarat,Tapi
+282,Gujarat,Vadnagar,MC,2025-08-04,False,,,
+284,Gujarat,Vadodara,DH,2029-01-05,True,Vadodara,Gujarat,Vadodara
+285,Gujarat,Vadodra,CHC,2021-12-10,True,Vadodara,Gujarat,Vadodara
+286,Gujarat,Vadodra,MC,2022-07-30,True,Vadodara,Gujarat,Vadodara
+287,Gujarat,Vadodra,MC,2022-04-07,True,Vadodara,Gujarat,Vadodara
+288,Gujarat,Valsad,MC,2022-07-30,True,Valsad,Gujarat,Valsad
+289,Haryana,Ambala,DH,2028-01-29,True,Ambala,Haryana,Ambala
+290,Haryana,Ambala,DH,2027-08-04,True,Ambala,Haryana,Ambala
+292,Haryana,Ambala,SDH,2022-05-08,True,Ambala,Haryana,Ambala
+295,Haryana,Faridabad,DH,2023-03-31,True,Faridabad,Haryana,Faridabad
+298,Haryana,Gurugram,DH,2025-11-12,True,Gurugram,Haryana,Gurgaon
+299,Haryana,Hisar,DH,2025-07-29,True,Hisar,Haryana,Hisar
+300,Haryana,Jhajjar,SDH,2029-01-11,True,Jhajjar,Haryana,Jhajjar
+302,Haryana,Kaithal,DH,2028-11-30,True,Kaithal,Haryana,Kaithal
+303,Haryana,Karnal,DH,2021-03-31,True,Karnal,Haryana,Karnal
+304,Haryana,Kurukshetra,DH,2028-12-31,True,Kurukshetra,Haryana,Kurukshetra
+306,Haryana,Panchkula,CHC,2028-12-14,True,Panchkula,Haryana,Panchkula
+307,Haryana,Panchkula,DH,2026-03-01,True,Panchkula,Haryana,Panchkula
+309,Haryana,Sonipat,DH,2022-11-07,True,Sonipat,Haryana,Sonipat
+310,Haryana,Yamunanagar,DH,2021-10-14,True,Yamunanagar,Haryana,Yamunanagar
+312,Himachal Pradesh,Kangra,DH,2022-03-26,True,Kangra,Himachal Pradesh,Kangra
+313,Himachal Pradesh,Kangra,DH,2026-01-31,True,Kangra,Himachal Pradesh,Kangra
+314,Himachal Pradesh,Kinnaur,DH,2022-12-17,True,Kinnaur,Himachal Pradesh,Kinnaur
+315,Himachal Pradesh,Kinnaur,CHC,2025-07-17,True,Kinnaur,Himachal Pradesh,Kinnaur
+316,Himachal Pradesh,Mandi,DH,2022-05-09,True,Mandi,Himachal Pradesh,Mandi
+317,Himachal Pradesh,Mandi,MC,2027-07-17,True,Mandi,Himachal Pradesh,Mandi
+318,Himachal Pradesh,Shimla,DH,2027-07-30,True,Shimla,Himachal Pradesh,Shimla
+319,Jammu & Kashmir,Baramulla,CHC,2025-08-04,True,Baramulla,Jammu & Kashmir,Baramula
+320,Jammu & Kashmir,Baramulla,DH,2028-10-16,True,Baramulla,Jammu & Kashmir,Baramula
+321,Jammu & Kashmir,Ganderbal,DH,2026-04-25,True,Ganderbal,Jammu & Kashmir,Ganderbal
+322,Jammu & Kashmir,Jammu,DH,2024-04-25,True,Jammu,Jammu & Kashmir,Jammu
+323,Jammu & Kashmir,Jammu,DH,2027-07-21,True,Jammu,Jammu & Kashmir,Jammu
+324,Jammu & Kashmir,Kupwara,CHC,2027-07-28,True,Kupwara,Jammu & Kashmir,Kupwara
+325,Jammu & Kashmir,Kupwara,CHC,2027-07-21,True,Kupwara,Jammu & Kashmir,Kupwara
+326,Jammu & Kashmir,Poonch,DH,2025-06-07,True,Poonch,Jammu & Kashmir,Anantnag
+327,Jammu & Kashmir,Reasi,CHC,2021-03-31,True,Reasi,Jammu & Kashmir,Reasi
+329,Jammu & Kashmir,Shrinagar,DH,2023-06-07,True,Srinagar,Jammu & Kashmir,Srinagar
+330,Jammu & Kashmir,Srinagar,DH,2026-04-25,True,Srinagar,Jammu & Kashmir,Srinagar
+331,Jammu & Kashmir,Udhampur,DH,2025-06-26,True,Udhampur,Jammu & Kashmir,Udhampur
+332,Jharkhand,Bokaro,DH,2022-02-16,True,Bokaro,Jharkhand,Bokaro
+334,Jharkhand,East Singhbhum,DH,2026-07-26,True,East Singhbum,Jharkhand,Purbi Singhbhum
+335,Jharkhand,Gumla,DH,2022-04-07,True,Gumla,Jharkhand,Gumla
+337,Jharkhand,Ramgarh,DH,2022-03-26,True,Ramgarh,Jharkhand,Ramgarh
+338,Jharkhand,Ramgarh,DH,2026-07-03,True,Ramgarh,Jharkhand,Ramgarh
+339,Jharkhand,Ranchi,CHC,2022-12-12,True,Ranchi,Jharkhand,Ranchi
+340,Jharkhand,Ranchi,DH,2022-05-09,True,Ranchi,Jharkhand,Ranchi
+341,Jharkhand,Ranchi,MC,2021-01-30,True,Ranchi,Jharkhand,Ranchi
+342,Jharkhand,Ranchi,DH,2027-07-25,True,Ranchi,Jharkhand,Ranchi
+344,Karnataka,Bagalakote,DH,2025-06-07,True,Bagalkote,Karnataka,Bagalkot
+346,Karnataka,Bagalakote,SDH,2026-09-10,True,Bagalkote,Karnataka,Bagalkot
+347,Karnataka,Bagalakote,SDH,2026-03-19,True,Bagalkote,Karnataka,Bagalkot
+348,Karnataka,Bagalkot,SDH,2028-08-18,True,Bagalkote,Karnataka,Bagalkot
+349,Karnataka,Ballari,CHC,2026-12-26,True,Ballari,Karnataka,Bellary
+351,Karnataka,Ballari,SDH,2023-11-14,True,Ballari,Karnataka,Bellary
+352,Karnataka,Bangalore Rural,SDH,2028-08-03,False,,,
+353,Karnataka,Belagavi,MC,2020-12-22,True,Belagavi,Karnataka,Belgaum
+354,Karnataka,Belagavi,DH,2026-04-12,True,Belagavi,Karnataka,Belgaum
+355,Karnataka,Belagavi,DH,2023-04-10,True,Belagavi,Karnataka,Belgaum
+356,Karnataka,Belagavi,SDH,2026-04-12,True,Belagavi,Karnataka,Belgaum
+357,Karnataka,Belagavi,DH,2024-12-06,True,Belagavi,Karnataka,Belgaum
+358,Karnataka,Belagavi,SDH,2023-03-20,True,Belagavi,Karnataka,Belgaum
+359,Karnataka,Belagavi,SDH,2023-03-20,True,Belagavi,Karnataka,Belgaum
+360,Karnataka,Belagavi,SDH,2026-06-07,True,Belagavi,Karnataka,Belgaum
+361,Karnataka,Belagavi,DH,2026-01-31,True,Belagavi,Karnataka,Belgaum
+363,Karnataka,Belagavi,SDH,2024-05-10,True,Belagavi,Karnataka,Belgaum
+364,Karnataka,Bengaluru,CHC,2025-07-05,True,Bengaluru Rural,Karnataka,Bangalore Rural
+365,Karnataka,Bengaluru,CHC,2023-07-05,True,Bengaluru Rural,Karnataka,Bangalore Rural
+367,Karnataka,Bengaluru,MC,2026-06-05,True,Bengaluru Rural,Karnataka,Bangalore Rural
+368,Karnataka,Bengaluru,DH,2023-01-19,True,Bengaluru Rural,Karnataka,Bangalore Rural
+370,Karnataka,Bengaluru,DH,2026-03-19,True,Bengaluru Rural,Karnataka,Bangalore Rural
+371,Karnataka,Bengaluru,DH,2023-03-31,True,Bengaluru Rural,Karnataka,Bangalore Rural
+372,Karnataka,Bengaluru,DH,2026-03-19,True,Bengaluru Rural,Karnataka,Bangalore Rural
+373,Karnataka,Bengaluru,DH,2024-03-19,True,Bengaluru Rural,Karnataka,Bangalore Rural
+375,Karnataka,Bengaluru,CHC,2022-05-13,True,Bengaluru Rural,Karnataka,Bangalore Rural
+377,Karnataka,Bengaluru,MC,2026-05-03,True,Bengaluru Rural,Karnataka,Bangalore Rural
+378,Karnataka,Bengaluru Rural,DH,2021-01-30,True,Bengaluru Rural,Karnataka,Bangalore Rural
+379,Karnataka,Bengaluru Rural,SDH,2026-04-12,True,Bengaluru Rural,Karnataka,Bangalore Rural
+380,Karnataka,Bengaluru Urban,DH,2025-10-06,True,Bengaluru Urban,Karnataka,Bangalore
+381,Karnataka,Bengaluru Urban,CHC,2026-07-17,True,Bengaluru Urban,Karnataka,Bangalore
+382,Karnataka,Bengluru Rural,DH,2026-12-06,True,Bengaluru Rural,Karnataka,Bangalore Rural
+383,Karnataka,Bidar,MC,2025-06-07,True,Bidar,Karnataka,Bidar
+384,Karnataka,Bidar,DH,2027-04-07,True,Bidar,Karnataka,Bidar
+385,Karnataka,Bidar,DH,2024-12-26,True,Bidar,Karnataka,Bidar
+386,Karnataka,Bidar,SDH,2026-12-26,True,Bidar,Karnataka,Bidar
+389,Karnataka,Chamarajnagar,DH,2025-06-07,True,Chamarajanagara,Karnataka,Chamarajanagar
+390,Karnataka,Chamarajnagar,SDH,2025-11-14,True,Chamarajanagara,Karnataka,Chamarajanagar
+394,Karnataka,Chikkaballapura,DH,2025-11-23,True,Chikkaballapura,Karnataka,Chikkaballapura
+395,Karnataka,Chikkaballapura,SDH,2024-05-21,True,Chikkaballapura,Karnataka,Chikkaballapura
+396,Karnataka,Chikkaballapura,SDH,2023-09-25,True,Chikkaballapura,Karnataka,Chikkaballapura
+397,Karnataka,Chikkaballapura,SDH,2025-12-01,True,Chikkaballapura,Karnataka,Chikkaballapura
+398,Karnataka,Chikkaballapura,SDH,2026-05-10,True,Chikkaballapura,Karnataka,Chikkaballapura
+399,Karnataka,Chikkamagaluru,DH,2023-08-02,True,Chikkamagaluru,Karnataka,Chikmagalur
+400,Karnataka,Chikkamagaluru,SDH,2025-07-18,True,Chikkamagaluru,Karnataka,Chikmagalur
+401,Karnataka,Chikkamagaluru,SDH,2024-01-31,True,Chikkamagaluru,Karnataka,Chikmagalur
+403,Karnataka,Chikmagalur,SDH,2028-11-03,True,Chikkamagaluru,Karnataka,Chikmagalur
+404,Karnataka,Chintamani,SDH,2022-05-13,False,,,
+406,Karnataka,Chitradurga,SDH,2026-12-26,True,Chitradurga,Karnataka,Chitradurga
+407,Karnataka,Dakshin Kannada,SDH,2024-05-10,True,Dakshina Kannada,Karnataka,Dakshina Kannada
+408,Karnataka,Dakshina Kannada,DH,2028-11-09,True,Dakshina Kannada,Karnataka,Dakshina Kannada
+409,Karnataka,Devangere,DH,2025-10-24,True,Davangere,Karnataka,Davanagere
+411,Karnataka,Devangere,DH,2025-11-23,True,Davangere,Karnataka,Davanagere
+412,Karnataka,Devangere,SDH,2022-05-13,True,Davangere,Karnataka,Davanagere
+413,Karnataka,Dharwad,CHC,2025-06-07,True,Dharwad,Karnataka,Dharwad
+414,Karnataka,Dharwad,DH,2024-07-17,True,Dharwad,Karnataka,Dharwad
+415,Karnataka,Dharwad,MC,2025-09-25,True,Dharwad,Karnataka,Dharwad
+416,Karnataka,Gadag,DH,2021-04-10,True,Gadag,Karnataka,Gadag
+417,Karnataka,Gadag,DH,2026-04-26,True,Gadag,Karnataka,Gadag
+418,Karnataka,Gadag,SDH,2026-08-18,True,Gadag,Karnataka,Gadag
+419,Karnataka,Gadag,SDH,2026-05-03,True,Gadag,Karnataka,Gadag
+420,Karnataka,Gulbarga,SDH,2025-07-21,False,,,
+421,Karnataka,Gulbarga,CHC,2025-11-24,False,,,
+422,Karnataka,Gulbarga,SDH,2026-04-30,False,,,
+424,Karnataka,Hassan,SDH,2023-04-26,True,Hassan,Karnataka,Hassan
+426,Karnataka,Hassan,MC,2025-08-31,True,Hassan,Karnataka,Hassan
+427,Karnataka,Hassan,SDH,2026-04-26,True,Hassan,Karnataka,Hassan
+428,Karnataka,Hassan,SDH,2024-05-03,True,Hassan,Karnataka,Hassan
+429,Karnataka,Haveri,DH,2026-05-15,True,Haveri,Karnataka,Haveri
+430,Karnataka,Haveri,SDH,2025-11-14,True,Haveri,Karnataka,Haveri
+431,Karnataka,Haveri,DH,2028-08-03,True,Haveri,Karnataka,Haveri
+433,Karnataka,Hungunda,SDH,2024-01-31,False,,,
+434,Karnataka,Kalaburagi,DH,2026-04-12,True,Kalaburagi,Karnataka,Gulbarga
+435,Karnataka,Kalaburagi,SDH,2026-05-10,True,Kalaburagi,Karnataka,Gulbarga
+436,Karnataka,Kodagu,CHC,2025-03-20,True,Kodagu,Karnataka,Kodagu
+437,Karnataka,Kodagu,CHC,2024-06-01,True,Kodagu,Karnataka,Kodagu
+438,Karnataka,Kodagu,MC,2023-01-19,True,Kodagu,Karnataka,Kodagu
+439,Karnataka,Kolar,DH,2027-10-10,True,Kolar,Karnataka,Kolar
+441,Karnataka,Kolar,DH,2026-07-17,True,Kolar,Karnataka,Kolar
+443,Karnataka,Koppal,CHC,2028-11-09,True,Koppal,Karnataka,Koppal
+444,Karnataka,Koppal,DH,2028-09-28,True,Koppal,Karnataka,Koppal
+445,Karnataka,Koppal,CHC,2028-09-28,True,Koppal,Karnataka,Koppal
+446,Karnataka,Koppal,CHC,2028-09-28,True,Koppal,Karnataka,Koppal
+447,Karnataka,Koppal,DH,2027-03-11,True,Koppal,Karnataka,Koppal
+448,Karnataka,Koppal,DH,2025-11-23,True,Koppal,Karnataka,Koppal
+449,Karnataka,Koppal,SDH,2024-05-15,True,Koppal,Karnataka,Koppal
+451,Karnataka,Mandya,DH,2024-05-21,True,Mandya,Karnataka,Mandya
+452,Karnataka,Mangalore,DH,2025-07-05,False,,,
+454,Karnataka,Mysuru,CHC,2026-03-19,True,Mysuru,Karnataka,Mysore
+456,Karnataka,Mysuru,DH,2025-03-20,True,Mysuru,Karnataka,Mysore
+457,Karnataka,Mysuru,DH,2027-04-07,True,Mysuru,Karnataka,Mysore
+458,Karnataka,Mysuru,DH,2021-03-02,True,Mysuru,Karnataka,Mysore
+459,Karnataka,Mysuru,DH,2026-03-19,True,Mysuru,Karnataka,Mysore
+460,Karnataka,Mysuru,DH,2026-05-21,True,Mysuru,Karnataka,Mysore
+462,Karnataka,Mysuru,SDH,2023-12-01,True,Mysuru,Karnataka,Mysore
+463,Karnataka,Mysuru,SDH,2025-12-01,True,Mysuru,Karnataka,Mysore
+464,Karnataka,Mysuru,SDH,2023-11-14,True,Mysuru,Karnataka,Mysore
+466,Karnataka,Raichur,DH,2025-07-05,True,Raichur,Karnataka,Raichur
+467,Karnataka,Raichur,SDH,2026-12-26,True,Raichur,Karnataka,Raichur
+468,Karnataka,Raichur,SDH,2025-11-23,True,Raichur,Karnataka,Raichur
+469,Karnataka,Raichur,SDH,2026-12-26,True,Raichur,Karnataka,Raichur
+470,Karnataka,Ramanagara,DH,2026-05-21,True,Ramanagara,Karnataka,Ramanagara
+471,Karnataka,Ramanagara,SDH,2025-08-31,True,Ramanagara,Karnataka,Ramanagara
+472,Karnataka,Shivamogga,DH,2022-05-13,True,Shivamogga,Karnataka,Shimoga
+473,Karnataka,Shivamogga,MC,2024-02-05,True,Shivamogga,Karnataka,Shimoga
+474,Karnataka,Shivamogga,SDH,2026-06-05,True,Shivamogga,Karnataka,Shimoga
+475,Karnataka,Shivamogga,SDH,2025-11-23,True,Shivamogga,Karnataka,Shimoga
+476,Karnataka,Shivamogga,SDH,2026-12-06,True,Shivamogga,Karnataka,Shimoga
+477,Karnataka,Tumakuru,DH,2026-12-06,True,Tumakuru,Karnataka,Tumkur
+478,Karnataka,Tumakuru,DH,2026-06-01,True,Tumakuru,Karnataka,Tumkur
+479,Karnataka,Tumkur,DH,2022-11-07,True,Tumakuru,Karnataka,Tumkur
+480,Karnataka,Udupi,DH,2023-03-31,True,Udupi,Karnataka,Udupi
+481,Karnataka,Udupi,SDH,2024-02-05,True,Udupi,Karnataka,Udupi
+483,Karnataka,Uttar Kannada,SDH,2027-10-10,True,Uttara Kannada,Karnataka,Uttara Kannada
+484,Karnataka,Uttarakanada,CHC,2026-06-01,False,,,
+485,Karnataka,Uttarakanada,DH,2025-06-07,False,,,
+486,Karnataka,Uttarakanada,MC,2026-12-26,False,,,
+487,Karnataka,Uttarakanada,SDH,2024-12-06,False,,,
+488,Karnataka,Uttarakanada,SDH,2026-05-15,False,,,
+489,Karnataka,Vijayanagara,DH,2024-12-26,True,Vijayanagar,Karnataka,Bellary
+490,Karnataka,Vijayanagara,SDH,2024-12-26,True,Vijayanagar,Karnataka,Bellary
+493,Karnataka,Vijayapura,SDH,2026-04-12,True,Vijayapura,Karnataka,Bijapur
+497,Karnataka,Yadgir,DH,2026-09-10,True,Yadgir,Karnataka,Yadgir
+498,Karnataka,Yadgir,SDH,2024-05-15,True,Yadgir,Karnataka,Yadgir
+499,Kerala,Alappuzha,DH,2023-12-01,True,Alappuzha,Kerala,Alappuzha
+500,Kerala,Ernakulum,DH,2022-08-04,True,Ernakulam,Kerala,Ernakulam
+501,Kerala,Kannur,DH,2024-12-07,True,Kannur,Kerala,Kannur
+502,Kerala,Kollam,SDH,2025-07-05,True,Kollam,Kerala,Kollam
+503,Kerala,Kottayam,MC,2025-06-12,True,Kottayam,Kerala,Kottayam
+504,Kerala,Kozhikode,DH,2028-08-04,True,Kozhikode,Kerala,Kozhikode
+505,Kerala,Kozhikode,MC,2025-06-07,True,Kozhikode,Kerala,Kozhikode
+506,Kerala,Kozhikode,DH,2021-10-15,True,Kozhikode,Kerala,Kozhikode
+507,Kerala,Kozikhode,DH,2022-04-09,True,Kozhikode,Kerala,Kozhikode
+508,Kerala,Malappuram,DH,2028-04-06,True,Malappuram,Kerala,Malappuram
+509,Kerala,Malappuram,DH,2026-01-26,True,Malappuram,Kerala,Malappuram
+510,Kerala,Pathanamthittta,DH,2028-04-06,True,Pathanamthitta,Kerala,Pathanamthitta
+511,Kerala,Thiruvananthapuram,DH,2027-04-14,True,Thiruvananthapuram,Kerala,Thiruvananthapuram
+512,Kerala,Thiruvananthapuram,SDH,2027-09-18,True,Thiruvananthapuram,Kerala,Thiruvananthapuram
+513,Kerala,Thrissur,DH,2028-10-15,True,Thrissur,Kerala,Thrissur
+514,Kerala,Wayanad,DH,2026-12-14,True,Wayanad,Kerala,Wayanad
+515,Madhya Pradesh,Agar Malwa,DH,2027-08-22,True,Agar Malwa,Madhya Pradesh,Agar Malwa
+520,Madhya Pradesh,Anuppur,DH,2028-05-13,True,Anuppur,Madhya Pradesh,Anuppur
+522,Madhya Pradesh,Ashok Nagar,DH,2027-01-04,True,Ashoknagar,Madhya Pradesh,Ashoknagar
+525,Madhya Pradesh,Balaghat,DH,2028-06-10,True,Balaghat,Madhya Pradesh,Balaghat
+529,Madhya Pradesh,Barwani,DH,2022-08-01,True,Barwani,Madhya Pradesh,Barwani
+536,Madhya Pradesh,Betul,DH,2025-05-11,True,Betul,Madhya Pradesh,Betul
+541,Madhya Pradesh,Bhind,DH,2022-08-01,True,Bhind,Madhya Pradesh,Bhind
+542,Madhya Pradesh,Bhopal,SDH,2028-11-11,True,Bhopal,Madhya Pradesh,Bhopal
+546,Madhya Pradesh,Bhopal,DH,2024-07-24,True,Bhopal,Madhya Pradesh,Bhopal
+548,Madhya Pradesh,Bhopal,MC,2025-09-12,True,Bhopal,Madhya Pradesh,Bhopal
+549,Madhya Pradesh,Burhanpur,DH,2025-12-26,True,Burhanpur,Madhya Pradesh,Burhanpur
+557,Madhya Pradesh,Chindwara,DH,2023-04-26,True,Chhindwara,Madhya Pradesh,Chhindwara
+563,Madhya Pradesh,Damoh,DH,2025-10-16,True,Damoh,Madhya Pradesh,Damoh
+568,Madhya Pradesh,Dewas,DH,2027-08-20,True,Dewas,Madhya Pradesh,Dewas
+569,Madhya Pradesh,Dhar,CHC,2027-08-20,True,Dhar,Madhya Pradesh,Dhar
+571,Madhya Pradesh,Dhar,DH,2025-11-20,True,Dhar,Madhya Pradesh,Dhar
+575,Madhya Pradesh,Guna,DH,2025-07-05,True,Guna,Madhya Pradesh,Guna
+576,Madhya Pradesh,Gwalior,DH,2025-05-11,True,Gwalior,Madhya Pradesh,Gwalior
+577,Madhya Pradesh,Gwalior,MC,2026-04-25,True,Gwalior,Madhya Pradesh,Gwalior
+580,Madhya Pradesh,Harda,DH,2022-05-03,True,Harda,Madhya Pradesh,Harda
+582,Madhya Pradesh,Hoshangabad,CHC,2028-12-04,False,,,
+585,Madhya Pradesh,Hoshangabad,DH,2022-05-03,False,,,
+591,Madhya Pradesh,Indore,SDH,2025-05-11,True,Indore,Madhya Pradesh,Indore
+596,Madhya Pradesh,Jabalpur,MC,2025-09-13,True,Jabalpur,Madhya Pradesh,Jabalpur
+597,Madhya Pradesh,Jabalpur,SDH,2026-03-20,True,Jabalpur,Madhya Pradesh,Jabalpur
+598,Madhya Pradesh,Jabalpur,DH,2022-04-22,True,Jabalpur,Madhya Pradesh,Jabalpur
+610,Madhya Pradesh,Katni,DH,2025-05-11,True,Katni,Madhya Pradesh,Katni
+612,Madhya Pradesh,Khandwa,DH,2022-08-01,False,,,
+618,Madhya Pradesh,Khargone,CHC,2025-06-09,True,Khargone,Madhya Pradesh,Khargone (West Nimar)
+619,Madhya Pradesh,Khargone,DH,2022-03-26,True,Khargone,Madhya Pradesh,Khargone (West Nimar)
+629,Madhya Pradesh,Mandsaur,DH,2025-10-26,True,Mandsaur,Madhya Pradesh,Mandsaur
+633,Madhya Pradesh,Morena,DH,2022-05-13,True,Morena,Madhya Pradesh,Morena
+636,Madhya Pradesh,Narsinghpur,DH,2026-09-10,True,Narsinghpur,Madhya Pradesh,Narsimhapur
+638,Madhya Pradesh,Neemuch,DH,2022-05-03,True,Neemuch,Madhya Pradesh,Neemuch
+643,Madhya Pradesh,Panna,DH,2026-01-16,True,Panna,Madhya Pradesh,Panna
+644,Madhya Pradesh,Raisen,DH,2027-07-11,True,Raisen,Madhya Pradesh,Raisen
+646,Madhya Pradesh,Raisen,DH,2025-04-06,True,Raisen,Madhya Pradesh,Raisen
+652,Madhya Pradesh,Rajgarh,SDH,2022-05-03,True,Rajgarh,Madhya Pradesh,Rajgarh
+653,Madhya Pradesh,Rajgarh,DH,2021-03-31,True,Rajgarh,Madhya Pradesh,Rajgarh
+657,Madhya Pradesh,Ratlam,DH,2020-04-22,True,Ratlam,Madhya Pradesh,Ratlam
+659,Madhya Pradesh,Ratlam,MC,2025-10-15,True,Ratlam,Madhya Pradesh,Ratlam
+663,Madhya Pradesh,Rewa,DH,2022-03-10,True,Rewa,Madhya Pradesh,Rewa
+664,Madhya Pradesh,Rewa,MC,2025-07-05,True,Rewa,Madhya Pradesh,Rewa
+665,Madhya Pradesh,Sagar,MC,2025-07-05,True,Sagar,Madhya Pradesh,Sagar
+671,Madhya Pradesh,Sagar,DH,2027-07-12,True,Sagar,Madhya Pradesh,Sagar
+674,Madhya Pradesh,Satna,DH,2025-11-23,True,Satna,Madhya Pradesh,Satna
+677,Madhya Pradesh,Sehore,DH,2026-09-19,True,Sehore,Madhya Pradesh,Sehore
+682,Madhya Pradesh,Seoni,SDH,2025-09-18,True,Seoni,Madhya Pradesh,Seoni
+686,Madhya Pradesh,Shahdol,DH,2026-04-26,True,Shahdol,Madhya Pradesh,Shahdol
+690,Madhya Pradesh,Shajapur,DH,2025-11-20,True,Shajapur,Madhya Pradesh,Shajapur
+692,Madhya Pradesh,Sheopur,DH,2022-03-10,True,Sheopur,Madhya Pradesh,Sheopur
+695,Madhya Pradesh,Shivpuri,CHC,2022-05-03,True,Shivpuri,Madhya Pradesh,Shivpuri
+696,Madhya Pradesh,Shivpuri,CHC,2027-01-04,True,Shivpuri,Madhya Pradesh,Shivpuri
+697,Madhya Pradesh,Shivpuri,DH,2022-04-22,True,Shivpuri,Madhya Pradesh,Shivpuri
+698,Madhya Pradesh,Shivpuri,MC,2027-08-20,True,Shivpuri,Madhya Pradesh,Shivpuri
+702,Madhya Pradesh,Singrauli,DH,2022-05-13,True,Singrauli,Madhya Pradesh,Singrauli
+709,Madhya Pradesh,Ujjain,DH,2025-12-25,True,Ujjain,Madhya Pradesh,Ujjain
+711,Madhya Pradesh,Umaria,DH,2025-06-12,True,Umaria,Madhya Pradesh,Umaria
+713,Madhya Pradesh,Vidisha,DH,2022-08-05,True,Vidisha,Madhya Pradesh,Vidisha
+715,Maharashtra,Ahmednagar,DH,2022-07-26,True,Ahmednagar,Maharastra,Ahmadnagar
+716,Maharashtra,Ahmednagar,SDH,2025-02-26,True,Ahmednagar,Maharastra,Ahmadnagar
+718,Maharashtra,Ahmednagar,DH,2025-04-15,True,Ahmednagar,Maharastra,Ahmadnagar
+719,Maharashtra,Ahmednagar,CHC,2026-07-23,True,Ahmednagar,Maharastra,Ahmadnagar
+720,Maharashtra,Akola,SDH,2022-10-24,True,Akola,Maharastra,Akola
+721,Maharashtra,Akola,DH,2022-08-27,True,Akola,Maharastra,Akola
+722,Maharashtra,Amravati,DH,2024-11-28,True,Amravati,Maharastra,Amravati
+723,Maharashtra,Amravati,SDH,2024-12-01,True,Amravati,Maharastra,Amravati
+724,Maharashtra,Amravati,SDH,2023-03-01,True,Amravati,Maharastra,Amravati
+725,Maharashtra,Aurangabad,DH,2023-03-10,True,Aurangabad,Maharastra,Aurangabad
+726,Maharashtra,Aurangabad,SDH,2023-03-10,True,Aurangabad,Maharastra,Aurangabad
+728,Maharashtra,Beed,SDH,2020-09-25,True,Beed,Maharastra,Bid
+729,Maharashtra,Beed,SDH,2022-08-27,True,Beed,Maharastra,Bid
+730,Maharashtra,Beed,MC,2023-03-10,True,Beed,Maharastra,Bid
+732,Maharashtra,Beed,DH,2022-10-24,True,Beed,Maharastra,Bid
+733,Maharashtra,Bhandara,DH,2024-12-01,True,Bhandara,Maharastra,Bhandara
+734,Maharashtra,Bhandara,SDH,2024-12-01,True,Bhandara,Maharastra,Bhandara
+735,Maharashtra,Buldhana,SDH,2022-10-24,True,Buldhana,Maharastra,Buldana
+736,Maharashtra,Chandrapur,SDH,2023-03-01,True,Chandrapur,Maharastra,Chandrapur
+737,Maharashtra,Chandrapur,SDH,2023-03-01,True,Chandrapur,Maharastra,Chandrapur
+738,Maharashtra,Gadchiroli,SDH,2020-10-10,True,Gadchiroli,Maharastra,Gadchiroli
+739,Maharashtra,Gadchiroli,SDH,2021-03-01,True,Gadchiroli,Maharastra,Gadchiroli
+740,Maharashtra,Gadchiroli,DH,2022-10-10,True,Gadchiroli,Maharastra,Gadchiroli
+741,Maharashtra,Gondia,DH,2022-05-03,True,Gondia,Maharastra,Gondiya
+742,Maharashtra,Gondia,SDH,2022-09-25,True,Gondia,Maharastra,Gondiya
+744,Maharashtra,Hingoli,DH,2022-09-25,True,Hingoli,Maharastra,Hingoli
+746,Maharashtra,Jalgaon,SDH,2020-10-24,True,Jalgaon,Maharastra,Jalgaon
+747,Maharashtra,Jalgaon,SDH,2022-10-24,True,Jalgaon,Maharastra,Jalgaon
+750,Maharashtra,Kolhapur,DH,2024-11-28,True,Kolhapur,Maharastra,Kolhapur
+751,Maharashtra,Kolhapur,SDH,2021-03-01,True,Kolhapur,Maharastra,Kolhapur
+752,Maharashtra,Kolhapur,SDH,2022-05-03,True,Kolhapur,Maharastra,Kolhapur
+753,Maharashtra,Kolhapur,SDH,2022-05-03,True,Kolhapur,Maharastra,Kolhapur
+754,Maharashtra,Kolhapur,DH,2020-08-27,True,Kolhapur,Maharastra,Kolhapur
+756,Maharashtra,Latur,SDH,2022-09-25,True,Latur,Maharastra,Latur
+757,Maharashtra,Latur,SDH,2022-09-25,True,Latur,Maharastra,Latur
+758,Maharashtra,Latur,DH,2027-07-17,True,Latur,Maharastra,Latur
+759,Maharashtra,Nagpur,DH,2022-12-17,True,Nagpur,Maharastra,Nagpur
+760,Maharashtra,Nanded,DH,2028-06-01,True,Nanded,Maharastra,Nanded
+761,Maharashtra,Nanded,SDH,2026-09-10,True,Nanded,Maharastra,Nanded
+762,Maharashtra,Nanded,SDH,2021-03-01,True,Nanded,Maharastra,Nanded
+763,Maharashtra,Nanded,SDH,2021-03-01,True,Nanded,Maharastra,Nanded
+764,Maharashtra,Nanded,SDH,2024-07-23,True,Nanded,Maharastra,Nanded
+765,Maharashtra,Nanded,DH,2020-10-24,True,Nanded,Maharastra,Nanded
+766,Maharashtra,Nashik,DH,2026-12-31,True,Nashik,Maharastra,Nashik
+767,Maharashtra,Nashik,DH,2023-03-01,True,Nashik,Maharastra,Nashik
+768,Maharashtra,Nashik,SDH,2024-11-28,True,Nashik,Maharastra,Nashik
+769,Maharashtra,Nashik,SDH,2023-03-01,True,Nashik,Maharastra,Nashik
+770,Maharashtra,Nashik,SDH,2022-05-03,True,Nashik,Maharastra,Nashik
+772,Maharashtra,Osmanabad,SDH,2024-11-28,True,Osmanabad,Maharastra,Osmanabad
+773,Maharashtra,Osmanabad,SDH,2022-10-24,True,Osmanabad,Maharastra,Osmanabad
+775,Maharashtra,Osmanabad,SDH,2022-10-24,True,Osmanabad,Maharastra,Osmanabad
+776,Maharashtra,Osmanabad,DH,2022-08-27,True,Osmanabad,Maharastra,Osmanabad
+777,Maharashtra,Palghar,SDH,2022-11-28,True,Palghar,Maharastra,Palghar
+778,Maharashtra,Palghar,SDH,2024-11-28,True,Palghar,Maharastra,Palghar
+779,Maharashtra,Pune,CHC,2025-12-26,True,Pune,Maharastra,Pune
+780,Maharashtra,Pune,CHC,2027-02-20,True,Pune,Maharastra,Pune
+781,Maharashtra,Pune,DH,2022-10-10,True,Pune,Maharastra,Pune
+782,Maharashtra,Pune,CHC,2025-04-15,True,Pune,Maharastra,Pune
+783,Maharashtra,Pune,SDH,2026-02-13,True,Pune,Maharastra,Pune
+784,Maharashtra,Pune,SDH,2025-03-10,True,Pune,Maharastra,Pune
+785,Maharashtra,Pune,SDH,2020-09-25,True,Pune,Maharastra,Pune
+787,Maharashtra,Pune,DH,2022-09-25,True,Pune,Maharastra,Pune
+788,Maharashtra,Raigad,DH,2025-04-15,True,Raigad,Maharastra,Raigarh
+789,Maharashtra,Ratnagiri,DH,2023-03-01,True,Ratnagiri,Maharastra,Ratnagiri
+790,Maharashtra,Ratnagiri,SDH,2021-03-01,True,Ratnagiri,Maharastra,Ratnagiri
+791,Maharashtra,Sangali,SDH,2022-12-17,True,Sangli,Maharastra,Sangli
+792,Maharashtra,Sangali,SDH,2022-12-17,True,Sangli,Maharastra,Sangli
+795,Maharashtra,Satara,DH,2023-03-01,True,Satara,Maharastra,Satara
+796,Maharashtra,Satara,SDH,2023-03-10,True,Satara,Maharastra,Satara
+797,Maharashtra,Sindhudurg,DH,2022-12-17,True,Sindhudurg,Maharastra,Sindhudurg
+798,Maharashtra,Sindhudurg,SDH,2021-03-01,True,Sindhudurg,Maharastra,Sindhudurg
+799,Maharashtra,Sindhudurg,SDH,2022-12-17,True,Sindhudurg,Maharastra,Sindhudurg
+800,Maharashtra,Solapur,SDH,2022-12-17,True,Solapur,Maharastra,Solapur
+801,Maharashtra,Solapur,SDH,2022-12-17,True,Solapur,Maharastra,Solapur
+802,Maharashtra,Thane,CHC,2026-09-10,True,Thane,Maharastra,Thane
+803,Maharashtra,Thane,DH,2022-10-24,True,Thane,Maharastra,Thane
+804,Maharashtra,Thane,DH,2022-10-24,True,Thane,Maharastra,Thane
+805,Maharashtra,Thane,DH,2022-10-24,True,Thane,Maharastra,Thane
+806,Maharashtra,Wardha,DH,2022-12-17,True,Wardha,Maharastra,Wardha
+807,Maharashtra,Wardha,MC,2025-03-10,True,Wardha,Maharastra,Wardha
+808,Maharashtra,Wardha,SDH,2022-12-17,True,Wardha,Maharastra,Wardha
+809,Maharashtra,Washim,DH,2022-08-27,True,Washim,Maharastra,Washim
+811,Maharashtra,Yavatmal,SDH,2028-11-03,True,Yavatmal,Maharastra,Yavatmal
+813,Manipur,Chandel,DH,2022-06-25,True,Chandel,Manipur,Chandel
+814,Manipur,Churachandpur,DH,2024-06-22,True,Churachandpur,Manipur,Churachandpur
+815,Manipur,Khangabok,DH,2023-01-23,False,,,
+818,Meghalaya,East Khasi Hills,DH,2028-10-15,True,East Khasi Hills,Meghalaya,East Khasi Hills
+820,Meghalaya,Shillong,DH,2024-03-13,False,,,
+821,Meghalaya,West Garo Hills,DH,2028-12-17,True,South West Garo Hills,Meghalaya,South West Garo Hills
+822,Meghalaya,West Khasi Hills,DH,2026-06-09,True,Eastern West Khasi Hills,Meghalaya,East Khasi Hills
+823,Mizoram,Aizwal,DH,2027-06-14,False,,,
+824,Mizoram,Aizwal,DH,2028-04-27,False,,,
+826,Mizoram,Champhai,DH,2027-06-14,True,Champhai,Mizoram,Champhai
+827,Mizoram,Lawngtlai,DH,2027-12-22,True,Lawngtlai,Mizoram,Lawngtlai
+828,Mizoram,Lunglei,DH,2025-12-26,True,Lunglei,Mizoram,Lunglei
+830,Mizoram,Saiha,DH,2027-12-31,True,Saiha,Mizoram,Chandel
+831,Mizoram,Serchhip,DH,2028-11-30,True,Serchhip,Mizoram,Serchhip
+832,Odisha,Angul,DH,2027-07-21,True,Anugul,Odisha,Anugul
+834,Odisha,Baragarh,DH,2026-05-25,True,Bargarh,Odisha,Bargarh
+835,Odisha,Baragarh,SDH,2026-05-25,True,Bargarh,Odisha,Bargarh
+837,Odisha,Bhubaneswar,DH,2023-10-26,False,,,
+838,Odisha,Bolangir,MC,2024-07-29,True,Balangir,Odisha,Balangir
+839,Odisha,Cuttack,DH,2023-10-26,True,Cuttack,Odisha,Cuttack
+840,Odisha,Dhenkanal,DH,2025-10-26,True,Dhenkanal,Odisha,Dhenkanal
+841,Odisha,Gajapati,DH,2023-03-31,True,Gajapati,Odisha,Gajapati
+842,Odisha,Ganjam,DH,2027-01-29,True,Ganjam,Odisha,Ganjam
+844,Odisha,Jagatsinghpur,DH,2025-12-05,True,Jagatsinghapur,Odisha,Jagatsinghapur
+845,Odisha,Jajpur,DH,2025-10-26,True,Jajapur,Odisha,Jajapur
+846,Odisha,Kalahandi,DH,2022-12-08,True,Kalahandi,Odisha,Kalahandi
+847,Odisha,Kandhamal,DH,2022-08-01,True,Kandhamal,Odisha,Kandhamal
+848,Odisha,Kendrapara,DH,2027-07-21,True,Kendrapara,Odisha,Kendrapara
+849,Odisha,Keonjhar,CHC,2022-08-01,False,,,
+850,Odisha,Khorda,DH,2026-08-01,True,Khordha,Odisha,Khordha
+851,Odisha,Konaput,DH,2025-03-20,True,Koraput,Odisha,Koraput
+852,Odisha,Koraput,DH,2026-05-21,True,Koraput,Odisha,Koraput
+853,Odisha,Malkangiri,DH,2023-01-29,True,Malkangiri,Odisha,Malkangiri
+854,Odisha,Malkingiri,DH,2026-12-28,True,Malkangiri,Odisha,Malkangiri
+855,Odisha,Mayurbhanj,CHC,2025-11-14,True,Mayurbhanj,Odisha,Mayurbhanj
+858,Odisha,Nabarangpur,DH,2022-08-15,True,Nabarangpur,Odisha,Nabarangapur
+859,Odisha,Nayagarh,DH,2022-09-26,True,Nayagarh,Odisha,Nayagarh
+860,Odisha,Nuapada,DH,2024-08-01,True,Nuapada,Odisha,Nuapada
+861,Odisha,Rayagada,DH,2023-10-26,True,Rayagada,Odisha,Rayagada
+862,Odisha,Sundargarh,DH,2025-03-20,True,Sundargarh,Odisha,Sundargarh
+863,Puducherry,Karaikal,DH,2026-03-19,True,Karaikal,Puducherry,Karaikal
+864,Puducherry,Puducherry,MC,2028-03-02,False,,,
+865,Puducherry,Puducherry,DH,2026-08-21,False,,,
+866,Punjab,Amritsar,CHC,2026-05-28,True,Amritsar,Punjab,Amritsar
+868,Punjab,Barnala,DH,2026-06-05,True,Barnala,Punjab,Barnala
+870,Punjab,Bhatinda,DH,2026-06-05,True,Bathinda,Punjab,Bathinda
+873,Punjab,Gurdaspur,SDH,2028-08-05,True,Gurdaspur,Punjab,Gurdaspur
+874,Punjab,Hoshiyarpur,SDH,2026-05-25,True,Hoshiarpur,Punjab,Hoshiarpur
+875,Punjab,Ludhiana,SDH,2026-11-24,True,Ludhiana,Punjab,Ludhiana
+876,Punjab,Mohali,DH,2026-09-19,False,,,
+877,Punjab,Nawashahar,DH,2022-12-21,False,,,
+878,Punjab,Pathankot,DH,2026-07-17,True,Pathankot,Punjab,Pathankot
+879,Punjab,Patiala,DH,2024-11-24,True,Patiala,Punjab,Patiala
+881,Punjab,Patiala,SDH,2028-04-29,True,Patiala,Punjab,Patiala
+882,Punjab,Sahid Bhagat Singh Nagar,DH,2025-09-29,True,Shahid Bhagat Singh Nagar,Punjab,Shahid Bhagat Singh Nagar
+883,Punjab,Tarn Taran,DH,2028-12-18,True,Tarn Taran,Punjab,Tarn Taran
+885,Rajasthan,Ajmer,SDH,2026-11-22,True,Ajmer,Rajasthan,Ajmer
+886,Rajasthan,Ajmer,DH,2025-07-21,True,Ajmer,Rajasthan,Ajmer
+888,Rajasthan,Ajmer,SDH,2026-04-20,True,Ajmer,Rajasthan,Ajmer
+889,Rajasthan,Ajmer,DH,2028-01-31,True,Ajmer,Rajasthan,Ajmer
+890,Rajasthan,Alwar,CHC,2023-05-13,True,Alwar,Rajasthan,Alwar
+892,Rajasthan,Alwar,DH,2023-10-06,True,Alwar,Rajasthan,Alwar
+893,Rajasthan,Banswara,DH,2025-10-06,True,Banswara,Rajasthan,Banswara
+894,Rajasthan,Baran,DH,2025-10-06,True,Baran,Rajasthan,Baran
+900,Rajasthan,Barmer,SDH,2023-02-11,True,Barmer,Rajasthan,Barmer
+902,Rajasthan,Bhilwara,SDH,2025-09-04,True,Bhilwara,Rajasthan,Bhilwara
+907,Rajasthan,Chittaurgath,DH,2027-07-31,False,,,
+911,Rajasthan,Chittorgarh,DH,2020-02-04,True,Chittorgarh,Rajasthan,Chittaurgarh
+913,Rajasthan,Churu,DH,2026-03-19,True,Churu,Rajasthan,Churu
+914,Rajasthan,Dausa,DH,2027-07-11,True,Dausa,Rajasthan,Dausa
+918,Rajasthan,Dholpur,DH,2026-11-22,True,Dholpur,Rajasthan,Dhaulpur
+921,Rajasthan,Dungarpur,SDH,2025-03-10,True,Dungarpur,Rajasthan,Dungarpur
+922,Rajasthan,Dungarpur,DH,2025-03-10,True,Dungarpur,Rajasthan,Dungarpur
+924,Rajasthan,Ganganagar,DH,2022-12-13,True,Ganganagar,Rajasthan,Ganganagar
+926,Rajasthan,Hanumangarh,DH,2023-03-01,True,Hanumangarh,Rajasthan,Hanumangarh
+927,Rajasthan,Jaipur,CHC,2025-09-12,True,Jaipur,Rajasthan,Jaipur
+928,Rajasthan,Jaipur,MC,2026-01-03,True,Jaipur,Rajasthan,Jaipur
+929,Rajasthan,Jaipur,MC,2024-06-26,True,Jaipur,Rajasthan,Jaipur
+930,Rajasthan,Jaipur,MC,2023-08-31,True,Jaipur,Rajasthan,Jaipur
+931,Rajasthan,Jaisalmer,CHC,2026-09-19,True,Jaisalmer,Rajasthan,Jaisalmer
+932,Rajasthan,Jaisalmer,DH,2027-07-11,True,Jaisalmer,Rajasthan,Jaisalmer
+936,Rajasthan,Jhunjhunu,DH,2022-07-09,True,Jhunjhunu,Rajasthan,Jhunjhunun
+937,Rajasthan,Jhunjhunu,CHC,2024-11-14,True,Jhunjhunu,Rajasthan,Jhunjhunun
+940,Rajasthan,Jhunjhunu,SDH,2023-03-08,True,Jhunjhunu,Rajasthan,Jhunjhunun
+942,Rajasthan,Jodhpur,CHC,2026-07-23,True,Jodhpur Gramin,Rajasthan,Jodhpur
+944,Rajasthan,Jodhpur,MC,2027-07-31,True,Jodhpur Gramin,Rajasthan,Jodhpur
+948,Rajasthan,Karauli,DH,2027-07-11,True,Karauli,Rajasthan,Karauli
+950,Rajasthan,Karauli,DH,2026-09-19,True,Karauli,Rajasthan,Karauli
+952,Rajasthan,Kota,CHC,2027-07-11,True,Kota,Rajasthan,Kota
+955,Rajasthan,Nagaur,DH,2027-02-19,True,Nagaur,Rajasthan,Nagaur
+956,Rajasthan,Nathdwara,DH,2024-11-14,False,,,
+957,Rajasthan,Pali,CHC,2026-02-05,True,Pali,Rajasthan,Pali
+958,Rajasthan,Pali,DH,2022-11-14,True,Pali,Rajasthan,Pali
+959,Rajasthan,Pali,SDH,2023-08-21,True,Pali,Rajasthan,Pali
+964,Rajasthan,Pratapgarh,DH,2022-06-25,True,Pratapgarh,Rajasthan,Pratapgarh
+968,Rajasthan,Rajsamand,DH,2024-10-03,True,Rajsamand,Rajasthan,Rajsamand
+969,Rajasthan,Rajsamand,DH,2022-09-15,True,Rajsamand,Rajasthan,Rajsamand
+971,Rajasthan,Sawai Madhopur,DH,2025-11-02,True,Sawai Madhopur,Rajasthan,Sawai Madhopur
+973,Rajasthan,Seoni,DH,2022-08-05,False,,,
+974,Rajasthan,Sikar,CHC,2023-11-02,True,Sikar,Rajasthan,Sikar
+975,Rajasthan,Sikar,DH,2022-07-09,True,Sikar,Rajasthan,Sikar
+977,Rajasthan,Sirohi,CHC,2026-08-12,True,Sirohi,Rajasthan,Sirohi
+980,Rajasthan,Sirohi,DH,2021-10-21,True,Sirohi,Rajasthan,Sirohi
+983,Rajasthan,Tonk,DH,2023-03-16,True,Tonk,Rajasthan,Tonk
+984,Rajasthan,Udaipur,CHC,2023-09-04,True,Udaipur,Rajasthan,Udaipur
+989,Rajasthan,Udaipur,MC,2026-04-30,True,Udaipur,Rajasthan,Udaipur
+990,Sikkim,Gyalshing,DH,2022-05-23,True,Gyalshing,Sikkim,West District
+991,Tamil Nadu,Ariyalur,DH,2027-12-02,True,Ariyalur,Tamil Nadu,Ariyalur
+992,Tamil Nadu,Ariyalur,SDH,2026-05-23,True,Ariyalur,Tamil Nadu,Ariyalur
+993,Tamil Nadu,Chengalpattu,MC,2026-05-30,True,Chengalpattu,Tamil Nadu,Kancheepuram
+994,Tamil Nadu,Chengalpattu,SDH,2027-02-19,True,Chengalpattu,Tamil Nadu,Kancheepuram
+995,Tamil Nadu,Chengalpattu,SDH,2027-08-05,True,Chengalpattu,Tamil Nadu,Kancheepuram
+996,Tamil Nadu,Chennai,CHC,2026-06-17,True,Chennai,Tamil Nadu,Chennai
+998,Tamil Nadu,Chennai,MC,2028-06-23,True,Chennai,Tamil Nadu,Chennai
+999,Tamil Nadu,Chennai,MC,2022-05-09,True,Chennai,Tamil Nadu,Chennai
+1000,Tamil Nadu,Chennai,MC,2021-03-01,True,Chennai,Tamil Nadu,Chennai
+1001,Tamil Nadu,Chennai,SDH,2026-07-24,True,Chennai,Tamil Nadu,Chennai
+1002,Tamil Nadu,Chennai,MC,2023-07-07,True,Chennai,Tamil Nadu,Chennai
+1003,Tamil Nadu,Chennai,MC,2025-08-09,True,Chennai,Tamil Nadu,Chennai
+1004,Tamil Nadu,Chennai,CHC,2028-10-05,True,Chennai,Tamil Nadu,Chennai
+1005,Tamil Nadu,Coimbatore,DH,2026-09-10,True,Coimbatore,Tamil Nadu,Coimbatore
+1006,Tamil Nadu,Coimbatore,MC,2027-11-24,True,Coimbatore,Tamil Nadu,Coimbatore
+1007,Tamil Nadu,Coimbatore,SDH,2026-07-26,True,Coimbatore,Tamil Nadu,Coimbatore
+1008,Tamil Nadu,Coimbatore,MC,2023-03-16,True,Coimbatore,Tamil Nadu,Coimbatore
+1009,Tamil Nadu,Coimbatore,SDH,2027-02-19,True,Coimbatore,Tamil Nadu,Coimbatore
+1010,Tamil Nadu,Cuddalore,SDH,2028-12-03,True,Cuddalore,Tamil Nadu,Cuddalore
+1012,Tamil Nadu,Cuddalore,DH,2027-07-09,True,Cuddalore,Tamil Nadu,Cuddalore
+1013,Tamil Nadu,Cuddalore,SDH,2026-06-16,True,Cuddalore,Tamil Nadu,Cuddalore
+1015,Tamil Nadu,Cuddalore,SDH,2026-05-30,True,Cuddalore,Tamil Nadu,Cuddalore
+1016,Tamil Nadu,Dharmapuri,DH,2027-09-13,True,Dharmapuri,Tamil Nadu,Dharmapuri
+1017,Tamil Nadu,Dharmapuri,MC,2026-05-30,True,Dharmapuri,Tamil Nadu,Dharmapuri
+1019,Tamil Nadu,Dindigul,DH,2023-07-07,True,Dindigul,Tamil Nadu,Dindigul
+1020,Tamil Nadu,Dindigul,SDH,2027-09-13,True,Dindigul,Tamil Nadu,Dindigul
+1021,Tamil Nadu,Dindigul,SDH,2027-01-04,True,Dindigul,Tamil Nadu,Dindigul
+1022,Tamil Nadu,Erode,CHC,2027-07-28,True,Erode,Tamil Nadu,Erode
+1024,Tamil Nadu,Erode,DH,2028-02-06,True,Erode,Tamil Nadu,Erode
+1025,Tamil Nadu,Erode,DH,2022-08-01,True,Erode,Tamil Nadu,Erode
+1026,Tamil Nadu,Erode,SDH,2024-05-23,True,Erode,Tamil Nadu,Erode
+1027,Tamil Nadu,Erode,SDH,2027-11-24,True,Erode,Tamil Nadu,Erode
+1028,Tamil Nadu,Kallakurichi,DH,2028-02-06,True,Kallakurichi,Tamil Nadu,Viluppuram
+1029,Tamil Nadu,Kallakurichi,SDH,2027-11-24,True,Kallakurichi,Tamil Nadu,Viluppuram
+1031,Tamil Nadu,Kanchipuram,DH,2023-03-16,True,Kanchipuram,Tamil Nadu,Kancheepuram
+1032,Tamil Nadu,Kanyakumari,DH,2027-09-13,True,Kanniyakumari,Tamil Nadu,Kanniyakumari
+1033,Tamil Nadu,Kanyakumari,DH,2022-11-26,True,Kanniyakumari,Tamil Nadu,Kanniyakumari
+1034,Tamil Nadu,Kanyakumari,MC,2026-06-26,True,Kanniyakumari,Tamil Nadu,Kanniyakumari
+1035,Tamil Nadu,Kanyakumari,SDH,2027-01-04,True,Kanniyakumari,Tamil Nadu,Kanniyakumari
+1036,Tamil Nadu,Kanyakumari,SDH,2024-03-26,True,Kanniyakumari,Tamil Nadu,Kanniyakumari
+1037,Tamil Nadu,Karur,DH,2025-01-30,True,Karur,Tamil Nadu,Karur
+1038,Tamil Nadu,Karur,MC,2026-05-30,True,Karur,Tamil Nadu,Karur
+1040,Tamil Nadu,Krishnagiri,MC,2026-07-24,True,Krishnagiri,Tamil Nadu,Krishnagiri
+1041,Tamil Nadu,Krishnagiri,SDH,2027-09-13,True,Krishnagiri,Tamil Nadu,Krishnagiri
+1042,Tamil Nadu,Krishnagiri,SDH,2028-12-03,True,Krishnagiri,Tamil Nadu,Krishnagiri
+1043,Tamil Nadu,Kumbakonam,DH,2023-03-16,False,,,
+1044,Tamil Nadu,Madurai,CHC,2027-03-31,True,Madurai,Tamil Nadu,Madurai
+1045,Tamil Nadu,Madurai,DH,2027-10-15,True,Madurai,Tamil Nadu,Madurai
+1046,Tamil Nadu,Madurai,DH,2022-08-01,True,Madurai,Tamil Nadu,Madurai
+1047,Tamil Nadu,Madurai,MC,2023-03-31,True,Madurai,Tamil Nadu,Madurai
+1048,Tamil Nadu,Madurai,SDH,2027-02-19,True,Madurai,Tamil Nadu,Madurai
+1049,Tamil Nadu,Madurai,SDH,2026-01-03,True,Madurai,Tamil Nadu,Madurai
+1050,Tamil Nadu,Mayiladuthurai,MC,2026-05-30,True,Mayiladuthurai,Tamil Nadu,Nagapattinam
+1051,Tamil Nadu,Mayiladuthurai,SDH,2028-02-06,True,Mayiladuthurai,Tamil Nadu,Nagapattinam
+1052,Tamil Nadu,Nagapattinam,DH,2023-03-16,True,Nagapattinam,Tamil Nadu,Nagapattinam
+1053,Tamil Nadu,Namakkal,DH,2027-07-09,True,Namakkal,Tamil Nadu,Namakkal
+1054,Tamil Nadu,Namakkal,SDH,2026-07-10,True,Namakkal,Tamil Nadu,Namakkal
+1055,Tamil Nadu,Namakkal,MC,2026-07-10,True,Namakkal,Tamil Nadu,Namakkal
+1056,Tamil Nadu,Namakkal,SDH,2027-09-13,True,Namakkal,Tamil Nadu,Namakkal
+1057,Tamil Nadu,Perambalur,DH,2023-01-27,True,Perambalur,Tamil Nadu,Perambalur
+1058,Tamil Nadu,Puddukotai,DH,2023-01-27,True,Pudukkottai,Tamil Nadu,Pudukkottai
+1061,Tamil Nadu,Pudukottai,MC,2026-06-26,True,Pudukkottai,Tamil Nadu,Pudukkottai
+1062,Tamil Nadu,Ramanathapuram,DH,2021-12-26,True,Ramanathapuram,Tamil Nadu,Ramanathapuram
+1064,Tamil Nadu,Ramanathapuram,SDH,2026-05-30,True,Ramanathapuram,Tamil Nadu,Ramanathapuram
+1065,Tamil Nadu,Ranipet,SDH,2027-09-01,True,Ranipet,Tamil Nadu,Vellore
+1066,Tamil Nadu,Ranipet,SDH,2027-08-26,True,Ranipet,Tamil Nadu,Vellore
+1068,Tamil Nadu,Salem,DH,2024-01-30,True,Salem,Tamil Nadu,Salem
+1069,Tamil Nadu,Salem,MC,2023-03-16,True,Salem,Tamil Nadu,Salem
+1071,Tamil Nadu,Salem,SDH,2026-12-07,True,Salem,Tamil Nadu,Salem
+1074,Tamil Nadu,Sivagangai,DH,2027-02-19,True,Sivaganga,Tamil Nadu,Sivaganga
+1075,Tamil Nadu,Sivagangai,MC,2023-08-11,True,Sivaganga,Tamil Nadu,Sivaganga
+1076,Tamil Nadu,Tenkasi,DH,2025-09-04,True,Tenkasi,Tamil Nadu,Tirunelveli
+1077,Tamil Nadu,Tenkasi,SDH,2024-06-08,True,Tenkasi,Tamil Nadu,Tirunelveli
+1078,Tamil Nadu,Thanjavur,DH,2024-01-30,True,Thanjavur,Tamil Nadu,Thanjavur
+1079,Tamil Nadu,Thanjavur,SDH,2026-06-26,True,Thanjavur,Tamil Nadu,Thanjavur
+1080,Tamil Nadu,Thanjavur,SDH,2028-02-06,True,Thanjavur,Tamil Nadu,Thanjavur
+1081,Tamil Nadu,Thanjavur,MC,2022-05-09,True,Thanjavur,Tamil Nadu,Thanjavur
+1082,Tamil Nadu,The Nilgiris,SDH,2028-12-08,True,The Nilgiris,Tamil Nadu,The Nilgiris
+1083,Tamil Nadu,The Nilgiris,SDH,2027-12-02,True,The Nilgiris,Tamil Nadu,The Nilgiris
+1084,Tamil Nadu,The Nilgiris,MC,2028-11-30,True,The Nilgiris,Tamil Nadu,The Nilgiris
+1085,Tamil Nadu,The Nilgiris,MC,2025-02-19,True,The Nilgiris,Tamil Nadu,The Nilgiris
+1086,Tamil Nadu,Theni,DH,2027-07-28,True,Theni,Tamil Nadu,Theni
+1087,Tamil Nadu,Theni,SDH,2026-12-11,True,Theni,Tamil Nadu,Theni
+1089,Tamil Nadu,Theni,MC,2026-12-07,True,Theni,Tamil Nadu,Theni
+1090,Tamil Nadu,Thirupathur,DH,2023-03-01,True,Tirupathur,Tamil Nadu,Vellore
+1091,Tamil Nadu,Thirupathur,SDH,2026-07-24,True,Tirupathur,Tamil Nadu,Vellore
+1092,Tamil Nadu,Thiruvallur,SDH,2027-10-07,True,Thiruvallur,Tamil Nadu,Thiruvallur
+1093,Tamil Nadu,Thiruvallur,DH,2027-03-31,True,Thiruvallur,Tamil Nadu,Thiruvallur
+1094,Tamil Nadu,Thiruvannamalai,SDH,2027-02-19,True,Tiruvannamalai,Tamil Nadu,Tiruvannamalai
+1095,Tamil Nadu,Thiruvarur,DH,2024-01-30,True,Thiruvarur,Tamil Nadu,Thiruvarur
+1096,Tamil Nadu,Thiruvarur,DH,2026-04-05,True,Thiruvarur,Tamil Nadu,Thiruvarur
+1097,Tamil Nadu,Thoothukudi,DH,2025-07-03,False,,,
+1098,Tamil Nadu,Thoothukudi,SDH,2026-07-10,False,,,
+1100,Tamil Nadu,Tiruchirapally,MC,2027-09-13,True,Tiruchirappalli,Tamil Nadu,Tiruchirappalli
+1102,Tamil Nadu,Tirunelveli,MC,2023-01-19,True,Tirunelveli,Tamil Nadu,Tirunelveli
+1104,Tamil Nadu,Tiruppur,DH,2022-09-30,True,Tiruppur,Tamil Nadu,Tiruppur
+1105,Tamil Nadu,Tiruppur,SDH,2024-01-03,True,Tiruppur,Tamil Nadu,Tiruppur
+1106,Tamil Nadu,Tiruppur,SDH,2024-01-16,True,Tiruppur,Tamil Nadu,Tiruppur
+1107,Tamil Nadu,Tiruvallur,SDH,2026-07-24,True,Thiruvallur,Tamil Nadu,Thiruvallur
+1108,Tamil Nadu,Tiruvallur,SDH,2023-07-07,True,Thiruvallur,Tamil Nadu,Thiruvallur
+1109,Tamil Nadu,Tiruvannamalai,DH,2024-01-30,True,Tiruvannamalai,Tamil Nadu,Tiruvannamalai
+1110,Tamil Nadu,Tiruvannamalai,SDH,2026-06-26,True,Tiruvannamalai,Tamil Nadu,Tiruvannamalai
+1111,Tamil Nadu,Tiruvannamalai,SDH,2026-06-26,True,Tiruvannamalai,Tamil Nadu,Tiruvannamalai
+1112,Tamil Nadu,Tiruvannamalai,MC,2026-06-26,True,Tiruvannamalai,Tamil Nadu,Tiruvannamalai
+1114,Tamil Nadu,Trichy,DH,2026-12-10,False,,,
+1115,Tamil Nadu,Trichy,SDH,2026-07-24,False,,,
+1116,Tamil Nadu,Trichy,DH,2023-01-19,False,,,
+1117,Tamil Nadu,Trichy,SDH,2026-01-03,False,,,
+1118,Tamil Nadu,Trichy,SDH,2024-08-20,False,,,
+1119,Tamil Nadu,Tuticorin,MC,2026-05-30,True,Tuticorin,Tamil Nadu,Thoothukkudi
+1120,Tamil Nadu,Udhagamandalam,DH,2021-03-01,False,,,
+1121,Tamil Nadu,Vellore,DH,2027-03-21,True,Vellore,Tamil Nadu,Vellore
+1122,Tamil Nadu,Vellore,DH,2023-03-01,True,Vellore,Tamil Nadu,Vellore
+1123,Tamil Nadu,Vellore,SDH,2026-07-10,True,Vellore,Tamil Nadu,Vellore
+1124,Tamil Nadu,Vellore,MC,2027-07-09,True,Vellore,Tamil Nadu,Vellore
+1125,Tamil Nadu,Villupuram,CHC,2027-08-26,True,Villupuram,Tamil Nadu,Viluppuram
+1126,Tamil Nadu,Villupuram,SDH,2027-02-19,True,Villupuram,Tamil Nadu,Viluppuram
+1127,Tamil Nadu,Villupuram,MC,2026-05-30,True,Villupuram,Tamil Nadu,Viluppuram
+1128,Tamil Nadu,Virudhunagar,CHC,2027-10-14,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1129,Tamil Nadu,Virudhunagar,DH,2026-07-17,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1130,Tamil Nadu,Virudhunagar,DH,2021-12-27,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1131,Tamil Nadu,Virudhunagar,SDH,2026-07-10,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1132,Tamil Nadu,Virudhunagar,SDH,2026-01-03,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1133,Tamil Nadu,Virudhunagar,SDH,2026-01-03,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1134,Tamil Nadu,Virudhunagar,SDH,2026-01-03,True,Virudhunagar,Tamil Nadu,Virudhunagar
+1137,Telangana,Bhadadri,CHC,2024-03-05,False,,,
+1138,Telangana,Bhupalpally,CHC,2026-05-08,False,,,
+1139,Telangana,Hyderabad,SDH,2024-01-03,True,Hyderabad,Telangana,Hyderabad
+1141,Telangana,Hyderabad,DH,2026-05-21,True,Hyderabad,Telangana,Hyderabad
+1142,Telangana,Hyderabad,MC,2026-11-12,True,Hyderabad,Telangana,Hyderabad
+1143,Telangana,Jagtial,SDH,2026-05-21,True,Jagitial,Telangana,Jagitial
+1145,Telangana,Janagaon,SDH,2024-05-15,False,,,
+1147,Telangana,Kamareddy,SDH,2026-01-03,True,Kamareddy,Telangana,Kamareddy
+1148,Telangana,Kamareddy,DH,2026-01-03,True,Kamareddy,Telangana,Kamareddy
+1149,Telangana,Kamareddy,CHC,2024-05-25,True,Kamareddy,Telangana,Kamareddy
+1150,Telangana,Karimnagar,SDH,2026-01-03,True,Karimnagar,Telangana,Karimnagar
+1151,Telangana,Karimnagar,DH,2024-01-26,True,Karimnagar,Telangana,Karimnagar
+1152,Telangana,Khammam,DH,2024-04-23,True,Khammam,Telangana,Khammam
+1154,Telangana,Mahabubabad,DH,2022-10-23,True,Mahabubabad,Telangana,Mahabubabad
+1155,Telangana,Medchal,CHC,2024-08-21,True,Medchal Malkajgiri,Telangana,Medchal-Malkajgiri
+1156,Telangana,Mulugu,SDH,2022-09-29,True,Mulugu,Telangana,Jayashankar Bhupalapally
+1158,Telangana,Nagarkurnool,CHC,2024-05-23,True,Nagarkurnool,Telangana,Nagarkurnool
+1159,Telangana,Nalgonda,SDH,2026-05-25,True,Nalgonda,Telangana,Nalgonda
+1160,Telangana,Nalgonda,DH,2020-08-01,True,Nalgonda,Telangana,Nalgonda
+1161,Telangana,Nirmal,SDH,2024-05-15,True,Nirmal,Telangana,Nirmal
+1162,Telangana,Nirmal,SDH,2023-06-13,True,Nirmal,Telangana,Nirmal
+1163,Telangana,Nizamabad,DH,2026-05-25,True,Nizamabad,Telangana,Nizamabad
+1164,Telangana,Peddapally,SDH,2026-03-16,True,Peddapalli,Telangana,Peddapalli
+1165,Telangana,Peddapally,DH,2026-05-08,True,Peddapalli,Telangana,Peddapalli
+1167,Telangana,Rajanna Sircilla,SDH,2024-05-24,True,Rajanna Sircilla,Telangana,Rajanna Sircilla
+1168,Telangana,Rajanna Sircilla,SDH,2026-05-08,True,Rajanna Sircilla,Telangana,Rajanna Sircilla
+1169,Telangana,Rangareddy,SDH,2026-05-23,True,Ranga Reddy,Telangana,Ranga Reddy
+1170,Telangana,Rangareddy,SDH,2024-03-13,True,Ranga Reddy,Telangana,Ranga Reddy
+1173,Telangana,Sangareddy,SDH,2025-07-09,True,Sangareddy,Telangana,Sangareddy
+1174,Telangana,Sangareddy,DH,2022-08-01,True,Sangareddy,Telangana,Sangareddy
+1175,Telangana,Sangareddy,MC,2024-05-08,True,Sangareddy,Telangana,Sangareddy
+1176,Telangana,Siddipet,SDH,2025-06-30,True,Siddipet,Telangana,Siddipet
+1177,Telangana,Siddipet,SDH,2024-05-15,True,Siddipet,Telangana,Siddipet
+1178,Telangana,Suryapet,SDH,2026-05-21,True,Suryapet,Telangana,Suryapet
+1179,Telangana,Suryapet,SDH,2025-03-07,True,Suryapet,Telangana,Suryapet
+1180,Telangana,Warangal,CHC,2026-03-02,True,Warangal,Telangana,Warangal Rural
+1182,Telangana,Yadadri,CHC,2027-07-04,True,Yadadri Bhuvanagiri,Telangana,Yadadri Bhuvanagiri
+1183,Telangana,Yadadri,CHC,2026-05-21,True,Yadadri Bhuvanagiri,Telangana,Yadadri Bhuvanagiri
+1184,Telangana,Zaheerabad,SDH,2026-03-13,False,,,
+1185,Tripura,Dhalai,DH,2023-12-05,True,Dhalai,Tripura,Dhalai
+1186,Tripura,Gomati,DH,2025-08-06,True,Gomati,Tripura,Gomati
+1187,Tripura,Khowai,SDH,2028-10-08,True,Khowai,Tripura,Khowai
+1188,Tripura,South Tripura,DH,2025-09-25,True,South Tripura,Tripura,South Tripura
+1190,Tripura,West Tripura,DH,2024-04-26,True,West Tripura,Tripura,West Tripura
+1193,Uttar Pradesh,Aligarh,DH,2024-08-20,True,Aligarh,Uttar Pradesh,Aligarh
+1195,Uttar Pradesh,Ambedkarnagar,DH,2022-03-30,True,Ambedkar Nagar,Uttar Pradesh,Ambedkar Nagar
+1196,Uttar Pradesh,Amethi,CHC,2027-10-06,True,Amethi,Uttar Pradesh,Amethi
+1199,Uttar Pradesh,Ayodhya,DH,2022-03-18,True,Ayodhya,Uttar Pradesh,Faizabad
+1200,Uttar Pradesh,Ayodhya,DH,2023-10-05,True,Ayodhya,Uttar Pradesh,Faizabad
+1201,Uttar Pradesh,Azamgarh,DH,2026-03-09,True,Azamgarh,Uttar Pradesh,Azamgarh
+1202,Uttar Pradesh,Baghpat,DH,2025-09-18,True,Baghpat,Uttar Pradesh,Baghpat
+1203,Uttar Pradesh,Bahraich,CHC,2026-03-05,True,Bahraich,Uttar Pradesh,Bahraich
+1204,Uttar Pradesh,Balrampur,CHC,2025-07-18,True,Balrampur,Uttar Pradesh,Balrampur
+1206,Uttar Pradesh,Balrampur,DH,2026-03-13,True,Balrampur,Uttar Pradesh,Balrampur
+1208,Uttar Pradesh,Barabanki,DH,2024-03-01,True,Barabanki,Uttar Pradesh,Bara Banki
+1209,Uttar Pradesh,Basti,CHC,2027-11-11,True,Basti,Uttar Pradesh,Basti
+1211,Uttar Pradesh,Basti,DH,2022-12-15,True,Basti,Uttar Pradesh,Basti
+1213,Uttar Pradesh,Bijnor,DH,2023-03-31,True,Bijnor,Uttar Pradesh,Bijnor
+1214,Uttar Pradesh,Bulandshahr,DH,2028-06-01,True,Bulandshahr,Uttar Pradesh,Bulandshahr
+1215,Uttar Pradesh,Chandauli,CHC,2027-11-07,True,Chandauli,Uttar Pradesh,Chandauli
+1218,Uttar Pradesh,Chitrakoot,DH,2025-05-18,True,Chitrakoot,Uttar Pradesh,Chitrakoot
+1219,Uttar Pradesh,Deoria,CHC,2023-09-12,True,Deoria,Uttar Pradesh,Deoria
+1220,Uttar Pradesh,Etawah,CHC,2027-01-04,True,Etawah,Uttar Pradesh,Etawah
+1221,Uttar Pradesh,Etawah,DH,2020-07-21,True,Etawah,Uttar Pradesh,Etawah
+1223,Uttar Pradesh,Fatehpur,CHC,2026-10-26,True,Fatehpur,Uttar Pradesh,Fatehpur
+1224,Uttar Pradesh,Fatehpur,DH,2023-01-07,True,Fatehpur,Uttar Pradesh,Fatehpur
+1227,Uttar Pradesh,Gautam Buddha Nagar,DH,2028-07-16,True,Gautam Buddha Nagar,Uttar Pradesh,Gautam Buddha Nagar
+1229,Uttar Pradesh,Ghaziabad,DH,2023-01-07,True,Ghaziabad,Uttar Pradesh,Ghaziabad
+1232,Uttar Pradesh,Gorakhpur,DH,2025-09-30,True,Gorakhpur,Uttar Pradesh,Gorakhpur
+1234,Uttar Pradesh,Hamirpur,CHC,2024-07-24,True,Hamirpur,Uttar Pradesh,Hamirpur
+1235,Uttar Pradesh,Hamirpur,DH,2022-02-25,True,Hamirpur,Uttar Pradesh,Hamirpur
+1238,Uttar Pradesh,Hardoi,CHC,2025-10-13,True,Hardoi,Uttar Pradesh,Hardoi
+1239,Uttar Pradesh,Hardoi,DH,2023-03-16,True,Hardoi,Uttar Pradesh,Hardoi
+1243,Uttar Pradesh,Kanpur,DH,2022-11-28,True,Kanpur Nagar,Uttar Pradesh,Kanpur Nagar
+1246,Uttar Pradesh,Kanpur Dehat,DH,2026-02-13,True,Kanpur Dehat,Uttar Pradesh,Kanpur Dehat
+1247,Uttar Pradesh,Kanpur Nagar,DH,2028-06-15,True,Kanpur Nagar,Uttar Pradesh,Kanpur Nagar
+1248,Uttar Pradesh,Kanpur Nagar,DH,2026-03-13,True,Kanpur Nagar,Uttar Pradesh,Kanpur Nagar
+1249,Uttar Pradesh,Lalitpur,DH,2025-10-05,True,Lalitpur,Uttar Pradesh,Lalitpur
+1251,Uttar Pradesh,Lucknow,CHC,2026-03-05,True,Lucknow,Uttar Pradesh,Lucknow
+1252,Uttar Pradesh,Lucknow,CHC,2024-03-13,True,Lucknow,Uttar Pradesh,Lucknow
+1253,Uttar Pradesh,Lucknow,DH,2025-08-31,True,Lucknow,Uttar Pradesh,Lucknow
+1256,Uttar Pradesh,Lucknow,DH,2025-07-05,True,Lucknow,Uttar Pradesh,Lucknow
+1257,Uttar Pradesh,Lucknow,DH,2026-04-30,True,Lucknow,Uttar Pradesh,Lucknow
+1258,Uttar Pradesh,Maharajganj,CHC,2024-09-13,True,Maharajganj,Uttar Pradesh,Mahrajganj
+1260,Uttar Pradesh,Maharajganj,DH,2027-10-07,True,Maharajganj,Uttar Pradesh,Mahrajganj
+1262,Uttar Pradesh,Mathura,DH,2021-01-07,True,Mathura,Uttar Pradesh,Mathura
+1263,Uttar Pradesh,Maunath Bhanjan,DH,2023-07-05,False,,,
+1264,Uttar Pradesh,Muzaffarnagar,DH,2022-10-03,True,Muzaffarnagar,Uttar Pradesh,Muzaffarnagar
+1266,Uttar Pradesh,Pratapgarh,CHC,2023-10-05,True,Pratapgarh,Uttar Pradesh,Pratapgarh
+1267,Uttar Pradesh,Pratapgarh,CHC,2027-09-25,True,Pratapgarh,Uttar Pradesh,Pratapgarh
+1268,Uttar Pradesh,Prayagraj,CHC,2026-08-10,True,Prayagraj,Uttar Pradesh,Allahabad
+1269,Uttar Pradesh,Prayagraj,DH,2025-10-05,True,Prayagraj,Uttar Pradesh,Allahabad
+1271,Uttar Pradesh,Raebareli,CHC,2025-06-07,False,,,
+1272,Uttar Pradesh,Raebareli,DH,2021-01-07,False,,,
+1273,Uttar Pradesh,Raebareli,DH,2025-05-01,False,,,
+1275,Uttar Pradesh,Rampur,DH,2023-07-05,True,Rampur,Uttar Pradesh,Rampur
+1279,Uttar Pradesh,Sambhal,DH,2027-10-14,True,Sambhal,Uttar Pradesh,Sambhal
+1280,Uttar Pradesh,Sant Kabir Nagar,DH,2025-10-07,True,Sant Kabeer Nagar,Uttar Pradesh,Sant Kabir Nagar
+1281,Uttar Pradesh,Shahjahanpur,DH,2022-07-21,True,Shahjahanpur,Uttar Pradesh,Shahjahanpur
+1282,Uttar Pradesh,Shrawasti,CHC,2025-09-01,True,Shravasti,Uttar Pradesh,Shrawasti
+1283,Uttar Pradesh,Shrawasti,DH,2023-03-20,True,Shravasti,Uttar Pradesh,Shrawasti
+1284,Uttar Pradesh,Sitapur,DH,2027-10-14,True,Sitapur,Uttar Pradesh,Sitapur
+1286,Uttar Pradesh,Sonbhadra,DH,2022-12-15,True,Sonbhadra,Uttar Pradesh,Sonbhadra
+1292,Uttar Pradesh,Varanasi,CHC,2025-02-22,True,Varanasi,Uttar Pradesh,Varanasi
+1294,Uttarakhand,Chamoli,DH,2025-07-09,True,Chamoli,Uttarakhand,Chamoli
+1296,Uttarakhand,Dehradun,DH,2027-03-07,True,Dehradun,Uttarakhand,Dehradun
+1297,Uttarakhand,Dehradun,SDH,2021-12-18,True,Dehradun,Uttarakhand,Dehradun
+1298,Uttarakhand,Dehradun,SDH,2023-04-06,True,Dehradun,Uttarakhand,Dehradun
+1299,Uttarakhand,Haldwani,MC,2022-05-13,False,,,
+1303,Uttarakhand,Haridwar,DH,2022-10-31,True,Haridwar,Uttarakhand,Hardwar
+1304,Uttarakhand,Haridwar,SDH,2025-11-21,True,Haridwar,Uttarakhand,Hardwar
+1305,Uttarakhand,Nainital,DH,2023-03-25,True,Nainital,Uttarakhand,Nainital
+1306,Uttarakhand,Tehri Garhwal,SDH,2027-09-17,True,Tehri Garhwal,Uttarakhand,Tehri Garhwal
+1307,Uttarakhand,Udham Singh Nagar,DH,2023-01-19,True,Udam Singh Nagar,Uttarakhand,Udham Singh Nagar
+1309,West Bengal,Alipurduar,DH,2024-03-26,True,Alipurduar,West Bengal,Jalpaiguri
+1311,West Bengal,Bankura,DH,2028-10-16,True,Bankura,West Bengal,Bankura
+1312,West Bengal,Bardhaman,DH,2021-09-06,True,Paschim Bardhaman,West Bengal,Paschim Barddhaman
+1313,West Bengal,Basirhat,DH,2026-03-01,False,,,
+1314,West Bengal,Birbhum,DH,2027-07-07,True,Birbhum,West Bengal,Birbhum
+1315,West Bengal,Birbhum,MC,2027-07-07,True,Birbhum,West Bengal,Birbhum
+1316,West Bengal,Birbhum,SDH,2027-07-07,True,Birbhum,West Bengal,Birbhum
+1317,West Bengal,Coochbehar,DH,2026-12-05,True,Coochbehar,West Bengal,Koch Bihar
+1318,West Bengal,Dakshin Dinajpur,DH,2026-06-26,True,Dinajpur Dakshin,West Bengal,Dakshin Dinajpur
+1319,West Bengal,Dinajpur,SDH,2022-07-11,True,Dinajpur Dakshin,West Bengal,Dakshin Dinajpur
+1320,West Bengal,Durgapur,SDH,2028-04-03,False,,,
+1321,West Bengal,Hooghly,DH,2027-12-03,True,Hooghly,West Bengal,Hugli
+1322,West Bengal,Hooghly,SDH,2026-06-07,True,Hooghly,West Bengal,Hugli
+1323,West Bengal,Hoogly,SDH,2022-07-11,True,Hooghly,West Bengal,Hugli
+1324,West Bengal,Howrah,SDH,2026-06-07,True,Howrah,West Bengal,Haora
+1325,West Bengal,Jalpaiguri,DH,2025-07-17,True,Jalpaiguri,West Bengal,Jalpaiguri
+1326,West Bengal,Jalpaiguri,SDH,2027-07-07,True,Jalpaiguri,West Bengal,Jalpaiguri
+1327,West Bengal,Jhargram,DH,2028-08-20,True,Jhargram,West Bengal,Paschim Medinipur
+1328,West Bengal,Kolkata,DH,2028-07-08,True,Kolkata,West Bengal,Kolkata
+1329,West Bengal,Kolkata,MC,2021-11-18,True,Kolkata,West Bengal,Kolkata
+1330,West Bengal,Kolkata,MC,2028-05-13,True,Kolkata,West Bengal,Kolkata
+1331,West Bengal,Kolkata,MC,2025-03-21,True,Kolkata,West Bengal,Kolkata
+1332,West Bengal,Kolkata,MC,2027-01-04,True,Kolkata,West Bengal,Kolkata
+1333,West Bengal,Kolkata,MC,2025-01-04,True,Kolkata,West Bengal,Kolkata
+1334,West Bengal,Maldah,MC,2027-07-07,True,Maldah,West Bengal,Maldah
+1335,West Bengal,Murshidabad,MC,2026-12-05,True,Murshidabad,West Bengal,Murshidabad
+1336,West Bengal,Nadia,SDH,2027-07-07,True,Nadia,West Bengal,Nadia
+1337,West Bengal,Nadia,SDH,2024-03-21,True,Nadia,West Bengal,Nadia
+1338,West Bengal,North 24 Parganas,MC,2025-03-21,True,24 Paraganas North,West Bengal,North Twenty Four Pargana
+1339,West Bengal,North 24 Parganas,DH,2025-01-29,True,24 Paraganas North,West Bengal,North Twenty Four Pargana
+1340,West Bengal,North 24 Parganas,DH,2024-03-20,True,24 Paraganas North,West Bengal,North Twenty Four Pargana
+1341,West Bengal,Purba Bardhman,MC,2027-07-07,True,Purba Bardhaman,West Bengal,Paschim Barddhaman
+1342,West Bengal,Purba Bardhman,SDH,2026-02-02,True,Purba Bardhaman,West Bengal,Paschim Barddhaman
+1343,West Bengal,Purba Medinipur,SDH,2027-10-06,False,,,
+1344,West Bengal,Purba Medinipur,CHC,2028-08-10,False,,,
+1345,West Bengal,Purba Medinipur,SDH,2025-08-27,False,,,
+1346,West Bengal,Purba Medinipur,MC,2025-07-10,False,,,
+1347,West Bengal,Siliguri,DH,2024-11-21,False,,,
+1348,West Bengal,South 24 Parganas,MC,2026-12-05,True,24 Paraganas South,West Bengal,South Twenty Four Pargana
+1350,West Bengal,South 24 Parganas,DH,2027-01-08,True,24 Paraganas South,West Bengal,South Twenty Four Pargana
+1351,West Bengal,South 24 Parganas,SDH,2026-03-01,True,24 Paraganas South,West Bengal,South Twenty Four Pargana
+1352,West Bengal,South 24 Parganas,SDH,2022-05-31,True,24 Paraganas South,West Bengal,South Twenty Four Pargana
+1353,West Bengal,South 24 Parganas,DH,2021-09-06,True,24 Paraganas South,West Bengal,South Twenty Four Pargana
+1354,West Bengal,Uttar Dinajpur,DH,2027-07-07,True,Dinajpur Uttar,West Bengal,Uttar Dinajpur

@@ -1,0 +1,14 @@
+{
+ "pairs": 1398,
+ "origins": 140,
+ "pairs_osrm_ge_10min": 1190,
+ "spearman_ge_10": 0.9064675965043204,
+ "median_ratio_osrm_over_raster": 1.0022995245399728,
+ "ratio_p10": 0.7046666232511317,
+ "ratio_p90": 1.7434912617257585,
+ "median_ratio_rural": 0.973898870719901,
+ "median_ratio_urban": 1.046785037864436,
+ "agree_60min_class": 0.9105865522174535,
+ "raster_le60_but_osrm_gt60": 63,
+ "raster_gt60_but_osrm_le60": 62
+}
