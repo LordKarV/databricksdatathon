@@ -11,7 +11,8 @@
   "zero_coords": 13,
   "in_india_bbox": 151001,
   "swapped_lat_lon": 791,
-  "numeric_outside_bbox_not_swapped": 1820
+  "numeric_outside_bbox_not_swapped": 1820,
+  "numeric_lat_with_le2_decimals": 1727
  },
  "admin_NA": {
   "district": 715,

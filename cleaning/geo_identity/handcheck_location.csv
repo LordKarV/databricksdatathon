@@ -1,0 +1,48 @@
+uid8,rule,chosen_right,note
+587034ea,city_confirms_coords,yes,Eranhipalam Kozhikode address
+9341c09e,city_confirms_coords,unclear,address Nirmala Road (Rajkot) vs description Vadodara
+8c4c07f2,city_confirms_coords,yes,Pandeypur Varanasi
+373e1b29,city_confirms_coords,yes,address says Belagavi 590001
+4ddde88c,city_confirms_coords,yes,Line Bazar Purnea
+5440dafe,city_confirms_coords,yes,Citilight Road Surat
+79d5bc5c,city_confirms_coords,unclear,address mixes Pimpri (Pune) and Charkop Kandivali (Mumbai)
+ff94cd5d,city_confirms_coords,yes,Samrala Chowk Ludhiana
+8bd4d071,city_confirms_coords,yes,description Jamwali Palitana
+59a5d901,city_confirms_coords,yes,description Pune
+940f2856,city_confirms_pin,yes,Gajuwaka Visakhapatnam (address also names Benz Circle Vijayawada)
+17a99a64,city_confirms_pin,yes,Kakori Lucknow
+b1cdf356,city_confirms_pin,yes,opposite MLB Medical College Jhansi
+1392cde6,city_confirms_pin,yes,Arundelpet Guntur
+6e0a0a7b,city_confirms_pin,yes,Naranpura Ahmedabad
+57259542,city_confirms_pin,unclear,address mixes Kamothe and Wagle Estate (Thane); PIN is Mumbai suburban
+70f5be78,city_confirms_pin,yes,Hinjewadi 411057
+1c23b3b4,city_confirms_pin,yes,Jamnagar address
+4e1497e3,city_confirms_pin,yes,Pune Camp 411001
+708de7d6,city_confirms_pin,yes,Shahpura Bhopal 462016
+11fd8e5d,city_points_elsewhere,real_conflict,city Palladam; description Tuticorin; PIN and coords Tuticorin
+05746699,city_points_elsewhere,real_conflict,District Hospital Dausa with Baran PIN and coords; city right
+d71e18cb,city_points_elsewhere,real_conflict,Agra address and PIN; description says Kanpur Nagar
+0bc12d8e,city_points_elsewhere,real_conflict,Thellakom (Kottayam) address; city Thrissur
+d6a60d83,city_points_elsewhere,real_conflict,Trimbak/Nashik description; Amravati PIN and coords
+80cc5230,city_points_elsewhere,real_conflict,Pune address; Mumbai description
+849414fc,city_points_elsewhere,real_conflict,Red Cross Mhow with Bhopal PIN and coords; city right
+b0687700,city_points_elsewhere,real_conflict,name says Pilibhit; address Kamla Nagar Agra
+2cd8e8c5,city_points_elsewhere,real_conflict,Kharghar address; city Aurangabad
+d815ec89,city_points_elsewhere,real_conflict,Lucknow description and PIN; city Moradabad
+43781e64,city_points_elsewhere,real_conflict,Mohali address; city Jalandhar
+3d88594f,city_points_elsewhere,real_conflict,GND Hospital Amritsar with Faridkot PIN and coords; city right
+daf2eec0,both_points_elsewhere,no,description Tonk; address Sikar; city Dholpur
+b8a5401f,both_points_elsewhere,unclear,Aravind Eye: Delhi PIN; Puducherry coords; city Hyderabad
+fdad58c8,both_points_elsewhere,yes,Allen Ganj Allahabad
+33c8917f,both_points_elsewhere,unclear,Rohtak address; Alwar PIN; city Bhiwandi
+4f1b6e2b,both_points_elsewhere,unclear,SDMH Jaipur in text; Sangod Road (Kota) address
+76a3a7f6,both_points_elsewhere,yes,description Perumbavoor Ernakulam
+6ac8f2ed,both_points_elsewhere,yes,description Erode network hospital
+94cfa2e6,both_points_elsewhere,unclear,Medicover chain record mixing Aurangabad CIDCO and Hyderabad
+7c045fa3,both_points_elsewhere,no,Varachha Road Surat matches PIN; city Navsari
+7aee4267,both_points_elsewhere,yes,Manjalpur Vadodara
+46ab39ed,both_points_elsewhere,unclear,address North 24 Parganas; Laxmipur resolved to an office in another district
+f8d352c9,both_points_elsewhere,yes,CHC Patan block Durg
+41e189a9,both_points_elsewhere,unclear,ESI record mixing Aurangabad CIDCO and Pune Chinchwad
+8a3bf8a0,both_points_elsewhere,no,Rajapeth Amravati matches PIN; city Mumbai
+a0de2e3f,both_points_elsewhere,no,Nava Naroda Ahmedabad; PIN centroid 382450 itself 118 km from Ahmedabad

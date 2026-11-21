@@ -1,0 +1,385 @@
+{
+ "model_hash": "f4c2f361d903e1df-fallback",
+ "labels_sha256": "f3afb0cb2b4ec298204ffc031e1569954ff95d092bd95cc01ea9ef77e6cb973d",
+ "created_at": "2026-11-21T13:41:12",
+ "service": {
+  "weighting": "uniform",
+  "prior": "M0@0.25",
+  "constant_rate_logloss_in_sample": 0.6619439760154051,
+  "candidates": {
+   "ipw|M0@1": {
+    "oof_logloss": 1.015589711242714
+   },
+   "ipw|M0@0.5": {
+    "oof_logloss": 0.8929200794367489
+   },
+   "ipw|M0@0.25": {
+    "oof_logloss": 0.80056423860141
+   },
+   "ipw|M1@1": {
+    "oof_logloss": 0.9215180911665043
+   },
+   "ipw|M1@0.5": {
+    "oof_logloss": 0.8302773536545713
+   },
+   "ipw|M1@0.25": {
+    "oof_logloss": 0.7578423393753447
+   },
+   "ipw|M2@1": {
+    "oof_logloss": 1.2218061975015053
+   },
+   "ipw|M2@0.5": {
+    "oof_logloss": 1.254933076268589
+   },
+   "ipw|M2@0.25": {
+    "oof_logloss": 1.2547370090169154
+   },
+   "uniform|M0@1": {
+    "oof_logloss": 0.8454539322823991
+   },
+   "uniform|M0@0.5": {
+    "oof_logloss": 0.776516600450477
+   },
+   "uniform|M0@0.25": {
+    "oof_logloss": 0.727058209657695
+   },
+   "uniform|M1@1": {
+    "oof_logloss": 0.7062313733464335
+   },
+   "uniform|M1@0.5": {
+    "oof_logloss": 0.6764070573846702
+   },
+   "uniform|M1@0.25": {
+    "oof_logloss": 0.6708866329247978
+   },
+   "uniform|M2@1": {
+    "oof_logloss": 0.7867970866103777
+   },
+   "uniform|M2@0.5": {
+    "oof_logloss": 0.8524385290665814
+   },
+   "uniform|M2@0.25": {
+    "oof_logloss": 0.9946931170468163
+   }
+  },
+  "paired_vs_M0": {
+   "M0@1": {
+    "oof_logloss": 0.8454539322823991,
+    "diff_vs_best_M0": 0.1183957226247041,
+    "se_diff": 0.12283034362984287
+   },
+   "M0@0.5": {
+    "oof_logloss": 0.776516600450477,
+    "diff_vs_best_M0": 0.04945839079278215,
+    "se_diff": 0.05195613646272483
+   },
+   "M0@0.25": {
+    "oof_logloss": 0.727058209657695,
+    "diff_vs_best_M0": 0.0,
+    "se_diff": 0.0
+   },
+   "M1@1": {
+    "oof_logloss": 0.7062313733464335,
+    "diff_vs_best_M0": -0.020826836311261265,
+    "se_diff": 0.0886052373579828
+   },
+   "M1@0.5": {
+    "oof_logloss": 0.6764070573846702,
+    "diff_vs_best_M0": -0.050651152273024684,
+    "se_diff": 0.09750703977345188
+   },
+   "M1@0.25": {
+    "oof_logloss": 0.6708866329247978,
+    "diff_vs_best_M0": -0.056171576732897084,
+    "se_diff": 0.11190025402662022
+   },
+   "M2@1": {
+    "oof_logloss": 0.7867970866103777,
+    "diff_vs_best_M0": 0.05973887695268268,
+    "se_diff": 0.18686377666272383
+   },
+   "M2@0.5": {
+    "oof_logloss": 0.8524385290665814,
+    "diff_vs_best_M0": 0.12538031940888641,
+    "se_diff": 0.22960957379294566
+   },
+   "M2@0.25": {
+    "oof_logloss": 0.9946931170468163,
+    "diff_vs_best_M0": 0.26763490738912166,
+    "se_diff": 0.29007141987615775
+   }
+  },
+  "rule": "lowest OOF IPW log loss; M0 unless another prior beats it by >= 1 paired SE; weighting chosen by M0's OOF loss",
+  "n_train": 76,
+  "n_pos": 28,
+  "ess": 21.97853332864121,
+  "folds": 5,
+  "draw_acceptance": 0.0011404494382022473,
+  "active_constraints": [
+   [
+    "t1"
+   ],
+   [
+    "t2"
+   ],
+   [
+    "t4"
+   ],
+   [
+    "tb_mid"
+   ],
+   [
+    "tb_high"
+   ],
+   [
+    "trunc0"
+   ],
+   [
+    "n1"
+   ],
+   [
+    "t2",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@dialysis"
+   ],
+   [
+    "t2",
+    "t2@emergency_csection"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@emergency_csection"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@emergency_csection"
+   ],
+   [
+    "t2",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@nicu"
+   ],
+   [
+    "t2",
+    "t2@cardiac_surgery"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@cardiac_surgery"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@cardiac_surgery"
+   ],
+   [
+    "t2",
+    "t2@mri"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@mri"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@mri"
+   ],
+   [
+    "t2",
+    "t2@burn_care"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@burn_care"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@burn_care"
+   ],
+   [
+    "t2",
+    "t2@trauma_emergency"
+   ],
+   [
+    "t2",
+    "tb_mid",
+    "t2@trauma_emergency"
+   ],
+   [
+    "t2",
+    "tb_high",
+    "t2@trauma_emergency"
+   ],
+   [
+    "t4",
+    "t4@emergency_csection"
+   ],
+   [
+    "t4",
+    "t4@cardiac_surgery"
+   ],
+   [
+    "t4",
+    "t4@mri"
+   ],
+   [
+    "t4",
+    "t4@burn_care"
+   ],
+   [
+    "p1",
+    "p1@emergency_csection"
+   ],
+   [
+    "p1",
+    "p1@burn_care"
+   ],
+   [
+    "t3"
+   ]
+  ]
+ },
+ "location": {
+  "prior": "M0",
+  "fitted": true,
+  "n_train": 121,
+  "n_pos": 101,
+  "selection": {
+   "M0": {
+    "oof_logloss": 0.3540949373840954
+   },
+   "M1": {
+    "oof_logloss": 0.34514240515867395
+   },
+   "diff_M1_minus_M0": -0.00895253222542141,
+   "se": 0.022121825569396594
+  },
+  "sources": {
+   "gold_dev": 65,
+   "geo_hand_check": 30,
+   "cleaning_hand_check": 26
+  },
+  "draw_acceptance": 0.4145
+ },
+ "existence": {
+  "prior": "M1",
+  "fitted": false,
+  "n_train": 76,
+  "n_neg": 5,
+  "note": "fewer than 15 negatives: existence weights are expert settings, not learned"
+ },
+ "thresholds": {
+  "t_L": 0.7,
+  "t_U": 0.2,
+  "n_eligible_T2_PL_PE": 46,
+  "tl_estimated": null,
+  "tu_estimated": null,
+  "fallback_used": {
+   "t_L": true,
+   "t_U": true
+  }
+ },
+ "variants": {
+  "B4_prior_only": {
+   "active_constraints": 7
+  },
+  "M0": {
+   "prior": "M0@0.25",
+   "oof_logloss": 0.727058209657695,
+   "platt": [
+    0.0,
+    -0.5006127551407005
+   ]
+  },
+  "M1": {
+   "prior": "M1@0.25",
+   "oof_logloss": 0.6708866329247978,
+   "platt": [
+    1.0,
+    0.0
+   ]
+  },
+  "M2": {
+   "prior": "M2@0.25",
+   "oof_logloss": 0.9946931170468163,
+   "platt": [
+    0.21146572582996423,
+    -0.3224738549915354
+   ]
+  },
+  "M0_sd2.5": {
+   "prior": "M0@1",
+   "oof_logloss": 0.8454539322823991,
+   "platt": [
+    0.061306049834552255,
+    -0.48225163992914305
+   ]
+  },
+  "abl_noown": {
+   "oof_logloss": 0.7019593938590369
+  },
+  "abl_noecho": {
+   "oof_logloss": 0.7194852888529314
+  },
+  "abl_nobucket": {
+   "oof_logloss": 0.677083285241375
+  },
+  "abl_nocontext": {
+   "oof_logloss": 0.7011824989491577
+  }
+ },
+ "kappa_dev_overlap": {
+  "service": {
+   "n": 13,
+   "agreement": 0.615,
+   "kappa": 0.293
+  },
+  "exists": {
+   "n": 13,
+   "agreement": 0.769,
+   "kappa": 0.494
+  },
+  "location": {
+   "n": 13,
+   "agreement": 0.615,
+   "kappa": 0.398
+  }
+ },
+ "dev_label_status": {
+  "checked": 78,
+  "unchecked": 27
+ },
+ "dropped_dev_rows_in_test_leakage_groups": [
+  "trauma_emergency_strong_1",
+  "v2_burn_care_weak_5"
+ ],
+ "band_counts_all_pairs": {
+  "Unverified": 69673,
+  "Unlikely": 40
+ }
+}

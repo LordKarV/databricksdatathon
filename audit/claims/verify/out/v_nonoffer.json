@@ -1,0 +1,181 @@
+{
+ "mention_rows": 26041,
+ "finder_nonoffer_rows": 94,
+ "my_nonoffer_rows": 77,
+ "both": 69,
+ "finder_by_service": {
+  "mri": 36,
+  "trauma": 22,
+  "dialysis": 11,
+  "icu": 9,
+  "cardiac_surgery": 5,
+  "csection": 4,
+  "burns": 4,
+  "nicu": 3
+ },
+ "finder_mri_cues": {
+  "negation": 3,
+  "referral": 0,
+  "future": 10,
+  "partner": 16,
+  "camp": 0,
+  "past": 2,
+  "hedge": 5
+ },
+ "finder_mri_outsourc_word": 15,
+ "non_offer_only_pairs": {
+  "mri": 9,
+  "trauma": 7,
+  "csection": 4,
+  "dialysis": 3,
+  "cardiac_surgery": 3,
+  "burns": 2,
+  "icu": 2,
+  "nicu": 1
+ },
+ "my_only_sample": [
+  [
+   "1b8ff061",
+   "mri",
+   "AI-automated MRI planned"
+  ],
+  [
+   "1f84bdca",
+   "dialysis",
+   "Dialysis machines (4) planned for 24x7 dialysis"
+  ],
+  [
+   "6321c614",
+   "icu",
+   "The seven ICU-bedded hospitals will be redeveloped into superspecialty ICU centres focusing on cancers, transplants and high-risk deliveries."
+  ],
+  [
+   "70cf98e8",
+   "icu",
+   "Planned ultra-modern surgical intensive care unit (SICU)"
+  ],
+  [
+   "7788feca",
+   "dialysis",
+   "CRRT machines planned for ICU dialysis"
+  ],
+  [
+   "bbf46f87",
+   "cardiac_surgery",
+   "Heart transplant will be held at General Hospital (GH), Ernakulam when a viable donor heart becomes available"
+  ],
+  [
+   "dfc36eeb",
+   "dialysis",
+   "Dialysis unit inaugurated; renal transplant program planned"
+  ]
+ ],
+ "finder_only_sample": [
+  [
+   "04f43374",
+   "trauma",
+   "Emergency services supported by a tie-up with a nearby allopathic hospital"
+  ],
+  [
+   "093844ce",
+   "trauma",
+   "Tie-up with nearest allopathic hospital to provide emergency services"
+  ],
+  [
+   "173459fb",
+   "mri",
+   "Imaging equipment visible in photos appears to be a CT/MRI scanner"
+  ],
+  [
+   "181d14e0",
+   "trauma",
+   "Emergency care available through tie-up with MIMS Hospital Calicut"
+  ],
+  [
+   "18a41f66",
+   "trauma",
+   "Plans to open a new emergency care unit at Hamidia Hospital"
+  ],
+  [
+   "19b38e0a",
+   "dialysis",
+   "Offers kidney treatment without dialysis using plants-based electro homeopathy medicines"
+  ],
+  [
+   "1ad3a80d",
+   "mri",
+   "No CT scan or MRI facility on-site"
+  ],
+  [
+   "30494fe0",
+   "icu",
+   "Plans to add new ICUs and operating theatres to achieve a 400-bed capacity by the end of 2024."
+  ],
+  [
+   "4efd3d6e",
+   "csection",
+   "Caesarean section performed; may be done with spinal block or general anaesthesia; involves incisions in the lower abdomen and uterus to deliver the baby"
+  ],
+  [
+   "5c0d519d",
+   "trauma",
+   "Orthopedic surgical and non-surgical treatments for musculoskeletal trauma, sports injuries, degenerative diseases, infections, tumors, and congenital disorders"
+  ]
+ ],
+ "finder_nonoffer_sample_seed5": [
+  [
+   "ce402c4a",
+   "icu",
+   "Plans to set up a 100-bed paediatric ICU at Sri Krishna Medical College and Hospital, Muzaffarpur within a year (reported 9 July 2019)."
+  ],
+  [
+   "1a5c40b0",
+   "mri",
+   "Imaging services (X-ray, CT, MRI) outsourced"
+  ],
+  [
+   "5eeb0152",
+   "dialysis",
+   "Kidney renal failure cure without dialysis"
+  ],
+  [
+   "c77afe8e",
+   "mri",
+   "MRI 3 Tesla (3T) scan system to be installed at Dr. B. Borooah Cancer Institute"
+  ],
+  [
+   "4efd3d6e",
+   "csection",
+   "Caesarean section performed; may be done with spinal block or general anaesthesia; involves incisions in the lower abdomen and uterus to deliver the baby"
+  ],
+  [
+   "6b064699",
+   "burns",
+   "Uses non-thermal VenaSeal method with no burns and no scars"
+  ],
+  [
+   "4d6c620f",
+   "trauma",
+   "Does not provide emergency services"
+  ],
+  [
+   "45532e92",
+   "trauma",
+   "Provides 24/7 emergency care (implied by 24/7 CT reporting in CT service)"
+  ],
+  [
+   "679c721f",
+   "icu",
+   "Patients from Warora can be transferred to a Covid Hospital in Chandrapur with ICU"
+  ],
+  [
+   "92dd37f1",
+   "trauma",
+   "A multi-specialty trauma center is under construction"
+  ]
+ ],
+ "hedge_items": 139,
+ "hedge_items_denominator": 451110,
+ "hedge_facilities": 121,
+ "hedge_in_mentions_finder": 10
+}

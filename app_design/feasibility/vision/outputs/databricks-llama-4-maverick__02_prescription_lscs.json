@@ -1,0 +1,56 @@
+{
+ "endpoint": "databricks-llama-4-maverick",
+ "image": "02_prescription_lscs.png",
+ "bytes": 43638,
+ "status": 200,
+ "latency_s": 2.46,
+ "response": {
+  "id": "chatcmpl_8f12b500-4f44-452d-965a-62bc58362c3f_b25ef423-e617-4d49-8579-83188a93b4fb",
+  "object": "chat.completion",
+  "created": 1795284610,
+  "model": "meta-llama-4-maverick-040225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"detected_text\": \"Example Nursing Home - Obstetrics OPD\\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iron-Folic acid 1 OD\\n2. Tab Calcium 500 mg BD\\nFindings: 38 weeks, previous caesarean (2023), breech\\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.\", \"language\": \"English\", \"document_type\": \"prescription\", \"suggested_service\": \"emergency_csection\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"LSCS advised\", \"red_flags\": [\"pain or bleeding\"]}"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1742,
+   "completion_tokens": 166,
+   "total_tokens": 1908,
+   "cache_read_input_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   }
+  }
+ },
+ "content": "{\"detected_text\": \"Example Nursing Home - Obstetrics OPD\\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iron-Folic acid 1 OD\\n2. Tab Calcium 500 mg BD\\nFindings: 38 weeks, previous caesarean (2023), breech\\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.\", \"language\": \"English\", \"document_type\": \"prescription\", \"suggested_service\": \"emergency_csection\", \"urgency\": \"urgent\", \"confidence\": 0.9, \"trigger_phrase\": \"LSCS advised\", \"red_flags\": [\"pain or bleeding\"]}",
+ "parsed": {
+  "detected_text": "Example Nursing Home - Obstetrics OPD\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\nRx\n1. Tab Iron-Folic acid 1 OD\n2. Tab Calcium 500 mg BD\nFindings: 38 weeks, previous caesarean (2023), breech\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.",
+  "language": "English",
+  "document_type": "prescription",
+  "suggested_service": "emergency_csection",
+  "urgency": "urgent",
+  "confidence": 0.9,
+  "trigger_phrase": "LSCS advised",
+  "red_flags": [
+   "pain or bleeding"
+  ]
+ },
+ "parse_mode": "strict",
+ "usage": {
+  "prompt_tokens": 1742,
+  "completion_tokens": 166,
+  "total_tokens": 1908,
+  "cache_read_input_tokens": 0,
+  "prompt_tokens_details": {
+   "cached_tokens": 0
+  }
+ }
+}

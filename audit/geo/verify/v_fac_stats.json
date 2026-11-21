@@ -1,0 +1,361 @@
+{
+ "well_formed": 9970,
+ "distinct_unique_id": 9959,
+ "dup_id_rows": 22,
+ "dup_ids_fully_identical": 11,
+ "dup_ids_differing_cols": [
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+ ],
+ "pin_valid": 9893,
+ "zip_null_like": 4,
+ "coord_null": 0,
+ "zero": 0,
+ "swapped": 0,
+ "outside_india": 6,
+ "outside_examples": [
+  [
+   "364dae5c-b868-450a-9e4e-e6705852c229",
+   "Krishna Hospital Multispeciality",
+   "Lucknow",
+   -81.706298828125,
+   26.953109741210938
+  ],
+  [
+   "515fb95f-d589-418f-b510-d8bf7438f884",
+   "Cura Imaging & Gastro Clinic",
+   "Nagpur",
+   2.9529342651367188,
+   41.38715744018555
+  ],
+  [
+   "7c6e6ca4-d07f-4613-a926-47d5ae7a2afe",
+   "Cardia Health Care",
+   "Noida",
+   7.710991382598877,
+   109.6875
+  ],
+  [
+   "86a33104-2959-4ddf-aeda-4e6f42b2395d",
+   "The Family Tree Hospital",
+   "Tirupati",
+   32.96258544921875,
+   7.479839324951172
+  ],
+  [
+   "b288467c-117e-47fe-81b5-7bb8dcf494b3",
+   "Hzb Arogyam Multispeciality Hospital",
+   "Hazaribagh",
+   46.07322692871094,
+   106.171875
+  ],
+  [
+   "fac0cc70-81a9-462d-bced-5ca40257b027",
+   "Sanjivani Multi Speciality Hospital",
+   "Chengannur",
+   59.949684143066406,
+   -38.26263427734375
+  ]
+ ],
+ "coord_json_mismatch": 0,
+ "coord_json_parsed": 9970,
+ "dist_naive": {
+  "n": 9682,
+  "gt50": 1540,
+  "gt100": 1194,
+  "bins": {
+   "(-0.01, 2.0]": 4416,
+   "(2.0, 10.0]": 2663,
+   "(10.0, 50.0]": 1063,
+   "(50.0, 100.0]": 346,
+   "(100.0, 500.0]": 1019,
+   "(500.0, 100000.0]": 175
+  },
+  "median": 2.37,
+  "p90": 146.5
+ },
+ "dist_robust": {
+  "n": 9527,
+  "gt50": 1386,
+  "gt100": 1087,
+  "bins": {
+   "(-0.01, 2.0]": 4512,
+   "(2.0, 10.0]": 2624,
+   "(10.0, 50.0]": 1005,
+   "(50.0, 100.0]": 299,
+   "(100.0, 500.0]": 983,
+   "(500.0, 100000.0]": 104
+  },
+  "median": 2.2,
+  "p90": 126.3
+ },
+ "dist_finder": {
+  "n": 9682,
+  "gt50": 1407,
+  "gt100": 1114,
+  "bins": {
+   "(-0.01, 2.0]": 4546,
+   "(2.0, 10.0]": 2648,
+   "(10.0, 50.0]": 1081,
+   "(50.0, 100.0]": 293,
+   "(100.0, 500.0]": 1012,
+   "(500.0, 100000.0]": 102
+  },
+  "median": 2.26,
+  "p90": 128.4
+ },
+ "finder_own_point_only": {
+  "n": 9518,
+  "gt50": 1371
+ },
+ "office_points_used_for_reverse_geocode": 87139,
+ "far_n": 1407,
+ "far_same_state_coordstate_eq_pinstate": 1338,
+ "far_same_district": 98,
+ "far_nearest_pin_same_prefix3": 114,
+ "far_nearest_pin_same_prefix2": 456,
+ "far_sibling_test": {
+  "siblings_near_centroid": 863,
+  "no_sibling": 353,
+  "siblings_scattered": 107,
+  "siblings_near_this_point": 84
+ },
+ "state_resolved_simple": 9648,
+ "state_exact_upper": 9591,
+ "state_null_like": 0,
+ "state_unresolved_top": {
+  "Thane": 13,
+  "Mumbai": 12,
+  "Navi Mumbai": 12,
+  "Chennai": 10,
+  "Pune": 10,
+  "Hyderabad": 9,
+  "Thiruvananthapuram": 7,
+  "Kollam": 5,
+  "Malappuram": 5,
+  "Punjab Region": 5,
+  "Dhule": 4,
+  "Kushinagar": 4,
+  "Ernakulam": 4,
+  "Ghaziabad": 4,
+  "Indore": 4,
+  "Erode": 4,
+  "Mohali": 3,
+  "Palghar": 3,
+  "West Tripura": 3,
+  "Ahmedabad": 3,
+  "Idukki": 3,
+  "Sangli": 3,
+  "Dakshin Kannad": 2,
+  "North 24 Parganas": 2,
+  "Thanjavur": 2
+ },
+ "state_vs_pin": [
+  60,
+  9374
+ ],
+ "zone_mismatch": [
+  20,
+  9575
+ ],
+ "zone_mismatch_examples": [
+  [
+   "13594579-5b83-48ec-8c81-4b21ad0a6881",
+   "PathSolutions Diagnostic & Research Center",
+   "Jodhpur City",
+   "Rajasthan",
+   "112001"
+  ],
+  [
+   "1eb2eee4-87b8-4619-bfe9-118a8ddbcbc8",
+   "Gayatri Hospital",
+   "Ghaziabad",
+   "Up",
+   "425001"
+  ],
+  [
+   "239cfb6f-cfd6-4653-984d-aaeeceb1c05e",
+   "Smit Hospital",
+   "Songadh",
+   "Gujarat",
+   "425418"
+  ],
+  [
+   "35689c43-5ccc-43dc-807b-c0c5924f81be",
+   "Modern Diagnostic & Research Centre, Thanabhawan, Muzaffarnagar",
+   "Muzaffarnagar",
+   "Uttar Pradesh",
+   "110015"
+  ],
+  [
+   "373756b9-e6d8-4fcb-af28-0bd0c4172694",
+   "Aarogya Hospital",
+   "Delhi",
+   "Delhi",
+   "394516"
+  ],
+  [
+   "4867084e-2c54-4392-bf68-eecda594ba1d",
+   "New Image Point Radiology Center",
+   "Navsari",
+   "Maharashtra",
+   "396445"
+  ],
+  [
+   "58f1d117-1043-4761-abc2-254274e11cd7",
+   "District Hospital Durg",
+   "Durg",
+   "Chhattisgarh",
+   "262701"
+  ],
+  [
+   "5ae4894c-84f4-4aa2-8d88-baccfb8618cb",
+   "Muskaan Hospital",
+   "Delhi",
+   "Delhi",
+   "250001"
+  ],
+  [
+   "611cd52b-3556-4214-9c56-06431e589c88",
+   "Smile Creations Dental Clinic",
+   "Kandivali West",
+   "Maharashtra",
+   "900092"
+  ],
+  [
+   "7930b04c-c4c3-4662-8328-c659e4133d63",
+   "Prasanthi Hospital",
+   "Bhimavaram",
+   "Andhra Pradesh",
+   "222321"
+  ],
+  [
+   "8b1887cf-6ea9-43b8-bcc3-07a8364d757a",
+   "Dr. Rajnish Yenurkar\u2019s Malgudi Clinics",
+   "Nagpur",
+   "Maharashtra",
+   "673017"
+  ],
+  [
+   "8c0ec23b-2d96-4fd8-93dd-636129a77b29",
+   "iTek Vision Centre",
+   "Noida",
+   "Delhi",
+   "201301"
+  ],
+  [
+   "9201d9c9-4ebc-4a21-bd47-9869d95e016f",
+   "Cloudnine Hospital",
+   "Hyderabad",
+   "Chhattisgarh",
+   "500034"
+  ],
+  [
+   "94cfa2e6-28a9-4597-ac9b-8769b0743955",
+   "Medicover Hospitals",
+   "Hyderabad",
+   "Telangana",
+   "431003"
+  ],
+  [
+   "b8a5401f-42f1-422a-8cd9-686a15b4cb76",
+   "Aravind Eye Hospital",
+   "Hyderabad",
+   "Telangana",
+   "110002"
+  ],
+  [
+   "bf01bc89-9607-4a94-86c8-3b9cbae7079c",
+   "Primary Health Center, Katarkhatav",
+   "Katarkhatav",
+   "Maharashtra",
+   "261405"
+  ],
+  [
+   "da51c57a-62b5-45fb-9997-43722b48cd95",
+   "District Hospital, Mandya",
+   "Mandya",
+   "Karnataka",
+   "481661"
+  ],
+  [
+   "dccc306a-a7d6-4d3b-96d4-8d8a240a2ab5",
+   "Aarogya Hospital",
+   "Vaishali",
+   "Uttar Pradesh",
+   "110092"
+  ],
+  [
+   "e667b954-ba77-4af8-8388-6aebb067401c",
+   "ESI Hospitals",
+   "Nagar",
+   "Haryana",
+   "321205"
+  ],
+  [
+   "faf71fe2-fe08-4642-9e6e-09b1f98c7d36",
+   "Seeds of Innocens IVF Centre Ghaziabad",
+   "Ghaziabad",
+   "Uttar Pradesh",
+   "121001"
+  ]
+ ],
+ "far_by_stated_state": {
+  "UTTAR PRADESH": [
+   207,
+   912
+  ],
+  "TAMIL NADU": [
+   135,
+   773
+  ],
+  "GUJARAT": [
+   159,
+   940
+  ],
+  "DELHI": [
+   1,
+   331
+  ],
+  "MAHARASHTRA": [
+   248,
+   1517
+  ],
+  "KARNATAKA": [
+   69,
+   511
+  ],
+  "KERALA": [
+   48,
+   471
+  ]
+ },
+ "coords_le_2_decimals": 19,
+ "coords_le_3_decimals": 2,
+ "shared_points": [
+  49,
+  103
+ ],
+ "shared_points_one_id": 11,
+ "shared_points_2plus_names": [
+  38,
+  81
+ ],
+ "shared_points_3plus_names": [
+  4,
+  13
+ ],
+ "grid_0001_cells_3plus_names": [
+  34,
+  110
+ ]
+}

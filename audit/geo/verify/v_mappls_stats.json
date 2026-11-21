@@ -1,0 +1,9 @@
+{
+ "records_with_mappls_zdata": 1015,
+ "zdata_points": 1119,
+ "zdata_within_2km_of_coords": 618,
+ "zdata_gt50km_from_coords": 274,
+ "far_gt50_with_zdata": 283,
+ "far_gt50_where_zdata_within_25km_of_pin": 75,
+ "far_gt50_where_zdata_within_2km_of_coords": 61
+}

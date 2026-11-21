@@ -1,0 +1,174 @@
+{
+ "text_pin_other_prefix3": 92,
+ "text_pin_other_prefix3_real_pin": 74,
+ "top_slugs": [
+  [
+   "mumbai",
+   411
+  ],
+  [
+   "bangalore",
+   341
+  ],
+  [
+   "pune",
+   323
+  ],
+  [
+   "delhi",
+   274
+  ],
+  [
+   "hyderabad",
+   272
+  ],
+  [
+   "chennai",
+   265
+  ],
+  [
+   "ahmedabad",
+   256
+  ],
+  [
+   "thane",
+   218
+  ],
+  [
+   "kolkata",
+   172
+  ],
+  [
+   "surat",
+   159
+  ],
+  [
+   "lucknow",
+   158
+  ],
+  [
+   "vadodara",
+   152
+  ],
+  [
+   "jaipur",
+   152
+  ],
+  [
+   "navi-mumbai",
+   135
+  ],
+  [
+   "gurgaon",
+   131
+  ],
+  [
+   "ludhiana",
+   112
+  ],
+  [
+   "india",
+   105
+  ],
+  [
+   "nagpur",
+   102
+  ],
+  [
+   "nashik",
+   101
+  ],
+  [
+   "patna",
+   98
+  ],
+  [
+   "kanpur",
+   91
+  ],
+  [
+   "ghaziabad",
+   85
+  ],
+  [
+   "noida",
+   82
+  ],
+  [
+   "varanasi",
+   79
+  ],
+  [
+   "coimbatore",
+   78
+  ],
+  [
+   "agra",
+   77
+  ],
+  [
+   "aurangabad-maharashtra",
+   75
+  ],
+  [
+   "indore",
+   71
+  ],
+  [
+   "amritsar",
+   71
+  ],
+  [
+   "rajkot",
+   70
+  ]
+ ],
+ "multi_city_slug": 2134,
+ "multi_slug_metro_neighbours_only": 194,
+ "n_slugs_distribution_multi": {
+  "2": 1092,
+  "3": 478,
+  "4": 214,
+  "5": 137,
+  "6": 213
+ },
+ "far_rate_multi": [
+  822,
+  2082,
+  0.395
+ ],
+ "far_rate_multi_not_metro": [
+  805,
+  1892,
+  0.425
+ ],
+ "far_rate_metro_only": [
+  17,
+  190,
+  0.089
+ ],
+ "far_rate_either": [
+  830,
+  2111,
+  0.393
+ ],
+ "far_rate_neither": [
+  577,
+  7571,
+  0.076
+ ],
+ "far_rate_text_other3": [
+  52,
+  89,
+  0.584
+ ],
+ "far_rate_no_slugs_at_all": [
+  288,
+  3693,
+  0.078
+ ],
+ "n_source_urls_median_multi_vs_not": [
+  36.0,
+  8.0
+ ]
+}

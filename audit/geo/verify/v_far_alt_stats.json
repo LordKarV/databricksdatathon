@@ -1,0 +1,19 @@
+{
+ "far": 1407,
+ "far_within_10km_of_any_own_pin_office": 69,
+ "far_within_25km_of_any_own_pin_office": 77,
+ "far_coord_district_eq_pin_district": 98,
+ "state_field_is_district": 194,
+ "of_which_coords_in_that_district": 119,
+ "of_which_pin_in_that_district": 120,
+ "of_which_far_gt50": 49,
+ "of_which_far_and_coords_in_state_field_district": 15,
+ "far_rate_state_is_district": 0.253,
+ "far_rate_overall": 0.145,
+ "finder_pins_n_used_1": 3951,
+ "far_on_single_office_pin": 247,
+ "facilities_on_single_office_pin": 1884,
+ "mid": 1081,
+ "mid_within_5km_of_any_own_pin_office": 463,
+ "mid_coord_district_eq_pin_district": 753
+}

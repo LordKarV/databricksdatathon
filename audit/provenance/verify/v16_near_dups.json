@@ -1,0 +1,55 @@
+{
+ "same_name_city": [
+  8,
+  16,
+  2
+ ],
+ "same_name_city_examples": [
+  [
+   "Om Dental Clinic",
+   "Ahmedabad",
+   2
+  ],
+  [
+   "Rajindra Hospital Patiala",
+   "Patiala",
+   2
+  ],
+  [
+   "Government Medical College, Thiruvananthapuram",
+   "Thiruvananthapuram",
+   2
+  ],
+  [
+   "Siri Dental Hospital",
+   "Hyderabad",
+   2
+  ],
+  [
+   "Devmata Hospital",
+   "Bhopal",
+   2
+  ],
+  [
+   "Care Dental Hospital",
+   "Bangalore",
+   2
+  ],
+  [
+   "Sarla Hospital",
+   "Mumbai",
+   2
+  ],
+  [
+   "Ortho Care Clinic",
+   "Lucknow",
+   2
+  ]
+ ],
+ "same_name_city_within_1km": 2,
+ "same_exact_coords_groups": [
+  37,
+  79,
+  4
+ ]
+}

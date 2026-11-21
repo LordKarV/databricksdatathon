@@ -1,0 +1,335 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberClient",
+        "paths": [
+          "/login/stage/*",
+          "/emailverification/client",
+          "/v2/emailverification/client",
+          "/hook/v1/arrive-by",
+          "/giftcard/redeem",
+          "/??-??/giftcard/redeem",
+          "/??/giftcard/redeem",
+          "/looking",
+          "/ul",
+          "/reserve",
+          "/ul/safety_qr_verify",
+          "/sr/helix",
+          "/??/sr/helix",
+          "/oauth/v2/riders/authorize",
+          "/oauth/v2/universal/authorize",
+          "/go/rent",
+          "/go/join-delegate-profile",
+          "/go/onboard-delegate-profile",
+          "/invite/rider",
+          "/invite",
+          "/??/invite/rider",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberClient.Enterprise",
+        "paths": [
+          "/login/stage/*",
+          "/emailverification/client",
+          "/v2/emailverification/client",
+          "/hook/v1/arrive-by",
+          "/giftcard/redeem",
+          "/??-??/giftcard/redeem",
+          "/??/giftcard/redeem",
+          "/looking",
+          "/ul",
+          "/reserve",
+          "/ul/safety_qr_verify",
+          "/sr/helix",
+          "/??/sr/helix",
+          "/oauth/v2/riders/authorize",
+          "/oauth/v2/universal/authorize",
+          "/go/rent",
+          "/go/join-delegate-profile",
+          "/go/onboard-delegate-profile",
+          "/invite/rider",
+          "/invite",
+          "/??/invite/rider",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberClient.Nightly",
+        "paths": [
+          "/login/stage/*",
+          "/emailverification/client",
+          "/v2/emailverification/client",
+          "/hook/v1/arrive-by",
+          "/giftcard/redeem",
+          "/??-??/giftcard/redeem",
+          "/??/giftcard/redeem",
+          "/looking",
+          "/ul",
+          "/reserve",
+          "/ul/safety_qr_verify",
+          "/sr/helix",
+          "/??/sr/helix",
+          "/oauth/v2/riders/authorize",
+          "/oauth/v2/universal/authorize",
+          "/go/rent",
+          "/go/join-delegate-profile",
+          "/go/onboard-delegate-profile",
+          "/invite/rider",
+          "/invite",
+          "/??/invite/rider",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberClient.development",
+        "paths": [
+          "/login/stage/*",
+          "/emailverification/client",
+          "/v2/emailverification/client",
+          "/hook/v1/arrive-by",
+          "/giftcard/redeem",
+          "/??-??/giftcard/redeem",
+          "/??/giftcard/redeem",
+          "/looking",
+          "/ul",
+          "/reserve",
+          "/ul/safety_qr_verify",
+          "/sr/helix",
+          "/??/sr/helix",
+          "/oauth/v2/riders/authorize",
+          "/oauth/v2/universal/authorize",
+          "/go/rent",
+          "/go/join-delegate-profile",
+          "/go/onboard-delegate-profile",
+          "/invite/rider",
+          "/invite",
+          "/??/invite/rider",
+          "/??/invite",
+          "/??/orginvite",
+          "/??/orginvite/rider"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberEats.Dev",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/applogin/eats/facebook",
+          "/applogin/eats/google",
+          "/applogin/eats/apple",
+          "/sr/eats",
+          "/??/sr/eats",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize",
+          "/invite/eats",
+          "/invite",
+          "/??/invite/eats",
+          "/??/invite",
+          "/??/orginvite",
+          "/??/orginvite/eats"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberEats.Nightly",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/applogin/eats/facebook",
+          "/applogin/eats/google",
+          "/applogin/eats/apple",
+          "/sr/eats",
+          "/??/sr/eats",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize",
+          "/invite/eats",
+          "/invite",
+          "/??/invite/eats",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberEats.FeatureBuild",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/applogin/eats/facebook",
+          "/applogin/eats/google",
+          "/applogin/eats/apple",
+          "/sr/eats",
+          "/??/sr/eats",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize",
+          "/invite/eats",
+          "/invite",
+          "/??/invite/eats",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberEats.Enterprise",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/applogin/eats/facebook",
+          "/applogin/eats/google",
+          "/applogin/eats/apple",
+          "/sr/eats",
+          "/??/sr/eats",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize",
+          "/invite/eats",
+          "/invite",
+          "/??/invite/eats",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberEats",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/applogin/eats/facebook",
+          "/applogin/eats/google",
+          "/applogin/eats/apple",
+          "/sr/eats",
+          "/??/sr/eats",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize",
+          "/invite/eats",
+          "/invite",
+          "/??/invite/eats",
+          "/??/invite"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.Postmates.Dev",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/emailverification/native/postmates",
+          "/sr/postmates",
+          "/??/sr/postmates",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.Postmates.Nightly",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/emailverification/native/postmates",
+          "/sr/postmates",
+          "/??/sr/postmates",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.Postmates.Enterprise",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/emailverification/native/postmates",
+          "/sr/postmates",
+          "/??/sr/postmates",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.postmates.getitnow",
+        "paths": [
+          "/emailverification/eats",
+          "/v2/emailverification/eats",
+          "/emailverification/native/postmates",
+          "/sr/postmates",
+          "/??/sr/postmates",
+          "/oauth/v2/eats/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberDriver.Nightly",
+        "paths": [
+          "/autologin/driver",
+          "/sr/carbon",
+          "/??/sr/carbon",
+          "/oauth/v2/drivers/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.UberDriver",
+        "paths": [
+          "/autologin/driver",
+          "/sr/carbon",
+          "/??/sr/carbon",
+          "/oauth/v2/drivers/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberDriver.development",
+        "paths": [
+          "/autologin/driver",
+          "/sr/carbon",
+          "/??/sr/carbon",
+          "/oauth/v2/drivers/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.UberPartner",
+        "paths": [
+          "/autologin/driver",
+          "/sr/carbon",
+          "/??/sr/carbon",
+          "/oauth/v2/drivers/authorize",
+          "/oauth/v2/universal/authorize"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.restaurantmanager.development",
+        "paths": [
+          "/sr/restaurantmanager",
+          "/??/sr/restaurantmanager"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.restaurantmanager.Enterprise",
+        "paths": [
+          "/sr/restaurantmanager",
+          "/??/sr/restaurantmanager"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.restaurantmanager.Nightly",
+        "paths": [
+          "/sr/restaurantmanager",
+          "/??/sr/restaurantmanager"
+        ]
+      },
+      {
+        "appID": "NW8WAZ2XUV.com.ubercab.restaurantmanager.Nightly",
+        "paths": [
+          "/sr/restaurantmanager",
+          "/??/sr/restaurantmanager"
+        ]
+      },
+      {
+        "appID": "5F83KRY2FH.com.ubercab.restaurantmanager",
+        "paths": [
+          "/sr/restaurantmanager",
+          "/??/sr/restaurantmanager"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["5F83KRY2FH.com.ubercab.UberClient.development"]
+  }
+}

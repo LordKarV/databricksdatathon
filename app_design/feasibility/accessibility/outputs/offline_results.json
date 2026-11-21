@@ -1,0 +1,54 @@
+{
+ "fastapi_gps_offline": {
+  "sw_controls_page": true,
+  "cached": [
+   "http://localhost:8000/pwa",
+   "http://localhost:8000/pack.json"
+  ],
+  "renders_offline": true,
+  "reload_s": 0.02,
+  "offline_banner_visible": true,
+  "gps": {
+   "status": "Offline: 3 nearest from saved data of 2026-11-21 (GPS).",
+   "results": [
+    "Mallya Hospital, Bangalore, 0.4 km Call",
+    "Dental Lavelle, Bengaluru, 0.4 km Call",
+    "Sparsh Super Speciality Hospital (Y), Yeshwantpur, Bengaluru, 0.7 km Call"
+   ]
+  },
+  "call_link": "tel:+918022277979",
+  "axe_violations_offline_results": []
+ },
+ "fastapi_gps_denied_offline": {
+  "sw_controls_page": true,
+  "cached": [
+   "http://localhost:8000/pwa",
+   "http://localhost:8000/pack.json"
+  ],
+  "renders_offline": true,
+  "reload_s": 0.01,
+  "offline_banner_visible": true,
+  "denied_message": "Could not get location (User denied Geolocation). Type your PIN code.",
+  "focus_moved_to_pin": true,
+  "pin": {
+   "status": "Offline: 3 nearest from saved data of 2026-11-21 (PIN 560001).",
+   "results": [
+    "Isha Orocare, Bangalore, 1.8 km Call",
+    "Derma Elite Skin Care Clinic, Bangalore, 2.1 km Call",
+    "Focus Diagnostics Centre and Speciality Clinics - HSR Layout, Bengaluru, 2.1 km Call"
+   ]
+  },
+  "denied_with_saved": {
+   "status": "Offline: 3 nearest from saved data of 2026-11-21 (last saved location).",
+   "results": [
+    "Isha Orocare, Bangalore, 1.8 km Call",
+    "Derma Elite Skin Care Clinic, Bangalore, 2.1 km Call",
+    "Focus Diagnostics Centre and Speciality Clinics - HSR Layout, Bengaluru, 2.1 km Call"
+   ]
+  }
+ },
+ "streamlit_offline": {
+  "renders_offline": false,
+  "error": "Page.reload: net::ERR_INTERNET_DISCONNECTED"
+ }
+}

@@ -1,0 +1,729 @@
+{
+ "model_hash": "f4c2f361d903e1df-fallback",
+ "terms": [
+  {
+   "name": "b_dialysis",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "dialysis"
+  },
+  {
+   "name": "b_emergency_csection",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "emergency_csection"
+  },
+  {
+   "name": "b_nicu",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "nicu"
+  },
+  {
+   "name": "b_cardiac_surgery",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "cardiac_surgery"
+  },
+  {
+   "name": "b_mri",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "mri"
+  },
+  {
+   "name": "b_burn_care",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "burn_care"
+  },
+  {
+   "name": "b_trauma_emergency",
+   "group": "intercept",
+   "sign": 0,
+   "family": "intercept",
+   "service": "trauma_emergency"
+  },
+  {
+   "name": "t1",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "t2",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "t3",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "t4",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "t5",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "tb_mid",
+   "group": "evidence",
+   "sign": -1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "tb_high",
+   "group": "evidence",
+   "sign": -1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "trunc0",
+   "group": "evidence",
+   "sign": 1,
+   "family": "T",
+   "service": "*"
+  },
+  {
+   "name": "c1",
+   "group": "evidence",
+   "sign": -1,
+   "family": "C",
+   "service": "*"
+  },
+  {
+   "name": "c2",
+   "group": "evidence",
+   "sign": -1,
+   "family": "C",
+   "service": "*"
+  },
+  {
+   "name": "n1",
+   "group": "evidence",
+   "sign": -1,
+   "family": "N",
+   "service": "*"
+  },
+  {
+   "name": "s1",
+   "group": "evidence",
+   "sign": -1,
+   "family": "S",
+   "service": "*"
+  },
+  {
+   "name": "p1",
+   "group": "evidence",
+   "sign": 1,
+   "family": "P",
+   "service": "*"
+  },
+  {
+   "name": "p2",
+   "group": "evidence",
+   "sign": 1,
+   "family": "P",
+   "service": "*"
+  },
+  {
+   "name": "g_mid",
+   "group": "context",
+   "sign": 0,
+   "family": "bucket",
+   "service": "*"
+  },
+  {
+   "name": "g_high",
+   "group": "context",
+   "sign": 0,
+   "family": "bucket",
+   "service": "*"
+  },
+  {
+   "name": "type_clinic",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "type_dentist",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "type_other",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "public",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "level_dh",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "level_sdh",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "level_chc",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "level_phc",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "level_mc",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "iphs_essential",
+   "group": "context",
+   "sign": 1,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "beds_missing",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "beds_lt30",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "beds_100p",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "doctors_missing",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "doctors_lt5",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "doctors_20p",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "breadth_lt5",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "breadth_20p",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "scale_contradiction",
+   "group": "context",
+   "sign": 0,
+   "family": "context",
+   "service": "*"
+  },
+  {
+   "name": "t2@dialysis",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "dialysis"
+  },
+  {
+   "name": "t2@emergency_csection",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "emergency_csection"
+  },
+  {
+   "name": "t2@nicu",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "nicu"
+  },
+  {
+   "name": "t2@cardiac_surgery",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "cardiac_surgery"
+  },
+  {
+   "name": "t2@mri",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "mri"
+  },
+  {
+   "name": "t2@burn_care",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "burn_care"
+  },
+  {
+   "name": "t2@trauma_emergency",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "trauma_emergency"
+  },
+  {
+   "name": "t4@dialysis",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "dialysis"
+  },
+  {
+   "name": "t4@emergency_csection",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "emergency_csection"
+  },
+  {
+   "name": "t4@nicu",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "nicu"
+  },
+  {
+   "name": "t4@cardiac_surgery",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "cardiac_surgery"
+  },
+  {
+   "name": "t4@mri",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "mri"
+  },
+  {
+   "name": "t4@burn_care",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "burn_care"
+  },
+  {
+   "name": "t4@trauma_emergency",
+   "group": "deviation",
+   "sign": 0,
+   "family": "T",
+   "service": "trauma_emergency"
+  },
+  {
+   "name": "p1@dialysis",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "dialysis"
+  },
+  {
+   "name": "p1@emergency_csection",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "emergency_csection"
+  },
+  {
+   "name": "p1@nicu",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "nicu"
+  },
+  {
+   "name": "p1@cardiac_surgery",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "cardiac_surgery"
+  },
+  {
+   "name": "p1@mri",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "mri"
+  },
+  {
+   "name": "p1@burn_care",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "burn_care"
+  },
+  {
+   "name": "p1@trauma_emergency",
+   "group": "deviation",
+   "sign": 0,
+   "family": "P",
+   "service": "trauma_emergency"
+  }
+ ],
+ "beta": [
+  -0.14364552927277174,
+  -0.16933088344942931,
+  -0.3132480004039075,
+  -0.40241589044961035,
+  -0.30482804839709227,
+  -0.32646809829994083,
+  -0.12615125706267852,
+  0.0,
+  0.0,
+  3.3191924939722597e-16,
+  -4.782829685989432e-17,
+  0.3758988693157597,
+  6.2898329524618316e-18,
+  5.3074769452035284e-18,
+  -5.3719617478957205e-17,
+  -0.2288444252906859,
+  -0.05458778964411322,
+  -6.139475229728278e-17,
+  -0.11522767789202787,
+  0.0564493220005801,
+  0.28998555252074454,
+  -0.021178057663533784,
+  -0.3087208140183745,
+  -0.629828615000129,
+  2.1446874224478885e-18,
+  -0.12646547546943973,
+  -0.4049818914648449,
+  0.2879024131053929,
+  1.1102230246251565e-16,
+  -2.7755575615628914e-17,
+  6.938893903907228e-18,
+  -0.43026605996224715,
+  0.36056755167910914,
+  -5.551115123125783e-17,
+  -0.12801070023209535,
+  0.062823801097099,
+  0.0,
+  -0.138195515435619,
+  -0.0750098295255327,
+  -0.48396709798073184,
+  0.3918305682263016,
+  0.19131900404424051,
+  -6.458921877796987e-17,
+  -2.195390241179535e-17,
+  6.70795785437663e-17,
+  -2.0691850082022484e-17,
+  8.95938396475291e-17,
+  -1.9248202824211236e-17,
+  -5.29131160434765e-17,
+  0.02238624617898625,
+  4.312610076610044e-17,
+  0.13876509742749019,
+  7.801389172408487e-17,
+  -2.1057384721729117e-16,
+  2.2518459492668825e-16,
+  0.0797543401500503,
+  0.02238624617898625,
+  -0.056449322000580074,
+  -0.03208731125738334,
+  0.05914710633994655,
+  0.025325630655490428,
+  -0.056449322000580136,
+  0.07425453816449169
+ ],
+ "platt": [
+  0.0,
+  -0.5006127551407005
+ ],
+ "t_L": 0.7,
+ "t_U": 0.2,
+ "location": {
+  "terms": [
+   {
+    "name": "b_loc",
+    "group": "intercept",
+    "sign": 0,
+    "family": "intercept",
+    "service": "*"
+   },
+   {
+    "name": "src_pin",
+    "group": "context",
+    "sign": 0,
+    "family": "source",
+    "service": "*"
+   },
+   {
+    "name": "src_city",
+    "group": "context",
+    "sign": 0,
+    "family": "source",
+    "service": "*"
+   },
+   {
+    "name": "src_map",
+    "group": "context",
+    "sign": 0,
+    "family": "source",
+    "service": "*"
+   },
+   {
+    "name": "v_coords",
+    "group": "evidence",
+    "sign": 1,
+    "family": "vote",
+    "service": "*"
+   },
+   {
+    "name": "v_pin",
+    "group": "evidence",
+    "sign": 1,
+    "family": "vote",
+    "service": "*"
+   },
+   {
+    "name": "v_city",
+    "group": "evidence",
+    "sign": 1,
+    "family": "vote",
+    "service": "*"
+   },
+   {
+    "name": "v_name",
+    "group": "evidence",
+    "sign": 1,
+    "family": "vote",
+    "service": "*"
+   },
+   {
+    "name": "v_state",
+    "group": "evidence",
+    "sign": 1,
+    "family": "vote",
+    "service": "*"
+   },
+   {
+    "name": "f_copied_geocode",
+    "group": "evidence",
+    "sign": -1,
+    "family": "flag",
+    "service": "*"
+   },
+   {
+    "name": "f_coords_look_wrong",
+    "group": "evidence",
+    "sign": -1,
+    "family": "flag",
+    "service": "*"
+   },
+   {
+    "name": "f_pin_looks_wrong",
+    "group": "evidence",
+    "sign": -1,
+    "family": "flag",
+    "service": "*"
+   },
+   {
+    "name": "f_text_pin_elsewhere",
+    "group": "evidence",
+    "sign": -1,
+    "family": "flag",
+    "service": "*"
+   }
+  ],
+  "beta": [
+   0.4479649832538383,
+   0.4174332338641268,
+   0.4948233093546221,
+   0.0,
+   0.0,
+   1.3293513806639456,
+   2.193177123651837,
+   0.0,
+   0.7363319914269167,
+   -2.368541901174653,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "platt": [
+   1.0,
+   0.0
+  ]
+ },
+ "existence": {
+  "terms": [
+   {
+    "name": "b_ex",
+    "group": "intercept",
+    "sign": 0,
+    "family": "intercept",
+    "service": "*"
+   },
+   {
+    "name": "e_web_own",
+    "group": "evidence",
+    "sign": 1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_web_other",
+    "group": "evidence",
+    "sign": 0,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_phone_shared3",
+    "group": "evidence",
+    "sign": -1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_phone_none",
+    "group": "evidence",
+    "sign": -1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_phone_landline",
+    "group": "evidence",
+    "sign": 0,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_multi_source",
+    "group": "evidence",
+    "sign": 1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_recency",
+    "group": "evidence",
+    "sign": 1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_nonfacility",
+    "group": "evidence",
+    "sign": -1,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_dup_member",
+    "group": "evidence",
+    "sign": 0,
+    "family": "existence",
+    "service": "*"
+   },
+   {
+    "name": "e_coord_shared3",
+    "group": "evidence",
+    "sign": -1,
+    "family": "existence",
+    "service": "*"
+   }
+  ],
+  "beta": [
+   1.0,
+   0.7,
+   0.0,
+   -0.7,
+   -0.7,
+   0.0,
+   0.3,
+   0.3,
+   -2.0,
+   0.3,
+   -0.5
+  ],
+  "platt": [
+   1.0,
+   0.0
+  ]
+ }
+}

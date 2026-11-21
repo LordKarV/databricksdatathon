@@ -10,6 +10,7 @@ Cleaning steps (each counted in pin_centroids_log.json):
 6. state label outside the postal zone of the first PIN digit -> relabelled from
    the majority of its 3-digit prefix
 7. centroid whose 15 nearest PIN centroids are mostly other states -> 'misplaced';
+   so is one outside its state's 5-95 percentile box + 2 deg, or > 150 km from its district median;
    best point falls back to district median, then 3-digit-prefix median
 
 Output: pin_centroids.parquet, one row per PIN present in the directory.
@@ -31,6 +32,7 @@ LAT_MIN, LAT_MAX, LON_MIN, LON_MAX = 6.0, 37.6, 68.0, 97.6
 OUTLIER_KM = 50.0  # ponytail: fixed radius; a big rural PIN rarely spans >50 km
 KNN = 15
 BOX_MARGIN = 2.0
+DISTRICT_KM = 150.0
 MISPLACED_SHARE = 0.2  # <3 of 15 nearest PIN centroids share the state
 
 
@@ -146,6 +148,14 @@ def main():
     log["pins_outside_state_box"] = int(out.outside_state_box.sum())
     log["pins_outside_state_box_by_state"] = {"/".join(k): int(v) for k, v in out.loc[out.outside_state_box].groupby(["state", "district"]).size().sort_values(ascending=False).head(12).items()}
     out["misplaced"] = (out.knn_same_state < MISPLACED_SHARE) | out.outside_state_box
+    # third rule, within-state misplacement (134118 Panchkula geocoded near Hisar): > DISTRICT_KM from
+    # the median of the district's other not-yet-misplaced PIN centroids
+    ref = out[has & ~out.misplaced].groupby(["state", "district"])[["lat", "lon"]].median().set_axis(["rlat", "rlon"], axis=1)
+    rj = out.join(ref, on=["state", "district"])
+    out["far_from_district"] = (hav_km(rj.lat, rj.lon, rj.rlat, rj.rlon) > DISTRICT_KM).values
+    log["pins_far_from_district"] = int((out.far_from_district & ~out.misplaced).sum())
+    log["pins_far_from_district_by_district"] = {"/".join(k): int(v) for k, v in out[out.far_from_district & ~out.misplaced].groupby(["state", "district"]).size().sort_values(ascending=False).head(10).items()}
+    out["misplaced"] = out.misplaced | out.far_from_district
     log["pins_misplaced_knn_only"] = int((out.knn_same_state < MISPLACED_SHARE).sum())
     log["pins_misplaced_total"] = int(out.misplaced.sum())
     log["pins_misplaced_examples"] = out.loc[out.misplaced, ["pincode", "state", "district", "lat", "lon", "knn_same_state"]].head(10).astype(str).values.tolist()

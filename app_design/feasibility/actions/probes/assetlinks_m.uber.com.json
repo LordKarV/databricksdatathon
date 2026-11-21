@@ -1,0 +1,1064 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.rider.internal",
+      "sha256_cert_fingerprints": [
+        "F0:CE:A4:4A:83:18:4B:33:8C:09:12:F4:06:87:29:F2:13:AE:E4:6D:0C:08:3C:5B:DA:82:A0:4F:32:AA:03:FC"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.internal",
+      "sha256_cert_fingerprints": [
+        "E6:55:C5:4F:15:29:EA:48:B5:94:0C:B3:3B:95:8E:C9:3B:05:10:37:8C:93:45:FE:47:D7:C6:10:7F:82:01:76"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats",
+      "sha256_cert_fingerprints": [
+        "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.internal",
+      "sha256_cert_fingerprints": [
+        "3E:DE:44:3D:10:75:5B:14:BE:E3:3B:6D:D2:70:F8:12:D6:47:6D:0F:EB:4A:16:05:72:FE:0E:A2:5A:B5:0E:AF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.internal",
+      "sha256_cert_fingerprints": [
+        "A0:0A:3C:75:18:1C:87:34:A6:62:17:65:1F:BF:0E:88:60:B3:E2:5E:5F:79:7A:7B:8D:F0:E4:8E:3C:4D:B4:8D"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.internal",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.presidio.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.presidio.development",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.debug",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.nightly",
+      "sha256_cert_fingerprints": [
+        "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.debug",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero",
+      "sha256_cert_fingerprints": [
+        "A8:BA:8F:51:BC:4E:9F:6A:4E:9E:9B:11:74:BF:8D:4D:B6:2F:0C:03:97:4C:54:19:64:2C:D1:DC:F4:64:4F:5A"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero.nightly",
+      "sha256_cert_fingerprints": [
+        "A8:BA:8F:51:BC:4E:9F:6A:4E:9E:9B:11:74:BF:8D:4D:B6:2F:0C:03:97:4C:54:19:64:2C:D1:DC:F4:64:4F:5A"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero.development",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+   {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+     ,"delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ],
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.debug"
+    }
+  },
+  {
+   "relation": [
+     "delegate_permission/common.handle_all_urls"
+    ,"delegate_permission/common.get_login_creds"
+   ],
+   "target": {
+     "sha256_cert_fingerprints": [
+       "79:24:86:A3:36:35:2E:DD:B5:74:E3:03:81:F4:D9:1D:F0:B9:06:31:C3:A7:91:40:12:E1:81:B3:C3:3C:54:F7"
+     ],
+     "namespace": "android_app",
+     "package_name": "com.postmates.android"
+   }
+ },
+ {
+  "relation": [
+    "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+    "sha256_cert_fingerprints": [
+      "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+    ],
+    "namespace": "android_app",
+    "package_name": "com.postmates.android.exo"
+  }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "4E:64:24:02:01:C1:10:94:CD:42:65:02:35:31:EA:10:7C:85:64:53:E9:2C:DB:D5:63:1F:66:55:96:6D:62:18"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.postmates.android.beta"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.internal"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.nightly"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.development"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.presidio.sdui.playground.development"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.presidio.sdui.playground"
+ }
+},
+{
+  "relation": [
+   "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.restaurants.development"
+ }
+},
+ {
+  "relation": [
+   "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+   "sha256_cert_fingerprints": [
+     "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.restaurants"
+ }
+},
+{
+ "relation": [
+  "delegate_permission/common.handle_all_urls"
+  ,"delegate_permission/common.get_login_creds"
+ ],
+ "target": {
+  "sha256_cert_fingerprints": [
+    "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+  ],
+  "namespace": "android_app",
+  "package_name": "com.uber.restaurants.beta"
+}
+},
+{
+  "relation": [
+   "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.restaurantmanager.development"
+ }
+},
+{
+  "relation": [
+   "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+   "sha256_cert_fingerprints": [
+     "50:04:65:8E:45:F8:B0:6C:95:4B:42:4D:14:28:C5:A8:CB:B6:C3:B8:08:D1:E0:36:F1:B9:0C:58:6E:98:77:24"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.restaurantmanager.nightly"
+ }
+},
+{
+  "relation": [
+   "delegate_permission/common.handle_all_urls"
+   ,"delegate_permission/common.get_login_creds"
+  ],
+  "target": {
+   "sha256_cert_fingerprints": [
+     "50:04:65:8E:45:F8:B0:6C:95:4B:42:4D:14:28:C5:A8:CB:B6:C3:B8:08:D1:E0:36:F1:B9:0C:58:6E:98:77:24"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.restaurantmanager"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.exo"
+  }
+ },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.rider.internal",
+      "sha256_cert_fingerprints": [
+        "F0:CE:A4:4A:83:18:4B:33:8C:09:12:F4:06:87:29:F2:13:AE:E4:6D:0C:08:3C:5B:DA:82:A0:4F:32:AA:03:FC"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.internal",
+      "sha256_cert_fingerprints": [
+        "E6:55:C5:4F:15:29:EA:48:B5:94:0C:B3:3B:95:8E:C9:3B:05:10:37:8C:93:45:FE:47:D7:C6:10:7F:82:01:76"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats",
+      "sha256_cert_fingerprints": [
+        "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.internal",
+      "sha256_cert_fingerprints": [
+        "3E:DE:44:3D:10:75:5B:14:BE:E3:3B:6D:D2:70:F8:12:D6:47:6D:0F:EB:4A:16:05:72:FE:0E:A2:5A:B5:0E:AF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.internal",
+      "sha256_cert_fingerprints": [
+        "A0:0A:3C:75:18:1C:87:34:A6:62:17:65:1F:BF:0E:88:60:B3:E2:5E:5F:79:7A:7B:8D:F0:E4:8E:3C:4D:B4:8D"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.uberlite.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight.internal",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.freight",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.nightly",
+      "sha256_cert_fingerprints": [
+        "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.presidio.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.nightly",
+      "sha256_cert_fingerprints": [
+        "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.exo",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero",
+      "sha256_cert_fingerprints": [
+        "A8:BA:8F:51:BC:4E:9F:6A:4E:9E:9B:11:74:BF:8D:4D:B6:2F:0C:03:97:4C:54:19:64:2C:D1:DC:F4:64:4F:5A"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero.nightly",
+      "sha256_cert_fingerprints": [
+        "A8:BA:8F:51:BC:4E:9F:6A:4E:9E:9B:11:74:BF:8D:4D:B6:2F:0C:03:97:4C:54:19:64:2C:D1:DC:F4:64:4F:5A"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ubercab.hero.development",
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ],
+      "namespace": "android_app",
+      "package_name": "com.ubercab.eats.debug"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ],
+      "namespace": "android_app",
+      "package_name": "com.ubercab.presidio.development"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.use_as_origin"
+    ],
+    "target": {
+      "sha256_cert_fingerprints": [
+        "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+      ],
+      "namespace": "android_app",
+      "package_name": "com.ubercab.driver.debug"
+    }
+  },
+  {
+   "relation": [
+     "delegate_permission/common.use_as_origin"
+   ],
+   "target": {
+     "sha256_cert_fingerprints": [
+       "79:24:86:A3:36:35:2E:DD:B5:74:E3:03:81:F4:D9:1D:F0:B9:06:31:C3:A7:91:40:12:E1:81:B3:C3:3C:54:F7"
+     ],
+     "namespace": "android_app",
+     "package_name": "com.postmates.android"
+   }
+ },
+ {
+  "relation": [
+    "delegate_permission/common.use_as_origin"
+  ],
+  "target": {
+    "sha256_cert_fingerprints": [
+      "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+    ],
+    "namespace": "android_app",
+    "package_name": "com.postmates.android.exo"
+  }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "4E:64:24:02:01:C1:10:94:CD:42:65:02:35:31:EA:10:7C:85:64:53:E9:2C:DB:D5:63:1F:66:55:96:6D:62:18"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.postmates.android.beta"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.internal"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.nightly"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.development"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.ubercab.fleet.exo"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.presidio.sdui.playground.development"
+ }
+},
+{
+ "relation": [
+   "delegate_permission/common.use_as_origin"
+ ],
+ "target": {
+   "sha256_cert_fingerprints": [
+     "40:03:23:1A:B4:2F:EB:8D:95:5E:62:FD:FA:A4:FA:D5:95:67:05:4B:9C:6B:BC:3D:95:02:99:DD:FC:26:83:92"
+   ],
+   "namespace": "android_app",
+   "package_name": "com.uber.presidio.sdui.playground"
+ }
+},
+{
+  "relation": [
+    "delegate_permission/common.use_as_origin"
+  ],
+  "target": {
+    "sha256_cert_fingerprints": [
+      "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+    ],
+    "namespace": "android_app",
+    "package_name": "com.uber.restaurants.development"
+  }
+ },
+ {
+  "relation": [
+    "delegate_permission/common.use_as_origin"
+  ],
+  "target": {
+    "sha256_cert_fingerprints": [
+      "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+    ],
+    "namespace": "android_app",
+    "package_name": "com.uber.restaurants"
+  }
+ },
+ {
+  "relation": [
+    "delegate_permission/common.use_as_origin"
+  ],
+  "target": {
+    "sha256_cert_fingerprints": [
+      "9A:8C:DC:86:87:60:49:A3:82:54:33:1A:74:45:39:14:64:C5:E3:A7:D0:5F:7C:8D:58:83:2E:94:23:11:C4:AA"
+    ],
+    "namespace": "android_app",
+    "package_name": "com.uber.restaurants.beta"
+  }
+ },
+ {
+   "relation": [
+     "delegate_permission/common.use_as_origin"
+   ],
+   "target": {
+     "sha256_cert_fingerprints": [
+       "74:22:5D:06:01:C7:9A:AD:C1:41:ED:8C:1B:31:AC:A3:65:9B:89:F1:3C:59:1B:3A:69:0F:4C:2A:81:CD:77:DF"
+     ],
+     "namespace": "android_app",
+     "package_name": "com.uber.restaurantmanager.development"
+   }
+  },
+  {
+   "relation": [
+     "delegate_permission/common.use_as_origin"
+   ],
+   "target": {
+     "sha256_cert_fingerprints": [
+       "50:04:65:8E:45:F8:B0:6C:95:4B:42:4D:14:28:C5:A8:CB:B6:C3:B8:08:D1:E0:36:F1:B9:0C:58:6E:98:77:24"
+     ],
+     "namespace": "android_app",
+     "package_name": "com.uber.restaurantmanager"
+   }
+  },
+  {
+   "relation": [
+     "delegate_permission/common.use_as_origin"
+   ],
+   "target": {
+     "sha256_cert_fingerprints": [
+       "50:04:65:8E:45:F8:B0:6C:95:4B:42:4D:14:28:C5:A8:CB:B6:C3:B8:08:D1:E0:36:F1:B9:0C:58:6E:98:77:24"
+     ],
+     "namespace": "android_app",
+     "package_name": "com.uber.restaurantmanager.nightly"
+   }
+  }
+]

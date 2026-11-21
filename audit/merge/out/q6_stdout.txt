@@ -1,0 +1,12 @@
+cluster_id distinct 9959 of 9959 deduplicated records
+cluster_id format: uuid 3733 hex32 6226
+hex32 cluster_id equal to one of the record's own source_ids: 397 of 6226
+hex32 cluster_id valid H3-res15 prefix: 6226 of 6226
+records with overture in source_types and hex32 cluster_id: 5545 ; uuid cluster_id with overture source: 3580
+H3 test: decoded res-2 cells with >=5 single-source records: 86 ; median latitude SD inside a cell: 5.86 degrees (an H3 res-2 cell is ~3 deg across)
+distinct source_ids [0,1): records 730, any quarantined 0.067, other-state claim 0.056, other-district claim 0.067
+distinct source_ids [1,2): records 2785, any quarantined 0.084, other-state claim 0.057, other-district claim 0.085
+distinct source_ids [2,5): records 2855, any quarantined 0.172, other-state claim 0.080, other-district claim 0.161
+distinct source_ids [5,10): records 1345, any quarantined 0.376, other-state claim 0.126, other-district claim 0.329
+distinct source_ids [10,100): records 2244, any quarantined 0.539, other-state claim 0.183, other-district claim 0.446
+byte-identical duplicate rows removed by common.load(): 11

@@ -1,0 +1,63 @@
+{
+ "n": 9959,
+ "p2": [
+  642,
+  9959
+ ],
+ "research_records": 431,
+ "research_urls": 1451,
+ "research_median_urls": 50.0,
+ "p3x": 1020,
+ "p3n_near_miss": 186,
+ "any_by_bucket(p2|p3x|p4)": {
+  "0-5": [
+   249,
+   2895,
+   8.6
+  ],
+  "6-10": [
+   444,
+   2967,
+   15.0
+  ],
+  "11-20": [
+   494,
+   1579,
+   31.3
+  ],
+  "21+": [
+   1358,
+   2518,
+   53.9
+  ]
+ },
+ "p2_by_bucket": {
+  "0-5": 1.14,
+  "6-10": 2.39,
+  "11-20": 5.0,
+  "21+": 18.23
+ },
+ "any_total": 2545,
+ "21plus_research": {
+  "records": 348,
+  "foreign_claims": 576,
+  "claims": 35475,
+  "rate_pct": 1.62,
+  "p4_pct": 26.3
+ },
+ "21plus_no_research": {
+  "records": 2170,
+  "foreign_claims": 1222,
+  "claims": 163348,
+  "rate_pct": 0.75,
+  "p4_pct": 31.2
+ },
+ "p4_given_near_miss": [
+  96,
+  178
+ ],
+ "p4_given_not_near_miss": [
+  1298,
+  9319
+ ]
+}

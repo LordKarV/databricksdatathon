@@ -1,0 +1,132 @@
+{
+ "cardiac_tag_hits": 765,
+ "cardiac_tag_only": 331,
+ "burn_tag_hits": 148,
+ "burn_tag_only": 48,
+ "icu_tag_hits": 1689,
+ "icu_tag_only": 483,
+ "mri_tesla_facilities": 235,
+ "mri_tesla_values": {
+  "3.0": 341,
+  "1.5": 234,
+  "5.0": 1,
+  "0.5": 1,
+  "2.5": 1,
+  "3.9": 1
+ },
+ "mri_facilities_mine": 952,
+ "dialysis_machine_count_facilities": 29,
+ "dialysis_machine_count_median": 14.0,
+ "mean_claimed_by_type": {
+  "clinic": [
+   0.255,
+   3770
+  ],
+  "dentist": [
+   0.057,
+   488
+  ],
+  "doctor": [
+   0.238,
+   21
+  ],
+  "hospital": [
+   1.573,
+   5610
+  ],
+  "null": [
+   0.088,
+   57
+  ]
+ },
+ "mean_claimed_by_size": {
+  "0": [
+   0.769,
+   13
+  ],
+  "1-9": [
+   0.475,
+   61
+  ],
+  "10-49": [
+   1.448,
+   676
+  ],
+  "200+": [
+   2.818,
+   675
+  ],
+  "50-199": [
+   2.421,
+   1085
+  ],
+  "unknown": [
+   0.575,
+   7449
+  ]
+ },
+ "claim_6plus_by_type": {
+  "hospital": 75,
+  "clinic": 2
+ },
+ "small_lt20_n": 234,
+ "small_lt20_claims": {
+  "cardiac_surgery": 6,
+  "mri": 12,
+  "nicu": 13,
+  "burns": 9
+ },
+ "clinic_mri_finder": [
+  211,
+  145
+ ],
+ "trauma_explicit_fac_mine": 1565,
+ "emergency_any_fac_mine": 3495,
+ "finder_pre_ct_true": 1024,
+ "kind_rows_any": 3390,
+ "kind_rows_list": 2947,
+ "kind_rows_staff": 450,
+ "kind_rows_dir": 184,
+ "kind_list_or_staff_or_dir_distinct_sentences": 2765,
+ "staff_sample": [
+  "Neurology care provided by doctors including Dr. Mrinal Kumar Acharya at The Mission Hospital in Bidhanagar, Durgapur",
+  "Specialist doctors including Dr. Naveen Kumar Agarwal (Diabetologist and Consultant Physician), Dr. Monika Agarwal (Gyne",
+  "Dr. Sunil Kr Gupta is Head of the Respiratory Intensive Care Unit (RICU) at Paras Hospital",
+  "Gondia's first intensive care center with 2 intensivist, neonatologist & pediatrician serving 24 hrs",
+  "ICU services with trained ICU staff",
+  "Offers a wide range of specialties including Anesthesia & Critical Care, Cardiology, Cardiac Thoracic & Vascular Surgery",
+  "Nipro-trained dialysis staff",
+  "Specialists include general surgeon, urologist, cardiac surgeon, orthopedist, andrologist, diabetologist, gastroenterolo",
+  "Dialysis unit overseen by a visiting nephrologist and in-charge (Dr. Deodatta Chafekar)",
+  "Dr. T. RaghuNath Reddy, MBBS, MS (Ortho), is an orthopedic, trauma, and joint replacement surgeon at Kakatiya Hospitals;",
+  "Experienced consultant team available 24 hours for emergency patients",
+  "Specializations include Cardiology & Cardiothoracic Surgery, Cosmetic or Plastic Surgery, Dental care, ENT, Gastroentero",
+  "AMRI Hospitals in Mukundapur, Kolkata has a Cardiothoracic Surgeon on staff, Dr. Arijit Datta.",
+  "ICU facility at KLES Dr Prabhakar Kore Hospital MRC Belgaum",
+  "Dr. Swati Chitnis is available between 10:00 am and 1:00 pm at Sarla Hospital & ICU"
+ ],
+ "dir_sample": [
+  "Dialysis centre listed within Jivan Jyot Drug Bank's Mumbai network.",
+  "Top specialties include Cardiologist, Ophthalmologist, ENT Specialist, Critical Care Consultant, Dermatologist",
+  "Ganga Hospital is a recognized trauma center and has repeatedly been named one of the best hospitals in India.",
+  "Best NICU setup with dedicated Neonatal Ventilator facility.",
+  "Listed as an emergency services hospital option on Quickobook",
+  "K. J. Somaiya Hospital, Chunabhatti is listed as a JJDB dialysis centre in Mumbai, Maharashtra",
+  "Harshal Surgical Hospital & ICU is listed as a project under TRIDENT HOSPITALS - Surat",
+  "Global Heart & Super Specialty Hospital offers a neurology department with EEG, EMG, MRI, CT, PET; 24/7 emergency servic",
+  "Listed as a Hemodialysis Centre",
+  "Having Top Laser Centre, Laparoscopic Centre, Varicose Centre, and Top ICU with Latest and Advance Equipment's."
+ ],
+ "list_sample_short": [
+  "Gynaecology, Urology, Orthopaedics, General Surgery and Critical Care departments",
+  "EEG, EMG, MRI, and CT imaging for evaluation and treatment planning",
+  "Offers MRI, CT, X-ray, and ultrasound imaging capabilities",
+  "Provides Neurosciences, Cardiac Sciences, Trauma Care, and Psychiatry departments",
+  "Performs Cesarean Delivery, Hysterectomy, Skin Grafting, and Eye Exam",
+  "Radiology imaging procedures including CT, MRI, ultrasound, and X-ray imaging",
+  "Provides imaging services including X-ray, MRI, CT, and ultrasound",
+  "Offers MRI, CT scan, X-ray, Ultrasound, EEG, TMT, and DEXA services",
+  "Provides diagnostic MRI imaging services for brain, spine, knee, and shoulder",
+  "CT scan, MRI scan, OPG, and mammography imaging services"
+ ]
+}

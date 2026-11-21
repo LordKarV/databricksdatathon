@@ -1,0 +1,104 @@
+{
+ "N": 9970,
+ "at_50": {
+  "procedure": 806,
+  "equipment": 88,
+  "capability": 1430,
+  "specialties": 2877
+ },
+ "over_50": {
+  "procedure": 0,
+  "equipment": 0,
+  "capability": 0,
+  "specialties": 0
+ },
+ "at_49": {
+  "procedure": 207,
+  "equipment": 43,
+  "capability": 267,
+  "specialties": 63
+ },
+ "any_text_at_50": 1789,
+ "any_incl_specialties_at_50": 3212,
+ "len_hist_45_50": {
+  "procedure": {
+   "45": 56,
+   "46": 46,
+   "47": 73,
+   "48": 94,
+   "49": 207,
+   "50": 806
+  },
+  "equipment": {
+   "45": 6,
+   "46": 12,
+   "47": 15,
+   "48": 26,
+   "49": 43,
+   "50": 88
+  },
+  "capability": {
+   "45": 47,
+   "46": 50,
+   "47": 63,
+   "48": 85,
+   "49": 267,
+   "50": 1430
+  },
+  "specialties": {
+   "45": 57,
+   "46": 52,
+   "47": 55,
+   "48": 56,
+   "49": 63,
+   "50": 2877
+  }
+ },
+ "exact_dup_casefold": {
+  "procedure": 10042,
+  "equipment": 3724,
+  "capability": 8746
+ },
+ "items": {
+  "procedure": 163791,
+  "equipment": 56052,
+  "capability": 231731,
+  "specialties": 278994
+ },
+ "spec_distinct_raw": 2927,
+ "spec_distinct_norm": 2476,
+ "spec_singletons": 1971,
+ "spec_10plus": 301,
+ "spec_rows_nonempty": 9970,
+ "spec_rows_with_dups": 9848,
+ "spec_mean_items_all_rows": 27.98,
+ "spec_mean_distinct_all_rows": 11.87,
+ "camel_share_uses": 0.9833,
+ "tag_dentistry_rows": 4195,
+ "dentist_type_rows": 488,
+ "tag_familymedicine_rows": 5179,
+ "tag_nephrology_rows": 2159,
+ "tag_nephrology_with_dialysis_text": 842,
+ "tag_dentistry_with_dental_name_or_type": 1778,
+ "capacity_numeric": 2516,
+ "capacity_literal_null": 7454,
+ "capacity_sql_null": 0,
+ "capacity_zero": 13,
+ "capacity_bins": {
+  "50-199": 1088,
+  "200+": 677,
+  "10-49": 677,
+  "1-9": 61,
+  "0": 13
+ },
+ "type_counts": {
+  "hospital": 5621,
+  "clinic": 3770,
+  "dentist": 488,
+  "null": 57,
+  "doctor": 21,
+  "farmacy": 10,
+  "pharmacy": 2,
+  "nursing_home": 1
+ }
+}

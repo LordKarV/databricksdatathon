@@ -1,0 +1,95 @@
+{
+ "call_911": [
+  1,
+  63,
+  63
+ ],
+ "board_certified": [
+  11,
+  245,
+  248
+ ],
+ "patient_portal": [
+  1,
+  53,
+  54
+ ],
+ "exceptional_cardiac": [
+  33,
+  6,
+  39
+ ],
+ "open_24_hours_status": [
+  1,
+  0,
+  1
+ ],
+ "name_dr_dot_prefix": 349,
+ "name_dr_dr": 1,
+ "dr_prefix_nonperson_examples": [
+  [
+   "Dr. Agarwal\u2019s Eye Hospital"
+  ],
+  [
+   "Dr. The Heart and Internal Medicine Clinic"
+  ],
+  [
+   "Dr. Chauhan Hirva (Aadit Eye Hospital)"
+  ],
+  [
+   "Dr. Chatterjee Clinic"
+  ],
+  [
+   "Dr. Susheela Tiwari Government Hospital"
+  ],
+  [
+   "Dr. Aggarwal's Wellness Multispeciality Hospital"
+  ],
+  [
+   "Dr. Genesis Multispeciality Hospital"
+  ],
+  [
+   "Dr. Olavo Ribeiro Hospital"
+  ],
+  [
+   "Dr. Anil Yadav Clinic"
+  ],
+  [
+   "Dr. Ram Krishna (Prerna Speech & Hearing Clinic)"
+  ],
+  [
+   "Dr. Madhu Tanwar Weight loss, Wellness & Physiotherapy Clinic"
+  ],
+  [
+   "Dr. Deshpande\u2019s Dental Clinic"
+  ]
+ ],
+ "dr_prefix_with_hospital_word": 108,
+ "call911_examples": [
+  [
+   "Pareek Hospital & Research Centre",
+   "Agra",
+   "Applied Homoeopathy at its very best incorporating the Scientific Methods and art of healing"
+  ],
+  [
+   "Madhavbaug Clinic Nerul",
+   "Navi Mumbai",
+   "Heart Hospital in Nerul, Navi Mumbai"
+  ],
+  [
+   "GUPTA ENT AND HEART CENTRE - Alwar",
+   "Alwar",
+   "SPECIALIZATION: ENT"
+  ],
+  [
+   "M.p. Birla Hospital & Priyamvada Birla Cancer Research Institute",
+   "Satna",
+   "250-bed hospital with 10% beds free; VishramBhavan for relatives of poor patients; Tele Medicine Facility covering small towns of Madhya Pradesh."
+  ],
+  [
+   "K.G.R Surgical Nursing Home",
+   "Erode",
+   "K.M. Nursing Home is listed among hospitals in Chennai, Tamilnadu, India."
+  ]
+ ]
+}

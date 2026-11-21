@@ -43,6 +43,28 @@ def state_conflict(stated, pin_sts):
     return not any(stated in g and pin_sts & g for g in COMPATIBLE)
 
 
+GENERIC_SLUG = {"hospital", "hospitals", "clinic", "clinics", "dental", "medical", "care",
+                "health", "healthcare", "centre", "center", "multispeciality", "speciality",
+                "super", "nursing", "home", "research", "institute", "diagnostic", "diagnostics",
+                "eye", "children", "child", "women", "mother", "city", "general", "india", "the",
+                "and", "sri", "shri", "shree", "new", "life", "lifeline"}
+
+
+def url_kind(url, name, cls):
+    """'about' when the URL is the record's own site or its path carries a distinctive word of
+    the facility name; 'list' for category/listing pages; else 'unverified'."""
+    if cls in ("official", "official_like"):
+        return "about"
+    path = set(re.findall(r"[a-z]+", re.sub(r"^[a-z]+://[^/]+", "", url.lower())))
+    core = re.split(r"\s[-\u2013|(]\s?|,", name or "")[0].lower()  # drop address tails
+    toks = {t for t in re.findall(r"[a-z]{4,}", core) if t not in GENERIC_SLUG}
+    if toks and toks & path:
+        return "about"
+    if LIST_PAGE.search(url):
+        return "list"
+    return "unverified"
+
+
 def official_hosts(r):
     w = r.officialWebsite
     return {host(w)} if isinstance(w, str) and w not in ("null", "") else set()
@@ -53,6 +75,7 @@ def record_row(r, pst, places):
     off = official_hosts(r)
     classes = [classify(host(u), off, r["name"]) for u in urls]
     cc = Counter(classes)
+    kinds = Counter(url_kind(u, r["name"], c) for u, c in zip(urls, classes))
     stated = norm_state(r.address_stateOrRegion)
     pin = norm_pin(r.address_zipOrPostcode)
     ps = pst.get(pin) if pin else None
@@ -93,6 +116,8 @@ def record_row(r, pst, places):
         "pin_states": "|".join(sorted(ps)) if ps else None,
         "n_urls": len(urls), "n_hosts": len({host(u) for u in urls}),
         "n_list_urls": sum(bool(LIST_PAGE.search(u)) for u in urls),
+        "n_url_about": kinds.get("about", 0), "n_url_list": kinds.get("list", 0),
+        "n_url_unverified": kinds.get("unverified", 0),
         "n_source_ids_distinct": len(set(jlist(r.source_ids))),
         "source_types": "|".join(sorted(set(jlist(r.source_types)))),
         **{f"n_{c}": cc.get(c, 0) for c in CLASSES},
@@ -137,6 +162,8 @@ def main():
                rec.n_source_ids_distinct.quantile([.25, .5, .75, .9]).to_dict(),
            "records_gt1_distinct_source_id": int((rec.n_source_ids_distinct > 1).sum()),
            "list_page_urls": int(rec.n_list_urls.sum()),
+           "url_kind_totals": {k: int(rec[f"n_url_{k}"].sum()) for k in ("about", "list", "unverified")},
+           "records_with_zero_about_urls": int((rec.n_url_about == 0).sum()),
            "source_types_combos": rec.source_types.value_counts().head(12).to_dict()}
     res["url_share_by_class"] = {c: {"urls": int(rec[f"n_{c}"].sum()),
                                      "pct_urls": round(100 * rec[f"n_{c}"].sum() / tot_urls, 2),
@@ -200,6 +227,12 @@ def main():
         "max_group_size": int(rec.content_id_group_size.max()),
         "proxy_shared_vs_not": {p: {"shared": rate(rec.loc[sh, p]), "not": rate(rec.loc[~sh, p])}
                                 for p in PROXIES}}
+    # cross-validation: proxies built from different fields should co-occur if both are real
+    p4 = rec.p4_coord_far_from_pin
+    res["p4_rate_given_other_proxy"] = {
+        p: {"given_flag": rate(p4[rec[p].fillna(False).astype(bool)]),
+            "given_no_flag": rate(p4[~rec[p].fillna(False).astype(bool)])}
+        for p in ("p2_url_cross_state", "p3c_foreign_claim", "p3s_similar_name")}
     res["cluster_id_distinct"] = int(df.cluster_id.nunique())
     res["source_column_values"] = df.source.value_counts().to_dict()
     with open(f"{OUT}/q1_results.json", "w") as f:

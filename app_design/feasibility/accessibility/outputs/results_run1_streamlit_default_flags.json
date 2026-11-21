@@ -1,0 +1,1163 @@
+{
+ "streamlit_bare": {
+  "none": {
+   "first_visit": {
+    "requests": 19,
+    "transfer_bytes": 1316591,
+    "decoded_bytes": 4903555,
+    "websocket_payload_chars": 1332,
+    "served_from_cache": 1,
+    "hosts": [
+     "api.segment.io",
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 0.38,
+   "main_action_visible_s": 0.38,
+   "features": {
+    "html_lang": "en",
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "aria-allowed-attr",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Elements must only use supported ARIA attributes",
+      "tags": [
+       "wcag2a",
+       "wcag412"
+      ]
+     },
+     {
+      "id": "button-name",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Buttons must have discernible text",
+      "tags": [
+       "wcag2a",
+       "wcag412"
+      ]
+     },
+     {
+      "id": "region",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "All page content should be contained by landmarks",
+      "tags": []
+     }
+    ],
+    "axe_passes": 26,
+    "axe_incomplete": [],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Deploy",
+      "w": 57,
+      "h": 32
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "",
+      "w": 32,
+      "h": 32
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Deploy",
+      "w": 57,
+      "h": 32
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "",
+      "w": 32,
+      "h": 32
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 16,
+    "transfer_bytes": 1340,
+    "decoded_bytes": 4903555,
+    "served_from_cache": 9
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 19,
+    "transfer_bytes": 1316583,
+    "decoded_bytes": 4903555,
+    "websocket_payload_chars": 1328,
+    "served_from_cache": 1,
+    "hosts": [
+     "api.segment.io",
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 8.09,
+   "main_action_visible_s": 8.09
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 11,
+    "transfer_bytes": 1310067,
+    "decoded_bytes": 4890628,
+    "websocket_payload_chars": 1328,
+    "served_from_cache": 1,
+    "hosts": [
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 43.61,
+   "main_action_visible_s": 43.61
+  }
+ },
+ "streamlit_probe": {
+  "none": {
+   "first_visit": {
+    "requests": 25,
+    "transfer_bytes": 1342615,
+    "decoded_bytes": 4972178,
+    "websocket_payload_chars": 2788,
+    "served_from_cache": 1,
+    "hosts": [
+     "api.segment.io",
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 0.39,
+   "main_action_visible_s": 0.41,
+   "features": {
+    "html_lang": "en",
+    "geolocation": "works: Got location 12.9716,77.5946",
+    "video_elements": 1,
+    "image_file_inputs": 0,
+    "file_inputs_with_capture": 0,
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "aria-allowed-attr",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Elements must only use supported ARIA attributes",
+      "tags": [
+       "wcag2a",
+       "wcag412"
+      ]
+     },
+     {
+      "id": "button-name",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Buttons must have discernible text",
+      "tags": [
+       "wcag2a",
+       "wcag412"
+      ]
+     },
+     {
+      "id": "region",
+      "impact": "moderate",
+      "nodes": 4,
+      "help": "All page content should be contained by landmarks",
+      "tags": []
+     }
+    ],
+    "axe_passes": 33,
+    "axe_incomplete": [
+     "frame-tested",
+     "video-caption"
+    ],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Deploy",
+      "w": 57,
+      "h": 32
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "",
+      "w": 32,
+      "h": 32
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Location (lat,lon)",
+      "w": 256,
+      "h": 24
+     },
+     {
+      "tag": "input",
+      "type": "text",
+      "name": "Location (lat,lon)",
+      "w": 254,
+      "h": 38
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Take Photo",
+      "w": 256,
+      "h": 40
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Deploy",
+      "w": 57,
+      "h": 32
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "",
+      "w": 32,
+      "h": 32
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "",
+      "w": 18,
+      "h": 18
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Location (lat,lon)",
+      "w": 256,
+      "h": 24
+     },
+     {
+      "tag": "input",
+      "type": "text",
+      "name": "Location (lat,lon)",
+      "w": 254,
+      "h": 38
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Take Photo",
+      "w": 256,
+      "h": 40
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 25,
+    "transfer_bytes": 1997,
+    "decoded_bytes": 4972178,
+    "served_from_cache": 15
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 25,
+    "transfer_bytes": 1342622,
+    "decoded_bytes": 4972178,
+    "websocket_payload_chars": 2784,
+    "served_from_cache": 1,
+    "hosts": [
+     "api.segment.io",
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 8.17,
+   "main_action_visible_s": 8.39
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 25,
+    "transfer_bytes": 1342619,
+    "decoded_bytes": 4972178,
+    "websocket_payload_chars": 2780,
+    "served_from_cache": 1,
+    "hosts": [
+     "api.segment.io",
+     "cdn.segment.com",
+     "data:",
+     "localhost:8501"
+    ]
+   },
+   "heading_visible_s": 43.62,
+   "main_action_visible_s": 44.44
+  }
+ },
+ "dash_bare": {
+  "none": {
+   "first_visit": {
+    "requests": 12,
+    "transfer_bytes": 1502548,
+    "decoded_bytes": 1500105,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 0.12,
+   "main_action_visible_s": 0.12,
+   "features": {
+    "html_lang": "",
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "html-has-lang",
+      "impact": "serious",
+      "nodes": 1,
+      "help": "<html> element must have a lang attribute",
+      "tags": [
+       "wcag2a",
+       "wcag311"
+      ]
+     }
+    ],
+    "axe_passes": 15,
+    "axe_incomplete": [],
+    "targets": [],
+    "targets_under_24px": [],
+    "targets_under_44px": []
+   },
+   "repeat_visit": {
+    "requests": 12,
+    "transfer_bytes": 4592,
+    "decoded_bytes": 1500105,
+    "served_from_cache": 9
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 12,
+    "transfer_bytes": 1502548,
+    "decoded_bytes": 1500105,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 8.52,
+   "main_action_visible_s": 8.52
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 12,
+    "transfer_bytes": 1502548,
+    "decoded_bytes": 1500105,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 49.86,
+   "main_action_visible_s": 49.86
+  }
+ },
+ "dash_probe": {
+  "none": {
+   "first_visit": {
+    "requests": 14,
+    "transfer_bytes": 1523147,
+    "decoded_bytes": 1520305,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 0.12,
+   "main_action_visible_s": 0.12,
+   "features": {
+    "html_lang": "",
+    "geolocation": "works: Got location 12.9716,77.5946",
+    "video_elements": 0,
+    "image_file_inputs": 1,
+    "file_inputs_with_capture": 0,
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "html-has-lang",
+      "impact": "serious",
+      "nodes": 1,
+      "help": "<html> element must have a lang attribute",
+      "tags": [
+       "wcag2a",
+       "wcag311"
+      ]
+     },
+     {
+      "id": "label",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Form elements must have labels",
+      "tags": [
+       "wcag2a",
+       "wcag412"
+      ]
+     },
+     {
+      "id": "target-size",
+      "impact": "serious",
+      "nodes": 1,
+      "help": "All touch targets must be 24px large, or leave sufficient space",
+      "tags": [
+       "wcag22aa",
+       "wcag258"
+      ]
+     }
+    ],
+    "axe_passes": 27,
+    "axe_incomplete": [
+     "color-contrast"
+    ],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use my location",
+      "w": 111,
+      "h": 21
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Take a photo (optional)",
+      "w": 152,
+      "h": 21
+     },
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 344,
+      "h": 21
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use my location",
+      "w": 111,
+      "h": 21
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Take a photo (optional)",
+      "w": 152,
+      "h": 21
+     },
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 344,
+      "h": 21
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use my location",
+      "w": 111,
+      "h": 21
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Take a photo (optional)",
+      "w": 152,
+      "h": 21
+     },
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 344,
+      "h": 21
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 14,
+    "transfer_bytes": 5751,
+    "decoded_bytes": 1520305,
+    "served_from_cache": 9
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 14,
+    "transfer_bytes": 1523147,
+    "decoded_bytes": 1520305,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 8.53,
+   "main_action_visible_s": 8.53
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 14,
+    "transfer_bytes": 1523147,
+    "decoded_bytes": 1520305,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8050"
+    ]
+   },
+   "heading_visible_s": 49.86,
+   "main_action_visible_s": 49.87
+  }
+ },
+ "gradio_bare": {
+  "none": {
+   "first_visit": {
+    "requests": 30,
+    "transfer_bytes": 1015442,
+    "decoded_bytes": 1026948,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 0.19,
+   "main_action_visible_s": 0.19,
+   "features": {
+    "html_lang": "en-US",
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 2,
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "tags": [
+       "wcag2aa",
+       "wcag143"
+      ]
+     },
+     {
+      "id": "landmark-one-main",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "Document should have one main landmark",
+      "tags": []
+     },
+     {
+      "id": "region",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "All page content should be contained by landmarks",
+      "tags": []
+     }
+    ],
+    "axe_passes": 22,
+    "axe_incomplete": [
+     "color-contrast"
+    ],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 30,
+    "transfer_bytes": 24937,
+    "decoded_bytes": 1026948,
+    "served_from_cache": 24
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 30,
+    "transfer_bytes": 1015470,
+    "decoded_bytes": 1026948,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 6.51,
+   "main_action_visible_s": 6.51
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 30,
+    "transfer_bytes": 1015450,
+    "decoded_bytes": 1026948,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 34.79,
+   "main_action_visible_s": 34.79
+  }
+ },
+ "gradio_probe": {
+  "none": {
+   "first_visit": {
+    "requests": 64,
+    "transfer_bytes": 1152266,
+    "decoded_bytes": 1152747,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 0.29,
+   "main_action_visible_s": 0.29,
+   "features": {
+    "html_lang": "en-US",
+    "geolocation": "failed: Locator.wait_for: Timeout 15000ms exceeded.",
+    "video_elements": 1,
+    "image_file_inputs": 1,
+    "file_inputs_with_capture": 0,
+    "axe_version": "4.12.1",
+    "axe_violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 2,
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "tags": [
+       "wcag2aa",
+       "wcag143"
+      ]
+     },
+     {
+      "id": "landmark-one-main",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "Document should have one main landmark",
+      "tags": []
+     },
+     {
+      "id": "region",
+      "impact": "moderate",
+      "nodes": 3,
+      "help": "All page content should be contained by landmarks",
+      "tags": []
+     }
+    ],
+    "axe_passes": 31,
+    "axe_incomplete": [
+     "color-contrast",
+     "target-size"
+    ],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use my location",
+      "w": 296,
+      "h": 42
+     },
+     {
+      "tag": "textarea",
+      "type": "textarea",
+      "name": "",
+      "w": 270,
+      "h": 42
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Take a photo (optional)",
+      "w": 152,
+      "h": 26
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "",
+      "w": 294,
+      "h": 280
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Click to Access Webcam",
+      "w": 294,
+      "h": 240
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Upload file",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Capture from camera",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Upload file",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Capture from camera",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use my location",
+      "w": 296,
+      "h": 42
+     },
+     {
+      "tag": "textarea",
+      "type": "textarea",
+      "name": "",
+      "w": 270,
+      "h": 42
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Take a photo (optional)",
+      "w": 152,
+      "h": 26
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Upload file",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Capture from camera",
+      "w": 22,
+      "h": 22
+     },
+     {
+      "tag": "button",
+      "type": "submit",
+      "name": "Use via API",
+      "w": 88,
+      "h": 21
+     },
+     {
+      "tag": "a",
+      "type": null,
+      "name": "Built with Gradio",
+      "w": 122,
+      "h": 21
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 64,
+    "transfer_bytes": 27812,
+    "decoded_bytes": 1152747,
+    "served_from_cache": 58
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 64,
+    "transfer_bytes": 1152288,
+    "decoded_bytes": 1152747,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 7.5,
+   "main_action_visible_s": 7.51
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 64,
+    "transfer_bytes": 1152264,
+    "decoded_bytes": 1152747,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 2,
+    "hosts": [
+     "",
+     "cdnjs.cloudflare.com",
+     "fonts.googleapis.com",
+     "fonts.gstatic.com",
+     "localhost:7860"
+    ]
+   },
+   "heading_visible_s": 40.33,
+   "main_action_visible_s": 40.34
+  }
+ },
+ "fastapi_bare": {
+  "none": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 373,
+    "decoded_bytes": 239,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.02,
+   "main_action_visible_s": 0.02,
+   "features": {
+    "html_lang": "en",
+    "axe_version": "4.12.1",
+    "axe_violations": [],
+    "axe_passes": 15,
+    "axe_incomplete": [],
+    "targets": [],
+    "targets_under_24px": [],
+    "targets_under_44px": []
+   },
+   "repeat_visit": {
+    "requests": 1,
+    "transfer_bytes": 373,
+    "decoded_bytes": 239,
+    "served_from_cache": 0
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 373,
+    "decoded_bytes": 239,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.21,
+   "main_action_visible_s": 0.21
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 373,
+    "decoded_bytes": 239,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.39,
+   "main_action_visible_s": 0.39
+  }
+ },
+ "fastapi_probe": {
+  "none": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 1855,
+    "decoded_bytes": 3497,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.03,
+   "main_action_visible_s": 0.03,
+   "features": {
+    "html_lang": "en",
+    "geolocation": "works: Got location 12.9716,77.5946",
+    "video_elements": 0,
+    "image_file_inputs": 1,
+    "file_inputs_with_capture": 1,
+    "axe_version": "4.12.1",
+    "axe_violations": [],
+    "axe_passes": 35,
+    "axe_incomplete": [],
+    "targets": [
+     {
+      "tag": "button",
+      "type": "button",
+      "name": "Use my location\n\u092e\u0947\u0930\u0940 \u091c\u0917\u0939",
+      "w": 328,
+      "h": 66
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Or type a town or PIN code",
+      "w": 328,
+      "h": 27
+     },
+     {
+      "tag": "input",
+      "type": "text",
+      "name": "",
+      "w": 328,
+      "h": 48
+     },
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Take a photo (optional)",
+      "w": 328,
+      "h": 56
+     },
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 1,
+      "h": 1
+     },
+     {
+      "tag": "button",
+      "type": "button",
+      "name": "Read aloud",
+      "w": 328,
+      "h": 56
+     }
+    ],
+    "targets_under_24px": [
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 1,
+      "h": 1
+     }
+    ],
+    "targets_under_44px": [
+     {
+      "tag": "label",
+      "type": null,
+      "name": "Or type a town or PIN code",
+      "w": 328,
+      "h": 27
+     },
+     {
+      "tag": "input",
+      "type": "file",
+      "name": "",
+      "w": 1,
+      "h": 1
+     }
+    ]
+   },
+   "repeat_visit": {
+    "requests": 1,
+    "transfer_bytes": 1855,
+    "decoded_bytes": 3497,
+    "served_from_cache": 0
+   }
+  },
+  "slow4g": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 1855,
+    "decoded_bytes": 3497,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.23,
+   "main_action_visible_s": 0.24
+  },
+  "2g": {
+   "first_visit": {
+    "requests": 1,
+    "transfer_bytes": 1855,
+    "decoded_bytes": 3497,
+    "websocket_payload_chars": 0,
+    "served_from_cache": 0,
+    "hosts": [
+     "localhost:8000"
+    ]
+   },
+   "heading_visible_s": 0.44,
+   "main_action_visible_s": 0.44
+  }
+ }
+}

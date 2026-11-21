@@ -1,0 +1,448 @@
+{
+ "created_at": "2026-11-21T13:29:11",
+ "sha256": "0dbf85d80543432aac2d94c6b9636a364bddb7105e7722cdeb61312710b2f529",
+ "disclosure": "Written after the builder read v2 dev labels and marginal v2 label counts; no v2 rate is used. v1 rates (36 pairs) were read during design and are dev data.",
+ "priors": {
+  "service": {
+   "b_dialysis": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_emergency_csection": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_nicu": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_cardiac_surgery": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_mri": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_burn_care": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "b_trauma_emergency": {
+    "mu": -2.9,
+    "sd": 1.5,
+    "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels)"
+   },
+   "t1": {
+    "mu": 0.4,
+    "sd": 1.0,
+    "derivation": "expert: a specialties tag or list-only mention is weak evidence"
+   },
+   "t2": {
+    "mu": 0.46,
+    "sd": 1.0,
+    "derivation": "v1 weak stratum 1/12 confirmed: logit -2.04 = b + t1 + t2, so t2 = -2.04 - (-2.9) - 0.4"
+   },
+   "t3": {
+    "mu": 0.8,
+    "sd": 1.0,
+    "derivation": "v1 strong 10/12 vs weak 1/12: LLR 3.47 split over t3, t4, t5/2, p1, p2/2"
+   },
+   "t4": {
+    "mu": 1.0,
+    "sd": 1.0,
+    "derivation": "same split as t3 (2+ fields is the core of the strong stratum)"
+   },
+   "t5": {
+    "mu": 0.6,
+    "sd": 1.0,
+    "derivation": "same split as t3 (about half of strong pairs carry a unit or quantity)"
+   },
+   "p1": {
+    "mu": 0.9,
+    "sd": 1.0,
+    "derivation": "same split as t3 (strong stratum requires a clinical prerequisite)"
+   },
+   "p2": {
+    "mu": 0.5,
+    "sd": 1.0,
+    "derivation": "same split as t3"
+   },
+   "tb_mid": {
+    "mu": -0.43,
+    "sd": 0.75,
+    "derivation": "half of tb_high"
+   },
+   "tb_high": {
+    "mu": -0.86,
+    "sd": 0.75,
+    "derivation": "merge audit: contamination 59.6% of records at 30+ URLs vs 4.2% at < 3 URLs; LLR log(0.404/0.958)"
+   },
+   "trunc0": {
+    "mu": 0.3,
+    "sd": 0.75,
+    "derivation": "expert: no mention on a record whose list hit the 50-item cap says less"
+   },
+   "c1": {
+    "mu": -0.51,
+    "sd": 1.0,
+    "derivation": "cleaning hand check: 17/25 other-facility flags are true foreign content (logit 0.73), scaled by 0.7 because own units remain"
+   },
+   "c2": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert: foreign content with no own unit (added to c1)"
+   },
+   "n1": {
+    "mu": -1.67,
+    "sd": 0.75,
+    "derivation": "claims audit: 6/40 non-offer atoms were support for the service (logit of 6.5/41) relative to even odds"
+   },
+   "s1": {
+    "mu": -1.5,
+    "sd": 1.0,
+    "derivation": "expert: single-specialty name (eye, dental, IVF, lab) claiming the service; Aravind v1 contradicted"
+   },
+   "g_mid": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert: no prior direction for the bucket main effect"
+   },
+   "g_high": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert: no prior direction"
+   },
+   "type_clinic": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert: inpatient services less often at clinics"
+   },
+   "type_dentist": {
+    "mu": -2.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "type_other": {
+    "mu": -1.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "public": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "level_dh": {
+    "mu": 0.5,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "level_sdh": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "level_chc": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "level_phc": {
+    "mu": -1.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "level_mc": {
+    "mu": 1.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "iphs_essential": {
+    "mu": 0.5,
+    "sd": 0.75,
+    "derivation": "IPHS 2022 marks dialysis and emergency C-section essential at district hospitals"
+   },
+   "beds_missing": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "beds_lt30": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "beds_100p": {
+    "mu": 0.5,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "doctors_missing": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "doctors_lt5": {
+    "mu": -0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "doctors_20p": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "breadth_lt5": {
+    "mu": -0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "breadth_20p": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "scale_contradiction": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "t2@dialysis": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@emergency_csection": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@nicu": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@cardiac_surgery": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@mri": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@burn_care": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t2@trauma_emergency": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@dialysis": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@emergency_csection": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@nicu": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@cardiac_surgery": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@mri": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@burn_care": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "t4@trauma_emergency": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@dialysis": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@emergency_csection": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@nicu": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@cardiac_surgery": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@mri": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@burn_care": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   },
+   "p1@trauma_emergency": {
+    "mu": 0.0,
+    "sd": 0.5,
+    "derivation": "contract: service deviation ~ N(0, 0.5^2)"
+   }
+  },
+  "location": {
+   "b_loc": {
+    "mu": 0.8,
+    "sd": 1.0,
+    "derivation": "p1 = listing coordinates: b - r_pin = logit(14.5/41) = -0.60 (geo hand check, conflicts) and b + r_pin = 2.2 (expert: about 0.9 when PIN agrees)"
+   },
+   "v_pin": {
+    "mu": 1.4,
+    "sd": 0.75,
+    "derivation": "solved with b_loc from the two equations above"
+   },
+   "v_coords": {
+    "mu": 0.7,
+    "sd": 0.75,
+    "derivation": "expert: about half the PIN vote (coordinates right 14/40 vs PIN right 27/40 in conflicts)"
+   },
+   "src_pin": {
+    "mu": 0.61,
+    "sd": 1.0,
+    "derivation": "p1 = PIN centre with coordinates dissenting: b + src_pin - r_coords = logit(27.5/41) = 0.71"
+   },
+   "src_city": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert: a city centre is a coarse point"
+   },
+   "src_map": {
+    "mu": 0.5,
+    "sd": 1.0,
+    "derivation": "expert: name-matched map link"
+   },
+   "v_name": {
+    "mu": 1.4,
+    "sd": 0.75,
+    "derivation": "contract: the name-place vote starts equal to the PIN vote"
+   },
+   "v_city": {
+    "mu": 1.0,
+    "sd": 0.75,
+    "derivation": "expert"
+   },
+   "v_state": {
+    "mu": 0.7,
+    "sd": 0.75,
+    "derivation": "expert"
+   },
+   "f_copied_geocode": {
+    "mu": -1.0,
+    "sd": 0.75,
+    "derivation": "expert"
+   },
+   "f_coords_look_wrong": {
+    "mu": -0.5,
+    "sd": 0.75,
+    "derivation": "expert"
+   },
+   "f_pin_looks_wrong": {
+    "mu": -0.5,
+    "sd": 0.75,
+    "derivation": "expert"
+   },
+   "f_text_pin_elsewhere": {
+    "mu": -0.5,
+    "sd": 0.75,
+    "derivation": "expert"
+   }
+  },
+  "existence": {
+   "b_ex": {
+    "mu": 1.0,
+    "sd": 1.0,
+    "derivation": "v1 web checks: 32 of 36 exist (logit 1.98), minus the own-domain, source and recency terms most v1 records carry"
+   },
+   "e_web_own": {
+    "mu": 0.7,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_web_other": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_phone_shared3": {
+    "mu": -0.7,
+    "sd": 1.0,
+    "derivation": "expert: directory number"
+   },
+   "e_phone_none": {
+    "mu": -0.7,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_phone_landline": {
+    "mu": 0.0,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_multi_source": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_recency": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_nonfacility": {
+    "mu": -2.0,
+    "sd": 1.0,
+    "derivation": "expert: pharmacy or veterinary"
+   },
+   "e_dup_member": {
+    "mu": 0.3,
+    "sd": 1.0,
+    "derivation": "expert"
+   },
+   "e_coord_shared3": {
+    "mu": -0.5,
+    "sd": 1.0,
+    "derivation": "expert: coordinate shared by 3+ names"
+   }
+  }
+ }
+}

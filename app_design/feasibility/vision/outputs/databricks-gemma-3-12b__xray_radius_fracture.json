@@ -1,0 +1,54 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "xray_radius_fracture.jpg",
+ "bytes": 169409,
+ "status": 200,
+ "latency_s": 1.55,
+ "response": {
+  "id": "chatcmpl_568bf3b1-6339-4ff0-873b-2d867c6fc948_06e855c4-f476-47ae-85fc-be7760b5b690",
+  "object": "chat.completion",
+  "created": 1795284643,
+  "model": "gemma-3-12b-it-060225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\n  \"detected_text\": \"\",\n  \"language\": \"unknown\",\n  \"document_type\": \"xray\",\n  \"suggested_service\": \"trauma_emergency\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.9,\n  \"trigger_phrase\": \"fracture\",\n  \"red_flags\": []\n}\n```"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 820,
+   "completion_tokens": 88,
+   "total_tokens": 908,
+   "cache_read_input_tokens": 288,
+   "prompt_tokens_details": {
+    "cached_tokens": 288
+   }
+  }
+ },
+ "content": "```json\n{\n  \"detected_text\": \"\",\n  \"language\": \"unknown\",\n  \"document_type\": \"xray\",\n  \"suggested_service\": \"trauma_emergency\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.9,\n  \"trigger_phrase\": \"fracture\",\n  \"red_flags\": []\n}\n```",
+ "parsed": {
+  "detected_text": "",
+  "language": "unknown",
+  "document_type": "xray",
+  "suggested_service": "trauma_emergency",
+  "urgency": "emergency",
+  "confidence": 0.9,
+  "trigger_phrase": "fracture",
+  "red_flags": []
+ },
+ "parse_mode": "after_stripping",
+ "usage": {
+  "prompt_tokens": 820,
+  "completion_tokens": 88,
+  "total_tokens": 908,
+  "cache_read_input_tokens": 288,
+  "prompt_tokens_details": {
+   "cached_tokens": 288
+  }
+ }
+}

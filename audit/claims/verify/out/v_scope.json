@@ -1,0 +1,322 @@
+{
+ "capped_pairs": 194,
+ "capped_by_service": {
+  "trauma": 84,
+  "icu": 51,
+  "dialysis": 16,
+  "mri": 11,
+  "nicu": 10,
+  "burns": 10,
+  "cardiac_surgery": 8,
+  "csection": 4
+ },
+ "capped_from_strong": 39,
+ "pairs_text_mention": 9707,
+ "pairs_all_rows": 10911,
+ "capped_dentist_type": 4,
+ "capped_by_trigger": {
+  "eye": 71,
+  "dental": 19,
+  "fertility": 13,
+  "ent": 13,
+  "ivf": 10,
+  "netra": 10,
+  "ayurved": 10,
+  "aesthetic": 8,
+  "siddha": 7,
+  "cosmetic": 7,
+  "skin": 5,
+  "nayan": 5,
+  "rehab": 4,
+  "test tube": 3,
+  "smile": 3,
+  "homeo": 2,
+  "physio": 2,
+  "unani": 1,
+  "hair": 1
+ },
+ "capped_names_suspect": [
+  [
+   "ApoKos Rehabilitation Hospital",
+   "dialysis",
+   "strong"
+  ],
+  [
+   "ApoKos Rehabilitation Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Siddharth Hospital",
+   "burns",
+   "strong"
+  ],
+  [
+   "Siddharth Hospital",
+   "trauma",
+   "strong"
+  ],
+  [
+   "Siddharth Hospital",
+   "icu",
+   "medium"
+  ],
+  [
+   "Gouda Ramesh ENT Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Siddhi Vinayak ENT Hospital",
+   "icu",
+   "medium"
+  ],
+  [
+   "Kiran Rehab Centre",
+   "icu",
+   "medium"
+  ],
+  [
+   "Suvarna Aesthetics",
+   "burns",
+   "strong"
+  ],
+  [
+   "Siddharth Hospital Ad",
+   "csection",
+   "medium"
+  ],
+  [
+   "Siddharth Hospital Ad",
+   "icu",
+   "medium"
+  ],
+  [
+   "Vishwa ENT Hospital Ahmedabad",
+   "mri",
+   "strong"
+  ],
+  [
+   "Vishwa ENT Hospital Ahmedabad",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Vishwa ENT Hospital Ahmedabad",
+   "icu",
+   "medium"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "dialysis",
+   "strong"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "nicu",
+   "medium"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "mri",
+   "strong"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "burns",
+   "strong"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Sushrutha Institute of Plastic, Reconstructive & Aesthetic Surgery",
+   "icu",
+   "medium"
+  ],
+  [
+   "ENT Laser Clinic - 116 Civil Lines",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Jain ENT Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Jain ENT Hospital",
+   "icu",
+   "strong"
+  ],
+  [
+   "Refine Aesthetic Clinic",
+   "burns",
+   "medium"
+  ],
+  [
+   "Anup Institute Of Orthopaedics Rehabilitation Dr RN Singh",
+   "trauma",
+   "strong"
+  ],
+  [
+   "Siddhant Hospital & Research Center",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Siddhant Hospital & Research Center",
+   "icu",
+   "strong"
+  ],
+  [
+   "Dr. Rajesh Rajput Hair Clinic",
+   "burns",
+   "medium"
+  ],
+  [
+   "The Smile Surgeon Face Surgery and Dental Clinic",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Smile Dental Hub",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Kamalnayan Bajaj Hospital",
+   "dialysis",
+   "medium"
+  ],
+  [
+   "Kamalnayan Bajaj Hospital",
+   "cardiac_surgery",
+   "medium"
+  ],
+  [
+   "Kamalnayan Bajaj Hospital",
+   "mri",
+   "strong"
+  ],
+  [
+   "Kamalnayan Bajaj Hospital",
+   "trauma",
+   "strong"
+  ],
+  [
+   "Kamalnayan Bajaj Hospital",
+   "icu",
+   "medium"
+  ],
+  [
+   "Dr. Vijay ENT Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Dr. Vijay ENT Hospital",
+   "icu",
+   "medium"
+  ],
+  [
+   "Smile Craze Dental Care Hospital & Trauma Centre, Jalandhar",
+   "trauma",
+   "medium"
+  ],
+  [
+   "KKR ENT Hospital And Institute",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Aashwi ENT Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "Aashwi ENT Hospital",
+   "icu",
+   "medium"
+  ]
+ ],
+ "eye": {
+  "named": 631,
+  "claiming_any": 129,
+  "by_service": {
+   "trauma": 90,
+   "icu": 49,
+   "mri": 13,
+   "dialysis": 12,
+   "nicu": 9,
+   "cardiac_surgery": 9,
+   "csection": 7,
+   "burns": 4
+  }
+ },
+ "dental": {
+  "named": 1781,
+  "claiming_any": 77,
+  "by_service": {
+   "trauma": 69,
+   "icu": 7,
+   "mri": 4,
+   "nicu": 3,
+   "dialysis": 2,
+   "csection": 1,
+   "cardiac_surgery": 1
+  }
+ },
+ "random_capped_sample": [
+  [
+   "15b7585f",
+   "Jai Kamal Eye Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "0b5b42f3",
+   "Balaji Dental and Craniofacial Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "62f443c8",
+   "City Eye Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "32e351e3",
+   "Sri Vinayaga Dental Clinic",
+   "trauma",
+   "medium"
+  ],
+  [
+   "f22a5809",
+   "Jain Free Eye Hospital, Jind",
+   "trauma",
+   "medium"
+  ],
+  [
+   "0a71e623",
+   "ApoKos Rehabilitation Hospital",
+   "trauma",
+   "medium"
+  ],
+  [
+   "14166899",
+   "Netra Chikitsa Trust Ayurveda College hospital",
+   "icu",
+   "medium"
+  ],
+  [
+   "b897a3d8",
+   "Smile Dental Hub",
+   "trauma",
+   "medium"
+  ]
+ ]
+}

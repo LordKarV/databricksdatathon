@@ -1,0 +1,38 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.juspay.nammayatripartner",
+      "sha256_cert_fingerprints":
+        ["60:A9:16:23:19:EA:AC:E8:88:72:5A:26:51:2F:B3:37:19:5A:B4:E1:E9:98:06:AC:64:4D:03:6D:D8:E1:E8:C9"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.juspay.nammayatri",
+      "sha256_cert_fingerprints":
+        ["4B:74:EB:A7:A5:1A:A3:50:31:EA:69:50:A8:1E:99:A7:47:57:F2:58:5C:E1:A6:84:80:A6:B0:FD:A9:57:2F:4D"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.juspay.nammayatripartner.debug",
+      "sha256_cert_fingerprints":
+        ["B5:A7:E7:70:1B:6F:62:E8:B2:91:74:4C:93:E9:32:F3:0D:0A:B6:A2:93:A0:FA:CF:41:F3:CF:55:60:65:08:E5"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.juspay.nammayatri.debug",
+      "sha256_cert_fingerprints":
+        ["B6:09:5F:A8:0F:BF:2F:DC:68:C3:21:95:40:F4:79:89:84:52:0F:E8:52:2D:FF:47:34:1E:9A:9D:7C:7F:1C:CC"]
+    }
+  }
+]

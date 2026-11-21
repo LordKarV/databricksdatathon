@@ -1,0 +1,1133 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="hi">
+<head id="Head1"><title>
+	Press Release Page | Press Information Bureau
+</title><link href="css/style.css?v=1" rel="stylesheet" type="text/css" /><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="alternate stylesheet" href="css/change.css?v=1" media="screen" title="change" /><link rel="alternate stylesheet" href="css/green.css?v=1" media="screen" title="green" /><link rel="alternate stylesheet" href="css/yellow.css" media="screen" title="yellow" /><link rel="stylesheet" type="text/css" href="css/prtint.css" media="print" /><link rel="stylesheet" href="css/style3.1.css" type="text/css" /><link id="pibA11yCss" rel="stylesheet" href="/css/accessibility.css?v=7" type="text/css" />
+    <script type="text/javascript">
+        (function (d) {
+            var t = "";
+            try {
+                t = window.localStorage.getItem("pibStyle") || "";
+            } catch (e) {
+                t = "";
+            }
+            if (t === "orange") {
+                t = "yellow";
+            }
+            var c = t === "change" ? " pib-hc"
+                : t === "green" ? " pib-theme-green"
+                : t === "yellow" ? " pib-theme-yellow" : "";
+            d.documentElement.className += c + " pib-a11y-content";
+        }(document));
+    </script>
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/accessibility.js?v=7"></script>
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+                  function getParameterByName(name) {
+                        var url = window.location.href;
+                        name = name.replace(/[\[\]]/g, '\\$&');
+                        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                              results = regex.exec(url);
+                        if (!results) return null;
+                        if (!results[2]) return '';
+                        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                  }
+                  let prid = parseInt(getParameterByName('PRID'), 10);
+
+                  if (!isNaN(prid) && prid > 0) {
+                        $.ajax({
+                              type: "POST",
+                              url: "AjaxMethod.aspx/UpdatePRHitCount",
+                              async: false,
+                              data: JSON.stringify({ 'PermId': prid }),
+                              contentType: "application/json; charset=utf-8",
+                              dataType: "json",
+                              success: function (response) {
+                                    console.log(response);
+                              },
+                              error: function (error) {
+                                    console.log("Error in AJAX request", error);
+                              }
+                        });
+                  } else {
+                        console.log("Invalid parameters:", prid);
+                  }
+            });
+    </script>
+    <style type="text/css">
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+        }
+
+        full-width {
+            width: 100%;
+        }
+
+        .logo-left, .logo-center, .countdown {
+            display: flex;
+            align-items: center;
+        }
+
+            .logo-left img, .logo-center img {
+                height: 70px;
+            }
+
+        .countdown {
+            text-align: center;
+            background-color: var(--dbim-text, #150202);
+            border-radius: 10px;
+            padding: 10px;
+            border: 2px solid grey;
+        }
+
+        .firstnumber {
+            color: #000000;
+            position: absolute;
+            top: 50px;
+            right: 90px;
+            font-size: 30px;
+        }
+
+        .secondnumber {
+            position: absolute;
+            color: #000000;
+            right: 45px;
+            top: 50px;
+            font-size: 30px;
+        }
+
+        .countdown .days {
+            font-size: 35px;
+            color: gold;
+        }
+
+        .countdown p {
+            margin: 0;
+        }
+
+        .countdown .text {
+            font-size: 16px;
+        }
+
+        a {
+            word-break: break-all;
+        }
+
+        iframe, img {
+            max-width: 100%;
+        }
+        .innner-page-main-about-us-content-right-part ul > li, .content-area ul > li {
+  /*list-style: none !important;*/
+}
+        /* === DBIM 3.0 Option 4 Separator Line & Reading Meta Styling === */
+        .pr-share--footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-top: 1px solid var(--dbim-border, #d1d5db);
+            padding-top: 16px;
+            margin-top: 24px;
+        }
+
+        .pr-share__left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pr-reading-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--dbim-text-secondary, #475569);
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: auto;
+        }
+
+        .pr-reading-meta__item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pr-reading-meta__divider {
+            color: var(--dbim-border, #cbd5e1);
+            font-weight: 300;
+        }
+
+        .pib-hc .pr-reading-meta,
+        .pib-hc .pr-reading-meta svg {
+            color: currentColor !important;
+        }
+
+        @media (max-width: 680px) {
+            .pr-share--footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .pr-reading-meta {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media(max-width:1199px) {
+            .firstnumber {
+                top: 40px;
+                right: 72px;
+                font-size: 30px;
+            }
+
+            .secondnumber {
+                right: 35px;
+                top: 40px;
+                font-size: 30px;
+            }
+        }
+
+        @media(max-width:990px) {
+            .firstnumber {
+                top: 25px;
+                right: 54px;
+                font-size: 30px;
+            }
+
+            .secondnumber {
+                right: 25px;
+                top: 25px;
+                font-size: 30px;
+            }
+        }
+
+        @media(max-width:768px) {
+            .countdown, .days {
+                font-size: 12px !important;
+            }
+
+            .firstnumber {
+                top: 25%;
+                right: 8%;
+                font-size: 30px;
+            }
+
+            .secondnumber {
+                right: 4.5%;
+                top: 25%;
+                font-size: 30px;
+            }
+        }
+
+        @media(max-width:475px) {
+            .countdown, .days {
+                font-size: 10px !important;
+                top: 20%;
+            }
+
+            .bannerimgdiv {
+                padding: 0 !important;
+            }
+
+            .bannerimg {
+                width: 108% !important;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+$(function () {
+    $("[id*=printPDF]").click(function () {
+        $("[id*=hfGridHtml]").val($("#PdfDiv").html());
+    });
+});
+$(function () {
+    $("[id*=printPDFEvent]").click(function () {
+        $("[id*=hfGridHtml]").val($("#PdfDiv").html());
+    });
+});
+</script>
+
+    <link id="pibConsentCss" href="/css/consent.css?v=8" rel="stylesheet" type="text/css" /><link id="pibFontsCss" href="/css/fonts-noto.css?v=6" rel="stylesheet" type="text/css" /><link id="pibDbimCss" href="/css/dbim.css?v=1120" rel="stylesheet" type="text/css" /><meta property="og:title" content="भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज" /><meta property="og:url" content="https://pib.gov.in/PressReleasePage.aspx?PRID=1806137" /><meta property="og:description" content="बंदरगाह, नौवहन और जलमार्ग मंत्रालय ने उस वक्‍त एक उपलब्धि हासिल की जब एमवी राम प्रसाद बिस्मिल ब्रह्मपुत्र पर जाने वाला अब तक का सबसे लंबा जहाज बन गया। 90 मीटर लंबा बेड़ा 26 मीटर चौड़ा और 2.1 मीटर गहरा" /><meta property="og:image" content="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" /><meta property="og:type" content="article" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:image" content="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" />
+                                <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="C4E7H-KSCMC-422L4-W3EM5-U36MF",function(){function e(){if(!i){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.parentNode.appendChild(e),i=!0}}function t(e){i=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",o.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"C4E7H-KSCMC-422L4-W3EM5-U36MF";var o=document.currentScript||document.getElementsByTagName("script")[0],i=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!i)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="qdwvf3qx26y3a2yb34pq-f-782559503-clientnsv4-s.akamaihd.net",o="false"=="true"?2:1,i={"ak.v":"41","ak.cp":"1825201","ak.ai":parseInt("1215205",10),"ak.ol":"0","ak.cr":50,"ak.ipv":4,"ak.proto":"h2","ak.rid":"9bc54a67","ak.r":50566,"ak.a2":n,"ak.m":"dscb","ak.n":"ff","ak.cport":64267,"ak.gh":"23.215.62.176","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1795284767","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==oxMIXkRhKTRz2uNtxM4qDA9ABZr9eQl9Q+zN36DaRKmujtz/UHdVi7DSPc2/DSVl6X+JcB8211+X06dMH5GfcUTwyrjrbhRZ96/iZsZ1AV93f+QdDtAhvsCgQ6/pfcFWaP/Ds+BMej/EwNRefXJlzbdUQuvmSdObKIjhMGpfcTZ+nKLOmC3PYtXB5qCkKTk49eWAj5fnObhxO7LxSLRJok85M+K4gLL/sns/lNQMmrv2lO5cVpCS4MJW78Cc9kXUTxCpqJTVVkGFZcTUedAfn8xLiTOyYPiqvxLM3N9lFEIqrdi0PXVakhA8ln+3F1rsmjPFCpzUeSWlMZWVpXR9BNUcU6DBdpoTYDDhBNnwSw3g1dR+VVoiAflhbjcFjS4i7a3YKkkeIYmLL964VHCTuTRP7VokMu/tFSKKobG3yCk=","ak.pv":"9","ak.dpoabenc":"","ak.tf":o};if(""!==t)i["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))i["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(i)},rv:function(){var e=["ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:i,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+<body>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
+     style="position:absolute;width:0;height:0;overflow:hidden" id="dbim-icon-sprite">
+    <defs>
+        <symbol id="icon-angle-double-left" viewBox="0 0 24 24"><path d="M11.6 4.6 4.2 12l7.4 7.4 2.2-2.2L8.6 12l5.2-5.2z"/><path d="M19 4.6 11.6 12 19 19.4l2.2-2.2L16 12l5.2-5.2z"/></symbol>
+        <symbol id="icon-angle-double-right" viewBox="0 0 24 24"><path d="M12.4 4.6 10.2 6.8 15.4 12l-5.2 5.2 2.2 2.2L19.8 12z"/><path d="M5 4.6 2.8 6.8 8 12l-5.2 5.2L5 19.4 12.4 12z"/></symbol>
+        <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="M20.8 10.6H9.6v2.8h11.2z"/><path d="M10.8 5.6 3.2 12l7.6 6.4z"/></symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M3.2 10.6h11.2v2.8H3.2z"/><path d="M13.2 5.6 20.8 12l-7.6 6.4z"/></symbol>
+        <symbol id="icon-blogger" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6.4 2.4h11.2a4 4 0 0 1 4 4v11.2a4 4 0 0 1-4 4H6.4a4 4 0 0 1-4-4V6.4a4 4 0 0 1 4-4zm2.8 5.2a2 2 0 0 0 0 4h2.4a2 2 0 0 0 0-4zm0 5.6a2 2 0 0 0 0 4h5.6a2 2 0 0 0 0-4z"/></symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M7.6 2.4H10v2.4H7.6z"/><path d="M14 2.4h2.4v2.4H14z"/><path fill-rule="evenodd" d="M4 4.8h16a1.6 1.6 0 0 1 1.6 1.6v13.2a1.6 1.6 0 0 1-1.6 1.6H4a1.6 1.6 0 0 1-1.6-1.6V6.4A1.6 1.6 0 0 1 4 4.8zm.4 5.6v8.4h15.2v-8.4z"/><path d="M6.4 12.4h3.2v3.2H6.4z"/></symbol>
+        <symbol id="icon-chevron-left" viewBox="0 0 24 24"><path d="M15.4 4.6 8 12l7.4 7.4 2.2-2.2L12.4 12l5.2-5.2z"/></symbol>
+        <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="M8.6 4.6 6.4 6.8 11.6 12l-5.2 5.2 2.2 2.2L16 12z"/></symbol>
+        <symbol id="icon-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24"><path d="M10.8 3h2.4v7.6h3.4L12 16.6l-4.6-6h3.4z"/><path d="M4 17.2h2.4v2.4h11.2v-2.4H20v3.2a1.4 1.4 0 0 1-1.4 1.4H5.4A1.4 1.4 0 0 1 4 20.4z"/></symbol>
+        <symbol id="icon-facebook" viewBox="0 0 24 24"><path d="M13.6 21.6v-8.4h2.8l.42-3.3h-3.22V7.8c0-.95.27-1.6 1.64-1.6h1.74V3.26a23 23 0 0 0-2.54-.13c-2.5 0-4.22 1.53-4.22 4.34v2.43H7.4v3.3h2.82v8.4z"/></symbol>
+        <symbol id="icon-fact-check" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.4 3.6 5.6v6.2c0 4.6 3.4 8.6 8.4 9.8 5-1.2 8.4-5.2 8.4-9.8V5.6zm-1 13.2-3.6-3.6 1.7-1.7 1.9 1.9 4.5-4.5 1.7 1.7z"/></symbol>
+        <symbol id="icon-hashtag" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M8.8 3h2.4l-1 6h3.2l1-6h2.4l-1 6h3.4v2.4h-3.8l-.6 3.2h3.6V17h-4l-1 5h-2.4l1-5h-3.2l-1 5H5.4l1-5H3V14.6h3.8l.6-3.2H3.8V9h4zm.6 8.4-.6 3.2h3.2l.6-3.2z"/></symbol>
+        <symbol id="icon-home" viewBox="0 0 24 24"><path d="M12 3.4 2.8 11.6h2.4v8.4a1 1 0 0 0 1 1h3.3v-5.4h5v5.4h3.3a1 1 0 0 0 1-1v-8.4h2.4z"/></symbol>
+        <symbol id="icon-instagram" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7.6 2.4h8.8a5.2 5.2 0 0 1 5.2 5.2v8.8a5.2 5.2 0 0 1-5.2 5.2H7.6a5.2 5.2 0 0 1-5.2-5.2V7.6a5.2 5.2 0 0 1 5.2-5.2zm0 2.4a2.8 2.8 0 0 0-2.8 2.8v8.8a2.8 2.8 0 0 0 2.8 2.8h8.8a2.8 2.8 0 0 0 2.8-2.8V7.6a2.8 2.8 0 0 0-2.8-2.8z"/><path fill-rule="evenodd" d="M12 6.8a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4zm0 2.4a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6z"/><circle cx="17.3" cy="6.7" r="1.3"/></symbol>
+        <symbol id="icon-linkedin" viewBox="0 0 24 24"><path d="M4.8 8.8h3.6v12H4.8z"/><circle cx="6.6" cy="5.4" r="2.1"/><path d="M10.8 8.8h3.45v1.65h.05c.48-.9 1.65-1.85 3.4-1.85 3.63 0 4.3 2.35 4.3 5.4v6.6h-3.6v-5.85c0-1.4-.03-3.2-1.95-3.2-1.95 0-2.25 1.52-2.25 3.1v5.95h-3.6z"/></symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24"><path d="M2.4 7.6v9.2a1.6 1.6 0 0 0 1.6 1.6h16a1.6 1.6 0 0 0 1.6-1.6V7.6L12 14z"/><path d="M21.2 5.4H2.8L12 11.8z"/></symbol>
+        <symbol id="icon-mail-open" viewBox="0 0 24 24"><path d="M2.4 9.8h19.2v9.6A1.6 1.6 0 0 1 20 21H4a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M12 2.6 21.6 9.2h-3.8L12 5.3 6.2 9.2H2.4z"/><path d="m3.9 11.2 8.1 5.4 8.1-5.4 1.5 1.3-9.6 6.4-9.6-6.4z"/></symbol>
+        <symbol id="icon-map-marker" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.4a7 7 0 0 0-7 7c0 5.2 7 12.2 7 12.2s7-7 7-12.2a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/></symbol>
+        <symbol id="icon-newspaper" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.8 4.4h14.8v15.2H2.8zm2 2v11.2h10.8V6.4z"/><path d="M6 7.6h8.4v1.6H6z"/><path d="M6 10.8h8.4v1.6H6z"/><path d="M6 14h5.2v1.6H6z"/><path d="M18.4 8.4h2.8v9.6a1.4 1.4 0 0 1-2.8 0z"/></symbol>
+        <symbol id="icon-pause" viewBox="0 0 24 24"><rect x="7.4" y="4" width="3.6" height="16" rx="0.9"/><rect x="13" y="4" width="3.6" height="16" rx="0.9"/></symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24"><path d="M8 4.5v15l12-7.5z"/></symbol>
+        <symbol id="icon-picture" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.4 5.2h19.2v13.6H2.4zm2 2v9.6h15.2V7.2z"/><path d="M5.6 16.4 10 11l2.6 3 2-2.2 4 4.6z"/><circle cx="8" cy="10.4" r="1.5"/></symbol>
+        <symbol id="icon-press-conference" viewBox="0 0 24 24"><circle cx="12" cy="5.2" r="2.6"/><path d="M7.6 12.2a4.4 4.4 0 0 1 8.8 0z"/><circle cx="4.9" cy="9.6" r="2.2"/><path d="M1.8 15.2a3.1 3.1 0 0 1 6.2 0z"/><circle cx="19.1" cy="9.6" r="2.2"/><path d="M16 15.2a3.1 3.1 0 0 1 6.2 0z"/><path d="M6.6 13.6h10.8l2.2 7.8H4.4z"/></symbol>
+        <symbol id="icon-print" viewBox="0 0 24 24"><path d="M6.4 2.8h11.2v4.4H6.4z"/><path d="M4 8.4h16a1.6 1.6 0 0 1 1.6 1.6v5.6a1.6 1.6 0 0 1-1.6 1.6h-1.6v-2.8H6v2.8H4a1.6 1.6 0 0 1-1.6-1.6V10A1.6 1.6 0 0 1 4 8.4z"/><path d="M7.2 15.6h9.6v5.6H7.2z"/></symbol>
+        <symbol id="icon-rss" viewBox="0 0 24 24"><circle cx="4.8" cy="19.2" r="2.4"/><path d="M2.4 11.2v3.2a6.4 6.4 0 0 1 6.4 6.4H12A9.6 9.6 0 0 0 2.4 11.2z"/><path d="M2.4 4.8V8A13.6 13.6 0 0 1 16 21.6h3.2A16.8 16.8 0 0 0 2.4 4.8z"/></symbol>
+        <symbol id="icon-search-plus" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10 2.8a7.2 7.2 0 1 0 0 14.4 7.2 7.2 0 0 0 0-14.4zm0 2.4a4.8 4.8 0 1 1 0 9.6 4.8 4.8 0 0 1 0-9.6z"/><path d="M15.3 14.6 21.2 20.5l-1.5 1.5-5.9-5.9z"/><path d="M9.2 6.8h1.6v2.4h2.4v1.6h-2.4v2.4H9.2v-2.4H6.8V9.2h2.4z"/></symbol>
+        <symbol id="icon-share" viewBox="0 0 24 24"><circle cx="18" cy="5.6" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="18.4" r="3"/><path d="M8.3 10.9 15.7 7.2l.9 1.8-7.4 3.7z"/><path d="M9.2 13.1 16.6 16.8l-.9 1.8-7.4-3.7z"/></symbol>
+        <symbol id="icon-twitter" viewBox="0 0 24 24"><path d="M4.2 3h4.3l11.3 18h-4.3z"/><path d="M19.3 3h-2.6L4.2 21h2.6z"/></symbol>
+        <symbol id="icon-university" viewBox="0 0 24 24"><path d="M12 2.4 21.6 7.2v1.6H2.4V7.2z"/><path d="M4.8 10.4h2.4v8H4.8z"/><path d="M9.2 10.4h2.4v8H9.2z"/><path d="M13.4 10.4h2.4v8h-2.4z"/><path d="M17.6 10.4H20v8h-2.4z"/><path d="M3.2 19.8h17.6v1.8H3.2z"/></symbol>
+        <symbol id="icon-volume-up" viewBox="0 0 24 24"><path d="M3.2 9.2h3.3l5-4.2v14l-5-4.2H3.2z"/><path d="M14.6 8.4a5 5 0 0 1 0 7.2l1.6 1.6a7.2 7.2 0 0 0 0-10.4z"/><path d="M17.4 5.6a8.8 8.8 0 0 1 0 12.8l1.5 1.5a10.9 10.9 0 0 0 0-15.8z"/></symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2.4a9.5 9.5 0 0 0-8.1 14.5L2.4 21.6l4.8-1.4A9.5 9.5 0 1 0 12 2.4zm0 2.2a7.3 7.3 0 1 1-3.8 13.5l-.4-.2-2.6.7.7-2.5-.3-.4A7.3 7.3 0 0 1 12 4.6z"/><path d="M9.4 7.8c-.2-.5-.4-.5-.6-.5h-.5a1 1 0 0 0-.7.3c-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.7 2.8 4.3 3.8 2.1.8 2.6.7 3 .6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3-1.6-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.6c-.1-.2 0-.4.1-.5l.4-.5.3-.5v-.5z"/></symbol>
+        <symbol id="icon-youtube" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.9 4.8 12 4.8 12 4.8s-5.9 0-7.6.4a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2 12a29 29 0 0 0 .4 4.8 2.8 2.8 0 0 0 2 2c1.7.4 7.6.4 7.6.4s5.9 0 7.6-.4a2.8 2.8 0 0 0 2-2A29 29 0 0 0 22 12a29 29 0 0 0-.4-4.8zM10.2 15.1V8.9l5.1 3.1z"/></symbol>
+    </defs>
+</svg>
+
+    <form method="post" action="./PressReleasePage.aspx?PRID=1806137&amp;reg=48&amp;lang=2" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="sc_HiddenField" id="sc_HiddenField" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZPQet1wIx1Q48y3xJY2k25Y7qxH5RrQ9qQcN-OiTC9guZtri9w2&amp;t=639246315009809930" type="text/javascript"></script>
+
+
+<script src="/ScriptResource.axd?d=x6wALODbMJK5e0eRC_p1LdIxBJXt0U_WW5GWfJqHAqo6frgCmGRfEywglicTersO2OKrFhK1gAIp0Wk2al2YrpdR3uWqH6f4nfjBsCyRUfTUUVmb0&amp;t=ffffffffecf8d3f2" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=P5lTttoqSeZXoYRLQMIScH645UK3RD852IErF2548Wz9Ssv0rLjB4fhVKnHcMpqkaMHpNAGOeWY02Lf4aBYN9-dVBme_SNK5KJwmFQNpMixYDZ7M0&amp;t=ffffffffecf8d3f2" type="text/javascript"></script>
+<script src="/PressReleasePage.aspx?_TSM_HiddenField_=sc_HiddenField&amp;_TSM_CombinedScripts_=%3b%3bAjaxControlToolkit%2c+Version%3d3.5.7.123%2c+Culture%3dneutral%2c+PublicKeyToken%3d28f01b0e84b6d53e%3aen-US%3a5a4df314-b4a2-4da2-a207-9284f1b1e96c%3ade1feab2%3af2c8e708%3a8613aea7%3af9cec9bc%3a3202a5a2%3aab09e3fe%3a87104b7c%3a720a52bf%3a589eaa30%3aa67c2700%3abe6fb298" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="59B53027" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="nOcquF8EsRpOQy/sOknWebkcsQG6KQEDmpbovoCXoL7vC3gAtub4WnQjcx1+8y87Zyqw8RAMnxGbkBnZLVytuPYjK7zzujVjzfWBLN55R9NV+zFhqeVrLdqkRzsuYLIKBuzrjqPNhQFIO6u/yTMY2loXipzUNPgqko6cdohDWDDfKlC83iFSKNnXWboRq5ZeEt2dEzpTsdsB5uBkwRN0DCLgYoSuJnVcXgzWaEthQOtH0Qj+jpLRTLRatbSy2zx2N2k2F0EYYQhfbtNamfOjZ1byc8o=" />
+</div>
+        
+        <div id="templateCss"></div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('sc', 'form1', ['tupdate12','update12'], [], [], 90, '');
+//]]>
+</script>
+
+        <input type="hidden" name="hfGridHtml" id="hfGridHtml" />
+        <div class="container" style='margin-bottom: 50px;'>
+            <div id="accessories">
+                
+                <div class="pull-right" style="display: flex">
+                    <div id="voll"></div>
+                    <div id="vollDT"></div>
+                    
+
+<span class="print-icons">
+<input type="image" name="Print1$print" id="Print1_print" aria-label="Print" src="images/printer_icon.png" alt="print page button" style="padding: 5px 10px 5px 10px;" />
+</span>
+                </div>
+            </div>
+            <input type="hidden" name="hydpermid" id="hydpermid" value="1806137" />
+            
+
+            <div class="innner-page-main-about-us-content-right-part">
+                <div id="MinistryName" class="MinistryNameSubhead text-center">
+                    पत्तन, पोत परिवहन और जलमार्ग मंत्रालय
+                </div>
+                <div id="lg_g"><div class='log_oo'>  <img src='https://static.pib.gov.in/WriteReadData/specificdocs/photo/2026/sep/ph_9768_20260902_10000501.png' alt='azadi ka amrit mahotsav' /> </div></div>
+
+                <div class="text-center event-heading-background">
+                    
+                    <h1 id="Titleh2">
+                        भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज
+                    </h1>
+                    <h3 id="Subtitleh3">
+                        <span id="ltrSubtitle"><br/>90 मीटर लंबा जहाज, एमवी राम प्रसाद बिस्मिल माल लादने वाले जहाजों डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ टीएमटी बार लेकर चला<br/><br/>केन्‍द्रीय मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से जहाजों को रवाना किया<br/><br/>आईबीपीआर पर बांग्‍लादेश के रास्‍ते कोलकाता से गुवाहाटी तक आईडब्ल्यूएआई जहाज पर नियमित लदान शुरू करेगा<br/><br/></span>
+                    </h3>
+                    
+                    
+                </div>
+
+                
+                
+
+                <div id="PrDateTime" class="ReleaseDateSubHeaddateTime text-center pt20">
+                    प्रविष्टि तिथि:
+                              15 MAR 2022 1:02PM by PIB Delhi
+                </div>
+                
+                <div class='pt20'>
+                </div>
+                <input type="hidden" name="hydphotoUrl" id="hydphotoUrl" />
+                
+
+                <!-- Release content wrapper for client-side zero-reflow word count -->
+                <div id="pibReleaseBody">
+                    <p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">बंदरगाह, नौवहन और जलमार्ग मंत्रालय ने उस वक्&zwj;त एक उपलब्धि हासिल की जब एमवी राम प्रसाद बिस्मिल ब्रह्मपुत्र पर जाने वाला अब तक का सबसे लंबा जहाज बन गया। 90 मीटर लंबा बेड़ा 26 मीटर चौड़ा और 2.1 मीटर गहरा है। इसके साथ ही इसने गुवाहाटी के पांडु बंदरगाह पर लंगर डालने के बाद कोलकाता में हल्दिया गोदी से भारी माल ढुलाई के महत्वाकांक्षी परीक्षण को आज सफलतापूर्वक पूरा किया। केन्&zwj;द्रीय बंदरगाह, नौवहन और जलमार्ग (पीएसडब्ल्यू) और आयुष मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से दो जहाजों - डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ हरी झंडी दिखाकर रवाना किया। </span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इस प्रारंभिक कार्य का महत्व इसलिए है क्&zwj;योंकि यह भारत-बांग्लादेश प्रोटोकॉल मार्ग (आईबीआरपी) के रास्&zwj;ते कोलकाता से गुवाहाटी तक माल लादने का कार्य शुरू करने के लिए मार्ग बताता है। जमशेदपुर में टाटा स्टील से 1,793 मीट्रिक टन स्टील रॉड से लदी इस खेप को 2.0 मीटर की गहराई की आवश्यकता थी। इस ऐतिहासिक खेप के डिजाइन और मशीनरी को तैयार करते समय कम-से-कम 2.0 मीटर की गहराई दी गई, इसके लिए खासतौर से आईबीपीआर के सिराजगंज-दाइकोवा खंड जैसे महत्वपूर्ण हिस्सों को ध्&zwj;यान में रखा गया। भारत सरकार ने बांग्लादेश की सरकार के साथ इस खंड के तलकर्षण को - क्रमशः 80:20 अनुपात के साथ - निर्बाध नेविगेशन के लिए वित्त पोषित किया है। भारतीय अंतर्देशीय जलमार्ग प्राधिकरण (आईडब्&zwj;ल्&zwj;यूएआई) के साथ-साथ बांग्लादेश अंतर्देशीय जल परिवहन प्राधिकरण (बीआईडब्&zwj;ल्&zwj;यूटीए) ने मिलकर काम किया ताकि यह ऐतिहासिक माल ढुलाई का कार्य सुचारू रूप से चल सके। &lsquo;परिवहन के माध्यम से परिवर्तन&rsquo; लाने की प्रधानमंत्री श्री नरेन्&zwj;द्र मोदी की परिकल्&zwj;पना को पुनर्जीवित करने और उसमें नई जान डालने के लिए, सरकार ने तलकर्षण का कार्य कराया और नाली को जहाजों के लिए सुरक्षित और सुचारू बनाने का काम किया। श्री सर्बानंद सोनोवाल ने सभी घटनाक्रमों पर बारीकी से नजर रखी और इस खंड में विभिन्न क्षेत्रों में आईडब्ल्यूएआई द्वारा किए गए तलकर्षण कार्य की व्यक्तिगत रूप से निगरानी की ताकि एनडब्ल्यू1 और एनडब्ल्यू2 के बीच आवाजाही प्राथमिकता के आधार पर शुरू हो सके।</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">दिल्ली से अपनी बात कहते हुए, केन्&zwj;द्रीय मंत्री श्री सोनोवाल ने कहा, &ldquo;प्रधानमंत्री श्री नरेन्&zwj;द्र मोदी जी की परिकल्&zwj;पना भारत के विकास इंजन को शक्ति प्रदान करने के लिए पूर्वोत्तर की अष्टलक्ष्मी क्षमता को सक्रिय करना है। &#39;परिवहन के माध्यम से परिवर्तन&#39; की उनकी परिकल्&zwj;पना के तहत, हमने क्षेत्र में जल परिवहन को फिर से जीवंत करने के लिए अथक प्रयास किया। यह न केवल परिवहन का सबसे सस्ता और पर्यावरण की दृष्टि से सबसे अनुकूल तरीका है, यह पूर्वोत्तर के व्यापार को समुद्री नेटवर्क के रास्&zwj;ते शेष दुनिया से जोड़ने की भी अनुमति देता है। चूंकि ब्रह्मपुत्र पर चलने वाले इस सबसे लंबे जहाज का परीक्षण आज पांडु में सफल रहा है, हमें यह स्वीकार करना चाहिए कि टीम ने कई हिस्सों में चुनौतीपूर्ण गहराई तैयार करने के दौरान काम में आने लायक एक मार्ग तैयार किया। हम असम में जल परिवहन की व्यावसायिक व्यवहार्यता लाने और पूर्वोत्तर भारत के आर्थिक भविष्&zwj;य के रूप में ब्रह्मपुत्र की जीवन शक्ति को फिर से जीवंत करने के लिए प्रतिबद्ध हैं।&rdquo;</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इस बात पर गौर किया जाना चाहिए कि पिछले दो वित्तीय वर्षों यानी वित्त वर्ष 2019-20 और वित्त वर्ष 2020-21 के लिए धुबरी और पांडु के बीच ब्रह्मपुत्र में न्यूनतम उपलब्ध गहराई 2.2 मीटर थी। हाल की एलएडी रिपोर्ट के अनुसार, यह गहराई जनवरी, 2022 में और कम होकर 1.5 मीटर तक आ गई। चिलमारी से दाइखावा तक, बिटवा ने 2.2 मीटर की आवश्यक गहराई की पुष्टि की।</span></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">असम के आर्थिक इतिहास के इस महत्वपूर्ण क्षण पर आभार व्यक्त करते हुए, श्री सोनोवाल ने कहा, &ldquo;असम के लोगों के लिए, ब्रह्मपुत्र जीवन रेखा है। प्रधानमंत्री ने इस बात को समझा जिसके कारण उन्होंने पर्यावरण की दृष्टि से संवेदनशील क्षेत्र के विकास को एक ऐसे माध्यम से आकार देने की कल्पना की जो व्यापक, आर्थिक और पर्यावरण के अनुकूल हो। इस पहल का तहे दिल से समर्थन करने के लिए मैं प्रधानमंत्री को धन्यवाद देना चाहता हूं। हमें बांग्लादेश सरकार का भी तहे दिल से शुक्रिया अदा करना चाहिए जिसके समर्थन के बिना यह संभव नहीं होता। मैं परिवहन के सर्वोत्तम साधनों में से एक को पुनर्जीवित करने और पारस्परिक लाभ और आर्थिक विकास के अवसर पैदा करने के लिए हमारे साथ साझेदारी करने के लिए लोगों की ओर से आभार व्यक्त करना चाहता हूं। चुनौतियों को देखते हुए, असम के मुख्यमंत्री डॉ. हिमंत बिस्वा सरमा के समर्थन के बिना यह सफल नहीं होता और इसके लिए मैं उन्हें धन्यवाद देता हूं। मैं पश्चिम बंगाल सरकार और बिहार सरकार को इस आरंभिक कार्य को सफलतापूर्वक पूरा करने के लिए प्रदान किए गए हर प्रकार के सहयोग के लिए धन्यवाद देना चाहता हूं। मैं इंजीनियरों, टेक्नोक्रेट और इस चुनौती से निपटने और समाधान खोजने में शामिल सभी लोगों की टीम द्वारा किए गए अग्रणी कार्य की भी सराहना करता हूं। हम आपके समर्थन के लिए तत्पर हैं क्योंकि हम उत्कृष्ट और अंतर्देशीय जलमार्गों को असम और पूर्वोत्तर भारत के आर्थिक पुनरुत्थान के लिए जीवन रेखा बनाने की दिशा में अपना प्रयास जारी रखे हुए हैं।</span></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इससे पहले एमवी लाल बहादुर शास्त्री ने पटना से पांडु तक भारतीय खाद्य निगम (एफसीआई) के लिए 200 मीट्रिक टन खाद्यान्न की एक खेप को गंगा, राष्ट्रीय जलमार्ग 1 (एनडब्ल्यू 1) और ब्रह्मपुत्र राष्ट्रीय जलमार्ग 2 (एनडब्&zwj;ल्&zwj;यू2) के बीच माल की ढुलाई के परीक्षण को सफलतापूर्वक पूरा किया था। इसके अलावा, नुमालीगढ़ रिफाइनरी के लिए एक ओवर डायमेंशनल कार्गो (ओडीसी) को भी पहले आईबीपीआर के माध्यम से एनडब्&zwj;ल्&zwj;यू2 पर ले जाया गया था।</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><strong><span style="font-family:Mangal">***</span></strong></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="background-color:#f8f9fa"><strong><span style="font-family:Mangal"><span style="color:#202124">एमजी/एएम/केपी/वीके</span></span></strong></span></span></p>
+
+<p style="text-align:justify">&nbsp;</p>
+
+                </div>
+
+                <div id="reel_pic">
+                </div>
+
+                <br />
+                <span id="ReleaseId">(रिलीज़ आईडी: 1806137)</span>
+                <span id="lblViews">	आगंतुक पटल  : 664</span>
+                <div>
+                    
+                </div>
+                
+
+                <span id="lblRefPhoto"></span>
+
+                <div class="BackgroundRelease">
+                    
+                </div>
+                <div>
+                    
+                </div>
+                <div class="ReleaseLang">इस विज्ञप्ति को इन भाषाओं में पढ़ें: 
+                
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806092' target="_blank">
+                            English </a>
+                    
+                        ,
+                    
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806477' target="_blank">
+                            Urdu </a>
+                    
+                        ,
+                    
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806322' target="_blank">
+                            Manipuri </a>
+                    
+                        ,
+                    
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806668' target="_blank">
+                            Bengali </a>
+                    
+                        ,
+                    
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806121' target="_blank">
+                            Gujarati </a>
+                    
+                        ,
+                    
+                        <a href='https://pib.gov.in/PressReleasePage.aspx?PRID=1806145' target="_blank">
+                            Tamil </a>
+                    
+                </div>
+
+                
+                
+
+                <div class="RelTag">
+                    <ul>
+                        
+                    </ul>
+                </div>
+                <div class="clear">
+                </div>
+
+                <!-- DBIM 3.0 Option 4: Separator Line with Left Share Rail & Right Reading Metrics -->
+                <div class="pr-share pr-share--footer" role="region" aria-label="Share and reading details">
+                    <div class="pr-share__left">
+                        <span class="pr-share__label" aria-hidden="true">Share</span>
+                        <ul class="pr-share__list">
+                            <li><a class="pr-share__btn pr-share__btn--facebook"
+                                href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fpib.gov.in%2fPressReleasePage.aspx%3fPRID%3d1806137"
+                                target="_blank" rel="noopener noreferrer"
+                                aria-label="Share on Facebook">
+                                <svg class="dbim-icon dbim-icon-24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false">
+                                    <use href="#icon-facebook" xlink:href="#icon-facebook"></use>
+                                </svg>
+                            </a></li>
+                            <li><a class="pr-share__btn pr-share__btn--twitter"
+                                href="https://twitter.com/intent/tweet?url=https%3a%2f%2fpib.gov.in%2fPressReleasePage.aspx%3fPRID%3d1806137"
+                                target="_blank" rel="noopener noreferrer"
+                                aria-label="Share on X">
+                                <svg class="dbim-icon dbim-icon-24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false">
+                                    <use href="#icon-twitter" xlink:href="#icon-twitter"></use>
+                                </svg>
+                            </a></li>
+                            <li><a class="pr-share__btn pr-share__btn--whatsapp"
+                                href="https://api.whatsapp.com/send?text=https%3a%2f%2fpib.gov.in%2fPressReleasePage.aspx%3fPRID%3d1806137"
+                                target="_blank" rel="noopener noreferrer"
+                                aria-label="Share on WhatsApp">
+                                <svg class="dbim-icon dbim-icon-24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false">
+                                    <use href="#icon-whatsapp" xlink:href="#icon-whatsapp"></use>
+                                </svg>
+                            </a></li>
+                            <li><a class="pr-share__btn pr-share__btn--linkedin"
+                                href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fpib.gov.in%2fPressReleasePage.aspx%3fPRID%3d1806137"
+                                target="_blank" rel="noopener noreferrer"
+                                aria-label="Share on LinkedIn">
+                                <svg class="dbim-icon dbim-icon-24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false">
+                                    <use href="#icon-linkedin" xlink:href="#icon-linkedin"></use>
+                                </svg>
+                            </a></li>
+                            <li><a class="pr-share__btn pr-share__btn--mail"
+                                href="mailto:?subject=Press+release+from+PIB&amp;body=https%3a%2f%2fpib.gov.in%2fPressReleasePage.aspx%3fPRID%3d1806137"
+                                aria-label="Share by email">
+                                <svg class="dbim-icon dbim-icon-24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false">
+                                    <use href="#icon-mail" xlink:href="#icon-mail"></use>
+                                </svg>
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="pr-reading-meta" id="prReadingMeta" aria-label="Reading statistics">
+                        <span class="pr-reading-meta__item">
+                            <!-- Modern Document / Word Count Icon -->
+                            <svg class="pr-reading-meta__icon" width="18" height="18" viewbox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                            </svg>
+                            <span id="prWordCount">-- words</span>
+                        </span>
+
+                        <span class="pr-reading-meta__divider" aria-hidden="true">|</span>
+
+                        <span class="pr-reading-meta__item">
+                            <!-- Modern Precision Clock / Read Time Icon -->
+                            <svg class="pr-reading-meta__icon" width="18" height="18" viewbox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+                                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                            </svg>
+                            <span id="prReadTime">-- min read</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="RelLink" class="RelLink">
+                    <ul>
+                        
+                    </ul>
+                </div>
+                <center>
+                    
+                </center>
+            </div>
+
+            <div id="update12">
+	
+                    
+                    <input type="hidden" name="Hidden" id="Hidden" />
+                    <div id="P_CategoryManagement" class="ModalWindow" style="border-width:0px;height:60%;width:60%;overflow:auto;display: none">
+		
+                        <div>
+                            <input type="image" name="btnClose" id="btnClose" src="images/close_flat_icon.png" />
+                        </div>
+                        <div id="description">
+                        </div>
+                        <div class="text-center">
+                            <h2>
+                                
+                                <br>
+                                
+                            </h2>
+                        </div>
+                        <br />
+                        <div class="clear">
+                        </div>
+                        
+                    
+	</div>
+                
+</div>
+        </div>
+
+        <div id="PdfDiv" style="display: none;">
+            <table width="100%">
+                <tr>
+                    <td style="font-weight: 200; text-align: center">
+                        पत्तन, पोत परिवहन और जलमार्ग मंत्रालय
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="font-weight: 200; text-align: center; font-size: 30px;">
+                            भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="font-weight: 200; text-align: center; font-size: 30px;">
+                            <div style='height:30px;width:100%;'></div>90 मीटर लंबा जहाज, एमवी राम प्रसाद बिस्मिल माल लादने वाले जहाजों डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ टीएमटी बार लेकर चला<div style='height:30px;width:100%;'></div><div style='height:30px;width:100%;'></div>केन्‍द्रीय मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से जहाजों को रवाना किया<div style='height:30px;width:100%;'></div><div style='height:30px;width:100%;'></div>आईबीपीआर पर बांग्‍लादेश के रास्‍ते कोलकाता से गुवाहाटी तक आईडब्ल्यूएआई जहाज पर नियमित लदान शुरू करेगा<div style='height:30px;width:100%;'></div><div style='height:30px;width:100%;'></div>
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="text-align: center; font-size: 14px;">
+                            प्रविष्टि तिथि:
+                                          15 MAR 2022 1:02PM by PIB Delhi
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="font-weight: 200; text-align: left; font-size: 16px;">
+                            <p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">बंदरगाह, नौवहन और जलमार्ग मंत्रालय ने उस वक्&zwj;त एक उपलब्धि हासिल की जब एमवी राम प्रसाद बिस्मिल ब्रह्मपुत्र पर जाने वाला अब तक का सबसे लंबा जहाज बन गया। 90 मीटर लंबा बेड़ा 26 मीटर चौड़ा और 2.1 मीटर गहरा है। इसके साथ ही इसने गुवाहाटी के पांडु बंदरगाह पर लंगर डालने के बाद कोलकाता में हल्दिया गोदी से भारी माल ढुलाई के महत्वाकांक्षी परीक्षण को आज सफलतापूर्वक पूरा किया। केन्&zwj;द्रीय बंदरगाह, नौवहन और जलमार्ग (पीएसडब्ल्यू) और आयुष मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से दो जहाजों - डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ हरी झंडी दिखाकर रवाना किया। </span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इस प्रारंभिक कार्य का महत्व इसलिए है क्&zwj;योंकि यह भारत-बांग्लादेश प्रोटोकॉल मार्ग (आईबीआरपी) के रास्&zwj;ते कोलकाता से गुवाहाटी तक माल लादने का कार्य शुरू करने के लिए मार्ग बताता है। जमशेदपुर में टाटा स्टील से 1,793 मीट्रिक टन स्टील रॉड से लदी इस खेप को 2.0 मीटर की गहराई की आवश्यकता थी। इस ऐतिहासिक खेप के डिजाइन और मशीनरी को तैयार करते समय कम-से-कम 2.0 मीटर की गहराई दी गई, इसके लिए खासतौर से आईबीपीआर के सिराजगंज-दाइकोवा खंड जैसे महत्वपूर्ण हिस्सों को ध्&zwj;यान में रखा गया। भारत सरकार ने बांग्लादेश की सरकार के साथ इस खंड के तलकर्षण को - क्रमशः 80:20 अनुपात के साथ - निर्बाध नेविगेशन के लिए वित्त पोषित किया है। भारतीय अंतर्देशीय जलमार्ग प्राधिकरण (आईडब्&zwj;ल्&zwj;यूएआई) के साथ-साथ बांग्लादेश अंतर्देशीय जल परिवहन प्राधिकरण (बीआईडब्&zwj;ल्&zwj;यूटीए) ने मिलकर काम किया ताकि यह ऐतिहासिक माल ढुलाई का कार्य सुचारू रूप से चल सके। &lsquo;परिवहन के माध्यम से परिवर्तन&rsquo; लाने की प्रधानमंत्री श्री नरेन्&zwj;द्र मोदी की परिकल्&zwj;पना को पुनर्जीवित करने और उसमें नई जान डालने के लिए, सरकार ने तलकर्षण का कार्य कराया और नाली को जहाजों के लिए सुरक्षित और सुचारू बनाने का काम किया। श्री सर्बानंद सोनोवाल ने सभी घटनाक्रमों पर बारीकी से नजर रखी और इस खंड में विभिन्न क्षेत्रों में आईडब्ल्यूएआई द्वारा किए गए तलकर्षण कार्य की व्यक्तिगत रूप से निगरानी की ताकि एनडब्ल्यू1 और एनडब्ल्यू2 के बीच आवाजाही प्राथमिकता के आधार पर शुरू हो सके।</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">दिल्ली से अपनी बात कहते हुए, केन्&zwj;द्रीय मंत्री श्री सोनोवाल ने कहा, &ldquo;प्रधानमंत्री श्री नरेन्&zwj;द्र मोदी जी की परिकल्&zwj;पना भारत के विकास इंजन को शक्ति प्रदान करने के लिए पूर्वोत्तर की अष्टलक्ष्मी क्षमता को सक्रिय करना है। &#39;परिवहन के माध्यम से परिवर्तन&#39; की उनकी परिकल्&zwj;पना के तहत, हमने क्षेत्र में जल परिवहन को फिर से जीवंत करने के लिए अथक प्रयास किया। यह न केवल परिवहन का सबसे सस्ता और पर्यावरण की दृष्टि से सबसे अनुकूल तरीका है, यह पूर्वोत्तर के व्यापार को समुद्री नेटवर्क के रास्&zwj;ते शेष दुनिया से जोड़ने की भी अनुमति देता है। चूंकि ब्रह्मपुत्र पर चलने वाले इस सबसे लंबे जहाज का परीक्षण आज पांडु में सफल रहा है, हमें यह स्वीकार करना चाहिए कि टीम ने कई हिस्सों में चुनौतीपूर्ण गहराई तैयार करने के दौरान काम में आने लायक एक मार्ग तैयार किया। हम असम में जल परिवहन की व्यावसायिक व्यवहार्यता लाने और पूर्वोत्तर भारत के आर्थिक भविष्&zwj;य के रूप में ब्रह्मपुत्र की जीवन शक्ति को फिर से जीवंत करने के लिए प्रतिबद्ध हैं।&rdquo;</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><img alt="https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg" src="https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg" style="height:400px; width:602px" /></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इस बात पर गौर किया जाना चाहिए कि पिछले दो वित्तीय वर्षों यानी वित्त वर्ष 2019-20 और वित्त वर्ष 2020-21 के लिए धुबरी और पांडु के बीच ब्रह्मपुत्र में न्यूनतम उपलब्ध गहराई 2.2 मीटर थी। हाल की एलएडी रिपोर्ट के अनुसार, यह गहराई जनवरी, 2022 में और कम होकर 1.5 मीटर तक आ गई। चिलमारी से दाइखावा तक, बिटवा ने 2.2 मीटर की आवश्यक गहराई की पुष्टि की।</span></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">असम के आर्थिक इतिहास के इस महत्वपूर्ण क्षण पर आभार व्यक्त करते हुए, श्री सोनोवाल ने कहा, &ldquo;असम के लोगों के लिए, ब्रह्मपुत्र जीवन रेखा है। प्रधानमंत्री ने इस बात को समझा जिसके कारण उन्होंने पर्यावरण की दृष्टि से संवेदनशील क्षेत्र के विकास को एक ऐसे माध्यम से आकार देने की कल्पना की जो व्यापक, आर्थिक और पर्यावरण के अनुकूल हो। इस पहल का तहे दिल से समर्थन करने के लिए मैं प्रधानमंत्री को धन्यवाद देना चाहता हूं। हमें बांग्लादेश सरकार का भी तहे दिल से शुक्रिया अदा करना चाहिए जिसके समर्थन के बिना यह संभव नहीं होता। मैं परिवहन के सर्वोत्तम साधनों में से एक को पुनर्जीवित करने और पारस्परिक लाभ और आर्थिक विकास के अवसर पैदा करने के लिए हमारे साथ साझेदारी करने के लिए लोगों की ओर से आभार व्यक्त करना चाहता हूं। चुनौतियों को देखते हुए, असम के मुख्यमंत्री डॉ. हिमंत बिस्वा सरमा के समर्थन के बिना यह सफल नहीं होता और इसके लिए मैं उन्हें धन्यवाद देता हूं। मैं पश्चिम बंगाल सरकार और बिहार सरकार को इस आरंभिक कार्य को सफलतापूर्वक पूरा करने के लिए प्रदान किए गए हर प्रकार के सहयोग के लिए धन्यवाद देना चाहता हूं। मैं इंजीनियरों, टेक्नोक्रेट और इस चुनौती से निपटने और समाधान खोजने में शामिल सभी लोगों की टीम द्वारा किए गए अग्रणी कार्य की भी सराहना करता हूं। हम आपके समर्थन के लिए तत्पर हैं क्योंकि हम उत्कृष्ट और अंतर्देशीय जलमार्गों को असम और पूर्वोत्तर भारत के आर्थिक पुनरुत्थान के लिए जीवन रेखा बनाने की दिशा में अपना प्रयास जारी रखे हुए हैं।</span></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="font-family:Mangal">इससे पहले एमवी लाल बहादुर शास्त्री ने पटना से पांडु तक भारतीय खाद्य निगम (एफसीआई) के लिए 200 मीट्रिक टन खाद्यान्न की एक खेप को गंगा, राष्ट्रीय जलमार्ग 1 (एनडब्ल्यू 1) और ब्रह्मपुत्र राष्ट्रीय जलमार्ग 2 (एनडब्&zwj;ल्&zwj;यू2) के बीच माल की ढुलाई के परीक्षण को सफलतापूर्वक पूरा किया था। इसके अलावा, नुमालीगढ़ रिफाइनरी के लिए एक ओवर डायमेंशनल कार्गो (ओडीसी) को भी पहले आईबीपीआर के माध्यम से एनडब्&zwj;ल्&zwj;यू2 पर ले जाया गया था।</span></span></p>
+
+<p style="text-align:center"><span style="font-size:16px"><strong><span style="font-family:Mangal">***</span></strong></span></p>
+
+<p style="text-align:justify"><span style="font-size:16px"><span style="background-color:#f8f9fa"><strong><span style="font-family:Mangal"><span style="color:#202124">एमजी/एएम/केपी/वीके</span></span></strong></span></span></p>
+
+<p style="text-align:justify">&nbsp;</p>
+
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                        <div style="font-weight: 100; text-align: left; font-size: 16px;">
+                            (रिलीज़ आईडी: 1806137)
+                        </div>
+                        <div style="height: 30px; width: 100%;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 200; text-align: center; font-size: 24px;"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="clearfix">
+        </div>
+
+        <div class="section1">
+            <div id="frst_t">
+                <div id="arr_rm"><div class='sticky-social_mb'><ul class='social_mb'><a href='http://www.facebook.com/share.php?u=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137' target='_blank'><li class='fb_b'   ></li></a><a href='https://twitter.com/intent/tweet?url=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&text=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज' target='_blank'><li class='twitter_r'  > </li></a><a href='https://api.whatsapp.com/send?text=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137' target='_blank'><li class='whatsapp_r'  ></li></a><a href='https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज&body=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&ui=2&tf=1&pli=1' title='Share by Email' target='_blank'><li class='fa-envelope_r' ></li></a><a href='https://www.linkedin.com/shareArticle?mini=true&url=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&title=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज&summary=My%20favorite%20developer%20program&source=LinkedIn' target='_blank'><li class='fa-linkedin_r'  ></li></a></ul></div></div>
+            </div>
+            <div id="second_t">
+                <div id="sndr_rm"><div class='sticky-social'><ul class='social'><a href='http://www.facebook.com/share.php?u=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137' target='_blank'><li class='fb_b'   ></li></a><a href='https://twitter.com/intent/tweet?url=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&text=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज' target='_blank'><li class='twitter_r'  > </li></a><a href='https://api.whatsapp.com/send?text=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137' target='_blank'><li class='whatsapp_r'  ></li></a><a href='https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज&body=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&ui=2&tf=1&pli=1' title='Share by Email' target='_blank'><li class='fa-envelope_r' ></li></a><a href='https://www.linkedin.com/shareArticle?mini=true&url=https://pib.gov.in/PressReleasePage.aspx?PRID=1806137&title=भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज&summary=My%20favorite%20developer%20program&source=LinkedIn' target='_blank'><li class='fa-linkedin_r'  ></li></a></ul></div></div>
+            </div>
+        </div>
+        <input type="hidden" name="ltrTitlee" id="ltrTitlee" value="भारत-बांग्‍लादेश प्रोटोकॉल मार्ग (आईबीपीआर) के रास्‍ते हल्दिया से जहाज पर माल लादने के बाद पांडु बंदरगाह पर ब्रह्मपुत्र लंगर पर जाने वाला अब तक का सबसे लंबा जहाज" />
+        <input type="hidden" name="ltrSubtitlee" id="ltrSubtitlee" value="&lt;br/>90 मीटर लंबा जहाज, एमवी राम प्रसाद बिस्मिल माल लादने वाले जहाजों डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ टीएमटी बार लेकर चला&lt;br/>&lt;br/>केन्‍द्रीय मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से जहाजों को रवाना किया&lt;br/>&lt;br/>आईबीपीआर पर बांग्‍लादेश के रास्‍ते कोलकाता से गुवाहाटी तक आईडब्ल्यूएआई जहाज पर नियमित लदान शुरू करेगा&lt;br/>&lt;br/>" />
+        <input type="hidden" name="ltrDescriptionn" id="ltrDescriptionn" value="&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>बंदरगाह, नौवहन और जलमार्ग मंत्रालय ने उस वक्&amp;zwj;त एक उपलब्धि हासिल की जब एमवी राम प्रसाद बिस्मिल ब्रह्मपुत्र पर जाने वाला अब तक का सबसे लंबा जहाज बन गया। 90 मीटर लंबा बेड़ा 26 मीटर चौड़ा और 2.1 मीटर गहरा है। इसके साथ ही इसने गुवाहाटी के पांडु बंदरगाह पर लंगर डालने के बाद कोलकाता में हल्दिया गोदी से भारी माल ढुलाई के महत्वाकांक्षी परीक्षण को आज सफलतापूर्वक पूरा किया। केन्&amp;zwj;द्रीय बंदरगाह, नौवहन और जलमार्ग (पीएसडब्ल्यू) और आयुष मंत्री श्री सर्बानंद सोनोवाल ने हल्दिया में श्यामा प्रसाद मुखर्जी बंदरगाह से दो जहाजों - डीबी कल्पना चावला और डीबी एपीजे अब्दुल कलाम के साथ हरी झंडी दिखाकर रवाना किया। &lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:center&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;img alt=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg&quot; src=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image001G2HX.jpg&quot; style=&quot;height:400px; width:602px&quot; />&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>इस प्रारंभिक कार्य का महत्व इसलिए है क्&amp;zwj;योंकि यह भारत-बांग्लादेश प्रोटोकॉल मार्ग (आईबीआरपी) के रास्&amp;zwj;ते कोलकाता से गुवाहाटी तक माल लादने का कार्य शुरू करने के लिए मार्ग बताता है। जमशेदपुर में टाटा स्टील से 1,793 मीट्रिक टन स्टील रॉड से लदी इस खेप को 2.0 मीटर की गहराई की आवश्यकता थी। इस ऐतिहासिक खेप के डिजाइन और मशीनरी को तैयार करते समय कम-से-कम 2.0 मीटर की गहराई दी गई, इसके लिए खासतौर से आईबीपीआर के सिराजगंज-दाइकोवा खंड जैसे महत्वपूर्ण हिस्सों को ध्&amp;zwj;यान में रखा गया। भारत सरकार ने बांग्लादेश की सरकार के साथ इस खंड के तलकर्षण को - क्रमशः 80:20 अनुपात के साथ - निर्बाध नेविगेशन के लिए वित्त पोषित किया है। भारतीय अंतर्देशीय जलमार्ग प्राधिकरण (आईडब्&amp;zwj;ल्&amp;zwj;यूएआई) के साथ-साथ बांग्लादेश अंतर्देशीय जल परिवहन प्राधिकरण (बीआईडब्&amp;zwj;ल्&amp;zwj;यूटीए) ने मिलकर काम किया ताकि यह ऐतिहासिक माल ढुलाई का कार्य सुचारू रूप से चल सके। &amp;lsquo;परिवहन के माध्यम से परिवर्तन&amp;rsquo; लाने की प्रधानमंत्री श्री नरेन्&amp;zwj;द्र मोदी की परिकल्&amp;zwj;पना को पुनर्जीवित करने और उसमें नई जान डालने के लिए, सरकार ने तलकर्षण का कार्य कराया और नाली को जहाजों के लिए सुरक्षित और सुचारू बनाने का काम किया। श्री सर्बानंद सोनोवाल ने सभी घटनाक्रमों पर बारीकी से नजर रखी और इस खंड में विभिन्न क्षेत्रों में आईडब्ल्यूएआई द्वारा किए गए तलकर्षण कार्य की व्यक्तिगत रूप से निगरानी की ताकि एनडब्ल्यू1 और एनडब्ल्यू2 के बीच आवाजाही प्राथमिकता के आधार पर शुरू हो सके।&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:center&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;img alt=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg&quot; src=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image002ZC0G.jpg&quot; style=&quot;height:400px; width:602px&quot; />&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>दिल्ली से अपनी बात कहते हुए, केन्&amp;zwj;द्रीय मंत्री श्री सोनोवाल ने कहा, &amp;ldquo;प्रधानमंत्री श्री नरेन्&amp;zwj;द्र मोदी जी की परिकल्&amp;zwj;पना भारत के विकास इंजन को शक्ति प्रदान करने के लिए पूर्वोत्तर की अष्टलक्ष्मी क्षमता को सक्रिय करना है। &amp;#39;परिवहन के माध्यम से परिवर्तन&amp;#39; की उनकी परिकल्&amp;zwj;पना के तहत, हमने क्षेत्र में जल परिवहन को फिर से जीवंत करने के लिए अथक प्रयास किया। यह न केवल परिवहन का सबसे सस्ता और पर्यावरण की दृष्टि से सबसे अनुकूल तरीका है, यह पूर्वोत्तर के व्यापार को समुद्री नेटवर्क के रास्&amp;zwj;ते शेष दुनिया से जोड़ने की भी अनुमति देता है। चूंकि ब्रह्मपुत्र पर चलने वाले इस सबसे लंबे जहाज का परीक्षण आज पांडु में सफल रहा है, हमें यह स्वीकार करना चाहिए कि टीम ने कई हिस्सों में चुनौतीपूर्ण गहराई तैयार करने के दौरान काम में आने लायक एक मार्ग तैयार किया। हम असम में जल परिवहन की व्यावसायिक व्यवहार्यता लाने और पूर्वोत्तर भारत के आर्थिक भविष्&amp;zwj;य के रूप में ब्रह्मपुत्र की जीवन शक्ति को फिर से जीवंत करने के लिए प्रतिबद्ध हैं।&amp;rdquo;&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:center&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;img alt=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg&quot; src=&quot;https://static.pib.gov.in/WriteReadData/userfiles/image/image003K8D4.jpg&quot; style=&quot;height:400px; width:602px&quot; />&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>इस बात पर गौर किया जाना चाहिए कि पिछले दो वित्तीय वर्षों यानी वित्त वर्ष 2019-20 और वित्त वर्ष 2020-21 के लिए धुबरी और पांडु के बीच ब्रह्मपुत्र में न्यूनतम उपलब्ध गहराई 2.2 मीटर थी। हाल की एलएडी रिपोर्ट के अनुसार, यह गहराई जनवरी, 2022 में और कम होकर 1.5 मीटर तक आ गई। चिलमारी से दाइखावा तक, बिटवा ने 2.2 मीटर की आवश्यक गहराई की पुष्टि की।&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>असम के आर्थिक इतिहास के इस महत्वपूर्ण क्षण पर आभार व्यक्त करते हुए, श्री सोनोवाल ने कहा, &amp;ldquo;असम के लोगों के लिए, ब्रह्मपुत्र जीवन रेखा है। प्रधानमंत्री ने इस बात को समझा जिसके कारण उन्होंने पर्यावरण की दृष्टि से संवेदनशील क्षेत्र के विकास को एक ऐसे माध्यम से आकार देने की कल्पना की जो व्यापक, आर्थिक और पर्यावरण के अनुकूल हो। इस पहल का तहे दिल से समर्थन करने के लिए मैं प्रधानमंत्री को धन्यवाद देना चाहता हूं। हमें बांग्लादेश सरकार का भी तहे दिल से शुक्रिया अदा करना चाहिए जिसके समर्थन के बिना यह संभव नहीं होता। मैं परिवहन के सर्वोत्तम साधनों में से एक को पुनर्जीवित करने और पारस्परिक लाभ और आर्थिक विकास के अवसर पैदा करने के लिए हमारे साथ साझेदारी करने के लिए लोगों की ओर से आभार व्यक्त करना चाहता हूं। चुनौतियों को देखते हुए, असम के मुख्यमंत्री डॉ. हिमंत बिस्वा सरमा के समर्थन के बिना यह सफल नहीं होता और इसके लिए मैं उन्हें धन्यवाद देता हूं। मैं पश्चिम बंगाल सरकार और बिहार सरकार को इस आरंभिक कार्य को सफलतापूर्वक पूरा करने के लिए प्रदान किए गए हर प्रकार के सहयोग के लिए धन्यवाद देना चाहता हूं। मैं इंजीनियरों, टेक्नोक्रेट और इस चुनौती से निपटने और समाधान खोजने में शामिल सभी लोगों की टीम द्वारा किए गए अग्रणी कार्य की भी सराहना करता हूं। हम आपके समर्थन के लिए तत्पर हैं क्योंकि हम उत्कृष्ट और अंतर्देशीय जलमार्गों को असम और पूर्वोत्तर भारत के आर्थिक पुनरुत्थान के लिए जीवन रेखा बनाने की दिशा में अपना प्रयास जारी रखे हुए हैं।&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;font-family:Mangal&quot;>इससे पहले एमवी लाल बहादुर शास्त्री ने पटना से पांडु तक भारतीय खाद्य निगम (एफसीआई) के लिए 200 मीट्रिक टन खाद्यान्न की एक खेप को गंगा, राष्ट्रीय जलमार्ग 1 (एनडब्ल्यू 1) और ब्रह्मपुत्र राष्ट्रीय जलमार्ग 2 (एनडब्&amp;zwj;ल्&amp;zwj;यू2) के बीच माल की ढुलाई के परीक्षण को सफलतापूर्वक पूरा किया था। इसके अलावा, नुमालीगढ़ रिफाइनरी के लिए एक ओवर डायमेंशनल कार्गो (ओडीसी) को भी पहले आईबीपीआर के माध्यम से एनडब्&amp;zwj;ल्&amp;zwj;यू2 पर ले जाया गया था।&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:center&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;strong>&lt;span style=&quot;font-family:Mangal&quot;>***&lt;/span>&lt;/strong>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&lt;span style=&quot;font-size:16px&quot;>&lt;span style=&quot;background-color:#f8f9fa&quot;>&lt;strong>&lt;span style=&quot;font-family:Mangal&quot;>&lt;span style=&quot;color:#202124&quot;>एमजी/एएम/केपी/वीके&lt;/span>&lt;/span>&lt;/strong>&lt;/span>&lt;/span>&lt;/p>
+
+&lt;p style=&quot;text-align:justify&quot;>&amp;nbsp;&lt;/p>
+" />
+        <script type="text/javascript">
+                  var mPlayer = document.getElementById("background_music");
+                  var mPlayAction = document.getElementById("playbutton");
+                  var isPlaying = false;
+
+                  function playAudio() {
+                        mPlayer.play();
+                        isPlaying = true;
+                        document.getElementById('stopA').style.display = "block";
+                        document.getElementById('playA').style.display = "none";
+                  }
+
+                  function pauseAudio() {
+                        mPlayer.pause();
+                        isPlaying = false;
+                        document.getElementById('playA').style.display = "block";
+                        document.getElementById('stopA').style.display = "none";
+                  }
+        </script>
+        <script type="text/javascript">
+                  var synth = window.speechSynthesis;
+
+                  function CleanHtml(html) {
+                        html = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+                        return html;
+                  }
+                  function stripHtml(html) {
+                        let tmp = document.createElement("DIV");
+                        tmp.innerHTML = CleanHtml(html);
+                        return tmp.textContent || tmp.innerText || "";
+                  }
+        </script>
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                        $("table").each(function () {
+                              if (!$(this).closest(".table-responsive").length) {
+                                    $(this).wrap("<div class='table-responsive'></div>");
+                              }
+                        });
+
+                        var width = $(window).width();
+                        if (width < 768) {
+                              document.getElementById('frst_t').style.display = "block";
+                              document.getElementById('second_t').style.display = "none";
+                        } else if (width < 991) {
+                              document.getElementById('frst_t').style.display = "block";
+                              document.getElementById('second_t').style.display = "none";
+                        } else if (width < 1199) {
+                              document.getElementById('frst_t').style.display = "none";
+                              document.getElementById('second_t').style.display = "block";
+                        } else {
+                              document.getElementById('frst_t').style.display = "none";
+                              document.getElementById('second_t').style.display = "block";
+                        }
+                  });
+        </script>
+        <style type="text/css">
+            @media print {
+                .sticky-social, .sticky-social_mb, .pull-right, #printPDF {
+                    display: none !important;
+                }
+            }
+
+            .f_vl {
+                padding-right: 30px;
+                font-size: 17px;
+                cursor: pointer;
+            }
+
+            .log_oo {
+                display: flex;
+                justify-content: space-between;
+            }
+
+                .log_oo img {
+                    width: 150px;
+                }
+
+            .sticky-social_mb {
+                position: fixed;
+                bottom: 0px;
+                padding: 0px;
+                margin: 0px;
+                width: 100%;
+            }
+
+            .social_mb {
+                list-style: none;
+                display: flex;
+                width: 100%;
+                margin-bottom: -8px;
+            }
+
+                .social_mb a {
+                    padding: 8px 0px;
+                    font-size: 30px;
+                    transition: all 0.8s ease-in-out;
+                    width: 20% !important;
+                    text-align: center;
+                }
+        </style>
+        <style type="text/css">
+            .section1 {
+                position: relative;
+                padding: 10px 0px;
+                width: 100%;
+            }
+
+            .sticky-social {
+                position: fixed;
+                top: 20px;
+                left: 0px;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .social {
+                list-style: none;
+            }
+
+                .social a li {
+                    padding: 8px 12px;
+                    font-size: 25px;
+                    transition: all 0.8s ease-in-out;
+                }
+
+                    .social a li:hover {
+                        margin-right: -30px;
+                        box-shadow: 2px 5px 10px grey;
+                    }
+
+                        .social a li:hover .fa {
+                            margin-left: 20px;
+                        }
+
+            .fb_b {
+                background-color: var(--dbim-key, #0F5757);
+            }
+
+            .twitter_r {
+                background-color: var(--dbim-key, #0F5757);
+            }
+
+            .whatsapp_r {
+                background-color: var(--dbim-key, #0F5757);
+            }
+
+            .fa-envelope_r {
+                background-color: var(--dbim-key, #0F5757);
+            }
+
+            .fa-linkedin_r {
+                background-color: var(--dbim-key, #0F5757);
+            }
+        </style>
+        <style type="text/css">
+            @media only screen and (max-device-width: 767px) {
+                p span img {
+                    max-width: 90% !important;
+                    height: auto !important;
+                }
+
+                p img {
+                    max-width: 90% !important;
+                    height: auto !important;
+                }
+
+                h2 {
+                    font-size: var(--dbim-h2, 20px);
+                    font-weight: 600 !important;
+                }
+
+                h3 {
+                    font-size: var(--dbim-h3, 16px);
+                    font-weight: 600 !important;
+                }
+            }
+        </style>
+        <style type="text/css">
+            .film-roll-badge {
+                position: absolute;
+                top: 82%;
+                right: 20px;
+                width: 230px;
+                height: 70px;
+                background: repeating-linear-gradient( to right, var(--dbim-green-key, #0F5757) 0px, var(--dbim-green-key, #0F5757) 18px, var(--dbim-text, #150202) 18px, var(--dbim-text, #150202) 36px );
+                border-top: 8px solid var(--dbim-green-key, #0F5757);
+                border-bottom: 8px solid var(--dbim-green-key, #0F5757);
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                animation: moveFilm 8s linear infinite;
+                z-index: 10;
+            }
+
+                .film-roll-badge::before,
+                .film-roll-badge::after {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 10px;
+                    background: repeating-linear-gradient( to right, var(--dbim-green-key, #0F5757) 0px, var(--dbim-green-key, #0F5757) 10px, #fff 10px, #fff 20px );
+                    left: 0;
+                    z-index: 2;
+                }
+
+                .film-roll-badge::before {
+                    top: -4px;
+                }
+
+                .film-roll-badge::after {
+                    bottom: -4px;
+                }
+
+            .film-roll-inner {
+                position: relative;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: flicker 2s infinite ease-in-out;
+            }
+
+            .countdown-text {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #fff;
+                text-shadow: 0 0 6px rgba(255, 255, 255, 0.4), 0 0 10px #000;
+                white-space: nowrap;
+            }
+
+            @keyframes moveFilm {
+                0% {
+                    background-position: 0 0;
+                }
+
+                100% {
+                    background-position: 120px 0;
+                }
+            }
+
+            @keyframes flicker {
+                0%, 100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.9;
+                }
+
+                25% {
+                    opacity: 0.95;
+                }
+
+                75% {
+                    opacity: 0.85;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .film-roll-badge {
+                    top: 68%;
+                    right: 18px;
+                    height: 65px;
+                    font-size: 0.85rem;
+                }
+
+                .press-section {
+                    margin-top: 35px;
+                }
+            }
+
+            @media (max-width: 992px) {
+                .film-roll-badge {
+                    top: 52%;
+                    right: 10px;
+                    width: 200px;
+                    height: 60px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .film-roll-badge {
+                    top: 56%;
+                    right: 10px;
+                    width: 124px;
+                    height: 55px;
+                }
+
+                .countdown-text {
+                    font-size: 0.9rem;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .film-roll-badge {
+                    top: 59%;
+                    right: 5px;
+                    height: 50px;
+                }
+
+                .countdown-text {
+                    font-size: 0.85rem;
+                }
+            }
+        </style>
+        <script type="text/javascript">
+                  const festivalStart = new Date("2025-11-20T00:00:00").getTime();
+                  const festivalEnd = new Date("2025-11-28T23:59:59").getTime();
+                  const countdownElement = document.getElementById("countdown");
+
+                  if (countdownElement) {
+                        const interval = setInterval(() => {
+                              const now = new Date().getTime();
+
+                              if (now < festivalStart) {
+                                    const diff = festivalStart - now;
+                                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                                    countdownElement.innerHTML = `${days} Day${days !== 1 ? 's' : ''} ${hours} Hour${hours !== 1 ? 's' : ''} to go`;
+                              } else if (now >= festivalStart && now <= festivalEnd) {
+                                    const dayNumber = Math.floor((now - festivalStart) / (1000 * 60 * 60 * 24)) + 1;
+                                    countdownElement.innerHTML = `56th IFFI - Day ${dayNumber}`;
+                              } else {
+                                    countdownElement.innerHTML = `✨ IFFI closes but never ends…`;
+                                    const elements = document.querySelectorAll('.film-roll-badge');
+                                    elements.forEach(el => el.style.width = "350px");
+                                    clearInterval(interval);
+                              }
+                        }, 1000);
+                  }
+        </script>
+        <script type="text/javascript">
+                  const miffStart = new Date("2026-06-15T00:00:00").getTime();
+                  const miffEnd = new Date("2026-06-15T23:59:59").getTime();
+                  const miffElement = document.getElementById("miff");
+
+                  if (miffElement) {
+                        const miffInterval = setInterval(() => {
+                              const now = new Date().getTime();
+
+                              if (now < miffStart) {
+                                    const diff = miffStart - now;
+                                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                                    miffElement.innerHTML = `${days} Day${days === 1 ? '' : 's'} to MIFF ...`;
+                              } else if (now >= miffStart && now <= miffEnd) {
+                                    const dayNumber = Math.floor((now - miffStart) / (1000 * 60 * 60 * 24)) + 1;
+                                    miffElement.innerHTML = `19th MIFF - Day ${dayNumber}`;
+                              } else {
+                                    miffElement.innerHTML = `✨ MIFF concludes, cinema lives on...`;
+                                    document.querySelectorAll('.film-roll-badge').forEach(el => el.style.width = "350px");
+                                    clearInterval(miffInterval);
+                              }
+                        }, 1000);
+                  }
+        </script>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("sc_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();Sys.Application.add_init(function() {
+    $create(Sys.Extended.UI.ModalPopupBehavior, {"BackgroundCssClass":"modalBackground","PopupControlID":"P_CategoryManagement","dynamicServicePath":"/PressReleasePage.aspx","id":"mpe"}, null, null, $get("Hidden"));
+});
+//]]>
+</script>
+<input type="hidden" name="__ncforminfo" value="vMY6FGfxQBTWFLjwcF9-qhF9oi4cpkRnYRjVuhCGKxv4Il9nQXwznFF3K1hBhe_b33CX9XADQPdNDbHBeKrDxxuMadaI8TkPPdI6kGIYgMxqggI9-TJVpg=="/></form>
+    
+
+<script type="application/json" id="pibConsentConfig">{"ga4Id":"G-Q414Y0X6EE,G-QJJ6LZ8LHV","policyUrl":"/CookiePolicy.aspx","text":{"bannerLabel":"कुकी सहमति","title":"इस वेबसाइट पर कुकीज़","body":"इस वेबसाइट को चलाने के लिए हम आवश्यक कुकीज़ का उपयोग करते हैं। आपके आने पर हम विश्लेषण कुकीज़ भी सेट करते हैं, ताकि हम देख सकें कि साइट का उपयोग कैसे हो रहा है और उसे बेहतर बना सकें - आप इन्हें नीचे या कभी भी कुकी नीति पृष्ठ से बंद कर सकते हैं। सोशल मीडिया सामग्री की कुकीज़ केवल आपकी अनुमति से ही सेट की जाती हैं।","policyLink":"हमारी कुकी नीति पढ़ें","accept":"सभी स्वीकार करें","reject":"वैकल्पिक अस्वीकार करें","customize":"अनुकूलित करें","prefsTitle":"कुकी प्राथमिकताएं","prefsIntro":"चुनें कि यह वेबसाइट कौन सी कुकीज़ सेट कर सकती है। आवश्यक कुकीज़ बंद नहीं की जा सकतीं क्योंकि उनके बिना साइट काम नहीं करती। विश्लेषण कुकीज़ तब तक चालू रहती हैं जब तक आप उन्हें बंद न करें। सोशल मीडिया कुकीज़ तब तक बंद रहती हैं जब तक आप अनुमति न दें। आप ये विकल्प कभी भी कुकी नीति पृष्ठ से बदल सकते हैं।","essentialName":"आवश्यक कुकीज़","essentialDesc":"साइट के कार्य करने के लिए आवश्यक। ये आपका सत्र, आपकी भाषा और क्षेत्र, आपके पाठ का आकार और रंग थीम याद रखती हैं, तथा फ़ॉर्म की सुरक्षा जांच सत्यापित करती हैं। ये हमेशा चालू रहती हैं।","analyticsName":"विश्लेषण कुकीज़","analyticsDesc":"ये हमें यह समझने में मदद करती हैं कि आगंतुक साइट का उपयोग कैसे करते हैं - कौन से पृष्ठ पढ़े जाते हैं और लोग कितनी देर रुकते हैं - ताकि इसे बेहतर बनाया जा सके। यह जानकारी ऐसे रूप में एकत्र की जाती है जो सीधे आपकी पहचान नहीं करती। आपके आने पर ये चालू रहती हैं; इन्हें यहां बंद करने पर ये रुक जाती हैं और पहले से सेट कुकीज़ हटा दी जाती हैं।","socialName":"सोशल मीडिया कुकीज़","socialDesc":"ये X, फेसबुक और यूट्यूब से एम्बेड की गई सामग्री, जैसे टाइमलाइन और वीडियो, द्वारा सेट की जाती हैं। ये प्लेटफ़ॉर्म इनका उपयोग विभिन्न वेबसाइटों पर आपको ट्रैक करने के लिए कर सकते हैं। ये तब तक बंद रहती हैं जब तक आप अनुमति न दें।","save":"प्राथमिकताएं सहेजें","cancel":"रद्द करें"}}</script>
+<script type="text/javascript" src='/js/consent.js?v=10'></script>
+
+<script type="text/javascript" src='/js/consent-embeds.js?v=10'></script>
+
+
+    <!-- Minimal O(N) Time and O(1) Auxiliary Space Word Count & Read Time Calculation -->
+    <script type="text/javascript">
+            (function () {
+                  function calculateReadingStats() {
+                        var bodyEl = document.getElementById("pibReleaseBody");
+                        if (!bodyEl) return;
+
+                        // textContent extracts text without triggering expensive layout/reflow computations
+                        var text = bodyEl.textContent || "";
+                        var words = 0;
+                        var inWord = false;
+
+                        // O(N) single pass character code scan: achieves O(1) space with zero array allocations
+                        for (var i = 0, len = text.length; i < len; i++) {
+                              var code = text.charCodeAt(i);
+                              // Delimits on ASCII whitespace, control characters, tabs, newlines, and non-breaking spaces (160)
+                              if (code <= 32 || code === 160) {
+                                    inWord = false;
+                              } else if (!inWord) {
+                                    inWord = true;
+                                    words++;
+                              }
+                        }
+
+                        // Standard 250 WPM reading speed (e.g., 612 words yields 2 min read)
+                        var minutes = Math.max(1, Math.round(words / 250));
+
+                        var elWords = document.getElementById("prWordCount");
+                        var elTime = document.getElementById("prReadTime");
+
+                        if (elWords) elWords.textContent = words + (words === 1 ? " word" : " words");
+                        if (elTime) elTime.textContent = minutes + " min read";
+                  }
+
+                  if (document.readyState === "loading") {
+                        document.addEventListener("DOMContentLoaded", calculateReadingStats);
+                  } else {
+                        calculateReadingStats();
+                  }
+            })();
+    </script>
+
+    <script type="text/javascript">
+(function () {
+    try {
+        if (window.self === window.top) { return; }
+    } catch (e) { return; }
+    var s = document.createElement("style");
+    s.textContent = ".sticky-social, .sticky-social_mb { display: none !important; }";
+    (document.head || document.documentElement).appendChild(s);
+}());
+    </script>
+</body>
+</html>

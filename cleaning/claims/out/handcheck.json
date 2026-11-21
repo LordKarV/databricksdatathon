@@ -1,0 +1,31 @@
+{
+ "A_other_facility": {
+  "TP": 17,
+  "FP": 6,
+  "U": 2,
+  "n": 25
+ },
+ "B_ambiguous": {
+  "other": 7,
+  "own": 4,
+  "not_a_claim": 3,
+  "U": 1,
+  "n": 15
+ },
+ "C_unanchored_in_contaminated_record": {
+  "plausible_own": 18,
+  "cannot_tell": 2,
+  "n": 20
+ },
+ "D_nonoffer": {
+  "correct": 14,
+  "false_alarm": 1,
+  "n": 15
+ },
+ "E_v2_strong": {
+  "supported": 15,
+  "weak_support": 8,
+  "not_supported": 1,
+  "n": 24
+ }
+}

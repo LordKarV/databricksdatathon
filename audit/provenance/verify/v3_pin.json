@@ -1,0 +1,217 @@
+{
+ "rows": 165627,
+ "pins": 19586,
+ "lat_NA": 12007,
+ "lat_nonnum_nonNA": 6,
+ "nonnum_examples": [
+  "28.430354\u00b0 N",
+  "17\u00b057'17.7",
+  "18.856818\u00b0",
+  "28.4 32628",
+  "26.52 12743",
+  "25.43 N"
+ ],
+ "in_box": 151001,
+ "swapped": 791,
+ "outside_not_swapped": 1820,
+ "zero": 13,
+ "district_NA": 715,
+ "state_NA": 715,
+ "pins_only_NA": 100,
+ "pins_multi_district": 1258,
+ "pins_multi_state": 52,
+ "circle_mismatch_rows": 53,
+ "circle_mismatch_pins": 26,
+ "circle_mismatch_pairs": {
+  "ANDHRA PRADESH -> TELANGANA": 1,
+  "APS -> UTTAR PRADESH": 1,
+  "APS -> WEST BENGAL": 1,
+  "ASSAM -> MEGHALAYA": 5,
+  "BIHAR -> JHARKHAND": 2,
+  "BIHAR -> UTTAR PRADESH": 1,
+  "DELHI -> UTTAR PRADESH": 1,
+  "GUJARAT -> RAJASTHAN": 1,
+  "NORTH EASTERN -> TELANGANA": 4,
+  "ODISHA -> TELANGANA": 1,
+  "RAJASTHAN -> CHHATTISGARH": 1,
+  "RAJASTHAN -> TELANGANA": 8,
+  "TAMILNADU -> KERALA": 1,
+  "TELANGANA -> ANDHRA PRADESH": 19,
+  "UTTAR PRADESH -> UTTARAKHAND": 6
+ },
+ "pin_799001": [
+  [
+   "Agartala Bazar S.O",
+   "Nirmal",
+   "TELANGANA",
+   "North Eastern Circle"
+  ],
+  [
+   "Agartala Court S.O",
+   "Nirmal",
+   "TELANGANA",
+   "North Eastern Circle"
+  ],
+  [
+   "Agartala H.O",
+   "Nirmal",
+   "TELANGANA",
+   "North Eastern Circle"
+  ],
+  [
+   "IDC Agartala",
+   "NA",
+   "NA",
+   "North Eastern Circle"
+  ],
+  [
+   "Jaganath Bari Road S.O",
+   "Nirmal",
+   "TELANGANA",
+   "North Eastern Circle"
+  ]
+ ],
+ "pin_504346": [
+  [
+   "Bhagavanrajupalem B.O",
+   "NA",
+   "NA",
+   "Andhra Pradesh Circle"
+  ],
+  [
+   "Chichdhari Khanapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Dasnapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Dhanora B B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Ginnera B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Gourapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Harkapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Indervelli S.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Keslapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Khandala B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Muthnur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Narsapur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Pipri B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Pulimadugu B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Salawada B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Shampur B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Umri B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Wadegaon B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ],
+  [
+   "Yenda B.O",
+   "PRAKASAM",
+   "ANDHRA PRADESH",
+   "Telangana Circle"
+  ]
+ ],
+ "pins_with_coord": 19558,
+ "pins_no_coord": 28,
+ "office_rows_gt200": 3931,
+ "pins_any_office_gt50": 4836,
+ "fac": 9959,
+ "fac_valid_pin": 9879,
+ "fac_pin_space_fixed": 153,
+ "fac_pin_in_dir": 9674,
+ "fac_pin_not_in_dir": 205,
+ "fac_raw_invalid_values_top": {
+  "000000": 6,
+  "10": 5,
+  "null": 4,
+  "39": 3,
+  "85": 3,
+  "83": 3,
+  "7": 2,
+  "67": 2
+ },
+ "fac_distinct_pins": 3018,
+ "fac_compared": 9497,
+ "fac_gt50": 1394,
+ "fac_gt200": 670,
+ "fac_d_quant": {
+  "0.5": 2.2,
+  "0.9": 129.3
+ }
+}

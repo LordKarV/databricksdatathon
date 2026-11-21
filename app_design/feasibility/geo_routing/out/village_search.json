@@ -1,0 +1,85 @@
+[
+ {
+  "query": "Muhra",
+  "nominatim_ms": 366,
+  "nominatim_n": 2,
+  "nominatim_top": [
+   {
+    "name": "Muhra",
+    "type": "county",
+    "district": "Gaya",
+    "state": "Bihar",
+    "lat": "24.9002846",
+    "lon": "85.2920998"
+   },
+   {
+    "name": "Muhra",
+    "type": "city_district",
+    "district": "Damoh",
+    "state": "Madhya Pradesh",
+    "lat": "23.5446163",
+    "lon": "79.4596048"
+   }
+  ],
+  "offline_office_n": 0,
+  "offline_offices": []
+ },
+ {
+  "query": "Muhra, Gaya",
+  "nominatim_ms": 319,
+  "nominatim_n": 1,
+  "nominatim_top": [
+   {
+    "name": "Muhra",
+    "type": "county",
+    "district": "Gaya",
+    "state": "Bihar",
+    "lat": "24.9002846",
+    "lon": "85.2920998"
+   }
+  ],
+  "offline_office_n": 0,
+  "offline_offices": []
+ },
+ {
+  "query": "Makepalli, Gadchiroli",
+  "nominatim_ms": 333,
+  "nominatim_n": 1,
+  "nominatim_top": [
+   {
+    "name": "Makepalli Chak No 1",
+    "type": "village",
+    "district": "Gadchiroli",
+    "state": "Maharashtra",
+    "lat": "19.8252030",
+    "lon": "80.0715887"
+   }
+  ],
+  "offline_office_n": 1,
+  "offline_offices": [
+   {
+    "officename": "Makepalli B.O",
+    "pincode": 442604,
+    "district": "GADCHIROLI",
+    "statename": "MAHARASHTRA"
+   }
+  ]
+ },
+ {
+  "query": "Ghat Sawali",
+  "nominatim_ms": 334,
+  "nominatim_n": 1,
+  "nominatim_top": [
+   {
+    "name": "Ghat Sawali",
+    "type": "village",
+    "district": "Beed District",
+    "state": "Maharashtra",
+    "lat": "18.9877408",
+    "lon": "75.9413302"
+   }
+  ],
+  "offline_office_n": 0,
+  "offline_offices": []
+ }
+]

@@ -1,0 +1,170 @@
+{
+ "directory_pins": 19586,
+ "pins_with_point_before": 19584,
+ "pins_misplaced_within_district_r0": 31,
+ "override_candidates_rejected_outside_district": 1,
+ "pins_overridden_single_office_path": 4,
+ "pins_overridden_by_facility_consensus": 69,
+ "override_d_km_quantiles_50_90_max": [
+  25.3,
+  66.0,
+  165.3
+ ],
+ "facility_pins_missing_from_directory": 134,
+ "missing_pins_added": {
+  "prefix3_median_not_in_directory": 113,
+  "facility_consensus_not_in_directory": 14
+ },
+ "pins_with_point_after": 19711,
+ "src_after": {
+  "pin_median": 18986,
+  "district_median": 520,
+  "prefix3_median_not_in_directory": 113,
+  "facility_consensus": 69,
+  "facility_consensus_not_in_directory": 14,
+  "prefix3_median": 9,
+  "NaN": 2
+ },
+ "radius_km_quantiles_50_90": [
+  10.0,
+  26.2
+ ],
+ "known_points": [
+  [
+   110001,
+   1.5,
+   1.5,
+   "pin_median"
+  ],
+  [
+   400001,
+   0.2,
+   0.2,
+   "pin_median"
+  ],
+  [
+   560001,
+   1.5,
+   1.5,
+   "pin_median"
+  ],
+  [
+   600001,
+   0.6,
+   0.6,
+   "pin_median"
+  ],
+  [
+   700001,
+   29.2,
+   29.2,
+   "pin_median"
+  ],
+  [
+   302001,
+   1.2,
+   1.2,
+   "pin_median"
+  ],
+  [
+   226001,
+   0.5,
+   0.5,
+   "pin_median"
+  ],
+  [
+   800001,
+   2.1,
+   2.1,
+   "pin_median"
+  ],
+  [
+   500001,
+   0.4,
+   0.4,
+   "pin_median"
+  ],
+  [
+   380001,
+   0.3,
+   0.3,
+   "pin_median"
+  ],
+  [
+   682001,
+   0.2,
+   0.2,
+   "pin_median"
+  ],
+  [
+   695001,
+   0.3,
+   0.3,
+   "pin_median"
+  ],
+  [
+   411001,
+   2.5,
+   2.5,
+   "pin_median"
+  ],
+  [
+   141001,
+   2.0,
+   2.0,
+   "pin_median"
+  ],
+  [
+   462001,
+   1.2,
+   1.2,
+   "pin_median"
+  ],
+  [
+   751001,
+   0.9,
+   0.9,
+   "pin_median"
+  ],
+  [
+   781001,
+   0.8,
+   0.8,
+   "pin_median"
+  ],
+  [
+   248001,
+   0.9,
+   0.9,
+   "pin_median"
+  ],
+  [
+   834001,
+   2.0,
+   2.0,
+   "pin_median"
+  ],
+  [
+   492001,
+   2.1,
+   2.1,
+   "pin_median"
+  ],
+  [
+   422009,
+   167.5,
+   2.5,
+   "facility_consensus"
+  ],
+  [
+   560017,
+   105.7,
+   8.4,
+   "district_median"
+  ]
+ ],
+ "known20_within_10km_before_after": [
+  19,
+  19
+ ]
+}

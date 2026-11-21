@@ -1,0 +1,468 @@
+{
+ "rows": {
+  "n": 9970,
+  "d": 9959
+ },
+ "exact_duplicate_claims": {
+  "claims": 469498,
+  "flagged_dup_in_record": 27528,
+  "service_claims": 24447,
+  "service_claims_dup": 1339
+ },
+ "field_echo": {
+  "pairs_with_own_claims": 9519,
+  "own_claims_raw": 23983,
+  "own_claims_distinct": 20964,
+  "pairs_2plus_fields": 3725,
+  "pairs_2plus_fields_but_1_distinct_claim": 221
+ },
+ "specialties": {
+  "raw_items": 278994,
+  "distinct_normalised_per_record": 117964,
+  "distinct_values": 2476,
+  "tag_only_pairs": {
+   "burns": 46,
+   "cardiac_surgery": 302,
+   "dialysis": 3,
+   "icu": 486,
+   "trauma": 376
+  }
+ },
+ "attribution_all_claims": {
+  "unanchored": 423958,
+  "own_anchored": 30112,
+  "other_facility": 9506,
+  "ambiguous": 5922
+ },
+ "attribution_service_claims": {
+  "unanchored": 23249,
+  "own_anchored": 955,
+  "other_facility": 136,
+  "ambiguous": 107
+ },
+ "quarantine_effect_v2": {
+  "pairs": 10799,
+  "pairs_changed": 58,
+  "transitions": [
+   {
+    "grade_noq": "moderate",
+    "grade": "attributed_elsewhere",
+    "n": 15
+   },
+   {
+    "grade_noq": "moderate",
+    "grade": "weak",
+    "n": 1
+   },
+   {
+    "grade_noq": "strong",
+    "grade": "attributed_elsewhere",
+    "n": 5
+   },
+   {
+    "grade_noq": "strong",
+    "grade": "moderate",
+    "n": 27
+   },
+   {
+    "grade_noq": "strong",
+    "grade": "weak",
+    "n": 1
+   },
+   {
+    "grade_noq": "weak",
+    "grade": "attributed_elsewhere",
+    "n": 9
+   }
+  ]
+ },
+ "nonoffer": {
+  "service_claims_nonoffer": 57,
+  "by_cue": {
+   "negation": 19,
+   "referral": 6,
+   "future": 26,
+   "parttime": 23,
+   "camp": 6,
+   "past": 1,
+   "third_party": 21,
+   "hedge": 8
+  },
+  "pairs_counter_evidence": 20,
+  "pairs_with_counter_risk": 53
+ },
+ "sentence_kinds_service_claims": {
+  "specific": 21906,
+  "list": 2246,
+  "directory": 135,
+  "staff": 91,
+  "qualified": 44,
+  "research": 20,
+  "template": 5
+ },
+ "quantities": {
+  "service_claims_with_qty": 1153,
+  "pairs_with_service_qty": 700,
+  "pairs_qty_by_service": {
+   "burns": 9,
+   "cardiac_surgery": 2,
+   "csection": 3,
+   "dialysis": 33,
+   "icu": 281,
+   "mri": 233,
+   "nicu": 64,
+   "trauma": 75
+  },
+  "unit_beds_gt_capacity": 12
+ },
+ "truncated": {
+  "records": 1495,
+  "pairs": 4498
+ },
+ "risk_flags_pairs_v2": {
+  "risk_location": 1966,
+  "risk_name_collision": 188,
+  "risk_service_elsewhere": 110,
+  "risk_counter": 53,
+  "risk_unit_gt_capacity": 12,
+  "risk_outpatient_type": 771
+ },
+ "scope_conflict_pairs": {
+  "v1": 423,
+  "v2": 439
+ },
+ "grades_v1": {
+  "burns": {
+   "attributed_elsewhere": 1,
+   "counter_evidence": 1,
+   "moderate": 49,
+   "strong": 108,
+   "tag_only": 46,
+   "weak": 59
+  },
+  "cardiac_surgery": {
+   "attributed_elsewhere": 4,
+   "counter_evidence": 3,
+   "moderate": 363,
+   "strong": 204,
+   "tag_only": 302,
+   "weak": 97
+  },
+  "csection": {
+   "attributed_elsewhere": 3,
+   "counter_evidence": 2,
+   "moderate": 327,
+   "strong": 97,
+   "tag_only": 0,
+   "weak": 19
+  },
+  "dialysis": {
+   "attributed_elsewhere": 6,
+   "counter_evidence": 3,
+   "moderate": 879,
+   "strong": 88,
+   "tag_only": 3,
+   "weak": 71
+  },
+  "icu": {
+   "attributed_elsewhere": 4,
+   "counter_evidence": 1,
+   "moderate": 1613,
+   "strong": 441,
+   "tag_only": 486,
+   "weak": 241
+  },
+  "mri": {
+   "attributed_elsewhere": 1,
+   "counter_evidence": 4,
+   "moderate": 348,
+   "strong": 546,
+   "tag_only": 0,
+   "weak": 53
+  },
+  "nicu": {
+   "attributed_elsewhere": 3,
+   "counter_evidence": 1,
+   "moderate": 494,
+   "strong": 182,
+   "tag_only": 0,
+   "weak": 66
+  },
+  "trauma": {
+   "attributed_elsewhere": 7,
+   "counter_evidence": 5,
+   "moderate": 2643,
+   "strong": 302,
+   "tag_only": 376,
+   "weak": 247
+  }
+ },
+ "grades_v2": {
+  "burns": {
+   "attributed_elsewhere": 1,
+   "counter_evidence": 1,
+   "moderate": 65,
+   "strong": 106,
+   "tag_only": 46,
+   "weak": 45
+  },
+  "cardiac_surgery": {
+   "attributed_elsewhere": 4,
+   "counter_evidence": 3,
+   "moderate": 233,
+   "strong": 347,
+   "tag_only": 302,
+   "weak": 84
+  },
+  "csection": {
+   "attributed_elsewhere": 3,
+   "counter_evidence": 2,
+   "moderate": 236,
+   "strong": 193,
+   "tag_only": 0,
+   "weak": 14
+  },
+  "dialysis": {
+   "attributed_elsewhere": 6,
+   "counter_evidence": 3,
+   "moderate": 279,
+   "strong": 695,
+   "tag_only": 3,
+   "weak": 64
+  },
+  "icu": {
+   "attributed_elsewhere": 4,
+   "counter_evidence": 1,
+   "moderate": 814,
+   "strong": 1279,
+   "tag_only": 486,
+   "weak": 202
+  },
+  "mri": {
+   "attributed_elsewhere": 1,
+   "counter_evidence": 4,
+   "moderate": 362,
+   "strong": 543,
+   "tag_only": 0,
+   "weak": 42
+  },
+  "nicu": {
+   "attributed_elsewhere": 3,
+   "counter_evidence": 1,
+   "moderate": 196,
+   "strong": 506,
+   "tag_only": 0,
+   "weak": 40
+  },
+  "trauma": {
+   "attributed_elsewhere": 7,
+   "counter_evidence": 5,
+   "moderate": 2478,
+   "strong": 482,
+   "tag_only": 376,
+   "weak": 232
+  }
+ },
+ "rules_v2": {
+  "G_mod": 4663,
+  "G_strong": 4151,
+  "G_tag": 1213,
+  "G_nonspec": 364,
+  "G_scope": 341,
+  "G_else": 29,
+  "G_no": 20,
+  "G_amb": 18
+ },
+ "regex_fix_effect_vs_audit": {
+  "pairs_lost": 101,
+  "pairs_gained": 0,
+  "lost_by_service": {
+   "burns": {
+    "pairs_lost": 14,
+    "explained_by_fix_regex": 14
+   },
+   "cardiac_surgery": {
+    "pairs_lost": 2,
+    "explained_by_fix_regex": 2
+   },
+   "csection": {
+    "pairs_lost": 14,
+    "explained_by_fix_regex": 14
+   },
+   "icu": {
+    "pairs_lost": 38,
+    "explained_by_fix_regex": 38
+   },
+   "mri": {
+    "pairs_lost": 8,
+    "explained_by_fix_regex": 8
+   },
+   "trauma": {
+    "pairs_lost": 25,
+    "explained_by_fix_regex": 25
+   }
+  },
+  "gained_by_service": {}
+ },
+ "residual_strong_in_records_with_quarantined_text": {
+  "strong_pairs": 4151,
+  "in_records_with_any_quarantined_sentence": 1161
+ },
+ "strong_v2_corroboration": {
+  "strong": 4151,
+  "tags_only": 1035,
+  "tags_only_by_service": {
+   "burns": 35,
+   "cardiac_surgery": 107,
+   "csection": 1,
+   "dialysis": 298,
+   "icu": 532,
+   "nicu": 62
+  },
+  "with_quantity": 515,
+  "self_anchored": 401
+ },
+ "llm_candidates": {
+  "service_claims_ambiguous_or_other": 242,
+  "unanchored_service_claims_in_records_with_quarantined_text": 7514,
+  "records": 1390
+ },
+ "strong_v1_vs_v2": {
+  "v1": 1968,
+  "v2": 4151
+ },
+ "residual_strong_city_matches_neither_pin_nor_coords": {
+  "strong": 4151,
+  "n": 445
+ },
+ "organizer_examples": [
+  {
+   "name": "Government Medical College, Thiruvananthapuram",
+   "uid": "13e107f9",
+   "service": "burns",
+   "grade": "tag_only",
+   "rule": "G_tag",
+   "risks": "",
+   "evidence": [],
+   "elsewhere": []
+  },
+  {
+   "name": "Wockhardt Hospital Nagpur",
+   "uid": "3ac5ae50",
+   "service": "dialysis",
+   "grade": "moderate",
+   "rule": "G_mod",
+   "risks": "service_elsewhere",
+   "evidence": [
+    "Offers dialysis services at concessional pricing (Rs. 350 or less per session) including blood tubin",
+    "In-house dialysis units"
+   ],
+   "elsewhere": [
+    "Provides dialysis treatment at Nair Hospital, Mumbai Central",
+    "Dialysis machines donated by Jivan Jyot Drug Bank are used at Nair Hospital, Mumbai Central"
+   ]
+  },
+  {
+   "name": "Wockhardt Hospital Nagpur",
+   "uid": "3ac5ae50",
+   "service": "mri",
+   "grade": "strong",
+   "rule": "G_strong",
+   "risks": "",
+   "evidence": [
+    "MRI (3T)",
+    "3T MRI"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Wockhardt Hospital Nagpur",
+   "uid": "3ac5ae50",
+   "service": "nicu",
+   "grade": "strong",
+   "rule": "G_strong",
+   "risks": "",
+   "evidence": [
+    "ICU, CCU, NICU, and PICU"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Aravind Eye Hospital",
+   "uid": "b8a5401f",
+   "service": "burns",
+   "grade": "weak",
+   "rule": "G_scope",
+   "risks": "location",
+   "evidence": [
+    "Burns and Plastic Surgery Department",
+    "Fully equipped minor operation theatre in burn ward"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Aravind Eye Hospital",
+   "uid": "b8a5401f",
+   "service": "dialysis",
+   "grade": "weak",
+   "rule": "G_scope",
+   "risks": "location",
+   "evidence": [
+    "Dialysis treatment is provided via a 20-bed Dialysis Unit with 10 machines as part of the Pradhan Ma",
+    "Dialysis unit of 20 beds under Pradhan Mantri National Dialysis Programme"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Aravind Eye Hospital",
+   "uid": "b8a5401f",
+   "service": "mri",
+   "grade": "weak",
+   "rule": "G_scope",
+   "risks": "location",
+   "evidence": [
+    "CT scan and MRI imaging services are available for registered IGH patients on advice",
+    "CT and MRI diagnostic capabilities available for registered patients"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Aravind Eye Hospital",
+   "uid": "b8a5401f",
+   "service": "nicu",
+   "grade": "weak",
+   "rule": "G_scope",
+   "risks": "location",
+   "evidence": [
+    "10-bed Neonatal Intensive Care Unit (NICU)"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Government Medical College, Thiruvananthapuram",
+   "uid": "e0fcd8ad",
+   "service": "burns",
+   "grade": "moderate",
+   "rule": "G_mod",
+   "risks": "location",
+   "evidence": [
+    "Offers Burns treatment as part of specialised units",
+    "Burns Unit"
+   ],
+   "elsewhere": []
+  },
+  {
+   "name": "Government Medical College, Thiruvananthapuram",
+   "uid": "e0fcd8ad",
+   "service": "dialysis",
+   "grade": "moderate",
+   "rule": "G_mod",
+   "risks": "location",
+   "evidence": [
+    "Provides dialysis services in a dedicated Dialysis Unit",
+    "Dialysis Unit"
+   ],
+   "elsewhere": []
+  }
+ ]
+}

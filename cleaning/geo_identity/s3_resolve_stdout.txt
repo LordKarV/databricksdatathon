@@ -1,0 +1,77 @@
+                typed        status                                  states          first_label  passed
+0              Jaipur            ok                               RAJASTHAN               jaipur    True
+1             Lucknow            ok                           UTTAR PRADESH              lucknow    True
+2               Patna            ok                                   BIHAR                patna    True
+3             Gurgaon            ok                                 HARYANA             gurugram    True
+4            Gurugram            ok                                 HARYANA             gurugram    True
+5              Bombay            ok                             MAHARASHTRA               mumbai    True
+6              Mumbai            ok                             MAHARASHTRA               mumbai    True
+7           Bangalore            ok                               KARNATAKA      bengaluru urban    True
+8           Bengaluru            ok                               KARNATAKA            bengaluru    True
+9              Madras            ok                              TAMIL NADU              chennai    True
+10           Calcutta            ok                             WEST BENGAL              kolkata    True
+11            Kolkata            ok                             WEST BENGAL              kolkata    True
+12         Trivandrum            ok                                  KERALA   thiruvananthapuram    True
+13             Cochin            ok                                  KERALA                kochi    True
+14              Kochi            ok                                  KERALA                kochi    True
+15              Vizag            ok                          ANDHRA PRADESH       visakhapatanam    True
+16             Mysore            ok                               KARNATAKA               mysuru    True
+17          Allahabad            ok                           UTTAR PRADESH            prayagraj    True
+18          Prayagraj            ok                           UTTAR PRADESH            prayagraj    True
+19             Baroda            ok                                 GUJARAT             vadodara    True
+20              Poona            ok                             MAHARASHTRA                 pune    True
+21              Noida            ok                           UTTAR PRADESH  gautam buddha nagar    True
+22        Navi Mumbai            ok                             MAHARASHTRA                thane    True
+23       Secunderabad            ok                               TELANGANA            hyderabad    True
+24             Mohali            ok                                  PUNJAB          s a s nagar    True
+25          Darbhanga            ok                                   BIHAR            darbhanga    True
+26        Muzaffarpur            ok                                   BIHAR          muzaffarpur    True
+27         Aurangabad     ask_state                       BIHAR|MAHARASHTRA           aurangabad    True
+28           Bilaspur     ask_state           CHHATTISGARH|HIMACHAL PRADESH             bilaspur    True
+29           Hamirpur     ask_state          HIMACHAL PRADESH|UTTAR PRADESH             hamirpur    True
+30         Pratapgarh     ask_state                 RAJASTHAN|UTTAR PRADESH           pratapgarh    True
+31            Raigarh            ok                            CHHATTISGARH              raigarh    True
+32             Raigad            ok                             MAHARASHTRA               raigad    True
+33             Rampur            ok                           UTTAR PRADESH               rampur    True
+34          Balrampur     ask_state              CHHATTISGARH|UTTAR PRADESH            balrampur    True
+35   Jaipur Rajasthan            ok                               RAJASTHAN               jaipur    True
+36  Aurangabad, Bihar            ok                                   BIHAR           aurangabad    True
+37           Hydrabad       confirm  ANDHRA PRADESH|TELANGANA|UTTAR PRADESH            hyderabad    True
+38             Lucknw  did_you_mean                           UTTAR PRADESH              lucknow    True
+39       Bhubaneshwar            ok                                  ODISHA          bhubaneswar    True
+40        Pondicherry            ok                              PUDUCHERRY          pondicherry    True
+41              Thane            ok                             MAHARASHTRA                thane    True
+42            Bijapur     ask_state                  CHHATTISGARH|KARNATAKA              bijapur    True
+43                Goa     ask_state                                     GOA                         True
+44             Patana       confirm             BIHAR|GUJARAT|UTTAR PRADESH                patan    True
+45             560017            ok                               KARNATAKA           PIN 560017    True
+46             422009            ok                             MAHARASHTRA           PIN 422009    True
+47             500063            ok                               TELANGANA           PIN 500063    True
+48             110001            ok                                   DELHI           PIN 110001    True
+49             999999     not_found                                                          NaN    True
+50       26.85, 80.95            ok                                                  coordinates    True
+51        51.5, -0.12     not_found                                                          NaN    True
+52            Xyzabad     not_found                                                          NaN    True
+53            Kaithal            ok                                 HARYANA              kaithal    True
+{
+ "tests": 54,
+ "passed": 54,
+ "status_counts": {
+  "ok": 41,
+  "ask_state": 7,
+  "not_found": 3,
+  "confirm": 2,
+  "did_you_mean": 1
+ },
+ "failed": [],
+ "gazetteer_rows_by_kind": {
+  "office": 146047,
+  "district": 761,
+  "city": 537
+ },
+ "city_layer_spread_p90_quantiles_50_90_99": [
+  2.4,
+  11.2,
+  21.4
+ ]
+}

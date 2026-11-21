@@ -1,0 +1,85 @@
+{
+ "dialysis": {
+  "mine": 1049,
+  "theirs": 1047,
+  "both": 1046,
+  "only_mine": 3,
+  "only_theirs": 1,
+  "sentences_mine": 3084,
+  "sentences_theirs": 3079
+ },
+ "csection_strict": {
+  "mine": 445,
+  "theirs": 462,
+  "both": 445,
+  "only_mine": 0,
+  "only_theirs": 17,
+  "sentences_mine": 691,
+  "sentences_theirs": 725
+ },
+ "nicu": {
+  "mine": 740,
+  "theirs": 746,
+  "both": 740,
+  "only_mine": 0,
+  "only_theirs": 6,
+  "sentences_mine": 1531,
+  "sentences_theirs": 1558
+ },
+ "cardiac_surgery": {
+  "mine": 589,
+  "theirs": 673,
+  "both": 584,
+  "only_mine": 5,
+  "only_theirs": 89,
+  "sentences_mine": 1584,
+  "sentences_theirs": 1961
+ },
+ "mri": {
+  "mine": 952,
+  "theirs": 960,
+  "both": 952,
+  "only_mine": 0,
+  "only_theirs": 8,
+  "sentences_mine": 3134,
+  "sentences_theirs": 3165
+ },
+ "burns": {
+  "mine": 232,
+  "theirs": 232,
+  "both": 232,
+  "only_mine": 0,
+  "only_theirs": 0,
+  "sentences_mine": 425,
+  "sentences_theirs": 424
+ },
+ "trauma_explicit": {
+  "mine": 1565,
+  "theirs": 3229,
+  "both": 1500,
+  "only_mine": 65,
+  "only_theirs": 1729,
+  "sentences_mine": 3811,
+  "sentences_theirs": 9041
+ },
+ "emergency_any": {
+  "mine": 3495,
+  "theirs": 3229,
+  "both": 3223,
+  "only_mine": 272,
+  "only_theirs": 6,
+  "sentences_mine": 10383,
+  "sentences_theirs": 9041
+ },
+ "icu": {
+  "mine": 2325,
+  "theirs": 2338,
+  "both": 2324,
+  "only_mine": 1,
+  "only_theirs": 14,
+  "sentences_mine": 6038,
+  "sentences_theirs": 6088
+ },
+ "total_sentences_theirs": 26041,
+ "total_distinct_sentence_rows_theirs": 23835
+}

@@ -1,0 +1,96 @@
+{
+ "n_pairs": 50,
+ "n_pairs_routed": 50,
+ "n_pairs_used_for_fit": 50,
+ "table_latency_ms_by_origin": {
+  "bihar_madhubani_rural": 338,
+  "bihar_gaya_rural": 336,
+  "bihar_saharsa_rural": 310,
+  "bihar_west_champaran_rural": 307,
+  "bihar_rohtas_rural": 326
+ },
+ "table_latency_ms_repeats_origin1": [
+  319,
+  319
+ ],
+ "size_probe": {
+  "100": {
+   "status": 200,
+   "code": "Ok",
+   "message": null,
+   "ms": 459
+  },
+  "101": {
+   "status": 200,
+   "code": "Ok",
+   "message": null,
+   "ms": 451
+  }
+ },
+ "origin_snap_m": {
+  "bihar_gaya_rural": 503,
+  "bihar_madhubani_rural": 159,
+  "bihar_rohtas_rural": 495,
+  "bihar_saharsa_rural": 316,
+  "bihar_west_champaran_rural": 281
+ },
+ "facility_snap_m_median_max": [
+  13.0,
+  1096.0
+ ],
+ "hav_km_median_range": [
+  38.005,
+  5.35,
+  80.63
+ ],
+ "circuity_road_over_hav_median_iqr": [
+  1.257,
+  1.221,
+  1.41
+ ],
+ "circuity_p10_p90": [
+  1.187,
+  1.64
+ ],
+ "osrm_speed_kmh_on_road_median": 69.4,
+ "minutes_per_hav_km_median_iqr": [
+  1.125,
+  1.019,
+  1.373
+ ],
+ "linear_fit_minutes": {
+  "intercept": 3.79,
+  "per_hav_km": 1.081
+ },
+ "loo_mape_constant_ratio": 0.152,
+ "loo_p90_ape_constant_ratio": 0.25,
+ "loo_mape_linear": 0.153,
+ "leave_origin_out_mape_constant_ratio": 0.165,
+ "leave_origin_out_p90_ape": 0.249,
+ "circuity_median_origin_bootstrap_95ci": [
+  1.229,
+  1.338
+ ],
+ "share_osrm_within_20pct_of_ratio_fit": 0.72,
+ "decision_layer_assumed_mape": 0.807,
+ "decision_layer_assumed_bias_median": 1.866,
+ "expressway_nearest": {
+  "input": [
+   18.7835,
+   73.37
+  ],
+  "snapped": [
+   18.779793,
+   73.379818
+  ],
+  "snap_m": 1113,
+  "road_name": "",
+  "ms": 310
+ },
+ "expressway_snapped_nominatim": {
+  "display": "Summer Hill, Thakurwadi, Lonavala, Mawal Subdistrict, Pune District, Maharashtra, 410400, India",
+  "state_district": "Pune District",
+  "road": null,
+  "ms": 377
+ }
+}

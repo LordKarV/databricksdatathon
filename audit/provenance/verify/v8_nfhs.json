@@ -1,0 +1,114 @@
+{
+ "rows": 706,
+ "cols": 109,
+ "indicators": 107,
+ "double": 58,
+ "string": 49,
+ "double_with_nan": 0,
+ "string_cells": 34594,
+ "string_null": 0,
+ "paren": 5068,
+ "star": 4125,
+ "plain_num": 25401,
+ "other": {},
+ "trailing_space_cells": 25401,
+ "all_cells": 75542,
+ "col:pregnant_w15_49_who_are_anaemic_lt_11_0_g_dl_22_pct": {
+  "dtype": "str",
+  "star": 134,
+  "paren": 421,
+  "plain": 151
+ },
+ "col:births_in_a_private_fac_that_were_delivered_by_csection_5y_pct": {
+  "dtype": "str",
+  "star": 150,
+  "paren": 122,
+  "plain": 434
+ },
+ "col:children_with_fever_or_symptoms_of_ari_2wk_taken_to_a_healt_pct": {
+  "dtype": "str",
+  "star": 224,
+  "paren": 264,
+  "plain": 218
+ },
+ "col:births_delivered_by_csection_5y_pct": {
+  "dtype": "float64",
+  "star": 0,
+  "paren": 0,
+  "plain": 706
+ },
+ "col:institutional_birth_5y_pct": {
+  "dtype": "float64",
+  "star": 0,
+  "paren": 0,
+  "plain": 706
+ },
+ "col:hh_member_covered_health_insurance_pct": {
+  "dtype": "float64",
+  "star": 0,
+  "paren": 0,
+  "plain": 706
+ },
+ "col:average_out_of_pocket_expenditure_per_delivery_in_a_public_fac": {
+  "dtype": "str",
+  "star": 1,
+  "paren": 14,
+  "plain": 691
+ },
+ "most_star": {
+  "non_breastfeeding_child_6_23m_receiving_an_adequate_diet16_pct": {
+   "star": 643,
+   "paren": 59,
+   "plain": 4
+  },
+  "child_6_8m_receiving_solid_or_semi_solid_food_and_breastmil_pct": {
+   "star": 642,
+   "paren": 62,
+   "plain": 2
+  },
+  "children_with_diarrhoea_2wk_who_received_oral_rehydration_s_pct": {
+   "star": 492,
+   "paren": 162,
+   "plain": 52
+  }
+ },
+ "range:births_delivered_by_csection_5y_pct": [
+  1.4,
+  82.4
+ ],
+ "range:institutional_birth_5y_pct": [
+  21.4,
+  100.0
+ ],
+ "range:hh_member_covered_health_insurance_pct": [
+  1.2,
+  97.8
+ ],
+ "identical_rows": [
+  "Manipur / Chandel",
+  "Mizoram / Chandel"
+ ],
+ "mizoram_districts": [
+  "Aizawl",
+  "Champhai",
+  "Chandel",
+  "Kolasib",
+  "Lawngtlai",
+  "Lunglei",
+  "Mamit",
+  "Serchhip"
+ ],
+ "wb_bardhaman_like": [],
+ "wb_n": 19,
+ "district_trailing_space": 704,
+ "state_values_odd": [
+  " Lakshadweep ",
+  "Maharastra"
+ ],
+ "longest_names": [
+  "North Twenty Four Pargana",
+  "South Twenty Four Pargana",
+  "Sahibzada Ajit Singh Nagar",
+  "Sant Ravidas Nagar (Bhadohi)"
+ ]
+}

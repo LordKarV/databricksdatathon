@@ -5,3 +5,8 @@ data/
 __pycache__/
 .DS_Store
 audit/capabilities/out/
+.venv*/
+*.pyc
+.tycho/
+*.pbf
+app_design/feasibility/*/ext_*/

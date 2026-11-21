@@ -1,0 +1,41 @@
+uid_prefix,city,pin,city_match_pin,verdict
+e63a8a9f,Bilaspur,495001,True,correct
+b4cbb8dd,Sirsa,125055,True,correct
+e85087f5,Patna,800026,True,correct
+bfdaa215,Burdwan,713101,True,correct
+6027060f,Gondia,441601,True,correct
+d797356b,Vadodara,390021,True,correct
+93831102,Kota,324005,True,correct
+09ce740e,New Delhi,110016,True,correct
+4a235f61,Salem,636009,True,correct
+76153087,Bilaspur,495001,True,correct
+fecc7238,Gurdaspur,143505,True,correct
+0c16ea7e,Kaithal,136027,True,correct
+b66190f9,Mumbai,400006,True,correct
+3ab16c5f,Sirsa,125055,True,correct
+6b631b2f,Kanpur,208006,True,correct
+2f6254e9,Surat,395009,True,correct
+a39093c2,Visakhapatnam,530040,True,correct
+029ef1cd,Margao,403601,True,correct
+7b767837,Khandwa,450001,True,correct
+bde1aebd,Moradabad,244001,True,correct
+99542806,Dombivli,421204,False,false_negative_locality
+08b6b610,Howrah,712203,False,real_mismatch
+ae709273,Indore,482002,False,real_mismatch
+4165b0ac,Debra,721124,False,false_negative_locality
+89570a0f,Kota,302015,False,real_mismatch
+b8f3c47a,Nashik,431001,False,real_mismatch
+42fb3d41,Neb Sarai,110074,False,false_negative_locality
+215f41ce,Visavadar,362120,False,false_negative_locality
+22add191,Jeedimetla,500098,False,false_negative_locality
+a41a2855,Mallikarjunpet,522007,False,unclear
+26586842,Badlapur East,421503,False,false_negative_locality
+f87cb1c8,Roadpali,410218,False,false_negative_locality
+6868fc30,Miraj,400031,False,real_mismatch
+e48a8f48,Dhalpur,175101,False,false_negative_locality
+351d3f2b,Edappally,682034,False,false_negative_locality
+26c6f144,Bangalore,576201,False,real_mismatch
+de44aecc,Nashik,411044,False,real_mismatch
+eea3fed1,Pune,425001,False,real_mismatch
+9a2f538e,Ongole,532312,False,real_mismatch
+16f6abc2,Chinchwad,411033,False,false_negative_locality

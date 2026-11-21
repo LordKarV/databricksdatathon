@@ -1,0 +1,103 @@
+{
+ "atoms": 22787,
+ "atoms_by_ownership": {
+  "unanchored": 21830,
+  "own_anchored": 762,
+  "other_facility": 114,
+  "other_place_district": 40,
+  "other_place_state": 23,
+  "ambiguous": 18
+ },
+ "atoms_by_role": {
+  "offer": 11638,
+  "unit_or_equipment": 5138,
+  "list": 5103,
+  "quantity": 714,
+  "staff": 72,
+  "nonoffer": 54,
+  "hedge": 50,
+  "research_or_template": 18
+ },
+ "counts_as_own": 17353,
+ "units": 15503,
+ "T": {
+  "0": 61746,
+  "1": 1097,
+  "2": 3169,
+  "3": 1393,
+  "4": 822,
+  "5": 1486
+ },
+ "T_noecho": {
+  "0": 61746,
+  "1": 1097,
+  "2": 2919,
+  "3": 1517,
+  "4": 885,
+  "5": 1549
+ },
+ "T_noown": {
+  "0": 61728,
+  "1": 1089,
+  "2": 3173,
+  "3": 1399,
+  "4": 823,
+  "5": 1501
+ },
+ "C": {
+  "0": 69583,
+  "1": 90,
+  "2": 40
+ },
+ "N": 44,
+ "S": 335,
+ "P": {
+  "0": 48170,
+  "1": 17029,
+  "2": 4514
+ },
+ "bucket_records": {
+  "mid": 3685,
+  "low": 3281,
+  "high": 2993
+ },
+ "level": {
+  "none": 9678,
+  "mc": 182,
+  "dh": 60,
+  "chc": 18,
+  "phc": 13,
+  "sdh": 8
+ },
+ "pairs_T_ge_2": 6870,
+ "pairs_any_mention": 8013,
+ "loc_votes": {
+  "v_coords": {
+   "0": 8788,
+   "-1": 1171
+  },
+  "v_pin": {
+   "1": 8202,
+   "0": 1143,
+   "-1": 614
+  },
+  "v_city": {
+   "1": 7846,
+   "0": 1660,
+   "-1": 453
+  },
+  "v_name": {
+   "0": 8890,
+   "1": 839,
+   "-1": 230
+  },
+  "v_state": {
+   "1": 9825,
+   "0": 81,
+   "-1": 53
+  }
+ },
+ "leakage_groups": 8548,
+ "largest_group": 134,
+ "code_sha256": "0228c1dc57ae8b8136165420a4fb460ba73dd01b45e96f3b6affeed1ee7cfe98"
+}

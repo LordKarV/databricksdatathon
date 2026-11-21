@@ -1,0 +1,1707 @@
+{
+ "method": "Grouped by facility duplicate cluster (identity grp_strong, else unique_id), stratified by (service, stratum), deterministic from sha256('vf-gold-split-v1:' + group key). Test is frozen: never inspect or tune on it.",
+ "counts": {
+  "test": 88,
+  "dev": 88
+ },
+ "by_cell": {
+  "burn_care_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "burn_care_strong": {
+   "dev": 3,
+   "test": 2
+  },
+  "burn_care_suspect": {
+   "dev": 3,
+   "test": 2
+  },
+  "burn_care_weak": {
+   "dev": 2,
+   "test": 3
+  },
+  "cardiac_surgery_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "cardiac_surgery_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "cardiac_surgery_suspect": {
+   "dev": 4,
+   "test": 3
+  },
+  "cardiac_surgery_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "dialysis_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "dialysis_strong": {
+   "test": 4,
+   "dev": 3
+  },
+  "dialysis_suspect": {
+   "test": 3,
+   "dev": 4
+  },
+  "dialysis_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "emergency_csection_no_mention": {
+   "test": 2,
+   "dev": 3
+  },
+  "emergency_csection_strong": {
+   "dev": 4,
+   "test": 3
+  },
+  "emergency_csection_suspect": {
+   "test": 4,
+   "dev": 3
+  },
+  "emergency_csection_weak": {
+   "test": 3,
+   "dev": 4
+  },
+  "mri_no_mention": {
+   "test": 2,
+   "dev": 3
+  },
+  "mri_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "mri_suspect": {
+   "test": 4,
+   "dev": 3
+  },
+  "mri_weak": {
+   "dev": 3,
+   "test": 4
+  },
+  "nicu_no_mention": {
+   "dev": 3,
+   "test": 2
+  },
+  "nicu_strong": {
+   "test": 3,
+   "dev": 4
+  },
+  "nicu_suspect": {
+   "dev": 3,
+   "test": 4
+  },
+  "nicu_weak": {
+   "dev": 3,
+   "test": 4
+  },
+  "trauma_emergency_no_mention": {
+   "dev": 2,
+   "test": 3
+  },
+  "trauma_emergency_strong": {
+   "dev": 3,
+   "test": 4
+  },
+  "trauma_emergency_suspect": {
+   "dev": 4,
+   "test": 3
+  },
+  "trauma_emergency_weak": {
+   "dev": 4,
+   "test": 3
+  }
+ },
+ "pairs": [
+  {
+   "pair_id": "dialysis_strong_1",
+   "version": "v1",
+   "unique_id": "af99e7c6-44b0-44db-88b4-d78424f0651d",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "af99e7c6-44b0-44db-88b4-d78424f0651d",
+   "split": "test"
+  },
+  {
+   "pair_id": "dialysis_strong_2",
+   "version": "v1",
+   "unique_id": "1f08b2ae-c50f-423f-a6fa-ce40a723f592",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "1f08b2ae-c50f-423f-a6fa-ce40a723f592",
+   "split": "dev"
+  },
+  {
+   "pair_id": "dialysis_weak_1",
+   "version": "v1",
+   "unique_id": "d523ee35-c4c0-4c3b-a3f4-16310b59500e",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "d523ee35-c4c0-4c3b-a3f4-16310b59500e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "dialysis_weak_2",
+   "version": "v1",
+   "unique_id": "d7b9aaf1-fb11-4a90-96be-78db26d7101f",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "d7b9aaf1-fb11-4a90-96be-78db26d7101f",
+   "split": "dev"
+  },
+  {
+   "pair_id": "dialysis_suspect_1",
+   "version": "v1",
+   "unique_id": "1abd52f3-879a-4c54-aba6-d59043d9f601",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "1abd52f3-879a-4c54-aba6-d59043d9f601",
+   "split": "dev"
+  },
+  {
+   "pair_id": "dialysis_suspect_2",
+   "version": "v1",
+   "unique_id": "08c8f9bb-2e33-468e-8b09-0b1d235ce426",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "08c8f9bb-2e33-468e-8b09-0b1d235ce426",
+   "split": "test"
+  },
+  {
+   "pair_id": "emergency_csection_strong_1",
+   "version": "v1",
+   "unique_id": "22f6c258-b765-4864-9f48-d5e365a5a0be",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "22f6c258-b765-4864-9f48-d5e365a5a0be",
+   "split": "test"
+  },
+  {
+   "pair_id": "emergency_csection_strong_2",
+   "version": "v1",
+   "unique_id": "ae20b125-7b8f-4851-89a7-06480eea6bd4",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "ae20b125-7b8f-4851-89a7-06480eea6bd4",
+   "split": "test"
+  },
+  {
+   "pair_id": "emergency_csection_weak_1",
+   "version": "v1",
+   "unique_id": "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+   "split": "dev"
+  },
+  {
+   "pair_id": "emergency_csection_weak_2",
+   "version": "v1",
+   "unique_id": "5853b359-ea74-4613-83b1-062038f1a9cc",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "5853b359-ea74-4613-83b1-062038f1a9cc",
+   "split": "test"
+  },
+  {
+   "pair_id": "emergency_csection_suspect_1",
+   "version": "v1",
+   "unique_id": "e5cd0285-1da5-4156-88a5-1d10967931f3",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "e5cd0285-1da5-4156-88a5-1d10967931f3",
+   "split": "dev"
+  },
+  {
+   "pair_id": "emergency_csection_suspect_2",
+   "version": "v1",
+   "unique_id": "a41a2855-b81a-4248-9908-a2dbadabaa38",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "a41a2855-b81a-4248-9908-a2dbadabaa38",
+   "split": "dev"
+  },
+  {
+   "pair_id": "nicu_strong_1",
+   "version": "v1",
+   "unique_id": "e7cf3511-c4e1-41b0-9a86-b11a6bdfd0e7",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "e7cf3511-c4e1-41b0-9a86-b11a6bdfd0e7",
+   "split": "dev"
+  },
+  {
+   "pair_id": "nicu_strong_2",
+   "version": "v1",
+   "unique_id": "09c73691-739e-4b31-88ba-2d31c89f7af3",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "09c73691-739e-4b31-88ba-2d31c89f7af3",
+   "split": "test"
+  },
+  {
+   "pair_id": "nicu_weak_1",
+   "version": "v1",
+   "unique_id": "87a43ad2-d525-4629-9e60-99f17cbed5b5",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "87a43ad2-d525-4629-9e60-99f17cbed5b5",
+   "split": "dev"
+  },
+  {
+   "pair_id": "nicu_weak_2",
+   "version": "v1",
+   "unique_id": "7fea71eb-1e73-4c9b-8723-0621aad3deb9",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "7fea71eb-1e73-4c9b-8723-0621aad3deb9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "nicu_suspect_1",
+   "version": "v1",
+   "unique_id": "32177fd1-293a-4179-ae03-2a0d06d07ef3",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "32177fd1-293a-4179-ae03-2a0d06d07ef3",
+   "split": "dev"
+  },
+  {
+   "pair_id": "nicu_suspect_2",
+   "version": "v1",
+   "unique_id": "20596c45-3ad4-409f-9dac-ab0fb319fee3",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "20596c45-3ad4-409f-9dac-ab0fb319fee3",
+   "split": "test"
+  },
+  {
+   "pair_id": "cardiac_surgery_strong_1",
+   "version": "v1",
+   "unique_id": "8bc595e4-98c0-4002-b3b8-8b2ac9d44d70",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "8bc595e4-98c0-4002-b3b8-8b2ac9d44d70",
+   "split": "test"
+  },
+  {
+   "pair_id": "cardiac_surgery_strong_2",
+   "version": "v1",
+   "unique_id": "64b04955-1b6c-47d7-b22d-1c9a20af1c6b",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "64b04955-1b6c-47d7-b22d-1c9a20af1c6b",
+   "split": "dev"
+  },
+  {
+   "pair_id": "cardiac_surgery_weak_1",
+   "version": "v1",
+   "unique_id": "a96d4572-8445-4eec-9fe5-41d32d88b92b",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "a96d4572-8445-4eec-9fe5-41d32d88b92b",
+   "split": "test"
+  },
+  {
+   "pair_id": "cardiac_surgery_weak_2",
+   "version": "v1",
+   "unique_id": "7d528d2e-0bd3-4a89-9161-cbfbf8f50c69",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "7d528d2e-0bd3-4a89-9161-cbfbf8f50c69",
+   "split": "test"
+  },
+  {
+   "pair_id": "cardiac_surgery_suspect_1",
+   "version": "v1",
+   "unique_id": "5e6f6e25-8a5c-40b1-9733-6bfd0811b42f",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "5e6f6e25-8a5c-40b1-9733-6bfd0811b42f",
+   "split": "dev"
+  },
+  {
+   "pair_id": "cardiac_surgery_suspect_2",
+   "version": "v1",
+   "unique_id": "2cbfa0f8-9049-4161-a8b4-9b4a9f9fb2ea",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "2cbfa0f8-9049-4161-a8b4-9b4a9f9fb2ea",
+   "split": "dev"
+  },
+  {
+   "pair_id": "mri_strong_1",
+   "version": "v1",
+   "unique_id": "222d6401-119d-4b00-b11c-ce3a311a238d",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "222d6401-119d-4b00-b11c-ce3a311a238d",
+   "split": "dev"
+  },
+  {
+   "pair_id": "mri_strong_2",
+   "version": "v1",
+   "unique_id": "4c94dfcb-fe8d-4595-86db-dc83b82c6e85",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "4c94dfcb-fe8d-4595-86db-dc83b82c6e85",
+   "split": "test"
+  },
+  {
+   "pair_id": "mri_weak_1",
+   "version": "v1",
+   "unique_id": "0b88e73f-787e-45c4-bcd3-ec8b27a53c74",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "0b88e73f-787e-45c4-bcd3-ec8b27a53c74",
+   "split": "test"
+  },
+  {
+   "pair_id": "mri_weak_2",
+   "version": "v1",
+   "unique_id": "18aca974-cadb-4c0f-a4e1-efde9710c729",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "18aca974-cadb-4c0f-a4e1-efde9710c729",
+   "split": "test"
+  },
+  {
+   "pair_id": "mri_suspect_1",
+   "version": "v1",
+   "unique_id": "788a47ec-36ae-43ba-afb0-ae07df9b1579",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "788a47ec-36ae-43ba-afb0-ae07df9b1579",
+   "split": "test"
+  },
+  {
+   "pair_id": "mri_suspect_2",
+   "version": "v1",
+   "unique_id": "66d812eb-a685-4bdc-956d-095e3b50e5d2",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "66d812eb-a685-4bdc-956d-095e3b50e5d2",
+   "split": "test"
+  },
+  {
+   "pair_id": "trauma_emergency_strong_1",
+   "version": "v1",
+   "unique_id": "3e808597-0724-40e8-9e27-51b54440e9ca",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "3e808597-0724-40e8-9e27-51b54440e9ca",
+   "split": "test"
+  },
+  {
+   "pair_id": "trauma_emergency_strong_2",
+   "version": "v1",
+   "unique_id": "404c60bb-c918-4d1e-896e-e98265bba0f5",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "404c60bb-c918-4d1e-896e-e98265bba0f5",
+   "split": "dev"
+  },
+  {
+   "pair_id": "trauma_emergency_weak_1",
+   "version": "v1",
+   "unique_id": "c52d8c4a-4b5f-46f3-8877-90e7b16837f5",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "c52d8c4a-4b5f-46f3-8877-90e7b16837f5",
+   "split": "dev"
+  },
+  {
+   "pair_id": "trauma_emergency_weak_2",
+   "version": "v1",
+   "unique_id": "90dfc866-2ede-48f3-a683-b1004e996d4b",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "90dfc866-2ede-48f3-a683-b1004e996d4b",
+   "split": "dev"
+  },
+  {
+   "pair_id": "trauma_emergency_suspect_1",
+   "version": "v1",
+   "unique_id": "c63d560f-2d07-44fd-96c0-a61cb41dffdd",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "c63d560f-2d07-44fd-96c0-a61cb41dffdd",
+   "split": "dev"
+  },
+  {
+   "pair_id": "trauma_emergency_suspect_2",
+   "version": "v1",
+   "unique_id": "1ee06ace-37e0-47db-91c6-7a7d4ca9e286",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "1ee06ace-37e0-47db-91c6-7a7d4ca9e286",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_strong_1",
+   "version": "v2",
+   "unique_id": "2caaab40-39cc-4ab2-8840-cb2405596bf9",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "2caaab40-39cc-4ab2-8840-cb2405596bf9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_strong_2",
+   "version": "v2",
+   "unique_id": "960c4a2a-1730-416d-9ac0-90347690a611",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "960c4a2a-1730-416d-9ac0-90347690a611",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_strong_3",
+   "version": "v2",
+   "unique_id": "c599e4ad-cccb-48f1-874e-8bbd70b7d21c",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "c599e4ad-cccb-48f1-874e-8bbd70b7d21c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_strong_4",
+   "version": "v2",
+   "unique_id": "ddb9be27-2b7e-4fd8-a68b-9f0ab2db6df9",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "ddb9be27-2b7e-4fd8-a68b-9f0ab2db6df9",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_strong_5",
+   "version": "v2",
+   "unique_id": "4a4f5851-0220-4767-9430-229122471c11",
+   "service": "dialysis",
+   "stratum": "strong",
+   "group": "4a4f5851-0220-4767-9430-229122471c11",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_weak_1",
+   "version": "v2",
+   "unique_id": "6678ea1a-54d7-4f3f-8f54-5416414ba681",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "6678ea1a-54d7-4f3f-8f54-5416414ba681",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_weak_2",
+   "version": "v2",
+   "unique_id": "871c4916-ba7f-4148-a4ec-3a0bca9e3f12",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "871c4916-ba7f-4148-a4ec-3a0bca9e3f12",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_weak_3",
+   "version": "v2",
+   "unique_id": "eb682cd1-f3d7-4138-9186-b8613c32a53e",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "eb682cd1-f3d7-4138-9186-b8613c32a53e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_weak_4",
+   "version": "v2",
+   "unique_id": "5ecc32b2-917a-4ecf-8ab5-1d1a7bf12cc4",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "5ecc32b2-917a-4ecf-8ab5-1d1a7bf12cc4",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_weak_5",
+   "version": "v2",
+   "unique_id": "ebcba078-03f3-439e-b7ad-8ac2e6ff4a27",
+   "service": "dialysis",
+   "stratum": "weak",
+   "group": "ebcba078-03f3-439e-b7ad-8ac2e6ff4a27",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_suspect_1",
+   "version": "v2",
+   "unique_id": "bfa6780d-a589-493c-b846-834f232d4efd",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "bfa6780d-a589-493c-b846-834f232d4efd",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_suspect_2",
+   "version": "v2",
+   "unique_id": "e995916e-4dfa-431a-8998-9904d5322e1e",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "e995916e-4dfa-431a-8998-9904d5322e1e",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_suspect_3",
+   "version": "v2",
+   "unique_id": "bb3cd01a-c6fc-4678-8844-b1ba0849b0c8",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "bb3cd01a-c6fc-4678-8844-b1ba0849b0c8",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_suspect_4",
+   "version": "v2",
+   "unique_id": "58f1d117-1043-4761-abc2-254274e11cd7",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "58f1d117-1043-4761-abc2-254274e11cd7",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_suspect_5",
+   "version": "v2",
+   "unique_id": "c2c2f471-241c-489e-9d0d-e422fa66ff7f",
+   "service": "dialysis",
+   "stratum": "suspect",
+   "group": "c2c2f471-241c-489e-9d0d-e422fa66ff7f",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_no_mention_1",
+   "version": "v2",
+   "unique_id": "50ce83e9-a967-4274-90b7-c3cd4d56fd17",
+   "service": "dialysis",
+   "stratum": "no_mention",
+   "group": "50ce83e9-a967-4274-90b7-c3cd4d56fd17",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_no_mention_2",
+   "version": "v2",
+   "unique_id": "40891eeb-dc6b-4308-b8d0-6414eac258b6",
+   "service": "dialysis",
+   "stratum": "no_mention",
+   "group": "40891eeb-dc6b-4308-b8d0-6414eac258b6",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_dialysis_no_mention_3",
+   "version": "v2",
+   "unique_id": "295b475d-e7ac-468f-9f48-447391f38984",
+   "service": "dialysis",
+   "stratum": "no_mention",
+   "group": "295b475d-e7ac-468f-9f48-447391f38984",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_no_mention_4",
+   "version": "v2",
+   "unique_id": "6defab3b-0fe5-4341-8123-5496cbc64fb4",
+   "service": "dialysis",
+   "stratum": "no_mention",
+   "group": "6defab3b-0fe5-4341-8123-5496cbc64fb4",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_dialysis_no_mention_5",
+   "version": "v2",
+   "unique_id": "d97ff0ee-d8f6-4d16-a965-c0e1be802137",
+   "service": "dialysis",
+   "stratum": "no_mention",
+   "group": "d97ff0ee-d8f6-4d16-a965-c0e1be802137",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_1",
+   "version": "v2",
+   "unique_id": "818121a4-bb10-44a5-9d1d-256a3070416c",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "818121a4-bb10-44a5-9d1d-256a3070416c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_2",
+   "version": "v2",
+   "unique_id": "46034119-2b71-48b0-a926-eeaa0b71233e",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "46034119-2b71-48b0-a926-eeaa0b71233e",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_3",
+   "version": "v2",
+   "unique_id": "d019b76c-137a-4fa4-a8cf-7c438d47e9c7",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "d019b76c-137a-4fa4-a8cf-7c438d47e9c7",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_4",
+   "version": "v2",
+   "unique_id": "7cd645ec-676e-4830-974a-6c3256d3434d",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "7cd645ec-676e-4830-974a-6c3256d3434d",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_5",
+   "version": "v2",
+   "unique_id": "c975a844-09b0-4eaa-88b4-8f2e40e4ec67",
+   "service": "emergency_csection",
+   "stratum": "strong",
+   "group": "c975a844-09b0-4eaa-88b4-8f2e40e4ec67",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_1",
+   "version": "v2",
+   "unique_id": "673aee98-ff44-4305-9830-43c052547193",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "673aee98-ff44-4305-9830-43c052547193",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_2",
+   "version": "v2",
+   "unique_id": "66264f61-3e21-4db3-9d05-e5aa99a7f33b",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "66264f61-3e21-4db3-9d05-e5aa99a7f33b",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_3",
+   "version": "v2",
+   "unique_id": "aa4621f2-0b6a-4256-a39c-4098101d92a4",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "aa4621f2-0b6a-4256-a39c-4098101d92a4",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_4",
+   "version": "v2",
+   "unique_id": "b1b8f085-52bc-4ca1-9b71-30c9ca0ee328",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "b1b8f085-52bc-4ca1-9b71-30c9ca0ee328",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_5",
+   "version": "v2",
+   "unique_id": "04bae564-9f3f-4b55-8854-3bfd587793a8",
+   "service": "emergency_csection",
+   "stratum": "weak",
+   "group": "04bae564-9f3f-4b55-8854-3bfd587793a8",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_suspect_1",
+   "version": "v2",
+   "unique_id": "142bcb47-6641-476f-8d1d-99ccbbd623ab",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "142bcb47-6641-476f-8d1d-99ccbbd623ab",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_suspect_2",
+   "version": "v2",
+   "unique_id": "c6d36143-9f57-46ab-8ae4-a8eceed8f58e",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "c6d36143-9f57-46ab-8ae4-a8eceed8f58e",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_suspect_3",
+   "version": "v2",
+   "unique_id": "4b55fb1d-da83-4492-b3a3-f48a70fefd85",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "4b55fb1d-da83-4492-b3a3-f48a70fefd85",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_suspect_4",
+   "version": "v2",
+   "unique_id": "dfb26678-ac7a-4fd4-8238-a4c632e1e31c",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "dfb26678-ac7a-4fd4-8238-a4c632e1e31c",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_suspect_5",
+   "version": "v2",
+   "unique_id": "aee90e94-5d26-4247-a0c5-7db96b6839ad",
+   "service": "emergency_csection",
+   "stratum": "suspect",
+   "group": "aee90e94-5d26-4247-a0c5-7db96b6839ad",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_no_mention_1",
+   "version": "v2",
+   "unique_id": "ddfc13b1-edd5-4950-bf42-76317a817e54",
+   "service": "emergency_csection",
+   "stratum": "no_mention",
+   "group": "ddfc13b1-edd5-4950-bf42-76317a817e54",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_no_mention_2",
+   "version": "v2",
+   "unique_id": "a9077716-04f1-44c5-9ad7-801c68d74978",
+   "service": "emergency_csection",
+   "stratum": "no_mention",
+   "group": "a9077716-04f1-44c5-9ad7-801c68d74978",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_no_mention_3",
+   "version": "v2",
+   "unique_id": "712fef10-eb2e-4770-9779-1af2784dcb7d",
+   "service": "emergency_csection",
+   "stratum": "no_mention",
+   "group": "712fef10-eb2e-4770-9779-1af2784dcb7d",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_emergency_csection_no_mention_4",
+   "version": "v2",
+   "unique_id": "67d311ae-eede-46e8-b5b4-2688a68d2a18",
+   "service": "emergency_csection",
+   "stratum": "no_mention",
+   "group": "67d311ae-eede-46e8-b5b4-2688a68d2a18",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_emergency_csection_no_mention_5",
+   "version": "v2",
+   "unique_id": "e671fc00-3e3b-44b4-8016-903f203e652a",
+   "service": "emergency_csection",
+   "stratum": "no_mention",
+   "group": "e671fc00-3e3b-44b4-8016-903f203e652a",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_strong_1",
+   "version": "v2",
+   "unique_id": "795e3aed-a2bf-4685-8831-6f2bd93674ca",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "795e3aed-a2bf-4685-8831-6f2bd93674ca",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_strong_2",
+   "version": "v2",
+   "unique_id": "ad126438-6e34-43e7-a627-1432ccc65d36",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "ad126438-6e34-43e7-a627-1432ccc65d36",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_strong_3",
+   "version": "v2",
+   "unique_id": "8b37f553-7fa1-4848-aefc-40b56b779c81",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "8b37f553-7fa1-4848-aefc-40b56b779c81",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_strong_4",
+   "version": "v2",
+   "unique_id": "36556485-61f1-44a2-9d39-361a5cd6925d",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "36556485-61f1-44a2-9d39-361a5cd6925d",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_strong_5",
+   "version": "v2",
+   "unique_id": "55b83426-e6e4-472b-8562-5ce11004dcb4",
+   "service": "nicu",
+   "stratum": "strong",
+   "group": "55b83426-e6e4-472b-8562-5ce11004dcb4",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_weak_1",
+   "version": "v2",
+   "unique_id": "76095878-6d16-4866-a5c7-77eeeba799e3",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "76095878-6d16-4866-a5c7-77eeeba799e3",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_weak_2",
+   "version": "v2",
+   "unique_id": "acb8dbea-b68f-4e88-8bfc-b8db291843b2",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "acb8dbea-b68f-4e88-8bfc-b8db291843b2",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_weak_3",
+   "version": "v2",
+   "unique_id": "8af05acc-928a-466c-ab65-d3c3e9b0bf2b",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "8af05acc-928a-466c-ab65-d3c3e9b0bf2b",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_weak_4",
+   "version": "v2",
+   "unique_id": "bf4a4444-50f4-40b6-b4c3-078b459ef4d6",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "bf4a4444-50f4-40b6-b4c3-078b459ef4d6",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_weak_5",
+   "version": "v2",
+   "unique_id": "5d2126fd-bbb9-4f3d-bfe8-431c256b1f1b",
+   "service": "nicu",
+   "stratum": "weak",
+   "group": "5d2126fd-bbb9-4f3d-bfe8-431c256b1f1b",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_suspect_1",
+   "version": "v2",
+   "unique_id": "980d56d9-fa21-4beb-bd15-9cc468409c00",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "980d56d9-fa21-4beb-bd15-9cc468409c00",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_suspect_2",
+   "version": "v2",
+   "unique_id": "f8844e4a-81b2-4f03-ab5d-2e18666542b4",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "f8844e4a-81b2-4f03-ab5d-2e18666542b4",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_suspect_3",
+   "version": "v2",
+   "unique_id": "a2424d67-963b-4570-8c5c-08761c417153",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "a2424d67-963b-4570-8c5c-08761c417153",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_suspect_4",
+   "version": "v2",
+   "unique_id": "3c59dd35-0e04-4868-85ad-86e300d97f02",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "3c59dd35-0e04-4868-85ad-86e300d97f02",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_suspect_5",
+   "version": "v2",
+   "unique_id": "bc3bb6d6-419c-4db9-94d9-63f61e1d72a1",
+   "service": "nicu",
+   "stratum": "suspect",
+   "group": "bc3bb6d6-419c-4db9-94d9-63f61e1d72a1",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_no_mention_1",
+   "version": "v2",
+   "unique_id": "a1949036-1d7a-4e0c-bcbc-23179217fd7c",
+   "service": "nicu",
+   "stratum": "no_mention",
+   "group": "a1949036-1d7a-4e0c-bcbc-23179217fd7c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_no_mention_2",
+   "version": "v2",
+   "unique_id": "427cf36b-ab8f-4d71-bd39-a30623946638",
+   "service": "nicu",
+   "stratum": "no_mention",
+   "group": "427cf36b-ab8f-4d71-bd39-a30623946638",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_no_mention_3",
+   "version": "v2",
+   "unique_id": "bc4f9e08-7f73-425a-8435-f9edc28c2881",
+   "service": "nicu",
+   "stratum": "no_mention",
+   "group": "bc4f9e08-7f73-425a-8435-f9edc28c2881",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_nicu_no_mention_4",
+   "version": "v2",
+   "unique_id": "ee8e47b1-0d7b-45d1-a953-53574c39fecc",
+   "service": "nicu",
+   "stratum": "no_mention",
+   "group": "ee8e47b1-0d7b-45d1-a953-53574c39fecc",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_nicu_no_mention_5",
+   "version": "v2",
+   "unique_id": "d5d4f2fd-ceee-4ed1-bf45-f60149860f9d",
+   "service": "nicu",
+   "stratum": "no_mention",
+   "group": "d5d4f2fd-ceee-4ed1-bf45-f60149860f9d",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_strong_1",
+   "version": "v2",
+   "unique_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_strong_2",
+   "version": "v2",
+   "unique_id": "268245b0-e431-4655-8042-bb45df37479e",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "268245b0-e431-4655-8042-bb45df37479e",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_strong_3",
+   "version": "v2",
+   "unique_id": "c7185521-d12b-410d-a93f-73e5039bd110",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "c7185521-d12b-410d-a93f-73e5039bd110",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_strong_4",
+   "version": "v2",
+   "unique_id": "7f0a880d-249c-471f-a02b-7c0dffd0caa4",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "7f0a880d-249c-471f-a02b-7c0dffd0caa4",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_strong_5",
+   "version": "v2",
+   "unique_id": "dbba43a6-3542-45e3-a84e-00ba395af36f",
+   "service": "cardiac_surgery",
+   "stratum": "strong",
+   "group": "dbba43a6-3542-45e3-a84e-00ba395af36f",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_weak_1",
+   "version": "v2",
+   "unique_id": "e3209079-d461-41f2-8ceb-581a2c893c48",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "e3209079-d461-41f2-8ceb-581a2c893c48",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_weak_2",
+   "version": "v2",
+   "unique_id": "c7dc68e3-40f2-4957-988c-931eef278a03",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "c7dc68e3-40f2-4957-988c-931eef278a03",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_weak_3",
+   "version": "v2",
+   "unique_id": "3f7524c7-f0cc-42d8-b86b-bbab020e1b0b",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "3f7524c7-f0cc-42d8-b86b-bbab020e1b0b",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_weak_4",
+   "version": "v2",
+   "unique_id": "06145f85-32c5-43ff-b6a6-2b5ac7e31d3e",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "06145f85-32c5-43ff-b6a6-2b5ac7e31d3e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_weak_5",
+   "version": "v2",
+   "unique_id": "267d9a6e-a1de-4c30-bd79-4d64b21d5bb1",
+   "service": "cardiac_surgery",
+   "stratum": "weak",
+   "group": "267d9a6e-a1de-4c30-bd79-4d64b21d5bb1",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_suspect_1",
+   "version": "v2",
+   "unique_id": "611ce272-c782-4276-9e90-848e5ab6e9e8",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "611ce272-c782-4276-9e90-848e5ab6e9e8",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_suspect_2",
+   "version": "v2",
+   "unique_id": "9e6e1baf-e632-4b83-97cf-fad2300aa110",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "9e6e1baf-e632-4b83-97cf-fad2300aa110",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_suspect_3",
+   "version": "v2",
+   "unique_id": "30494fe0-d130-4168-84a5-02b78a773940",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "30494fe0-d130-4168-84a5-02b78a773940",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_suspect_4",
+   "version": "v2",
+   "unique_id": "082418d4-65f4-4e1d-aac6-93570c0eba71",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "082418d4-65f4-4e1d-aac6-93570c0eba71",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_suspect_5",
+   "version": "v2",
+   "unique_id": "51179ca4-f342-4014-92d7-c2d2ef1adbb1",
+   "service": "cardiac_surgery",
+   "stratum": "suspect",
+   "group": "51179ca4-f342-4014-92d7-c2d2ef1adbb1",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_no_mention_1",
+   "version": "v2",
+   "unique_id": "3c89005b-873f-4827-a9b8-67f59f630c5c",
+   "service": "cardiac_surgery",
+   "stratum": "no_mention",
+   "group": "3c89005b-873f-4827-a9b8-67f59f630c5c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_no_mention_2",
+   "version": "v2",
+   "unique_id": "b1d8a8eb-744b-4217-97c1-104f5f20bdbb",
+   "service": "cardiac_surgery",
+   "stratum": "no_mention",
+   "group": "b1d8a8eb-744b-4217-97c1-104f5f20bdbb",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_no_mention_3",
+   "version": "v2",
+   "unique_id": "6e2fb5fc-defd-424b-a6e1-8bf3361959d3",
+   "service": "cardiac_surgery",
+   "stratum": "no_mention",
+   "group": "6e2fb5fc-defd-424b-a6e1-8bf3361959d3",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_no_mention_4",
+   "version": "v2",
+   "unique_id": "925223e2-ae6d-4f07-9a92-5dd5c7515c02",
+   "service": "cardiac_surgery",
+   "stratum": "no_mention",
+   "group": "6d432c18-06b6-4ddf-8fac-997522ed1135",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_cardiac_surgery_no_mention_5",
+   "version": "v2",
+   "unique_id": "ab1fa576-220b-43e1-8233-ffd2ad191d3c",
+   "service": "cardiac_surgery",
+   "stratum": "no_mention",
+   "group": "ab1fa576-220b-43e1-8233-ffd2ad191d3c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_strong_1",
+   "version": "v2",
+   "unique_id": "22e3be1e-c2c5-4ca3-a4c3-7f3d7b0d32d2",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "22e3be1e-c2c5-4ca3-a4c3-7f3d7b0d32d2",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_strong_2",
+   "version": "v2",
+   "unique_id": "c95d849a-cf56-4e86-aec0-33e76e057532",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "c95d849a-cf56-4e86-aec0-33e76e057532",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_strong_3",
+   "version": "v2",
+   "unique_id": "ac382cdf-8ff9-4539-a453-00bec0989719",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "ac382cdf-8ff9-4539-a453-00bec0989719",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_strong_4",
+   "version": "v2",
+   "unique_id": "2f988dbd-519d-432d-8993-ca89f4e376a0",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "2f988dbd-519d-432d-8993-ca89f4e376a0",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_strong_5",
+   "version": "v2",
+   "unique_id": "0fe3fe7f-f1d9-4332-9147-2c35de3179f0",
+   "service": "mri",
+   "stratum": "strong",
+   "group": "0fe3fe7f-f1d9-4332-9147-2c35de3179f0",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_weak_1",
+   "version": "v2",
+   "unique_id": "648a29a5-2257-426d-a96a-3209502187ee",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "648a29a5-2257-426d-a96a-3209502187ee",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_weak_2",
+   "version": "v2",
+   "unique_id": "8ea0fdef-17cc-4da6-9f0b-2ffb79c7c41e",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "8ea0fdef-17cc-4da6-9f0b-2ffb79c7c41e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_weak_3",
+   "version": "v2",
+   "unique_id": "f75d5250-6df0-46f5-8548-aa5705be2725",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "f75d5250-6df0-46f5-8548-aa5705be2725",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_weak_4",
+   "version": "v2",
+   "unique_id": "ee3ec41a-236c-4078-825a-72c59a4c7c41",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "ee3ec41a-236c-4078-825a-72c59a4c7c41",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_weak_5",
+   "version": "v2",
+   "unique_id": "28d5142d-f054-411a-a72e-60eb2d7c80c6",
+   "service": "mri",
+   "stratum": "weak",
+   "group": "28d5142d-f054-411a-a72e-60eb2d7c80c6",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_suspect_1",
+   "version": "v2",
+   "unique_id": "64be7869-83a6-40d4-a2f3-8c7c4fffbe7c",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "64be7869-83a6-40d4-a2f3-8c7c4fffbe7c",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_suspect_2",
+   "version": "v2",
+   "unique_id": "5f6eb7d7-b386-4a8f-92c4-102651f8ae40",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "5f6eb7d7-b386-4a8f-92c4-102651f8ae40",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_suspect_3",
+   "version": "v2",
+   "unique_id": "2723785d-90a3-4239-8843-abdd36e60c80",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "2723785d-90a3-4239-8843-abdd36e60c80",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_suspect_4",
+   "version": "v2",
+   "unique_id": "746990da-8984-41b5-84e1-bdd94a0b7cb9",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "746990da-8984-41b5-84e1-bdd94a0b7cb9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_suspect_5",
+   "version": "v2",
+   "unique_id": "7e08f70c-6fc4-49f8-a1e9-fdddda2e0469",
+   "service": "mri",
+   "stratum": "suspect",
+   "group": "7e08f70c-6fc4-49f8-a1e9-fdddda2e0469",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_no_mention_1",
+   "version": "v2",
+   "unique_id": "6d947540-8931-4d6d-92cb-50d5d76e1ac9",
+   "service": "mri",
+   "stratum": "no_mention",
+   "group": "6d947540-8931-4d6d-92cb-50d5d76e1ac9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_no_mention_2",
+   "version": "v2",
+   "unique_id": "19cfce30-f0d1-4489-a08b-598e70ddf018",
+   "service": "mri",
+   "stratum": "no_mention",
+   "group": "19cfce30-f0d1-4489-a08b-598e70ddf018",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_no_mention_3",
+   "version": "v2",
+   "unique_id": "dda3e7e4-0be7-4aff-be1a-0b7125edade9",
+   "service": "mri",
+   "stratum": "no_mention",
+   "group": "dda3e7e4-0be7-4aff-be1a-0b7125edade9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_mri_no_mention_4",
+   "version": "v2",
+   "unique_id": "9e64d63e-9421-4b29-ac72-dc73447a1db4",
+   "service": "mri",
+   "stratum": "no_mention",
+   "group": "9e64d63e-9421-4b29-ac72-dc73447a1db4",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_mri_no_mention_5",
+   "version": "v2",
+   "unique_id": "470aa9e5-7b9a-4c7f-a366-3c4006306c71",
+   "service": "mri",
+   "stratum": "no_mention",
+   "group": "470aa9e5-7b9a-4c7f-a366-3c4006306c71",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_strong_1",
+   "version": "v2",
+   "unique_id": "b2db2916-a5db-42ab-87f4-5f9581695f4e",
+   "service": "burn_care",
+   "stratum": "strong",
+   "group": "b2db2916-a5db-42ab-87f4-5f9581695f4e",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_strong_2",
+   "version": "v2",
+   "unique_id": "ce402c4a-e70e-48fb-89f1-d6c0182371c2",
+   "service": "burn_care",
+   "stratum": "strong",
+   "group": "ce402c4a-e70e-48fb-89f1-d6c0182371c2",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_strong_3",
+   "version": "v2",
+   "unique_id": "2fa5d7fc-9f40-4515-8e8a-4ab404f942ba",
+   "service": "burn_care",
+   "stratum": "strong",
+   "group": "2fa5d7fc-9f40-4515-8e8a-4ab404f942ba",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_strong_4",
+   "version": "v2",
+   "unique_id": "978b7d1a-07a6-43ea-bb36-bdfdf8eadd8e",
+   "service": "burn_care",
+   "stratum": "strong",
+   "group": "978b7d1a-07a6-43ea-bb36-bdfdf8eadd8e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_strong_5",
+   "version": "v2",
+   "unique_id": "198ec9ea-a628-463d-af35-8f8c20d3b92e",
+   "service": "burn_care",
+   "stratum": "strong",
+   "group": "198ec9ea-a628-463d-af35-8f8c20d3b92e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_weak_1",
+   "version": "v2",
+   "unique_id": "0e388917-7155-454b-82fc-8db4e501588c",
+   "service": "burn_care",
+   "stratum": "weak",
+   "group": "0e388917-7155-454b-82fc-8db4e501588c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_weak_2",
+   "version": "v2",
+   "unique_id": "df56f1a0-625e-4f5e-adf7-f06ff5505614",
+   "service": "burn_care",
+   "stratum": "weak",
+   "group": "df56f1a0-625e-4f5e-adf7-f06ff5505614",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_weak_3",
+   "version": "v2",
+   "unique_id": "3168e3e3-1154-47a7-a2be-2f06afb86a34",
+   "service": "burn_care",
+   "stratum": "weak",
+   "group": "3168e3e3-1154-47a7-a2be-2f06afb86a34",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_weak_4",
+   "version": "v2",
+   "unique_id": "f4b8714b-f61c-4445-8064-1df53506d713",
+   "service": "burn_care",
+   "stratum": "weak",
+   "group": "f4b8714b-f61c-4445-8064-1df53506d713",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_weak_5",
+   "version": "v2",
+   "unique_id": "f407e788-0b2f-4c12-8662-a32aa2175d6f",
+   "service": "burn_care",
+   "stratum": "weak",
+   "group": "f407e788-0b2f-4c12-8662-a32aa2175d6f",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_1",
+   "version": "v2",
+   "unique_id": "4616c935-ae1b-4d40-ae5a-3d6c31a90206",
+   "service": "burn_care",
+   "stratum": "suspect",
+   "group": "4616c935-ae1b-4d40-ae5a-3d6c31a90206",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_2",
+   "version": "v2",
+   "unique_id": "4160e35d-1d6a-452a-b1c4-2e178c6b2626",
+   "service": "burn_care",
+   "stratum": "suspect",
+   "group": "4160e35d-1d6a-452a-b1c4-2e178c6b2626",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_3",
+   "version": "v2",
+   "unique_id": "4e5ea99e-286a-41da-a405-6f150dd9534e",
+   "service": "burn_care",
+   "stratum": "suspect",
+   "group": "4e5ea99e-286a-41da-a405-6f150dd9534e",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_4",
+   "version": "v2",
+   "unique_id": "5c27a487-bb24-4767-afdb-b0bf23c46ebe",
+   "service": "burn_care",
+   "stratum": "suspect",
+   "group": "5c27a487-bb24-4767-afdb-b0bf23c46ebe",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_5",
+   "version": "v2",
+   "unique_id": "bf01bc89-9607-4a94-86c8-3b9cbae7079c",
+   "service": "burn_care",
+   "stratum": "suspect",
+   "group": "bf01bc89-9607-4a94-86c8-3b9cbae7079c",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_1",
+   "version": "v2",
+   "unique_id": "6508ae47-60a9-442e-ab88-c063d1b3e49a",
+   "service": "burn_care",
+   "stratum": "no_mention",
+   "group": "6508ae47-60a9-442e-ab88-c063d1b3e49a",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_2",
+   "version": "v2",
+   "unique_id": "b7566a89-db72-485c-af9a-d12737174d7b",
+   "service": "burn_care",
+   "stratum": "no_mention",
+   "group": "b7566a89-db72-485c-af9a-d12737174d7b",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_3",
+   "version": "v2",
+   "unique_id": "b9b368df-eb24-42dd-887d-f3c1270031f9",
+   "service": "burn_care",
+   "stratum": "no_mention",
+   "group": "b9b368df-eb24-42dd-887d-f3c1270031f9",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_4",
+   "version": "v2",
+   "unique_id": "9192a7c6-4036-494a-b792-87dd73879fb1",
+   "service": "burn_care",
+   "stratum": "no_mention",
+   "group": "9192a7c6-4036-494a-b792-87dd73879fb1",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_5",
+   "version": "v2",
+   "unique_id": "e0d7ddd5-5fad-42c0-b5ef-9d86e181f258",
+   "service": "burn_care",
+   "stratum": "no_mention",
+   "group": "e0d7ddd5-5fad-42c0-b5ef-9d86e181f258",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_1",
+   "version": "v2",
+   "unique_id": "463597f9-4ceb-4e49-a7c6-2b6265b99ab7",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "463597f9-4ceb-4e49-a7c6-2b6265b99ab7",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_2",
+   "version": "v2",
+   "unique_id": "d2d94430-fe24-41a4-8c48-96a04aa33d0b",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "d2d94430-fe24-41a4-8c48-96a04aa33d0b",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_3",
+   "version": "v2",
+   "unique_id": "587bf5c2-9fcd-450c-8fe1-8dbdff1adb8a",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "587bf5c2-9fcd-450c-8fe1-8dbdff1adb8a",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_4",
+   "version": "v2",
+   "unique_id": "63b6685c-2c27-4c9b-8c91-e5d657137389",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "63b6685c-2c27-4c9b-8c91-e5d657137389",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_5",
+   "version": "v2",
+   "unique_id": "f17e6aec-2c8f-4123-a3e8-dfa7ae056a3f",
+   "service": "trauma_emergency",
+   "stratum": "strong",
+   "group": "f17e6aec-2c8f-4123-a3e8-dfa7ae056a3f",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_weak_1",
+   "version": "v2",
+   "unique_id": "69fbb4ab-3605-418d-81d7-1328934b52b6",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "69fbb4ab-3605-418d-81d7-1328934b52b6",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_weak_2",
+   "version": "v2",
+   "unique_id": "3c0c8325-7198-4bc3-87ec-0a1409f37372",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "3c0c8325-7198-4bc3-87ec-0a1409f37372",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_weak_3",
+   "version": "v2",
+   "unique_id": "e0e20a47-20d6-4339-a91a-a222690be5f5",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "e0e20a47-20d6-4339-a91a-a222690be5f5",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_weak_4",
+   "version": "v2",
+   "unique_id": "2c8c9988-207b-4e17-af89-0257437d1c8f",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "2c8c9988-207b-4e17-af89-0257437d1c8f",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_weak_5",
+   "version": "v2",
+   "unique_id": "2438a69f-55a6-4cbc-b4e7-ede6707157d2",
+   "service": "trauma_emergency",
+   "stratum": "weak",
+   "group": "2438a69f-55a6-4cbc-b4e7-ede6707157d2",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_suspect_1",
+   "version": "v2",
+   "unique_id": "380c9661-eaeb-48f4-9fc8-5a7d781d6ffa",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "380c9661-eaeb-48f4-9fc8-5a7d781d6ffa",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_suspect_2",
+   "version": "v2",
+   "unique_id": "9ce89c30-1a87-4deb-bc63-3fd75ef058d6",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "9ce89c30-1a87-4deb-bc63-3fd75ef058d6",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_suspect_3",
+   "version": "v2",
+   "unique_id": "44777d73-d662-4eb4-8d21-7b5d1febdb11",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "44777d73-d662-4eb4-8d21-7b5d1febdb11",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_suspect_4",
+   "version": "v2",
+   "unique_id": "66fe3301-fc71-4a0f-8e29-77fc50b0f20c",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "66fe3301-fc71-4a0f-8e29-77fc50b0f20c",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_suspect_5",
+   "version": "v2",
+   "unique_id": "aaacf177-9918-489f-873c-7ecbba0b7117",
+   "service": "trauma_emergency",
+   "stratum": "suspect",
+   "group": "aaacf177-9918-489f-873c-7ecbba0b7117",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_no_mention_1",
+   "version": "v2",
+   "unique_id": "4e172891-8e97-4976-91d8-83b13a733b6c",
+   "service": "trauma_emergency",
+   "stratum": "no_mention",
+   "group": "4e172891-8e97-4976-91d8-83b13a733b6c",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_no_mention_2",
+   "version": "v2",
+   "unique_id": "2280b7ec-694c-4886-b58f-2c524818d2bf",
+   "service": "trauma_emergency",
+   "stratum": "no_mention",
+   "group": "2280b7ec-694c-4886-b58f-2c524818d2bf",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_no_mention_3",
+   "version": "v2",
+   "unique_id": "4138f021-e871-4aab-a556-8f407bce7d00",
+   "service": "trauma_emergency",
+   "stratum": "no_mention",
+   "group": "4138f021-e871-4aab-a556-8f407bce7d00",
+   "split": "dev"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_no_mention_4",
+   "version": "v2",
+   "unique_id": "08d4967a-b02f-4373-aace-2db8f64b0e27",
+   "service": "trauma_emergency",
+   "stratum": "no_mention",
+   "group": "08d4967a-b02f-4373-aace-2db8f64b0e27",
+   "split": "test"
+  },
+  {
+   "pair_id": "v2_trauma_emergency_no_mention_5",
+   "version": "v2",
+   "unique_id": "f14b8790-5fd5-4da8-9599-db45874396b5",
+   "service": "trauma_emergency",
+   "stratum": "no_mention",
+   "group": "f14b8790-5fd5-4da8-9599-db45874396b5",
+   "split": "test"
+  }
+ ]
+}

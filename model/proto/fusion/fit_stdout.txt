@@ -1,0 +1,37 @@
+[   0.1s] dev pairs 105 checked 78 in test leakage groups 2
+[   0.1s]   service shipped ipw M0@1: OOF weighted log loss 1.0156
+[   0.1s]   service shipped ipw M0@0.5: OOF weighted log loss 0.8929
+[   0.1s]   service shipped ipw M0@0.25: OOF weighted log loss 0.8006
+[   0.1s]   service shipped ipw M1@1: OOF weighted log loss 0.9215
+[   0.1s]   service shipped ipw M1@0.5: OOF weighted log loss 0.8303
+[   0.1s]   service shipped ipw M1@0.25: OOF weighted log loss 0.7578
+[  89.0s]   service shipped ipw M2@1: OOF weighted log loss 1.2218
+[  89.0s]   service shipped ipw M2@0.5: OOF weighted log loss 1.2549
+[  89.0s]   service shipped ipw M2@0.25: OOF weighted log loss 1.2547
+[  89.0s]   service shipped uniform M0@1: OOF weighted log loss 0.8455
+[  89.0s]   service shipped uniform M0@0.5: OOF weighted log loss 0.7765
+[  89.0s]   service shipped uniform M0@0.25: OOF weighted log loss 0.7271
+[  89.0s]   service shipped uniform M1@1: OOF weighted log loss 0.7062
+[  89.1s]   service shipped uniform M1@0.5: OOF weighted log loss 0.6764
+[  89.1s]   service shipped uniform M1@0.25: OOF weighted log loss 0.6709
+[  89.1s]   service shipped uniform M2@1: OOF weighted log loss 0.7868
+[  89.1s]   service shipped uniform M2@0.5: OOF weighted log loss 0.8524
+[  89.1s]   service shipped uniform M2@0.25: OOF weighted log loss 0.9947
+[  89.1s] service head: uniform M0@0.25 platt {'use': True, 'a': 0.0, 'c': -0.5006127551407005, 'oof_logloss_identity': 0.727058209657695, 'oof_logloss_platt_crossfit': 0.6743194771892085, 'diff': -0.0527387324684865, 'diff_se': 0.055347865756266094}
+[  89.1s] location head: 121 rows 101 pos M0 False {'M0': {'oof_logloss': 0.3540949373840954}, 'M1': {'oof_logloss': 0.34514240515867395}, 'diff_M1_minus_M0': -0.00895253222542141, 'se': 0.022121825569396594}
+[  89.1s] existence head: negatives 5 fitted False
+[ 107.1s] thresholds 0.7 0.2 {'n_eligible_T2_PL_PE': 46, 'tl_estimated': None, 'tu_estimated': None}
+[ 107.3s] wrote scores 69713 pairs, 382274 contribution rows; 9959 facilities
+[ 107.8s]   service shipped uniform M0@0.25: OOF weighted log loss 0.7271
+[ 107.8s]   service shipped uniform M1@0.25: OOF weighted log loss 0.6709
+[ 107.8s]   service shipped uniform M2@0.25: OOF weighted log loss 0.9947
+[ 107.9s]   service shipped uniform M0@1: OOF weighted log loss 0.8455
+[ 107.9s]   service ('noown',) uniform M0@0.25: OOF weighted log loss 0.7020
+[ 107.9s] ablation noown {'oof_logloss': 0.7019593938590369}
+[ 107.9s]   service ('noecho',) uniform M0@0.25: OOF weighted log loss 0.7195
+[ 107.9s] ablation noecho {'oof_logloss': 0.7194852888529314}
+[ 108.0s]   service ('nobucket',) uniform M0@0.25: OOF weighted log loss 0.6771
+[ 108.0s] ablation nobucket {'oof_logloss': 0.677083285241375}
+[ 108.0s]   service ('nocontext',) uniform M0@0.25: OOF weighted log loss 0.7012
+[ 108.0s] ablation nocontext {'oof_logloss': 0.7011824989491577}
+[ 108.0s] done f4c2f361d903e1df-fallback bands {'Unverified': 69673, 'Unlikely': 40}

@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting there tap test</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#fff;--fg:#111;--muted:#555;--line:#ccc;--btn:#0b57d0;--btnfg:#fff;--warn:#8a1c00}
+@media (prefers-color-scheme:dark){:root{--bg:#121212;--fg:#eee;--muted:#aaa;--line:#444;--btn:#8ab4f8;--btnfg:#000;--warn:#ffb4a0}}
+body{background:var(--bg);color:var(--fg);font:17px/1.45 system-ui,sans-serif;margin:0;padding:16px;max-width:720px}
+h1{font-size:1.4rem} h2{font-size:1.1rem;margin-top:1.6rem} .warn{color:var(--warn);font-weight:600}
+.row{border-top:1px solid var(--line);padding:12px 0}
+a.btn{display:block;min-height:48px;padding:12px 16px;border-radius:8px;background:var(--btn);color:var(--btnfg);text-decoration:none;font-weight:600}
+a.btn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.exp{color:var(--muted);margin:6px 0} code{word-break:break-all;font-size:.75rem;color:var(--muted)}
+select,textarea,button{font:inherit;min-height:44px} textarea{width:100%;box-sizing:border-box}
+</style></head><body>
+<h1>Getting there: tap test</h1>
+<p class="warn">Nothing on this page books a ride or places a call by itself, but the apps it opens can. Do not press Call, Book, Confirm or Send.</p>
+<p>Test destination: AIIMS New Delhi, Ansari Nagar, New Delhi (28.5645, 77.21). Open this page in Chrome on an Android phone (not inside another app). For each link, tap it, come back, and record what happened.</p>
+<label>Phone and Android version <input id="device" style="width:100%"></label>
+<h2>Phone</h2>
+<div class="row"><a class="btn" href="tel:108">Call 108 (dialer only)</a>
+<p class="exp">Expect: Dialer opens with 108. DO NOT press call.</p><code>tel:108</code>
+<p><label>Result <select data-id="Call 108 (dialer only)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="tel:102">Call 102 (dialer only)</a>
+<p class="exp">Expect: Dialer opens with 102. DO NOT press call.</p><code>tel:102</code>
+<p><label>Result <select data-id="Call 102 (dialer only)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="tel:112">Call 112 (dialer only)</a>
+<p class="exp">Expect: Dialer opens with 112. DO NOT press call.</p><code>tel:112</code>
+<p><label>Result <select data-id="Call 112 (dialer only)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="tel:+911100000000">Call facility (fake number)</a>
+<p class="exp">Expect: Dialer opens with +91 11 0000 0000.</p><code>tel:+911100000000</code>
+<p><label>Result <select data-id="Call facility (fake number)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<h2>Maps</h2>
+<div class="row"><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=driving">Google Maps directions, car</a>
+<p class="exp">Expect: Maps app opens a route from your location.</p><code>https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=driving</code>
+<p><label>Result <select data-id="Google Maps directions, car"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=two-wheeler">Google Maps directions, two-wheeler</a>
+<p class="exp">Expect: Two-wheeler route (India).</p><code>https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=two-wheeler</code>
+<p><label>Result <select data-id="Google Maps directions, two-wheeler"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=driving&amp;dir_action=navigate">Google Maps start navigation</a>
+<p class="exp">Expect: Turn-by-turn starts. Stop it after.</p><code>https://www.google.com/maps/dir/?api=1&amp;destination=28.5645%2C77.21&amp;travelmode=driving&amp;dir_action=navigate</code>
+<p><label>Result <select data-id="Google Maps start navigation"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=AIIMS+New+Delhi%2C+Ansari+Nagar%2C+New+Delhi&amp;travelmode=driving">Google Maps by name (low-trust coords)</a>
+<p class="exp">Expect: Route to the named place.</p><code>https://www.google.com/maps/dir/?api=1&amp;destination=AIIMS+New+Delhi%2C+Ansari+Nagar%2C+New+Delhi&amp;travelmode=driving</code>
+<p><label>Result <select data-id="Google Maps by name (low-trust coords)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="geo:0,0?q=28.5645,77.21(AIIMS%20New%20Delhi)">geo: chooser</a>
+<p class="exp">Expect: Chooser of map apps, pin labelled AIIMS.</p><code>geo:0,0?q=28.5645,77.21(AIIMS%20New%20Delhi)</code>
+<p><label>Result <select data-id="geo: chooser"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<h2>Ride</h2>
+<div class="row"><a class="btn" href="https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Blatitude%5D=28.5645&amp;dropoff%5Blongitude%5D=77.21&amp;dropoff%5Bnickname%5D=AIIMS+New+Delhi&amp;dropoff%5Bformatted_address%5D=Ansari+Nagar%2C+New+Delhi">Uber universal link /ul/</a>
+<p class="exp">Expect: Uber opens, drop-off AIIMS. DO NOT confirm.</p><code>https://m.uber.com/ul/?action=setPickup&amp;pickup=my_location&amp;dropoff%5Blatitude%5D=28.5645&amp;dropoff%5Blongitude%5D=77.21&amp;dropoff%5Bnickname%5D=AIIMS+New+Delhi&amp;dropoff%5Bformatted_address%5D=Ansari+Nagar%2C+New+Delhi</code>
+<p><label>Result <select data-id="Uber universal link /ul/"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://m.uber.com/looking?drop%5B0%5D=%7B%22latitude%22%3A28.5645%2C%22longitude%22%3A77.21%2C%22addressLine1%22%3A%22AIIMS+New+Delhi%22%7D">Uber /looking (current docs)</a>
+<p class="exp">Expect: Uber opens, drop-off AIIMS. DO NOT confirm.</p><code>https://m.uber.com/looking?drop%5B0%5D=%7B%22latitude%22%3A28.5645%2C%22longitude%22%3A77.21%2C%22addressLine1%22%3A%22AIIMS+New+Delhi%22%7D</code>
+<p><label>Result <select data-id="Uber /looking (current docs)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="uber://?action=setPickup&amp;pickup=my_location&amp;dropoff%5Blatitude%5D=28.5645&amp;dropoff%5Blongitude%5D=77.21&amp;dropoff%5Bnickname%5D=AIIMS+New+Delhi&amp;dropoff%5Bformatted_address%5D=Ansari+Nagar%2C+New+Delhi">Uber uber:// scheme</a>
+<p class="exp">Expect: Only if Uber installed.</p><code>uber://?action=setPickup&amp;pickup=my_location&amp;dropoff%5Blatitude%5D=28.5645&amp;dropoff%5Blongitude%5D=77.21&amp;dropoff%5Bnickname%5D=AIIMS+New+Delhi&amp;dropoff%5Bformatted_address%5D=Ansari+Nagar%2C+New+Delhi</code>
+<p><label>Result <select data-id="Uber uber:// scheme"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk">Ola auto, universal link</a>
+<p class="exp">Expect: Ola opens on auto, drop AIIMS, or web after 5 s. DO NOT confirm.</p><code>https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk</code>
+<p><label>Result <select data-id="Ola auto, universal link"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=bike&amp;landing_page=bk">Ola bike, universal link</a>
+<p class="exp">Expect: Ola bike, drop AIIMS.</p><code>https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=bike&amp;landing_page=bk</code>
+<p><label>Result <select data-id="Ola bike, universal link"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk&amp;bk_act=rl">Ola auto, ride later</a>
+<p class="exp">Expect: Ola date-time picker (for dialysis).</p><code>https://olawebcdn.com/assets/ola-universal-link.html?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk&amp;bk_act=rl</code>
+<p><label>Result <select data-id="Ola auto, ride later"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="olacabs://app/launch?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk">Ola auto, olacabs:// scheme</a>
+<p class="exp">Expect: Only if Ola installed.</p><code>olacabs://app/launch?drop_lat=28.5645&amp;drop_lng=77.21&amp;drop_address=AIIMS+New+Delhi&amp;category=auto&amp;landing_page=bk</code>
+<p><label>Result <select data-id="Ola auto, olacabs:// scheme"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="intent://rapido.bike/#Intent;scheme=https;package=com.rapido.passenger;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.rapido.passenger;end">Rapido (open app only)</a>
+<p class="exp">Expect: Rapido opens, or Play Store. Destination NOT prefilled.</p><code>intent://rapido.bike/#Intent;scheme=https;package=com.rapido.passenger;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.rapido.passenger;end</code>
+<p><label>Result <select data-id="Rapido (open app only)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="intent://nammayatri.in/#Intent;scheme=https;package=in.juspay.nammayatri;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Din.juspay.nammayatri;end">Namma Yatri (open app only)</a>
+<p class="exp">Expect: Namma Yatri opens, or Play Store. Destination NOT prefilled.</p><code>intent://nammayatri.in/#Intent;scheme=https;package=in.juspay.nammayatri;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Din.juspay.nammayatri;end</code>
+<p><label>Result <select data-id="Namma Yatri (open app only)"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<h2>Share</h2>
+<div class="row"><a class="btn" href="https://wa.me/?text=Plan%3A%20go%20to%20AIIMS%20New%20Delhi%2C%20Ansari%20Nagar%2C%20New%20Delhi.%0AMap%3A%20https%3A//www.google.com/maps/dir/%3Fapi%3D1%26destination%3D28.5645%252C77.21%26travelmode%3Ddriving%0ACall%20first%3A%20%2B911100000000%0A%0AQuestions%20to%20ask%3A%0A1.%20Hello%2C%20I%20am%20a%20health%20worker.%20Is%20this%20AIIMS%20New%20Delhi%20in%20New%20Delhi%3F%0A2.%20I%20have%20a%20patient%20who%20needs%20dialysis.%0A3.%20Is%20the%20dialysis%20unit%20running%20today%2C%20and%20is%20there%20a%20slot%20today%20or%20tomorrow%3F%0A4.%20Do%20you%20take%20new%20patients%2C%20and%20what%20is%20the%20cost%20per%20session%3F%20Is%20PM-JAY%20accepted%3F%0A5.%20If%20you%20cannot%2C%20which%20hospital%20nearby%20can%3F%0A6.%20Whom%20should%20we%20ask%20for%20when%20we%20arrive%3F%20Thank%20you.">WhatsApp, pick a contact</a>
+<p class="exp">Expect: WhatsApp contact picker, message prefilled.</p><code>https://wa.me/?text=Plan%3A%20go%20to%20AIIMS%20New%20Delhi%2C%20Ansari%20Nagar%2C%20New%20Delhi.%0AMap%3A%20https%3A//www.google.com/maps/dir/%3Fapi%3D1%26destination%3D28.5645%252C77.21%26travelmode%3Ddriving%0ACall%20first%3A%20%2B911100000000%0A%0AQuestions%20to%20ask%3A%0A1.%20Hello%2C%20I%20am%20a%20health%20worker.%20Is%20this%20AIIMS%20New%20Delhi%20in%20New%20Delhi%3F%0A2.%20I%20have%20a%20patient%20who%20needs%20dialysis.%0A3.%20Is%20the%20dialysis%20unit%20running%20today%2C%20and%20is%20there%20a%20slot%20today%20or%20tomorrow%3F%0A4.%20Do%20you%20take%20new%20patients%2C%20and%20what%20is%20the%20cost%20per%20session%3F%20Is%20PM-JAY%20accepted%3F%0A5.%20If%20you%20cannot%2C%20which%20hospital%20nearby%20can%3F%0A6.%20Whom%20should%20we%20ask%20for%20when%20we%20arrive%3F%20Thank%20you.</code>
+<p><label>Result <select data-id="WhatsApp, pick a contact"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="sms:?body=Plan%3A%20go%20to%20AIIMS%20New%20Delhi%2C%20Ansari%20Nagar%2C%20New%20Delhi.%0AMap%3A%20https%3A//www.google.com/maps/dir/%3Fapi%3D1%26destination%3D28.5645%252C77.21%26travelmode%3Ddriving%0ACall%20first%3A%20%2B911100000000%0A%0AQuestions%20to%20ask%3A%0A1.%20Hello%2C%20I%20am%20a%20health%20worker.%20Is%20this%20AIIMS%20New%20Delhi%20in%20New%20Delhi%3F%0A2.%20I%20have%20a%20patient%20who%20needs%20dialysis.%0A3.%20Is%20the%20dialysis%20unit%20running%20today%2C%20and%20is%20there%20a%20slot%20today%20or%20tomorrow%3F%0A4.%20Do%20you%20take%20new%20patients%2C%20and%20what%20is%20the%20cost%20per%20session%3F%20Is%20PM-JAY%20accepted%3F%0A5.%20If%20you%20cannot%2C%20which%20hospital%20nearby%20can%3F%0A6.%20Whom%20should%20we%20ask%20for%20when%20we%20arrive%3F%20Thank%20you.">SMS, no recipient</a>
+<p class="exp">Expect: Messages composer with the plan text.</p><code>sms:?body=Plan%3A%20go%20to%20AIIMS%20New%20Delhi%2C%20Ansari%20Nagar%2C%20New%20Delhi.%0AMap%3A%20https%3A//www.google.com/maps/dir/%3Fapi%3D1%26destination%3D28.5645%252C77.21%26travelmode%3Ddriving%0ACall%20first%3A%20%2B911100000000%0A%0AQuestions%20to%20ask%3A%0A1.%20Hello%2C%20I%20am%20a%20health%20worker.%20Is%20this%20AIIMS%20New%20Delhi%20in%20New%20Delhi%3F%0A2.%20I%20have%20a%20patient%20who%20needs%20dialysis.%0A3.%20Is%20the%20dialysis%20unit%20running%20today%2C%20and%20is%20there%20a%20slot%20today%20or%20tomorrow%3F%0A4.%20Do%20you%20take%20new%20patients%2C%20and%20what%20is%20the%20cost%20per%20session%3F%20Is%20PM-JAY%20accepted%3F%0A5.%20If%20you%20cannot%2C%20which%20hospital%20nearby%20can%3F%0A6.%20Whom%20should%20we%20ask%20for%20when%20we%20arrive%3F%20Thank%20you.</code>
+<p><label>Result <select data-id="SMS, no recipient"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<div class="row"><a class="btn" href="sms:+911100000000?body=Test%20from%20datathon%20tap-test">SMS to fake number</a>
+<p class="exp">Expect: Composer to +91 11 0000 0000. DO NOT send.</p><code>sms:+911100000000?body=Test%20from%20datathon%20tap-test</code>
+<p><label>Result <select data-id="SMS to fake number"><option>not tried</option><option>works as expected</option>
+<option>opens app, destination missing</option><option>opens web or store instead</option><option>nothing happens</option></select></label></p></div>
+<h2>Results</h2>
+<textarea id="out" rows="8" readonly aria-label="Results text"></textarea>
+<p><button type="button" id="mk">Build results text</button> <a id="wa" class="btn" href="#">Send results on WhatsApp</a></p>
+<script>
+document.getElementById('mk').onclick=function(){
+  var t='Tap test '+new Date().toISOString().slice(0,10)+' | '+document.getElementById('device').value+'\n';
+  document.querySelectorAll('select[data-id]').forEach(function(s){t+=s.dataset.id+': '+s.value+'\n';});
+  document.getElementById('out').value=t;
+  document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(t);
+};
+</script></body></html>

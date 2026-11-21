@@ -1,0 +1,56 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "02_prescription_lscs.png",
+ "bytes": 43638,
+ "status": 200,
+ "latency_s": 2.43,
+ "response": {
+  "id": "chatcmpl_9631fe70-6ea2-4ce7-9159-0b5c5d6853b1_4ff38656-e60b-412c-94cd-8958d2f081fb",
+  "object": "chat.completion",
+  "created": 1795284657,
+  "model": "gemma-3-12b-it-060225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\n  \"detected_text\": \"Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iron-Folic acid 1 OD\\n2. Tab Calcium 500 mg BD\\nFindings: 38 weeks, previous caesarean (2023), breech\\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.\",\n  \"language\": \"English\",\n  \"document_type\": \"prescription\",\n  \"suggested_service\": \"emergency_csection\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"LSCS advised\",\n  \"red_flags\": [\"pain or bleeding\"]\n}\n```"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 820,
+   "completion_tokens": 192,
+   "total_tokens": 1012,
+   "cache_read_input_tokens": 288,
+   "prompt_tokens_details": {
+    "cached_tokens": 288
+   }
+  }
+ },
+ "content": "```json\n{\n  \"detected_text\": \"Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iron-Folic acid 1 OD\\n2. Tab Calcium 500 mg BD\\nFindings: 38 weeks, previous caesarean (2023), breech\\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.\",\n  \"language\": \"English\",\n  \"document_type\": \"prescription\",\n  \"suggested_service\": \"emergency_csection\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"LSCS advised\",\n  \"red_flags\": [\"pain or bleeding\"]\n}\n```",
+ "parsed": {
+  "detected_text": "Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\nRx\n1. Tab Iron-Folic acid 1 OD\n2. Tab Calcium 500 mg BD\nFindings: 38 weeks, previous caesarean (2023), breech\nPlan: LSCS advised. Admit to a centre with OT and blood bank. Review immediately if pain or bleeding.",
+  "language": "English",
+  "document_type": "prescription",
+  "suggested_service": "emergency_csection",
+  "urgency": "emergency",
+  "confidence": 0.95,
+  "trigger_phrase": "LSCS advised",
+  "red_flags": [
+   "pain or bleeding"
+  ]
+ },
+ "parse_mode": "after_stripping",
+ "usage": {
+  "prompt_tokens": 820,
+  "completion_tokens": 192,
+  "total_tokens": 1012,
+  "cache_read_input_tokens": 288,
+  "prompt_tokens_details": {
+   "cached_tokens": 288
+  }
+ }
+}

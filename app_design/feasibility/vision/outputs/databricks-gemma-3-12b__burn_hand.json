@@ -1,0 +1,58 @@
+{
+ "endpoint": "databricks-gemma-3-12b",
+ "image": "burn_hand.jpg",
+ "bytes": 221004,
+ "status": 200,
+ "latency_s": 2.27,
+ "response": {
+  "id": "chatcmpl_a085ffdd-5afe-4666-9ee6-30967844ceff_521e400e-d589-4592-82b7-9bb0dc9130b9",
+  "object": "chat.completion",
+  "created": 1795284674,
+  "model": "gemma-3-12b-it-060225",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "```json\n{\n  \"detected_text\": \"\",\n  \"language\": \"unknown\",\n  \"document_type\": \"injury_photo\",\n  \"suggested_service\": \"burn_care\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"large red burn area on the palm of the hand\",\n  \"red_flags\": [\n    \"significant burn area\",\n    \"potential for blistering\",\n    \"risk of infection\"\n  ]\n}\n```"
+    },
+    "finish_reason": "stop",
+    "logprobs": null
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 820,
+   "completion_tokens": 121,
+   "total_tokens": 941,
+   "cache_read_input_tokens": 288,
+   "prompt_tokens_details": {
+    "cached_tokens": 288
+   }
+  }
+ },
+ "content": "```json\n{\n  \"detected_text\": \"\",\n  \"language\": \"unknown\",\n  \"document_type\": \"injury_photo\",\n  \"suggested_service\": \"burn_care\",\n  \"urgency\": \"emergency\",\n  \"confidence\": 0.95,\n  \"trigger_phrase\": \"large red burn area on the palm of the hand\",\n  \"red_flags\": [\n    \"significant burn area\",\n    \"potential for blistering\",\n    \"risk of infection\"\n  ]\n}\n```",
+ "parsed": {
+  "detected_text": "",
+  "language": "unknown",
+  "document_type": "injury_photo",
+  "suggested_service": "burn_care",
+  "urgency": "emergency",
+  "confidence": 0.95,
+  "trigger_phrase": "large red burn area on the palm of the hand",
+  "red_flags": [
+   "significant burn area",
+   "potential for blistering",
+   "risk of infection"
+  ]
+ },
+ "parse_mode": "after_stripping",
+ "usage": {
+  "prompt_tokens": 820,
+  "completion_tokens": 121,
+  "total_tokens": 941,
+  "cache_read_input_tokens": 288,
+  "prompt_tokens_details": {
+   "cached_tokens": 288
+  }
+ }
+}

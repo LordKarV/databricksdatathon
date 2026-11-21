@@ -1,0 +1,103 @@
+{
+ "atoms": 22787,
+ "atoms_counting": 17389,
+ "units": 15538,
+ "ownership": {
+  "unanchored": 21830,
+  "own_anchored": 762,
+  "ambiguous": 81,
+  "other_facility": 79,
+  "sibling": 21,
+  "other_place": 14
+ },
+ "role": {
+  "offer": 11545,
+  "unit_or_equipment": 5641,
+  "list": 5008,
+  "quantity": 341,
+  "directory": 101,
+  "staff": 72,
+  "nonoffer": 54,
+  "research_or_template": 18,
+  "hedge": 7
+ },
+ "rejected": {
+  "directory_or_list": 5064,
+  "ambiguous_reference": 81,
+  "names_other_facility": 79,
+  "staff_only": 66,
+  "nonoffer_cue": 51,
+  "sibling_branch": 21,
+  "research_or_template": 16,
+  "other_district_place": 12,
+  "hedge": 6,
+  "other_state_place": 2
+ },
+ "T": {
+  "0": 61746,
+  "1": 1084,
+  "2": 3176,
+  "3": 1390,
+  "4": 884,
+  "5": 1433
+ },
+ "C": {
+  "0": 69629,
+  "1": 57,
+  "2": 27
+ },
+ "N": 43,
+ "S": 20531,
+ "P": {
+  "0": 48180,
+  "1": 17028,
+  "2": 4505
+ },
+ "bucket": {
+  "mid": 3685,
+  "low": 3281,
+  "high": 2993
+ },
+ "S_vs_grades_agree": 7998,
+ "S_vs_grades_n": 8013,
+ "leakage_groups": 8562,
+ "largest_group": 133,
+ "name_place_witness": 894,
+ "votes": {
+  "coords": {
+   "1": 8788,
+   "-1": 1165,
+   "0": 6
+  },
+  "pin": {
+   "1": 9193,
+   "-1": 682,
+   "0": 84
+  },
+  "city": {
+   "1": 8041,
+   "0": 1432,
+   "-1": 486
+  },
+  "name_place": {
+   "0": 9065,
+   "1": 824,
+   "-1": 70
+  },
+  "state": {
+   "1": 9798,
+   "0": 81,
+   "-1": 80
+  },
+  "text_pin": {
+   "0": 9600,
+   "1": 266,
+   "-1": 93
+  },
+  "map_link": {
+   "0": 9052,
+   "1": 652,
+   "-1": 255
+  }
+ }
+}

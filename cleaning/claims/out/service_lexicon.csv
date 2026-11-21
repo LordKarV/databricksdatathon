@@ -1,0 +1,57 @@
+service,part,pattern
+dialysis,core,dialy[sz]|haemodialy|hemodialy|\bCAPD\b|\bCRRT\b|\bSLED\b|renal replacement|artificial kidney|\bPMNDP\b|national dialysis
+dialysis,exclude,dialysis profile|profile test|fistula|dialysis access|access (creation|salvage|surgery)
+dialysis,related,nephrolog|nephrologist|kidney (care|centre|center|disease|failure)|renal (care|failure|unit)
+csection,core,caesar|cesar|c-? ?section|\bLSCS\b|lower segment|\bCEmONC\b|comprehensive emergency obstetric
+csection,exclude,after (c|caes|ces)\w*[- ]?section|VBAC|scar (endometriosis|ectopic)|cesarean scar|post[- ]?caesarean (wound|scar)
+csection,related,high[- ]risk (pregnan|obstet|deliver|mother)|labou?r (room|ward|suite)|\bLDRP?\b|delivery|maternity|\bPMSMA\b|\bJSSK\b|\bJSY\b|blood bank|birthing|emergency obstetric|\bB?EmON?C\b|obstetric emergenc|operative (vaginal )?deliver
+nicu,core,"\bNICU|\bNICCU|\bSNCU|neonatal (intensive|icu|critical)|newborn (intensive|icu|care unit)|special newborn care|level[- ]?(ii|iii|2|3)\b.{0,20}(nicu|neonat)|neonatal ventilat"
+nicu,exclude,ambulance|transport
+nicu,related,neonat|newborn|nursery|incubator|radiant warmer|phototherapy|premature|preterm|kangaroo|\bKMC\b
+cardiac_surgery,core,\bCABG|bypass (graft|surg)|open[- ]heart|valve (replace|repair|surg)|\b(AVR|MVR|DVR)\b|cardiac surg|heart surg|cardio[- ]?thoracic|cardio[- ]vascular (and|&) thoracic|\bCTVS\b|\bCVTS\b|heart transplant|congenital heart (surg|defect surg)|cardiac (OT|operation theat)
+cardiac_surgery,exclude,cardio[- ]?thoracic radiolog|cardiac an(a)?esthe(s|t)|cardiothoracic imaging|bariatric|gastric bypass|transcatheter|\bTAVR|\bTAVI|\bTMVR|percutaneous|balloon valv|brain bypass|EC-IC|without surgery|non[- ]surgical|glaucoma|trabeculectomy|neurovascular|neuro[- ]?vascular bypass
+cardiac_surgery,related,angioplast|cath(eterisation|eterization)? ?lab|\bPTCA\b|stent|interventional cardio|angiograph|pacemaker
+mri,core,\bMRIs?\b|magnetic resonance|\bMRA\b|\bMR (scan|imaging|angio)
+mri,exclude,MRI[- ]compatible|MRI[- ]guided
+mri,related,\bCT\b|radiolog|imaging
+burns,core,\bburns?\b
+burns,exclude,heart ?burn|sun ?burn|burn ?out|burning|razor burn|calorie|\bfat\b|burn prevention|post[- ]?burns?|burns? (scar|contracture|reconstruct)
+burns,related,\bplastic surg|skin graft|reconstructive surg
+trauma,core,"\btrauma|polytrauma|casualty|accident (and|&) emergenc|\bA ?& ?E\b|emergency (department|room|ward|service|care|unit|medicine|surg)|\bER\b|24 ?(x|/|×|\*|hours?|hrs?|-hour) ?7?.{0,25}emergenc|emergenc.{0,25}24 ?(x|/|×|\*|hours?|hrs?)"
+trauma,exclude,dental|dentist|tooth|teeth|eye|ocular|ophthalm|psychiatric|emotional|psycholog|veterinar|contracept|maxillofacial trauma|facial trauma|trauma[- ]informed|childhood trauma|ptsd|^(?!.*(emergency (department|room|ward|unit)|casualty|trauma)).*ambulance
+trauma,related,ambulance|fracture|orthop(a)?edic
+icu,core,\bICUs?\b|intensive care|critical care|\bMICU|\bSICU|\bCCU|\bICCU|\bCTICU|\bCVTS ICU|\bHDU|high dependency
+icu,exclude,ambulance|icu on wheels|transport
+icu,related,ventilator|monitor|intensivist
+dialysis,prereq:nephrology,"nephrolog | tags: nephrology,nephrologyanddialysis,nephrologyandurology,nephrologyincludingdialysis,paediatricnephrology,pediatricnephrology"
+dialysis,prereq:dialysis_unit_or_machine,dialy\w* (machine|station|chair|bed)s?|(machine|station|chair|bed)s? (for|of) (haemo|hemo)?dialy|\bRO (water|plant|system)|reverse osmosis|fresenius|nipro|b\.? ?braun|\bCRRT\b|ha?emodialysis machine
+csection,prereq:obstetrics,"obstetric|gyn(a)?ecolog|maternity|\bobg|\bOB-?GYN | tags: gynecologyandobstetrics,maternalandchildhealth,maternalfetalmedicineorperinatology,obstetrics,obstetricsandgynaecology,obstetricsandgynecology,obstetricsandmaternitycare,obstetricsgynaecology"
+csection,prereq:operating_theatre,operat(ion|ing)[- ]?(theat|room|suite)|\bOTs?\b|modular (OT|theat)|surgical (theat|suite)
+csection,prereq:anaesthesia,"an(a)?esthe(s|t) | tags: anaesthesia,anaesthesiology,anesthesia,anesthesiology,anesthesiologyandcriticalcare,criticalcaremedicineanesthesiology,obstetricanesthesiology"
+nicu,prereq:paeds_or_neonatology,"p(a)?ediatric|neonatolog|neonatologist|paediatrician|pediatrician | tags: neonatalperinatal,neonatalperinatalmedicine,neonatology,neonatologyperinatalmedicine,paediatrics,paediatricsandneonatology,pediatriccriticalcaremedicine,pediatricneonatology,pediatrics,pediatricsandneonatology,pediatricsneonatology"
+nicu,prereq:incubator_warmer_ventilator,incubator|radiant warmer|\bwarmers?\b|ventilator|\bCPAP\b|bubble cpap|phototherapy|ventilation
+cardiac_surgery,prereq:cardiothoracic_surgeon_or_dept,"cardio[- ]?thoracic|\bCTVS\b|\bCVTS\b|cardiac surgeon|cardiothoracic surgeon|department of cardiac surg | tags: cardiacsciences,cardiacsurgery,cardiothoracicandvascularsurgery,cardiothoracicsurgery,cardiovascularsurgery,pediatriccardiacsurgery"
+cardiac_surgery,prereq:cathlab_or_heart_lung,cath(eterisation|eterization)? ?lab|heart[- ]lung machine|perfusion|\bIABP\b|\bECMO\b|cardiac (OT|operation theat)|bypass machine
+mri,prereq:mri_scanner,(MRI|magnetic resonance)\s*(scanner|machine|system|unit|suite|equipment)|\d(\.\d)?\s*-?\s*T(esla)?\b|\btesla\b|\bsiemens\b|\bphilips\b|\bGE\b|magnetom|\bsigna\b|ingenia|achieva|open MRI
+burns,prereq:burn_unit_or_plastic_surgery,"burns? (unit|ward|icu|centre|center|care unit)|\bplastic surg|plastic (and|&) reconstruct | tags: burnandtraumaplasticsurgery,burngeneralsurgery,burns,cosmeticandplasticsurgery,plasticandreconstructivesurgery,plasticsurgery,reconstructiveplasticsurgery"
+trauma,prereq:emergency_24x7,"(24 ?(x|/|×|\*|hours?|hrs?|-hour) ?7?|round[- ]the[- ]clock|24-hour|24 hour).{0,40}(emergenc|casualty|trauma)|(emergenc|casualty|trauma).{0,40}(24 ?(x|/|×|\*|hours?|hrs?)|round[- ]the[- ]clock)"
+trauma,prereq:surgery_or_ortho,"general surg|orthop(a)?edic|trauma surg|laparoscop|operat(ion|ing)[- ]?theat | tags: generalsurgery,orthopaedics,orthopaedicsurgery,orthopedicsurgery,orthopedictraumaandfracturesurgery,polytrauma"
+trauma,prereq:ct,\bCT\b|computed tomograph|\bCT[- ]?scan|\d+[- ]slice
+icu,prereq:ventilator,ventilator|ventilation|\bBiPAP|\bCPAP
+icu,prereq:critical_care_or_anaesthesia,"intensivist|critical care|an(a)?esthe(s|t) | tags: anaesthesia,anaesthesiology,anesthesia,anesthesiology,anesthesiologyandcriticalcare,criticalcare,criticalcaremedicine,criticalcaremedicineanesthesiology,icuandcriticalcare,intensivecareunit,neurocriticalcare,obstetricanesthesiology"
+all,spec_core_tags:dialysis,"dialysis,nephrologyanddialysis,nephrologyincludingdialysis,pediatricdialysis"
+all,spec_core_tags:csection,
+all,spec_core_tags:nicu,
+all,spec_core_tags:cardiac_surgery,"cardiacsciences,cardiacsurgery,cardiothoracicandvascularsurgery,cardiothoracicsurgery,cardiovascularsurgery,pediatriccardiacsurgery"
+all,spec_core_tags:mri,
+all,spec_core_tags:burns,"burnandtraumaplasticsurgery,burngeneralsurgery,burns"
+all,spec_core_tags:trauma,"accidentandemergency,emergencymedicine,orthopedictraumaandfracturesurgery,polytrauma"
+all,spec_core_tags:icu,"criticalcare,criticalcaremedicine,icuandcriticalcare,intensivecareunit"
+all,cue:negation,"\bnot (available|offered|provided|present|performed|listed|done|equipped)|\bdo(es)? not (have|offer|provide|list|perform)|n't (have|offer|provide)|unavailable|\bno [a-z ]{0,25}(facility|facilities|services?|units?|available|on[- ]?site)\b|\bwithout (dialysis|surgery|open|the need|incision|scar|cuts?)|\bno (burns?|scars?|surgery|cuts?)\b|non[- ]surgical"
+all,cue:referral,\breferred (out |elsewhere )?to\b|\brefers? (patients |cases )?(out |elsewhere )?to\b|\breferrals? to\b|transfer(red)? to|shifted to|send(s)? (patients )?to
+all,cue:future,\b(is|are|being) planned|plans? to (start|open|set|launch|add|install)|upcoming|coming soon|\bproposed\b|under construction|will be (installed|started|set up|opened|launched|available|commissioned|added)|to be (started|set up|established|launched|opened|commissioned|installed)|in the pipeline|\bplanned\b
+all,cue:parttime,\bvisiting\b|\bon[- ]call\b|once a (week|month)|\bweekly\b|(mon|tues|wednes|thurs|fri|satur|sun)days? only
+all,cue:camp,\bcamps?\b
+all,cue:past,\b(shut|closed) down|discontinued|no longer|\bceased\b|\bused to (be|have|offer|provide|run|perform)\b|\bdefunct\b
+all,cue:third_party,"outsourc|(through|via|by) (a |an )?(partner|third[- ]party|external|tie[- ]?up)|tie[- ]?up with (?!.{0,20}(esic|cghs|insur|tpa|scheme))"
+all,cue:hedge,if applicable|\(if any\)|\bpossibly\b|\blikely\b|\bmay (have|offer|provide|include)\b|presumabl|not (specified|confirmed|clear)|\bunclear\b|as reported by|reportedly|\bappears to\b|\bimplied\b|\bassumed\b|inferred

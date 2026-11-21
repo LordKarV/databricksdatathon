@@ -1,0 +1,37 @@
+{
+ "created_at": "2026-11-21T13:38:14",
+ "code_sha256": {
+  "atoms.py": "d69bc7766193c93624aee325c8f292ca208a25f1930be844d685cc843409a84a",
+  "build.py": "d5b6a5991d765556e020547b2822bb41e0cabf9c34700a35679aa814a6e70055",
+  "common.py": "bba8af2166963db46ad376c273fb82bad1931ed34b4f928d932a753290d64bd3",
+  "facility.py": "05340cf52f894af7a72b5e8dbe2a467d5f3b56ac5f8af5631870c328afcc80e9"
+ },
+ "input_sha256": {
+  "claims": "e233088e021b81c34fa0dc81adddb158307c06542a69322d17c13fa7dbc1b206",
+  "grades": "b5ccde356858e783b938655a9101f824809cd76529472d9c1873914a3a6e7e4c",
+  "specialties": "cb6b22d3568fddea18284469b1e563133a12552bf9c3b5dae254699c09d0bd7f",
+  "lexicon": "e368df176bdec4df278e2256747cb6485bd72f0ba85efabe357ee08a44e4d3d9",
+  "sentence_decisions": "90bbf53007c58ff0dc926d03a5ebf76665e7fcaf95138acb0908d41710e490b7",
+  "record_scores": "a4bd50b7761ce1b72d2f637195eca0dbf43c7b30178d3c4585d7bbb6685fa4d2",
+  "facility_location": "e2d140490ce169c09cd0d6ad4fa351a30860d767deb72049585febaeb16bf5ef",
+  "pin_gazetteer": "e0e6ab64aec9aece12530b722c8aeb3df5b1f567d53c28c43d5c6d91b1a8608c",
+  "place_gazetteer": "46d7d429270b0e406c02260970ff5f7e18afe1f48c970b7b4a6ceed173f52a5f",
+  "facility_geo": "cccabd339a1650b06b2f9609614afbde34eea761152d77ee80fbe7c3d3a89b67",
+  "existence_signals": "4ff432717162242aa8957b2cc8d2c1f5909a1cdbdacee7c5ae5f3a6f9c07554b",
+  "shared_phones": "1ff79b4395c8fd15073169df7f6014319f5e39a1744c938d9b30c9e482fd1e09",
+  "shared_domains": "b8ed5c1590b45cc2e48a8230dc580df96da1c9811cad1972cacba5f194f73891",
+  "dup_groups": "d18842f57fc228c842b4a0aeb4da1873040925628b439b73bf1469f65b7cca03",
+  "chain_membership": "31e438995c4b1e5afbef9d7c6c78637bda65df69cc0b6a66799f742dd58196b0",
+  "raw_facilities": "7aca5cb1780faa6323d1612a84a27daf69b53433fc15f829b7ee43b37bb0c95e"
+ },
+ "derived_input_sha256": {
+  "attribution_rates.csv": null
+ },
+ "output_sha256": {
+  "claim_atoms.parquet": "d492494fdc5dee1ca52e6b2ccfdf8decec133734ab3c8f17cd7ad6c0f982c129",
+  "pair_features.parquet": "1cf1ebe82febb33ae2531cfa7d6d59af0b57140156b6e7c01e1d8efc69a89f3d",
+  "facility_features.parquet": "677727aa1be4bd881d8e8264699106aa47dd28dc407d8197f122257d73fb36b4",
+  "lexicon_used.csv": "e368df176bdec4df278e2256747cb6485bd72f0ba85efabe357ee08a44e4d3d9"
+ },
+ "note": "Any change to families or lexicon gets a new hash; gold labels read before the change move to dev."
+}
