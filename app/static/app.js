@@ -221,10 +221,12 @@ function planScreen() {
 async function bindPlan() {
   if (!state.service || !state.loc || state.plan) return;
   const l = state.loc;
-  const qs = new URLSearchParams({service: state.service, lat: l.lat.toFixed(2), lon: l.lon.toFixed(2), source: l.source});
-  if (l.accuracy_m != null) qs.set('accuracy_m', l.accuracy_m);
+  // Rounded to 0.01 deg on the phone too; the point goes in the body, never the URL.
+  const body = {service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2), accuracy_m: l.accuracy_m,
+    source: l.source, depth: 'quick'};
   try {
-    const r = await fetch('/api/recommend?' + qs, {redirect: 'manual'});
+    const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body), redirect: 'manual'});
     if (r.type === 'opaqueredirect') throw new Error('Signed out. Reload the page to sign in again.');
     if (!r.ok) throw new Error('The server could not make a plan (' + r.status + ').');
     state.plan = await r.json();

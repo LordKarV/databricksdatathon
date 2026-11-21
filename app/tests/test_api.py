@@ -15,7 +15,8 @@ OPTION_KEYS = {"facility_id", "name", "lat", "lon", "travel", "band", "band_word
 
 
 def get(**params):
-    return client.get("/api/recommend", params=params)
+    """POST /api/plan, the endpoint the page uses (name kept short for the tests below)."""
+    return client.post("/api/plan", json=params)
 
 
 @pytest.mark.parametrize("service", sorted(SERVICES))
@@ -73,3 +74,28 @@ def test_shell_allowlist():
     assert client.get("/app.py").status_code == 404
     assert client.get("/stub_data.py").status_code == 404
     assert client.get("/docs").status_code == 404
+
+
+def test_dev_alias_matches_post():
+    params = {"service": "mri", "lat": 26.5951, "lon": 85.4808, "accuracy_m": 12, "source": "manual"}
+    a, b = client.post("/api/plan", json=params).json(), client.get("/api/recommend", params=params).json()
+    for j in (a, b):
+        j["meta"].pop("generated_at")
+    assert a == b and a["query"]["depth"] == "quick"
+
+
+def test_plan_rejects_unknown_fields_and_get():
+    assert get(service="mri", lat=20, lon=78, user_id="x").status_code == 422
+    assert get(service="mri", lat=20, lon=78, depth="deep").status_code == 422
+    assert client.get("/api/plan").status_code == 405
+
+
+def test_main_reads_databricks_port(monkeypatch):
+    import runpy
+
+    import uvicorn
+    seen = {}
+    monkeypatch.setattr(uvicorn, "run", lambda *a, **k: seen.update(k))
+    monkeypatch.setenv("DATABRICKS_APP_PORT", "8123")
+    runpy.run_path(str(Path(__file__).resolve().parents[1] / "main.py"), run_name="__main__")
+    assert seen["port"] == 8123 and seen["access_log"] is False and seen["host"] == "0.0.0.0"

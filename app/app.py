@@ -12,10 +12,12 @@ from typing import Annotated, Literal
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, ConfigDict, Field
 
 from stub_data import SERVICES, recommend_stub
 
 LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
+Depth = Literal["quick", "compare", "area"]
 
 HERE = Path(__file__).resolve().parent
 STATIC = HERE / "static"
@@ -49,19 +51,37 @@ def ping() -> dict[str, bool]:
     return {"ok": True}
 
 
-@app.get("/api/recommend")
-def recommend(
-    service: Annotated[str, Query(description="One of the 7 decision-layer service keys")],
-    lat: Annotated[float, Query(ge=6.0, le=37.5)],
-    lon: Annotated[float, Query(ge=68.0, le=97.5)],
-    accuracy_m: Annotated[float | None, Query(ge=0)] = None,
-    source: Annotated[LocationSource, Query()] = "gps",
-) -> dict:
-    if service not in SERVICES:
+class PlanRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    service: str = Field(description="One of the 7 decision-layer service keys")
+    lat: float = Field(ge=6.0, le=37.5)
+    lon: float = Field(ge=68.0, le=97.5)
+    accuracy_m: float | None = Field(default=None, ge=0)
+    source: LocationSource = "gps"
+    depth: Depth = "quick"
+
+
+def _plan(req: PlanRequest) -> dict:
+    if req.service not in SERVICES:
         raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
     # Round to 0.01 deg (~1.1 km) before anything else touches the point (spec section 8).
-    acc = None if accuracy_m is None else round(accuracy_m)
-    return recommend_stub(service, round(lat, 2), round(lon, 2), acc, source)
+    acc = None if req.accuracy_m is None else round(req.accuracy_m)
+    plan = recommend_stub(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source)
+    plan["query"]["depth"] = req.depth
+    return plan
+
+
+@app.post("/api/plan")
+def plan(req: PlanRequest) -> dict:
+    """The page's endpoint: the point travels in the body, so it stays out of proxy URL logs."""
+    return _plan(req)
+
+
+@app.get("/api/recommend")
+def recommend_dev_alias(req: Annotated[PlanRequest, Query()]) -> dict:
+    """Dev-only alias for curl and browser checks. The page never calls it."""
+    return _plan(req)
 
 
 @app.get("/{name}")
