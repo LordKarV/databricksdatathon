@@ -74,6 +74,57 @@ function getGps(onDone) {
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
 
+// ---------- offline (spec S9; logic in offline.js, loaded lazily) ----------
+function savedLine() {
+  const m = load('pack');
+  if (!m) return 'Saved for offline: not yet. It saves after your first online answer.';
+  return `Saved for offline: ${esc(m.state)}, ${new Date(m.saved_at).toLocaleDateString([], {day: 'numeric', month: 'short'})}.`;
+}
+function needScripts(srcs) {
+  return Promise.all(srcs.map(src => document.querySelector(`script[src="${src}"]`)?.dataset.loaded === '1'
+    ? Promise.resolve() : new Promise((ok, fail) => {
+      const el = document.querySelector(`script[src="${src}"]`) || document.head.appendChild(Object.assign(
+        document.createElement('script'), {src}));
+      el.addEventListener('load', () => { el.dataset.loaded = '1'; ok(); });
+      el.addEventListener('error', fail);
+    })));
+}
+function stopWatch() { if (state.stopWatch) { state.stopWatch(); state.stopWatch = null; } }
+async function offlinePlan(reason) {
+  let pack = null;
+  try { await needScripts(['/pack.js', '/offline.js']); pack = await window.RSOffline.loadPack(); } catch { /* not cached */ }
+  const R = window.RSOffline;
+  const p = {offline: true, reason, pack, confirmed: false, answer: null};
+  if (pack && R.fixIsFresh(state.loc)) p.answer = R.answer(pack, state.loc, state.service);
+  stopWatch();
+  if (R) {
+    state.stopWatch = R.watchSatellite(fix => {
+      state.loc = fix; save('loc', fix); state.stopWatch = null;
+      if (state.plan && state.plan.offline) {
+        state.plan.confirmed = true;
+        if (state.plan.pack) state.plan.answer = R.answer(state.plan.pack, fix, state.service);
+        announce('Updated to GPS now.'); render();
+      }
+    });
+  }
+  state.plan = p;
+  announce('No internet. ' + (p.answer ? `${p.answer.options.length} saved options.` : 'Showing what is saved on this phone.'));
+}
+function offlineScreen(s) {
+  const p = state.plan, R = window.RSOffline;
+  if (!R) {
+    return `<h1 tabindex="-1">No internet</h1><p>${esc(p.reason)}</p><p class="card">Nothing is saved on this phone yet.</p>
+      <a class="btn btn-primary btn-block" href="tel:108"><span aria-hidden="true">&#9742;</span> Call 108</a>`;
+  }
+  return R.render(p.answer, {serviceLabel: s.en, locLine: locLine(state.loc), reason: p.reason,
+    show102: s.key === 'emergency_csection' || s.key === 'nicu', gettingGps: !!state.stopWatch,
+    fresh: p.confirmed || R.fixIsFresh(state.loc), hasPack: !!p.pack});
+}
+function saveOfflinePack() {
+  const l = state.loc;
+  needScripts(['/pack.js', '/offline.js']).then(() => window.RSOffline.savePack(l.lat, l.lon)).catch(() => {});
+}
+
 // ---------- screens ----------
 function home() {
   const tiles = SERVICES.map(s => `<button type="button" class="tile" data-svc="${s.key}"
@@ -100,7 +151,7 @@ function home() {
       <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108</a></div>
     <details><summary>Danger signs now?</summary>${boxes}
       <p class="small muted">Checklist written by the team, not clinically reviewed.</p></details>
-    <p class="small muted">Saved for offline: not yet (packs arrive with issue #9).</p>`;
+    <p class="small muted">${savedLine()}</p>`;
 }
 function bindHome() {
   $('#gps')?.addEventListener('click', () => { location.hash = '#/gps'; });
@@ -146,14 +197,16 @@ function changeScreen() {
     <form id="place-form" novalidate>
       <label for="place">PIN, village, town, district, or 'lat, lon'</label>
       <input id="place" type="text" inputmode="text" autocomplete="off" aria-describedby="place-help place-err">
-      <p id="place-help" class="small muted">Example: 26.59, 85.48. PIN and place search arrive with /api/resolve.</p>
+      <p id="place-help" class="small muted">PIN works from the data saved on this phone. Or type coordinates, for example 26.59, 85.48.</p>
       <p id="place-err" role="alert"></p>
       <button type="submit" class="btn btn-primary btn-block">Use this place</button>
     </form>
+    <div id="district-pick"></div>
     <a class="btn btn-block" href="#/">Cancel</a>`;
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
+  districtPicker();
   $('#place-form').addEventListener('submit', e => {
     e.preventDefault();
     const v = $('#place').value.trim();
@@ -162,12 +215,45 @@ function bindChange() {
       state.loc = {lat: +m[1], lon: +m[2], accuracy_m: null, source: 'manual', t: Date.now(), label: null};
       save('loc', state.loc); state.msg = ''; location.hash = '#/'; return;
     }
-    $('#place-err').textContent = /^\d{6}$/.test(v)
-      ? 'PIN lookup is not built yet. Type coordinates as "lat, lon".'
-      : 'Type coordinates in India as "lat, lon", for example 26.59, 85.48.';
+    if (/^\d{6}$/.test(v)) {
+      packPlace(p => p.pin(v)).then(ok => {
+        if (ok) return;
+        $('#place-err').textContent = 'PIN not found in the data saved on this phone. Type coordinates as "lat, lon".';
+        $('#place').setAttribute('aria-invalid', 'true');
+        $('#place').focus();
+      });
+      return;
+    }
+    $('#place-err').textContent = 'Type a 6-digit PIN, or coordinates in India as "lat, lon", for example 26.59, 85.48.';
     $('#place').setAttribute('aria-invalid', 'true');
     $('#place').focus();
   });
+}
+
+// Resolve a place from the saved pack (works offline). pick(api) returns {lat, lon, label} or null.
+async function packPlace(pick, source = 'pin') {
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    const hit = pack && pick({pin: v => window.RSOffline.resolvePin(pack, v),
+      district: d => window.RSOffline.districtCentre(pack, d)});
+    if (!hit) return false;
+    state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
+    save('loc', state.loc); state.msg = ''; location.hash = '#/';
+    return true;
+  } catch { return false; }
+}
+async function districtPicker() {
+  if (!load('pack')) return;
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    if (!pack || !$('#district-pick')) return;
+    $('#district-pick').innerHTML = `<label for="district">Or choose a district (saved data)</label>
+      <select id="district">${pack.districts.filter(Boolean).map(d => `<option>${esc(d)}</option>`).join('')}</select>
+      <button type="button" class="btn btn-block" id="use-district">Use district centre</button>`;
+    $('#use-district').addEventListener('click', () => packPlace(p => p.district($('#district').value), 'district'));
+  } catch { /* no saved pack */ }
 }
 
 function trackWords(tr) {
@@ -200,6 +286,7 @@ function planScreen() {
   const s = svc(state.service);
   if (!s || !state.loc) return home();
   const p = state.plan;
+  if (p && p.offline) return offlineScreen(s);
   const head = `<h1 tabindex="-1">${esc(s.en)} near you</h1><p class="small">${locLine(state.loc)}</p>`;
   if (!p) return head + '<p>Finding options...</p>';
   if (p.error) return head + `<p class="card" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">Back</a>`;
@@ -219,21 +306,44 @@ function planScreen() {
     <a class="btn btn-block" href="#/">New search</a>`;
 }
 async function bindPlan() {
+  if (state.plan && state.plan.offline) {
+    $('#patient-here')?.addEventListener('click', () => {
+      const p = state.plan;
+      p.confirmed = true;
+      if (p.pack) p.answer = window.RSOffline.answer(p.pack, state.loc, state.service);
+      render();
+    });
+    return;
+  }
   if (!state.service || !state.loc || state.plan) return;
+  // Offline per spec 3.2.3: navigator.onLine false, a failed /api call, or one slower than 8 s.
+  if (!navigator.onLine) { await offlinePlan('This phone has no internet.'); render(); return; }
   const l = state.loc;
   // Rounded to 0.01 deg on the phone too; the point goes in the body, never the URL.
   const body = {service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2), accuracy_m: l.accuracy_m,
     source: l.source, depth: 'quick'};
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 8000);
   try {
     const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(body), redirect: 'manual'});
-    if (r.type === 'opaqueredirect') throw new Error('Signed out. Reload the page to sign in again.');
-    if (!r.ok) throw new Error('The server could not make a plan (' + r.status + ').');
-    state.plan = await r.json();
-    announce(state.plan.abstain ? 'No confident option. Showing places to call.' : `${state.plan.options.length} options found.`);
+      body: JSON.stringify(body), redirect: 'manual', signal: ctl.signal});
+    if (r.type === 'opaqueredirect') {
+      await offlinePlan('Signed out. Reload the page to sign in again. Showing saved data meanwhile.');
+    } else if (r.status >= 500) {
+      await offlinePlan('The server is not answering. Showing saved data.');
+    } else if (!r.ok) {
+      state.plan = {error: 'The server could not make a plan (' + r.status + ').'};
+      announce(state.plan.error);
+    } else {
+      state.plan = await r.json();
+      announce(state.plan.abstain ? 'No confident option. Showing places to call.' : `${state.plan.options.length} options found.`);
+      saveOfflinePack();  // background, never on the critical path
+    }
   } catch (e) {
-    state.plan = {error: navigator.onLine ? e.message : 'No internet. Plans need internet until offline packs land.'};
-    announce(state.plan.error);
+    await offlinePlan(e.name === 'AbortError' ? 'The server took more than 8 seconds. Showing saved data.'
+      : 'Could not reach the server. Showing saved data.');
+  } finally {
+    clearTimeout(timer);
   }
   render();
 }
@@ -310,7 +420,7 @@ function render() {
   bind();
 }
 window.addEventListener('hashchange', () => {
-  if (location.hash === '#/' || location.hash === '#/change') state.plan = null;
+  if (location.hash === '#/' || location.hash === '#/change') { state.plan = null; stopWatch(); }
   render();
 });
 function setOnline() { $('#offline').hidden = navigator.onLine; }
