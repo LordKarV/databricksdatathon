@@ -767,6 +767,22 @@ async function bindHow() {
   }
 }
 
+// ---------- Data stories (#53): stories.js and /api/stories load only on this route ----------
+function storiesScreen() {
+  return `<h1 tabindex="-1">Data stories</h1><div id="stories-out"><p>Loading...</p></div>`;
+}
+async function bindStories() {
+  try {
+    const [, r] = await Promise.all([loadScript('/stories.js', 'RSStories'), fetch('/api/stories', {redirect: 'manual'})]);
+    if (!r.ok) throw new Error();
+    $('#main').innerHTML = RSStories.render(await r.json());
+    RSStories.bind($('#main'));
+    $('#main h1').focus();
+  } catch {
+    $('#stories-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+  }
+}
+
 // ---------- router ----------
 function render() {
   const h = location.hash || '#/';
@@ -777,6 +793,7 @@ function render() {
   else if (h.startsWith('#/why/')) [html, bind] = [whyScreen(parseInt(h.split('/')[2], 10)), bindWhy];
   else if (h.startsWith('#/slip/')) [html, bind] = [slipScreen(parseInt(h.split('/')[2], 10)), bindSlip];
   else if (h === '#/how') [html, bind] = [howScreen(), bindHow];
+  else if (h === '#/stories') [html, bind] = [storiesScreen(), bindStories];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
   document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));

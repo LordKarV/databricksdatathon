@@ -71,16 +71,19 @@ def chart(d, res, load_tm, out):
     S.fig_title(fig, f"The LLM judge said yes to {n_yes} of {n} benchmark candidates, {conf1} of them at confidence 1; "
                         f"the ledger spread the same candidates from P_S {d.p_s.min():.2f} to {d.p_s.max():.2f}")
     ipw39 = load_tm["headline_checked"]["auroc_ipw_shipped_minus_system"]["B3_llm_judge"]
+    # The subtitle starts at the axes, not the figure edge, so it is wrapped to the axes width; the published
+    # AUROC sentence sits in the source note, which spans the figure.
     S.panel_title(ax, textwrap.fill(f"{n} candidates: up to 10 keyword matches per query, {n_q} of 40 benchmark queries, "
                               f"{d.unique_id.nunique()} facilities. Yes rate {p_yes:.1%} (Wilson 95% "
-                              f"{lo:.1%} to {hi:.1%}). Published test AUROC, 71 pairs: LLM judge "
-                              f"{a['B3_llm_judge']['raw']:.3f} [{a['B3_llm_judge']['raw_boot']['ci95'][0]:.3f}, "
-                              f"{a['B3_llm_judge']['raw_boot']['ci95'][1]:.3f}], ledger "
-                              f"{a['WL_shipped']['raw']:.3f} [{a['WL_shipped']['raw_boot']['ci95'][0]:.3f}, "
-                              f"{a['WL_shipped']['raw_boot']['ci95'][1]:.3f}]; on the 39 searched pairs reweighted "
-                              f"(IPW), ledger minus LLM is {ipw39['mean']:+.3f} "
-                              f"[{ipw39['ci95'][0]:+.2f}, {ipw39['ci95'][1]:+.2f}])", 118))
-    S.source_note(fig, textwrap.fill(I.source("llm_b3_pairs", "pair_scores", "results", "test_metrics") +
+                              f"{lo:.1%} to {hi:.1%}).", 92))
+    S.source_note(fig, textwrap.fill("Published test AUROC, 71 pairs: LLM judge "
+                  f"{a['B3_llm_judge']['raw']:.3f} [{a['B3_llm_judge']['raw_boot']['ci95'][0]:.3f}, "
+                  f"{a['B3_llm_judge']['raw_boot']['ci95'][1]:.3f}], ledger "
+                  f"{a['WL_shipped']['raw']:.3f} [{a['WL_shipped']['raw_boot']['ci95'][0]:.3f}, "
+                  f"{a['WL_shipped']['raw_boot']['ci95'][1]:.3f}]; on the 39 searched pairs reweighted "
+                  f"(IPW), ledger minus LLM is {ipw39['mean']:+.3f} "
+                  f"[{ipw39['ci95'][0]:+.2f}, {ipw39['ci95'][1]:+.2f}]. " +
+                  I.source("llm_b3_pairs", "pair_scores", "results", "test_metrics") +
                   ". Flag rows repeat candidates already shown in the T rows. Vertical jitter only.", 190))
     flags = d[(d.C >= 1) | (d.S >= 1) | (d.band == "Unlikely")]
     alt = (f"Dot strip chart. Each dot is one of {n} benchmark candidates, placed by the ledger's P_S and "

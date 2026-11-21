@@ -40,6 +40,7 @@ SHELL_FILES: dict[str, str] = {
     "offline.js": "text/javascript; charset=utf-8",
     "slip.js": "text/javascript; charset=utf-8",
     "how.js": "text/javascript; charset=utf-8",
+    "stories.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -151,6 +152,35 @@ def how() -> Response:
         return JSONResponse({"error": "page data is not built on this server (run app/howto/build.py)"},
                             status_code=503)
     return FileResponse(HOW, media_type="application/json", headers={"Cache-Control": "no-cache"})
+
+
+STORIES = HERE / "stories" / "out"  # built by stories/build.py from viz/gallery.json (git-ignored)
+
+
+def _stories_doc() -> dict | None:
+    path = STORIES / "stories.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
+@app.get("/api/stories")
+def stories() -> Response:
+    """Data for the 'Data stories' page (#53): text copied from viz/gallery.json, charts by name."""
+    if not (STORIES / "stories.json").is_file():
+        return JSONResponse({"error": "page data is not built on this server (run app/stories/build.py)"},
+                            status_code=503)
+    return FileResponse(STORIES / "stories.json", media_type="application/json", headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/api/stories/chart/{name}")
+def story_chart(name: str) -> Response:
+    """One chart as SVG. Only names listed in stories.json are served."""
+    doc = _stories_doc()
+    allowed = {c["file"] for s in doc["stories"] for c in s["charts"]} if doc else set()
+    if name not in allowed or not (STORIES / "charts" / name).is_file():
+        raise HTTPException(status_code=404)
+    return FileResponse(STORIES / "charts" / name, media_type="image/svg+xml",
+                        headers={"Cache-Control": "public, max-age=3600", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'",
+                                 "X-Content-Type-Options": "nosniff"})
 
 
 @app.get("/api/recommend")

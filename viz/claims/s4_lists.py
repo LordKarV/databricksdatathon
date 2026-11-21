@@ -115,10 +115,11 @@ def chart_lists(d: pd.DataFrame, extra: dict):
         ax.add_patch(__import__("matplotlib").patches.Rectangle((x, -0.95), 2.2, 0.22, color=col, clip_on=False))
         ax.text(x + 3, -0.84, lab, va="center", fontsize=10.5)
     n = d.iloc[0]
-    S.finding_title(ax, f"{n.dataset_only:,} of {n.dataset_claims:,} records that say NABH ({n.share_claims_unmatched:.0%}, "
+    # figure-level headline: an axes title starts right of the long row labels and ran off the right edge
+    S.fig_title(fig, f"{n.dataset_only:,} of {n.dataset_claims:,} records that say NABH ({n.share_claims_unmatched:.0%}, "
                         f"95% CI {n.share_claims_unmatched_lo:.0%}-{n.share_claims_unmatched_hi:.0%}) were not found on NABH's "
                         f"current list, and {n.list_only:,} of {n.both + n.list_only:,} list-matched records never "
-                        f"mention NABH", wrap=84)
+                        f"mention NABH", wrap=80)
     st = extra["nabh_both_status"]
     S.source_note(fig, "Sources: data/external NABH, e-RaktKosh, LaQshya, MoHFW trauma 196 matches (hand-checked 39/40, "
                        "16/20 + 2 likely, 17/20 + 3 plausible, 19/20);\ndataset claims from kb/vf_details (NABH) and the "

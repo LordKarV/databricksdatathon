@@ -22,6 +22,9 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
   # 'How this works' page data (#45): reads REPORT.md, model/MODEL_SPEC.md, research/DATASETS.md and the facts
   # export at build time, writes app/howto/out/how.json (the docs themselves are not bundled).
   uv run --no-project "${UV_DEPS[@]}" python app/howto/build.py
+  # 'Data stories' page data (#53): copies text from viz/gallery.json and the chart SVGs it names into
+  # app/stories/out/ (standard library only; order does not matter).
+  uv run --no-project "${UV_DEPS[@]}" python app/stories/build.py
 fi
 
 echo "== assemble bundle"

@@ -18,6 +18,9 @@ PURPOSE = {"stabilise": "Stabilise", "definitive": "Definitive care", "assess": 
            "access": "Fistula surgery", "recurring": "Dialysis sessions"}
 COLOR = {"origin": S.INK, "stabilise": S.CATEGORICAL[1], "assess": S.CATEGORICAL[1], "access": S.CATEGORICAL[1],
          "definitive": S.CATEGORICAL[0], "recurring": S.CATEGORICAL[0]}
+FIGSIZE = (16, 9)   # slide ratio (16:9), wider than S.SLIDE_SIZE so three maps and their evidence text fit
+MAP_W_OVER_H = 1.4  # map frame width / height in km; fills the column so no empty band is left above the maps
+WRAP = 68           # characters per evidence line, about one column wide
 
 
 def load():
@@ -55,11 +58,12 @@ def draw(ax, tx, rows, b, fac, pathway):
     k = 1 / math.cos(math.radians(lat0))
     la = [p[0] for p in pts]
     lo = [p[1] for p in pts]
-    half = max(max(la) - min(la), (max(lo) - min(lo)) / k, 0.6) / 2 * 1.3  # square frame in km
+    half = max(max(la) - min(la), (max(lo) - min(lo)) / k, 0.6) / 2 * 1.3  # half height of the frame, degrees lat
     cy, cx = (max(la) + min(la)) / 2, (max(lo) + min(lo)) / 2
     y0, y1 = cy - half, cy + half
-    x0, x1 = cx - half * k, cx + half * k
-    f = fac[fac.loc_lat.between(y0, y1) & fac.loc_lon.between(x0, x1)]
+    x0, x1 = cx - half * k, cx + half * k  # square core that holds every stop; label sides are chosen against it
+    fx0, fx1 = cx - half * k * MAP_W_OVER_H, cx + half * k * MAP_W_OVER_H  # drawn frame, widened to the column
+    f = fac[fac.loc_lat.between(y0, y1) & fac.loc_lon.between(fx0, fx1)]
     ax.scatter(f.loc_lon, f.loc_lat, s=7, color=S.AXIS, lw=0, zorder=1)
     # connectors: origin -> each distinct site in order (repeat visits drawn once)
     prev = rows[0]
@@ -83,8 +87,6 @@ def draw(ax, tx, rows, b, fac, pathway):
         if key in labelled:
             continue
         labelled.add(key)
-        name = textwrap.shorten(r["name"].split(",")[0], 34, placeholder="...")
-        txt = "Start" if i == 0 else f"{i}. {name}"
         right = i == 0 or r["lon"] > (x0 + x1) / 2 + (x1 - x0) * 0.15
         near_origin = i > 0 and abs(r["lat"] - rows[0]["lat"]) + abs(r["lon"] - rows[0]["lon"]) < 0.12
         # label sits above or below the point, on the side away from the connector it extends towards
@@ -93,16 +95,19 @@ def draw(ax, tx, rows, b, fac, pathway):
         up = all(q["lat"] < r["lat"] for q in side) if side else bool(i % 2)
         off = (-10, -16) if i == 0 else (9, -16) if near_origin else (-9 if right else 9, 7 if up else -16)
         right = right and not near_origin
+        # a right-aligned label runs back towards the middle of the map, so it gets a shorter name to stay off the connectors
+        name = textwrap.shorten(r["name"].split(",")[0], 27 if right else 34, placeholder="...")
+        txt = "Start" if i == 0 else f"{i}. {name}"
         ax.annotate(txt, (r["lon"], r["lat"]), xytext=off,
                     textcoords="offset points", ha="right" if right else "left", fontsize=10, color=S.INK, fontweight="bold" if i == 0 else "normal", zorder=6,
                     bbox=dict(fc=S.SURFACE, ec="none", alpha=0.85, pad=0.5))
     # scale bar
     km = 25 if (y1 - y0) * 111 < 160 else 50
     deg = km / (111.32 * math.cos(math.radians(lat0)))
-    sx, sy = x0 + (x1 - x0) * 0.05, y0 + (y1 - y0) * 0.05
+    sx, sy = fx0 + (fx1 - fx0) * 0.04, y0 + (y1 - y0) * 0.05
     ax.plot([sx, sx + deg], [sy, sy], color=S.INK_2, lw=2)
     ax.text(sx + deg / 2, sy + (y1 - y0) * 0.015, f"{km} km", ha="center", va="bottom", fontsize=9.5, color=S.INK_2)
-    ax.set_xlim(x0, x1)
+    ax.set_xlim(fx0, fx1)
     ax.set_ylim(y0, y1)
     ax.set_aspect(k)
     ax.set_xticks([])
@@ -120,31 +125,39 @@ def draw(ax, tx, rows, b, fac, pathway):
         lines.append(("h", head))
         for q, qid in zip((r["evidence"] or "").split(" | "), (r["evidence_id"] or "").split(" | ")):
             if q:
-                lines.append(("q", textwrap.fill(f'"{textwrap.shorten(q, 80, placeholder="...")}" [{qid}]', 60)))
+                lines.append(("q", textwrap.fill(f'"{textwrap.shorten(q, 80, placeholder="...")}" [{qid}]', WRAP)))
         if r["flags"]:
-            lines.append(("f", textwrap.fill(r["flags"], 58)))
+            lines.append(("f", textwrap.fill(r["flags"], WRAP - 3)))
     t = b["totals"]
     if "p_objective" in t:
         lines.append(("s", textwrap.fill(f"Chance of first care in time {t['p_first_care']:.2f}; of care in time at both "
-                                         f"steps {t['p_objective']:.2f}. {b['vs_direct']['text'] if b.get('vs_direct') else ''}", 58)))
+                                         f"steps {t['p_objective']:.2f}. {b['vs_direct']['text'] if b.get('vs_direct') else ''}", WRAP)))
     else:
         wk = t["travel_minutes_over_planning_weeks"] / 60 / t["planning_weeks"]
         lines.append(("s", textwrap.fill(f"{t['distinct_sites']} sites. Travel about {wk:.0f} hours a week for "
                                          f"sessions over {t['planning_weeks']} weeks; chance every stage is available "
-                                         f"{t['p_all_stages']:.2f}.", 58)))
-    y = 1.0
+                                         f"{t['p_all_stages']:.2f}.", WRAP)))
+    # Stacked in points from the top-left of the text panel, so line spacing does not depend on the panel height.
+    # Warnings are text in ink behind a "!" chip in the data-quality flag colour (never text in a series colour).
+    y = 4.0
     for kind, s in lines:
         style = {"h": dict(color=S.INK, fontsize=9.8, fontweight="bold"), "q": dict(color=S.INK_2, fontsize=9.3, style="italic"),
-                 "f": dict(color="#9a3c14", fontsize=9.3), "s": dict(color=S.INK, fontsize=9.6)}[kind]
-        tx.text(0, y, s, transform=tx.transAxes, va="top", **style)
-        y -= 0.05 * (s.count("\n") + 1) + 0.018
+                 "f": dict(color=S.INK, fontsize=9.3), "s": dict(color=S.INK, fontsize=9.6)}[kind]
+        if kind == "h" and y > 4.0:
+            y += 5  # extra space above each new stop
+        at = dict(xy=(0, 1), xycoords="axes fraction", textcoords="offset points", va="top", annotation_clip=False)
+        if kind == "f":
+            tx.annotate("!", xytext=(3, -y), ha="left", fontsize=9.3, fontweight="bold", color=S.ON_FILL["flagged"],
+                        bbox=dict(boxstyle="round,pad=0.22", fc=S.SEMANTIC["flagged"], ec="none"), **at)
+        tx.annotate(s, xytext=(15 if kind == "f" else 0, -y), ha="left", linespacing=1.25, **style, **at)
+        y += style["fontsize"] * 1.25 * (s.count("\n") + 1) + 5.5
 
 
 def main():
     runs, claims, fac = load()
-    fig = S.plt.figure(figsize=(16, 10.5), constrained_layout=True)
-    fig.get_layout_engine().set(rect=(0, 0, 1, 0.93))  # room for the two-line headline above fixed-aspect maps
-    gs = fig.add_gridspec(2, 3, height_ratios=[1.25, 1])
+    fig = S.plt.figure(figsize=FIGSIZE, constrained_layout=True)
+    fig.get_layout_engine().set(h_pad=0.09)  # inches; keeps the panel headings clear of the headline
+    gs = fig.add_gridspec(2, 3, height_ratios=[1.3, 1])
     all_rows = []
     titles = []
     for j, key in enumerate(PICKS):
