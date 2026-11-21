@@ -349,10 +349,12 @@ function stopHtml(r, g, P) {
       ${s.dwell_minutes != null ? `Stay about ${F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}.` : ''}
       Least sure: ${F(S + '.weakest_capability', s.weakest_capability)} (${F(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2), 'num')}).
       ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
-      ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-        <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
-        <p class="small muted">Listing sentences behind this stop: ${F(S + '.n_evidence', s.n_evidence, 'num')}; the first are quoted.</p>`
-        : '<p class="small muted">No listing sentence in our data for this stop.</p>'}
+      <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
+        ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
+          <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
+          ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
+          : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
+      </details>
       ${s.fallback ? `<p class="small">If turned away: ${F(S + '.fallback.name', s.fallback.name)}, arriving about
         ${F(S + '.fallback.eta_minutes', s.fallback.eta_minutes, 'num')} min from the start
         (chance ${F(S + '.fallback.p', s.fallback.p.toFixed(2), 'num')}).</p>` : ''}
