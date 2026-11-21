@@ -133,3 +133,8 @@ select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--m
 
 /* How this works (#45): wide tables scroll inside themselves, never the page. */
 .table-scroll { overflow-x: auto; }
+
+/* Route card (#47): numbered stops; stages at one hospital nest under it. */
+.route .stops { padding-left: 1.5rem; }
+.route .stops > li { margin-bottom: 0.75rem; }
+.route .stop-name { margin: 0.25rem 0; }

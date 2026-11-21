@@ -323,6 +323,82 @@ function farVerifiedNote(p) {
     ${F(`options.${k}.travel.km`, Math.round(likely.travel.km), 'num')} km away (option ${r(likely)}).</strong>
     ${which} closer but not verified: call first.</p>`;
 }
+// ---------- Multi-stop route (#47): the planner's itinerary, shown above the options to call ----------
+// Durations use kind 'dur' (minutes, hours or days back to stored minutes); met / not met uses kind 'met'.
+function durText(m) {
+  if (m < 120) return `${m} min`;
+  if (m >= 1440) return `${Math.round(m / 1440)} day${Math.round(m / 1440) === 1 ? '' : 's'}`;
+  return `${Math.round(m / 60)} h`;
+}
+function stopGroups(stops) {
+  const g = [];
+  stops.forEach((s, k) => {
+    if (g.length && g[g.length - 1].id === s.facility_id) g[g.length - 1].ks.push(k);
+    else g.push({id: s.facility_id, ks: [k]});
+  });
+  return g;
+}
+function stopHtml(r, g, P) {
+  const s0 = r.stops[g.ks[0]];
+  const S0 = `${P}.stops.${g.ks[0]}`;
+  const ph = s0.phone && s0.phone.e164;
+  const stages = g.ks.map(k => {
+    const s = r.stops[k], S = `${P}.stops.${k}`;
+    return `<li><strong>${F(S + '.purpose_word', s.purpose_word)}</strong>.
+      Chance this stop can do it: ${F(S + '.p', s.p.toFixed(2), 'num')}.
+      ${s.dwell_minutes != null ? `Stay about ${F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}.` : ''}
+      Least sure: ${F(S + '.weakest_capability', s.weakest_capability)} (${F(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2), 'num')}).
+      ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
+      <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
+        ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
+          <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
+          ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
+          : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
+      </details>
+      ${s.fallback ? `<p class="small">If turned away: ${F(S + '.fallback.name', s.fallback.name)}, arriving about
+        ${F(S + '.fallback.eta_minutes', s.fallback.eta_minutes, 'num')} min from the start
+        (chance ${F(S + '.fallback.p', s.fallback.p.toFixed(2), 'num')}).</p>` : ''}
+      ${s.flags.map((f, j) => `<p class="small">${F(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
+  }).join('');
+  return `<li><p class="stop-name"><strong>${F(S0 + '.name', s0.name)}</strong></p>
+    <p class="small">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}Arrive about
+      ${F(S0 + '.eta_low', s0.eta_low, 'num')}-${F(S0 + '.eta_high', s0.eta_high, 'num')} min from the start.
+      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>` : 'No phone number in our data.'}</p>
+    <ul>${stages}</ul></li>`;
+}
+function routePlanHtml(r, P) {
+  const t = r.totals, v = r.vs_direct;
+  return `<p>${F(P + '.type_word', r.type_word)}.</p>
+    <ol class="stops">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
+    ${t.minutes_to_definitive != null ? `<p>Definitive care in about ${F(P + '.totals.minutes_to_definitive', t.minutes_to_definitive, 'num')} min
+      (${F(P + '.totals.low', t.low, 'num')}-${F(P + '.totals.high', t.high, 'num')}).
+      Chance of first care in time: ${F(P + '.totals.p_first_care', t.p_first_care.toFixed(2), 'num')}.
+      Chance of being treated: ${F(P + '.totals.p_treated', t.p_treated.toFixed(2), 'num')}.</p>` : ''}
+    ${r.window_checks.map((c, j) => `<p class="small">${F(`${P}.window_checks.${j}.check`, c.check)} within
+      ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
+      <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
+      (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
+    ${v ? `<p class="small">Going straight to ${F(P + '.vs_direct.direct_name', v.direct_name)} takes about
+      ${F(P + '.vs_direct.direct_minutes', v.direct_minutes, 'num')} min. Chance of care in time: direct
+      ${F(P + '.vs_direct.direct_p_objective', v.direct_p_objective.toFixed(2), 'num')}, this route
+      ${F(P + '.vs_direct.plan_p_objective', v.plan_p_objective.toFixed(2), 'num')}. First care in time: direct
+      ${F(P + '.vs_direct.direct_p_first_care', v.direct_p_first_care.toFixed(2), 'num')}, this route
+      ${F(P + '.vs_direct.plan_p_first_care', v.plan_p_first_care.toFixed(2), 'num')}.</p>` : ''}`;
+}
+function routeHtml(p) {
+  const it = p.itinerary;
+  if (!it) return '';
+  const head = `<h2>Suggested route</h2>
+    <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
+      estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
+  if (it.abstain) return head + `<p class="card"><strong>${F('itinerary.abstain', it.abstain)}</strong></p>`;
+  if (!it.plans.length) return '';
+  const best = `<article class="card route" aria-labelledby="route-1"><h3 id="route-1">Route
+    ${F('itinerary.plans.0.rank', it.plans[0].rank, 'num')}</h3>${routePlanHtml(it.plans[0], 'itinerary.plans.0')}</article>`;
+  const more = it.plans.slice(1).map((r, k) => `<details><summary>Route&nbsp;${F(`itinerary.plans.${k + 1}.rank`, r.rank, 'num')}:&nbsp;${F(`itinerary.plans.${k + 1}.type_word`, r.type_word)}</summary>${routePlanHtml(r, `itinerary.plans.${k + 1}`)}</details>`).join('');
+  return head + best + more;
+}
+
 function planScreen() {
   const s = svc(state.service);
   if (!s || !state.loc) return home();
@@ -343,12 +419,12 @@ function planScreen() {
   if (p.abstain) {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
-      <h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
       ${oo ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
+    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
       ${p.why_not.map((w, k) => `<p><strong>${F(`why_not.${k}.name`, w.name)}</strong>,
         ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');

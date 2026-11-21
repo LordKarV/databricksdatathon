@@ -218,6 +218,13 @@ def area(page: Page) -> None:
     page.locator("#ten-calls").wait_for()
 
 
+def route_all_open(page: Page) -> None:
+    """Multi-stop route (#47) with the other routes expanded."""
+    plan_for("Accident")(page)
+    page.get_by_text("Suggested route").first.wait_for()
+    page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+
+
 def how_page(page: Page) -> None:
     """'How this works' (#45) with every expandable section open, so axe sees the tables too."""
     go(page, "#/how")
@@ -241,6 +248,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "compare_dialysis": compare(desk=False),
     "compare_desk": compare(desk=True),
     "area_trauma": area,
+    "route_trauma": route_all_open,
     "how_this_works": how_page,
 }
 

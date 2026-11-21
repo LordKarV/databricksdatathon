@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
 import app as app_module  # noqa: E402
+import itinerary  # noqa: E402
 from facts.engine import Engine  # noqa: E402
 from services import SERVICES  # noqa: E402
 
@@ -111,3 +112,54 @@ def test_nearer_first_but_a_confirmed_listing_in_reach_is_never_hidden():
     likely = next(o for o in p["options"] if o["band"] == "likely")
     assert likely["rank"] == len(p["options"])  # far away, so it takes the last slot rather than the first
     assert p["options"][0]["travel"]["minutes"] < likely["travel"]["minutes"]
+
+
+# ---------- multi-stop route (#47) ----------
+ROUTED = itinerary.itinerary(ENGINE, "trauma_emergency", 25.15, 83.68) if ENGINE else None
+needs_planner = pytest.mark.skipif(ROUTED is None, reason="planner/out not built (planner/export_v1.py)")
+
+
+@needs_planner
+@pytest.mark.parametrize("name", QUERIES)
+def test_route_rides_along_in_budget(name):
+    s, la, lo = QUERIES[name]
+    t = time.perf_counter()
+    r = client.post("/api/plan", json={"service": s, "lat": la, "lon": lo, "accuracy_m": 40})
+    ms = (time.perf_counter() - t) * 1000
+    it = r.json()["itinerary"]
+    assert r.status_code == 200 and ms < 500 and len(r.content) < 20_000, (ms, len(r.content))
+    assert it["pathway"] and (it["plans"] or it["abstain"])
+    for plan in it["plans"]:
+        assert plan["stops"][-1]["purpose"] in ("definitive", "recurring")
+        for st in plan["stops"]:
+            assert st["eta_low"] <= st["eta_high"] and 0 <= st["p"] <= 1
+            for e in st["evidence"]:  # quotes are the claim rows' own text, never another facility's sentence
+                field, text, nonoffer, attribution = ENGINE.claims[e["claim_id"]]
+                assert e["quote"] == text and not nonoffer and attribution != "other_facility"
+
+
+@needs_planner
+def test_route_does_not_change_the_options():
+    plain = ENGINE.plan("trauma_emergency", 25.15, 83.68, 40, "gps")
+    routed = client.post("/api/plan", json={"service": "trauma_emergency", "lat": 25.15, "lon": 83.68,
+                                            "accuracy_m": 40}).json()
+    assert [o["facility_id"] for o in routed["options"]] == [o["facility_id"] for o in plain["options"]]
+
+
+def test_no_route_without_a_pathway_or_a_planner(monkeypatch):
+    assert client.post("/api/plan", json={"service": "mri", "lat": 24.79, "lon": 85.0}).json()["itinerary"] is None
+    monkeypatch.setattr(itinerary, "_planner", lambda: None)  # planner not shipped
+    r = client.post("/api/plan", json={"service": "trauma_emergency", "lat": 25.15, "lon": 83.68}).json()
+    assert r["itinerary"] is None and r["options"]
+
+
+@needs_planner
+def test_no_route_when_planner_data_missing(monkeypatch):
+    svc = itinerary._planner()
+
+    def not_built(*a, **k):
+        raise RuntimeError("planner data not built")
+
+    monkeypatch.setattr(svc, "plan_for_service", not_built)
+    r = client.post("/api/plan", json={"service": "trauma_emergency", "lat": 25.15, "lon": 83.68}).json()
+    assert r["itinerary"] is None and r["options"]

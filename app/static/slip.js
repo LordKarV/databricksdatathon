@@ -16,7 +16,7 @@
       note: "Carry the doctor's note.", name: 'Patient name (write by hand): ____________',
       made: 'Made', asOf: 'Facility data as of', old: 'Call before going if this slip is more than a day old.',
       ask: 'Ask the patient before sending.', draft: '',
-      listing: 'its listing says', source: 'source',
+      listing: 'its listing says', source: 'source', route: 'Suggested route', stay: 'stay',
     },
     hi: {
       title: '\u0930\u0947\u092b\u0930\u0932 \u092a\u0930\u094d\u091a\u0940',
@@ -52,6 +52,8 @@
       draft: '(Hindi draft, not reviewed)',
       listing: '\u0907\u0938\u0915\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0932\u093f\u0916\u093e \u0939\u0948',
       source: '\u0938\u094d\u0930\u094b\u0924',
+      route: '\u0938\u0941\u091d\u093e\u092f\u093e \u0917\u092f\u093e \u0930\u093e\u0938\u094d\u0924\u093e',
+      stay: '\u0930\u0941\u0915\u0947\u0902',
     },
   };
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -92,7 +94,30 @@
       outcome: callOutcome && OUTCOME_KEY[callOutcome.said]
         ? {key: OUTCOME_KEY[callOutcome.said], at: stamp(new Date(callOutcome.at)).slice(-5)} : null,
       stub: !!(plan.meta && plan.meta.stub),
+      route: routeModel(plan),
     };
+  }
+
+  /** The best multi-stop route (#47), one entry per hospital, in order; null when the plan has none. */
+  function routeModel(plan) {
+    const r = plan.itinerary && plan.itinerary.plans && plan.itinerary.plans[0];
+    if (!r || !r.stops.length) return null;
+    const out = [];
+    r.stops.forEach((s, k) => {
+      const path = `itinerary.plans.0.stops.${k}`;
+      const last = out[out.length - 1];
+      const stage = {path, purpose: s.purpose_word, dwell: s.dwell_minutes};
+      if (last && last.id === s.facility_id) { last.stages.push(stage); return; }
+      out.push({id: s.facility_id, path, name: s.name, low: s.eta_low, high: s.eta_high, stages: [stage],
+        phoneKey: s.phone && s.phone.display ? 'display' : 'e164',
+        phone: s.phone && s.phone.e164 ? (s.phone.display || s.phone.e164) : null});
+    });
+    return out;
+  }
+  function durText(m) {
+    if (m < 120) return `${m} min`;
+    if (m >= 1440) return `${Math.round(m / 1440)} day${Math.round(m / 1440) === 1 ? '' : 's'}`;
+    return `${Math.round(m / 60)} h`;
   }
 
   function travelText(g, t) {
@@ -119,6 +144,11 @@
     }
     out.push(`${t.call}: ${outcomeText(m, t)}`);
     if (m.backup) out.push(`${t.ifNot}: ${m.backup.name}, ${m.backup.km} ${t.km}. ${t.phone}: ${m.backup.phone || t.noPhone}`);
+    if (m.route) {
+      out.push(`${t.route}:`);
+      m.route.forEach((g, k) => out.push(`${k + 1}. ${g.name} (${g.stages.map(x => x.purpose).join(', ')}), ` +
+        `${t.about} ${g.low}-${g.high} ${t.min}. ${t.phone}: ${g.phone || t.noPhone}`));
+    }
     out.push(t.numbers);
     if (m.has102) out.push(t.n102);
     out.push(t.worse, t.note);
@@ -177,6 +207,11 @@
           <span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)}; ${F(q.path + '.claim_id', q.claim)})</span></li>`).join('')}</ul>`) : ''}
         ${row(t.call, `<span data-device>${esc(outcomeText(m, t))}</span>`)}
         ${m.backup ? row(t.ifNot, `${F(m.backup.path + '.name', m.backup.name)}, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
+        ${m.route ? row(t.route, `<ol>${m.route.map(g => `<li><strong>${F(g.path + '.name', g.name)}</strong>:
+          ${g.stages.map(x => `<span lang="en">${F(x.path + '.purpose_word', x.purpose)}</span>${x.dwell != null
+            ? ` (${esc(t.stay)} ${F(x.path + '.dwell_minutes', durText(x.dwell), 'dur')})` : ''}`).join(', ')}.
+          ${esc(t.about)} ${F(g.path + '.eta_low', g.low, 'num')}-${F(g.path + '.eta_high', g.high, 'num')} ${esc(t.min)}.
+          ${esc(t.phone)}: ${phoneHtml(g) || esc(t.noPhone)}</li>`).join('')}</ol>`) : ''}
       </tbody></table>
       <p><strong>${esc(t.numbers)}</strong>${m.has102 ? ' ' + esc(t.n102) : ''}</p>
       <p>${esc(t.worse)} ${esc(t.note)}</p>
