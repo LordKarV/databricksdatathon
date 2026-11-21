@@ -38,6 +38,7 @@ SHELL_FILES: dict[str, str] = {
     "pack.js": "text/javascript; charset=utf-8",
     "offline.js": "text/javascript; charset=utf-8",
     "slip.js": "text/javascript; charset=utf-8",
+    "how.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -136,6 +137,18 @@ def verify(req: VerifyRequest) -> JSONResponse:
     if ch is None:
         return JSONResponse({"error": "website check is not set up on this server"}, status_code=503)
     return JSONResponse(ch.check(req.facility_id, req.service_id), headers={"Cache-Control": "no-store"})
+
+
+HOW = HERE / "howto" / "out" / "how.json"  # built by howto/build.py (git-ignored)
+
+
+@app.get("/api/how")
+def how() -> Response:
+    """Data for the 'How this works' page (#45): every number with the repo file it comes from."""
+    if not HOW.is_file():
+        return JSONResponse({"error": "page data is not built on this server (run app/howto/build.py)"},
+                            status_code=503)
+    return FileResponse(HOW, media_type="application/json", headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/api/recommend")

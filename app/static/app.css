@@ -130,3 +130,6 @@ select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--m
   body.wide .compare-table { display: block; }
   body.wide .compare-cards { display: none; }
 }
+
+/* How this works (#45): wide tables scroll inside themselves, never the page. */
+.table-scroll { overflow-x: auto; }

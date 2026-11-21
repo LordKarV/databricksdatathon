@@ -218,6 +218,13 @@ def area(page: Page) -> None:
     page.locator("#ten-calls").wait_for()
 
 
+def how_page(page: Page) -> None:
+    """'How this works' (#45) with every expandable section open, so axe sees the tables too."""
+    go(page, "#/how")
+    page.get_by_text("Page data built").wait_for()
+    page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -234,6 +241,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "compare_dialysis": compare(desk=False),
     "compare_desk": compare(desk=True),
     "area_trauma": area,
+    "how_this_works": how_page,
 }
 
 
