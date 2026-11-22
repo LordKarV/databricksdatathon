@@ -187,9 +187,9 @@
   "offline_answer_dialysis-light": {
    "violations": [],
    "horizontal_scroll": false,
-   "options": 4,
-   "tel_links": 4,
-   "sms_links": 4
+   "options": 3,
+   "tel_links": 3,
+   "sms_links": 3
   },
   "offline_no_saved_pack-light": {
    "violations": [],
@@ -217,15 +217,15 @@
     "gzip": 2577
    },
    "/app.js": {
-    "raw": 59937,
-    "gzip": 18480
+    "raw": 61315,
+    "gzip": 18927
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 21786,
+  "gzip_total": 22233,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
