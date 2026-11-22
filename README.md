@@ -10,19 +10,24 @@ instead of guessing, and it keeps working offline on a cheap phone.
 **Not the nearest, and not an unreachable "best".** Sending everyone to the closest listing ignores whether it
 really offers the care; sending everyone to the best hospital ignores whether the patient can get there in time.
 Referral Saathi weighs evidence, travel time and the care's time window, and when the right hospital is too far it
-plans a stop to stabilise first. For example, after a road accident near Pusa, Bihar, the definitive trauma hospital
-is about 80 minutes away and misses the 60-minute window. So the app says: call the sub-divisional hospital 19
-minutes away first, and if they say no, call the confirmed private hospital 34 minutes away next. A simulated
-referral world showed that in an emergency the nearest plausible place first, with a call ahead, gets more patients
-to care in time than sending them farther for better evidence (simulated, not a field result). *These numbers come
-from the app and route planner on model v2: list 1 is Sub Divisional Hospital Pusa (not verified), list 2 Miracare
-Hospital (Likely), and the route continues to Ganpati Hospital, Vaishali.*
+plans a stop to stabilise first. For example, after a road accident in Gaya, Bihar (24.79, 85.0), going straight to
+AIIMS Patna takes about 92 minutes and misses the 60-minute window. So the app says: call Dr. A Barkat
+Multispeciality Hospital, half a kilometre away and rated Likely ("Provides 24/7 trauma and emergency care"), for
+first care, then go on to AIIMS Patna. A simulated referral world showed that in an emergency the nearest plausible
+place first, with a call ahead, gets more patients to care in time than sending them farther for better evidence
+(simulated, not a field result). *These numbers come from the app and route planner on model v2 (`/api/plan`,
+trauma, at that point; the route's own sentence is "Going straight to All India Institute of Medical Sciences Patna
+takes 92 min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first
+care in about 1 min.").*
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 
+It is for ASHAs and other front-line health workers deciding where to send a patient, and for district planners
+asking where the evidence of care is thin.
+
 The submission is three things:
 
-- **Video demo:** the app on a phone, start to finish. Link to come (#12).
+- **Video demo:** the app on a phone, start to finish. Video: VIDEO_LINK (placeholder, added after recording, #12).
 - **This repository**, with the code for every step from audit to app.
 - **The notebook**, with all our code and its outputs:
   [`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb). It is readable on GitHub as is, and runs
@@ -30,6 +35,38 @@ The submission is three things:
 
 The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
 tells the same story as the notebook, in plain words.
+
+## What runs on Databricks
+
+- **The App** (Databricks Apps, `referral-saathi`, deployed by `tools/deploy/deploy.sh`). Typed requests the
+  offline lexicon cannot place go to Llama 3.3 70B (`databricks-meta-llama-3-3-70b-instruct`), which also
+  translates quotes. A photo of a referral note is read by Llama 4 Maverick (`databricks-llama-4-maverick`). Both
+  are called through model serving, and a model's answer is kept only when its deciding phrase appears word for
+  word in the input (`app/inputs/understand.py`). Speech goes through faster-whisper small on the App's own CPU:
+  2.1 to 3.0 s per clip, 3 of 3 test clips parsed to the right service (`submission/measured_on_databricks.json`).
+- **Unity Catalog:** schema `workspace.referral_saathi`, 62 tables, including the model v2 scores
+  (`facility_service_scores_v2`, 358,092 rows). The six v1 prototype tables are kept and commented SUPERSEDED.
+  Which tables rebuild from this repo and which need unpublished inputs: `databricks/README.md`.
+- **AI/BI dashboard** "Referral Saathi: district planner": five pages for district planners, built and tested by
+  `databricks/dashboard/build_dashboard.py` (`databricks/dashboard/DASHBOARD.md`).
+- **Genie agent** "Referral Saathi planner": the planners' questions in plain English over the same tables, with
+  instructions, 13 example queries and a 12-question benchmark. Benchmark accuracy: 10 of 12 on the live space
+  (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
+  hospital near Lucknow can handle an emergency C-section?" with claim ids.
+- **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
+  `submission/00_rebuild_derived.ipynb`. Run ids: RUN_IDS (placeholder, filled at release step R6, listed in
+  `submission/README.md`).
+- **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
+  about 7 minutes each; neither beat the rules, so it is a documented negative result (`model/reader/README.md`).
+- Stills of the dashboard and the Genie Benchmark tab: STILLS (placeholder, `demo/stills/`, captured in a signed-in
+  browser at release step R7).
+
+## Data we brought in
+
+DATA_SOURCES_TABLE (placeholder: one row per outside source, with what it testifies, the facilities matched and its
+effect on the answers, read from `validation/out/source_impact.csv` when the WS5 PR lands).
+
+The rule for every outside source: it is a cited witness on the Why page, never the ranking.
 
 ## How it works
 
@@ -39,14 +76,17 @@ provided facility table (Databricks Marketplace, 9,959 usable records)
   -> cleaning/     fix what can be fixed, flag the rest; split every listing into sentences with ids
   -> derived/v1/   cleaned tables + a score with an interval for every data point (pipelines/source_scoring)
   -> kb/           taxonomy of services, care pathways, website crawl and open-data witnesses
-  -> model/        evidence grades, source reliability, scores for "exists", "is here", "offers it"
+  -> model/        the v2 model (model/v2): one score per facility and service, with its ledger of reasons
+  -> derived/v2/   the frozen model's scores, witnesses and model card, which the app reads
   -> app/          FastAPI + one plain HTML page: whom to call, WHY (quotes) and HOW (points), offline packs
      planner/      multi-stop routes for time-critical cases (stabilise first, then definitive care)
      geo/          travel-time estimates, with hill-road factors by state
+     sim/          the simulated referral world that chose the emergency order
+  -> databricks/   Unity Catalog loader, AI/BI dashboard, Genie agent, read-only verification
 ```
 
 At request time the app needs only the Python standard library plus FastAPI. Its data exports are built from
-`derived/v1` in a few seconds.
+`derived/v1` and `derived/v2` in a few seconds.
 
 ## Reproduce
 
@@ -60,7 +100,7 @@ At request time the app needs only the Python standard library plus FastAPI. Its
 **Locally** (Python 3.11+, a venv with pandas, pyarrow, fastapi, uvicorn and pytest):
 
 ```
-make app-data     # planner export, facts, offline packs, "How this works" data (from derived/v1)
+make app-data     # planner export, facts, offline packs, "How this works", stories, website check (derived/v1, v2)
 make test         # app, planner and travel tests
 make serve        # http://127.0.0.1:8000
 make notebook     # re-run the submission notebook and save it with outputs
@@ -80,6 +120,9 @@ upstream cleaning steps; see `derived/v1/README.md`.
 | `cleaning/` | Location and identity cleaning; sentence attribution and service grades |
 | `pipelines/` | Builds `derived/v1` (source reliability and data-point scores) |
 | `derived/v1/` | The cleaned tables every other part reads |
+| `derived/v2/` | The frozen model's outputs: scores, witnesses, model card |
+| `sim/` | The simulated referral world behind the emergency order |
+| `databricks/` | Unity Catalog loader, AI/BI dashboard, Genie agent and their verification |
 | `kb/` | Service taxonomy, care pathways, website crawl, open-data matches |
 | `external/` | Fetch and join code for 14 public lists, with licence notes |
 | `model/` | Model spec, prototypes, gold labels, the statistical review |
@@ -163,5 +206,10 @@ That is why every answer ends with "call first".
 - **e-RaktKosh blood centres:** no licence stated; shown only as single-centre facts with a link.
 - The full table, with each source's terms and hand-check results, is in `research/DATASETS.md`.
 - What this repository holds, file by file, is in `DATA_AUDIT.md`.
+
+## Licence
+
+The code is under the MIT licence (`LICENSE`). The data in this repository is not: each dataset stays under its own
+terms, listed above and in `research/DATASETS.md`.
 
 Not clinical advice. In an emergency call 108.
