@@ -431,7 +431,8 @@ function stopHtml(r, g, P) {
   return `<li><p class="stop-name"><strong>${F(S0 + '.name', s0.name)}</strong></p>
     <p class="small">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}Arrive about
       ${F(S0 + '.eta_low', s0.eta_low, 'num')}-${F(S0 + '.eta_high', s0.eta_high, 'num')} min from the start.
-      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>` : 'No phone number in our data.'}</p>
+      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>`
+        : s0.phone && s0.phone.display ? `Phone: ${F(S0 + '.phone.display', s0.phone.display)}` : 'No phone number in our data.'}</p>
     <ul>${stages}</ul></li>`;
 }
 function routePlanHtml(r, P) {
