@@ -7,10 +7,10 @@ service and outputs two probabilities:
 - `p_offers`: the sentence says the facility offers the service (not a referral, a plan, a negation,
   a staff history or another hospital's service)
 
-Status: the pipeline is built and proven end to end on a small subset. **The full training has not
-been run.** No reader scores are in `derived/v2/` yet, and nothing here shows the reader beats the
-rules. The numbers below for the reader come from a 20,000-example, 1-epoch test run and are only
-evidence that the code works.
+Status: the full training was run once, on the lead's machine (Apple M5 Pro, 48 GB, MPS). **Verdict:
+the reader does not beat the rules and is not used as primary evidence.** Details in "Full run
+result" below. Its scores are in `derived/v2/reader_scores.parquet` for the candidate D experiment
+(issue #79) only.
 
 ## Run it
 
@@ -153,12 +153,66 @@ The 20,000-example, 1-epoch test model scores below the rules on the hand labels
 about_this 0.50 against 0.55; offers 0.22 against 0.86). It is undertrained and says nothing about
 the full run.
 
-## Expected wall time for the full run
+## Full run result (2026-11-21, lead's machine)
 
-Not measured. From the speeds above: 123,947 examples x 3 epochs at about 200 examples/s is about
-31 minutes per backbone on an M5 with 16 GB. Scoring about 530,000 rows plus token attribution is
-about 20 minutes at the sample's speed. That gives roughly 2 hours for three backbones on this
-machine, and less on a faster one; how much less is a guess.
+Run: `python -m model.reader.run --config model/reader/configs/full.yaml`, Apple M5 Pro, 48 GB,
+MPS, shared with two other jobs. Total 10,272 s. Files: `out/metrics_full.json`,
+`eval/results_minilm-l12.json`, `eval/eval_predictions_minilm-l12.csv`,
+`eval/disagreements_minilm-l12.csv`, `eval/score_stats_minilm-l12.json`,
+`weights/minilm-l12/{config,log}.json`.
+
+**Only one of the three backbones trained.** `bge-small` and `me5-small` exited with return code 1
+after 51 s and 50 s (`failed_backbones` in the metrics file); the cause is not recorded in the
+committed files. So "minilm-l12 was chosen" means it was the only one that finished, not that it
+won a comparison. minilm-l12: 7,588 s of training, best validation loss 0.262.
+
+Hand labels (564 rows), F1 on label 0, reader threshold 0.5, not tuned on this set:
+
+| Target | Rules P / R / F1 | Reader P / R / F1 | F1 difference (95% bootstrap CI) | Verdict |
+|---|---|---|---|---|
+| about_this | 0.644 / 0.475 / 0.547 | 0.552 / 0.607 / 0.578 | +0.031 (-0.077 to 0.139) | no detectable difference |
+| offers | 0.974 / 0.776 / 0.864 | 0.312 / 0.408 / 0.354 | -0.510 (-0.653 to -0.375) | reader much worse |
+
+Calibration of the reader on the hand labels is poor: expected calibration error 0.165
+(about_this) and 0.167 (offers).
+
+Whole corpus (469,498 sentences): the rules mark 9,506 as about another facility; the reader marks
+27,069 (p_about_this below 0.5); 8,902 are marked by both. The reader disagrees with the rules on
+18,167 sentences the rules call "about this", and on 604 the other way.
+
+### Hand check of the 18,167 (agent labels, not human)
+
+A random 40 of those 18,167 sentences (seed 7) were labelled by the tm-Art4v agent, reading the
+facility name, city and sentence. Labels and one-line reasons are in
+`eval/agent_labels_about_disagreements.csv`. No human has checked them.
+
+- Reader right (the sentence really is about another facility or place): 8 of 34 clear cases,
+  0.24 (95% Wilson interval 0.12 to 0.40). 6 were unclear.
+- Reader wrong: 26 of 34. The pattern is consistent: it treats any named organisation or place
+  that differs from the record's name string as "another facility". Examples it got wrong:
+  "Located in Gurugram, India" for a Gurgaon hospital; "Part of Lokmanya Tilak Municipal General
+  Hospital" for Sion Hospital (the same hospital); empanelment and insurer-network sentences; own
+  branches and affiliations.
+- Being very sure does not help: among sentences with p_about_this at or below 0.05 it was right
+  in 5 of 17.
+- It did find real cases the rules miss (for example a Rajkot hospital's ventilator in a Vadodara
+  record, a Vijayawada listing in a Proddatur record, "Top Clinics in Borivali West" in an
+  Aurangabad record). At 24% precision that would be roughly 4,000 of the 18,167, but the interval
+  is wide (about 2,200 to 7,300) and they cannot be separated from the 76% noise by score.
+
+Likely cause (not tested): the synthetic "swap" negatives and the rule labels both teach "name
+mismatch means other facility", and nothing teaches that affiliations, aliases, parent bodies and
+localities are still about this facility.
+
+### What this means
+
+- Do not use `p_about_this` to down-weight or drop sentences. On the rules' positives it is wrong
+  about three times in four.
+- Do not use `p_offers`: it is far below the rules on the hand labels, which are in-sample for the
+  rules but still the only labels there are.
+- `top_tokens_*` were not evaluated at all. They should not be shown to users as an explanation.
+- Candidate D (issue #79) may still test the soft counts on gold DEV; this result predicts it will
+  not help.
 
 ## Output
 
@@ -184,8 +238,9 @@ built, a win on `offers` is unlikely; `about_this` is the head to watch.
 
 ## Not done
 
-- The full training, and therefore every claim about the reader's quality.
-- Hand-checking the 80 disagreement sentences (needs the full model).
-- No new hand labels; no random-sample eval set, so the comparison is biased toward the rules.
-- No run on CPU only, no run on the lead's machine.
+- The other two backbones (they failed on the full run; cause unknown).
+- A human check of the 40 agent labels, and any check of the 604 disagreements the other way.
+- No random-sample eval set, so the comparison on hand labels is biased toward the rules.
+- No evaluation of the token attributions.
+- No CPU-only run.
 - LLM-distilled support labels are not used.
