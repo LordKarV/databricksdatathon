@@ -32,6 +32,7 @@ from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 import outcomes
+from errors import Invalid
 from facts.engine import Engine
 from services import BAND_WORDS, SERVICES
 
@@ -226,7 +227,7 @@ def _demo_rows(eng: Engine, district: str) -> list[dict]:
     try:
         from community.field import simulated_reports
     except ImportError as e:
-        raise outcomes.OutcomeError("the demo reports are not installed on this server") from e
+        raise outcomes.OutcomeError("the demo reports are not installed on this server", "pulse_demo_missing") from e
     # ponytail: the demo reports are days old, so most fall in the current week, which is never published; they
     # are moved one week back to land in the window. Simulated and labelled either way.
     return [{**r, "week": week_start(r["created_at"]) - timedelta(days=7)} for r in simulated_reports(eng)
@@ -238,13 +239,13 @@ def resolve_district(eng: Engine, district: str | None, lat: float | None, lon: 
     if district:
         name = district.strip().title()
         if name not in {str(d).title() for d in eng.pins["district"]}:
-            raise ValueError("unknown district")
+            raise Invalid("pulse_unknown_district", "unknown district")
         return name
     if lat is None or lon is None:
-        raise ValueError("give a district, or lat and lon")
+        raise Invalid("pulse_need_where", "give a district, or lat and lon")
     found = outcomes.district(eng, round(lat, 2), round(lon, 2))
     if not found:
-        raise ValueError("no district found for this point")
+        raise Invalid("pulse_no_district_for_point", "no district found for this point")
     return found
 
 
@@ -255,7 +256,7 @@ def pulse(eng: Engine, district: str | None, service: str | None, lat: float | N
           lon: float | None = None) -> dict[str, Any]:
     """GET /api/pulse. Raises ValueError on bad input and outcomes.OutcomeError when the store is unavailable."""
     if service is not None and service not in SERVICES:
-        raise ValueError("unknown service")
+        raise Invalid("pulse_unknown_service", "unknown service")
     name = resolve_district(eng, district, lat, lon)
     demo = os.environ.get("COMMUNITY_DEMO") == "1"
     key = (name, service, demo)

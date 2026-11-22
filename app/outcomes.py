@@ -26,6 +26,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from errors import Invalid
 from facts.engine import Engine
 from services import SERVICES
 
@@ -46,7 +47,11 @@ UUID = r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
 
 
 class OutcomeError(Exception):
-    """The warehouse is not configured, or the statement failed."""
+    """The warehouse is not configured, or the statement failed. `code` is a key of errors.MESSAGES."""
+
+    def __init__(self, message: str, code: str = "store_failed") -> None:
+        super().__init__(message)
+        self.code = code
 
 
 class RateLimited(Exception):
@@ -69,7 +74,7 @@ _sql: Callable[[dict[str, Any]], dict[str, Any]] = _sdk_sql  # tests replace thi
 def run(statement: str, params: dict[str, str | None]) -> list[list[Any]]:
     wh = os.environ.get("DATABRICKS_WAREHOUSE_ID")
     if not wh:
-        raise OutcomeError("DATABRICKS_WAREHOUSE_ID is not set on this server")
+        raise OutcomeError("DATABRICKS_WAREHOUSE_ID is not set on this server", "store_not_set_up")
     body = {"warehouse_id": wh, "statement": statement, "wait_timeout": "30s", "on_wait_timeout": "CANCEL",
             "parameters": [{"name": k, "value": v, "type": "STRING"} for k, v in params.items()]}
     try:
@@ -101,20 +106,20 @@ def questions(eng: Engine, facility_id: str, service_id: str) -> list[str]:
 
 def validate(eng: Engine, facility_id: str, service_id: str) -> None:
     if service_id not in SERVICES:
-        raise ValueError("unknown service")
+        raise Invalid("outcome_unknown_service", "unknown service")
     i = eng.fid.get(facility_id)
     if i is None or i not in eng.index[service_id]:
-        raise ValueError("this facility is not listed for this service")
+        raise Invalid("outcome_not_listed", "this facility is not listed for this service")
 
 
 def check_report(kind: str, outcome: str, reason: str | None, wait_bucket: str | None) -> None:
     """Which fields go together: a reason only explains a "no" or a turn-away; a wait only follows a visit."""
     if outcome not in OUTCOMES_BY_KIND.get(kind, ()):
-        raise ValueError(f"outcome {outcome!r} is not valid for a {kind} report")
+        raise Invalid("outcome_bad_kind", f"outcome {outcome!r} is not valid for a {kind} report")
     if reason is not None and (reason not in REASONS or outcome not in ("no", "turned_away")):
-        raise ValueError("a reason is only accepted with a no or a turn-away, from the fixed list")
+        raise Invalid("outcome_bad_reason", "a reason is only accepted with a no or a turn-away, from the fixed list")
     if wait_bucket is not None and (wait_bucket not in WAIT_BUCKETS or kind != "visit"):
-        raise ValueError("a wait is only accepted with a visit outcome, from the fixed list")
+        raise Invalid("outcome_bad_wait", "a wait is only accepted with a visit outcome, from the fixed list")
 
 
 def _check_rate(reporter_key: str, outcome_id: str, facility_id: str, service_id: str, kind: str,
