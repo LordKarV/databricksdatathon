@@ -356,6 +356,8 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
     elif kind == "count":  # how many items a list holds: '3' for three options
         ok = isinstance(stored, list) and number(shown) == len(stored)
+    elif kind == "likely":  # how many options in a list are in the Likely band: '2' in "2 of 3 options are Likely"
+        ok = isinstance(stored, list) and number(shown) == sum(o["band"] == "likely" for o in stored)
     elif kind == "atleast":  # 1 - prod(1 - p) as a capped percent: 'over 99%', 'under 1%' or 'N%' (#121)
         ok = capped_pct_ok(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
@@ -909,6 +911,12 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("compare", payload, got, report)
         errs += [f"compare: {e}" for e in check_number_wording(page.inner_text("#main"))]
+        # #140 3e: band counts, never a "Chance ... checks out" line, on Compare
+        kinds = {(it["path"], it["kind"]) for it in got["items"]}
+        if payload["options"] and not {("options", "likely"), ("options", "count")} <= kinds:
+            errs.append("compare: the Likely count line is not shown")
+        if re.search(r"\bchance\b", page.inner_text("#main"), re.IGNORECASE):
+            errs.append("compare: a 'chance' label is still shown")
         errs += check_quotes("compare", payload, got["items"], claims, report)
         shown = {it["path"] for it in got["items"]}
         for i in range(len(payload["options"])):
@@ -1169,8 +1177,15 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
         page.locator(f"[data-svc={payload['query']['service']}]").first.click()
         page.wait_for_selector("text=Suggested route")
         got = page.evaluate(COLLECT_JS)
+        route_text = page.evaluate("() => document.querySelector('#h-route').closest('section').textContent")
     finally:
         ctx.close()
+    # #140 3e: the route says "score", never "chance"; its totals name their assumption; windows count from departure
+    assert not re.search(r"\bchance\b", route_text, re.IGNORECASE), f"{name}: 'chance' on the route"
+    if any(p["totals"].get("minutes_to_definitive") is not None for p in payload["itinerary"]["plans"]):
+        assert "Score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
+    if any(p["window_checks"] for p in payload["itinerary"]["plans"]):
+        assert "counted from when the patient leaves" in route_text
     shown = {it["path"] for it in got["items"]}
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"
