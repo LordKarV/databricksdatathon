@@ -110,7 +110,7 @@ def recommend_stub(service: str, lat: float, lon: float, accuracy_m: float | Non
                     "text": "The public standard says this level should offer it; not verified in our data.",
                     "travel": _travel(lat, lon, lat + 0.25, lon - 0.1)},
             },
-            "options": options, "why_not": [], "what_would_change": None,
+            "options": options, "why_not": [], "what_would_change": None, "first_is_nearest": True,
             "time_window": {"window_min": 60, "first_outside": False}, "public_option": None, "meta": meta,
         }
 
@@ -145,6 +145,7 @@ def recommend_stub(service: str, lat: float, lon: float, accuracy_m: float | Non
         "query": query, "location": location, "as_of": as_of, "profile": profile,
         "emergency_numbers": emergency_numbers_, "abstain": None,
         "options": options, "why_not": why_not, "what_would_change": change,
+        "first_is_nearest": all(w["minutes_vs_first"] >= 0 for w in why_not),
         "time_window": {"window_min": 60, "first_outside": options[0]["travel"]["minutes"] > 60},
         "public_option": None, "meta": meta,
     }

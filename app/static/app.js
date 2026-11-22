@@ -378,8 +378,12 @@ function whyNotHtml(p) {
     return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
       ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
   }).join('');
+  // #121: when option 1 is already the nearest, say so; the rows are then farther places, not nearer alternatives.
+  const nearest = p.first_is_nearest && p.options.length
+    ? `<p class="why-not-nearest">The first choice is already the nearest listing
+      that offers ${F('query.service_label.en', p.query.service_label.en)}.${rows.length ? ' The places below are farther away.' : ''}</p>` : '';
   return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
-    ${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    ${nearest}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
     <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {

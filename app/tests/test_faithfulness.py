@@ -426,6 +426,7 @@ def check_card(name: str, payload: dict, card: str, report: dict) -> list[str]:
 # ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
 PUBLIC_LABEL = "by public standard, not verified"
 WINDOW_LINE = "The best-evidenced option is about"
+NEAREST_LINE = "The first choice is already the nearest listing"
 WHY_NOT_CODES = {"contradicted", "no_quote", "weak_quotes", "outside_window", "farther", "missing", "evidence_kind",
                  "location", "shared_phone", "not_confirmed", "weaker"}
 
@@ -459,6 +460,8 @@ def check_why_not(payload: dict, shown: set[str]) -> list[str]:
                 errs.append(f"why_not.{k}: reason {code} does not match its fields {b} / band {w['band']}")
         if w["reason_code"] != w["basis"][0]["code"]:
             errs.append(f"why_not.{k}: reason_code is not the first basis")
+        if payload.get("first_is_nearest") and w["minutes_vs_first"] < 0:
+            errs.append(f"why_not.{k}: nearer than option 1, but first_is_nearest is set")
     c = payload.get("what_would_change")
     if c:
         for f in ("name", "minutes_vs_first"):
@@ -645,6 +648,11 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         shown_note = "The nearest verified" in page.inner_text("#main")
         if bool(far) != shown_note:
             errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
+        # #121: "Why not the nearest?" says plainly when option 1 is already the nearest listing
+        said = NEAREST_LINE in text
+        if said != bool(payload.get("first_is_nearest") and opts and (payload.get("why_not")
+                                                                       or payload.get("what_would_change"))):
+            errs.append(f"plan: first-is-nearest line shown={said}, first_is_nearest={payload.get('first_is_nearest')}")
         for i, o in enumerate(payload["options"]):
             page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
             page.wait_for_selector("#how")
