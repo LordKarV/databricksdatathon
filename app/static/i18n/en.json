@@ -505,5 +505,8 @@
   "ans.why_first.nearest": "Why first: the nearest place that could treat this. {name} is rated Likely but {n} min farther: call here first, then {name}.",
   "ans.why_first.rows": "Why first: {rows}.",
   "ans.why_first.rule": "Why first: {rule}",
-  "route.direct": "Without stopping: about {n} min."
+  "route.direct": "Without stopping: about {n} min.",
+  "ans.doubt.line": "Map point may be wrong. Its address says {address}.",
+  "ans.doubt.alt": "From that area it is {low} to {high} min.",
+  "ans.doubt.ask": "Ask the way when you call."
 }

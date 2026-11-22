@@ -30,6 +30,7 @@ BASE = f"http://127.0.0.1:{PORT}"
 AXE_JS = (Path(axe_playwright_python.__file__).parent / "axe.min.js").read_text()
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]  # spec section 7
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
+PUSA = {"latitude": 25.6, "longitude": 85.95, "accuracy": 40}  # #140 hero: location doubt on option 1
 BIHAR_UP_BORDER = {"latitude": 26.50, "longitude": 84.25, "accuracy": 40}  # west of Gopalganj, near Kushinagar
 VIEWPORT = {"width": 360, "height": 780}
 
@@ -421,8 +422,10 @@ def fold_checks(browser) -> dict:
     out = {}
     for w, h in FOLD_VIEWPORTS:
         for lang in ("en", "hi"):
-            for service in ("trauma_emergency", "dialysis"):
-                ctx = browser.new_context(viewport={"width": w, "height": h}, geolocation=SITAMARHI,
+            # Pusa trauma: the hero, whose readout also carries the location-doubt, receipt and "Why first" lines
+            for service, geo, tag in (("trauma_emergency", SITAMARHI, ""), ("dialysis", SITAMARHI, ""),
+                                      ("trauma_emergency", PUSA, "pusa_")):
+                ctx = browser.new_context(viewport={"width": w, "height": h}, geolocation=geo,
                                           permissions=["geolocation"], is_mobile=True, device_scale_factor=1)
                 page = ctx.new_page()
                 page.add_init_script(prefs_script(lang, 100))
@@ -431,9 +434,9 @@ def fold_checks(browser) -> dict:
                 page.evaluate("window.scrollTo(0, 0)")
                 page.wait_for_timeout(200)
                 res = page.evaluate(CALL_VISIBLE_JS)
-                page.screenshot(path=str(SCREENS / f"fold_{service}_{lang}-{w}x{h}.png"))
-                out[f"call_{service}_{lang}_{w}x{h}"] = res
-                if (w, h) == (320, 568) and service == "trauma_emergency":
+                page.screenshot(path=str(SCREENS / f"fold_{tag}{service}_{lang}-{w}x{h}.png"))
+                out[f"call_{tag}{service}_{lang}_{w}x{h}"] = res
+                if (w, h) == (320, 568) and service == "trauma_emergency" and not tag:
                     go(page, "#/why/1")
                     page.locator("#how").wait_for()
                     page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
