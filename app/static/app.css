@@ -160,3 +160,5 @@ select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--m
 #visit-form fieldset:disabled { opacity: .6; }
 .reason-step button { flex-direction: column; gap: 0; }
 #visit-form .check input { flex: none; }
+/* Sealed TEST record (#86): long commitment hashes wrap instead of widening the page at 360 px. */
+.test-record code { overflow-wrap: anywhere; }

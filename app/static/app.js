@@ -278,6 +278,23 @@ function trackHtml(tr, P) {
     `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
     `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
+// Sealed TEST record of the Likely band (#86, #66): every number and hash from meta.test_record, which app/facts/build.py
+// copies from model/gold/v3/test_eval/results.json. Hindi gloss is a draft until native-speaker review (#10).
+function testRecordHtml(tr) {
+  if (!tr) return '';
+  const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
+  return `<div class="test-record"><p class="small"><strong>Sealed test record</strong>
+    <span lang="hi">(\u0938\u0940\u0932\u092c\u0902\u0926 \u091c\u093e\u0901\u091a \u0915\u093e \u0928\u0924\u0940\u091c\u093e)</span>:
+    Likely: ${M('k')} of ${M('n')} confirmed (${M('pct')}%, interval ${M('lo_pct')} to ${M('hi_pct')}%) on a test set
+    sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities
+    (${M('public_n')} public test pairs with a verdict).</p>
+    <details class="small"><summary>Opening log and commitment hashes</summary>
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, opened ${M('opened')} UTC.
+      Results: ${M('source')}.</p>
+      <p>Model version <code>${M('model_version')}</code><br>Test predictions hash
+        <code>${M('predictions_sha256')}</code><br>Test labels hash <code>${M('labels_sha256')}</code></p>
+    </details></div>`;
+}
 function travelHtml(t, P) {
   return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
     `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
@@ -734,6 +751,7 @@ function whyScreen(rank) {
     : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
       ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
+    ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
     ${fieldHtml(o, P)}
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min

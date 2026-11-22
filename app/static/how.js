@@ -94,12 +94,20 @@
     <h2>How good it is</h2>
     <p>The app uses ${t('v2_model')}: an expert-set scorecard with one calibration step ${src('v2_model')}.
       These results are on DEV pairs, grouped five-fold, out of fold. The labels were made by an agent from public
-      web pages, not checked by a person. The sealed test set has not been opened yet.</p>
+      web pages, not checked by a person. The sealed test set was opened once, after the model was frozen${f.test_likely
+    ? '; its result for Likely is below' : ''}.</p>
     <p>What the chance means: ${t('v2_meaning')}</p>
     ${tbl('v2_eval', 'The model against simpler choices, on DEV pairs')}
     <ul>
       <li><strong>Likely.</strong> ${n('likely_dev')} of ${of('likely_dev')} DEV pairs labelled Likely were
         confirmed (${d('likely_dev_lo', 3)} to ${d('likely_dev_hi', 3)}).</li>
+      ${f.test_likely ? `<li class="test-record"><strong>Sealed test.</strong> Likely: ${n('test_likely')} of
+        ${of('test_likely')} confirmed (${n('test_likely_pct')}%, interval ${n('test_likely_lo')} to
+        ${n('test_likely_hi')}%) on a test set sealed before the model was frozen; agent-labelled, not human-checked
+        ${src('test_likely')}. Not shown to rank public facilities (${n('test_public_n')} public test pairs with a
+        verdict). Opened once, ${t('test_opened')} UTC, as recorded in the opening log ${src('test_opened')}.
+        Commitments: model version <code>${t('test_model_version')}</code>, test predictions hash
+        <code>${t('test_predictions_sha')}</code>, test labels hash <code>${t('test_labels_sha')}</code>.</li>` : ''}
       <li><strong>First options.</strong> A confirmed place was among the first ${n('conf_em_k')} options in
         ${n('conf_em')} of ${of('conf_em')} emergency groups and among the first ${n('conf_pl_k')} in ${n('conf_pl')}
         of ${of('conf_pl')} planned-care groups. A random order scores ${d('conf_em_random', 2)} and
