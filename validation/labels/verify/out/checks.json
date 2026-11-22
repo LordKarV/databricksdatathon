@@ -1,0 +1,164 @@
+[
+ {
+  "name": "l1_never_searched",
+  "status": "fail",
+  "metric": "106 of 213 primary no_info have 0 URLs; gold_pairs no_info 114: 56 by primary-URL rule {'test': 30, 'dev': 26}, 52 by its own merged URL column {'test': 27, 'dev': 25}; 8 no-URL notes report a search (hand read, ids present=True)",
+  "threshold": "0 unflagged",
+  "detail": "gold_pairs has no searched flag; 4 pairs were searched only by the overlap labeller",
+  "examples": [
+   "v2_nicu_no_mention_2",
+   "v2_cardiac_surgery_weak_3",
+   "v2_mri_weak_5",
+   "v2_trauma_emergency_weak_3",
+   "nicu_weak_2"
+  ]
+ },
+ {
+  "name": "l2_v1_in_test",
+  "status": "fail",
+  "metric": "17 of 36 v1 pairs in test; 41 of 141 test gold points from them; service negatives from v1 5 of 6",
+  "threshold": "0 design-read pairs in test",
+  "detail": "{\"service_claim\": {\"n\": 29, \"from_v1\": 12, \"neg\": 6, \"neg_from_v1\": 5, \"auc_all\": [0.826, 0.819], \"auc_v2only\": [0.969, 1.0]}, \"location\": {\"n\": 56, \"from_v1\": 14, \"neg\": 10, \"neg_from_v1\": 2, \"auc_all\": [0.77, 0.802], \"auc_v2only\": [0.728, 0.765]}, \"existence\": {\"n\": 56, \"from_v1\": 15, \"neg\": 0, \"neg_from_v1\": 0, \"auc_all\": [NaN, NaN], \"auc_v2only\": [NaN, NaN]}}",
+  "examples": [
+   "cardiac_surgery_strong_1",
+   "cardiac_surgery_weak_1",
+   "cardiac_surgery_weak_2",
+   "dialysis_strong_1",
+   "dialysis_suspect_2"
+  ]
+ },
+ {
+  "name": "l3_no_web_evidence",
+  "status": "fail",
+  "metric": "14 service verdicts with 0 URLs {'e2e': 13, 'v2p': 1}; 10 location=no with 0 URLs {'dev': 4, 'test': 3, 'e2e': 3}; test location negatives not showing a wrong location: 3 PIN-only + 2 state-only of 10",
+  "threshold": "0",
+  "detail": "location test AUC q_ev/model all 0.77/0.802; without those 5 0.874/0.861 (n_neg 5)",
+  "examples": [
+   "v2_emergency_csection_suspect_1",
+   "e2e_046",
+   "v2_nicu_suspect_1",
+   "v2_burn_care_suspect_5",
+   "v2_trauma_emergency_suspect_2"
+  ]
+ },
+ {
+  "name": "l4_url_recheck",
+  "status": "warn",
+  "metric": "agreement 22/25 Wilson95 (0.7, 0.958)",
+  "threshold": ">= 0.95",
+  "detail": "page text: caesarean named {'emergency_csection_strong_1': False, 'v2_emergency_csection_strong_5': True}; data point status {'emergency_csection_strong_1': ['verified_true'], 'v2_burn_care_suspect_1': ['verified_false'], 'v2_emergency_csection_strong_5': ['verified_false'], 'v2_dialysis_no_mention_1': []}",
+  "examples": [
+   "emergency_csection_strong_1",
+   "v2_burn_care_suspect_1",
+   "v2_emergency_csection_strong_5"
+  ]
+ },
+ {
+  "name": "l5_contradicted_semantics",
+  "status": "warn",
+  "metric": "8 of 26 contradicted rest on misattribution (hand read); 3 show no absence (3 say so in the note)",
+  "threshold": "0 without absence evidence",
+  "detail": "derived/v1 service test negatives: ['cardiac_surgery_weak_1', 'emergency_csection_weak_2', 'mri_suspect_1', 'mri_suspect_2', 'nicu_suspect_2', 'v2_dialysis_suspect_2']",
+  "examples": [
+   "v2_emergency_csection_suspect_1",
+   "v2_dialysis_suspect_2",
+   "v2_burn_care_suspect_1"
+  ]
+ },
+ {
+  "name": "l6_trauma",
+  "status": "warn",
+  "metric": "3 of 7 trauma confirmations are ED/casualty-only (hand read); regex on notes+quote finds 1 (notes mention 'trauma level not stated')",
+  "threshold": "0",
+  "detail": "taxonomy alias trauma_emergency->trauma_care, trauma->emergency_24x7; pairs by set {'e2e': 27, 'v2': 20, 'v1': 6}",
+  "examples": [
+   "v2_trauma_emergency_strong_3",
+   "v2_trauma_emergency_no_mention_2",
+   "e2e_003"
+  ]
+ },
+ {
+  "name": "l7_two_readers",
+  "status": "warn",
+  "metric": "20 fields over 10 pairs; service 5 ({'test': 3, 'dev': 2})",
+  "threshold": "0",
+  "detail": "gold_pairs (merged with o1/o2) vs primary labels read by fusion/gold.py",
+  "examples": [
+   "v2_dialysis_weak_3",
+   "v2_emergency_csection_weak_5",
+   "v2_nicu_strong_3",
+   "v2_nicu_suspect_1",
+   "v2_mri_no_mention_4"
+  ]
+ },
+ {
+  "name": "l8_leakage",
+  "status": "warn",
+  "metric": "groups across splits 1 (v1-as-dev 2); e2e on v2 test uid 4, in v2 test group 7 of 158",
+  "threshold": "0",
+  "detail": "",
+  "examples": [
+   "e2e_016",
+   "e2e_062",
+   "e2e_127",
+   "e2e_147",
+   "e2e_043"
+  ]
+ },
+ {
+  "name": "l9_minor",
+  "status": "warn",
+  "metric": "unattached 6 of 62 ({'no_mention': 6}); non-canonical 4 of 334; URLs with whitespace 10 of 308",
+  "threshold": "0",
+  "detail": "",
+  "examples": [
+   "v2_dialysis_no_mention_1",
+   "v2_dialysis_no_mention_3",
+   "v2_burn_care_strong_1",
+   "e2e_061",
+   "e2e_002"
+  ]
+ },
+ {
+  "name": "m1_existence_no_negatives",
+  "status": "fail",
+  "metric": "exists=no in 0 of 331 label records; 13 searched-not-found coded unclear; EXISTS_DEFAULT dev 60/0 q_ev 0.984; facility_trust existence_score min 0.970 max 0.991 over 9959",
+  "threshold": ">= 1 negative class",
+  "detail": "existence gold points {'verified_true': 116}; model/proto/fusion/fit.py existence_rows codes exists=unclear as y=0",
+  "examples": [
+   "nicu_weak_2",
+   "dialysis_suspect_2",
+   "v2_emergency_csection_strong_4",
+   "v2_emergency_csection_suspect_1",
+   "v2_emergency_csection_no_mention_3"
+  ]
+ },
+ {
+  "name": "m2_service_test_negatives",
+  "status": "fail",
+  "metric": "6 negatives in derived/v1 service test; 5 design-read v1, 1 with no absence evidence, 0 clean",
+  "threshold": ">= 5 clean negatives",
+  "detail": "evaluation.json service_claim AUC 0.826/0.819 has no clean negative",
+  "examples": [
+   "nicu_suspect_2",
+   "emergency_csection_weak_2",
+   "mri_suspect_2",
+   "mri_suspect_1",
+   "cardiac_surgery_weak_1"
+  ]
+ },
+ {
+  "name": "m3_confirm_from_record_sources",
+  "status": "warn",
+  "metric": "23 of 62 confirmations cite a record source URL; 15 cite only record source URLs",
+  "threshold": "independent evidence",
+  "detail": "exact URL match after scheme/www/slash normalisation",
+  "examples": [
+   "cardiac_surgery_strong_1",
+   "cardiac_surgery_weak_2",
+   "emergency_csection_strong_2",
+   "trauma_emergency_strong_2",
+   "v2_cardiac_surgery_suspect_2"
+  ]
+ }
+]

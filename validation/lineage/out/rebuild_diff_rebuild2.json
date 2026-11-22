@@ -1,0 +1,551 @@
+{
+ "scratch": "/private/tmp/claude-501/-Users-karthikvattem-projects-datathon/9dfde72e-e6a4-41f0-9f98-3c01b187efeb/scratchpad/rebuild2",
+ "ok": true,
+ "log": [
+  {
+   "step": "ss_common.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "ss_common.py self-check ok\n"
+  },
+  {
+   "step": "package.py --hashes-before",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ""
+  },
+  {
+   "step": "s1_sources.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ": 16714,\n  \"business_dir\": 9275,\n  \"other_health_site\": 8358,\n  \"other\": 8072,\n  \"insurance_scheme\": 4703,\n  \"maps_geo\": 3954,\n  \"official_like\": 2698,\n  \"government\": 2406,\n  \"research\": 1480,\n  \"wikipedia\": 901,\n  \"news\": 809,\n  \"education\": 696,\n  \"docs_repo\": 669,\n  \"crowdfunding_ngo\": 121\n }\n}\n"
+  },
+  {
+   "step": "s2_gold.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "7,\n   \"no_info\": 55\n  }\n },\n \"location_ok_by_split\": {\n  \"dev\": {\n   \"no\": 13,\n   \"unclear\": 32,\n   \"yes\": 43\n  },\n  \"test\": {\n   \"no\": 10,\n   \"unclear\": 32,\n   \"yes\": 46\n  }\n },\n \"exists_by_split\": {\n  \"dev\": {\n   \"unclear\": 28,\n   \"yes\": 60\n  },\n  \"test\": {\n   \"unclear\": 32,\n   \"yes\": 56\n  }\n }\n}\n"
+  },
+  {
+   "step": "s4_datapoints.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "                          True         43\n               test        False        10\n                           True         46\nservice_claim  dev         False         5\n                           True         22\n               test        False         6\n                           True         23\n"
+  },
+  {
+   "step": "s5_fit.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ".8284,\n  \"other\": 0.8844,\n  \"other_health_site\": 0.8779,\n  \"research\": 0.8624,\n  \"social\": 0.9172,\n  \"wikipedia\": 0.8391\n },\n \"mean_logit_sigma_by_type\": {\n  \"claim_attribution\": 1.907,\n  \"email\": 1.8896,\n  \"existence\": 1.8763,\n  \"location\": 1.8763,\n  \"phone\": 1.8854,\n  \"service_claim\": 1.8336\n }\n}\n"
+  },
+  {
+   "step": "s6_score.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "      0.839859\n       government        372    2406     0.835035 0.797866 0.868960                   0.835267\n         maps_geo         40    3954     0.831392 0.792286 0.868680                   0.831745\n    official_like       1015    2698     0.828413 0.798364 0.856788                   0.828930\n"
+  },
+  {
+   "step": "s7_eval.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "lity\": {\n    \"sentences\": 142,\n    \"supported_rate\": 0.0\n   },\n   \"own_anchored\": {\n    \"sentences\": 515,\n    \"supported_rate\": 0.023\n   },\n   \"unanchored\": {\n    \"sentences\": 5623,\n    \"supported_rate\": 0.059\n   }\n  },\n  \"overall_supported_rate\": 0.054,\n  \"overall_token_supported_rate\": 0.242\n }\n}\n"
+  },
+  {
+   "step": "package.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "99,\n \"grades_v1.parquet\": 10799,\n \"pin_gazetteer.parquet\": 19713,\n \"place_gazetteer.parquet\": 147345,\n \"record_trust.parquet\": 9959,\n \"source_classes.parquet\": 16,\n \"source_domains.parquet\": 10951,\n \"source_page_checks.parquet\": 6492,\n \"source_urls.parquet\": 158444,\n \"specialties.parquet\": 117964\n}\n"
+  },
+  {
+   "step": "selfcheck.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "selfcheck ok: 518191 data points, 10951 domains, 17 tables\n"
+  }
+ ],
+ "diff": {
+  "only_ref": [
+   "README.md"
+  ],
+  "only_new": [],
+  "files": {
+   "MANIFEST.json": {
+    "byte_identical": false,
+    "json_top_keys_differ": [
+     "csv_copies",
+     "script_sha256",
+     "tables"
+    ]
+   },
+   "build_stats.json": {
+    "byte_identical": true
+   },
+   "claims.parquet": {
+    "byte_identical": true
+   },
+   "data_point_scores.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 518191,
+     "rows_new": 518191,
+     "cols_equal": true,
+     "cells_differ": {
+      "score": {
+       "n": 9026,
+       "max_abs": 6.661338147750939e-16,
+       "first_rows": [
+        547,
+        868,
+        1112,
+        1261,
+        1601
+       ]
+      },
+      "score_lo": {
+       "n": 21608,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        10,
+        23,
+        77,
+        88,
+        116
+       ]
+      },
+      "score_hi": {
+       "n": 3165,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        6,
+        11,
+        88,
+        101,
+        518
+       ]
+      },
+      "source_support": {
+       "n": 11235,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        273,
+        280,
+        491,
+        516,
+        518
+       ]
+      },
+      "score_model": {
+       "n": 9062,
+       "max_abs": 6.661338147750939e-16,
+       "first_rows": [
+        547,
+        868,
+        1112,
+        1261,
+        1601
+       ]
+      }
+     },
+     "max_abs_float_diff": 6.661338147750939e-16,
+     "non_float_cells_differ": 0
+    }
+   },
+   "evaluation.json": {
+    "byte_identical": true
+   },
+   "evidence_rules.parquet": {
+    "byte_identical": true
+   },
+   "facility_groups.parquet": {
+    "byte_identical": true
+   },
+   "facility_location.parquet": {
+    "byte_identical": true
+   },
+   "facility_trust.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     9959,
+     9959
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 5.551115123125783e-16
+   },
+   "facility_trust.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 9959,
+     "rows_new": 9959,
+     "cols_equal": true,
+     "cells_differ": {
+      "existence_score": {
+       "n": 3,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        547,
+        4904,
+        5818
+       ]
+      },
+      "location_score": {
+       "n": 38,
+       "max_abs": 2.7755575615628914e-16,
+       "first_rows": [
+        547,
+        868,
+        1112,
+        1261,
+        1601
+       ]
+      },
+      "location_lo": {
+       "n": 252,
+       "max_abs": 3.3306690738754696e-16,
+       "first_rows": [
+        10,
+        23,
+        77,
+        88,
+        116
+       ]
+      },
+      "location_hi": {
+       "n": 90,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        6,
+        11,
+        88,
+        101,
+        518
+       ]
+      },
+      "attribution_score": {
+       "n": 32,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        491,
+        654,
+        663,
+        1318,
+        1655
+       ]
+      },
+      "service_score_mean": {
+       "n": 2377,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        2,
+        3,
+        5,
+        6,
+        11
+       ]
+      },
+      "source_support": {
+       "n": 986,
+       "max_abs": 3.3306690738754696e-16,
+       "first_rows": [
+        8,
+        53,
+        67,
+        74,
+        90
+       ]
+      },
+      "overall_score": {
+       "n": 66,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        491,
+        547,
+        654,
+        663,
+        868
+       ]
+      },
+      "overall_lo": {
+       "n": 301,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        10,
+        23,
+        77,
+        88,
+        116
+       ]
+      }
+     },
+     "max_abs_float_diff": 5.551115123125783e-16,
+     "non_float_cells_differ": 0
+    }
+   },
+   "gold_pairs.parquet": {
+    "byte_identical": true
+   },
+   "grades.parquet": {
+    "byte_identical": true
+   },
+   "grades_v1.parquet": {
+    "byte_identical": true
+   },
+   "pin_gazetteer.parquet": {
+    "byte_identical": true
+   },
+   "place_gazetteer.parquet": {
+    "byte_identical": true
+   },
+   "record_trust.parquet": {
+    "byte_identical": true
+   },
+   "source_classes.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     16,
+     16
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 2.2737367544323206e-13
+   },
+   "source_classes.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 16,
+     "rows_new": 16,
+     "cols_equal": true,
+     "cells_differ": {
+      "reliability": {
+       "n": 5,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        4,
+        5,
+        8,
+        9,
+        13
+       ]
+      },
+      "ci05": {
+       "n": 3,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        2,
+        9,
+        15
+       ]
+      },
+      "ci95": {
+       "n": 3,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        5,
+        6,
+        12
+       ]
+      },
+      "domain_reliability_p10": {
+       "n": 4,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        9,
+        10,
+        13,
+        15
+       ]
+      },
+      "domain_reliability_p90": {
+       "n": 3,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        12,
+        13,
+        15
+       ]
+      },
+      "effective_true": {
+       "n": 2,
+       "max_abs": 1.1368683772161603e-13,
+       "first_rows": [
+        2,
+        5
+       ]
+      },
+      "effective_false": {
+       "n": 8,
+       "max_abs": 2.2737367544323206e-13,
+       "first_rows": [
+        1,
+        4,
+        6,
+        8,
+        9
+       ]
+      }
+     },
+     "max_abs_float_diff": 2.2737367544323206e-13,
+     "non_float_cells_differ": 0
+    }
+   },
+   "source_domains.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     10951,
+     10951
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 8.526512829121202e-14
+   },
+   "source_domains.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 10951,
+     "rows_new": 10951,
+     "cols_equal": true,
+     "cells_differ": {
+      "alpha": {
+       "n": 1430,
+       "max_abs": 8.526512829121202e-14,
+       "first_rows": [
+        5,
+        12,
+        16,
+        21,
+        23
+       ]
+      },
+      "beta": {
+       "n": 1798,
+       "max_abs": 2.842170943040401e-14,
+       "first_rows": [
+        2,
+        4,
+        5,
+        9,
+        10
+       ]
+      },
+      "reliability": {
+       "n": 1142,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        5,
+        12,
+        21,
+        22,
+        23
+       ]
+      },
+      "ci05": {
+       "n": 1474,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        4,
+        5,
+        12,
+        32,
+        37
+       ]
+      },
+      "ci95": {
+       "n": 567,
+       "max_abs": 3.3306690738754696e-16,
+       "first_rows": [
+        4,
+        10,
+        12,
+        21,
+        32
+       ]
+      },
+      "credit": {
+       "n": 1362,
+       "max_abs": 8.526512829121202e-14,
+       "first_rows": [
+        5,
+        12,
+        13,
+        16,
+        21
+       ]
+      },
+      "blame": {
+       "n": 3798,
+       "max_abs": 2.842170943040401e-14,
+       "first_rows": [
+        2,
+        4,
+        5,
+        9,
+        10
+       ]
+      },
+      "class_prior_mean": {
+       "n": 1488,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        1,
+        2,
+        4,
+        5,
+        10
+       ]
+      }
+     },
+     "max_abs_float_diff": 8.526512829121202e-14,
+     "non_float_cells_differ": 0
+    }
+   },
+   "source_page_checks.parquet": {
+    "byte_identical": true
+   },
+   "source_urls.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 158444,
+     "rows_new": 158444,
+     "cols_equal": true,
+     "cells_differ": {
+      "domain_reliability": {
+       "n": 15497,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        21,
+        23,
+        24,
+        25,
+        32
+       ]
+      },
+      "ci05": {
+       "n": 22436,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        21,
+        23,
+        24,
+        25,
+        32
+       ]
+      },
+      "ci95": {
+       "n": 13082,
+       "max_abs": 3.3306690738754696e-16,
+       "first_rows": [
+        7,
+        8,
+        21,
+        23,
+        24
+       ]
+      }
+     },
+     "max_abs_float_diff": 4.440892098500626e-16,
+     "non_float_cells_differ": 0
+    }
+   },
+   "specialties.parquet": {
+    "byte_identical": true
+   }
+  }
+ }
+}

@@ -1,0 +1,98 @@
+[
+ {
+  "name": "cleaning_rebuild",
+  "status": "warn",
+  "metric": "8/9 byte-identical; 1 same rows in another order; 0 differ or missing",
+  "threshold": "9/9 identical",
+  "detail": "row order only: ['specialties'] (build_claims.py:54-61 SPEC_SQL GROUP BY has no ORDER BY)",
+  "examples": []
+ },
+ {
+  "name": "exports_v2_switch",
+  "status": "pass",
+  "metric": "v2 scores file present: False; facts built from v2: False",
+  "threshold": "exports built from the source that exists now",
+  "detail": "facts meta scores: 'interim: derived/v1 data_point_scores (likely only when verified true)'; packs band_note: 'placeholder: likely only for pairs verified true; model scores not published yet'. Neither records a hash of the score file it read.",
+  "examples": []
+ },
+ {
+  "name": "float_noise_ties",
+  "status": "warn",
+  "metric": "8 files differ; 0 beyond 1e-12 or at 3 decimals; max 1.1e-13",
+  "threshold": "no real diffs",
+  "detail": "min-rank changes from tie flips: {'data_point_scores.parquet': {'score': 199, 'score_lo': 282, 'score_hi': 94, 'source_support': 335, 'score_model': 199}, 'facility_trust.csv': {'existence_score': 3, 'location_lo': 3, 'attribution_score': 3, 'overall_score': 8, 'overall_lo': 4}, 'facility_trust.parquet': {'existence_score': 3, 'location_lo': 3, 'attribution_score': 3, 'overall_score': 8, 'overall_lo': 4}, 'source_domains.csv': {'alpha': 1, 'blame': 5}, 'source_domains.parquet': {'alpha': 1, 'blame': 5}}",
+  "examples": []
+ },
+ {
+  "name": "itinerary_reachability",
+  "status": "pass",
+  "metric": "0 of 4459 plans route through a NaN-district stop; 0 crashes",
+  "threshold": "0 crashes",
+  "detail": "the crash at app/itinerary.py:53 needs such a stop; none was produced near these 13 facilities",
+  "examples": []
+ },
+ {
+  "name": "live_rowprint",
+  "status": "pass",
+  "metric": "3/3 tables equal",
+  "threshold": "3/3",
+  "detail": "facilities: rows 10088, distinct rows 10077; india_post_pincode_directory: rows 165627, distinct rows 165625; nfhs_5_district_health_indicators: rows 706, distinct rows 706",
+  "examples": []
+ },
+ {
+  "name": "pack_quote_stability",
+  "status": "warn",
+  "metric": "123 of 11505 pair rows show different quotes or order; 37 show a different sentence; 25/36 packs",
+  "threshold": "0",
+  "detail": "16563 quote slots; scores unchanged in 11505 rows",
+  "examples": [
+   "('andaman_and_nicobar_islands.json', ('94acaff7', 'nicu'), ['Neonatal ICU (NICU) care', 'NICU - Neonatal ICU Care'], ['NICU - Neonatal ICU Care', 'Neonatal ICU (NICU) care'])",
+   "('andhra_pradesh.json', ('0ed7fc50', 'mri'), ['MRI 1.5 Tesla', '1.5 Tesla MRI'], ['1.5 Tesla MRI', 'MRI 1.5 Tesla'])",
+   "('andhra_pradesh.json', ('24677213', 'emergency_csection'), ['C-section surgeries are performed routinely for obstetric emergencies', 'Obstetric emergency services including cesarean sections are provided'], ['Obstetric emergency services including cesarean sections are provided', 'C-section surgeries are performed routinely for obstetric emergencies'])",
+   "('andhra_pradesh.json', ('aa6d8ce2', 'trauma_emergency'), ['24/7 emergency services', 'Emergency surgical care'], ['Emergency surgical care', '24/7 emergency services'])",
+   "('andhra_pradesh.json', ('8df9ef6c', 'trauma_emergency'), ['Emergency department in Secunderabad', 'Specializes in trauma and GI surgery'], ['Specializes in trauma and GI surgery', 'Emergency department in Secunderabad'])"
+  ]
+ },
+ {
+  "name": "planner_nan_recount",
+  "status": "fail",
+  "metric": "13 non-finite of 9959 facilities ({'district': 13})",
+  "threshold": "0",
+  "detail": "derived/v1 facility_location has 13 null districts; every one becomes NaN in the export",
+  "examples": [
+   "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+   "18a0b6a3-8792-43ef-8753-47548e4aab02",
+   "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+   "5106028d-191f-4a51-a596-05d8b41e857b",
+   "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+  ]
+ },
+ {
+  "name": "specialties_nraw_duplicates",
+  "status": "warn",
+  "metric": "165 of 165 rows for 11 duplicated ids (117,964 rows in table)",
+  "threshold": "0",
+  "detail": "n_raw is read only by build/measure stats; specialty sets (spec) are right",
+  "examples": [
+   "08344cdb-f455-4c22-8d31-a0a8e849124b internalmedicine: expected 21, published 42",
+   "08344cdb-f455-4c22-8d31-a0a8e849124b radiology: expected 5, published 10",
+   "08344cdb-f455-4c22-8d31-a0a8e849124b emergencymedicine: expected 3, published 6",
+   "08344cdb-f455-4c22-8d31-a0a8e849124b physicalmedicineandrehabilitation: expected 3, published 6",
+   "08344cdb-f455-4c22-8d31-a0a8e849124b addictionmedicinepm: expected 2, published 4"
+  ]
+ },
+ {
+  "name": "truncated_records",
+  "status": "warn",
+  "metric": "30 truncated facilities dropped (0 kept under the same id); 88 fragment rows",
+  "threshold": "documented where the data is used",
+  "detail": "PROFILE.json row_integrity records 30/88; derived/v1/README.md mentions it: False; truncated rows with any of specialties/capability/lat/source_urls: 0; ids also present as kie: 0",
+  "examples": [
+   "12d987ef-1ff8-4025-bf5d-8870f2083a90 Bharati Fertility Center (Mandaveli)",
+   "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5 Ajanta Hospital & Ivf Centre (Lucknow)",
+   "22142a37-a47a-4a9a-bc80-f5981361f000 The Velvet Skin Centre \u2013 Dermatologist in Lucknow, Hair & Skin Clinic (Lucknow)",
+   "287913e3-162c-45d5-873a-eada15f8591b Dr. Manjari Ultrasound (Noida)",
+   "3e951c62-51b0-459e-972c-2e1790618894 PROLIFE Diagnostics (Bhubaneswar)"
+  ]
+ }
+]

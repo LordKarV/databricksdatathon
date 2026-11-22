@@ -25,7 +25,15 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
   # 'Data stories' page data (#53): copies text from viz/gallery.json and the chart SVGs it names into
   # app/stories/out/ (standard library only; order does not matter).
   uv run --no-project "${UV_DEPS[@]}" python app/stories/build.py
+  # Website check (#37, #85 H1): official URLs and service patterns for /api/verify.
+  uv run --no-project "${UV_DEPS[@]}" python app/verify/build_sites.py
 fi
+
+echo "== check every feature's data file exists"
+for f in planner/out/planner_v1.json.gz app/facts/out/facts.json.gz app/packs/out/index.json \
+         app/howto/out/how.json app/stories/out/stories.json app/verify/out/sites.json.gz; do
+  [ -s "$f" ] || { echo "missing build output: $f (a feature would be off in the deployed app)" >&2; exit 1; }
+done
 
 echo "== assemble bundle"
 rm -rf "$BUNDLE" && mkdir -p "$BUNDLE/kb"

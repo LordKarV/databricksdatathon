@@ -1,0 +1,257 @@
+[
+ {
+  "name": "label_schema",
+  "status": "pass",
+  "metric": "0 bad of 1324 enum fields in 331 records",
+  "threshold": "0",
+  "detail": "15 label files; enums exists/location yes|no|unclear, service confirmed|contradicted|no_info, confidence high|medium|low",
+  "examples": []
+ },
+ {
+  "name": "duplicate_label_records",
+  "status": "pass",
+  "metric": "0 duplicate or orphaned overlap records",
+  "threshold": "0",
+  "detail": "331 records; 301 primary; overlap labels 30 vs overlap_v2.json 30; e2e not_run 33",
+  "examples": []
+ },
+ {
+  "name": "label_coverage",
+  "status": "pass",
+  "metric": "0 coverage defects",
+  "threshold": "0",
+  "detail": "labelled/sampled per set {'e2e': {'sum': 125, 'size': 158}, 'v1': {'sum': 36, 'size': 36}, 'v2': {'sum': 140, 'size': 140}}; e2e not_run 33",
+  "examples": []
+ },
+ {
+  "name": "unique_ids_usable",
+  "status": "warn",
+  "metric": "0 not usable, 4 non-canonical, of 334 pairs",
+  "threshold": "0 not usable",
+  "detail": "usable = present in derived/v1/facility_location (9,959); by set: Counter({'e2e': 3, 'v2': 1}); list in out/unusable_ids.csv",
+  "examples": [
+   "v2:v2_burn_care_strong_1 b2db2916-a5db-42ab-87f4-5f9581695f4e (non-canonical duplicate member)",
+   "e2e:e2e_061 3f0d836c-9e5b-4e24-add9-c217bcf684df (non-canonical duplicate member)",
+   "e2e:e2e_082 2b5d4240-8105-4e60-adb7-01f8cee3a622 (non-canonical duplicate member)",
+   "e2e:e2e_147 b2db2916-a5db-42ab-87f4-5f9581695f4e (non-canonical duplicate member)"
+  ]
+ },
+ {
+  "name": "pair_metadata_matches_raw",
+  "status": "pass",
+  "metric": "0 mismatches of 334",
+  "threshold": "0",
+  "detail": "name compared after lowercasing and stripping punctuation; PIN as string",
+  "examples": []
+ },
+ {
+  "name": "live_table_ids",
+  "status": "pass",
+  "metric": "317 of 317 ids found live",
+  "threshold": "all present",
+  "detail": "SELECT unique_id ... WHERE unique_id IN (gold ids)",
+  "examples": []
+ },
+ {
+  "name": "services_in_taxonomy",
+  "status": "warn",
+  "metric": "0 unmapped; 1 gold ids that map to different taxonomy services via the taxonomy alias vs derived/v1 s2_gold SERVICE_MAP",
+  "threshold": "0 / 0",
+  "detail": "gold services ['burn_care', 'cardiac_surgery', 'dialysis', 'emergency_csection', 'mri', 'nicu', 'trauma_emergency']; divergent: {'trauma_emergency': ('trauma_care', 'emergency_24x7')} (taxonomy says trauma_emergency is an alias of trauma_care; s2_gold maps it to the claims key 'trauma', an alias of emergency_24x7)",
+  "examples": [
+   "trauma_emergency: taxonomy=trauma_care derived_v1=emergency_24x7"
+  ]
+ },
+ {
+  "name": "trauma_label_semantics",
+  "status": "warn",
+  "metric": "2 of 7 trauma_emergency confirmations cite no trauma, accident or injury term",
+  "threshold": "0",
+  "detail": "these confirm emergency_24x7, not trauma_care; label meaning depends on which taxonomy id the consumer maps trauma_emergency to",
+  "examples": [
+   "e2e_003: 24x7 Emergency Unit - Always ready to receive and stabilize patients.",
+   "v2_trauma_emergency_strong_3: Emergency Department"
+  ]
+ },
+ {
+  "name": "overlap_conflicts",
+  "status": "pass",
+  "metric": "0 informative conflicts on 30 double-labelled pairs; service kappa 0.382 (agreement 0.700)",
+  "threshold": "0 conflicts",
+  "detail": "{'service': {'agree': 21, 'one_informative': 9}, 'exists': {'agree': 21, 'one_informative': 9}, 'location': {'agree': 20, 'one_informative': 10}}",
+  "examples": []
+ },
+ {
+  "name": "same_facility_service_across_sets",
+  "status": "pass",
+  "metric": "0 (facility, service) keys under 2+ pair_ids; 0 with conflicting verdicts",
+  "threshold": "0 conflicts",
+  "detail": "e2e pairs re-label gold facilities; a gold TEST facility relabelled in the e2e pool is also a leak if e2e labels are used for tuning (out/same_facility_service.csv)",
+  "examples": []
+ },
+ {
+  "name": "same_facility_conflicting_exists_location",
+  "status": "pass",
+  "metric": "0 records with disagreeing exists/location verdicts",
+  "threshold": "0",
+  "detail": "primary labels across v1, v2, e2e",
+  "examples": []
+ },
+ {
+  "name": "split_leakage_unique_id",
+  "status": "pass",
+  "metric": "0 unique_ids and 0 frozen groups in both splits",
+  "threshold": "0",
+  "detail": "176 unique_ids, 176 frozen groups (grp_strong)",
+  "examples": []
+ },
+ {
+  "name": "split_leakage_groups",
+  "status": "warn",
+  "metric": "{'splits_json:model_lg': 1, 'splits_json:canon': 0, 'v1_as_dev:model_lg': 2, 'v1_as_dev:canon': 0}",
+  "threshold": "0 groups spanning dev and test",
+  "detail": "model_lg = model/proto/fusion features_facility.leakage_group_id (grp_strong + phone/domain + chain + source_content_id); canon = derived/v1 facility_groups dup_group_id + possible_same_site + co_located_with. fit.py drops dev rows in test leakage groups; derived/v1 s4/s5 does not",
+  "examples": [
+   "[splits_json/model_lg] v2_cardiac_surgery_suspect_5=test; v2_burn_care_weak_5=dev",
+   "[v1_as_dev/model_lg] v2_cardiac_surgery_suspect_5=test; v2_burn_care_weak_5=dev",
+   "[v1_as_dev/model_lg] trauma_emergency_strong_1=dev; v2_nicu_suspect_5=test"
+  ]
+ },
+ {
+  "name": "v1_split_contract",
+  "status": "fail",
+  "metric": "17 of 36 v1 pairs marked test; 41 of 141 derived/v1 test gold points come from them",
+  "threshold": "0 design-read pairs in a held-out test",
+  "detail": "derived/v1 evaluation.json test points by type from v1 pairs {'existence': 15, 'location': 14, 'service_claim': 12} of {'location': 56, 'existence': 56, 'service_claim': 29}; model/proto treats all v1 as dev",
+  "examples": [
+   "dialysis_strong_1 (af99e7c6)",
+   "dialysis_suspect_2 (08c8f9bb)",
+   "emergency_csection_strong_1 (22f6c258)",
+   "emergency_csection_strong_2 (ae20b125)",
+   "emergency_csection_weak_2 (5853b359)"
+  ]
+ },
+ {
+  "name": "e2e_vs_gold_test",
+  "status": "warn",
+  "metric": "4 e2e pairs on a v2 test facility, 7 more in a test leakage group, of 158",
+  "threshold": "0 if e2e labels ever feed model selection",
+  "detail": "harmless while e2e labels are only scored; a leak if they enter dev or calibration",
+  "examples": [
+   "e2e_016 f75d5250 nicu",
+   "e2e_062 51179ca4 mri",
+   "e2e_127 7f0a880d emergency_csection",
+   "e2e_147 b2db2916 nicu",
+   "e2e_043 e93a7ae0 burn_care"
+  ]
+ },
+ {
+  "name": "never_searched_vs_no_info",
+  "status": "fail",
+  "metric": "213 no_info primary labels: 106 never searched by the URL rule; rule disagrees with notes on 12 (5 searched-without-URL, 7 URL-but-stopped); gold_pairs has no searched flag and 56 of its 114 no_info rows were never searched (dev 26, test 30)",
+  "threshold": "a searched flag on every no_info row",
+  "detail": "no_info mixes 'searched, found nothing' with 'never searched'",
+  "examples": [
+   "no URL, searched: nicu_weak_2: The record's website returned 404. Two searches found no Ananya Hospital in Kash",
+   "no URL, searched: e2e_013: Searches for Bharati Hospital Chandrapur returned only Bharati Hospital Pune (Bh",
+   "no URL, searched: e2e_039: No hospital of this name found in Sikar (closest: Amit Neuro Brain and Spine Car",
+   "no URL, searched: v2_mri_suspect_3: vijayadiagnostic.com returned 403. Record PIN 518501 maps to Nandyal district pe",
+   "no URL, searched: v2_emergency_csection_suspect_4: Two searches found no Taj Hospital in Chennai or Arumbakkam (PIN 600106); record"
+  ]
+ },
+ {
+  "name": "verdicts_without_web_evidence",
+  "status": "fail",
+  "metric": "14 service verdicts with no URL (13 name-only) by set {'e2e': 13, 'v2_primary': 1}; 10 location verdicts with no URL (10 from the local PIN directory); 0 exists verdicts with no URL; 0 v2/e2e confirmations with an empty quote",
+  "threshold": "0 service verdicts without a URL",
+  "detail": "name-only contradictions restate the scope feature the model already uses (circular); PIN-directory location verdicts restate the dataset's own PIN (out/verdicts_without_evidence.csv)",
+  "examples": [
+   "e2e_046=contradicted: No listing found for Smile Kraft Dental Clinic in Palamu. Dental clini",
+   "e2e_085=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental c",
+   "e2e_091=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental h",
+   "e2e_109=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; maternit",
+   "e2e_118=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental c"
+  ]
+ },
+ {
+  "name": "contradicted_semantics",
+  "status": "warn",
+  "metric": "5 of 26 contradicted labels rest on misattribution; 2 of them give no evidence the service is absent",
+  "threshold": "0",
+  "detail": "misattribution is a location/attribution fact; as a service y=0 it teaches the model that a real hospital lacks a service nobody checked",
+  "examples": [
+   "v2_emergency_csection_suspect_1: Record PIN 201001 is Ghaziabad, UP in the India Post directory, not Lucknow. The claim text itself attributes ",
+   "v2_dialysis_suspect_2: Two searches found no Randeep Hospital in Talwandi Sabo or Punjab. The dialysis claim names a NephroPlus centr"
+  ]
+ },
+ {
+  "name": "evidence_urls_wellformed",
+  "status": "warn",
+  "metric": "10 of 308 URLs malformed (space or no scheme)",
+  "threshold": "0",
+  "detail": "spaces must be %20-encoded for a re-fetch",
+  "examples": [
+   "e2e_043: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2023-1126_5th Edition - RA, SA, Focus & Scope Correction.pdf",
+   "e2e_002: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2022-1051_5th Edition.pdf",
+   "e2e_011: https://portal.nabh.co/Documents/AccreditedList/AYUSH Hospitals/AH-2018-0038..pdf",
+   "e2e_048: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2021-0824_5th Edition.pdf",
+   "v2_trauma_emergency_weak_3: https://portal.nabh.co/Documents/AccreditedList/SHCO/SHCO-2024-1105_3rd Edition_Scope Correction.pdf"
+  ]
+ },
+ {
+  "name": "gold_pairs_matches_labels",
+  "status": "pass",
+  "metric": "0 cell diffs over 176 rows x 11 cols; 0 stale input hashes; 0 label inputs not hashed in MANIFEST",
+  "threshold": "0 / 0 / 0",
+  "detail": "rebuilt with s2_gold rules from current files; unhashed: []",
+  "examples": []
+ },
+ {
+  "name": "gold_pairs_vs_model_loader",
+  "status": "warn",
+  "metric": "20 fields where derived/v1 and the model read different verdicts for the same pair (of 176 pairs)",
+  "threshold": "0",
+  "detail": "two consumers of the same labels disagree; dev q_ev and test metrics in derived/v1 use the merged value",
+  "examples": [
+   "v2_dialysis_weak_3 [dev] service_verdict: gold_pairs=confirmed model=no_info",
+   "v2_dialysis_weak_3 [dev] location_ok: gold_pairs=yes model=unclear",
+   "v2_dialysis_no_mention_1 [dev] location_ok: gold_pairs=yes model=unclear",
+   "v2_emergency_csection_weak_5 [test] service_verdict: gold_pairs=confirmed model=no_info",
+   "v2_nicu_strong_3 [dev] service_verdict: gold_pairs=confirmed model=no_info"
+  ]
+ },
+ {
+  "name": "gold_attach_to_datapoints",
+  "status": "warn",
+  "metric": "6 of 62 informative service verdicts reach no service_claim data point; 0 split mismatches",
+  "threshold": "0 / 0",
+  "detail": "missing by stratum/verdict {('no_mention', 'confirmed'): 5, ('no_mention', 'contradicted'): 1}: unclaimed services (no grade row) are invisible to evaluation.json, so it measures claim precision only",
+  "examples": [
+   "v2_dialysis_no_mention_1 [dev] confirmed",
+   "v2_dialysis_no_mention_3 [test] confirmed",
+   "v2_emergency_csection_no_mention_4 [dev] confirmed",
+   "v2_nicu_no_mention_4 [test] confirmed",
+   "v2_mri_no_mention_4 [test] contradicted"
+  ]
+ },
+ {
+  "name": "derived_v2_gold_contract",
+  "status": "warn",
+  "metric": "not run",
+  "threshold": "contract holds",
+  "detail": "derived/v2 has no gold table yet; contract: one row per pair_id, service in the 36 taxonomy ids, label_status in {checked, unchecked}, unchecked never used as y=0, v1 pairs not in test, no leakage group in both splits",
+  "examples": []
+ },
+ {
+  "name": "url_recheck",
+  "status": "warn",
+  "metric": "verdict agreement 22/25 = 0.88 [95% Wilson 0.7, 0.958]; pages reachable 25/30; quote found 12/15 [(0.548, 0.93)]",
+  "threshold": "Wilson lower bound >= 0.8",
+  "detail": "30 labels, seed fixed, v2 TEST excluded; 5 not judgeable (no page reachable)",
+  "examples": [
+   "emergency_csection_strong_1 label=confirmed -> no: pages show O&G DNB training and a 2012 BEmOC (basic emergency obstetric care excludes caesarean) course; no page names caesarean; verdict is inferred from hospital size so no_info fits the rubric",
+   "v2_burn_care_suspect_1 label=contradicted -> no: homepage lists General Surgery and no burns unit but nothing says burn care is absent; contradicted here means the claim text names another facility (rubric) not that the service is absent",
+   "v2_emergency_csection_strong_5 label=contradicted -> no: own site blocked by robots; the one reachable page (aggregator) lists Cesarean Delivery; nothing supports absence; labeller notes it could be no_info"
+  ]
+ }
+]

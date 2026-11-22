@@ -1,0 +1,31 @@
+pair_id,agree,reason
+v2_dialysis_no_mention_1,na,evidence PDF returns 404; label quote came from a search snippet the labeller never read in full
+e2e_021,yes,AIIMS Bhubaneswar department list and CTVS department page exist
+e2e_129,yes,own site names a team of cardiac surgeons
+emergency_csection_strong_1,no,pages show O&G DNB training and a 2012 BEmOC (basic emergency obstetric care excludes caesarean) course; no page names caesarean; verdict is inferred from hospital size so no_info fits the rubric
+v2_emergency_csection_weak_1,yes,myUpchar lists Cesarean delivery and emergency care for the Kadamkuan hospital
+dialysis_suspect_1,yes,NephroPlus lists a dialysis clinic at Sadar Hospital Ward 15 Banakata Gopalganj 841428
+e2e_154,yes,own site: well equipped Level 3 NICU
+dialysis_strong_2,yes,own site lists Dialysis in scope of services
+cardiac_surgery_strong_1,yes,own site lists Adult and Paediatric Cardiac Surgery departments
+v2_trauma_emergency_strong_3,yes,own site lists an Emergency Department; supports emergency_24x7 under the pre-split trauma_emergency definition only (no trauma-specific text)
+e2e_016,yes,own site: 4-bed level II NICU
+emergency_csection_strong_2,yes,own site: around 50 caesarean section deliveries monthly
+mri_suspect_1,yes,Sentinel 2015 article ties the MRI to GMCH; the homoeopathic college page lists no MRI
+e2e_022,yes,PM-JAY directory lists it as an eye care centre; single specialty
+v2_burn_care_suspect_1,no,homepage lists General Surgery and no burns unit but nothing says burn care is absent; contradicted here means the claim text names another facility (rubric) not that the service is absent
+v2_emergency_csection_strong_5,no,own site blocked by robots; the one reachable page (aggregator) lists Cesarean Delivery; nothing supports absence; labeller notes it could be no_info
+e2e_130,yes,own 16-item super-speciality list has cardiology with angioplasty but no cardiac surgery
+trauma_emergency_weak_1,yes,page is a home nursing agency; no emergency or trauma care
+e2e_056,yes,insurer network listing only; no dialysis mention
+v2_emergency_csection_weak_2,na,page renders by script; 0 characters of text without a browser
+e2e_017,yes,directory pages exist; only generic CGHS emergency boilerplate
+e2e_037,yes,directory pages exist; no dialysis mention
+emergency_csection_weak_1,yes,own site lists obstetrics and pregnancy care with no OT or caesarean service
+e2e_009,yes,directory page lists general services; no cardiac surgery
+v2_burn_care_no_mention_3,na,page returns only its title (69 characters) without script
+e2e_010,yes,page is a CMC Vellore vacancy notice; no emergency or trauma service stated
+e2e_050,na,page renders by script; 0 characters of text without a browser
+e2e_024,na,host does not resolve (DNS) on re-fetch
+e2e_012,yes,NephroPlus unit listing; trauma appears only in a user review
+e2e_034,yes,directory page for a Parijat Hospital in Sinnar; nothing on caesarean

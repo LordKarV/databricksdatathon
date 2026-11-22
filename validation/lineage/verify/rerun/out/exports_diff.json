@@ -1,0 +1,58 @@
+{
+ "scratch": "/private/tmp/claude-501/-Users-karthikvattem-projects-datathon/9dfde72e-e6a4-41f0-9f98-3c01b187efeb/scratchpad/tmp/exports_rebuild_u9lwk5go",
+ "planner": {
+  "equal_except_build_time": true,
+  "first_diff": ".facilities.district[845]: 'nan' vs 'nan'"
+ },
+ "facts": {
+  "equal_except_build_time": true,
+  "first_diff": null,
+  "facts_sha_ref": "1f6352f3212b",
+  "facts_sha_new": "1f6352f3212b",
+  "meta_scores": "interim: derived/v1 data_point_scores (likely only when verified true)"
+ },
+ "packs": {
+  "n_ref": 36,
+  "n_new": 36,
+  "same_names": true,
+  "index_sha_mismatch": [],
+  "rebuilt_bytes_differ": [
+   "andaman_and_nicobar_islands",
+   "andhra_pradesh",
+   "assam",
+   "bihar",
+   "chandigarh",
+   "chhattisgarh",
+   "delhi",
+   "goa",
+   "gujarat",
+   "haryana",
+   "himachal_pradesh",
+   "jharkhand",
+   "karnataka",
+   "kerala",
+   "madhya_pradesh",
+   "maharashtra",
+   "odisha",
+   "punjab",
+   "rajasthan",
+   "sikkim",
+   "tamil_nadu",
+   "telangana",
+   "uttar_pradesh",
+   "uttarakhand",
+   "west_bengal"
+  ],
+  "first_diffs": {
+   "andaman_and_nicobar_islands": ".q[48][0]: 'Neonatal ICU (NICU) care' vs 'NICU - Neonatal ICU Care'",
+   "andhra_pradesh": ".q[17][0]: 'MRI 1.5 Tesla' vs '1.5 Tesla MRI'",
+   "assam": ".q[92][0]: 'Orthopedics and Traumatology clinic' vs 'Trauma care for orthopedic injuries'",
+   "bihar": ".ev.q1[276]: '253' vs '252'",
+   "chandigarh": ".q[26][0]: 'Has a 3.0 Tesla MRI' vs 'Has a 1.5 Tesla MRI'"
+  },
+  "other_files_identical": {
+   "pin_index.json": true
+  },
+  "unlisted_ref_files": []
+ }
+}

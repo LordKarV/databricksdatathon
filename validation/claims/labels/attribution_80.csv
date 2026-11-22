@@ -1,0 +1,81 @@
+claim_id,attribution,verdict,note
+35b23454:capa:34,ambiguous,other,director of a different hospital
+acd3c2df:capa:18,ambiguous,other,"K. G. Nursing Home, Erode, not M K Nursing Home Chennai"
+d8a5b63a:capa:47,ambiguous,other,Apollo Clinic branch in Punjab; record is Bangalore
+95f35d21:desc:2,ambiguous,unclear,name fragment with a place; split sentence
+142bcb47:capa:4,ambiguous,other,doctor past employment at Max Hospital
+cd0cdb98:capa:23,ambiguous,own,own corporate parent; relation context is about this facility
+e9c707b0:desc:0,ambiguous,own,own founding vision; other cities named only as where patients used to go
+2f32f15e:capa:9,ambiguous,unclear,"staff course credential, not a facility claim"
+279fa2c2:proc:17,ambiguous,other,sister clinic Chawla IVF in Jalandhar; record is Ludhiana
+5d03ca61:capa:7,ambiguous,other,branch in Tenali; record is Vijayawada
+454b7120:capa:22,ambiguous,own,this centre offers fellowships affiliated to a university
+279fa2c2:proc:20,ambiguous,other,Chawla IVF Jalandhar
+7c54cff3:capa:30,ambiguous,other,Shreeji Clinic Palanpur; record is Jamnagar
+8ce511e9:capa:18,ambiguous,other,Aarthi Scans Chennai branch; record Rajapalaiyam
+21f7b673:proc:49,ambiguous,other,future project in another city
+229a9ce3:capa:39,ambiguous,own,visiting surgeons operate at this hospital (TGMC = record)
+a273b62d:capa:13,ambiguous,other,Trivandrum branch; record Kozhikode
+bf1263a3:capa:44,ambiguous,other,Bhilwara branch; record Udaipur
+b8299e72:capa:6,ambiguous,other,claims to be in Gurdaspur; record Raikot
+79183989:capa:2,ambiguous,other,Lifecare Vijayawada; record Nellore
+1f56d05d:capa:10,other_facility,other,Kannur; record Kozhikode
+b7d34745:capa:21,other_facility,other,Hyderabad branch; record Tiruchi
+697cb912:capa:10,other_facility,other,Ludhiana listing; record Ferozepur
+f7e5db30:capa:11,other_facility,other,Bulandshahr; record Azamgarh
+61ed89ad:desc:0,other_facility,other,Navi Mumbai; record Lonand
+48cc44df:capa:6,other_facility,other,Bangalore; record Dharwad
+4b992a3a:capa:31,other_facility,own,"Pondicherry = Puducherry, own city; foreign name is the website Watchdoq"
+8ce511e9:capa:7,other_facility,other,Tirunelveli; record Rajapalaiyam
+21ce7dac:capa:4,other_facility,own,"Bijapur is the old name of Vijayapura, own city"
+e306b567:capa:37,other_facility,other,Thiruvananthapuram listing; record Kulathupuzha (Kollam)
+31533901:capa:33,other_facility,other,Ludhiana; record Nakodar
+fad89081:capa:13,other_facility,own,"Senapati Bapat Marg is a Pune road, read as Senapati (Manipur)"
+09571e22:capa:37,other_facility,other,"Banga, Punjab; record Ahmedabad"
+d5d1d609:capa:5,other_facility,other,Jodhpur; record Sikar
+142bcb47:proc:5,other_facility,other,Max Noida; record Lucknow
+a8b20d00:capa:20,other_facility,other,Ankleshwar; record Ahmedabad
+cd83c441:capa:39,other_facility,own,"Hyderabad, Andhra Pradesh is the pre-2014 state name of own city"
+825f5bbc:capa:37,other_facility,other,Ulhasnagar; record Nashik
+0be8a076:capa:23,other_facility,other,Thane; record Mangalwedha
+8773160a:capa:29,other_facility,own,"own facility is a project of Life Line, Gandhidham is in Kachchh"
+8bb3569b:capa:9,own_anchored,own,
+69b28268:proc:37,own_anchored,own,"Fortis Mulund, plausibly this Fortis Mumbai record"
+a80377d2:capa:1,own_anchored,own,
+57fbae3e:desc:6,own_anchored,own,
+8e187418:capa:5,own_anchored,own,
+94fa207d:desc:0,own_anchored,own,"own name; sentence cut at ""St."" by the splitter"
+14327a60:equi:1,own_anchored,own,
+8df9ef6c:proc:47,own_anchored,other,KIMS Sunshine Begumpet is a different KIMS unit from the record
+5506f14e:capa:1,own_anchored,own,
+e4ef022f:capa:11,own_anchored,own,
+9eee74ce:capa:34,own_anchored,own,
+b7ad3ec1:capa:36,own_anchored,own,
+aa1bca39:proc:27,own_anchored,own,
+fe54c4d8:proc:7,own_anchored,own,
+c6007087:desc:0,own_anchored,own,
+ee69a982:capa:8,own_anchored,own,
+a83112ff:capa:17,own_anchored,own,
+c8484829:capa:39,own_anchored,own,
+2fe535c2:proc:8,own_anchored,own,
+45ecf66b:capa:33,own_anchored,own,
+28dee8e3:desc:1,unanchored,own,
+122b19ff:proc:4,unanchored,own,
+b667b55a:proc:44,unanchored,own,
+40056b84:capa:43,unanchored,own,
+99d8aef2:capa:15,unanchored,own,
+c7bfb343:proc:19,unanchored,own,
+7bdd1e41:capa:32,unanchored,own,
+83f1bfc7:proc:6,unanchored,own,
+8ae6e524:proc:19,unanchored,own,
+a1f70288:proc:21,unanchored,own,
+12fd20f0:capa:8,unanchored,own,"not a claim (listing distance), but not another facility"
+d643e9bb:proc:21,unanchored,own,
+f56190db:proc:12,unanchored,own,
+6c51a7fd:proc:22,unanchored,own,
+f1aac4fb:equi:0,unanchored,own,
+e790efe5:capa:27,unanchored,own,
+18e90980:capa:13,unanchored,own,
+decba67c:capa:11,unanchored,own,
+50a67626:proc:7,unanchored,own,
+5272f488:desc:2,unanchored,own,

@@ -1,0 +1,12 @@
+file,kind,synthetic_marker,ships,match,context
+app_design/feasibility/vision/make_images.py,patient_name_label,True,public_copy,Pt: Test Patient,"width=2) wobbly_lines(d, [ ""Pt: Test Patient, 52 M"", ""c/o swelling feet, bre"
+app_design/feasibility/vision/make_images.py,age_sex,True,public_copy,Age: 27 F," d.text((50, 65), ""Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026"", font=f, fil"
+app_design/feasibility/vision/outputs/databricks-gemma-3-12b__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F,"\""detected_text\"": \""Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iro"
+app_design/feasibility/vision/outputs/databricks-gemma-3-12b__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F,"\""detected_text\"": \""Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iro"
+app_design/feasibility/vision/outputs/databricks-gemma-3-12b__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F," ""detected_text"": ""Name: Test Patient Age: 27 F G2P1 Date: 21/11/2026\nRx\n1. Tab Iron-"
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F,e - Obstetrics OPD\\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iro
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F,e - Obstetrics OPD\\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\\nRx\\n1. Tab Iro
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__02_prescription_lscs.json,age_sex,True,public_copy,Age: 27 F,me - Obstetrics OPD\nName: Test Patient Age: 27 F G2P1 Date: 21/11/2026\nRx\n1. Tab Iron-
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__05_referral_dialysis_bad_photo.json,patient_name_label,True,public_copy,Pt: Test Patient," ""content"": ""{\""detected_text\"": \""Pt: Test Patient, 52 M c/o swelling feet, breathlessness"
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__05_referral_dialysis_bad_photo.json,patient_name_label,True,public_copy,Pt: Test Patient," }, ""content"": ""{\""detected_text\"": \""Pt: Test Patient, 52 M c/o swelling feet, breathlessness"
+app_design/feasibility/vision/outputs/databricks-llama-4-maverick__05_referral_dialysis_bad_photo.json,patient_name_label,True,public_copy,Pt: Test Patient,"\""]}"", ""parsed"": { ""detected_text"": ""Pt: Test Patient, 52 M c/o swelling feet, breathlessness"
