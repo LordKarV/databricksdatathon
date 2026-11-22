@@ -22,6 +22,16 @@ PURPOSE = {"stabilise": "First care: stabilise", "definitive": "Definitive care"
            "access": "Fistula or line for dialysis", "recurring": "Regular dialysis sessions"}
 TYPE = {"direct": "Go straight there", "one_stop": "Stop for first care, then go on",
         "two_stop": "Two stops, then go on", "single_site": "One hospital for every stage"}
+# kb/pathways capability tags of the app's emergency pathways, in plain words for stop_1_note
+CAPABILITY_WORDS = {
+    "emergency_24x7": "24x7 emergency care", "general_surgery_ot": "an operating theatre",
+    "blood_transfusion": "blood transfusion", "ct_scan": "a CT scanner", "icu": "an ICU",
+    "trauma_centre": "a trauma centre", "neurosurgery": "neurosurgery", "orthopaedics": "orthopaedic surgery",
+    "iv_fluid_resuscitation": "IV fluids for burns", "burns_dressing": "burn dressing", "burn_unit": "a burn unit",
+    "plastic_surgery": "plastic surgery", "basic_emoc": "basic emergency obstetric care",
+    "comprehensive_emoc": "emergency caesarean section", "neonatal_stabilisation": "newborn stabilisation",
+    "sncu": "a special newborn care unit", "nicu": "a newborn intensive care unit",
+}
 
 
 ROUTE_DOWN = "The suggested route could not be built just now. The options below do not depend on it."
@@ -76,8 +86,10 @@ def _stop(eng: Engine, s: dict, question: str | None) -> dict:
 def _vs_direct(v: dict | None, plan_type: str) -> dict | None:
     """The planner's one plain sentence against going direct, plus what would change the answer (#86 decision 3).
     The probabilities ride along for the record but are not in the sentence."""
-    if not v or plan_type in ("direct", "single_site") or v.get("direct_minutes") is None:
+    if not v or v.get("direct_minutes") is None:
         return None
+    if plan_type in ("direct", "single_site") and not v.get("first_care_alternative"):
+        return None  # a direct plan shows its sentence only when it names a first-care stop (#92)
     return {"text": v["text"], "what_would_change": v.get("what_would_change"),
             "direct_p_objective": v["direct_p_objective"], "plan_p_objective": v["plan_p_objective"],
             "direct_p_first_care": v["direct_p_first_care"], "plan_p_first_care": v["plan_p_first_care"]}
@@ -98,18 +110,38 @@ def _plan(eng: Engine, rank: int, o: dict) -> dict:
     }
 
 
-def stop_1_note(route: dict, first_option: dict | None) -> str | None:
-    """One plain line when route 1's first stop is not the options list's first choice (#86 decision 2)."""
+def _lacks(groups: list[list[str]]) -> str:
+    words = [CAPABILITY_WORDS.get(c, c.replace("_", " ")) for g in groups for c in g]
+    return words[0] if len(words) == 1 else f"{', '.join(words[:-1])} or {words[-1]}"
+
+
+def stop_1_note(route: dict, first_option: dict | None, first_stop: dict | None = None) -> str | None:
+    """One plain line when route 1's first stop is not the options list's first choice (#86 decision 2). In an
+    emergency the planner takes the list's first choice as stop 1 whenever it can give first care (#92), so the line
+    says which capability it lacks (first_stop: what the planner found, planner.core)."""
     if not first_option or not route.get("stops"):
         return None
     s, d = route["stops"][0], route["stops"][-1]
     if s["facility_id"] == first_option["facility_id"]:
         return None
     y = first_option["name"]
-    if s["purpose"] == "stabilise":
+    if first_stop and first_stop["facility_id"] == first_option["facility_id"]:
+        if not first_stop["in_data"]:
+            return f"The route starts at {s['name']}: the best option {y} is not in the route planner's data."
+        if not first_stop["first_care"] and first_stop["missing_first_care"]:
+            return (f"The route starts at {s['name']}: the best option {y} has no evidence of "
+                    f"{_lacks(first_stop['missing_first_care'])} in our data, which first care needs.")
+        alt = (route.get("vs_direct") or {}).get("first_care_alternative") or {}
+        if s is d and alt.get("facility_id") == first_option["facility_id"]:
+            return (f"The route goes straight to {s['name']}, about {s['eta_minutes']} min away, for definitive care "
+                    f"in time; the best option {y} ({alt['eta_minutes']} min) can give first care if it is needed sooner.")
+        if s is d and first_stop["missing_definitive"]:
+            return (f"The route goes straight to {s['name']}, about {s['eta_minutes']} min away, for definitive care: "
+                    f"the best option {y} has no evidence of {_lacks(first_stop['missing_definitive'])} in our data.")
+    if s["purpose"] == "stabilise":  # the list's choice is too far for a stop to help: the nearest first care leads
         if s["eta_minutes"] < first_option["travel"]["minutes"]:
             return f"Stop first to stabilise at {s['name']}, which is nearer than the best option {y}."
-        return f"Stop first to stabilise at {s['name']}, which the route rates above the best option {y} for first care on the way to {d['name']}."
+        return f"Stop first to stabilise at {s['name']}; the best option {y} is ranked on this service alone."
     if s is d:
         return f"The route goes straight to {s['name']}, which has evidence for every part of this care; the best option {y} is ranked on this service alone."
     return f"The route starts at {s['name']} for {PURPOSE.get(s['purpose'], s['purpose']).lower()}; the best option {y} is ranked on this service alone."
@@ -120,7 +152,7 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float, first_option: d
     if svc is None or svc.pathway_for(service) is None:
         return None
     try:
-        out = svc.plan_for_service(service, lat, lon)
+        out = svc.plan_for_service(service, lat, lon, first_stop=(first_option or {}).get("facility_id"))
     except RuntimeError:  # planner/out not built on this server
         return None
     pw = svc.pathways()[out["pathway"]]
@@ -129,7 +161,8 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float, first_option: d
         "pathway": out["pathway"], "pathway_name": pw["name"].split(":")[0], "urgency": out.get("urgency"),
         "abstain": (out.get("abstain") or {}).get("text"),
         "plans": [_plan(eng, k + 1, o) for k, o in enumerate(out["options"])],
-        "stop_1_note": stop_1_note(out["options"][0]["route"], first_option) if out["options"] else None,
+        "stop_1_note": stop_1_note(out["options"][0]["route"], first_option, out.get("first_stop"))
+        if out["options"] else None,
         "meta": {"origin_state": meta.get("origin_state"),
                  "terrain": meta.get("terrain"),
                  "plans_considered": (out.get("considered") or {}).get("plans")},

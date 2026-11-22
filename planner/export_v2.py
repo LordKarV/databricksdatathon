@@ -6,6 +6,7 @@ Writes planner/out/planner_v2.json.gz (git-ignored: it holds facility data):
                 dental or eye clinic (validation H2, #86: none of the pathways is theirs to serve).
   capabilities  per capability tag: facility indexes, p, band and up to 3 evidence claim ids
   pins          PIN centroids with their state (hill-road travel constants are chosen by state)
+  The name is common/names.py display_name (no address tail); the record's raw name stays in derived/v1.
 
 Probabilities
 - A tag with a v2_service in kb/pathways/capabilities.json: the v2 p of that (facility, service).
@@ -33,6 +34,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "app")]
 
 import pandas as pd  # noqa: E402
 
+from common.names import display_name  # noqa: E402
 from facts.redact import redact_names  # noqa: E402
 
 # DATATHON_ROOT moves the data root (where derived/ lives); PLANNER_OUT the output folder
@@ -87,7 +89,8 @@ def facilities(scored):
     spec = [specialty_only(n, t) for n, t in zip(f.name, f.facilityTypeId)]
     print(f"facilities: {len(f)} scored by v2, {sum(spec)} dental or eye clinics left out")
     f = f[[not s for s in spec]]
-    return [{"id": r.unique_id, "name": r.name, "lat": round(float(r.loc_lat), 5), "lon": round(float(r.loc_lon), 5),
+    return [{"id": r.unique_id, "name": display_name(r.name),
+             "lat": round(float(r.loc_lat), 5), "lon": round(float(r.loc_lon), 5),
              "town": _str(r.address_city), "district": _str(r.district), "state": _str(r.state_final),
              "flags": [] if r.loc_conf == "high" else [f"location confidence is {r.loc_conf}: confirm the address by phone"]}
             for r in f.itertuples(index=False)]
