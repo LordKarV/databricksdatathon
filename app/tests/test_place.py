@@ -68,7 +68,8 @@ def test_text_that_is_not_exactly_six_digits_is_not_a_pin(q):
 def test_district_beats_post_office_of_the_same_name_and_state(places):
     [m] = places.lookup("  bahraich DISTRICT ")
     assert m["kind"] == "district" and m["label"] == "Bahraich district centre, Uttar Pradesh"
-    assert (m["lat"], m["lon"]) == (27.6, 81.55)  # mean of its PIN centroids, as offline.js districtCentre
+    # its own PIN nearest the mean of its PIN points; two PINs tie, so the lower PIN (as offline.js districtCentre)
+    assert (m["lat"], m["lon"]) == (27.5, 81.5)
 
 
 def test_post_office_names_the_nearest_pin_district(places):

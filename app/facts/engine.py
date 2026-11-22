@@ -810,7 +810,8 @@ class Engine:
     def area(self, service: str, lat: float, lon: float, max_pins: int = 40) -> dict:
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pins = self.pins
-        k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
+        c = math.cos(math.radians(lat))  # a degree of longitude is cos(lat) of a degree of latitude
+        k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + ((pins["lon"][j] - lon) * c) ** 2)
         district, state = self.pin_where[k]  # the district the nearest PIN point lies in, not the one it is filed under
         # PINs the gazetteer files under no district (facts/build.py fill_districts) are not counted as the district's
         guessed = pins.get("district_from") or [""] * len(pins["pin"])

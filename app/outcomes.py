@@ -18,6 +18,7 @@ value, so the old request shape writes the same statement as before and NULL kin
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import time
@@ -92,7 +93,8 @@ def district(eng: Engine, lat: float, lon: float) -> str | None:
     pins = eng.pins
     if not pins["pin"]:
         return None
-    k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
+    c = math.cos(math.radians(lat))  # as Engine.area
+    k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + ((pins["lon"][j] - lon) * c) ** 2)
     return str(pins["district"][k]).title() or None
 
 
