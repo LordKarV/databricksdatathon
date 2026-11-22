@@ -22,7 +22,8 @@ e = Engine.load()
 PTS = {"Sitamarhi": (26.5951, 85.4808), "Mohania": (25.15, 83.68), "Pusa": (25.6, 85.95), "Patna": (25.61, 85.14),
        "Gaya": (24.78, 85.0), "Bahraich": (27.57, 81.6), "Banda": (25.48, 80.33), "Darbhanga": (26.15, 85.9)}
 NAMED = re.compile(r"\b(?:Dr|DR|Prof)\b\.?\s*[A-Z][a-z]+\s+[A-Z][a-z]+")
-MISMATCH = re.compile(r"\b(eye|netra|netralaya|dental|dentist|skin|derma|ayurved|homoeo|homeo|physio|vet|veterinary|ivf|fertility)\b", re.I)
+MISMATCH = re.compile(r"\b(eye|netra|netralaya|dental|dentist|skin|derma|ayurved|homoeo|homeo|physio|vet|veterinary"
+                      r"|ivf|fertility)\b", re.I)
 issues = collections.defaultdict(list)
 for place, (la, lo) in PTS.items():
     for s in SERVICES:
@@ -35,7 +36,8 @@ for place, (la, lo) in PTS.items():
                     issues["unredacted name"].append((place, s, o["name"], ev["claim_id"]))
                 for f in ev.get("flags", []):
                     if f["code"] == "src_other_place":
-                        issues["other-place source (flagged)"].append((place, s, k + 1, o["name"], f.get("place"), f.get("km")))
+                        row = (place, s, k + 1, o["name"], f.get("place"), f.get("km"))
+                        issues["other-place source (flagged)"].append(row)
         it = p.get("itinerary") or {}
         for r in it.get("plans", []):
             for st in r["stops"]:
@@ -48,7 +50,8 @@ for place, (la, lo) in PTS.items():
         tw = p.get("time_window") or {}
         if tw.get("first_outside"):
             first = p["options"][0]["travel"]["minutes"]
-            issues["first option outside window"].append((place, s, first, tw["window_min"], bool(p.get("public_option"))))
+            row = (place, s, first, tw["window_min"], bool(p.get("public_option")))
+            issues["first option outside window"].append(row)
 for k in ("unredacted name", "unredacted name in route", "other-place source (flagged)",
           "mismatched specialty option", "mismatched specialty route stop", "first option outside window"):
     print(f"== {k}: {len(issues[k])}")
