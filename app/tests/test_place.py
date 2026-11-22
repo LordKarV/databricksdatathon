@@ -471,7 +471,7 @@ def test_chooser_lists_hindi_first_and_ticks_it_for_indian_phones(browser, base_
         page.goto(base_url + "/#/")
         page.wait_for_selector("input[name=first-lang]")
         got = page.eval_on_selector_all("input[name=first-lang]", "els => els.map(e => [e.value, e.checked])")
-        assert got == [["hi", ticked == "hi"], ["en", ticked == "en"]]
+        assert got[:2] == [["hi", ticked == "hi"], ["en", ticked == "en"]] and not any(c for _, c in got[2:])
     finally:
         ctx.close()
 

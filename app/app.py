@@ -521,14 +521,14 @@ def static_file(name: str) -> FileResponse:
 
 # UI2 (design/ui2/SPEC.md): the strings files and the self-hosted fonts. Fixed allowlists, so no client string reaches
 # the filesystem path. Fonts never change under a name, so they may be cached for a year; strings revalidate.
-STRING_FILES = {"en.json", "hi.json"}
+STRING_FILES = {f"{code}.json" for code in ("en", "hi", "ta", "te", "kn", "ml", "bn", "mr", "gu", "ur")}
 FONT_FILES = {"barlow-500.woff2", "barlow-600.woff2", "barlow-condensed-600.woff2", "plex-mono-500-digits.woff2",
               "hind-500-deva.woff2", "hind-600-deva.woff2"}
 
 
 @app.get("/i18n/{name}")
 def strings_file(name: str) -> FileResponse:
-    if name not in STRING_FILES:
+    if name not in STRING_FILES or not (STATIC / "i18n" / name).is_file():  # a language file not shipped yet
         raise HTTPException(404)
     return FileResponse(STATIC / "i18n" / name, media_type="application/json; charset=utf-8",
                         headers={"Cache-Control": "no-cache"})

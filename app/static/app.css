@@ -75,6 +75,8 @@ main:focus, [tabindex="-1"]:focus { outline: none; box-shadow: none; }
 .skip:focus { position: fixed; top: var(--sp2); left: var(--sp2); z-index: 30; width: auto; height: auto; clip-path: none;
   padding: var(--sp3) var(--sp4); background: var(--surface); border: 2px solid var(--focus); }
 .num { font-family: var(--font-num); font-weight: 500; }
+[dir=rtl] .num, [dir=rtl] [lang=en] { direction: ltr; unicode-bidi: isolate; }
+.choice small { display: block; }
 .small, .note { font-size: var(--s16); }
 .muted, .note { color: var(--muted); }
 code { font-size: var(--s14); overflow-wrap: anywhere; }
