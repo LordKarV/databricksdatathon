@@ -259,7 +259,6 @@ function offlineScreen(s) {
   const fresh = p.confirmed || R.fixIsFresh(state.loc);
   const body = R.render(p.answer, {serviceLabel: s.label, locLine: locLine(state.loc), reason: ts(p.reason),
     show102: has102(s.key), gettingGps: !!state.stopWatch, fresh, hasPack: !!p.pack});
-  // #140 DA-1: saved cards to call come first; the notice and Retry follow (the heading's dates say it is saved)
   return fresh && p.answer && p.answer.options.length ? body + offNotice(ts(p.reason)) : offNotice(ts(p.reason)) + body;
 }
 function offNotice(reason) {
@@ -696,7 +695,6 @@ function sureHtml(o, P) {
   const key = o.model_band === 'NO_SERVICE_TEXT' ? 'no_text' : o.band;
   const cls = o.band === 'likely' ? 'sure-ok' : o.band === 'unlikely' ? 'sure-no' : 'sure-nv';
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
-  // Likely: the kicker already says "Call first", so no second line (#140 overload review)
   return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' || key === 'likely' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
 // WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
@@ -752,7 +750,7 @@ function whyFirstHtml(p, o, P) {
       .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
     if (top.length) return `<p class="why-first">${th('ans.why_first.rows', {rows: top.join('; ')})}</p>`;
   }
-  return '';  // the general rank rule is the same sentence on every answer: it is on the Why page, not the card (#140)
+  return '';
 }
 function answerPanel(p, o, i, describedBy = '') {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
@@ -1066,11 +1064,8 @@ async function bindPlan() {
   const l = state.loc, key = [state.service, l.lat, l.lon, l.source].join('|');
   if (planReq && planReq.key === key) return;  // a re-render while it loads does not ask twice
   const req = planReq = {key};
-  // Live: still the newest request, still on the answer screen, same service and place, nothing shown yet.
-  // A reply for a screen that is gone (Back, Change place, another service) is dropped, not drawn over it.
   const live = () => planReq === req && location.hash === '#/plan' && !state.plan && !!state.loc
     && [state.service, state.loc.lat, state.loc.lon, state.loc.source].join('|') === key;
-  // A dropped reply while still waiting on this screen (the place changed under it) asks again, never "Finding..." forever
   const done = () => { if (planReq === req) { planReq = null; if (location.hash === '#/plan' && !state.plan) setTimeout(render); } };
   // Offline per spec 3.2.3: navigator.onLine false, a failed /api call, or one slower than 8 s.
   if (!navigator.onLine) { if (await offlinePlan('off.no_net', live)) render(); done(); return; }
