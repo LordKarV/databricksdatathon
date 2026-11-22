@@ -485,7 +485,9 @@ def pins() -> dict[str, list]:
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
 # The LGD join (external/lgd_district_polygons/join_test.py) puts every India Post office in its LGD district polygon;
 # the file is git-ignored data, so without it the area view keeps each PIN's own district.
-LGD_PINS = ROOT / "data" / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
+LGD_REL = Path("data") / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
+# DATA_ROOT first (a worktree or the Databricks volume holds the git-ignored data there), then the repo.
+LGD_PINS = next((r / LGD_REL for r in (DATA_ROOT, ROOT) if (r / LGD_REL).is_file()), ROOT / LGD_REL)
 NEAR_DEG = 0.01  # an office this close (lat + lon degrees, about 1 km) stands for the PIN point's own polygon
 
 
@@ -589,7 +591,7 @@ def main() -> None:
     moved = pin_districts(facts["pins"])
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
-          if moved else f"pin districts: {LGD_PINS.relative_to(ROOT)} not found, area view uses each PIN's own district")
+          if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
     pl = places()
     (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")
