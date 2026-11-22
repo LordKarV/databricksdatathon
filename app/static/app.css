@@ -362,3 +362,4 @@ body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
   .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
   .slip a { color: #000; text-decoration: none; }
 }
+.cite .note { display: block; }
