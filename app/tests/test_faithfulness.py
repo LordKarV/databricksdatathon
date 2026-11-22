@@ -7,8 +7,8 @@ data-k="<kind>". This test then checks:
 
 - each marked value equals its source field: text verbatim; numbers within the precision shown (so "24 km" for
   24.6 fails); totals equal the sum of their parts; band words follow the fixed mapping;
-- no unmarked digit is on screen, apart from fixed template text (108, 102, 112, 24x7, "in 10 listings") and
-  device-side text (location, clock times, call outcomes) marked data-device;
+- no unmarked digit is on screen, apart from fixed template text (108, 102, 112, 24x7, Hindi "24 hours",
+  "in 10 listings") and device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
 - read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
@@ -51,7 +51,8 @@ from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
               "NO_SERVICE_TEXT": "NO SERVICE TEXT: call to ask"}  # derived/v2 sub-band, shown from options.N.model_band
-STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\bin 10 listings\b"]
+STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
+                  r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
     "Access now": "area.summary.access_now",
@@ -513,6 +514,43 @@ def check_gap(area: dict, shown: set[str]) -> list[str]:
     return errs
 
 
+# ---------- sealed TEST record (#86, #66): the band and the How page show the committed results ----------
+TEST_RECORD_SHOWN = ("k", "n", "pct", "lo_pct", "hi_pct", "public_n", "opened", "model_version", "predictions_sha256",
+                     "labels_sha256", "log", "source")
+GOLD_V3 = ROOT / "model" / "gold" / "v3"
+
+
+def expected_test_record() -> dict:
+    """Read straight from the committed files, independently of app/facts/build.py."""
+    res = json.loads((GOLD_V3 / "test_eval" / "results.json").read_text())
+    lk = res["headline_decided"]["LIKELY_confirmed"]
+    log = next(ln for ln in (GOLD_V3 / "OPENING_LOG.md").read_text().splitlines() if ln.startswith("| opened "))
+    cells = [c.strip() for c in log.strip().strip("|").split("|")]
+    return {"k": lk["k"], "n": lk["n"], "pct": round(100 * lk["rate"]), "lo_pct": round(100 * lk["ci95"][0]),
+            "hi_pct": round(100 * lk["ci95"][1]), "public_n": res["by_operator_decided"]["public"]["n"],
+            "model_version": res["model_version"], "predictions_sha256": res["test_predictions_sha256"],
+            "labels_sha256": cells[4], "opened": cells[1]}
+
+
+def test_sealed_test_record_equals_the_results_file():
+    from facts.engine import Engine
+    eng = Engine.load()
+    if eng is None or not eng.test_record:
+        pytest.skip("facts export without a TEST record (interim scores or app/facts/out not built)")
+    want = expected_test_record()
+    meta = eng._meta()["test_record"]
+    assert {k: meta[k] for k in want} == want
+    assert meta["model_version"] == json.loads((ROOT / "derived/v2/model_card.json").read_text())["model_version"]
+    if HOW_JSON.is_file():
+        f = json.loads(HOW_JSON.read_text())["facts"]
+        how = {"k": f["test_likely"]["value"], "n": f["test_likely"]["of"], "pct": f["test_likely_pct"]["value"],
+               "lo_pct": f["test_likely_lo"]["value"], "hi_pct": f["test_likely_hi"]["value"],
+               "public_n": f["test_public_n"]["value"], "model_version": f["test_model_version"]["value"],
+               "predictions_sha256": f["test_predictions_sha"]["value"], "labels_sha256": f["test_labels_sha"]["value"],
+               "opened": f["test_opened"]["value"]}
+        assert how == want
+
+
 # ---------- the test ----------
 @pytest.mark.parametrize("name, payload", PAYLOADS, ids=[n for n, _ in PAYLOADS])
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
@@ -571,6 +609,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
+            tr = payload.get("meta", {}).get("test_record")
+            if tr and o["band"] == "likely":  # the sealed TEST record sits next to every Likely band (#86)
+                errs += [f"why/{o['rank']}: meta.test_record.{k} not shown" for k in TEST_RECORD_SHOWN
+                         if f"meta.test_record.{k}" not in shown]
             # Live website check (#37): the dated line and its quotes must equal the /api/verify answer.
             ver = verify_fixture(o)
             page.route("**/api/verify", json_reply(ver))

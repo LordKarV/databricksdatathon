@@ -2,9 +2,10 @@
 
 The app reads only that file at start-up (standard library, no pandas), the same pattern as the packs and the
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
-counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
-derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
+counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
+common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
+When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each
+pair and engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -36,6 +37,7 @@ from common.eligibility import (  # noqa: E402, RUF100
     same_site_groups,
     to_sites,
 )
+from common.names import display_name  # noqa: E402, RUF100
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -115,6 +117,8 @@ def e164(raw: str) -> str | None:
     if re.fullmatch(r"0[1-9]\d{9}", d):
         return "+91" + d[1:]
     if re.fullmatch(r"\+91[1-9]\d{9}", d):
+        return d
+    if re.fullmatch(r"1800\d{6,8}", d):  # Indian toll-free: no E.164 form, but dialled as is from any phone in India
         return d
     return None
 
@@ -322,6 +326,51 @@ def likely_threshold(path: Path | None = None) -> float | None:
     return json.loads(path.read_text()).get("band_thresholds", {}).get("likely", {}).get("p")
 
 
+GOLD_V3 = ROOT / "model" / "gold" / "v3"
+TEST_RESULTS = GOLD_V3 / "test_eval" / "results.json"
+OPENING_LOG = GOLD_V3 / "OPENING_LOG.md"
+TEST_LABELS_SHA = GOLD_V3 / "test_labels.sha256"
+
+
+def opening_log(path: Path = OPENING_LOG) -> dict[str, str]:
+    """The single 'opened' row of OPENING_LOG.md: its date and the two committed hashes. Fails on zero or two rows."""
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in path.read_text().splitlines()
+            if ln.startswith("| opened ")]
+    if len(rows) != 1:
+        raise SystemExit(f"{path}: expected exactly one 'opened' row, found {len(rows)}")
+    return {"opened": rows[0][1], "predictions_sha256": rows[0][3], "labels_sha256": rows[0][4]}
+
+
+def sealed_test_record(card_path: Path | None = None, results_path: Path = TEST_RESULTS) -> dict | None:
+    """The sealed gold v3 TEST record of the LIKELY band (#86, #66), from model/gold/v3/test_eval/results.json.
+
+    None when the file is absent or the app does not serve the model the record is about (interim scores, or a
+    model_version other than the one the TEST was run against). Fails when the opening log, the label commitment and
+    the results disagree, or when the public-facility caveat the page shows stops being true.
+    """
+    card_path = card_path or MODEL_CARD
+    if not (results_path.is_file() and card_path.is_file() and V2.is_file()):
+        return None
+    res, card = json.loads(results_path.read_text()), json.loads(card_path.read_text())
+    if res["model_version"] != card.get("model_version"):
+        return None
+    log = opening_log()
+    labels_full = next(ln.split()[0] for ln in TEST_LABELS_SHA.read_text().splitlines()
+                       if ln.endswith(".full.canonical"))
+    if log["predictions_sha256"] != res["test_predictions_sha256"] or log["labels_sha256"] != labels_full:
+        raise SystemExit(f"{OPENING_LOG}: hashes differ from {results_path.name} or {TEST_LABELS_SHA.name}")
+    lk, pub = res["headline_decided"]["LIKELY_confirmed"], res["by_operator_decided"]["public"]
+    if pub["auroc_ci95"][0] > 0.5:
+        raise SystemExit(f"{results_path}: public AUROC interval excludes 0.5; update the public caveat in app.js")
+    rel = lambda p: str(p.relative_to(ROOT))  # noqa: E731
+    return {"split": "test", "k": lk["k"], "n": lk["n"], "pct": round(100 * lk["rate"]),
+            "lo_pct": round(100 * lk["ci95"][0]), "hi_pct": round(100 * lk["ci95"][1]),
+            "public_n": pub["n"], "model_version": res["model_version"],
+            "predictions_sha256": res["test_predictions_sha256"], "labels_sha256": labels_full,
+            "opened": log["opened"], "source": rel(results_path), "log": rel(OPENING_LOG),
+            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/dev/{rel(OPENING_LOG)}"}
+
+
 def rules() -> dict[str, dict]:
     e = pd.read_parquet(V1 / "evidence_rules.parquet")
     return {r.rule: {"n": int(r.handcheck_true + r.handcheck_false + r.dev_true + r.dev_false),
@@ -362,7 +411,8 @@ def main() -> None:
         "rules": rules(),
         "track_bins": track_bins(),
         "likely_threshold": likely_threshold(),
-        "fac": {"id": list(f.unique_id), "name": list(f.name), "city": col(f.address_city),
+        "test_record": sealed_test_record(),
+        "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
                 "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),

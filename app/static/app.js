@@ -6,11 +6,11 @@ const SERVICES = [
   // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
   {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
   {key: 'nicu', hi: '\u0928\u0935\u091c\u093e\u0924 ICU', en: 'Newborn ICU (NICU)', profile: 'urgent'},
-  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f / \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
-  {key: 'burn_care', hi: '\u091c\u0932\u0928\u093e', en: 'Burns', profile: 'emergency'},
+  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f \u092f\u093e \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
+  {key: 'burn_care', hi: '\u091c\u0932\u0928\u0947 \u0915\u0940 \u091a\u094b\u091f', en: 'Burns', profile: 'emergency'},
   {key: 'dialysis', hi: '\u0921\u093e\u092f\u0932\u093f\u0938\u093f\u0938', en: 'Dialysis', profile: 'scheduled'},
   {key: 'mri', hi: 'MRI \u0938\u094d\u0915\u0948\u0928', en: 'MRI scan (planned)', profile: 'planned'},
-  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u093e \u0911\u092a\u0930\u0947\u0936\u0928', en: 'Heart surgery (planned)', profile: 'planned'},
+  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u0940 \u0938\u0930\u094d\u091c\u0930\u0940', en: 'Heart surgery (planned)', profile: 'planned'},
   {key: 'other', hi: '\u0915\u0941\u091b \u0914\u0930 / \u092a\u0924\u093e \u0928\u0939\u0940\u0902', en: 'Other / not sure', profile: null},
 ];
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
@@ -278,6 +278,23 @@ function trackHtml(tr, P) {
     `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
     `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
+// Sealed TEST record of the Likely band (#86, #66): every number and hash from meta.test_record, which app/facts/build.py
+// copies from model/gold/v3/test_eval/results.json. Hindi gloss is a draft until native-speaker review (#10).
+function testRecordHtml(tr) {
+  if (!tr) return '';
+  const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
+  return `<div class="test-record"><p class="small"><strong>Sealed test record</strong>
+    <span lang="hi">(\u0938\u0940\u0932\u092c\u0902\u0926 \u091c\u093e\u0901\u091a \u0915\u093e \u0928\u0924\u0940\u091c\u093e)</span>:
+    Likely: ${M('k')} of ${M('n')} confirmed (${M('pct')}%, interval ${M('lo_pct')} to ${M('hi_pct')}%) on a test set
+    sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities
+    (${M('public_n')} public test pairs with a verdict).</p>
+    <details class="small"><summary>Opening log and commitment hashes</summary>
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, opened ${M('opened')} UTC.
+      Results: ${M('source')}.</p>
+      <p>Model version <code>${M('model_version')}</code><br>Test predictions hash
+        <code>${M('predictions_sha256')}</code><br>Test labels hash <code>${M('labels_sha256')}</code></p>
+    </details></div>`;
+}
 function travelHtml(t, P) {
   return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
     `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
@@ -370,7 +387,7 @@ function fieldHtml(o, P) {
   if (!f || !(f.lines.length || f.notes.length)) return '';
   const both = (x, Q) => `<p class="small">${F(Q + '.en', x.en)}<br><span lang="hi">${F(Q + '.hi', x.hi)}</span></p>`;
   return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="small"><strong>Field reports
-    <span lang="hi">(\u092b\u093c\u0940\u0932\u094d\u0921 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
+    <span lang="hi">(\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
     ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
     ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
 }
@@ -431,22 +448,69 @@ function stopHtml(r, g, P) {
   return `<li><p class="stop-name"><strong>${F(S0 + '.name', s0.name)}</strong></p>
     <p class="small">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}Arrive about
       ${F(S0 + '.eta_low', s0.eta_low, 'num')}-${F(S0 + '.eta_high', s0.eta_high, 'num')} min from the start.
-      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>` : 'No phone number in our data.'}</p>
+      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>`
+        : s0.phone && s0.phone.display ? `Phone: ${F(S0 + '.phone.display', s0.phone.display)}` : 'No phone number in our data.'}</p>
     <ul>${stages}</ul></li>`;
+}
+// Route strip (design/ui/DESIGN.md): the plan against the clock, drawn only when the plan has a time window.
+// One lane per stop group; each arrival is a capsule from eta_low to eta_high (the range, not a guessed minute);
+// the window is a rule at the first check's limit with the time past it hatched. Every number carries data-f.
+// The SVG has no viewBox: x is a percentage of the axis, y is px, so strokes and dashes never stretch.
+const STRIP_LANE = 72, STRIP_Y0 = 80, STRIP_DRAW_MS = 700;
+function stripHtml(r, P) {
+  const c = r.window_checks[0];
+  if (!c) return '';
+  const C = `${P}.window_checks.0`;
+  const lanes = stopGroups(r.stops).map(g => ({s: r.stops[g.ks[0]], S: `${P}.stops.${g.ks[0]}`}));
+  const span = 1.08 * Math.max(c.limit_minutes, ...lanes.map(l => l.s.eta_high));
+  const x = m => +(100 * m / span).toFixed(2);
+  const y = k => STRIP_Y0 + k * STRIP_LANE;
+  let at = 0;  // the line only moves forward in time, even if a later stop's range starts earlier
+  const xs = lanes.map(l => (at = Math.max(at, x(l.s.eta_low))));
+  // Segments in drawing order: along lane k-1 to the next arrival, then down to lane k. Lengths are estimated
+  // for a 300 px axis so the whole line takes STRIP_DRAW_MS.
+  const segs = [[0, y(0), xs[0], y(0)]];
+  xs.slice(1).forEach((xk, k) => segs.push([xs[k], y(k), xk, y(k)], [xk, y(k), xk, y(k + 1)]));
+  const len = segs.map(([x1, y1, x2, y2]) => Math.abs(x2 - x1) * 3 + Math.abs(y2 - y1) + 1);
+  const total = len.reduce((a, b) => a + b, 0);
+  let t = 0;
+  const line = segs.map(([x1, y1, x2, y2], i) => {
+    const ms = Math.round(STRIP_DRAW_MS * len[i] / total), style = `animation-duration:${ms}ms;animation-delay:${t}ms`;
+    t += ms;
+    return `<line class="strip-path" x1="${x1}%" y1="${y1}" x2="${x2}%" y2="${y2}" pathLength="1" style="${style}"/>`;
+  }).join('');
+  const wx = x(c.limit_minutes);
+  const win = wx < 60 ? `left:calc(${wx}% + 6px)` : `right:calc(${(100 - wx).toFixed(2)}% + 6px)`;
+  const marks = lanes.map((l, k) => {
+    // the label sits above its lane, on the far side of the drop that arrives there
+    const pos = xs[k] <= 55 ? `left:calc(${xs[k]}% + 18px)` : `right:calc(${(100 - xs[k]).toFixed(2)}% + 18px);text-align:right`;
+    const delay = `animation-delay:${STRIP_DRAW_MS * len.slice(0, 2 * k + 1).reduce((a, b) => a + b, 0) / total | 0}ms`;
+    return `<span class="strip-stop" aria-hidden="true" style="left:${xs[k]}%;top:${y(k)}px;${delay}">${k + 1}</span>
+      <span class="strip-lab" style="${pos};top:${y(k) - 52}px"><b>${F(l.S + '.eta_low', l.s.eta_low, 'num')}-${F(l.S + '.eta_high', l.s.eta_high, 'num')} min</b>
+      ${F(l.S + '.purpose_word', l.s.purpose_word)}</span>`;
+  }).join('');
+  return `<div class="strip" role="img" aria-label="The route drawn against the clock. The stops and times are listed below."
+      style="height:${y(lanes.length - 1) + 48}px">
+    <div class="strip-late" style="left:${wx}%"></div>
+    <span class="strip-win" style="${win}">Window ${F(C + '.limit_minutes', c.limit_minutes, 'num')} min</span>
+    <svg aria-hidden="true">${lanes.map((l, k) => `<line class="strip-eta" x1="${x(l.s.eta_low)}%" x2="${x(l.s.eta_high)}%"
+      y1="${y(k)}" y2="${y(k)}"/>`).join('')}${line}</svg>
+    <span class="strip-origin" style="left:0;top:${y(0)}px"></span>${marks}
+    <div class="strip-axis"><span>Start</span><span>minutes from the start</span></div></div>`;
 }
 function routePlanHtml(r, P) {
   const t = r.totals, v = r.vs_direct;
-  return `<p>${F(P + '.type_word', r.type_word)}.</p>
+  return `<p>${F(P + '.type_word', r.type_word)}.</p>${stripHtml(r, P)}
     <ol class="stops">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>Definitive care in about ${F(P + '.totals.minutes_to_definitive', t.minutes_to_definitive, 'num')} min
       (${F(P + '.totals.low', t.low, 'num')}-${F(P + '.totals.high', t.high, 'num')}).
       Chance of first care in time: ${F(P + '.totals.p_first_care', t.p_first_care.toFixed(2), 'num')}.
       Chance of being treated: ${F(P + '.totals.p_treated', t.p_treated.toFixed(2), 'num')}.</p>` : ''}
-    ${r.window_checks.map((c, j) => `<p class="small">${F(`${P}.window_checks.${j}.check`, c.check)} within
+    ${r.window_checks.map((c, j) => `<p class="small check-${c.met ? 'met' : 'miss'}">${F(`${P}.window_checks.${j}.check`, c.check)} within
       ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
       <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
       (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small">${F(P + '.vs_direct.text', v.text)}
+    ${v ? `<p class="small vs-direct">${F(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
 }
 function routeHtml(p) {
@@ -633,13 +697,13 @@ function areaHtml(a) {
     </tbody></table>
     <p>${F('area.caveat', a.caveat)}</p>
     ${gapHtml(a)}
-    <table><caption>Plan per PIN area</caption>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Plan per PIN area"><table><caption>Plan per PIN area</caption>
       <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
-      <tbody>${rows}</tbody></table>
+      <tbody>${rows}</tbody></table></div>
     <h2 id="ten-calls">Calls that close the most of the gap</h2>
-    <table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
       <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
-      <tbody>${calls}</tbody></table>
+      <tbody>${calls}</tbody></table></div>
     <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
       <button type="button" id="area-print">Print chart</button></div>
     ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;
@@ -733,6 +797,7 @@ function whyScreen(rank) {
     : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
       ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
+    ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
     ${fieldHtml(o, P)}
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
@@ -816,7 +881,7 @@ function bindWhy() {
     $('#reason-step').innerHTML = '';
     if (b.dataset.outcome === 'Said no' && o && window.RSCommunity) {
       RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, 'Said no', at, reason ? {reason} : {}), announce);
-      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092e\u0928\u093e \u0915\u093f\u092f\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
+      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092b\u093c\u094b\u0928 \u092a\u0930 \u0928\u093e \u0915\u0939\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
       return;
     }
     const sent = o && queueOutcome(o, b.dataset.outcome, at);
@@ -879,7 +944,7 @@ function slipScreen(rank) {
       <button type="button" id="slip-card">Send to family <span lang="hi">(\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u094b \u092d\u0947\u091c\u0947\u0902)</span></button>
     </div>
     <p class="small no-print">The family card is a file that opens on any phone without a login: places, phones and
-      what to bring, no patient details. <span lang="hi">\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948: \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901, \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
+      what to bring, no patient details. <span lang="hi">\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948\u0964 \u0907\u0938\u092e\u0947\u0902 \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0928\u0902\u092c\u0930 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901 \u0932\u093f\u0916\u093e \u0939\u0948; \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
 }
 function loadSlipJs() {
   if (window.RSSlip) return Promise.resolve();
@@ -920,7 +985,7 @@ async function bindSlip() {
       const r = await RSSlip.shareJourney(p, lang, {rank});
       announce(msg(r === 'downloaded' ? 'cardSaved' : r === 'shared' ? 'cardShared' : 'cardCancelled'));
     } catch {
-      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
+      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
     }
   });
 }

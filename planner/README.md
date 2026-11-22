@@ -29,7 +29,7 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | `eval_gold_dev_notebook.py` | The same evaluation as a Databricks-format notebook (local path run; Unity Catalog path not run) |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 27 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 29 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
 
 ## Calling it from the app
 

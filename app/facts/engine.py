@@ -21,11 +21,49 @@ OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
 N_OPTIONS = 3
 N_TRAVEL = 40  # travel estimates for the nearest candidates only
-# value = p x exp(-minutes / scale): the scale by urgency; the area window in minutes
+# Non-emergency order: value = p x exp(-minutes / scale), the scale by urgency; the area window in minutes.
 TIME_SCALE = {"emergency": 45, "urgent": 60, "scheduled": 120, "planned": 240}
+# Emergency order (#92): nearest plausible place first, call it, and if it says no call the next. A "no" on the
+# phone costs minutes, a wasted trip costs the window, so distance leads; p only chooses among the places within
+# TIE_MIN of the nearest one left.
+# The simulation showed the p x exp(-minutes / 45) order losing to "nearest + call first" in every scenario.
+NEAREST_FIRST = {"emergency"}
+TIE_MIN = 5
+CALL_MIN = 5  # assumed minutes per phone call, used only for expected_in_window (sim/assumptions.py has the range)
+RANK_RULE = {
+    "nearest_plausible": "Nearest place that plausibly offers it first; call first, and if they say no, call the next.",
+    "evidence_and_time": "Ordered by how sure we are, discounted by travel time.",
+}
 WINDOW = {"emergency": 60, "urgent": 60, "scheduled": 120, "planned": 240}
 OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
+
+def nearest_plausible(rows: list, window: float = math.inf) -> list:
+    """Rows (p, minutes, ...) in emergency order: repeatedly the highest p among the rows within TIE_MIN of the
+    nearest row left (no fixed buckets, so 102 and 103 minutes are always a tie), nearer first on equal p. A tie
+    never crosses the window: while the nearest row left is inside it, only rows inside it compete."""
+    rest, out = sorted(rows, key=lambda r: r[1]), []
+    while rest:
+        reach = rest[0][1] + TIE_MIN
+        if rest[0][1] <= window:
+            reach = min(reach, window)
+        near = [r for r in rest if r[1] <= reach]
+        best = max(near, key=lambda r: (r[0], -r[1]))
+        out.append(best)
+        rest.remove(best)
+    return out
+
+
+def expected_in_window(rows: list[tuple[float, float]], window: float, call_min: float = CALL_MIN) -> float:
+    """Chance of care within the window when the options are called in order and the first "yes" is visited:
+    rows are (p, minutes); the k-th call ends at k x call_min. p is the per-call chance of a "yes" that holds."""
+    e, miss = 0.0, 1.0
+    for k, (p, minutes) in enumerate(rows, 1):
+        if k * call_min + minutes <= window:
+            e += miss * p
+        miss *= 1 - p
+    return round(e, 3)
+
 
 RULE_PLAIN = {
     "G_strong": "own specific sentences about it", "G_mod": "an own sentence about it",
@@ -127,6 +165,7 @@ class Engine:
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
         self.likely_threshold = facts.get("likely_threshold")
+        self.test_record = facts.get("test_record")  # sealed gold v3 TEST record of LIKELY (#86); None if absent
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
@@ -346,7 +385,8 @@ class Engine:
     def _ranked(self, service: str, lat: float, lon: float, state: str | None = None,
                 scores: dict | None = None) -> tuple[list, list]:
         """(pool, unlikely): [(utility, minutes, pair, travel, band)] sorted best first / nearest first."""
-        scale = TIME_SCALE[SERVICES[service]["profile"]]
+        profile = SERVICES[service]["profile"]
+        scale = TIME_SCALE[profile]
         pool, unlikely = [], []
         state = state or self.origin_state(lat, lon)
         for _, pr in self._near(service, lat, lon):
@@ -354,11 +394,14 @@ class Engine:
             if not ev and band != "unlikely":
                 continue  # every recommendation cites facility text (#85): a pair with no usable quote is not offered
             tr = self._travel(lat, lon, pr.fi, state)
-            row = (self.rank_p(pr, p) * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
+            rp = self.rank_p(pr, p)
+            row = (rp if profile in NEAREST_FIRST else rp * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr,
+                   band)
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
-        pool.sort(key=lambda r: -r[0])
+        pool = (nearest_plausible(pool, WINDOW[profile]) if profile in NEAREST_FIRST
+                else sorted(pool, key=lambda r: -r[0]))
         unlikely.sort(key=lambda r: r[1])
         return pool, unlikely
 
@@ -401,7 +444,10 @@ class Engine:
         if best_likely and best_likely not in chosen:
             chosen = chosen[: N_OPTIONS - 1] + [best_likely]
         options = [self.option(k + 1, r[2], service, lat, lon, r[3], scores) for k, r in enumerate(chosen)]
-        if len(options) > 1:
+        nearest_first = info["profile"] in NEAREST_FIRST
+        if nearest_first and options:
+            options[0]["why_first_text"] = RANK_RULE["nearest_plausible"]
+        elif len(options) > 1:
             nearest = min(range(len(chosen)), key=lambda k: chosen[k][1])
             if nearest != 0:
                 n, o = options[nearest], options[0]
@@ -427,6 +473,11 @@ class Engine:
             # The first choice beyond the urgency window (60 min for emergencies) is the answer's first line, with
             # 108/102 and the nearest hospital the public standard expects to offer the care (#86, lead's decision).
             "time_window": {"window_min": window, "first_outside": first_outside},
+            "rank_rule": {"code": "nearest_plausible" if nearest_first else "evidence_and_time",
+                          "text": RANK_RULE["nearest_plausible" if nearest_first else "evidence_and_time"],
+                          # model p as the chance each call ends in care; CALL_MIN per call is an assumption
+                          "expected_in_window": expected_in_window([(o["p"], o["travel"]["minutes"]) for o in options],
+                                                                   window) if nearest_first else None},
             "public_option": public if first_outside else None,
             "meta": self._meta(),
         }
@@ -500,9 +551,15 @@ class Engine:
                          "option_rank": rank.get(r[2].fi), "minutes_vs_first": r[1] - top[1], "band": r[4],
                          "reason_code": code, "reason": text, "basis": basis})
         # A nearer listing that a "yes" on the phone would move to first place (confirmed pairs score p_confirmed).
-        scale = TIME_SCALE[SERVICES[service]["profile"]]
-        flip = next((r for r in near if r[1] < top[1] and r[4] == "not_verified"
-                     and self.p_confirmed * math.exp(-r[1] / scale) > top[0]), None)
+        profile = SERVICES[service]["profile"]
+        scale = TIME_SCALE[profile]
+        def first_if_confirmed(r: tuple) -> bool:
+            if profile in NEAREST_FIRST:
+                conf = (self.p_confirmed, *r[1:])
+                return nearest_plausible([top, conf], WINDOW[profile])[0] is conf
+            return self.p_confirmed * math.exp(-r[1] / scale) > top[0]
+
+        flip = next((r for r in near if r[1] < top[1] and r[4] == "not_verified" and first_if_confirmed(r)), None)
         if flip:
             change = {"kind": "confirm_nearer", "facility_id": self._f("id", flip[2].fi),
                       "name": self._f("name", flip[2].fi), "minutes_vs_first": flip[1] - top[1]}
@@ -518,7 +575,8 @@ class Engine:
     def _meta(self) -> dict:
         return {"stub": False, "model_hash": f"interim-{self.sha}" if "interim" in self.meta["scores"] else self.sha,
                 "data_snapshot": f"{self.meta['source']} {self.meta['as_of']}", "scores": self.meta["scores"],
-                "generated_at": datetime.now(UTC).isoformat(timespec="seconds")}
+                "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
+                **({"test_record": self.test_record} if self.test_record else {})}
 
     # ---------- /api/area ----------
     def area(self, service: str, lat: float, lon: float, max_pins: int = 40) -> dict:

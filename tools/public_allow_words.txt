@@ -1,0 +1,34 @@
+# Single name words cleared by a person after reading each in context (tools/data_audit.py, single-name-word rule).
+# A word here is never treated as a facility identity on its own. Add a word only with the reason it is not one.
+# Places (towns, rivers, old spellings) that the gazetteers do not spell this way
+avinashi
+ayanavaram
+brahmaputra
+cawnpore
+girwa
+hoogly
+hoshiyarpur
+koduvally
+sreekariyam
+vijayanagaram
+# People named in Wikipedia text about languages and ambulance services, not facilities
+chaudhury
+murugan
+ramalinga
+sahay
+thirumalai
+# Ordinary words, code identifiers and product names
+atlantis    # a made-up pack id in a path-traversal test
+beats       # "beats" (verb)
+biotech
+hemat       # regex stem for haematology
+ident       # code identifier
+lakeview    # Databricks Lakeview dashboards
+noora       # glyph name inside a font file
+rajkiya     # Hindi "government" (a generic word)
+regen       # regenerate
+samay       # Hindi "time"
+dakshata    # a national maternal-care training programme
+dentalcare  # generic compound
+spinecare   # generic compound
+nasha       # Hindi "addiction"

@@ -72,10 +72,6 @@
    "violations": [],
    "horizontal_scroll": false
   },
-  "translated_quote-light": {
-   "violations": [],
-   "horizontal_scroll": false
-  },
   "call_ahead_trauma-light": {
    "violations": [],
    "horizontal_scroll": false
@@ -188,10 +184,6 @@
    "violations": [],
    "horizontal_scroll": false
   },
-  "translated_quote-dark": {
-   "violations": [],
-   "horizontal_scroll": false
-  },
   "call_ahead_trauma-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -283,23 +275,23 @@
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1317,
-    "gzip": 665
+    "raw": 1592,
+    "gzip": 796
    },
    "/app.css": {
-    "raw": 8496,
-    "gzip": 2750
+    "raw": 18540,
+    "gzip": 5481
    },
    "/app.js": {
-    "raw": 67103,
-    "gzip": 20696
+    "raw": 69124,
+    "gzip": 21609
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 24247,
+  "gzip_total": 28022,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

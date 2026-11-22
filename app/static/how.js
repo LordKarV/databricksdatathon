@@ -77,29 +77,42 @@
         ${n('app_not_verified')} "Not verified: call to confirm", ${n('app_no_service_text')} "No service text: call
         to ask" (the listing has no sentence about the service), and ${n('app_unlikely')} Unlikely
         ${src('app_likely')}.</li>
-      <li><strong>Order.</strong> Options are ordered by the model's chance, discounted by travel time. The discount
-        is steeper in an emergency (${n('scale_emergency')} minute scale) than for planned care
-        (${n('scale_planned')} minutes). A listing with no sentence about the service counts as at most
-        ${d('likely_p', 2)}, so a hospital cannot come first on its size or level alone. We search ${n('radius_km')} km and
-        show up to ${n('n_options')} options ${src('radius_km')}. The order does not yet count the time lost if the
-        first place turns the patient away.</li>
+      <li><strong>Order.</strong> In an emergency the nearest place that plausibly offers the care comes first: call
+        it, and if they say no, call the next. A place we judge Unlikely, or with no sentence of its own about the
+        service, is never listed. The model's chance only breaks ties within ${n('tie_min')} minutes
+        ${src('tie_min')}. A simulated referral world showed that ordering by the chance discounted by travel time
+        sent patients farther and lost time when the first place said no; this rule fixed that (simulated, not a
+        field result). For planned care, options are ordered by the model's chance, discounted by travel time
+        (${n('scale_planned')} minute scale), because a longer trip to a likelier place pays when there is time. A
+        listing with no sentence about the service counts as at most ${d('likely_p', 2)}, so a hospital cannot come
+        first on its size or level alone. We search ${n('radius_km')} km and show up to ${n('n_options')} options
+        ${src('radius_km')}.</li>
       <li><strong>Saying no.</strong> When nothing is Likely, the app says so, lists places to call, and names the
         nearest hospital the public standard says should offer the service.</li>
       <li><strong>Several stops.</strong> ${n('pathways')} care pathways are written down for time-critical cases
         (${F('facts.pathway_names.value', f.pathway_names.value)}) ${src('pathways')}. For these the app adds a
-        suggested route. The route planner still uses placeholder chances built from the listings, not the model,
-        and the route says so.</li>
+        suggested route. The route planner uses the model's chance for each service the model scores; for support
+        equipment it does not score (operating theatre, ECG, laboratory), it uses the facility's own sentences
+        that name it, with fixed assumed chances.</li>
     </ul>
 
     <h2>How good it is</h2>
     <p>The app uses ${t('v2_model')}: an expert-set scorecard with one calibration step ${src('v2_model')}.
       These results are on DEV pairs, grouped five-fold, out of fold. The labels were made by an agent from public
-      web pages, not checked by a person. The sealed test set has not been opened yet.</p>
+      web pages, not checked by a person. The sealed test set was opened once, after the model was frozen${f.test_likely
+    ? '; its result for Likely is below' : ''}.</p>
     <p>What the chance means: ${t('v2_meaning')}</p>
     ${tbl('v2_eval', 'The model against simpler choices, on DEV pairs')}
     <ul>
       <li><strong>Likely.</strong> ${n('likely_dev')} of ${of('likely_dev')} DEV pairs labelled Likely were
         confirmed (${d('likely_dev_lo', 3)} to ${d('likely_dev_hi', 3)}).</li>
+      ${f.test_likely ? `<li class="test-record"><strong>Sealed test.</strong> Likely: ${n('test_likely')} of
+        ${of('test_likely')} confirmed (${n('test_likely_pct')}%, interval ${n('test_likely_lo')} to
+        ${n('test_likely_hi')}%) on a test set sealed before the model was frozen; agent-labelled, not human-checked
+        ${src('test_likely')}. Not shown to rank public facilities (${n('test_public_n')} public test pairs with a
+        verdict). Opened once, ${t('test_opened')} UTC, as recorded in the opening log ${src('test_opened')}.
+        Commitments: model version <code>${t('test_model_version')}</code>, test predictions hash
+        <code>${t('test_predictions_sha')}</code>, test labels hash <code>${t('test_labels_sha')}</code>.</li>` : ''}
       <li><strong>First options.</strong> A confirmed place was among the first ${n('conf_em_k')} options in
         ${n('conf_em')} of ${of('conf_em')} emergency groups and among the first ${n('conf_pl_k')} in ${n('conf_pl')}
         of ${of('conf_pl')} planned-care groups. A random order scores ${d('conf_em_random', 2)} and

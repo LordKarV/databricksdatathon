@@ -27,6 +27,9 @@ Arguments
                    the store, tags model v2 scores are never implied: v2's band is final for them.
     blood          optional list facts for blood (see planner/implied.py). Default: taken from the
                    planner export when it was built with the e-RaktKosh outputs present.
+    first_stop     optional facility id the caller ranks first (the app's options list #1). In an
+                   emergency it is stop 1 when it can give first care; `first_stop` in the result says
+                   whether it could and which capabilities it lacks (planner.core).
     travel_fn      optional travel_fn(origin, destinations) -> geo.travel rows. Default: the
                    geo.travel estimate with no network calls, for that state. A travel_fn you pass
                    must apply the state itself.
@@ -80,7 +83,7 @@ def pathway_for(service):
 
 
 def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, facilities=None, travel_fn=None,
-                     state=None, implications=True, blood=None):
+                     state=None, implications=True, blood=None, first_stop=None):
     pid = pathway_for(service)
     if pid is None:
         return {"pathway": None}
@@ -107,7 +110,8 @@ def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, fa
     if travel_fn is None:
         travel_fn = default_travel_fn(state)
     pw = pathways()[pid]
-    result = plan(origin, pw, facilities, capability_p, travel_fn=travel_fn, elapsed_minutes=elapsed_minutes)
+    result = plan(origin, pw, facilities, capability_p, travel_fn=travel_fn, elapsed_minutes=elapsed_minutes,
+                  first_stop=first_stop)
     if from_store:
         _call_first(result, pw, st, capability_p)
         _what_would_change(result, pw, st, origin, facilities)
@@ -115,6 +119,7 @@ def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, fa
             "options": to_options(result), "abstain": result["abstain"],
             "thresholds": result.get("thresholds"), "instructions": result["instructions"],
             "considered": result.get("considered"), "assumptions": result["assumptions"],
+            "first_stop": result.get("first_stop"),
             "meta": {"implications": capability_p.describe() if implications else None, "origin_state": state, "origin_state_source": state_source,
                      "terrain": _terrain(state), "planner_data": st.meta if from_store else None}}
 
