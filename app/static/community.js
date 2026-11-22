@@ -139,7 +139,21 @@
         ${travelHtml(po.travel, 'public_option.travel')}.</p>` : ''}
       <div id="call-reason"></div></div>`;
   }
-  function showCallLoop() { const el = document.getElementById('call-loop'); if (el) el.innerHTML = callLoopHtml(state.plan); }
+  function showCallLoop() { const el = document.getElementById('call-loop'); if (el) el.innerHTML = callLoopHtml(state.plan); root.callBar?.(); }
+  // The fixed Call bar (app.js callBar, #178) copies the card's Call, which is option 1. Once the loop has moved on it
+  // dials the option the loop is on, and after the last one 108 (102). It wraps the global, so render() keeps it too.
+  const baseBar = root.callBar;
+  function barFollows() {
+    baseBar();
+    const bar = document.getElementById('call-bar'), c = state.call, p = state.plan;
+    if (!bar || !c || c.plan !== p) return;
+    const i = p.options.findIndex(x => x.rank === c.rank), o = p.options[i];
+    if (c.stage === 'end') bar.innerHTML = `<div class="sos-inline">${sosHtml(has102(p.query.service))}</div>`;
+    else if (i > 0 && telOf(o)) {
+      bar.innerHTML = `<a class="btn btn-go btn-block btn-big call-fixed" href="${telOf(o)}">${icon('phone')} ${th('ans.call')} <span class="num">${esc(o.phone.display || o.phone.e164)}</span></a>`;
+    }
+  }
+  if (typeof baseBar === 'function') root.callBar = barFollows;
   /** The phone is back from the dialler: the four outcomes for the option just called. */
   function callBack() {
     const c = state.call;
@@ -185,7 +199,7 @@
     root.document.addEventListener('visibilitychange', () => { if (root.document.visibilityState === 'visible') callBack(); });
     root.document.head.appendChild(Object.assign(root.document.createElement('style'), {textContent:
       '.call-loop{margin-top:var(--sp3);padding-top:var(--sp3);border-top:1px solid var(--line)}'
-      + '.call-loop .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}'}));
+      + '.call-loop .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}.call-bar .sos-inline{margin:0}'}));
   }
 
   // ---------- recent referrals and the visit report ----------

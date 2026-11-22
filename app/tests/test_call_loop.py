@@ -212,3 +212,38 @@ def test_said_yes_offers_the_slip(browser, base_url):
         page.locator(f"#call-loop a[href='#/slip/{PLAN['options'][0]['rank']}']").wait_for()
     finally:
         ctx.close()
+
+
+# The fixed Call bar (#178, screens up to 600 px tall) follows the loop: after "No answer" on option 1 it dials
+# option 2, not the number that just failed, and after the last option 108 (102). A later render() keeps it.
+BAR_JS = """async () => { const seen = new Set();
+  for (let y = 0; y <= document.documentElement.scrollHeight; y += 40) { scrollTo(0, y);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const b = document.getElementById('call-bar');
+    if (b && !b.hidden) seen.add([...b.querySelectorAll('a')].map(a => a.getAttribute('href')).join(' ')); }
+  scrollTo(0, 0); return [...seen]; }"""
+
+
+@pytest.mark.parametrize("lang", ["en", "hi"])
+def test_fixed_call_bar_follows_the_loop(browser, base_url, lang):
+    ctx, page, _ = answer(browser, base_url, lang)
+    o1, o2 = PLAN["options"][0], PLAN["options"][1]
+    try:
+        page.set_viewport_size({"width": 320, "height": 568})
+        page.evaluate("render({keepFocus: true})")  # callBar() builds the bar for the short screen
+        assert page.evaluate(BAR_JS) == [f"tel:{o1['phone']['e164']}"]
+        page.locator(".call-main").click()
+        page.evaluate(BACK)
+        page.locator("#call-loop [data-call-out=none]").click()
+        page.wait_for_selector("#call-next-btn")
+        assert page.evaluate(BAR_JS) == [f"tel:{o2['phone']['e164']}"]
+        page.evaluate("render({keepFocus: true})")
+        assert page.evaluate(BAR_JS) == [f"tel:{o2['phone']['e164']}"]
+        while page.locator("#call-next-btn").count():
+            page.locator("#call-next-btn").click()
+            page.evaluate(BACK)
+            page.locator("#call-loop [data-call-out=none]").click()
+        page.locator(".call-end").wait_for()
+        assert page.evaluate(BAR_JS) == ["tel:108 tel:102"]
+    finally:
+        ctx.close()
