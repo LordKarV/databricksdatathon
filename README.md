@@ -167,7 +167,7 @@ upstream cleaning steps; see `derived/v1/README.md`.
   ask" or "Unlikely". Every option still says to call first, and when nothing is Likely the app says so.
 - **Exists and location are not tested.** No TEST label says a facility does not exist or is in the wrong place
   (114 yes and 36 unclear for each). Counting "unclear after a search" as a negative, the DEV rule, the existence
-  score gets AUROC 0.617 [0.484, 0.749], close to chance
+  score gets AUROC 0.617 [0.481, 0.743], close to chance
   ([`independence.json`](model/gold/v3/test_eval/independence.json), `existence_head`).
 - **Two routes to Unlikely** ([`independence.json`](model/gold/v3/test_eval/independence.json),
   `unlikely_by_route`): a low score (p <= 0.2) was right, that is contradicted, on 9 of 9 labelled pairs (DEV 7,

@@ -54,7 +54,7 @@ frozen predictions) and [`results.json`](../../model/gold/v3/test_eval/results.j
 - **No TEST negatives** for emergency_csection, nicu, emergency_24x7 and stemi_thrombolysis
   (`services_with_0_test_negatives`): TEST cannot show ranking within those services.
 - **Exists and location are not tested.** TEST has no "no" label for either (114 yes, 36 unclear each). With the
-  DEV rule (unclear after a search counts as 0) the existence score gets AUROC 0.617 [0.484, 0.749]
+  DEV rule (unclear after a search counts as 0) the existence score gets AUROC 0.617 [0.481, 0.743]
   (`existence_head`), which includes chance.
 - **The c2 override.** UNLIKELY from p <= t_U (0.2) was right (contradicted) on 9 of 9 labelled pairs: DEV 7 of 7,
   TEST 2 of 2. UNLIKELY from the c2 rule with p > t_U was right on 3 of 10: DEV 3 of 8, TEST 0 of 2
