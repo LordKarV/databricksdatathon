@@ -215,6 +215,7 @@ def facts(c: dict[str, float]) -> dict:
         "other_facility_direct": fact(c["other_facility_direct"], claims_src,
                                       "of those, records with such a sentence in direct context",
                                       of=c["other_facility"]),
+        "scores_source": fact(eng.meta["scores"], "app/facts/build.py", "which scores the app serves (meta.scores)"),
         "app_pairs": fact(app_pairs, "app/facts/build.py", "pairs for the app's services"),
         "app_likely": fact(bands["likely"], eng_src, "pairs the app labels Likely (derived/v2 band LIKELY)"),
         "app_not_verified": fact(bands["not_verified"], eng_src, "pairs labelled Not verified (band CALL_FIRST)"),

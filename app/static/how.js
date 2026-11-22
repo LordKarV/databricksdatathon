@@ -37,6 +37,7 @@
     <p>Referral Saathi reads ${n('records')} facility records ${src('records')}, checks each claim against the
       sentence it came from, and tells you whom to call first and why. Every number on this page links to the file
       it comes from.</p>
+    <p class="small">Scores: ${F('facts.scores_source.value', h.facts.scores_source.value)} ${src('scores_source')}.</p>
 
     <h2>The data problem we found</h2>
     <p>The records are messy in ways that can send a patient to the wrong place.</p>
