@@ -475,8 +475,6 @@ function similarHtml(o, P) {
     ? th('num.similar', {lo: F(P + '.p_lo', pc(o.p_lo), 'pct'), hi: F(P + '.p_hi', pc(o.p_hi), 'pct')})
     : th('num.range', {lo: N(P + '.p_lo', o.p_lo.toFixed(2)), hi: N(P + '.p_hi', o.p_hi.toFixed(2))});
 }
-// A chance shown as a whole percent, capped: never "100%" or "1.00" from a product of model chances (#121).
-const capPct = x => (x > 0.99 ? ts('num.over99') : x < 0.01 ? ts('num.under1') : `${Math.round(100 * x)}%`);
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return th('track.none');
@@ -689,7 +687,7 @@ function routePlanHtml(r, P) {
     <ol class="stops-full">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>${th('route.totals', {min: N(P + '.totals.minutes_to_definitive', t.minutes_to_definitive),
       low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: N(P + '.totals.p_first_care', t.p_first_care.toFixed(2)),
-      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p>` : ''}
+      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p><p class="note">${th('route.totals_assume')}</p>` : ''}
     ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
     ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}
@@ -768,20 +766,41 @@ function sureHtml(o, P) {
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
   return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
+// WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
+// when the engine has it, the time from the PIN centre (travel.alt), so the worker asks the way on the call.
+// A no-op on payloads without the field.
+function doubtHtml(o, P) {
+  if (!o.location_doubt) return '';
+  const alt = o.travel && o.travel.alt;
+  return `<p class="doubt">${icon('warn')}<span>${th('ans.doubt.line', {address: `<span lang="en">${F(P + '.address', o.address || o.town)}</span>`})}${
+    alt ? ' ' + th('ans.doubt.alt', {low: N(P + '.travel.alt.low', alt.low), high: N(P + '.travel.alt.high', alt.high)}) : ''} ${th('ans.doubt.ask')}</span></p>`;
+}
 // WS1 1b, the receipt: the first listing sentence, cut at 60 characters (kind 'part': the shown text is a piece of
 // the stored quote), in English as written, with its source page. A NO SERVICE TEXT option says its lines are general.
 const RECEIPT_CUT = 60;
+// Which quote: the first one with no weak flag whose field is not a generic description; else the first, shown with
+// its warning (#171 review). The cut ends at a word: the last space at or before 60 characters.
+function receiptQuote(o) {
+  const ok = e => !(e.flags || []).some(f => f.weak) && e.field !== 'description';
+  const j = o.evidence.findIndex(ok);
+  return j >= 0 ? j : 0;
+}
+function cutAtWord(q) {
+  if (q.length <= RECEIPT_CUT) return q;
+  const sp = q.lastIndexOf(' ', RECEIPT_CUT);
+  return (sp > 0 ? q.slice(0, sp) : q.slice(0, RECEIPT_CUT)).trimEnd();
+}
 function receiptHtml(p, o, P) {
-  const e = o.evidence[0];
-  if (!e) return '';
-  const Q = `${P}.evidence.0`;
-  const cut = e.quote.length > RECEIPT_CUT ? e.quote.slice(0, RECEIPT_CUT).trimEnd() : e.quote;
+  if (!o.evidence.length) return '';
+  const j = receiptQuote(o), e = o.evidence[j];
+  const Q = `${P}.evidence.${j}`;
+  const cut = cutAtWord(e.quote);
   const lead = o.model_band === 'NO_SERVICE_TEXT'
     ? th(p.query.service === 'trauma_emergency' ? 'quote.caption_trauma' : 'quote.caption', {label: labelF(p.query)})
     : th('ans.receipt.from');
   return `<p class="receipt">${lead}: <span lang="en">"${F(Q + '.quote', cut, 'part')}${cut.length < e.quote.length ? '...' : ''}"</span>${
     claimHtml(Q + '.claim_id', e.claim_id)}${e.source_url
-    ? ` <a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('ans.receipt.source')}</a>` : ''}</p>`;
+    ? ` <a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('ans.receipt.source')}</a>` : ''}${quoteFlagsHtml(e, Q)}</p>`;
 }
 // WS1 1b, why this one first, in one line: nearest-first emergencies name the Likely option they put second and how
 // much farther it is; planned care names the two ledger rows that add most; otherwise the engine's rank rule.
@@ -814,10 +833,12 @@ function answerPanel(p, o, i) {
     ${i === 0 && fb ? `<p class="note"><strong>${E('itinerary.fallback.ask', fb.ask)}</strong> ${E('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
+    ${doubtHtml(o, P)}
     ${sureHtml(o, P)}
     ${receiptHtml(p, o, P)}
     ${i === 0 ? whyFirstHtml(p, o, P) : ''}
-    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>
+      <p class="note call-note">${th('call.number_note')}</p>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
     <p id="speak-note" class="note" aria-live="polite"></p>
@@ -893,13 +914,13 @@ function compareHtml(p) {
   }
   const opts = p.options;
   const P = i => `options.${i}`;
-  // At least one checks out (#121 item 3): capped at "over 99%" and stated with k; assumes independent failures.
-  const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
+  // #140 3e: band counts, not "chance at least one checks out" (a product of model scores that assumed
+  // independent failures). Each number is marked: k counts Likely options, n counts options.
+  const nLikely = opts.filter(o => o.band === 'likely').length;
   const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', ');
-  const which = opts.length > 1 ? th('num.chance_any', {k: F('options', opts.length, 'count')}) : th('num.chance_one');
   const head = `<p class="section">${th(state.patientHere ? 'cmp.here' : 'cmp.elsewhere')}</p>
     <p>${th('cmp.plan', {names})}</p>
-    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} ${th('num.independent')}</p>` : ''}`;
+    ${opts.length ? `<p>${th('cmp.likely_count', {k: F('options', nLikely, 'likely'), n: F('options', opts.length, 'count')})}</p>` : ''}`;
   const table = `<div class="compare-table table-scroll" tabindex="0" role="region" aria-label="${th('cmp.h')}"><table class="ledger"><caption>${th('cmp.caption', {label: labelF(p.query)})}</caption>
     <thead><tr><th scope="col">${th('cmp.row')}</th>${opts.map((o, i) => `<th scope="col">${N(P(i) + '.rank', o.rank)}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
     <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${th(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>

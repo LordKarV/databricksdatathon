@@ -7,6 +7,9 @@ draft written for this ledger and need the same native-speaker review as the glo
 """
 from __future__ import annotations
 
+import re
+from urllib.parse import urlsplit
+
 # term -> (English, Hindi). "base" is the model's starting score, the same for every pair.
 TERMS: dict[str, tuple[str, str]] = {
     "base": ("Starting score, the same for every listing", "शुरुआती अंक, हर लिस्टिंग के लिए एक जैसे"),
@@ -128,3 +131,62 @@ LIST_NAMES: dict[str, str] = {
 
 def nabh_text(tier: str | None, acc: str) -> str:
     return NABH_TIER.get(tier or "", NABH_UNTIERED).format(acc=acc)
+
+
+# Cite links (#166 review). Hosts whose entry links opened the entry in a desktop browser (Chromium with a normal user
+# agent, our page as referer), checked 2026-11-22. A cite that links any other host fails the facts build.
+CITE_HOSTS: frozenset[str] = frozenset({
+    "portal.nabh.co", "nabh-tenant-bucket-prod.s3.ap-south-1.amazonaws.com", "nabh.co",
+    "nmc.org.in", "eraktkosh.mohfw.gov.in", "qps.nhsrcindia.org", "web.archive.org", "nhm.goa.gov.in",
+    "www.openstreetmap.org", "www.wikidata.org",
+})
+# Hosts whose entry links never open for a reader. The CGHS/ECHS certificate bucket answers S3 AccessDenied (403) to
+# a GET, in a browser too and with NABH's page as referer: NABH's portal serves those files by signed link only, and
+# external/nabh_accredited/parse.py drops the signature. hope.qcin.org:5004/Reportviewer.aspx answers "Invalid
+# Request, url failed !!" without the portal's query string. Their cites link the list's own search page instead.
+DEAD_ENTRY_HOSTS: frozenset[str] = frozenset({
+    "annovatech-echscghs-2024.s3.ap-south-1.amazonaws.com", "hope.qcin.org:5004",
+})
+# Each list's own page a reader can search, from the "Page" line of its external/<source>/README.md. NMC's entry link
+# is its JSON endpoint, which a phone shows as raw JSON, so NMC cites link the list's page as well.
+LIST_PAGE: dict[str, str] = {
+    "nabh": "https://nabh.co/find-a-healthcare-organisation/",
+    "nmc": "https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-mbbs",
+}
+JSON_ENTRY_URLS: frozenset[str] = frozenset({"https://nmc.org.in/college-courses/list"})
+
+
+def cite_url(list_key: str | None, url: str | None) -> tuple[str | None, bool]:
+    """(the link a cite shows, whether that link opens the entry itself) for one list row's evidence url.
+
+    An entry link that cannot open (not an http link, a DEAD_ENTRY_HOSTS host, a JSON endpoint) becomes the list's
+    own search page when it has one, else no link. The cite keeps its text, source and date, so the reader still has
+    the list name, the entry number and the date it was read.
+    """
+    if (url and url.startswith(("https://", "http://")) and urlsplit(url).netloc not in DEAD_ENTRY_HOSTS
+            and url not in JSON_ENTRY_URLS):
+        return url, True
+    return LIST_PAGE.get(list_key or ""), False
+
+
+# OpenStreetMap and Wikidata matches (derived/v2 witnesses value_text "osm high, 5.63 km"): the tier is our match
+# confidence, so the page says what the match means instead. A conflict-tier match has the same name but a point far
+# from the listing's (model/v2/assemble/acommon.py: "conflict tier: location warning").
+OSM_MATCH = re.compile(r"^(osm|wikidata) (high|medium|conflict), ([\d.]+) km$")
+OSM_SOURCE = {"osm": "OpenStreetMap", "wikidata": "Wikidata"}
+OSM_TEXT: dict[str, tuple[str, str]] = {
+    "match": ("{name}: on {src}, mapped {km} km from the listed point",
+              "{name}: {src} पर, लिस्टिंग के पते से {km} किमी पर दर्ज"),
+    "conflict": ("{name}: on {src} under the same name, but mapped {km} km from the listed point; check the address",
+                 "{name}: {src} पर इसी नाम से, पर लिस्टिंग के पते से {km} किमी दूर दर्ज; पता जाँच लें"),
+}
+
+
+def osm_text(name: str, value: str | None) -> tuple[str, str] | None:
+    """(English, Hindi) for an OSM/Wikidata match row, or None for a tag row such as "emergency=yes"."""
+    m = OSM_MATCH.match(value or "")
+    if not m:
+        return None
+    src, tier, km = m.groups()
+    return tuple(t.format(name=name, src=OSM_SOURCE[src], km=km)  # type: ignore[return-value]
+                 for t in OSM_TEXT["conflict" if tier == "conflict" else "match"])

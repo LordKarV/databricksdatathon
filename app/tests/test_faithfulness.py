@@ -356,6 +356,8 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
     elif kind == "count":  # how many items a list holds: '3' for three options
         ok = isinstance(stored, list) and number(shown) == len(stored)
+    elif kind == "likely":  # how many options in a list are in the Likely band: '2' in "2 of 3 options are Likely"
+        ok = isinstance(stored, list) and number(shown) == sum(o["band"] == "likely" for o in stored)
     elif kind == "atleast":  # 1 - prod(1 - p) as a capped percent: 'over 99%', 'under 1%' or 'N%' (#121)
         ok = capped_pct_ok(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
@@ -760,6 +762,45 @@ def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
     return [f"tie row does not show {missing}"] if missing else []
 
 
+def check_doubt(payload: dict, shown: set[str]) -> list[str]:
+    """WS1 1d: when option 1's map point may be wrong (location_doubt, #147), the readout names its address and,
+    when the engine has it, the time from the PIN centre (travel.alt)."""
+    o = (payload.get("options") or [None])[0]
+    if not o or not o.get("location_doubt"):
+        return []
+    need = ["options.0.address" if o.get("address") else "options.0.town"]
+    if (o.get("travel") or {}).get("alt"):
+        need += ["options.0.travel.alt.low", "options.0.travel.alt.high"]
+    return [f"location doubt: {x} not shown" for x in need if x not in shown]
+
+
+def test_location_doubt_line_on_the_readout(base_url, browser):
+    """WS1 1d on a payload with the #147 fields set (works before #147 merges): the amber line, marked, in en and hi."""
+    import copy
+    base = next(p for n, p in PAYLOADS if n.startswith("stub-trauma"))
+    payload = copy.deepcopy(base)
+    o = payload["options"][0]
+    o["location_doubt"] = True
+    o["travel"]["alt"] = {"minutes": 30, "low": 25, "high": 41, "from": "pin_centre"}
+    for lang in ("en", "hi"):
+        ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+        page = ctx.new_page()
+        page.route("**/api/plan", json_reply(payload))
+        page.add_init_script("localStorage.setItem('rs.lang', " + json.dumps(json.dumps(lang)) + ");"
+                             "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+                             " source: 'gps', t: Date.now(), label: null}))")
+        try:
+            page.goto(base_url + "/#/")
+            page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+            page.wait_for_selector("article.card .doubt")
+            got = page.evaluate(COLLECT_JS)
+        finally:
+            ctx.close()
+        shown = {it["path"] for it in got["items"]}
+        errs = check_doubt(payload, shown) + check_screen(f"doubt/{lang}", payload, got, {"values_checked": 0})
+        assert not errs, errs[:10]
+
+
 # ---------- the test ----------
 @pytest.mark.parametrize("name, payload", PAYLOADS, ids=[n for n, _ in PAYLOADS])
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
@@ -786,6 +827,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        errs += [f"plan: {e}" for e in check_doubt(payload, plan_shown)]
         # WS1 1c: the golden-hour sentence sits under the route strip, outside Route details, when the route has one
         it0 = payload.get("itinerary") or {}
         vd = None if it0.get("abstain") else (((it0.get("plans") or [{}])[0].get("vs_direct") or {}).get("text"))
@@ -795,13 +837,21 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             errs.append(f"plan: golden-hour sentence shown {main_vd} times outside Route details, vs_direct.text={bool(vd)}")
         # WS1 1b: the readout's receipt is option 1's first quote (a marked piece of it, cut at 60 characters), and
         # its "Why first" line is marked: why-not rows, ledger rows or the engine's rank rule.
+        # #171 review: the receipt is the first quote with no weak flag that is not a generic description (else the
+        # first, with its warning), cut at the last space at or before 60 characters.
         o0 = (payload.get("options") or [None])[0]
-        if o0 and o0["evidence"] and "options.0.evidence.0.quote" not in plan_shown:
-            errs.append("plan: receipt quote not shown")
-        receipt = page.evaluate("() => { const e = document.querySelector('#main .answer [data-f=\"options.0.evidence.0.quote\"]');"
-                                " return e ? e.textContent : null; }")
-        if o0 and o0["evidence"] and not (receipt and len(receipt) <= 60 and o0["evidence"][0]["quote"].startswith(receipt)):
-            errs.append(f"plan: receipt {receipt!r} is not the first 60 characters of the first quote")
+        if o0 and o0["evidence"]:
+            j = next((k for k, e in enumerate(o0["evidence"]) if not any(f.get("weak") for f in e.get("flags", []))
+                      and e.get("field") != "description"), 0)
+            q = o0["evidence"][j]["quote"]
+            want = q if len(q) <= 60 else (q[:q.rfind(" ", 0, 61)] if q.rfind(" ", 0, 61) > 0 else q[:60]).rstrip()
+            receipt = page.evaluate("p => { const e = document.querySelector(`#main .answer [data-f=\"${p}\"]`);"
+                                    " return e ? e.textContent : null; }", f"options.0.evidence.{j}.quote")
+            if receipt != want:
+                errs.append(f"plan: receipt {receipt!r}, expected evidence {j} cut at a word: {want!r}")
+            for m, f in enumerate(o0["evidence"][j].get("flags", [])):
+                if f"options.0.evidence.{j}.flags.{m}.text" not in plan_shown:
+                    errs.append(f"plan: receipt quote's warning {m} not shown")
         why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
         if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
             errs.append("plan: no marked 'Why first' line on the readout")
@@ -909,6 +959,12 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("compare", payload, got, report)
         errs += [f"compare: {e}" for e in check_number_wording(page.inner_text("#main"))]
+        # #140 3e: band counts, never a "Chance ... checks out" line, on Compare
+        kinds = {(it["path"], it["kind"]) for it in got["items"]}
+        if payload["options"] and not {("options", "likely"), ("options", "count")} <= kinds:
+            errs.append("compare: the Likely count line is not shown")
+        if re.search(r"\bchance\b", page.inner_text("#main"), re.IGNORECASE):
+            errs.append("compare: a 'chance' label is still shown")
         errs += check_quotes("compare", payload, got["items"], claims, report)
         shown = {it["path"] for it in got["items"]}
         for i in range(len(payload["options"])):
@@ -1169,8 +1225,15 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
         page.locator(f"[data-svc={payload['query']['service']}]").first.click()
         page.wait_for_selector("text=Suggested route")
         got = page.evaluate(COLLECT_JS)
+        route_text = page.evaluate("() => document.querySelector('#h-route').closest('section').textContent")
     finally:
         ctx.close()
+    # #140 3e: the route says "score", never "chance"; its totals name their assumption; windows count from departure
+    assert not re.search(r"\bchance\b", route_text, re.IGNORECASE), f"{name}: 'chance' on the route"
+    if any(p["totals"].get("minutes_to_definitive") is not None for p in payload["itinerary"]["plans"]):
+        assert "Score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
+    if any(p["window_checks"] for p in payload["itinerary"]["plans"]):
+        assert "counted from when the patient leaves" in route_text
     shown = {it["path"] for it in got["items"]}
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"

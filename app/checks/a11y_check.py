@@ -30,6 +30,7 @@ BASE = f"http://127.0.0.1:{PORT}"
 AXE_JS = (Path(axe_playwright_python.__file__).parent / "axe.min.js").read_text()
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]  # spec section 7
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
+PUSA = {"latitude": 25.6, "longitude": 85.95, "accuracy": 40}  # #140 hero: location doubt on option 1
 GAYA = {"latitude": 24.79, "longitude": 85.0, "accuracy": 40}  # C-section: option 1 outside the 60-min window
 MOHANIA = {"latitude": 25.15, "longitude": 83.68, "accuracy": 40}
 BAHRAICH = {"latitude": 27.57, "longitude": 81.6, "accuracy": 40}
@@ -424,10 +425,12 @@ def fold_checks(browser) -> dict:
     out = {}
     for w, h in FOLD_VIEWPORTS:
         for lang in ("en", "hi"):
-            # Gaya and Mohania C-section: option 1 is outside the window, so the window-miss panel sits above the card
+            # Pusa trauma: the hero, whose readout also carries the location-doubt, receipt and "Why first" lines.
+            # Gaya and Mohania C-section and Bahraich burns: option 1 is outside the window (Bahraich also abstains).
             for service, geo, tag in (("trauma_emergency", SITAMARHI, ""), ("dialysis", SITAMARHI, ""),
+                                      ("trauma_emergency", PUSA, "pusa_"),
                                       ("emergency_csection", GAYA, "gaya_"), ("emergency_csection", MOHANIA, "mohania_"),
-                                      ("burn_care", BAHRAICH, "bahraich_")):  # abstains, and misses the window
+                                      ("burn_care", BAHRAICH, "bahraich_")):
                 ctx = browser.new_context(viewport={"width": w, "height": h}, geolocation=geo,
                                           permissions=["geolocation"], is_mobile=True, device_scale_factor=1)
                 page = ctx.new_page()

@@ -622,6 +622,51 @@ def test_nabh_cites_say_which_kind_of_entry():
         assert nabh and want in nabh[0]["text"] and nabh[0]["url"]
 
 
+def test_every_cite_link_is_on_a_checked_host():
+    """#166 review: every cite and NABH "Official lists" link is an https link to a host whose entry links were opened
+    in a browser (ledger_terms.CITE_HOSTS), never to a host whose entry links fail (the CGHS/ECHS bucket answers 403)
+    and never "#" or "Not Found"."""
+    from urllib.parse import urlsplit
+
+    from facts.ledger_terms import CITE_HOSTS, DEAD_ENTRY_HOSTS
+    urls = [v[1] for v in ENGINE.cites.values()] + [e[2] for e in ENGINE.fac["nabh"] if e]
+    hosts = {urlsplit(u).netloc for u in urls if u}
+    assert all(u is None or u.startswith("https://") for u in urls), {u for u in urls if u and "://" not in u}
+    assert hosts <= CITE_HOSTS, hosts - CITE_HOSTS
+    assert not hosts & DEAD_ENTRY_HOSTS
+
+
+def test_dead_entry_links_open_the_lists_own_page():
+    """Gaya dialysis option 1 (Arsh): its CGHS/ECHS certificate link answers 403, so the cite links NABH's search
+    page, says the link is not the entry, and keeps the entry number, the list and the date it was read. NMC cites
+    link NMC's page, not its JSON endpoint."""
+    from facts.ledger_terms import LIST_PAGE
+    o = ENGINE.plan("dialysis", 24.79, 85.0, 40, "gps")["options"][0]
+    assert "Arsh" in o["name"]
+    cts = [ct for c in o["contributions"] for ct in c.get("cites", []) if "NABH" in (ct["source"] or "")]
+    assert cts and all(ct["url"] == LIST_PAGE["nabh"] and ct["url_is_entry"] is False for ct in cts)
+    assert all("HOS/2023/C0745" in ct["text"] and ct["fetched_date"] for ct in cts)
+    assert [x["url"] for x in o["public_lists"] if x["list"] == "nabh"] == [LIST_PAGE["nabh"]]
+    nmc = [v for v in ENGINE.cites.values() if "nmc.org.in" in (v[1] or "")]
+    assert nmc and all(v[1] == LIST_PAGE["nmc"] and v[8] is False for v in nmc)
+    entries = [v for v in ENGINE.cites.values() if "portal.nabh.co" in (v[1] or "")]
+    assert entries and all(v[8] is True for v in entries)
+
+
+def test_osm_cites_say_where_it_is_mapped_in_en_and_hi():
+    """#166 review: an OpenStreetMap match reads "<name>: on OpenStreetMap, mapped 5.63 km from the listed point", not
+    our match tier ("osm high"), with a Hindi line."""
+    from facts.ledger_terms import osm_text
+    assert osm_text("Vijay Marie Hospital", "osm high, 5.63 km") == (
+        "Vijay Marie Hospital: on OpenStreetMap, mapped 5.63 km from the listed point",
+        "Vijay Marie Hospital: OpenStreetMap पर, लिस्टिंग के पते से 5.63 किमी पर दर्ज")
+    assert "check the address" in osm_text("X", "wikidata conflict, 2.1 km")[0]
+    assert osm_text("X", "emergency=yes") is None
+    osm = [v for v in ENGINE.cites.values() if "openstreetmap.org" in (v[1] or "") or "wikidata.org" in (v[1] or "")]
+    assert osm and not any(re.search(r"\b(osm|wikidata) (high|medium|conflict)\b", v[0]) for v in osm)
+    assert all(v[7] for v in osm if " km from the listed point" in v[0])
+
+
 def test_restricted_lists_are_only_shown_per_facility():
     """The cite table holds only rows a served pair's ledger cites (never a whole NABH, NMC or MoHFW list), and an
     option shows only the cites of its own ledger rows."""
