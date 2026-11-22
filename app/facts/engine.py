@@ -36,6 +36,12 @@ STRINGS = {
     "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
+# Area district brief (WS4 4b): where each number comes from, for the payload and the page's Sources line.
+NEED_SOURCE = {"people": "WorldPop 2025 (CC BY 4.0), summed over the LGD district polygon",
+               "listings": "the provided facility dataset", "nfhs": "NFHS-5 district fact sheets (2019-21)"}
+LAQSHYA_SOURCE = "NHSRC LaQshya master data, 08-04-2026"
+PMNDP_SOURCE = "NHSRC, PMNDP data (nhsrcindia.org/pmndp-map-table)"
+N_GOV = 5  # government-list rows on the Area brief
 RADIUS_KM = 150  # straight-line search radius
 N_OPTIONS = 3
 N_TRAVEL = 40  # travel estimates for the nearest candidates only
@@ -262,6 +268,7 @@ class Engine:
         self.cites, self.list_names = words.get("cites", {}), words.get("lists", {})
         self.fac.setdefault("nabh", [None] * len(self.fac["id"]))
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
+        self.brief = facts.get("district_brief")  # older exports: no district brief, the Area page leaves it out
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
         # The score a pair gets once a second source confirms it (the gold override): used for "what would change".
         self.p_confirmed = min((p.score for rows in self.pairs.values() for p in rows if p.status == "verified_true"),
@@ -845,7 +852,8 @@ class Engine:
         calls = sorted(gains.items(), key=lambda t: (-len(t[1]), self._f("name", t[0])))[:10]
         return {
             "query": {"service": service, "service_label": {"en": label, "hi": info["label_hi"]}},
-            "area": {"district": district.title(), "state": state.title(), "window_min": window},
+            "area": {"district": district.title(), "state": state.title(), "window_min": window,
+                     "need": self._need(district, state), "gov_list": self._gov_list(service, district, state)},
             "as_of": self.meta["as_of"],
             "summary": {"n_pins": len(rows), "n_without_option": sum(r["first"] is None for r in rows),
                         "access_now": round(n_now / n, 2), "access_if_confirmed": round(n_conf / n, 2),
@@ -857,8 +865,55 @@ class Engine:
             "ten_calls": [{"rank": r + 1, "facility_id": self._f("id", fi), "name": self._f("name", fi),
                            "phone_kind": self._phone_kind(fi), "areas": len(p), "access_gain": round(len(p) / n, 3)}
                           for r, (fi, p) in enumerate(calls)],
+            "headline": self._headline(calls, len(rows), n_now, window),
             "meta": self._meta(),
         }
+
+    def _lgd(self, district: str, state: str) -> str | None:
+        return (self.brief or {}).get("key", {}).get(f"{state}|{district}".upper())
+
+    def _need(self, district: str, state: str) -> dict | None:
+        """People, listings per million (against India's) and NFHS-5 birth rates for the area's LGD district. The
+        NFHS-5 numbers are a district survey estimate, not facility data; None where a value is suppressed."""
+        row = (self.brief or {}).get("need", {}).get(self._lgd(district, state) or "")
+        if not row:
+            return None
+        name, people, listings, per_m, nfhs_district, cs, pub, priv, inst = row
+        return {"lgd_district": name, "population": people, "listings": listings, "listings_per_million": per_m,
+                "india_per_million": self.brief["india_per_million"], "nfhs_district": nfhs_district,
+                "csection_pct": cs, "public_csection_pct": pub, "private_csection_pct": priv,
+                "institutional_pct": inst, "source": NEED_SOURCE}
+
+    def _gov_list(self, service: str, district: str, state: str) -> list[dict]:
+        """Government lists for this care in the area: LaQshya Maternity OT certificates in the district for a
+        C-section (valid ones first, latest expiry first), PMNDP's state count for dialysis; [] otherwise."""
+        b = self.brief or {}
+        if service == "emergency_csection":
+            today = datetime.now(UTC).date().isoformat()
+            rows = b.get("laqshya", {}).get(self._lgd(district, state) or "", [])
+            rows = sorted(rows, key=lambda r: r[3], reverse=True)
+            rows = sorted(rows, key=lambda r: r[3] < today)  # stable: valid ones first, each part latest expiry first
+            return [{"list": "laqshya", "name": name, "what": f"LaQshya certificate, {dept}", "department": dept,
+                     "certified": cert, "valid_to": valid, "expired": valid < today, "status": status,
+                     "source": LAQSHYA_SOURCE} for name, dept, cert, valid, status in rows[:N_GOV]]
+        key = re.sub(r"^the ", "", state.lower()).replace("&", "and")
+        if service == "dialysis" and key in b.get("pmndp", {}):
+            centres, working, total, fetched = b["pmndp"][key]
+            return [{"list": "pmndp", "name": f"PMNDP, {state.title()}",
+                     "what": f"{centres} government dialysis centres working in {working} of {total} districts",
+                     "centres": centres, "districts_working": working, "districts_total": total, "fetched": fetched,
+                     "valid_to": None, "expired": False, "source": PMNDP_SOURCE}]
+        return []
+
+    @staticmethod
+    def _headline(calls: list, n: int, now: int, window: int) -> dict:
+        """The Area headline from ten_calls[0]: if it confirms, k of n sampled PIN areas (now `now`) have care in the
+        window; or why there is no such call: every area is covered already, or nothing is claimed in the window."""
+        if calls:
+            _, gained = calls[0]
+            return {"kind": "if_confirms", "rank": 1, "k": now + len(gained), "n": n, "now": now, "window_min": window}
+        return {"kind": "all_covered" if n and now == n else "none_in_window", "n": n, "now": now,
+                "window_min": window}
 
     def _public_pin(self, service: str, lat: float, lon: float) -> dict | None:
         best = self._public_near(service, lat, lon)

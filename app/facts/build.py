@@ -660,6 +660,57 @@ def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
     return out
 
 
+GOV = Path(__file__).resolve().parent / "gov"  # small committed inputs, written by gov/build_gov.py (WS4 4b, #140)
+GEO = ROOT / "viz" / "geography" / "data"  # committed district tables of the data stories (viz/geography)
+
+
+def moved_pins() -> dict[str, list[str]]:
+    """pin_districts() as committed in gov/pin_district_moved.csv, so a clean checkout gets the LGD district too."""
+    m = pd.read_csv(GOV / "pin_district_moved.csv", dtype=str)
+    return {p: [d, s] for p, d, s in zip(m.pin, m.district, m.state, strict=True)}
+
+
+def _num(x: object, nd: int) -> float | None:
+    return None if pd.isna(x) else round(float(x), nd)
+
+
+def district_brief() -> dict:
+    """The Area page's district brief (WS4 4b): need, by LGD district, from the committed viz/geography tables, and
+    the government lists. WorldPop people and listings per million (s1), NFHS-5 caesarean and institutional birth
+    rates (s3, by the NFHS-5 district s1 maps it to), LaQshya Maternity OT certificates and PMNDP state counts (gov/).
+    Keys: "STATE|DISTRICT" in India Post spelling -> dist_lgd; dist_lgd -> rows."""
+    lgd = pd.read_csv(GOV / "district_lgd.csv")
+    s1 = pd.read_csv(GEO / "s1_district.csv")
+    s3 = pd.read_csv(GEO / "s3_district.csv").set_index(["nfhs_state", "nfhs_district"])
+    s1_numbers = json.loads((GEO / "s1_numbers.json").read_text())
+    pub, priv = (f"births_in_a_{k}_fac_that_were_delivered_by_csection_5y_pct" for k in ("public", "private"))
+    need = {}
+    for r in s1.itertuples(index=False):
+        n = s3.loc[(r.nfhs_state, r.nfhs_district)] if (r.nfhs_state, r.nfhs_district) in s3.index else None
+        nf = [None] * 5 if n is None else [
+            r.nfhs_district, _num(n.births_delivered_by_csection_5y_pct, 1),
+            _num(n[pub], 1) if n[f"{pub}_flag"] == "ok" else None,
+            _num(n[priv], 1) if n[f"{priv}_flag"] == "ok" else None, _num(n.institutional_birth_5y_pct, 1)]
+        need[str(r.dist_lgd)] = [r.dtname, round(r.pop), int(r.records), _num(r.per_m, 2), *nf]
+    key = {f"{st}|{d}".upper(): str(c) for d, st, c in zip(lgd.district, lgd.state, lgd.dist_lgd, strict=True)}
+    # LaQshya rows -> the LGD district viz/geography/s3_csection.py matched them to (within their NFHS-5 state)
+    code = {(st, d): str(c) for c, d, st in zip(s1.dist_lgd, s1.dtname, s1.nfhs_state, strict=True)}
+    lq = pd.read_csv(GOV / "laqshya.csv").dropna(subset=["lgd_district"])
+    laqshya: dict[str, list] = {}
+    for r in lq.itertuples(index=False):
+        c = code.get((r.nfhs_state, r.lgd_district))
+        if c:
+            laqshya.setdefault(c, []).append([r.name, r.department, r.certified, r.valid_to, r.status])
+    pm = pd.read_csv(GOV / "pmndp_state.csv")
+    pmndp = {k: [int(a), int(b), int(t), d] for k, a, b, t, d in zip(
+        pm.state_key, pm.functional_centres, pm.functional_districts, pm.total_districts, pm.fetched, strict=True)}
+    n_lq = sum(map(len, laqshya.values()))
+    print(f"district brief: {len(need)} LGD districts, {len(key)} India Post district names, "
+          f"{n_lq} LaQshya certificates in {len(laqshya)} districts, {len(pmndp)} PMNDP states")
+    return {"key": key, "need": need, "india_per_million": round(s1_numbers["national_per_m"], 1),
+            "laqshya": laqshya, "pmndp": pmndp}
+
+
 PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
 
 
@@ -726,6 +777,7 @@ def main() -> None:
         "claims": claim_rows,
         "claim_flags": claim_fl,
         "pins": pins(),
+        "district_brief": district_brief(),
     }
     # The hash covers the data only (not built_at or where it was read from), so it changes only when the data does
     # and a rebuild of derived/v1 that matches the repo gives the same hash (#86 step 3).
@@ -736,11 +788,11 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (out / "facts.sha").write_text(facts_hash + "\n")
-    # Outside facts.json and its hash: the file comes from git-ignored data, so a derived/v1 rebuild still matches.
-    moved = pin_districts(facts["pins"])
+    # Outside facts.json and its hash, as before the LGD map was committed (gov/pin_district_moved.csv).
+    moved = moved_pins()
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
-    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
-          if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
+    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in "
+          "(app/facts/gov/pin_district_moved.csv)")
     guessed = Counter(s for s, how in zip(facts["pins"]["state"], facts["pins"]["district_from"], strict=True) if how)
     print(f"pins: {sum(guessed.values())} PINs with no district in the gazetteer kept, district from the nearest PIN "
           f"of the same state ({', '.join(f'{s.title()} {n}' for s, n in guessed.most_common())})")
