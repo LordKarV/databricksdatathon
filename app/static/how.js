@@ -57,7 +57,7 @@
 
     return `<a class="btn" href="#/">&larr; Start</a>
     <h1 tabindex="-1">How this works</h1>
-    <p>Referral Saathi reads ${n('records')} facility records ${src('records')}, checks each claim against the
+    <p>Bharosa reads ${n('records')} facility records ${src('records')}, checks each claim against the
       sentence it came from, and tells you whom to call first and why. Every number on this page links to the file
       it comes from.</p>
     <p class="small">Scores: ${F('facts.scores_source.value', h.facts.scores_source.value)} ${src('scores_source')}.</p>

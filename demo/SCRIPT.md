@@ -17,7 +17,7 @@ real hospital; we moved them. A chatbot cannot see any of this: asked whether a 
 [REPORT.md, cleaning/geo_identity/summary.json, audit/capabilities/aiq2_rerun_20261122.json]
 
 **0:45 the answer.** Open the app at the GPS point and tap "C-section, emergency". "The nearest listing, City
-Hospital, is [300 metres] away. Referral Saathi does not send her there, and it says why: its listing never
+Hospital, is [300 metres] away. Bharosa does not send her there, and it says why: its listing never
 mentions an operating theatre, and its map point may be wrong. Instead: BNK Hospital, [4] minutes, rated Likely.
 The receipt is on the card, from its own listing: 'Performs Lower Segment Caesarean Section'. And it ranks first
 because it also shows evidence of blood transfusion, which the next hospital does not."

@@ -1,5 +1,5 @@
 {
-  "title": "Referral Saathi storybook gallery",
+  "title": "Bharosa storybook gallery",
   "root": "/Users/karthikvattem/projects/datathon",
   "paths": "repo-relative; join with root",
   "built": "2026-11-21",
@@ -82,7 +82,7 @@
       "id": "sources_s3_paraphrase",
       "theme": "Who said so?",
       "headline": "Only 5.4% of claim sentences (346 of 6,364 tests, 95% CI 4.4 to 6.5) appear near-verbatim on a page from the record's own source list; even on the facility's own site only 9.6% (277 of 2,891) do",
-      "presenter_line": "The source list looks like citations but behaves like search results. So Referral Saathi quotes the crawled page text and labels the record's own sentences as a summary, not a quote.",
+      "presenter_line": "The source list looks like citations but behaves like search results. So Bharosa quotes the crawled page text and labels the record's own sentences as a summary, not a quote.",
       "primary_chart": "viz/sources/s3_paraphrase.png",
       "charts": [
         {

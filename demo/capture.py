@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -38,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(__file__).resolve().parent / "out"
 LIVE = "https://referral-saathi-7474649134616784.aws.databricksapps.com"
 PROFILE = Path.home() / ".cache" / "referral-saathi-demo-profile"
+APP_NAME = re.compile(r"Bharosa|Referral Saathi")  # the live app shows the old name until it is redeployed
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 MOHANIA = "25.15, 83.68"  # NH-19 near Mohania, benchmark q29 (APP_EXPERIENCE 10.5)
 VIEWPORT = {"width": 360, "height": 780}
@@ -208,13 +210,13 @@ def start_local() -> tuple[subprocess.Popen, str]:
 
 def wait_for_login(page: Page, base: str) -> None:
     page.goto(base + "/")
-    if page.locator("text=Referral Saathi").count() and base in page.url:
+    if page.get_by_text(APP_NAME).count() and base in page.url:
         return
     print("\nThe app is behind the workspace login. Log in in the browser window (by hand), wait until the app's "
           "start screen shows, then press Enter here.")
     input()
     page.goto(base + "/")
-    page.get_by_text("Referral Saathi").first.wait_for(timeout=60_000)
+    page.get_by_text(APP_NAME).first.wait_for(timeout=60_000)
 
 
 def main() -> int:

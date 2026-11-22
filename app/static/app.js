@@ -1626,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('#skip').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
   applyPrefs();
   try { await loadStrings(); } catch {
-    $('#main').innerHTML = '<h1>Referral Saathi</h1><p>Could not load the app. In an emergency call <a href="tel:108">108</a>.</p>';
+    $('#main').innerHTML = '<h1>Bharosa</h1><p>Could not load the app. In an emergency call <a href="tel:108">108</a>.</p>';
     return;
   }
   state.lang = pickLang();

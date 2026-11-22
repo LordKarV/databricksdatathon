@@ -1,4 +1,4 @@
-# Storybook: 15 data stories for Referral Saathi
+# Storybook: 15 data stories for Bharosa
 
 This is the curated set of charts the datathon presentation, the demo, the app's "How this works"
 page, the model card and the district planner dashboard draw from. It picks 15 of the 37 verified
@@ -85,7 +85,7 @@ a page from the record's own source list; even on the facility's own site only 9
 
 Chart: `viz/sources/s3_paraphrase.png`.
 
-Presenter: "The source list looks like citations but behaves like search results. So Referral Saathi
+Presenter: "The source list looks like citations but behaves like search results. So Bharosa
 quotes the crawled page text and labels the record's own sentences as a summary, not a quote."
 
 Caveat: a stratified sample of 385 URLs (258 fetched), so 5.4% is a pooled sample rate. Strict

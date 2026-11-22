@@ -1,4 +1,4 @@
-# Referral Saathi app
+# Bharosa app
 
 FastAPI serving one plain HTML page and a service worker. Answers come from model v2 (`derived/v2`), built into
 `app/facts/out` at deploy time by `facts/build.py` and served by `facts/engine.py` (`meta.stub = false`). On
