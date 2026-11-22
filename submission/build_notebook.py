@@ -124,7 +124,7 @@ if not (DATA_ROOT / "derived" / "v1" / "MANIFEST.json").is_file():
     raise FileNotFoundError(f"{DATA_ROOT}/derived/v1/MANIFEST.json not found: check data_root")
 os.environ["DATATHON_ROOT"] = str(DATA_ROOT)  # the app builds below (subprocesses) read the same folder
 V1 = DATA_ROOT / "derived" / "v1"
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/submission/"
 print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name,
       "| derived/v1 from", "the repository" if DATA_ROOT == ROOT else DATA_ROOT)
 rebuilt = re.search(r"On Free Edition serverless it gave [^.]+\\.", (ROOT / "submission/README.md").read_text())
@@ -676,7 +676,10 @@ b = ind["band_as_score"]
 print(f"The band as a score: AUROC {auc_txt(b['band_ordinal'])}; LIKELY against the rest {auc_txt(b['likely_vs_rest'])}")
 print("Services with no contradicted TEST pair:", ", ".join(ind["services_with_0_test_negatives"]))
 ex = ind["existence_head"]
-print(f"Exists: labels {ex['counts']}; with the DEV rule, AUROC {auc_txt(ex['y_E_rule'])}")
+# extras.json is the scored-TEST script's output (evaluate.py); README and the model card cite its interval.
+ex_e = json.loads((ROOT / "model/gold/v3/test_eval/extras.json").read_text())["existence_head"]["y_E_rule"]
+assert ex_e["auroc"] == ex["y_E_rule"]["auroc"]
+print(f"Exists: labels {ex['counts']}; with the DEV rule, AUROC {auc_txt(ex_e)} (extras.json)")
 for split, r in ind["unlikely_by_route"].items():
     if split != "t_U":
         print(f"{split} Unlikely right (contradicted): p <= {ind['unlikely_by_route']['t_U']} route "
@@ -1087,8 +1090,9 @@ md("""
 **For planners: the Genie agent and the AI/BI dashboard.** Both run in the team workspace over the Unity Catalog
 schema `workspace.referral_saathi`, which holds the same v2 scores the app reads.
 - **Genie agent** (`databricks/genie/`, built as code by `space.py`): ask in plain English where facilities show
-  public evidence of a service, how strong it is, and which districts have none. Its answers cite claim ids. The
-  space's test questions are asked through the Conversation API and compared with our own SQL
+  public evidence of a service, how strong it is, and which districts have none. Its answers cite claim ids. Two
+  measures: the native benchmark (12 questions, `benchmark_results.json`), which is the accuracy figure, and an
+  earlier smoke test that asks 7 questions through the Conversation API and compares them with our own SQL
   (`test_space.py`, results in `test_results.json`).
 - **District planner dashboard** (`databricks/dashboard/`, built by `build_dashboard.py`): for a state, district
   and service, how thin the evidence is, how far people are from confirmed care, and which records to check by
@@ -1100,9 +1104,14 @@ from IPython.display import Image
 
 space = json.loads((ROOT / "databricks/genie/genie_space.json").read_text())
 gt = json.loads((ROOT / "databricks/genie/test_results.json").read_text())
+bench = json.loads((ROOT / "databricks/genie/benchmark_results.json").read_text())
 print(f"Genie agent {(ROOT / 'databricks/genie/space_id.txt').read_text().strip()}: "
-      f"{len(space['data_sources']['tables'])} tables; {sum(t['auto_pass'] for t in gt)} of {len(gt)} test questions "
-      "match our SQL (databricks/genie/test_results.json)")
+      f"{len(space['data_sources']['tables'])} tables")
+print("Native benchmark (databricks/genie/benchmark_results.json): " + "; then ".join(
+    f"{r['num_correct']} of {r['num_questions']} on run {r['eval_run_id']}" for r in bench["runs"])
+      + " (the last run is the live space)")
+print(f"Smoke test (Conversation API, {len(gt)} questions, databricks/genie/test_results.json): "
+      f"{sum(t['auto_pass'] for t in gt)} of {len(gt)} match our SQL")
 for t in gt:
     print(f"  {'PASS' if t['auto_pass'] else 'DIFF'}  {t['question']}")
 dash = json.loads((ROOT / "databricks/dashboard/planner_dashboard.json").read_text())

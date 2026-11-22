@@ -926,6 +926,7 @@ function areaHtml(a) {
   return `<h2>${th('area.plan_h', {label: L})}</h2>
     <p>${F('area.area.district', a.area.district)}, ${F('area.area.state', a.area.state)}. ${th('area.n_pins', {n: N('area.summary.n_pins', S.n_pins)})}</p>
     <p><strong>${th('area.without', {k: N('area.summary.n_without_option', S.n_without_option), n: N('area.summary.n_pins', S.n_pins), w: W})}</strong></p>
+    ${briefHtml(a, W)}
     <div class="table-scroll" tabindex="0" role="region" aria-label="${th('area.access_caption_short')}"><table class="ledger"><caption>${th('area.access_caption', {label: L, w: W})}</caption><tbody>
       <tr><th scope="row">${th('area.row_now')}</th><td class="num">${n('summary.access_now')}</td></tr>
       <tr><th scope="row">${th('area.row_confirmed')}</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
@@ -944,6 +945,54 @@ function areaHtml(a) {
     <div class="pair section"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">${th('area.csv')}</a>
       <button type="button" class="btn" id="area-print">${th('area.print')}</button></div>
     ${a.meta && a.meta.stub ? `<p class="note">${th('area.stub')}</p>` : ''}`;
+}
+// WS4 4b: the district brief. People and listings per million against India's; for birth care the NFHS-5 rates, a
+// district survey estimate and not facility data; the government lists for this care; the one call that would change
+// the most, or why there is none; and where each number comes from. Every number is a payload value.
+function briefHtml(a, W) {
+  const nd = a.area.need, gov = a.area.gov_list || [], h = a.headline, D = 'area.area.need';
+  const svcKey = a.query.service, lines = [], src = [];
+  const en = html => `<span lang="en">${html}</span>`;  // names and source credits are English in both languages
+  if (nd) {
+    lines.push(th('area.need.people', {people: N(D + '.population', nd.population.toLocaleString('en-IN')),
+      district: F(D + '.lgd_district', nd.lgd_district)}));
+    lines.push(th('area.need.listings', {n: N(D + '.listings', nd.listings),
+      per_m: N(D + '.listings_per_million', nd.listings_per_million), india: N(D + '.india_per_million', nd.india_per_million)}));
+    src.push(en(F(D + '.source.people', nd.source.people)), en(F(D + '.source.listings', nd.source.listings)));
+    if (has102(svcKey) && nd.csection_pct != null) {
+      const parts = [th('area.need.cs', {cs: N(D + '.csection_pct', nd.csection_pct)})];
+      const pub = nd.public_csection_pct, priv = nd.private_csection_pct;  // NFHS-5 suppresses small samples: null
+      const pv = {pub: N(D + '.public_csection_pct', pub), priv: N(D + '.private_csection_pct', priv)};
+      if (pub != null || priv != null) parts.push(th(priv == null ? 'area.need.cs_public' : pub == null ? 'area.need.cs_private' : 'area.need.cs_split', pv));
+      if (nd.institutional_pct != null) parts.push(th('area.need.inst', {inst: N(D + '.institutional_pct', nd.institutional_pct)}));
+      lines.push(`${th('area.need.nfhs', {district: F(D + '.nfhs_district', nd.nfhs_district)})} ${parts.join(' ')}`);
+      src.push(en(F(D + '.source.nfhs', nd.source.nfhs)));
+    }
+  }
+  const govLines = gov.map((g, j) => {
+    const G = `area.area.gov_list.${j}`;
+    if (g.list === 'pmndp') {
+      return th('area.gov.pmndp', {centres: N(G + '.centres', g.centres), working: N(G + '.districts_working', g.districts_working),
+        total: N(G + '.districts_total', g.districts_total), state: F('area.area.state', a.area.state)});
+    }
+    const status = g.status && g.status !== 'Certified' ? ` (${F(G + '.status', g.status)})` : '';
+    return th(g.expired ? 'area.gov.laqshya_expired' : 'area.gov.laqshya', {name: en(F(G + '.name', g.name)),
+      date: F(G + '.valid_to', g.valid_to)}) + status;
+  });
+  [...new Set(gov.map(g => g.source))].forEach(x => src.push(en(F(`area.area.gov_list.${gov.findIndex(g => g.source === x)}.source`, x))));
+  const govHtml = govLines.length ? `<ul>${govLines.map(x => `<li>${x}</li>`).join('')}</ul>`
+    : svcKey === 'emergency_csection' ? `<p>${th('area.gov.none')}</p>` : '';
+  const head = !h ? '' : h.kind === 'if_confirms' && a.ten_calls.length
+    ? th('area.need.headline', {name: en(F('area.ten_calls.0.name', a.ten_calls[0].name)), k: N('area.headline.k', h.k),
+      n: N('area.headline.n', h.n), now: N('area.headline.now', h.now), w: N('area.headline.window_min', h.window_min)})
+    : th(h.kind === 'all_covered' ? 'area.need.headline_all' : 'area.need.headline_none',
+      {n: N('area.headline.n', h.n), w: N('area.headline.window_min', h.window_min)});
+  if (!lines.length && !govHtml && !head) return '';
+  return `<section id="area-brief" class="section" aria-labelledby="h-brief"><h2 id="h-brief">${th('area.need.h')}</h2>
+    ${lines.map(x => `<p>${x}</p>`).join('')}
+    ${govHtml ? `<h3>${th('area.gov.h')}</h3>${govHtml}` : ''}
+    ${head ? `<p><strong>${head}</strong></p>` : ''}
+    ${src.length ? `<p class="note">${th('area.need.sources', {list: src.join('; ')})}</p>` : ''}</section>`;
 }
 function areaScreen() {
   const s = svc(state.service);
@@ -1091,6 +1140,7 @@ function whyScreen(rank) {
       <div><dt>${th('why.where')}</dt><dd>${E(P + '.where_check', o.where_check)}</dd></div>
       ${o.website ? `<div><dt>${th('why.website')}</dt><dd>${F(`${P}.website.text.${state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'}`,
         o.website.text[state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'])}</dd></div>` : ''}
+      ${listsHtml(o, P)}
       ${o.flags.map((f, j) => `<div><dt>${th('why.warn')}</dt><dd class="warn">${icon('warn')}<span>${E(`${P}.flags.${j}`, f)}</span></dd></div>`).join('')}
       </dl></section>
 
@@ -1117,9 +1167,11 @@ function ledgerHtml(o, P, q) {
     const C = `${P}.contributions.${j}`;
     const label = rowLabel(c, C);
     const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
-    // the row's quotes go full width under it, so a 320 px screen never scrolls sideways
-    return `<tr${quotes ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
-      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}`;
+    const cites = (c.cites || []).map((x, k) => citeHtml(x, `${C}.cites.${k}`)).join('');
+    // the row's quotes and list entries go full width under it, so a 320 px screen never scrolls sideways
+    return `<tr${quotes || cites ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
+      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}
+      ${cites ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.cite.summary', {n: F(C + '.cites', c.cites.length, 'count')})}</summary>${cites}</details></td></tr>` : ''}`;
   }).join('');
   const unseen = o.not_observed || [];
   return `<table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(q)})}</caption>
@@ -1129,6 +1181,28 @@ function ledgerHtml(o, P, q) {
         ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
     </table>
     ${unseen.length ? `<p class="note">${th('why.not_observed', {list: unseen.map((x, j) => rowLabel(x, `${P}.not_observed.${j}`)).join('; ')})}</p>` : ''}`;
+}
+// WS4 4a: the official-list or OpenStreetMap row a ledger term rests on, with its link, its source and how often our
+// matches to that list were right. A NABH row says which kind of entry it is (an entry-level certificate or a CGHS/ECHS
+// empanelment is not accreditation); in Hindi that kind is the reviewed string and the entry number stays as listed.
+const enSpan = html => (state.lang === 'hi' ? `<span lang="en">${html}</span>` : html);
+function citeText(x, path) {
+  if (state.lang === 'hi' && x.tier && raw('why.cite.tier.' + x.tier) !== 'why.cite.tier.' + x.tier) {
+    return th('why.cite.tier.' + x.tier, {id: enSpan(F(path + '.id', x.id))});
+  }
+  return enSpan(F(path + '.text', x.text));
+}
+function citeHtml(x, path) {
+  const prec = x.precision_k != null && x.precision_n
+    ? ' ' + th('why.cite.precision', {k: N(path + '.precision_k', x.precision_k), n: N(path + '.precision_n', x.precision_n)}) : '';
+  return `<p class="cite">${citeText(x, path)}${th('punct.stop')}
+    ${x.url ? `<a href="${esc(x.url)}" rel="noopener noreferrer">${th('why.cite.link')}</a>` : ''}
+    <span class="note">${th('why.cite.from', {source: enSpan(F(path + '.source', x.source))})}${prec}</span></p>`;
+}
+function listsHtml(o, P) {
+  const lists = o.public_lists || [];
+  return lists.length ? `<div><dt>${th('why.cite.lists')}</dt><dd>${lists.map((x, j) => (x.text
+    ? citeText(x, `${P}.public_lists.${j}`) : enSpan(F(`${P}.public_lists.${j}.name`, x.name)))).join('; ')}</dd></div>` : '';
 }
 // How sure for NO SERVICE TEXT (derived/v2/README): never Likely, but its score still comes from the ledger's other
 // rows; the two that add most are named, so this line and the ledger agree.
