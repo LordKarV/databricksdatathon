@@ -124,7 +124,7 @@ if not (DATA_ROOT / "derived" / "v1" / "MANIFEST.json").is_file():
     raise FileNotFoundError(f"{DATA_ROOT}/derived/v1/MANIFEST.json not found: check data_root")
 os.environ["DATATHON_ROOT"] = str(DATA_ROOT)  # the app builds below (subprocesses) read the same folder
 V1 = DATA_ROOT / "derived" / "v1"
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
 print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name,
       "| derived/v1 from", "the repository" if DATA_ROOT == ROOT else DATA_ROOT)
 rebuilt = re.search(r"On Free Edition serverless it gave [^.]+\\.", (ROOT / "submission/README.md").read_text())
@@ -788,7 +788,7 @@ show(recommend("emergency_csection", 19.88, 75.34))   # Aurangabad district, Mah
 ''')
 
 code('''
-show(recommend("trauma_emergency", 25.15, 83.68))     # NH-19 near Mohania, Bihar: a multi-stop plan
+show(recommend("trauma_emergency", 24.79, 85.0))      # road accident near Gaya, Bihar: a multi-stop plan
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -853,34 +853,24 @@ simulated method finding, not as field evidence.
 """)
 
 code('''
-pc = ROOT / "validation/out/policy_compare.csv"
-if not pc.is_file():
-    print("REAL DATA policy comparison: pending (run validation/policy_compare.py, #93; its CSV is not committed yet).")
-    print("It will show, per policy (app, nearest, best on paper) at the demo places: answers, median travel minutes,")
-    print("how many first picks are inside the service's time window, how many are LIKELY, and the published DEV")
-    print("labels (confirmed or contradicted) where they exist. Real data, not simulated.")
-else:
-    d = pd.read_csv(pc)
-    d = d[d.facility.notna() & d.facility.ne("")]
-    print("REAL DATA at the demo places, not simulated; gold = published DEV labels only, so coverage is small")
-    display(d.groupby("policy").agg(answers=("service", "size"), median_minutes=("minutes", "median"),
-                                    in_window=("in_window", "sum"), likely=("band", lambda b: int((b == "LIKELY").sum())),
-                                    gold_confirmed=("gold", lambda g: int((g == "confirmed").sum())),
-                                    gold_contradicted=("gold", lambda g: int((g == "contradicted").sum()))))
+d = pd.read_csv(ROOT / "validation/out/policy_compare.csv")  # validation/policy_compare.py, #93
+d = d[d.facility.notna() & d.facility.ne("")]
+print(f"REAL DATA at {d.place.nunique()} demo places x {d.service.nunique()} services, not simulated "
+      "(validation/out/policy_compare.csv); gold = published DEV labels only, so coverage is small")
+display(d.groupby("policy").agg(answers=("service", "size"), median_minutes=("minutes", "median"),  # noqa: F821
+                                in_window=("in_window", "sum"), likely=("band", lambda b: int((b == "LIKELY").sum())),
+                                gold_confirmed=("gold", lambda g: int((g == "confirmed").sum())),
+                                gold_contradicted=("gold", lambda g: int((g == "contradicted").sum()))))
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("## 8. Data stories")
 
 code('''
-stories = ROOT / "viz" / "STORYBOOK.md"
-if stories.is_file():
-    heads = [ln.lstrip("# ").strip() for ln in stories.read_text().splitlines() if ln.startswith("## ")]
-    print("Data stories in viz/STORYBOOK.md:")
-    for head in heads:
-        print(" -", head)
-else:
-    print("The data stories (issue #53) are not in this version yet; this cell lists them once viz/ lands.")
+heads = [ln.lstrip("# ").strip() for ln in (ROOT / "viz/STORYBOOK.md").read_text().splitlines() if ln.startswith("## ")]
+print("Data stories in viz/STORYBOOK.md:")
+for head in heads:
+    print(" -", head)
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1091,6 +1081,37 @@ assert abs(100 * int(k.replace(",", "")) / int(n.replace(",", "")) - float(pct))
 print(f"Offline packs: the phone saves every state pack with a facility within {RADIUS_KM} km of the fix. Of "
       f"{n_pins} PIN centroids within {km} km of a state border, the nearest facility offering the service is in "
       f"another state for {pct}% of (PIN, service) pairs ({k} of {n}; app/README.md).")
+''')
+
+md("""
+**For planners: the Genie agent and the AI/BI dashboard.** Both run in the team workspace over the Unity Catalog
+schema `workspace.referral_saathi`, which holds the same v2 scores the app reads.
+- **Genie agent** (`databricks/genie/`, built as code by `space.py`): ask in plain English where facilities show
+  public evidence of a service, how strong it is, and which districts have none. Its answers cite claim ids. The
+  space's test questions are asked through the Conversation API and compared with our own SQL
+  (`test_space.py`, results in `test_results.json`).
+- **District planner dashboard** (`databricks/dashboard/`, built by `build_dashboard.py`): for a state, district
+  and service, how thin the evidence is, how far people are from confirmed care, and which records to check by
+  phone.
+""")
+
+code('''
+from IPython.display import Image
+
+space = json.loads((ROOT / "databricks/genie/genie_space.json").read_text())
+gt = json.loads((ROOT / "databricks/genie/test_results.json").read_text())
+print(f"Genie agent {(ROOT / 'databricks/genie/space_id.txt').read_text().strip()}: "
+      f"{len(space['data_sources']['tables'])} tables; {sum(t['auto_pass'] for t in gt)} of {len(gt)} test questions "
+      "match our SQL (databricks/genie/test_results.json)")
+for t in gt:
+    print(f"  {'PASS' if t['auto_pass'] else 'DIFF'}  {t['question']}")
+dash = json.loads((ROOT / "databricks/dashboard/planner_dashboard.json").read_text())
+print(f"Dashboard {(ROOT / 'databricks/dashboard/dashboard_id.txt').read_text().strip()}: "
+      f"{len(dash['datasets'])} datasets; pages: " + "; ".join(p["displayName"] for p in dash["pages"]))
+stills = sorted((ROOT / "demo/stills").glob("*.png")) if (ROOT / "demo/stills").is_dir() else []
+print(f"{len(stills)} stills in demo/stills/")
+for f in stills[:4]:
+    display(Image(filename=str(f), width=640))  # noqa: F821
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------

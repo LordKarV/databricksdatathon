@@ -57,7 +57,5 @@ it needs no simulation output. The CSV header gives the seeds, cases and commit.
 
 ## Still to fill
 
-- **Section 7b:** the real-data policy table (`validation/out/policy_compare.csv`, #93) shows as pending until it
-  is committed.
 - **Section 10** reads the voice latency measured on the deployed app from `measured_on_databricks.json` (the lead's
   smoke test, posted on #2), since no other file in the repository records it.
