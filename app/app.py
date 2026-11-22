@@ -468,6 +468,22 @@ def place(req: PlaceRequest) -> JSONResponse:
     return JSONResponse({"matches": matches, **({"matched_as": matched_as} if matched_as else {})})
 
 
+class NearRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    lat: float = Field(ge=6, le=37.5)
+    lon: float = Field(ge=68, le=97.5)
+
+
+@app.post("/api/place/near")
+def place_near(req: NearRequest) -> JSONResponse:
+    """The phone's point in words for the home location line (#140 3f): nearest town or post office, district, PIN.
+
+    The point travels in the body, rounded to 0.01 degree as /api/plan, and is never logged.
+    """
+    return JSONResponse(_places().near(round(req.lat, 2), round(req.lon, 2)))
+
+
 def _near_packs(idx: dict, home: str, lat: float, lon: float) -> list[dict]:
     """Other built packs with a facility of their state within the search radius (care crosses state lines).
 

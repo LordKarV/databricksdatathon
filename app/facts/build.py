@@ -29,7 +29,7 @@ import time
 from collections import Counter
 from pathlib import Path
 from typing import Any
-from urllib.parse import unquote
+from urllib.parse import unquote, urlsplit
 
 import numpy as np
 import pandas as pd
@@ -48,7 +48,15 @@ from common.names import display_name  # noqa: E402, RUF100
 from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))
-from facts.ledger_terms import LIST_NAMES, NOT_OBSERVED, TERMS, nabh_text  # noqa: E402
+from facts.ledger_terms import (  # noqa: E402
+    CITE_HOSTS,
+    LIST_NAMES,
+    NOT_OBSERVED,
+    TERMS,
+    cite_url,
+    nabh_text,
+    osm_text,
+)
 from facts.places import PIN_GRID, centre_pin  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
@@ -324,14 +332,17 @@ def site_check(f: pd.DataFrame) -> dict:
 
 
 def nabh_entries(ids: pd.Series) -> list[list | None]:
-    """[tier, acc_no, certificate url] from derived/v2 facility_attributes, or None: NABH on "Official lists"."""
+    """[tier, acc_no, certificate url] from derived/v2 facility_attributes, or None: NABH on "Official lists".
+    A certificate link that cannot open is NABH's search page (ledger_terms.cite_url)."""
     if not ATTRS.is_file():
         return [None] * len(ids)
     a = pd.read_parquet(ATTRS, columns=["unique_id", "nabh_tier", "nabh_acc_no", "nabh_cert_url"])
     a = a.dropna(subset=["nabh_acc_no"]).drop_duplicates("unique_id").set_index("unique_id")
-    return [None if u not in a.index else
-            [a.nabh_tier[u] if isinstance(a.nabh_tier[u], str) else None, a.nabh_acc_no[u],
-             a.nabh_cert_url[u] if isinstance(a.nabh_cert_url[u], str) else None] for u in ids]
+    out = [None if u not in a.index else
+           [a.nabh_tier[u] if isinstance(a.nabh_tier[u], str) else None, a.nabh_acc_no[u],
+            cite_url("nabh", a.nabh_cert_url[u] if isinstance(a.nabh_cert_url[u], str) else None)[0]] for u in ids]
+    check_cite_hosts(e[2] for e in out if e)
+    return out
 
 
 def v2_only(m: pd.DataFrame) -> pd.DataFrame:
@@ -412,11 +423,14 @@ def ledger(base: float, terms_json: str, p: float, same: set[str], cited: dict |
 
 
 def cites(ids: set[str]) -> dict[str, list]:
-    """{evidence id: [text, url, source, fetched_date, nabh tier, precision k, precision n]} for X and O ids.
+    """{evidence id: [text, url, source, fetched_date, nabh tier, precision k, precision n, Hindi text or None,
+    url opens the entry itself]} for X and O ids.
 
     The text is the list entry's own name and what the list says ("DH Dausa: Maternity OT certificate valid to ..."),
     or for NABH the kind of entry by nabh_tier: full accreditation, entry-level certificate, or a CGHS/ECHS
-    empanelment that NABH's portal also lists, which is not accreditation. Points do not change.
+    empanelment that NABH's portal also lists, which is not accreditation. An OpenStreetMap match says where it is
+    mapped, not our match tier (ledger_terms.osm_text, en and hi). A list link that cannot open its entry is the
+    list's own page (ledger_terms.cite_url, #166 review). Points do not change.
     """
     if not ids:
         return {}
@@ -432,17 +446,32 @@ def cites(ids: set[str]) -> dict[str, list]:
     w = w.astype(object).where(w.notna(), None)  # pd.NA has no truth value
     for r in w.itertuples(index=False):
         t = tier.get(r.evidence_id) if r.source_key == "nabh" else None
+        osm = osm_text(r.quote, r.value_text) if r.family == "O" and r.quote else None
+        text_hi = None
         if r.source_key == "nabh":
             text = nabh_text(t, r.evidence_id)
+        elif osm:
+            text, text_hi = osm
         elif r.quote and r.quote not in (r.value_text or ""):
             text = f"{r.quote}: {r.value_text}"
         else:
             text = r.value_text
         k, n = (None if x is None else int(x) for x in (r.precision_k, r.precision_n))
-        out[r.evidence_id] = [text, r.evidence_url, r.source, r.fetched_date, t, k, n]
+        url, entry = cite_url(r.source_key, r.evidence_url) if r.family == "X" else (r.evidence_url, True)
+        out[r.evidence_id] = [text, url, r.source, r.fetched_date, t, k, n, text_hi, entry]
+    check_cite_hosts(v[1] for v in out.values())
     print(f"facts.cites: {len(out)} of {len(ids)} cited list and OpenStreetMap ids have a witness row; NABH tiers "
-          f"{dict(Counter(v[4] for v in out.values() if v[2] and 'NABH' in v[2]))}")
+          f"{dict(Counter(v[4] for v in out.values() if v[2] and 'NABH' in v[2]))}; "
+          f"{sum(not v[8] for v in out.values())} link the list's page, not the entry")
     return out
+
+
+def check_cite_hosts(urls: object) -> None:
+    """Fail the build on a cite link to a host never checked to open in a browser (ledger_terms.CITE_HOSTS)."""
+    bad = Counter(urlsplit(u).netloc for u in urls if u and urlsplit(u).netloc not in CITE_HOSTS)
+    if bad:
+        raise SystemExit(f"facts.cites: cite links to unchecked hosts {dict(bad)}; open a few in a browser, then add "
+                         "the host to ledger_terms.CITE_HOSTS or DEAD_ENTRY_HOSTS")
 
 
 def public_lists(overlays: object) -> list[list[str]]:

@@ -142,6 +142,32 @@ def test_area_from_real_rows():
     assert all(c["facility_id"] in ENGINE.fid for c in a["ten_calls"]) and len(a["ten_calls"]) <= 10
 
 
+def test_area_headline_agrees_with_the_gap_list():
+    """#167 review: over 280 cases (40 districts x 7 services, with Agra, Giridih, Datia and Araria, where the
+    headline said "No call can add a PIN area" over a gap list saying "A phone call can settle it"), the headline
+    kind follows from the gap list's own counts, and "Calls could close" is the gap list's not_confirmed."""
+    first = {}
+    for j in range(len(ENGINE.pins["pin"])):
+        first.setdefault(ENGINE.pin_where[j], j)
+    seen = sorted(first)
+    named = [k for k in seen if k[0] in {"AGRA", "GIRIDIH", "DATIA", "ARARIA"}][:4]
+    picks = named + random.Random(167).sample([k for k in seen if k not in named], 40 - len(named))
+    bad = []
+    for key in picks:
+        j = first[key]
+        for s in SERVICES:
+            a = ENGINE.area(s, ENGINE.pins["lat"][j], ENGINE.pins["lon"][j])
+            h, g, n = a["headline"], a["gap"], a["summary"]["n_pins"]
+            want = ("if_confirms" if g["not_confirmed"] else "all_covered" if n and g["covered"] == n
+                    else "none_in_window")
+            ok = (h["kind"] == want and h["now"] == g["covered"] and h["n"] == n
+                  and round(a["summary"]["calls_could_close"] * n) == g["not_confirmed"]
+                  and (want != "if_confirms" or h["k"] - h["now"] == a["ten_calls"][0]["areas"]))
+            if not ok:
+                bad.append((a["area"]["district"], s, h["kind"], g["not_confirmed"]))
+    assert len(picks) * len(SERVICES) == 280 and not bad, bad
+
+
 def test_503_when_data_not_built(monkeypatch):
     monkeypatch.setattr(app_module, "_engine", lambda: None)
     assert client.post("/api/plan", json={"service": "mri", "lat": 20, "lon": 78}).status_code == 503
@@ -620,6 +646,51 @@ def test_nabh_cites_say_which_kind_of_entry():
         assert not any("full accreditation" in t for t in texts)
         nabh = [x for x in o["public_lists"] if x["list"] == "nabh"]
         assert nabh and want in nabh[0]["text"] and nabh[0]["url"]
+
+
+def test_every_cite_link_is_on_a_checked_host():
+    """#166 review: every cite and NABH "Official lists" link is an https link to a host whose entry links were opened
+    in a browser (ledger_terms.CITE_HOSTS), never to a host whose entry links fail (the CGHS/ECHS bucket answers 403)
+    and never "#" or "Not Found"."""
+    from urllib.parse import urlsplit
+
+    from facts.ledger_terms import CITE_HOSTS, DEAD_ENTRY_HOSTS
+    urls = [v[1] for v in ENGINE.cites.values()] + [e[2] for e in ENGINE.fac["nabh"] if e]
+    hosts = {urlsplit(u).netloc for u in urls if u}
+    assert all(u is None or u.startswith("https://") for u in urls), {u for u in urls if u and "://" not in u}
+    assert hosts <= CITE_HOSTS, hosts - CITE_HOSTS
+    assert not hosts & DEAD_ENTRY_HOSTS
+
+
+def test_dead_entry_links_open_the_lists_own_page():
+    """Gaya dialysis option 1 (Arsh): its CGHS/ECHS certificate link answers 403, so the cite links NABH's search
+    page, says the link is not the entry, and keeps the entry number, the list and the date it was read. NMC cites
+    link NMC's page, not its JSON endpoint."""
+    from facts.ledger_terms import LIST_PAGE
+    o = ENGINE.plan("dialysis", 24.79, 85.0, 40, "gps")["options"][0]
+    assert "Arsh" in o["name"]
+    cts = [ct for c in o["contributions"] for ct in c.get("cites", []) if "NABH" in (ct["source"] or "")]
+    assert cts and all(ct["url"] == LIST_PAGE["nabh"] and ct["url_is_entry"] is False for ct in cts)
+    assert all("HOS/2023/C0745" in ct["text"] and ct["fetched_date"] for ct in cts)
+    assert [x["url"] for x in o["public_lists"] if x["list"] == "nabh"] == [LIST_PAGE["nabh"]]
+    nmc = [v for v in ENGINE.cites.values() if "nmc.org.in" in (v[1] or "")]
+    assert nmc and all(v[1] == LIST_PAGE["nmc"] and v[8] is False for v in nmc)
+    entries = [v for v in ENGINE.cites.values() if "portal.nabh.co" in (v[1] or "")]
+    assert entries and all(v[8] is True for v in entries)
+
+
+def test_osm_cites_say_where_it_is_mapped_in_en_and_hi():
+    """#166 review: an OpenStreetMap match reads "<name>: on OpenStreetMap, mapped 5.63 km from the listed point", not
+    our match tier ("osm high"), with a Hindi line."""
+    from facts.ledger_terms import osm_text
+    assert osm_text("Vijay Marie Hospital", "osm high, 5.63 km") == (
+        "Vijay Marie Hospital: on OpenStreetMap, mapped 5.63 km from the listed point",
+        "Vijay Marie Hospital: OpenStreetMap पर, लिस्टिंग के पते से 5.63 किमी पर दर्ज")
+    assert "check the address" in osm_text("X", "wikidata conflict, 2.1 km")[0]
+    assert osm_text("X", "emergency=yes") is None
+    osm = [v for v in ENGINE.cites.values() if "openstreetmap.org" in (v[1] or "") or "wikidata.org" in (v[1] or "")]
+    assert osm and not any(re.search(r"\b(osm|wikidata) (high|medium|conflict)\b", v[0]) for v in osm)
+    assert all(v[7] for v in osm if " km from the listed point" in v[0])
 
 
 def test_restricted_lists_are_only_shown_per_facility():

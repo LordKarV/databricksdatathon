@@ -16,6 +16,8 @@ from pathlib import Path
 from typing import TypedDict
 
 MAX_MATCHES = 6
+NEAR_KM = 15  # "Near <place>" only when that place is this close; past it the line names only the district and PIN
+TOWN_KM = 5  # a town centre this close is named before a nearer post office
 # Official renames, old to new. When the typed name is in none of our tables, the other name of its pair is tried
 # (either way: our tables may carry the old name or the new one). When the old name is itself a place in our tables
 # (Simla is a post office in Assam), the new one's matches in other states come first and the old ones stay, so
@@ -88,6 +90,22 @@ class Match(TypedDict, total=False):
     matched_as: dict  # only from Places.resolve's fallbacks: {"query", "name", "how": "rename" | "spelling"}
     district: str  # only with district_from
     district_from: str  # a PIN the gazetteer files under no district: "nearest_pin" or "gazetteer_list"
+
+
+class Near(TypedDict, total=False):
+    district: str
+    state: str
+    pin: str
+    place: str  # only when a town or post office is within NEAR_KM
+    kind: str  # town | post_office
+    km: float
+
+
+def _km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance in km."""
+    a = (math.sin(math.radians(lat2 - lat1) / 2) ** 2
+         + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(math.radians(lon2 - lon1) / 2) ** 2)
+    return 2 * 6371.0 * math.asin(math.sqrt(a))
 
 
 def norm(s: str) -> str:
@@ -165,6 +183,27 @@ class Places:
         i = min((j for j, how in enumerate(self.district_from) if not how),
                 key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
         return title(p["district"][i])
+
+    def near(self, lat: float, lon: float) -> Near:
+        """The phone's point in words (#140 3f): the nearest town or post office, and the district and PIN of the
+        nearest PIN centroid filed under a district. The place is left out when it is over NEAR_KM away."""
+        p, k = self.pins, math.cos(math.radians(lat))
+        i = min((j for j, how in enumerate(self.district_from) if not how),
+                key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
+        out: Near = {"district": title(p["district"][i]), "state": title(p["state"][i]), "pin": str(p["pin"][i])}
+        g = self.gaz
+        if not g or not g["name"]:
+            return out
+        d2 = [(g["lat"][j] - lat) ** 2 + ((g["lon"][j] - lon) * k) ** 2 for j in range(len(g["name"]))]
+        town = g["kinds"].index("city") if "city" in g["kinds"] else -1
+        # a town the point is in reads better than the post office next door; else the nearest of either kind
+        j = min((j for j in range(len(d2)) if g["k"][j] == town), key=d2.__getitem__, default=None)
+        if j is None or _km(lat, lon, g["lat"][j], g["lon"][j]) > TOWN_KM:
+            j = min(range(len(d2)), key=d2.__getitem__)
+        km = _km(lat, lon, g["lat"][j], g["lon"][j])
+        if km <= NEAR_KM:
+            out.update(place=title(g["name"][j]), kind=_GAZ_KIND[g["kinds"][g["k"][j]]], km=round(km, 1))
+        return out
 
     def lookup(self, q: str) -> list[Match]:
         """Every place the text names, best first (at most MAX_MATCHES); [] when nothing matches.
