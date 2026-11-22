@@ -39,8 +39,10 @@ OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
 # Tie-break from health-worker reports (#86, lead's rule): leading options in the same band whose shown p differ by
 # at most TIE_P and whose travel differs by at most TIE_TRAVEL_MIN are tied; only those are reordered, and only for
-# profiles outside NEAREST_FIRST (the emergency order is untouched).
+# TIE_BREAK_PROFILES: scheduled and planned care. Emergency (#101) and urgent care (NICU: a sick newborn is
+# time-critical) never move on report counts (lead's decision on #116).
 TIE_P, TIE_TRAVEL_MIN = 0.05, 10
+TIE_BREAK_PROFILES = {"scheduled", "planned"}
 
 
 def tied_prefix(rows: list[tuple[float, float, str]]) -> int:
@@ -459,7 +461,7 @@ class Engine:
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pool, unlikely = self._ranked(service, lat, lon, scores=scores)
         tie = None
-        if tiebreak and info["profile"] not in NEAREST_FIRST:
+        if tiebreak and info["profile"] in TIE_BREAK_PROFILES:
             pool, tie = self._break_tie(service, pool, scores, tiebreak)
         chosen = pool[:N_OPTIONS]
         # Never hide a confirmed listing in reach: if none made the top slots, it takes the last one.
