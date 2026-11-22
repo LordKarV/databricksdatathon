@@ -1,0 +1,22 @@
+{
+ "model_version": "reader-minilm-l12-v1",
+ "rows": 537431,
+ "claim_rows": 469498,
+ "service_rows": 67933,
+ "seconds_predict": 1545,
+ "seconds_total": 2443,
+ "device": "mps",
+ "rows_with_tokens": 95002,
+ "file_mb": 5.4,
+ "about_this": {
+  "rules_other_facility": 9506,
+  "reader_below_0.5": 27069,
+  "both": 8902
+ },
+ "offers": {
+  "rules_offer": 63620,
+  "reader_at_least_0.5": 63248,
+  "both": 62427
+ },
+ "disagreement_counts": "{('about_this', 'rules_0_reader_1'): 604, ('about_this', 'rules_1_reader_0'): 18167, ('offers', 'rules_0_reader_1'): 821, ('offers', 'rules_1_reader_0'): 1193}"
+}
