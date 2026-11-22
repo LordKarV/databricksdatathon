@@ -5,8 +5,9 @@ website check. Every value is copied from derived/v1 unchanged; the only compute
 counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
 common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
 When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi / p_location / p_exists are
-exported next to each pair and engine.score() uses them; the cards then show the model's own P_L and P_E, not the
-derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
+exported next to each pair and engine.score() uses them, with the model's own ledger: its named terms in points, which
+sum to the score (ledger() below; the plain words are in ledger_terms.py). The cards show the model's own P_L and P_E,
+not the derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -40,6 +41,9 @@ from common.eligibility import (  # noqa: E402, RUF100
 )
 from common.names import display_name  # noqa: E402, RUF100
 
+sys.path.insert(0, str(ROOT / "app"))
+from facts.ledger_terms import NOT_OBSERVED, TERMS  # noqa: E402
+
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
 # derived/v2 (the frozen model) and planner/out always come from the repo; the rebuild does not remake them.
@@ -68,6 +72,12 @@ MAX_EVIDENCE = 3
 # facility is not public or its level is unknown). Per service, so a district hospital is never named for cardiac
 # surgery. AYUSH and dental colleges match "medical college" in the level rule but offer none of these services.
 FEATURES = ROOT / "derived" / "v2" / "facility_features.parquet"
+WITNESSES = ROOT / "derived" / "v2" / "witnesses.parquet"
+# derived/v2 ledger (README there): logit(p) = base + sum(points) / PDO. The app keeps its own scale, APP_SCALE points
+# per logit unit (engine._pts, the field-report row), and ships tenths of a point.
+PDO = 20 / math.log(2)
+APP_SCALE = 10
+CLAIM_ID = re.compile(r"[0-9a-f]{8}:[a-z]{4}:\d+")  # a derived/v1 claim id; v2 also cites lists, pages, record:name
 NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturopath|yoga|dental", re.I)
 
 
@@ -236,7 +246,56 @@ def check_band_rule(m: pd.DataFrame, card_path: Path | None = None) -> None:
                          "the model owner; do not re-band in the app")
 
 
-def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
+def v2_terms(terms: pd.Series) -> tuple[set[str], dict[str, str]]:
+    """(evidence ids that are app claims, family of each term label) over the served pairs' contributions.
+
+    An id is an app claim when it is a derived/v1 claim and v2's witness quote for it is that claim's text or a clause
+    of it (40 of about 30,600 are clauses), so the page never shows another sentence under the id. Specialty items
+    (":spec:") are not v1 claims and are left out, as are list, website and standard ids.
+    """
+    parsed = [json.loads(c) for c in terms]
+    ids = {e for ts in parsed for t in ts for e in t["evidence_ids"] if CLAIM_ID.fullmatch(e)}
+    family = {t["label"]: t["family"] for ts in parsed for t in ts}
+    text = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "text"])
+    text = text[text.claim_id.isin(ids)]
+    w = pd.read_parquet(WITNESSES, columns=["evidence_id", "quote"], filters=[("observability", "==", "present")])
+    quote = w[w.evidence_id.isin(ids)].drop_duplicates("evidence_id").set_index("evidence_id").quote
+    same = {c for c, t in zip(text.claim_id, text.text, strict=True) if isinstance(quote.get(c), str) and quote[c] in t}
+    print(f"facts.ledger_claims: {len(same)} of {len(ids)} cited claim ids are app claims")
+    return same, family
+
+
+def ledger(base: float, terms_json: str, p: float, same: set[str]) -> list[list]:
+    """[[term, tenths of an app point, [app claim ids]], ...] for one pair: base first, terms with 0 points left out.
+
+    Each row is APP_SCALE x its logit contribution. Rounding to tenths is spread by largest remainder, so the rows sum
+    exactly to round(10 x APP_SCALE x logit(p)) and the total maps back to p within 0.0013.
+    """
+    terms = [t for t in json.loads(terms_json) if t["points"]]
+    unnamed = {t["label"] for t in terms} - TERMS.keys()
+    if unnamed:
+        raise SystemExit(f"derived/v2 terms without plain words in app/facts/ledger_terms.py: {sorted(unnamed)}")
+    exact = [10 * APP_SCALE * x for x in (base, *(t["points"] / PDO for t in terms))]
+    if abs(sum(exact) / (10 * APP_SCALE) - math.log(p / (1 - p))) > 1e-6:
+        raise SystemExit(f"derived/v2 ledger does not sum to logit(p) = logit({p}): {terms_json[:200]}")
+    tenths = [math.floor(x) for x in exact]
+    for k in sorted(range(len(exact)), key=lambda k: tenths[k] - exact[k])[: round(sum(exact)) - sum(tenths)]:
+        tenths[k] += 1
+    ids = [[], *([e for e in t["evidence_ids"] if e in same][:MAX_EVIDENCE] for t in terms)]
+    return [[n, x, i] for n, x, i in zip(("base", *(t["label"] for t in terms)), tenths, ids, strict=True)]
+
+
+def not_observed(m: pd.DataFrame) -> list[str]:
+    """Per pair, the NOT_OBSERVED families derived/v2 cannot see (facility_features obs_<family>), e.g. "WO"."""
+    fams = list(NOT_OBSERVED)
+    ff = pd.read_parquet(FEATURES, columns=["unique_id", "service", *(f"obs_{f}" for f in fams)])
+    ff["service"] = ff.service.map(TAXONOMY_TO_V1)
+    ff = ff.dropna(subset=["service"]).set_index(["unique_id", "service"])
+    obs = ff.reindex(pd.MultiIndex.from_arrays([m.unique_id, m.service]))
+    return ["".join(f for f in fams if row[f"obs_{f}"] == "not_observable") for _, row in obs.iterrows()]
+
+
+def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, list]]:
     dps = pd.read_parquet(V1 / "data_point_scores.parquet", columns=[
         "dp_type", "unique_id", "service", "score", "score_lo", "score_hi", "status", "rule", "q_ev", "score_model"])
     dps = dps[dps.dp_type == "service_claim"].drop(columns="dp_type")
@@ -257,7 +316,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     report("facts.duplicates", counts)
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
-                                          "p_exists"])
+                                          "p_exists", "base", "contributions"])
         v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
         v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         bad = set(v2.band.str.upper()) - set(V2_BAND)
@@ -265,10 +324,15 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
             raise SystemExit(f"derived/v2 has bands the app does not map: {sorted(bad)}")
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
                                                                   "band": "m_band", "p_location": "m_pl",
-                                                                  "p_exists": "m_pe"}),
+                                                                  "p_exists": "m_pe", "base": "m_base",
+                                                                  "contributions": "m_terms"}),
                     on=["unique_id", "service"], how="left")
         m = v2_only(m)
         check_band_rule(m)
+        m["not_observed"] = not_observed(m)
+        same, family = v2_terms(m.m_terms)
+    else:
+        same, family = set(), {}
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
@@ -280,11 +344,17 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
         model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper(), round(float(r.m_pl), 3),
                   round(float(r.m_pe), 3)]
                  if "m_band" in m.columns and isinstance(r.m_band, str) else None)
+        led = ledger(r.m_base, r.m_terms, r.m_p, same) if model else None
+        cited.update(c for *_, ids in led or [] for c in ids)
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
             round(r.score_hi, 4), round(r.q_ev, 4), round(r.score_model, 4), ev, missing, risks,
-            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings)])
-    return out, cited
+            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings),
+            led, r.not_observed if model else ""])
+    used = {"base": "base", **family}
+    words = {"terms": {k: [used[k], *TERMS[k]] for k in sorted(used)},
+             "not_observed": {k: list(v) for k, v in NOT_OBSERVED.items()}}
+    return out, cited, words
 
 
 def planner_cited() -> set[str]:
@@ -442,6 +512,26 @@ def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
     return out
 
 
+PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
+
+
+def places() -> dict:
+    """Town and post office names from place_gazetteer for the typed-place lookup (#121 bug 5), kept out of facts.
+
+    Districts and PINs come from the PIN table already in facts.json.gz. One row per state and name; a town beats a
+    post office of the same name. 0.001 degree (about 100 m) is finer than the plan's 0.01 degree rounding.
+    """
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "kind"])
+    g = g[g.kind.isin(PLACE_KINDS)].dropna(subset=["name", "lat", "lon", "state"])
+    g = g.assign(rank=g.kind.map(PLACE_KINDS.index)).sort_values(["state", "name", "rank"])
+    g = g.drop_duplicates(["state", "name"])
+    states = sorted(g.state.unique())
+    s_idx = {s: i for i, s in enumerate(states)}
+    return {"v": 1, "kinds": list(PLACE_KINDS), "states": states, "name": list(g.name),
+            "s": [s_idx[x] for x in g.state], "k": [int(x) for x in g["rank"]],
+            "lat": col(g.lat, 3), "lon": col(g.lon, 3)}
+
+
 def scores_source() -> str:
     """Which scores the app serves, in words a judge reads on the How page and in the build log (#86 item 2)."""
     if not V2.is_file():
@@ -456,7 +546,7 @@ def main() -> None:
     out = ap.parse_args().out
     t0 = time.time()
     f, fidx = facilities()
-    pr, cited = pairs(fidx)
+    pr, cited, ledger_words = pairs(fidx)
     claim_rows, claim_fl = claims(cited | planner_cited())
     manifest = json.loads((V1 / "MANIFEST.json").read_text())
     facts = {
@@ -481,6 +571,7 @@ def main() -> None:
                 "public_standard": list(f.public_standard), "public_level": list(f.public_level),
                 "operator": list(f.operator)},
         "pairs": pr,
+        "ledger": ledger_words,  # plain words for the pairs' ledger rows: {"terms": {term: [family, en, hi]}, ...}
         "claims": claim_rows,
         "claim_flags": claim_fl,
         "pins": pins(),
@@ -499,9 +590,12 @@ def main() -> None:
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
           if moved else f"pin districts: {LGD_PINS.relative_to(ROOT)} not found, area view uses each PIN's own district")
+    pl = places()
+    (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
-    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
+    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs, "
+          f"{len(pl['name'])} places (places.json.gz); "
           f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
           f"{time.time() - t0:.1f} s; sha {facts_hash}")
 

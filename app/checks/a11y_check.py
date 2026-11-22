@@ -133,8 +133,9 @@ def note_consent(page: Page) -> None:
 
 def change_error(page: Page) -> None:
     go(page, "#/change")
-    page.get_by_label("PIN, village, town, district, or 'lat, lon'").fill("843317")
+    page.get_by_label("PIN, district, town or post office, or 'lat, lon'").fill("xqzv plonk")
     page.get_by_role("button", name="Use this place").click()
+    page.locator("#place-err").get_by_text("No PIN, district").wait_for()  # the server's answer, not an empty alert
 
 
 def plan_for(service_label: str) -> Callable[[Page], None]:
@@ -232,7 +233,7 @@ def offline_old_fix(ctx, page: Page) -> dict:
 def offline_pin_picker(ctx, page: Page) -> dict:
     online_plan_then_offline(ctx, page)
     go(page, "#/change")
-    page.get_by_label("PIN, village, town, district, or 'lat, lon'").fill("843302")
+    page.get_by_label("PIN, district, town or post office, or 'lat, lon'").fill("843302")
     page.get_by_role("button", name="Use this place").click()
     page.get_by_text("PIN 843302").wait_for()
     return {"district_select": page.evaluate("location.hash")}

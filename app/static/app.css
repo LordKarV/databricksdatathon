@@ -211,6 +211,7 @@ th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: lef
 thead th { color: var(--ink-2); font-weight: 600; border-bottom: 2px solid var(--ink); }
 tfoot th, tfoot td { font-weight: 700; border-top: 3px double var(--ink); border-bottom: 0; }
 td.num, th.num { text-align: right; white-space: nowrap; }
+.ledger details { border: 0; padding: 0; margin: 0; background: none; }
 ol.script { padding-left: 24px; }
 ol.script li { margin: 10px 0; }
 

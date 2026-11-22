@@ -2,6 +2,60 @@
 //   #/ home (S1)  #/gps (S1a)  #/change (S1b)  #/plan (S3 / S3x)  #/why/<rank> (S4 + S5 + S6)
 'use strict';
 
+// Change location strings (#121 bug 5): one map per language, so they move into the strings files of the coming
+// app-wide language setting. The screen shows 'en' until then. The Hindi is a draft for native review (#10).
+const PLACE_STRINGS = {
+  en: {
+    label: "PIN, district, town or post office, or 'lat, lon'",
+    help: 'With internet: any PIN, district, town or post office name in India. Add the state if many places share ' +
+      'the name, for example Rampur, Bihar. Without internet: a PIN or district of a state saved on this phone. ' +
+      'Coordinates always work, for example 26.59, 85.48.',
+    gpsBlocked: 'GPS is blocked for this site. Type a PIN, district, town or post office instead.',
+    gpsBlockedHint: 'GPS is blocked for this site. Type where the patient is: a PIN, district, town or post office ' +
+      'name. Coordinates work too.',
+    typePlace: 'Type a place',
+    tryGps: 'Try GPS again',
+    typedPlace: 'typed place',
+    choose: n => `${n} places have this name. Choose one:`,
+    empty: 'Type a PIN, a district, town or post office name, or coordinates as "lat, lon".',
+    pinMissing: v => `PIN ${v} is not in our PIN list. Check the number, or type the district or town name.`,
+    nameMissing: v => `No PIN, district, town or post office called "${v}" in our data. Check the spelling, try ` +
+      'the district name, or type coordinates as "lat, lon".',
+    noNet: 'No internet',
+    noAnswer: 'The place search is not answering',
+    notSaved: (why, v, st) => `${why}, and "${v}" is not in the data saved on this phone (${st}). Without ` +
+      'internet, type a PIN or district of a saved state, or coordinates as "lat, lon", for example 26.59, 85.48.',
+    nothingSaved: why => `${why}, and no place data is saved on this phone yet. Type coordinates as "lat, lon", ` +
+      'for example 26.59, 85.48, or use GPS. After one answer with internet, PINs and districts of that state ' +
+      'work offline.',
+  },
+  hi: {
+    label: "पिन कोड, ज़िला, कस्बा या डाकघर, या 'lat, lon'",
+    help: 'इंटरनेट के साथ: भारत का कोई भी पिन कोड, ज़िला, कस्बा या डाकघर का नाम। अगर कई जगहों का एक ही नाम है ' +
+      'तो राज्य भी लिखें, जैसे Rampur, Bihar। इंटरनेट के बिना: इस फ़ोन पर सेव किए गए राज्य का पिन कोड या ज़िला। ' +
+      'अक्षांश-देशांतर हमेशा काम करते हैं, जैसे 26.59, 85.48।',
+    gpsBlocked: 'इस साइट के लिए GPS बंद है। इसकी जगह पिन कोड, ज़िला, कस्बा या डाकघर लिखें।',
+    gpsBlockedHint: 'इस साइट के लिए GPS बंद है। मरीज़ कहाँ है, लिखें: पिन कोड, ज़िला, कस्बा या डाकघर का नाम। ' +
+      'अक्षांश-देशांतर भी चलते हैं।',
+    typePlace: 'जगह लिखें',
+    tryGps: 'GPS फिर से आज़माएँ',
+    typedPlace: 'लिखी गई जगह',
+    choose: n => `${n} जगहों का यही नाम है। एक चुनें:`,
+    empty: 'पिन कोड, ज़िला, कस्बा या डाकघर का नाम, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    pinMissing: v => `पिन कोड ${v} हमारी सूची में नहीं है। नंबर जाँचें, या ज़िले या कस्बे का नाम लिखें।`,
+    nameMissing: v => `"${v}" नाम का कोई पिन कोड, ज़िला, कस्बा या डाकघर हमारे डेटा में नहीं है। वर्तनी जाँचें, ` +
+      'ज़िले का नाम लिखें, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    noNet: 'इंटरनेट नहीं है',
+    noAnswer: 'जगह की खोज जवाब नहीं दे रही',
+    notSaved: (why, v, st) => `${why}, और "${v}" इस फ़ोन पर सेव डेटा (${st}) में नहीं है। इंटरनेट के बिना, सेव ` +
+      'किए गए राज्य का पिन कोड या ज़िला लिखें, या अक्षांश-देशांतर "lat, lon", जैसे 26.59, 85.48।',
+    nothingSaved: why => `${why}, और इस फ़ोन पर अभी जगह का कोई डेटा सेव नहीं है। अक्षांश-देशांतर "lat, lon" ` +
+      'लिखें, जैसे 26.59, 85.48, या GPS चलाएँ। इंटरनेट के साथ एक जवाब के बाद उस राज्य के पिन कोड और ज़िले ' +
+      'बिना इंटरनेट भी चलेंगे।',
+  },
+};
+const PT = PLACE_STRINGS.en;
+
 const SERVICES = [
   // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
   {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
@@ -73,7 +127,7 @@ function renderBar() {
 function locLine(loc) {
   if (!loc) return 'No location yet.';
   const src = {gps: `GPS ${loc.accuracy_m ?? '?'} m`, last_fix: 'last GPS fix', manual: 'typed coordinates',
-    pin: 'PIN centre', district: 'district centre'}[loc.source] || loc.source;
+    pin: 'PIN centre', district: 'district centre', place: PT.typedPlace}[loc.source] || loc.source;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
@@ -81,10 +135,13 @@ function getGps(onDone) {
   navigator.geolocation.getCurrentPosition(p => {
     state.loc = {lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
       source: 'gps', t: Date.now(), label: null};
-    save('loc', state.loc);
+    save('loc', state.loc); state.gpsDenied = false;
     onDone(null);
-  }, e => onDone(e.code === 1 ? 'Location blocked for this site. Type a PIN or place instead.'
-    : 'Could not get GPS. Stand outside, or choose a place instead.'),
+  }, e => {
+    if (e.code === 1) state.gpsDenied = true;
+    onDone(e.code === 1 ? PT.gpsBlocked
+      : 'Could not get GPS. Stand outside, or choose a place instead.');
+  },
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
 
@@ -162,7 +219,11 @@ function home() {
     ? `<div class="where"><p><span aria-hidden="true">&#128205;</span> ${locLine(state.loc)}</p>
         <div class="row"><a class="btn" href="#/change">Change location</a>
         <button type="button" id="regps">Update GPS</button></div></div>`
-    : `<button type="button" class="btn btn-primary btn-block" id="gps">
+    : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
+      ? `<p class="small place-hint">${PT.gpsBlocked}</p>
+         <a class="btn btn-primary btn-block" href="#/change">${PT.typePlace}</a>
+         <button type="button" class="btn btn-block" id="gps"><span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>`
+      : `<button type="button" class="btn btn-primary btn-block" id="gps">
         <span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>
        <a class="btn btn-block" href="#/change">Choose a place instead</a>`;
   const boxes = DANGER_SIGNS.map((d, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
@@ -217,45 +278,104 @@ function gpsScreen() {
     <a class="btn btn-block" href="#/">Back</a>`;
 }
 function bindGps() {
-  getGps(err => { state.msg = err || ''; if (!err) announce('Location found.'); location.hash = '#/'; });
+  getGps(err => {
+    state.msg = err || '';
+    if (!err) announce('Location found.');
+    // GPS blocked: go straight to typing the place, which then comes first (#121 bug 5).
+    location.hash = state.gpsDenied && !state.loc ? '#/change' : '#/';
+  });
 }
 
+// Typed place (#121 bug 5): online the server resolves PINs, districts, towns and post offices (/api/place);
+// offline only the saved pack can, so PINs and districts of a saved state. Coordinates always work.
+const PLACE_SOURCE = {pin: 'pin', district: 'district', town: 'place', post_office: 'place'};
 function changeScreen() {
+  const gpsBtn = `<button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> ${
+    state.gpsDenied ? PT.tryGps : 'Back to my GPS location'}</button>`;
   return `<h1 tabindex="-1">Change location</h1>
-    <button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> Back to my GPS location</button>
+    ${state.gpsDenied ? `<p class="card place-hint">${PT.gpsBlockedHint}</p>` : gpsBtn}
     <form id="place-form" novalidate>
-      <label for="place">PIN, village, town, district, or 'lat, lon'</label>
-      <input id="place" type="text" inputmode="text" autocomplete="off" aria-describedby="place-help place-err">
-      <p id="place-help" class="small muted">PIN works from the data saved on this phone. Or type coordinates, for example 26.59, 85.48.</p>
+      <label for="place">${PT.label}</label>
+      <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
+      <p id="place-help" class="small muted">${PT.help}</p>
       <p id="place-err" role="alert"></p>
+      <div id="place-choices"></div>
       <button type="submit" class="btn btn-primary btn-block">Use this place</button>
     </form>
     <div id="district-pick"></div>
+    ${state.gpsDenied ? gpsBtn : ''}
     <a class="btn btn-block" href="#/">Cancel</a>`;
+}
+function usePlace(hit, source) {
+  state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
+  save('loc', state.loc); state.msg = ''; location.hash = '#/';
+}
+function placeErr(text) {
+  $('#place-err').textContent = text;
+  $('#place').setAttribute('aria-invalid', 'true');
+  $('#place').focus();
+}
+// {matches} from the server ([] when it knows no such place), or null when it cannot answer (offline, signed out).
+async function serverPlace(q) {
+  if (!navigator.onLine) return null;
+  try {
+    const r = await fetch('/api/place', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({q}), redirect: 'manual'});
+    const j = r.ok || r.status === 404 ? await r.json() : null;
+    return j && Array.isArray(j.matches) ? j : null;
+  } catch { return null; }
+}
+function placeChoices(matches) {
+  $('#place-choices').innerHTML = `<div role="group" aria-labelledby="place-choices-h" class="place-choices">
+    <p id="place-choices-h">${PT.choose(matches.length)}</p>
+    ${matches.map((m, i) => `<button type="button" class="btn btn-block" data-place="${i}">${esc(m.label)}</button>`).join('')}
+    </div>`;
+  $('#place-choices').querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
+    const m = matches[+b.dataset.place];
+    usePlace(m, PLACE_SOURCE[m.kind] || 'place');
+  }));
+  $('#place-choices [data-place]').focus();
+}
+// Offline: a PIN, or a district name, from every saved pack.
+async function packHit(v) {
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    if (!pack) return {pack: null};
+    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
+      .replace(/ (district|dist|zila|zilla|jila)$/, '');
+    for (const p of pack.packs || [pack]) {
+      const d = p.districts.find(x => x && key(x) === key(v));
+      if (d) return {pack, hit: window.RSOffline.districtCentre(p, d), source: 'district'};
+    }
+    return {pack, hit: null};
+  } catch { return {pack: null}; }
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
   districtPicker();
-  $('#place-form').addEventListener('submit', e => {
+  $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = $('#place').value.trim();
+    $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
     const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
-      state.loc = {lat: +m[1], lon: +m[2], accuracy_m: null, source: 'manual', t: Date.now(), label: null};
-      save('loc', state.loc); state.msg = ''; location.hash = '#/'; return;
+      usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    if (/^\d{6}$/.test(v)) {
-      packPlace(p => p.pin(v)).then(ok => {
-        if (ok) return;
-        $('#place-err').textContent = 'PIN not found in the data saved on this phone. Type coordinates as "lat, lon".';
-        $('#place').setAttribute('aria-invalid', 'true');
-        $('#place').focus();
-      });
+    if (!v) { placeErr(PT.empty); return; }
+    const online = await serverPlace(v);
+    if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
+    if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
+    if (online) {
+      placeErr(/^\d{6}$/.test(v) ? PT.pinMissing(v) : PT.nameMissing(v));
       return;
     }
-    $('#place-err').textContent = 'Type a 6-digit PIN, or coordinates in India as "lat, lon", for example 26.59, 85.48.';
-    $('#place').setAttribute('aria-invalid', 'true');
-    $('#place').focus();
+    const {pack, hit, source} = await packHit(v);
+    if (hit) { usePlace(hit, source); return; }
+    const why = navigator.onLine ? PT.noAnswer : PT.noNet;
+    const saved = load('pack');
+    placeErr(pack ? PT.notSaved(why, v, saved ? saved.state : '') : PT.nothingSaved(why));
   });
 }
 
@@ -855,6 +975,43 @@ function noOptionHtml() {
   return `<h1 tabindex="-1">${esc(t.title)}</h1><p>${esc(t.body)}</p>
     <a class="btn btn-block" href="${back}">${esc(t.button)}</a>`;
 }
+// The model's witness ledger (derived/v2): one row per named term, in points (10 per unit of log-odds), summing to the
+// total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
+// see for this listing add nothing and share one muted line.
+const signed = n => (n > 0 ? '+' : '') + n.toFixed(1);
+function ledgerHtml(o, P, L) {
+  const total = o.contributions.reduce((a, c) => a + c.points, 0);
+  const rows = o.contributions.map((c, j) => {
+    const C = `${P}.contributions.${j}`;
+    const label = F(C + '.label', c.label);
+    const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
+    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
+      <td class="num">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+  }).join('');
+  const unseen = o.not_observed || [];
+  return `<table class="ledger"><caption>Points for "offers ${L}"</caption>
+      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', signed(total), 'sum')} &rarr;
+        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
+    </table>
+    ${unseen.length ? `<p class="small muted">Counts neither for nor against:
+      ${unseen.map((x, j) => F(`${P}.not_observed.${j}.label`, x.label)).join('; ')}.</p>` : ''}`;
+}
+// How sure for NO SERVICE TEXT (derived/v2/README): no line describes the service as its own unit, so it is never
+// Likely, but its score still comes from the ledger's other rows. The two rows that add most are named, so this line
+// and the ledger agree. Trauma's quotes are general emergency lines (noTextCaptionHtml), the reason it is a first stop.
+function noTextSureHtml(o, P, L, q) {
+  const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
+    .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
+    .map(([c, j]) => `${F(`${P}.contributions.${j}.label`, c.label)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+  const still = q.service === 'trauma_emergency' && o.evidence.length
+    ? 'It is still plausible for first care: its listing has general emergency lines (quoted above), and the model scores it'
+    : 'It is still plausible: the model scores it';
+  return `${F(P + '.band_word', o.band_word)}: no line in its listing describes ${L} as its own service, so it is not
+    rated Likely. ${still} ${F(P + '.p', o.p.toFixed(2), 'num')} from the rest of its record (How we decided,
+    below)${top.length ? `. Largest rows: ${top.join('; ')}` : ''}. Call to ask.`;
+}
 function whyScreen(rank) {
   const p = state.plan;
   const o = planOption(rank);
@@ -862,9 +1019,7 @@ function whyScreen(rank) {
   const P = `options.${p.options.indexOf(o)}`;
   const label = p.query.service_label.en;
   const L = F('query.service_label.en', label);
-  const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const width = o.p_hi - o.p_lo;
-  const sign = n => (n > 0 ? '+' : '');
   const phone = o.phone && o.phone.e164
     ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${F(P + '.phone.display', o.phone.display)}</a>`
     : '<p class="card">No dialable number in our data for this listing.</p>';
@@ -885,8 +1040,8 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
-    ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
+    <h2>How sure</h2><p id="how-sure">${o.model_band === 'NO_SERVICE_TEXT'
+    ? noTextSureHtml(o, P, L, p.query)
     : `${F(P + '.band_word', o.band_word)}, ${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}. ${similarHtml(o, P).replace(/^./, c => c.toUpperCase())}.`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
@@ -899,13 +1054,7 @@ function whyScreen(rank) {
     <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
 
     <h2 id="how">How we decided</h2>
-    <table><caption>Points for "offers ${L}"</caption>
-      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
-      <tbody>${o.contributions.map((c, j) => `<tr><td>${F(`${P}.contributions.${j}.label`, c.label)}</td>
-        <td class="num">${F(`${P}.contributions.${j}.points`, sign(c.points) + c.points, 'num')}</td></tr>`).join('')}</tbody>
-      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', sign(total) + total, 'sum')} &rarr;
-        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
-    </table>
+    ${ledgerHtml(o, P, L)}
     <p class="small muted">Model ${F('meta.model_hash', p.meta.model_hash)}. Facility id ${F(P + '.facility_id', o.facility_id)}.</p>
 
     <h2 id="call" tabindex="-1">Call ahead</h2>
@@ -1208,6 +1357,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const perm = await navigator.permissions?.query({name: 'geolocation'});
     if (perm && perm.state === 'granted' && (location.hash || '#/') === '#/') getGps(err => { if (!err) render(); });
+    // Blocked GPS puts typing the place first; unblocking it in site settings puts GPS back (#121 bug 5).
+    const onPerm = () => {
+      state.gpsDenied = perm.state === 'denied';
+      if (['', '#/', '#/change'].includes(location.hash)) render();
+    };
+    if (perm && perm.state === 'denied') onPerm();
+    if (perm) perm.onchange = onPerm;
   } catch { /* Permissions API missing: the GPS button stays */ }
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
 });
