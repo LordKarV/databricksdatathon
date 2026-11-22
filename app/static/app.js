@@ -608,8 +608,9 @@ const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.10
 function windowBelowHtml(p) {
   const w = p.time_window, po = p.public_option;
   if (!w || !w.first_outside || !p.options.length) return '';
+  // On a narrow phone the sticky bar's 102 sub-line is clipped from view, so it is said here once, under the card.
   return `<p class="panel window-public">${po ? `${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
-    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>`;
+    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>${has102(p.query.service) ? `<p class="note">${th('sos.102_sub')}</p>` : ''}`;
 }
 function whyNotHtml(p) {
   const rows = p.why_not || [];
@@ -740,10 +741,10 @@ function whyFirstHtml(p, o, P) {
   }
   return rule.text ? `<p class="why-first">${th('ans.why_first.rule', {rule: E('rank_rule.text', rule.text)})}</p>` : '';
 }
-function answerPanel(p, o, i) {
+function answerPanel(p, o, i, describedBy = '') {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
   const fb = p.itinerary && p.itinerary.fallback;  // the route only if card 1 cannot treat (#126)
-  return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}">
+  return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}>
     <h2 class="kicker">${th(o.call_first || i === 0 ? 'ans.call_first' : 'ans.option', {n: N(P + '.rank', o.rank)})}</h2>
     <h3 id="opt-${o.rank}" class="name" lang="en">${F(P + '.name', o.name)}</h3>
     <p class="place"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
@@ -794,9 +795,10 @@ function planScreen() {
     const oo = p.abstain.outside_option;
     // With a window-miss panel above as well, the "none confirmed" notice goes under the card, so Call stays on
     // screen on a 320x568 phone (the window line stays the answer's first line).
-    const notice = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>`, low = !!windowHtml(p);
+    // The card is described by the notice (aria-describedby), so a screen reader hears it with the card and its Call.
+    const notice = `<p class="panel section" id="abstain-note"><strong>${E('abstain.text', p.abstain.text)}</strong></p>`, low = !!windowHtml(p);
     body = `${low ? '' : notice}
-      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${low ? notice : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
+      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0, low ? 'abstain-note' : '')}</div>` : ''}${low ? notice : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
       ${oo && !windowHtml(p) ? `<article class="panel section"><h3 lang="en">${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="note"><strong>${E('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${E('abstain.outside_option.text', oo.text)}</p>

@@ -202,9 +202,10 @@
       `${F(g.path + '.travel.high', g.high, 'num')} ${esc(t.min)} (${lang === 'hi' ? E(g.path + '.travel.label', g.label, lang) : F(g.path + '.travel.label', g.label)})`;
   }
 
-  /** Printable slip markup (one A5/A4 page with the print stylesheet). */
-  // Styles for this screen only, injected on first use so they stay off the first-paint CSS (75 KB budget).
-  const CSS = `.slip { border: 2px solid var(--text); border-radius: var(--r2); padding: var(--sp3) var(--sp4); margin: var(--sp3) 0; background: var(--surface); }
+  // Styles for this screen only, injected on first use so they stay off the first-paint CSS (75 KB budget). Screen only:
+  // app.css's @media print rules for .slip must win when printing.
+  const CSS = `@media screen {
+.slip { border: 2px solid var(--text); border-radius: var(--r2); padding: var(--sp3) var(--sp4); margin: var(--sp3) 0; background: var(--surface); }
 .slip h2 { font-size: var(--s21); margin-top: 0; }
 .slip-table { table-layout: fixed; }
 .slip-table th, .slip-table td { padding: var(--sp2) var(--sp1); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -214,7 +215,8 @@
 .slip a { overflow-wrap: anywhere; }
 .slip-name { border-top: 1px dashed var(--line-strong); padding-top: var(--sp2); }
 body.slip-big .slip { font-size: 200%; }
-body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }`;
+body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
+}`;
   function injectCss() {
     if (typeof document === 'undefined' || document.getElementById('slip-css')) return;
     const st = document.createElement('style');
@@ -222,6 +224,7 @@ body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
     st.textContent = CSS;
     document.head.appendChild(st);
   }
+  /** Printable slip markup (one A5/A4 page with the print stylesheet). */
   function toHtml(m, lang) {
     injectCss();
     const t = T[lang] || T.en;
