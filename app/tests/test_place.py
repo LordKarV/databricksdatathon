@@ -156,7 +156,8 @@ def test_api_resolves_names_and_pins_without_a_pack(q, kind, label):
 @needs_data
 def test_api_nonsense_is_404_with_no_matches():
     r = client.post("/api/place", json={"q": "xqzv plonk"})
-    assert r.status_code == 404 and r.json() == {"error": "place not found", "matches": []}
+    assert r.status_code == 404 and r.json().items() >= {"error": "place not found", "matches": []}.items()
+    assert r.json()["code"] == "place_not_found"
 
 
 def test_api_rejects_bad_bodies_without_echoing_them():
