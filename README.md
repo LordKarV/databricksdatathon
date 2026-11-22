@@ -35,7 +35,10 @@ The submission is three things:
   on Databricks Free Edition ([`submission/README.md`](submission/README.md)).
 
 The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
-tells the same story as the notebook, in plain words.
+tells the same story as the notebook, in plain words. When online, it shows the options on an OpenStreetMap street
+map with a Google Maps directions link for each (offline it keeps a simple drawn map). It is in English and Hindi,
+plus machine-translated text, not yet reviewed by a native speaker, in eight more languages: Tamil, Telugu,
+Kannada, Malayalam, Bengali, Marathi, Gujarati and Urdu.
 
 ## What runs on Databricks
 
