@@ -596,12 +596,21 @@ function windowHtml(p) {
   const w = p.time_window;
   if (!w || !w.first_outside || !p.options.length) return '';
   const po = p.public_option;
+  // Kept short above the card (the sentence and one compact 108/102 row) so Call stays on screen on a 320x568 phone;
+  // the public hospital goes under the card (windowBelowHtml).
   return `<section class="panel window-miss" aria-label="${th('window.label')}">
     <p><strong>${th('window.miss', {min: N('options.0.travel.minutes', p.options[0].travel.minutes), win: N('time_window.window_min', w.window_min)})}</strong></p>
-    <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
-    ${po ? `<p>${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
-      ${travelHtml(po.travel, 'public_option.travel')}.</p>` : `<p>${th('window.no_public')}</p>`}
+    <div class="sos-inline">${sosCompact(has102(p.query.service))}</div>
   </section>`;
+}
+const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.108_short')}</b></a>${with102
+  ? ` <a href="tel:102">${icon('phone')}<b>${th('sos.102_short')}</b></a>` : ''}`;
+function windowBelowHtml(p) {
+  const w = p.time_window, po = p.public_option;
+  if (!w || !w.first_outside || !p.options.length) return '';
+  // On a narrow phone the sticky bar's 102 sub-line is clipped from view, so it is said here once, under the card.
+  return `<p class="panel window-public">${po ? `${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>${has102(p.query.service) ? `<p class="note">${th('sos.102_sub')}</p> ` : ''}`;
 }
 function whyNotHtml(p) {
   const rows = p.why_not || [];
@@ -658,120 +667,8 @@ function farVerifiedNote(p) {
     ${th(nearer.length === 1 ? 'far.one' : 'far.many', {ranks: nearer.map(r).join(', ')})}</p>`;
 }
 
-// ---------- Multi-stop route (#47): a compact strip and stop list on the answer, every field under "Route details" ----------
-// Durations use kind 'dur' (minutes, hours or days back to stored minutes); met / not met uses kind 'met'.
-function durText(m) {
-  if (m < 120) return ts('dur.min', {n: m});
-  if (m >= 1440) return ts(Math.round(m / 1440) === 1 ? 'dur.day' : 'dur.days', {n: Math.round(m / 1440)});
-  return ts('dur.h', {n: Math.round(m / 60)});
-}
-function stopGroups(stops) {
-  const g = [];
-  stops.forEach((s, k) => {
-    if (g.length && g[g.length - 1].id === s.facility_id) g[g.length - 1].ks.push(k);
-    else g.push({id: s.facility_id, ks: [k]});
-  });
-  return g;
-}
-function evidenceHtml(s, S) {
-  if (!s.evidence.length) return `<p class="note">${th(s.n_evidence ? 'route.ev_not_here' : 'route.ev_none')}</p>`;
-  return `<ul class="quotes">${s.evidence.map((e, j) => `<li lang="en">"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-    ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
-    ${s.n_evidence > s.evidence.length ? `<p class="note">${th('route.ev_more')}</p>` : ''}`;
-}
-function stopHtml(r, g, P) {
-  const s0 = r.stops[g.ks[0]];
-  const S0 = `${P}.stops.${g.ks[0]}`;
-  const ph = s0.phone && s0.phone.e164;
-  const stages = g.ks.map(k => {
-    const s = r.stops[k], S = `${P}.stops.${k}`;
-    return `<li><strong>${E(S + '.purpose_word', s.purpose_word)}</strong>.
-      ${th('route.p', {p: N(S + '.p', s.p.toFixed(2))})}
-      ${s.dwell_minutes != null ? th('route.stay', {d: F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}) : ''}
-      ${th('route.weakest', {cap: E(S + '.weakest_capability', s.weakest_capability), p: N(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2))})}
-      ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
-      <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
-        ${evidenceHtml(s, S)}</details>
-      ${s.fallback ? `<p class="note">${th('route.fallback', {name: `<span lang="en">${F(S + '.fallback.name', s.fallback.name)}</span>`,
-        eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: N(S + '.fallback.p', s.fallback.p.toFixed(2))})}</p>` : ''}
-      ${s.note ? `<p class="note">${E(S + '.note', s.note)}</p>` : ''}
-      ${s.flags.map((f, j) => `<p class="note">${E(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
-  }).join('');
-  const phone = ph ? `<a href="tel:${esc(ph)}">${th('route.call', {phone: F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)})}</a>`
-    : s0.phone && s0.phone.display ? th('route.phone', {phone: F(S0 + '.phone.display', s0.phone.display)}) : th('route.no_phone');
-  return `<li><p class="stop-name"><strong lang="en">${F(S0 + '.name', s0.name)}</strong></p>
-    <p class="note">${s0.place ? `<span lang="en">${F(S0 + '.place', s0.place)}</span>. ` : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
-      ${phone}</p>
-    <ul>${stages}</ul></li>`;
-}
-function routePlanHtml(r, P) {
-  const t = r.totals, v = r.vs_direct;
-  return `<p>${E(P + '.type_word', r.type_word)}.</p>
-    <ol class="stops-full">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
-    ${t.minutes_to_definitive != null ? `<p>${th('route.totals', {min: N(P + '.totals.minutes_to_definitive', t.minutes_to_definitive),
-      low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: N(P + '.totals.p_first_care', t.p_first_care.toFixed(2)),
-      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p><p class="note">${th('route.totals_assume')}</p>` : ''}
-    ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
-    ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
-      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}
-    ${v && v.direct_minutes != null ? `<p class="note">${th('route.direct', {n: N(P + '.vs_direct.direct_minutes', v.direct_minutes)})}</p>` : ''}`;
-}
-function checkHtml(c, C, full) {
-  return `<p class="window${c.met ? '' : ' miss'}">${icon(c.met ? 'ok' : 'warn')}<span>${th(full ? 'route.check' : 'route.check_short', {
-    check: E(C + '.check', c.check), limit: N(C + '.limit_minutes', c.limit_minutes),
-    met: `<strong>${F(C + '.met', ts(c.met ? 'route.met' : 'route.not_met'), 'met')}</strong>`, eta: N(C + '.eta_minutes', c.eta_minutes)})}</span></p>`;
-}
-// Route strip (design/ui2/SPEC.md): one lane against the clock; each arrival a capsule from eta_low to eta_high; the
-// window a rule with the time past it hatched; the line draws once and the first stop pulses. aria-hidden: the stop
-// list under it is the accessible version and carries the marked numbers.
-// A missed check comes first (safety): the strip and the line under it never show a green "inside the limit" while
-// another check (for example definitive care) is not met.
-const keyCheck = r => r.window_checks.find(w => !w.met) || r.window_checks[0];
-function stripHtml(r) {
-  const c = keyCheck(r);
-  if (!c) return '';
-  const lanes = stopGroups(r.stops).map(g => r.stops[g.ks[0]]);
-  const span = 1.1 * Math.max(c.limit_minutes, ...lanes.map(s => s.eta_high));
-  const x = m => +(100 * m / span).toFixed(2);
-  const wx = x(c.limit_minutes);
-  const short = n => n.replace(/^(Sub Divisional|District|Sadar) Hospital,? /, 'SDH ').replace(/ (Hospital|Medical College).*$/, '');
-  const labs = lanes.map((s, k) => {
-    const S = `itinerary.plans.0.stops.${r.stops.indexOf(s)}`;
-    return `<span class="strip-lab" style="${x(s.eta_low) < 50 ? `left:max(0px, calc(${x(s.eta_low)}% - 7px))` : 'right:0;text-align:right'}"><span lang="en">${k + 1}. ${esc(short(s.name))}</span>
-    <span class="num">${N(S + '.eta_low', s.eta_low)}-${N(S + '.eta_high', s.eta_high)}</span></span>`;
-  }).join('');
-  return `<div class="strip" aria-hidden="true">
-    <svg><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="6" fill="var(--hazard)" opacity=".5"/></pattern></defs>
-      <rect class="late" x="${wx}%" y="12" width="${(100 - wx).toFixed(2)}%" height="24"/><line class="limit" x1="${wx}%" x2="${wx}%" y1="2" y2="44"/>
-      ${lanes.map(s => `<line class="eta" x1="${x(s.eta_low)}%" x2="${x(s.eta_high)}%" y1="24" y2="24"/>`).join('')}
-      <line class="path" x1="0" x2="${x(lanes[lanes.length - 1].eta_low)}%" y1="24" y2="24" pathLength="1"/>
-      <circle cx="0" cy="24" r="4" class="origin"/>${lanes.map((s, k) => `<circle class="stop${k === 0 ? ' now' : ''}" cx="${x(s.eta_low)}%" cy="24" r="7"/>`).join('')}</svg>
-    <span class="strip-limit" style="left:calc(${wx}% + 4px)">${c.limit_minutes} ${th('unit.min')}</span>${labs}</div>`;
-}
-function routeHtml(p) {
-  const it = p.itinerary;
-  if (!it) return p.itinerary_note ? `<p class="panel note">${E('itinerary_note', p.itinerary_note)}</p>` : '';
-  const head = `<h2 id="h-route">${th('route.h')}</h2>
-    <p class="note">${th('route.intro', {name: E('itinerary.pathway_name', it.pathway_name)})}</p>
-    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}
-    ${it.itinerary_note ? `<p class="note">${E('itinerary.itinerary_note', it.itinerary_note)}</p>` : ''}`;
-  if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
-  if (!it.plans.length) return '';
-  const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
-  const compact = stopGroups(r.stops).map(g => {
-    const s = r.stops[g.ks[0]], S = `${P}.stops.${g.ks[0]}`;
-    return `<li><b lang="en">${F(S + '.name', s.name)}</b><span>${g.ks.map(k => E(`${P}.stops.${k}.purpose_word`, r.stops[k].purpose_word)).join(', ')}${c
-      ? `, ${th('route.eta', {low: N(S + '.eta_low', s.eta_low), high: N(S + '.eta_high', s.eta_high)})}` : ''}</span></li>`;
-  }).join('');
-  const legend = c ? `<ul class="legend" aria-hidden="true"><li><span class="sw sw-route"></span>${th('route.legend_route')}</li>
-    <li><span class="sw sw-range"></span>${th('route.legend_range')}</li><li><span class="sw sw-late"></span>${th('route.legend_late')}</li></ul>` : '';
-  const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
-  return `<section class="section" aria-labelledby="h-route">${head}
-    <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
-      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}
-      ${r.vs_direct && r.vs_direct.text ? `<p class="vs-direct-main">${E(P + '.vs_direct.text', r.vs_direct.text)}</p>` : ''}${legend}
-      <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
-}
+// ---------- Multi-stop route (#47): in /route.js, loaded with the plan request (off the first-paint bytes) ----------
+const routeOrNone = p => (typeof routeHtml === 'function' ? routeHtml(p) : '');
 
 // ---------- the answer (S3): one readout, then the next two, then the route ----------
 // A listed website flagged by the facts build (#136): its label, and why it is unreliable, in the app language.
@@ -844,10 +741,10 @@ function whyFirstHtml(p, o, P) {
   }
   return rule.text ? `<p class="why-first">${th('ans.why_first.rule', {rule: E('rank_rule.text', rule.text)})}</p>` : '';
 }
-function answerPanel(p, o, i) {
+function answerPanel(p, o, i, describedBy = '') {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
   const fb = p.itinerary && p.itinerary.fallback;  // the route only if card 1 cannot treat (#126)
-  return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}">
+  return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}"${describedBy ? ` aria-describedby="${describedBy}"` : ''}>
     <h2 class="kicker">${th(o.call_first || i === 0 ? 'ans.call_first' : 'ans.option', {n: N(P + '.rank', o.rank)})}</h2>
     <h3 id="opt-${o.rank}" class="name" lang="en">${F(P + '.name', o.name)}</h3>
     <p class="place"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
@@ -882,7 +779,7 @@ function planScreen() {
   if (!s || !state.loc) return home();
   const p = state.plan;
   if (p && p.offline) return offlineScreen(s);
-  const head = `<h1 tabindex="-1">${esc(s.label)}</h1><p class="note" data-device>${locLine(state.loc)}</p>`;
+  const head = `<h1 tabindex="-1">${esc(s.label)}</h1><p class="note loc-line" data-device>${locLine(state.loc)}</p>`;
   if (!p) return head + `<p class="section">${th('ans.finding')}</p>`;
   if (p.error) return head + `<p class="panel section" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">${th('nav.back')}</a>`;
   const depth = state.depth || 'quick';
@@ -896,16 +793,20 @@ function planScreen() {
   let body;
   if (p.abstain) {
     const oo = p.abstain.outside_option;
-    body = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>
-      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${nextRows(p, 1)}
+    // With a window-miss panel above as well, the "none confirmed" notice goes under the card, so Call stays on
+    // screen on a 320x568 phone (the window line stays the answer's first line).
+    // The card is described by the notice (aria-describedby), so a screen reader hears it with the card and its Call.
+    const notice = `<p class="panel section" id="abstain-note"><strong>${E('abstain.text', p.abstain.text)}</strong></p>`, low = !!windowHtml(p);
+    body = `${low ? '' : notice}
+      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0, low ? 'abstain-note' : '')}</div>` : ''}${low ? notice : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
       ${oo && !windowHtml(p) ? `<article class="panel section"><h3 lang="en">${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="note"><strong>${E('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${E('abstain.outside_option.text', oo.text)}</p>
-        <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}${routeHtml(p)}`;
+        <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}${routeOrNone(p)}`;
     if (!p.options.length) body = body + `<p class="note">${RSInput.speakHtml()}</p><p id="speak-note" class="note" aria-live="polite"></p>`;
   } else {
     // The readout first, so Call is above the fold on small phones; the far-verified note qualifies it right under it.
-    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + farVerifiedNote(p) + nextRows(p, 1) + routeHtml(p);
+    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + windowBelowHtml(p) + farVerifiedNote(p) + nextRows(p, 1) + routeOrNone(p);
   }
   return head + windowHtml(p) + body + foot;
 }
@@ -1150,6 +1051,7 @@ async function bindPlan() {
     source: l.source, depth: 'quick'};
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 8000);
+  const routeJs = needScripts(['/route.js']).catch(() => {});  // fetched alongside the plan (not on first paint)
   try {
     const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body), redirect: 'manual', signal: ctl.signal});
@@ -1173,6 +1075,7 @@ async function bindPlan() {
   } finally {
     clearTimeout(timer);
   }
+  await routeJs;
   render();
 }
 
@@ -1639,12 +1542,38 @@ function render(opts = {}) {
   document.body.classList.toggle('wide', (h === '#/plan' && state.depth === 'compare') || h === '#/area');
   document.body.classList.toggle('on-plan', h === '#/plan');  // no bottom nav on the answer: Call needs the room
   renderBar();
+  if (h === '#/plan' && state.plan && state.plan.itinerary && typeof routeHtml !== 'function') {
+    needScripts(['/route.js']).then(() => render({keepFocus: true})).catch(() => {});  // e.g. back to #/plan
+  }
   const h1 = $('#main h1');
   if (h1 && !opts.keepFocus && !h.endsWith('#call')) h1.focus({preventScroll: false});
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + ts('app.name');
   bind();
   if ($('#speak')) RSInput.bindSpeak(state.speak);
+  callBar();
   if (state.lang === 'hi' && state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
+}
+// On a short screen (under 600 px tall) a fixed Call bar shows whenever any part of the answer card is on screen and
+// its own Call button is not fully visible, so Call is reachable whatever stands above the card (#178). It copies the
+// card's link without the data-f marks (the card keeps them) and lives outside #main.
+function callBar() {
+  $('#call-bar')?.remove();
+  if (state.callObs) { state.callObs.disconnect(); state.callObs = null; }
+  const card = $('#main article.answer'), call = card && card.querySelector('.call-main');
+  if (!call || !('IntersectionObserver' in window) || !matchMedia('(max-height: 600px)').matches) return;
+  const bar = document.createElement('div');
+  bar.id = 'call-bar';
+  bar.className = 'call-bar';
+  bar.hidden = true;
+  bar.innerHTML = call.outerHTML.replace(/ data-[fk]="[^"]*"/g, '').replace('call-main', 'call-fixed');
+  document.body.appendChild(bar);
+  let cardOn = false, callOn = false;
+  state.callObs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.target === card) cardOn = e.isIntersecting; else callOn = e.intersectionRatio > 0.999; });
+    bar.hidden = !(cardOn && !callOn);
+  }, {threshold: [0, 1]});
+  state.callObs.observe(card);
+  state.callObs.observe(call);
 }
 window.addEventListener('hashchange', () => {
   window.RSCommunity?.sendPending();  // a "no" left without a reason is sent as it is
