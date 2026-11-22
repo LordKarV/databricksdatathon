@@ -728,6 +728,45 @@ def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
     return [f"tie row does not show {missing}"] if missing else []
 
 
+def check_doubt(payload: dict, shown: set[str]) -> list[str]:
+    """WS1 1d: when option 1's map point may be wrong (location_doubt, #147), the readout names its address and,
+    when the engine has it, the time from the PIN centre (travel.alt)."""
+    o = (payload.get("options") or [None])[0]
+    if not o or not o.get("location_doubt"):
+        return []
+    need = ["options.0.address" if o.get("address") else "options.0.town"]
+    if (o.get("travel") or {}).get("alt"):
+        need += ["options.0.travel.alt.low", "options.0.travel.alt.high"]
+    return [f"location doubt: {x} not shown" for x in need if x not in shown]
+
+
+def test_location_doubt_line_on_the_readout(base_url, browser):
+    """WS1 1d on a payload with the #147 fields set (works before #147 merges): the amber line, marked, in en and hi."""
+    import copy
+    base = next(p for n, p in PAYLOADS if n.startswith("stub-trauma"))
+    payload = copy.deepcopy(base)
+    o = payload["options"][0]
+    o["location_doubt"] = True
+    o["travel"]["alt"] = {"minutes": 30, "low": 25, "high": 41, "from": "pin_centre"}
+    for lang in ("en", "hi"):
+        ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+        page = ctx.new_page()
+        page.route("**/api/plan", json_reply(payload))
+        page.add_init_script("localStorage.setItem('rs.lang', " + json.dumps(json.dumps(lang)) + ");"
+                             "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+                             " source: 'gps', t: Date.now(), label: null}))")
+        try:
+            page.goto(base_url + "/#/")
+            page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+            page.wait_for_selector("article.card .doubt")
+            got = page.evaluate(COLLECT_JS)
+        finally:
+            ctx.close()
+        shown = {it["path"] for it in got["items"]}
+        errs = check_doubt(payload, shown) + check_screen(f"doubt/{lang}", payload, got, {"values_checked": 0})
+        assert not errs, errs[:10]
+
+
 # ---------- the test ----------
 @pytest.mark.parametrize("name, payload", PAYLOADS, ids=[n for n, _ in PAYLOADS])
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
@@ -754,6 +793,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        errs += [f"plan: {e}" for e in check_doubt(payload, plan_shown)]
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []

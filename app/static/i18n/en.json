@@ -470,5 +470,8 @@
  "test.model_version": "Model version",
  "test.pred_hash": "Test predictions hash",
  "test.label_hash": "Test labels hash",
- "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India."
+ "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India.",
+ "ans.doubt.line": "Map point may be wrong. Its address says {address}.",
+ "ans.doubt.alt": "From that area it is {low} to {high} min.",
+ "ans.doubt.ask": "Ask the way when you call."
 }

@@ -747,6 +747,15 @@ function sureHtml(o, P) {
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
   return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
+// WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
+// when the engine has it, the time from the PIN centre (travel.alt), so the worker asks the way on the call.
+// A no-op on payloads without the field.
+function doubtHtml(o, P) {
+  if (!o.location_doubt) return '';
+  const alt = o.travel && o.travel.alt;
+  return `<p class="doubt">${icon('warn')}<span>${th('ans.doubt.line', {address: `<span lang="en">${F(P + '.address', o.address || o.town)}</span>`})}${
+    alt ? ' ' + th('ans.doubt.alt', {low: N(P + '.travel.alt.low', alt.low), high: N(P + '.travel.alt.high', alt.high)}) : ''} ${th('ans.doubt.ask')}</span></p>`;
+}
 function answerPanel(p, o, i) {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
   const fb = p.itinerary && p.itinerary.fallback;  // the route only if card 1 cannot treat (#126)
@@ -759,6 +768,7 @@ function answerPanel(p, o, i) {
     ${i === 0 && fb ? `<p class="note"><strong>${E('itinerary.fallback.ask', fb.ask)}</strong> ${E('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
+    ${doubtHtml(o, P)}
     ${sureHtml(o, P)}
     ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
