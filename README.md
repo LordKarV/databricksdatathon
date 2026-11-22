@@ -113,6 +113,10 @@ upstream cleaning steps; see `derived/v1/README.md`.
   "How this works" page, as history. Its numbers are not comparable with the DEV numbers above.
 - **Faithfulness:** every number and quote the app shows is checked against its stored row by
   `app/tests/test_faithfulness.py` before release.
+- **What the outside lists change** ([`validation/out/source_impact.csv`](validation/out/source_impact.csv)):
+  removing every list and OpenStreetMap row from the frozen scores changes the first answer for 57 of 299 dialysis
+  and 86 of 294 cardiac surgery searches (19% and 29%, over 300 seeded PIN centres), and moves 0 LIKELY pairs out
+  of LIKELY. The lists are cited witnesses on a facility's ledger row; they reorder close calls, never the band.
 
 ## Limits
 

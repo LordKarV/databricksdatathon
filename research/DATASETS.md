@@ -20,8 +20,8 @@ named in each entry; they differ between datasets. Hand-check precision is on sm
 |---|---|---|---|---|---|---|
 | 1 | NABH accredited list | evidence, labels | restricted (per-facility facts only) | 20.7% of 9,970 VF | 39/40 | 3 h |
 | 2 | LGD archive (PIN to district) | geography | reproduce freely, credit LGD | 85.8% | 19/20, 1 ambiguous | 3 h |
-| 3 | PIN code boundaries | geography, location check | GODL | 61.7% inside stated PIN | 12/12, far flag 4/4 | 3 h |
-| 4 | IDP NFHS district (NFHS-5 and NFHS-6) | need | ODC-BY | 98.2% of facilities | 20/20 | 3 h |
+| 3 | PIN code boundaries (evaluated, not used) | geography, location check | GODL | 61.7% inside stated PIN | 12/12, far flag 4/4 | 3 h |
+| 4 | IDP NFHS district (NFHS-5; NFHS-6 provisional evaluated, not used) | need | ODC-BY | 98.2% of facilities | 20/20 | 3 h |
 | 5 | MAP travel time to healthcare | travel time | CC BY | 98.6% | 20/20 raster values | 4 h |
 | 6 | NMC medical colleges and courses | evidence, labels | restricted (per-facility facts only) | 79/839 colleges | 19/20 | 4 h |
 | 7 | e-RaktKosh blood centres | evidence, routing, labels | no licence stated | 388/6,904 centres | 16/20 strict, 18/20 with likely | 4 h |
@@ -30,8 +30,14 @@ named in each entry; they differ between datasets. Hand-check precision is on sm
 | 10 | MoHFW trauma care facilities (196) | evidence, routing, labels (trauma) | restricted (per-facility facts only) | 20/196 | 19/20 | 4 h |
 | 11 | WorldPop R2025A | need (population) | CC BY 4.0 | 98.7% | 18/20 | 3 h |
 | 12 | LGD district polygons | geography | CC0 mirror, do not draw as a map | 99.9% | 15/20, 4 wrong due to VF coordinates | 3 h |
-| 13 | HMIS sub-district (IDP) | need, district plausibility | ODC-BY | 91.8% district | 17/20 | 4 h |
+| 13 | HMIS sub-district (IDP) (evaluated, not used) | need, district plausibility | ODC-BY | 91.8% district | 17/20 | 4 h |
 | 14 | PMNDP dialysis counts | need, weak dialysis flag | NHSRC: reproduce freely, credit | state join 95.7% | Goa 1/1 precision, 1/8 recall | 3 h |
+
+Status on 2026-11-22: four entries were evaluated and are not used by the model or the app. They are HMIS
+sub-district (rank 13), the NFHS-6 2023-24 provisional columns (rank 4; the app shows NFHS-5), PIN code boundaries
+(rank 3; only the location validation check `validation/location/checks.py` reads it) and NPPMBI burn units
+(section 2). What each used source changes in the scores and in the first answer is in
+`validation/out/source_impact.csv` (`validation/source_impact.py`).
 
 Total effort if everything is done: 48 h. Ranks 1 to 8 are about 27 h and cover evidence for all the
 example services plus geography, need and travel time. Ranks 9 to 14 add corroboration and context.
@@ -377,7 +383,7 @@ These came up in discovery but were not downloaded or tested, so no match rate o
 | Wikidata hospitals and medical colleges in India | CC0 identity crosswalk (website, coordinates, ids) | not queried |
 | Archived COVID-19 bed dashboards (Delhi, TN, Telangana) | the only per-facility ICU and ventilator evidence found | not fetched; 2020-21 data |
 | AIKosh mirrors: National Hospital Directory with geo code, Blood Bank Directory (GODL), CGHS list, Health Centres 2016, Hospital Directory 2015 | more registry rows; the Blood Bank Directory is a licensed alternative to e-RaktKosh | not fetched; 2015 and 2016 snapshots are stale |
-| MusQan certification, NPPMBI burn units (47), NCG cancer members, NCDIR HBCR hospitals, NNF fellowship centres, NQAS, Kayakalp 2021-22 | service-specific evidence for paediatrics, burns, oncology, NICU | not fetched; burn units are "scheme-supported", not proof of service; Kayakalp is FY 2021-22 only |
+| MusQan certification, NPPMBI burn units (47; evaluated, not used), NCG cancer members, NCDIR HBCR hospitals, NNF fellowship centres, NQAS, Kayakalp 2021-22 | service-specific evidence for paediatrics, burns, oncology, NICU | not fetched; burn units are "scheme-supported", not proof of service; Kayakalp is FY 2021-22 only |
 | State insurance lists: Gujarat PMJAY-MA CSV, Telangana Aarogyasri JSON (GitHub copies), Kerala KASP, Haryana PDFs, MJPJAY via Wayback | per-hospital specialty labels for cardiac, dialysis, oncology | not fetched; GitHub copies have unknown provenance; one state each |
 | Chain locators: NephroPlus, DCDC, Apollo Dialysis, Aarthi Scans, Mahajan Imaging | positive labels for dialysis and MRI, where no public list exists | not fetched; robots.txt and terms not checked |
 | PSA oxygen plant list (MoHFW RTI, 2023) | oxygen evidence | not fetched |
