@@ -16,6 +16,7 @@ from community import field
 from community import pulse as area_pulse
 from community.reporter import reporter_key
 from facts.engine import RADIUS_KM, Engine
+from facts.places import Places, load_places
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
@@ -27,12 +28,13 @@ from services import SERVICES, haversine_km
 from verify.check import Checker
 from voice import transcribe as voice
 
-LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
+LocationSource = Literal["gps", "last_fix", "pin", "district", "place", "manual"]
 Depth = Literal["quick", "compare", "area"]
 
 HERE = Path(__file__).resolve().parent
 STATIC = HERE / "static"
 PACKS = HERE / "packs" / "out"  # built by packs/build_packs.py (git-ignored)
+PLACES = HERE / "facts" / "out" / "places.json.gz"  # town and post office names, built by facts/build.py
 
 # Only these files are served from the root. An allowlist keeps the shell small and
 # avoids exposing anything else in the folder.
@@ -409,6 +411,29 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
         return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
     return JSONResponse({"slug": slug, "state": state,
                          "packs": [{"slug": slug, "state": state}] + _near_packs(idx, slug, lat, lon)})
+
+
+class PlaceRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    q: str = Field(min_length=1, max_length=80)
+
+
+@functools.lru_cache(maxsize=1)
+def _places() -> Places:
+    return Places(_need_engine().pins, load_places(PLACES))
+
+
+@app.post("/api/place")
+def place(req: PlaceRequest) -> JSONResponse:
+    """A typed PIN, district, town or post office name to a point (#121 bug 5), from facts and places.json.gz only.
+
+    The text travels in the body and is never logged. 404 with no matches, so the page can say what to type.
+    """
+    matches = _places().lookup(req.q)
+    if not matches:
+        return JSONResponse({"error": "place not found", "matches": []}, 404)
+    return JSONResponse({"matches": matches})
 
 
 def _near_packs(idx: dict, home: str, lat: float, lon: float) -> list[dict]:
