@@ -1,0 +1,746 @@
+{
+ "query": {
+  "service": "dialysis",
+  "service_label": {
+   "en": "dialysis",
+   "hi": "डायलिसिस"
+  },
+  "depth": "quick"
+ },
+ "location": {
+  "lat": 25.6,
+  "lon": 85.14,
+  "accuracy_m": 40,
+  "source": "gps",
+  "rounded_to_deg": 0.01
+ },
+ "as_of": "2026-11-21",
+ "profile": "scheduled",
+ "emergency_numbers": [
+  {
+   "number": "108",
+   "label": "Ambulance (free)"
+  }
+ ],
+ "abstain": null,
+ "options": [
+  {
+   "rank": 1,
+   "facility_id": "a52cd60a-a5c0-427e-bfbc-e9c63dc9410a",
+   "name": "Satyavrat Hospital",
+   "town": "Patna",
+   "district": "PATNA",
+   "state": "BIHAR",
+   "address": "Patna, Bihar 800020",
+   "operator": "private",
+   "lat": 25.60218,
+   "lon": 85.15295,
+   "travel": {
+    "minutes": 2,
+    "low": 2,
+    "high": 3,
+    "km": 1.8,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "band": "likely",
+   "band_word": "Likely",
+   "band_reason": null,
+   "p": 0.99,
+   "p_lo": 0.82,
+   "p_hi": 0.93,
+   "range_kind": "similar_scores",
+   "model_band": "LIKELY",
+   "p_e": 0.986,
+   "p_l": 0.955,
+   "evidence": [
+    {
+     "claim_id": "a52cd60a:proc:2",
+     "field": "procedure",
+     "quote": "Hemodialysis is performed in the Hemodialysis Unit",
+     "source_url": "http://satyavrathospital.com/",
+     "flags": []
+    },
+    {
+     "claim_id": "a52cd60a:proc:10",
+     "field": "procedure",
+     "quote": "Hemodialysis treatment is provided",
+     "source_url": "http://satyavrathospital.com/",
+     "flags": []
+    },
+    {
+     "claim_id": "a52cd60a:capa:2",
+     "field": "capability",
+     "quote": "Hemodialysis unit available",
+     "source_url": "http://satyavrathospital.com/",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 49
+    }
+   ],
+   "flags": [],
+   "call_ahead": [
+    {
+     "question": "Do you have dialysis unit or machine on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": true,
+   "track_record": {
+    "n": 217,
+    "k_confirmed": 114,
+    "k_contradicted": 14,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.80 to 1.00"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "own website",
+    "phone not shared with other listings",
+    "no concerns found in its record"
+   ],
+   "where_check": "Map point, PIN and city agree",
+   "why_first_text": null,
+   "say_to_family": {
+    "en": "This hospital's listing says it offers dialysis. It is about 2 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  },
+  {
+   "rank": 2,
+   "facility_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+   "name": "Advanced Neuro Hospital",
+   "town": "Patna",
+   "district": "PATNA",
+   "state": "BIHAR",
+   "address": "Patna, Bihar 800001",
+   "operator": "private",
+   "lat": 25.6091,
+   "lon": 85.13434,
+   "travel": {
+    "minutes": 2,
+    "low": 1,
+    "high": 3,
+    "km": 1.6,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "band": "likely",
+   "band_word": "Likely",
+   "band_reason": null,
+   "p": 0.98,
+   "p_lo": 0.82,
+   "p_hi": 0.93,
+   "range_kind": "similar_scores",
+   "model_band": "LIKELY",
+   "p_e": 0.984,
+   "p_l": 0.95,
+   "evidence": [
+    {
+     "claim_id": "cfe04a36:proc:8",
+     "field": "procedure",
+     "quote": "Nephrology treatments including hemodialysis",
+     "source_url": "http://www.advanceneurohospital.com/",
+     "flags": []
+    },
+    {
+     "claim_id": "cfe04a36:proc:12",
+     "field": "procedure",
+     "quote": "Hemodialysis is provided",
+     "source_url": "http://www.advanceneurohospital.com/",
+     "flags": []
+    },
+    {
+     "claim_id": "cfe04a36:equi:3",
+     "field": "equipment",
+     "quote": "Hemodialysis equipment is available",
+     "source_url": "http://www.advanceneurohospital.com/",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 41
+    }
+   ],
+   "flags": [],
+   "call_ahead": [
+    {
+     "question": "Do you have dialysis unit or machine on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": false,
+   "track_record": {
+    "n": 217,
+    "k_confirmed": 114,
+    "k_contradicted": 14,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.80 to 1.00"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "own website",
+    "phone not shared with other listings",
+    "no concerns found in its record"
+   ],
+   "where_check": "Map point, PIN and city agree",
+   "why_first_text": null,
+   "say_to_family": {
+    "en": "This hospital's listing says it offers dialysis. It is about 2 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  },
+  {
+   "rank": 3,
+   "facility_id": "e8396ece-9b70-4b1f-aa01-85d88ecbc9c3",
+   "name": "Ford Hospital And Research Center",
+   "town": "Patna",
+   "district": "PATNA",
+   "state": "BIHAR",
+   "address": "Patna, Bihar 800027",
+   "operator": "private",
+   "lat": 25.60044,
+   "lon": 85.1531,
+   "travel": {
+    "minutes": 2,
+    "low": 2,
+    "high": 3,
+    "km": 1.8,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "band": "likely",
+   "band_word": "Likely",
+   "band_reason": null,
+   "p": 0.98,
+   "p_lo": 0.82,
+   "p_hi": 0.93,
+   "range_kind": "similar_scores",
+   "model_band": "LIKELY",
+   "p_e": 0.984,
+   "p_l": 0.95,
+   "evidence": [
+    {
+     "claim_id": "e8396ece:equi:5",
+     "field": "equipment",
+     "quote": "Dialysis unit",
+     "source_url": "http://www.fordhospital.org/",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 38
+    }
+   ],
+   "flags": [
+    "Claims 6 or more of the 8 audited acute services; records like this often merge several facilities."
+   ],
+   "call_ahead": [
+    {
+     "question": "Do you have dialysis unit or machine on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "Is this the branch in this town, or another branch?",
+     "asked_because": "record may merge several branches"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": false,
+   "track_record": {
+    "n": 217,
+    "k_confirmed": 114,
+    "k_contradicted": 14,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.80 to 1.00"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "own website",
+    "phone not shared with other listings"
+   ],
+   "where_check": "Map point, PIN and city agree",
+   "why_first_text": null,
+   "say_to_family": {
+    "en": "This hospital's listing says it offers dialysis. It is about 2 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  }
+ ],
+ "why_not": [
+  {
+   "facility_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+   "name": "Advanced Neuro Hospital",
+   "travel": {
+    "minutes": 2,
+    "low": 1,
+    "high": 3,
+    "km": 1.6,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "option_rank": 2,
+   "minutes_vs_first": 0,
+   "band": "likely",
+   "reason_code": "weaker",
+   "reason": "Its listing evidence is weaker than the first choice's",
+   "basis": [
+    {
+     "code": "weaker",
+     "field": "p",
+     "value": 0.98
+    }
+   ]
+  },
+  {
+   "facility_id": "e8396ece-9b70-4b1f-aa01-85d88ecbc9c3",
+   "name": "Ford Hospital And Research Center",
+   "travel": {
+    "minutes": 2,
+    "low": 2,
+    "high": 3,
+    "km": 1.8,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "option_rank": 3,
+   "minutes_vs_first": 0,
+   "band": "likely",
+   "reason_code": "weaker",
+   "reason": "Its listing evidence is weaker than the first choice's",
+   "basis": [
+    {
+     "code": "weaker",
+     "field": "p",
+     "value": 0.98
+    }
+   ]
+  },
+  {
+   "facility_id": "2058385c-4d0f-462f-8b1d-94f0f59c087c",
+   "name": "Nectar Hospital",
+   "travel": {
+    "minutes": 2,
+    "low": 1,
+    "high": 3,
+    "km": 1.4,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.341,
+    "kmh": 49.1,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.34 at 49 km/h, no route check"
+   },
+   "option_rank": null,
+   "minutes_vs_first": 0,
+   "band": "likely",
+   "reason_code": "weaker",
+   "reason": "Its listing evidence is weaker than the first choice's",
+   "basis": [
+    {
+     "code": "weaker",
+     "field": "p",
+     "value": 0.94
+    }
+   ]
+  }
+ ],
+ "what_would_change": {
+  "kind": "first_says_no",
+  "facility_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+  "name": "Advanced Neuro Hospital",
+  "first_name": "Satyavrat Hospital",
+  "minutes_vs_first": 0
+ },
+ "time_window": {
+  "window_min": 120,
+  "first_outside": false
+ },
+ "rank_rule": {
+  "code": "evidence_and_time",
+  "text": "Ordered by how sure we are, discounted by travel time.",
+  "expected_in_window": null
+ },
+ "public_option": null,
+ "meta": {
+  "stub": false,
+  "model_hash": "ba68457adb1a",
+  "data_snapshot": "derived/v1 2026-11-21",
+  "scores": "model v2 export, model_version eed29abe3b7d",
+  "generated_at": "2026-11-22T06:10:33+00:00",
+  "test_record": {
+   "split": "test",
+   "k": 25,
+   "n": 28,
+   "pct": 89,
+   "lo_pct": 73,
+   "hi_pct": 96,
+   "public_n": 25,
+   "model_version": "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a",
+   "predictions_sha256": "1b85f4c81afd936a057d9349247c716f7fa65091931d51e30ccdcef83f6e3ff4",
+   "labels_sha256": "3e8c00de50e42022d06427fc46f4b24fbbb829ca18b44abf5bb06c01ef8fba97",
+   "opened": "2026-11-22 04:24",
+   "source": "model/gold/v3/test_eval/results.json",
+   "log": "model/gold/v3/OPENING_LOG.md",
+   "log_url": "https://github.com/LordKarV/databricksdatathon/blob/dev/model/gold/v3/OPENING_LOG.md"
+  }
+ },
+ "itinerary": {
+  "pathway": "dialysis_start",
+  "pathway_name": "Starting maintenance dialysis",
+  "urgency": "scheduled",
+  "abstain": null,
+  "plans": [
+   {
+    "rank": 1,
+    "type": "two_sites",
+    "type_word": "Two places, each for its stage",
+    "stops": [
+     {
+      "facility_id": "a52cd60a-a5c0-427e-bfbc-e9c63dc9410a",
+      "name": "Satyavrat Hospital",
+      "place": "Patna",
+      "purpose": "assess",
+      "purpose_word": "Assessment",
+      "eta_low": 2,
+      "eta_high": 3,
+      "dwell_minutes": 240,
+      "p": 0.6302,
+      "weakest_capability": "nephrology",
+      "weakest_capability_p": 0.7938,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [],
+      "n_evidence": 0,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "fc9cdea1-23bf-4180-872a-44335e348fb4",
+      "name": "Pulse Emergency Hospital",
+      "place": "Patna",
+      "purpose": "access",
+      "purpose_word": "Fistula or line for dialysis",
+      "eta_low": 3,
+      "eta_high": 6,
+      "dwell_minutes": 1440,
+      "p": 0.7,
+      "weakest_capability": "vascular access surgery",
+      "weakest_capability_p": 0.7,
+      "question": "Do you create AV fistulas for dialysis here?",
+      "evidence": [
+       {
+        "claim_id": "fc9cdea1:capa:3",
+        "quote": "Departments include General Medicine, Cardiology, Respiratory Medicine, Nephrology, Urology, Obstetric & Gynecology, Endocrinology, NICU, Oncology, Pathology, Radiology, Emergency, Rheumatology, Cardiothoracic and Vascular Surgery (CTVS), Neuro Surgery, General Surgery, Laparoscopic Surgery, Gastro Surgery, Paediatric Surgery, ENT, Plastic Surgery"
+       }
+      ],
+      "n_evidence": 1,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "a52cd60a-a5c0-427e-bfbc-e9c63dc9410a",
+      "name": "Satyavrat Hospital",
+      "place": "Patna",
+      "purpose": "recurring",
+      "purpose_word": "Regular dialysis sessions",
+      "eta_low": 2,
+      "eta_high": 3,
+      "dwell_minutes": 240,
+      "p": 0.9923,
+      "weakest_capability": "haemodialysis unit",
+      "weakest_capability_p": 0.9923,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [
+       {
+        "claim_id": "a52cd60a:proc:2",
+        "quote": "Hemodialysis is performed in the Hemodialysis Unit"
+       },
+       {
+        "claim_id": "a52cd60a:proc:10",
+        "quote": "Hemodialysis treatment is provided"
+       }
+      ],
+      "n_evidence": 3,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     }
+    ],
+    "totals": {},
+    "window_checks": [],
+    "vs_direct": null
+   },
+   {
+    "rank": 2,
+    "type": "two_sites",
+    "type_word": "Two places, each for its stage",
+    "stops": [
+     {
+      "facility_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+      "name": "Advanced Neuro Hospital",
+      "place": "Patna",
+      "purpose": "assess",
+      "purpose_word": "Assessment",
+      "eta_low": 1,
+      "eta_high": 3,
+      "dwell_minutes": 240,
+      "p": 0.6187,
+      "weakest_capability": "nephrology",
+      "weakest_capability_p": 0.7866,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [],
+      "n_evidence": 0,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "fc9cdea1-23bf-4180-872a-44335e348fb4",
+      "name": "Pulse Emergency Hospital",
+      "place": "Patna",
+      "purpose": "access",
+      "purpose_word": "Fistula or line for dialysis",
+      "eta_low": 3,
+      "eta_high": 6,
+      "dwell_minutes": 1440,
+      "p": 0.7,
+      "weakest_capability": "vascular access surgery",
+      "weakest_capability_p": 0.7,
+      "question": "Do you create AV fistulas for dialysis here?",
+      "evidence": [
+       {
+        "claim_id": "fc9cdea1:capa:3",
+        "quote": "Departments include General Medicine, Cardiology, Respiratory Medicine, Nephrology, Urology, Obstetric & Gynecology, Endocrinology, NICU, Oncology, Pathology, Radiology, Emergency, Rheumatology, Cardiothoracic and Vascular Surgery (CTVS), Neuro Surgery, General Surgery, Laparoscopic Surgery, Gastro Surgery, Paediatric Surgery, ENT, Plastic Surgery"
+       }
+      ],
+      "n_evidence": 1,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "cfe04a36-27d3-42ad-9b9a-381e5b931ade",
+      "name": "Advanced Neuro Hospital",
+      "place": "Patna",
+      "purpose": "recurring",
+      "purpose_word": "Regular dialysis sessions",
+      "eta_low": 1,
+      "eta_high": 3,
+      "dwell_minutes": 240,
+      "p": 0.9832,
+      "weakest_capability": "haemodialysis unit",
+      "weakest_capability_p": 0.9832,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [
+       {
+        "claim_id": "cfe04a36:proc:8",
+        "quote": "Nephrology treatments including hemodialysis"
+       },
+       {
+        "claim_id": "cfe04a36:proc:12",
+        "quote": "Hemodialysis is provided"
+       }
+      ],
+      "n_evidence": 3,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     }
+    ],
+    "totals": {},
+    "window_checks": [],
+    "vs_direct": null
+   },
+   {
+    "rank": 3,
+    "type": "single_site",
+    "type_word": "One hospital for every stage",
+    "stops": [
+     {
+      "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+      "name": "Rajeshwar Hospital",
+      "place": "Patna",
+      "purpose": "assess",
+      "purpose_word": "Assessment",
+      "eta_low": 4,
+      "eta_high": 7,
+      "dwell_minutes": 240,
+      "p": 0.54,
+      "weakest_capability": "nephrology",
+      "weakest_capability_p": 0.7349,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [],
+      "n_evidence": 0,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+      "name": "Rajeshwar Hospital",
+      "place": "Patna",
+      "purpose": "access",
+      "purpose_word": "Fistula or line for dialysis",
+      "eta_low": 4,
+      "eta_high": 7,
+      "dwell_minutes": 1440,
+      "p": 0.78,
+      "weakest_capability": "vascular access surgery",
+      "weakest_capability_p": 0.78,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [
+       {
+        "claim_id": "acb49d43:proc:44",
+        "quote": "Provides Cardiology and Cardiothoracic Vascular Surgery (CTVS) services"
+       },
+       {
+        "claim_id": "acb49d43:capa:14",
+        "quote": "Cardiothoracic & Vascular Surgery program"
+       }
+      ],
+      "n_evidence": 2,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     },
+     {
+      "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+      "name": "Rajeshwar Hospital",
+      "place": "Patna",
+      "purpose": "recurring",
+      "purpose_word": "Regular dialysis sessions",
+      "eta_low": 4,
+      "eta_high": 7,
+      "dwell_minutes": 240,
+      "p": 0.9186,
+      "weakest_capability": "haemodialysis unit",
+      "weakest_capability_p": 0.9186,
+      "question": "Do you have a dialysis slot for a new patient, and on which days?",
+      "evidence": [
+       {
+        "claim_id": "acb49d43:proc:4",
+        "quote": "Dialysis and Continuous Renal Replacement Therapy (CRRT)"
+       },
+       {
+        "claim_id": "acb49d43:capa:10",
+        "quote": "Renal Replacement Therapy facility (CRRT)"
+       }
+      ],
+      "n_evidence": 3,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": []
+     }
+    ],
+    "totals": {},
+    "window_checks": [],
+    "vs_direct": null
+   }
+  ],
+  "stop_1_note": null,
+  "meta": {
+   "origin_state": "BIHAR",
+   "terrain": "plain",
+   "plans_considered": null
+  }
+ },
+ "field_reports": {
+  "read": false,
+  "note": {
+   "en": "Logged field reports were not read for this answer; the scores come from the listings only.",
+   "hi": "इस जवाब के लिए स्वास्थ्य कार्यकर्ताओं की रिपोर्ट नहीं पढ़ी जा सकीं; स्कोर सिर्फ़ लिस्टिंग से हैं।"
+  }
+ }
+}

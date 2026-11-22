@@ -1,0 +1,789 @@
+{
+ "query": {
+  "service": "trauma_emergency",
+  "service_label": {
+   "en": "accident and injury care",
+   "hi": "एक्सीडेंट या चोट"
+  },
+  "depth": "quick"
+ },
+ "location": {
+  "lat": 25.6,
+  "lon": 85.95,
+  "accuracy_m": 40,
+  "source": "gps",
+  "rounded_to_deg": 0.01
+ },
+ "as_of": "2026-11-21",
+ "profile": "emergency",
+ "emergency_numbers": [
+  {
+   "number": "108",
+   "label": "Ambulance (free)"
+  }
+ ],
+ "abstain": null,
+ "options": [
+  {
+   "rank": 1,
+   "facility_id": "61731339-a1d6-4384-92ee-fce2d11b3338",
+   "name": "Sub Divisional Hospital Pusa",
+   "town": "Rau Pusa",
+   "district": "SAMASTIPUR",
+   "state": "BIHAR",
+   "address": "Rau Pusa, Samastipur, Bihar 848125",
+   "operator": "public",
+   "lat": 25.6699,
+   "lon": 85.84445,
+   "travel": {
+    "minutes": 19,
+    "low": 14,
+    "high": 27,
+    "km": 17.0,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.293,
+    "kmh": 54.6,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.29 at 55 km/h, no route check"
+   },
+   "band": "not_verified",
+   "band_word": "Not verified",
+   "band_reason": "listing evidence not strong enough to rate it Likely",
+   "p": 0.76,
+   "p_lo": 0.67,
+   "p_hi": 0.9,
+   "range_kind": "similar_scores",
+   "model_band": "NO_SERVICE_TEXT",
+   "p_e": 0.982,
+   "p_l": 0.34,
+   "evidence": [
+    {
+     "claim_id": "61731339:capa:1",
+     "field": "capability",
+     "quote": "Emergency services available",
+     "source_url": "http://www.onefivenine.com/india/Listing/Town/hospitals/Samastipur/Pusa",
+     "flags": []
+    },
+    {
+     "claim_id": "61731339:capa:17",
+     "field": "capability",
+     "quote": "Has 32+ emergency services",
+     "source_url": "http://www.onefivenine.com/india/Listing/Town/hospitals/Samastipur/Pusa",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 12
+    }
+   ],
+   "flags": [
+    "Its location is uncertain."
+   ],
+   "call_ahead": [
+    {
+     "question": "Can you do accident and injury care today?",
+     "asked_because": "listing not rated Likely"
+    },
+    {
+     "question": "Do you have emergency 24x7 on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": true,
+   "track_record": {
+    "n": 136,
+    "k_confirmed": 38,
+    "k_contradicted": 9,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.60 to 0.80"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "phone not shared with other listings",
+    "no concerns found in its record"
+   ],
+   "where_check": "Map point is far from its PIN; check the address",
+   "why_first_text": "Nearest place that plausibly offers it first; call first, and if they say no, call the next.",
+   "say_to_family": {
+    "en": "This hospital's listing mentions accident and injury care, but we have not confirmed it. It is about 17 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  },
+  {
+   "rank": 2,
+   "facility_id": "398d9f9c-7552-4e3a-9951-d38fbe46366e",
+   "name": "Miracare Hospital",
+   "town": "Begusarai",
+   "district": "BEGUSARAI",
+   "state": "BIHAR",
+   "address": "Begusarai, Bihar 851101",
+   "operator": "private",
+   "lat": 25.42239,
+   "lon": 86.14072,
+   "travel": {
+    "minutes": 34,
+    "low": 27,
+    "high": 46,
+    "km": 35.3,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.282,
+    "kmh": 61.9,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.28 at 62 km/h, no route check"
+   },
+   "band": "likely",
+   "band_word": "Likely",
+   "band_reason": null,
+   "p": 0.79,
+   "p_lo": 0.67,
+   "p_hi": 0.9,
+   "range_kind": "similar_scores",
+   "model_band": "LIKELY",
+   "p_e": 0.987,
+   "p_l": 0.96,
+   "evidence": [
+    {
+     "claim_id": "398d9f9c:capa:29",
+     "field": "capability",
+     "quote": "Miracare Hospital provides accident and emergency care.",
+     "source_url": "https://www.exportersindia.com/miracare-hospital/about-us.htm",
+     "flags": []
+    },
+    {
+     "claim_id": "398d9f9c:proc:8",
+     "field": "procedure",
+     "quote": "Provides trauma-related surgical services",
+     "source_url": "https://www.exportersindia.com/miracare-hospital/about-us.htm",
+     "flags": []
+    },
+    {
+     "claim_id": "398d9f9c:proc:12",
+     "field": "procedure",
+     "quote": "Provides Accident & Emergency Care",
+     "source_url": "https://www.exportersindia.com/miracare-hospital/about-us.htm",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 13
+    }
+   ],
+   "flags": [],
+   "call_ahead": [
+    {
+     "question": "Do you have emergency 24x7 on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": false,
+   "track_record": {
+    "n": 136,
+    "k_confirmed": 38,
+    "k_contradicted": 9,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.60 to 0.80"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "phone not shared with other listings",
+    "no concerns found in its record"
+   ],
+   "where_check": "Map point, PIN and city agree",
+   "why_first_text": null,
+   "say_to_family": {
+    "en": "This hospital's listing says it offers accident and injury care. It is about 35 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  },
+  {
+   "rank": 3,
+   "facility_id": "8ba30cb1-b307-44c9-8077-8fb984fe3cdc",
+   "name": "Mata Chandrakala Hospital Trauma & Dental Center",
+   "town": "Samastipur",
+   "district": "SAMASTIPUR",
+   "state": "BIHAR",
+   "address": "Samastipur, Bihar 848101",
+   "operator": "unknown",
+   "lat": 25.83609,
+   "lon": 85.76282,
+   "travel": {
+    "minutes": 39,
+    "low": 31,
+    "high": 52,
+    "km": 41.6,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.29,
+    "kmh": 64.0,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.29 at 64 km/h, no route check"
+   },
+   "band": "likely",
+   "band_word": "Likely",
+   "band_reason": null,
+   "p": 0.78,
+   "p_lo": 0.67,
+   "p_hi": 0.9,
+   "range_kind": "similar_scores",
+   "model_band": "LIKELY",
+   "p_e": 0.985,
+   "p_l": 0.953,
+   "evidence": [
+    {
+     "claim_id": "8ba30cb1:capa:2",
+     "field": "capability",
+     "quote": "Provides emergency services",
+     "source_url": "https://www.matachandrakalahospital.com/overview",
+     "flags": []
+    },
+    {
+     "claim_id": "8ba30cb1:capa:24",
+     "field": "capability",
+     "quote": "Provides trauma care",
+     "source_url": "https://www.matachandrakalahospital.com/overview",
+     "flags": []
+    },
+    {
+     "claim_id": "8ba30cb1:capa:32",
+     "field": "capability",
+     "quote": "Trauma care",
+     "source_url": "https://www.matachandrakalahospital.com/overview",
+     "flags": []
+    }
+   ],
+   "contributions": [
+    {
+     "label": "model score (derived/v2)",
+     "points": 13
+    }
+   ],
+   "flags": [
+    "Its name suggests a different specialty."
+   ],
+   "call_ahead": [
+    {
+     "question": "Do you have ct on site?",
+     "asked_because": "our data does not mention it"
+    },
+    {
+     "question": "What does it cost? Is PM-JAY accepted?",
+     "asked_because": "our data does not say if it is public or private"
+    }
+   ],
+   "call_first": false,
+   "track_record": {
+    "n": 136,
+    "k_confirmed": 38,
+    "k_contradicted": 9,
+    "k_no_info": 89,
+    "split": "dev",
+    "basis": "score 0.60 to 0.80"
+   },
+   "phone": {
+    "e164": "+910000000000",
+    "display": "0000 000000",
+    "shared_listings": 1
+   },
+   "is_real": [
+    "own website",
+    "phone not shared with other listings",
+    "no concerns found in its record"
+   ],
+   "where_check": "Map point, PIN and city agree",
+   "why_first_text": null,
+   "say_to_family": {
+    "en": "This hospital's listing says it offers accident and injury care. It is about 42 kilometres away. We will phone before going.",
+    "hi": null
+   }
+  }
+ ],
+ "why_not": [
+  {
+   "facility_id": "398d9f9c-7552-4e3a-9951-d38fbe46366e",
+   "name": "Miracare Hospital",
+   "travel": {
+    "minutes": 34,
+    "low": 27,
+    "high": 46,
+    "km": 35.3,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.282,
+    "kmh": 61.9,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.28 at 62 km/h, no route check"
+   },
+   "option_rank": 2,
+   "minutes_vs_first": 15,
+   "band": "likely",
+   "reason_code": "farther",
+   "reason": "It is farther away than the first choice; its listing does not mention a CT scanner",
+   "basis": [
+    {
+     "code": "farther",
+     "field": "minutes_vs_first",
+     "value": 15
+    },
+    {
+     "code": "missing",
+     "field": "missing",
+     "value": "ct"
+    }
+   ]
+  },
+  {
+   "facility_id": "8ba30cb1-b307-44c9-8077-8fb984fe3cdc",
+   "name": "Mata Chandrakala Hospital Trauma & Dental Center",
+   "travel": {
+    "minutes": 39,
+    "low": 31,
+    "high": 52,
+    "km": 41.6,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.29,
+    "kmh": 64.0,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.29 at 64 km/h, no route check"
+   },
+   "option_rank": 3,
+   "minutes_vs_first": 20,
+   "band": "likely",
+   "reason_code": "farther",
+   "reason": "It is farther away than the first choice; its listing does not mention a CT scanner",
+   "basis": [
+    {
+     "code": "farther",
+     "field": "minutes_vs_first",
+     "value": 20
+    },
+    {
+     "code": "missing",
+     "field": "missing",
+     "value": "ct"
+    }
+   ]
+  },
+  {
+   "facility_id": "3dd77c71-8a4f-4030-be7d-a1058b035d49",
+   "name": "Darbhanga Children Hospital",
+   "travel": {
+    "minutes": 49,
+    "low": 40,
+    "high": 66,
+    "km": 54.7,
+    "method": "haversine_factor",
+    "cached": false,
+    "factor": 1.297,
+    "kmh": 66.8,
+    "terrain": "plain",
+    "label": "rough estimate: straight line x 1.30 at 67 km/h, no route check"
+   },
+   "option_rank": null,
+   "minutes_vs_first": 30,
+   "band": "not_verified",
+   "reason_code": "farther",
+   "reason": "It is farther away than the first choice; its listing does not mention a CT scanner",
+   "basis": [
+    {
+     "code": "farther",
+     "field": "minutes_vs_first",
+     "value": 30
+    },
+    {
+     "code": "missing",
+     "field": "missing",
+     "value": "ct"
+    }
+   ]
+  }
+ ],
+ "what_would_change": {
+  "kind": "first_says_no",
+  "facility_id": "398d9f9c-7552-4e3a-9951-d38fbe46366e",
+  "name": "Miracare Hospital",
+  "first_name": "Sub Divisional Hospital Pusa",
+  "minutes_vs_first": 15
+ },
+ "time_window": {
+  "window_min": 60,
+  "first_outside": false
+ },
+ "rank_rule": {
+  "code": "nearest_plausible",
+  "text": "Nearest place that plausibly offers it first; call first, and if they say no, call the next.",
+  "expected_in_window": 0.989
+ },
+ "public_option": null,
+ "meta": {
+  "stub": false,
+  "model_hash": "ba68457adb1a",
+  "data_snapshot": "derived/v1 2026-11-21",
+  "scores": "model v2 export, model_version eed29abe3b7d",
+  "generated_at": "2026-11-22T06:10:33+00:00",
+  "test_record": {
+   "split": "test",
+   "k": 25,
+   "n": 28,
+   "pct": 89,
+   "lo_pct": 73,
+   "hi_pct": 96,
+   "public_n": 25,
+   "model_version": "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a",
+   "predictions_sha256": "1b85f4c81afd936a057d9349247c716f7fa65091931d51e30ccdcef83f6e3ff4",
+   "labels_sha256": "3e8c00de50e42022d06427fc46f4b24fbbb829ca18b44abf5bb06c01ef8fba97",
+   "opened": "2026-11-22 04:24",
+   "source": "model/gold/v3/test_eval/results.json",
+   "log": "model/gold/v3/OPENING_LOG.md",
+   "log_url": "https://github.com/LordKarV/databricksdatathon/blob/dev/model/gold/v3/OPENING_LOG.md"
+  }
+ },
+ "itinerary": {
+  "pathway": "major_trauma",
+  "pathway_name": "Major trauma",
+  "urgency": "emergency",
+  "abstain": null,
+  "plans": [
+   {
+    "rank": 1,
+    "type": "one_stop",
+    "type_word": "Stop for first care, then go on",
+    "stops": [
+     {
+      "facility_id": "61731339-a1d6-4384-92ee-fce2d11b3338",
+      "name": "Sub Divisional Hospital Pusa",
+      "place": "Rau Pusa, Samastipur",
+      "purpose": "stabilise",
+      "purpose_word": "First care: stabilise",
+      "eta_low": 14,
+      "eta_high": 27,
+      "dwell_minutes": 30,
+      "p": 0.7447,
+      "weakest_capability": "emergency 24x7",
+      "weakest_capability_p": 0.7447,
+      "question": "Is your emergency department open now, with a doctor on duty?",
+      "evidence": [
+       {
+        "claim_id": "61731339:capa:1",
+        "quote": "Emergency services available"
+       },
+       {
+        "claim_id": "61731339:capa:17",
+        "quote": "Has 32+ emergency services"
+       }
+      ],
+      "n_evidence": 2,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": [
+       "location confidence is medium: confirm the address by phone"
+      ]
+     },
+     {
+      "facility_id": "6f4cc862-2ee6-429b-b13f-890e8f43aa20",
+      "name": "Ganpati Hospital",
+      "place": "Hajipur, Vaishali",
+      "purpose": "definitive",
+      "purpose_word": "Definitive care",
+      "eta_low": 102,
+      "eta_high": 149,
+      "dwell_minutes": null,
+      "p": 0.4591,
+      "weakest_capability": "blood transfusion",
+      "weakest_capability_p": 0.7788,
+      "question": "Do you have blood available now?",
+      "evidence": [
+       {
+        "claim_id": "6f4cc862:proc:8",
+        "quote": "Performs general surgery"
+       },
+       {
+        "claim_id": "6f4cc862:capa:7",
+        "quote": "Multispeciality hospital with departments including oncology, child care, cardiology, ENT, dermatology, urology, physiotherapy, maternity care, gastroenterology, general medicine, general surgery, gynecology & obstetrics, orthopaedics, paediatrics and neurology"
+       }
+      ],
+      "n_evidence": 10,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": {
+       "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+       "name": "Rajeshwar Hospital",
+       "eta_minutes": 149,
+       "p": 0.5224
+      },
+      "flags": []
+     }
+    ],
+    "totals": {
+     "minutes_to_definitive": 118,
+     "low": 102,
+     "high": 149,
+     "p_first_care": 0.7447,
+     "p_treated": 0.7417
+    },
+    "window_checks": [
+     {
+      "check": "first care (stabilised)",
+      "limit_minutes": 60,
+      "eta_minutes": 19,
+      "met": true
+     }
+    ],
+    "vs_direct": {
+     "text": "Going straight to Ganpati Hospital takes 80 min and misses the 60-minute window; stopping first at Sub Divisional Hospital Pusa gives first care in about 19 min.",
+     "what_would_change": null,
+     "direct_p_objective": 0.0,
+     "plan_p_objective": 0.5523,
+     "direct_p_first_care": 0.0,
+     "plan_p_first_care": 0.7447
+    }
+   },
+   {
+    "rank": 2,
+    "type": "one_stop",
+    "type_word": "Stop for first care, then go on",
+    "stops": [
+     {
+      "facility_id": "61731339-a1d6-4384-92ee-fce2d11b3338",
+      "name": "Sub Divisional Hospital Pusa",
+      "place": "Rau Pusa, Samastipur",
+      "purpose": "stabilise",
+      "purpose_word": "First care: stabilise",
+      "eta_low": 14,
+      "eta_high": 27,
+      "dwell_minutes": 30,
+      "p": 0.7447,
+      "weakest_capability": "emergency 24x7",
+      "weakest_capability_p": 0.7447,
+      "question": "Is your emergency department open now, with a doctor on duty?",
+      "evidence": [
+       {
+        "claim_id": "61731339:capa:1",
+        "quote": "Emergency services available"
+       },
+       {
+        "claim_id": "61731339:capa:17",
+        "quote": "Has 32+ emergency services"
+       }
+      ],
+      "n_evidence": 2,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": [
+       "location confidence is medium: confirm the address by phone"
+      ]
+     },
+     {
+      "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+      "name": "Rajeshwar Hospital",
+      "place": "Patna",
+      "purpose": "definitive",
+      "purpose_word": "Definitive care",
+      "eta_low": 106,
+      "eta_high": 155,
+      "dwell_minutes": null,
+      "p": 0.5224,
+      "weakest_capability": "general surgery ot",
+      "weakest_capability_p": 0.7589,
+      "question": "Is a surgeon and an operating theatre available now?",
+      "evidence": [
+       {
+        "claim_id": "acb49d43:capa:43",
+        "quote": "Blood Bank"
+       },
+       {
+        "claim_id": "acb49d43:capa:16",
+        "quote": "Imaging diagnostic capabilities (X-ray, CT scan, Ultrasound)"
+       }
+      ],
+      "n_evidence": 8,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": {
+       "facility_id": "d2726883-b75f-4292-93ad-7b88fc74e311",
+       "name": "Indira Gandhi Institute of Medical Sciences",
+       "eta_minutes": 150,
+       "p": 0.4937
+      },
+      "flags": []
+     }
+    ],
+    "totals": {
+     "minutes_to_definitive": 123,
+     "low": 106,
+     "high": 155,
+     "p_first_care": 0.7447,
+     "p_treated": 0.7582
+    },
+    "window_checks": [
+     {
+      "check": "first care (stabilised)",
+      "limit_minutes": 60,
+      "eta_minutes": 19,
+      "met": true
+     }
+    ],
+    "vs_direct": {
+     "text": "Going straight to Ganpati Hospital takes 80 min and misses the 60-minute window; stopping first at Sub Divisional Hospital Pusa gives first care in about 19 min, and the route then goes on to Rajeshwar Hospital (about 123 min), which has stronger evidence than Ganpati Hospital for definitive care.",
+     "what_would_change": null,
+     "direct_p_objective": 0.0,
+     "plan_p_objective": 0.5646,
+     "direct_p_first_care": 0.0,
+     "plan_p_first_care": 0.7447
+    }
+   },
+   {
+    "rank": 3,
+    "type": "one_stop",
+    "type_word": "Stop for first care, then go on",
+    "stops": [
+     {
+      "facility_id": "3dd77c71-8a4f-4030-be7d-a1058b035d49",
+      "name": "Darbhanga Children Hospital",
+      "place": "Darbhanga",
+      "purpose": "stabilise",
+      "purpose_word": "First care: stabilise",
+      "eta_low": 40,
+      "eta_high": 66,
+      "dwell_minutes": 30,
+      "p": 0.831,
+      "weakest_capability": "emergency 24x7",
+      "weakest_capability_p": 0.831,
+      "question": "Is your emergency department open now, with a doctor on duty?",
+      "evidence": [
+       {
+        "claim_id": "3dd77c71:capa:0",
+        "quote": "Has 24/7 emergency care"
+       },
+       {
+        "claim_id": "3dd77c71:capa:16",
+        "quote": "Provides emergency services (2+)"
+       }
+      ],
+      "n_evidence": 3,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": null,
+      "flags": [
+       "location confidence is medium: confirm the address by phone"
+      ]
+     },
+     {
+      "facility_id": "d2265f6e-cac6-41f6-833a-e7de431a7b2e",
+      "name": "Madhubani Medical College & Hospital",
+      "place": "Madhubani",
+      "purpose": "definitive",
+      "purpose_word": "Definitive care",
+      "eta_low": 107,
+      "eta_high": 156,
+      "dwell_minutes": null,
+      "p": 0.3138,
+      "weakest_capability": "blood transfusion",
+      "weakest_capability_p": 0.6202,
+      "question": "Do you have blood available now?",
+      "evidence": [
+       {
+        "claim_id": "d2265f6e:capa:17",
+        "quote": "Central operation theatre"
+       },
+       {
+        "claim_id": "d2265f6e:equi:6",
+        "quote": "Has central operation theatre"
+       }
+      ],
+      "n_evidence": 7,
+      "phone": {
+       "e164": "+910000000000",
+       "display": "0000 000000",
+       "shared_listings": 1
+      },
+      "fallback": {
+       "facility_id": "acb49d43-cff0-4aa7-81ab-9a64e646f818",
+       "name": "Rajeshwar Hospital",
+       "eta_minutes": 264,
+       "p": 0.5224
+      },
+      "flags": []
+     }
+    ],
+    "totals": {
+     "minutes_to_definitive": 124,
+     "low": 107,
+     "high": 156,
+     "p_first_care": 0.831,
+     "p_treated": 0.6723
+    },
+    "window_checks": [
+     {
+      "check": "first care (stabilised)",
+      "limit_minutes": 60,
+      "eta_minutes": 49,
+      "met": true
+     }
+    ],
+    "vs_direct": {
+     "text": "Going straight to Ganpati Hospital takes 80 min and misses the 60-minute window; stopping first at Darbhanga Children Hospital gives first care in about 49 min, and the route then goes on to Madhubani Medical College & Hospital (about 124 min), which is quicker to reach from Darbhanga Children Hospital than Ganpati Hospital.",
+     "what_would_change": "A 'yes' from Sub Divisional Hospital Pusa on the phone would change this.",
+     "direct_p_objective": 0.0,
+     "plan_p_objective": 0.5587,
+     "direct_p_first_care": 0.0,
+     "plan_p_first_care": 0.831
+    }
+   }
+  ],
+  "stop_1_note": null,
+  "meta": {
+   "origin_state": "BIHAR",
+   "terrain": "plain",
+   "plans_considered": 37
+  }
+ },
+ "field_reports": {
+  "read": false,
+  "note": {
+   "en": "Logged field reports were not read for this answer; the scores come from the listings only.",
+   "hi": "इस जवाब के लिए स्वास्थ्य कार्यकर्ताओं की रिपोर्ट नहीं पढ़ी जा सकीं; स्कोर सिर्फ़ लिस्टिंग से हैं।"
+  }
+ }
+}
