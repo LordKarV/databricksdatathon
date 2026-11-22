@@ -24,9 +24,11 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | `export_v1.py` | Build step: writes `planner/out/planner_v1.json.gz` from the stub (needs pandas, about 6 s) |
 | `store.py` | Loads that file with the standard library: `facilities()`, `capability_p`, `state_near` |
 | `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
+| `implied.py` | Wrapper around any `capability_p`: implied capabilities and blood from the blood-centre list |
+| `eval_gold_dev.py`, `EVAL_GOLD_DEV.md` | The planner against the gold DEV labels, before and after |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 20 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 26 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
 
 ## Calling it from the app
 
@@ -51,6 +53,28 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
   used (near a border this can be the neighbouring state). `meta.origin_state`,
   `meta.origin_state_source` and `meta.terrain` say what was applied.
 - If the export is missing, the call raises `RuntimeError` naming the build step.
+
+## Implied capabilities and list evidence
+
+`plan_for_service` wraps whatever `capability_p` it uses with `planner.implied.with_implications`
+(pass `implications=False` to turn it off), so the model's scores get the same treatment.
+
+- A capability takes `max(own p, strength x p of a source capability)` when the source is strongly
+  evidenced (p at least 0.75). Rules, each with its reason, are in `IMPLIES`: a haemodialysis unit
+  implies nephrology cover and a laboratory; comprehensive emergency obstetric care implies an
+  operating theatre, the basic functions, a laboratory and (more weakly) blood; a NICU implies
+  special newborn care and stabilisation; a burn unit implies dressings and IV fluids; and so on.
+  One level only: an implied capability does not imply others.
+- An implied capability has no evidence ids. The stop lists it under `capability_notes` as
+  `{"capability", "basis": "implied", "implied_by", "text": "implied by a strongly evidenced ...",
+  "p", "source_p", "strength", "reason"}`, so the card can show it as a named, weaker contribution.
+- Blood: when the planner export was built on a machine that has
+  `data/external/eraktkosh_blood_centres/` (not in git), `blood_transfusion` ignores record text:
+  0.80 if the facility is matched to a listed blood centre (the matcher's hand-checked precision,
+  16 of 20), 0.50 if a listed centre is within 5 km, else 0.02. The note's `basis` is `list`,
+  `list_nearby` or `list_none`. Without those files blood comes from record text or from the
+  caesarean implication, and `meta.implications.blood_from_list` is false.
+- The strengths (0.6 to 0.9), the 0.75 cut, 0.50, 0.02 and 5 km are assumptions.
 
 ## The swap point
 
@@ -85,8 +109,9 @@ The stub in `data_v1.py` is a placeholder, not a fitted model:
     matches it there and beats it by 0.05 on the second.
   - STEMI: after thrombolysis the PCI deadline becomes 24 hours from stabilisation (rule
     `pci_3_to_24h_after_lysis`); the MoHFW 30 minute reading is a `caution` line, not a rule.
-- Scheduled pathways (dialysis): one facility per stage; fewest distinct sites first, then least
-  travel over 12 weeks (one return trip per one-off stage, 3 a week for sessions).
+- Scheduled pathways (dialysis): one facility per stage; least travel over 12 weeks first (one
+  return trip per one-off stage, 3 a week for sessions), then fewer distinct sites. The best
+  one-site plan is always among the plans returned, for comparison.
 - Travel defaults to the `geo.travel` estimate with no network calls. `--osrm` routes every leg
   live (about 15 requests for one plan).
 - The planner constants (15 minute turn-away, 0.05 margin, 150 km radius, corridor, 12 weeks,
