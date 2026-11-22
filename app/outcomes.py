@@ -9,6 +9,11 @@ page reaches the table. "Wrong number" is not sent: it says nothing about the se
 Writes go through the SQL Statement Execution API on the app's warehouse resource (DATABRICKS_WAREHOUSE_ID) with
 named parameters; the table name comes from OUTCOMES_TABLE. The summary for "How this works" counts outcomes
 and how many contradicted the band the app showed for that pair (Said no to a Likely, Said yes to an Unlikely).
+
+Field reports (community/field.py) add four optional columns (databricks/app_plumbing/field_reports.sql): kind
+(call, or visit: the patient went, accepted or turned away), reason (a fixed enum, never free text), wait_bucket and
+reporter_key (a keyed hash of the signed-in user, community/reporter.py). A column is written only when it has a
+value, so the old request shape writes the same statement as before and NULL kind reads as "call".
 """
 from __future__ import annotations
 
@@ -26,6 +31,13 @@ from services import SERVICES
 
 TABLE = os.environ.get("OUTCOMES_TABLE", "workspace.referral_saathi.call_outcomes")
 OUTCOMES = ("yes", "no", "no_answer")
+OUTCOMES_BY_KIND = {"call": OUTCOMES, "visit": ("accepted", "turned_away")}
+# Reasons for a "no" or a turn-away. Only the first class speaks to whether the facility offers the service.
+REASONS_NOT_OFFERED = ("service_not_here", "equipment_absent", "referred_elsewhere_for_this_service")
+REASONS_TEMPORARY = ("no_bed", "doctor_absent", "machine_down", "asked_to_pay", "closed_now")
+REASONS = REASONS_NOT_OFFERED + REASONS_TEMPORARY
+WAIT_BUCKETS = ("lt_30m", "30_120m", "gt_2h")
+RATE_WINDOW = timedelta(hours=24)
 MAX_AGE = timedelta(days=7)
 SUMMARY_TTL_S = 60
 SW = Path(__file__).resolve().parent / "static" / "sw.js"
@@ -35,6 +47,10 @@ UUID = r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
 
 class OutcomeError(Exception):
     """The warehouse is not configured, or the statement failed."""
+
+
+class RateLimited(Exception):
+    """This reporter already sent this kind of report for this facility and service within 24 h."""
 
 
 def _sdk_sql(body: dict[str, Any]) -> dict[str, Any]:
@@ -91,23 +107,65 @@ def validate(eng: Engine, facility_id: str, service_id: str) -> None:
         raise ValueError("this facility is not listed for this service")
 
 
+def check_report(kind: str, outcome: str, reason: str | None, wait_bucket: str | None) -> None:
+    """Which fields go together: a reason only explains a "no" or a turn-away; a wait only follows a visit."""
+    if outcome not in OUTCOMES_BY_KIND.get(kind, ()):
+        raise ValueError(f"outcome {outcome!r} is not valid for a {kind} report")
+    if reason is not None and (reason not in REASONS or outcome not in ("no", "turned_away")):
+        raise ValueError("a reason is only accepted with a no or a turn-away, from the fixed list")
+    if wait_bucket is not None and (wait_bucket not in WAIT_BUCKETS or kind != "visit"):
+        raise ValueError("a wait is only accepted with a visit outcome, from the fixed list")
+
+
+def _check_rate(reporter_key: str, outcome_id: str, facility_id: str, service_id: str, kind: str,
+                said: datetime) -> None:
+    """At most one report per reporter, pair and kind in any 24 h, checked in the table (not in this process).
+
+    ponytail: check-then-write, so two simultaneous taps can both pass; a MERGE condition fixes that if it matters.
+    Per kind, so the call-ahead and the later "they took the patient" from the same visit both go in; field.py
+    counts only each reporter's latest report anyway.
+    """
+    fmt = "%Y-%m-%d %H:%M:%S"
+    rows = run(f"""SELECT outcome_id FROM {TABLE} WHERE reporter_key = :reporter_key AND facility_id = :facility_id
+  AND service_id = :service_id AND coalesce(kind, 'call') = :kind
+  AND created_at > to_timestamp(:since) AND created_at < to_timestamp(:until) LIMIT 5""",
+               {"reporter_key": reporter_key, "facility_id": facility_id, "service_id": service_id, "kind": kind,
+                "since": (said - RATE_WINDOW).strftime(fmt), "until": (said + RATE_WINDOW).strftime(fmt)})
+    if any(r[0] != outcome_id for r in rows):  # the same outcome_id is a retried flush: the MERGE writes nothing
+        raise RateLimited("already reported for this facility and service in the last 24 hours")
+
+
 def record(eng: Engine, outcome_id: str, facility_id: str, service_id: str, outcome: str, said_at_ms: int,
-           lat: float, lon: float) -> dict[str, Any]:
+           lat: float, lon: float, kind: str = "call", reason: str | None = None, wait_bucket: str | None = None,
+           reporter_key: str | None = None) -> dict[str, Any]:
     validate(eng, facility_id, service_id)
+    check_report(kind, outcome, reason, wait_bucket)
     now = datetime.now(UTC)
     said = datetime.fromtimestamp(said_at_ms / 1000, UTC)
     if not now - MAX_AGE <= said <= now + timedelta(minutes=5):
         said = now  # a phone clock far off: keep the row, use the server time
+    # Stored to the hour only: an exact time next to a stable reporter_key would let a reader of the table link one
+    # health worker's reports to their day. The rate check below uses the same hour.
+    said = said.replace(minute=0, second=0, microsecond=0)
     row = {"outcome_id": outcome_id, "facility_id": facility_id, "service_id": service_id, "outcome": outcome,
            "questions": json.dumps(questions(eng, facility_id, service_id), ensure_ascii=False),
            "model_version": eng._meta()["model_hash"], "district": district(eng, round(lat, 2), round(lon, 2)),
            "created_at": said.strftime("%Y-%m-%d %H:%M:%S"), "app_version": APP_VERSION}
+    extra = {k: v for k, v in (("reason", reason), ("wait_bucket", wait_bucket), ("reporter_key", reporter_key))
+             if v is not None}
+    if extra or kind != "call":
+        extra = {"kind": kind, **extra}
+    if reporter_key:
+        _check_rate(reporter_key, outcome_id, facility_id, service_id, kind, said)
+    # Column names come from the fixed tuple above, never from the request; values are named parameters.
+    cols = "".join(f", {k}" for k in extra)
+    vals = "".join(f", :{k}" for k in extra)
     # MERGE on outcome_id: a retried flush from an offline queue writes the row once.
     run(f"""MERGE INTO {TABLE} t USING (SELECT :outcome_id AS outcome_id) s ON t.outcome_id = s.outcome_id
 WHEN NOT MATCHED THEN INSERT (outcome_id, facility_id, service_id, outcome, questions, model_version, district,
-  created_at, app_version)
+  created_at, app_version{cols})
 VALUES (:outcome_id, :facility_id, :service_id, :outcome, from_json(:questions, 'array<string>'), :model_version,
-  :district, to_timestamp(:created_at), :app_version)""", row)
+  :district, to_timestamp(:created_at), :app_version{vals})""", {**row, **extra})
     _summary_cache.clear()
     return {"ok": True, "outcome_id": outcome_id, "district": row["district"]}
 
@@ -126,7 +184,7 @@ def summary(eng: Engine) -> dict[str, Any]:
         n = int(n)
         out["recorded"] += n
         out[outcome] = out.get(outcome, 0) + n
-        if outcome == "no_answer" or sid not in SERVICES or eng.fid.get(fid) not in eng.index.get(sid, {}):
+        if outcome not in ("yes", "no") or sid not in SERVICES or eng.fid.get(fid) not in eng.index.get(sid, {}):
             continue
         out["answered"] += n
         band = eng.score(fid, sid)[0]

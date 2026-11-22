@@ -293,3 +293,104 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   evidence family's weight (a Beta update, with today's mean counted as 10 earlier calls). Nothing retrains
   automatically.
 - **Tests.** `app/tests/test_outcomes.py` mocks the warehouse.
+
+## Community: field reports, area pulse and the family card
+
+Health workers already know which hospitals took their patients. These three features put that knowledge next to
+the listing evidence without turning it into opinions: no star ratings, no free-text reviews, no feed about named
+people. Every report is a fixed choice, and every number it adds is shown with its count and date.
+
+- **What is stored.** One row per report in `call_outcomes` (`OUTCOMES_TABLE`), through the same parameterised
+  `MERGE` as #65.
+  - A phone result (`kind` call: yes, no, no answer). A "no" can carry one reason from a fixed list of 8.
+  - A visit result (`kind` visit: accepted or turned away), with an optional reason and a wait bucket
+    (`lt_30m`, `30_120m`, `gt_2h`).
+  - Also the facility, the service, the district of the nearest PIN, the time cut to the hour on the server before
+    the write, the model and app versions, and `reporter_key`.
+  - `reporter_key` is HMAC-SHA256 of the signed-in user (`X-Forwarded-User`) under the `REPORTER_KEY` secret, cut
+    to 16 hex characters (`community/reporter.py`). It is never the user or the email. Without the secret it is
+    NULL: the row is stored but never counts as a reporter.
+  - Nothing about the patient, no names, no phone numbers, no typed text, nothing finer than the district.
+  - One report per reporter, facility, service and kind in 24 h (429 after that; the page drops it).
+- **On the page.**
+  - After "Call before you go", "Said no" shows the optional reason buttons. "Not offered there" and "Not
+    available today" are separate groups. Skip, a different answer, or leaving the page sends the "no" without a
+    reason.
+  - Making a slip remembers the referral on this phone (`localStorage['rs.recent']`: facility, service, time,
+    point rounded to 0.01 degree; at most 5, for 7 days). The start screen then offers "How did a referral go?"
+    (`#/report`): accepted or turned away, why, and the wait. Reports go through the same offline queue as #65.
+  - Option cards and the why page show "Field reports": the server's dated lines in English and Hindi, any
+    availability note, and "Reports disagree with the listing: call first". The why page ledger gains a "Field
+    reports" row.
+  - When the reports could not be read, `field_reports.note` says so under the plan.
+  - Strings are in `static/community.js` (lazy, cached by the service worker). Hindi strings are drafts.
+- **Field witness math** (`community/field.py`, pure `field_adjust`).
+  - Prior Beta(N0 p, N0 (1 - p)), where p is the model score. N0 = 10 is an assumption: the model counts as 10
+    earlier reports, as in notebook section 9b.
+  - For "offers": an accepted visit counts 1 and a phone yes counts 1/2 (SAFETY 10: a receptionist's yes is not
+    a confirmation).
+  - Against: a "does not offer" reason counts 1 on a visit and 1/2 on the phone.
+  - Each report is weighted 0.5^(age in days / 30) over a 90-day window. Each reporter counts once (their
+    latest report).
+  - Nothing moves until 2 distinct reporters have reported.
+  - Temporary reasons (no bed, doctor away, machine down, asked to pay, closed) never lower the score. They
+    become a note for the last 7 days.
+  - The effect is one additive term, `logit(posterior) - logit(p)`, so the ledger still sums to the score.
+  - Reports alone never take a score below 0.20 (they flag "call first" instead; SAFETY 9). Without listing
+    text they never lift it to 0.70 or above.
+  - Reports can lower a band, never raise it. A Likely pair whose adjusted p falls below 0.70 becomes Not
+    verified, with the reason "Health-worker reports disagree with the listing: call first" (English and Hindi).
+    Every other band stays as the model set it, even when the reports are positive; the field line still shows
+    them. There is still no public "Unlikely" from reports alone.
+  - The plan is rebuilt from the adjusted scores (`Engine.plan(..., scores)`): the ranking, why_first_text,
+    why_not, the abstention, say_to_family, the call-ahead questions, the family card and its read-aloud all use
+    the adjusted p and band. p_lo and p_hi move by the same logit shift, not by the posterior's own interval.
+- **Never waits on the warehouse.** `/api/plan` and `/api/recommend` call
+  `field.apply_field(plan, field.aggregates(wait=False), now, eng)`. One `GROUP BY` query is cached for 60 s and
+  refreshed in a background thread, because a stopped warehouse can take 30 s to answer. The first answer after
+  start-up has no field lines. On any warehouse error the plan is unchanged and `field_reports` is
+  `{"read": false, "note": {...}}`.
+- **Area pulse** (`#/pulse`, `GET /api/pulse?district=&service=` or `lat=&lon=`, `community/pulse.py`,
+  `static/pulse.js`).
+  - District counts for coordinators and planners, for one window only: the last 90 days, as the 13 whole
+    weeks that end where the current ISO week starts. Times are cut to the week in SQL, so the numbers stay the
+    same for a whole week.
+  - k-anonymity: a district x service cell needs at least 3 distinct reporter keys and 5 reports; a facility
+    cell or a reason cell needs 5 and 8. Reason cells show the two classes only ("does not offer",
+    "temporarily unavailable"), never a single reason.
+  - Complementary suppression: what a service cell holds beyond its shown facility (or reason) cells is either
+    nothing or passes the 5 and 8 rule itself; otherwise the smallest detail cell is hidden too.
+  - Hidden cells are left out, with no count of them, and every total is the sum of the shown cells. The only
+    text about hidden data is "Some reports are not shown so no single health worker can be identified.",
+    shown on every answer.
+  - Acceptance rates carry a 95% Wilson interval in words. Each most-used facility carries the listing sentence
+    behind its band.
+  - Known limit (COMMUNITY_CHECK.md 2E): someone who reads the same query in two weeks can subtract the
+    answers and see what one week added, and a report that arrives late with an older time changes a week
+    already published. If that week added a single report, it is exposed. Health workers who collude can
+    also subtract their own reports from a cell: with k = 3, two of them can recover the third's report. A
+    fixed weekly answer narrows this but does not close it; closing it would need noise (differential privacy)
+    or a release that is frozen once published.
+  - 503 until the SQL below has run.
+- **Family journey card** ("Send to family" on the slip, `static/journey.js`).
+  - One self-contained HTML file, sent with Web Share or downloaded. It opens on any phone without a Databricks
+    login (a link into the app would not) and makes no network requests (CSP `default-src 'none'`).
+  - It shows 108 and 102 first, then the stops in order with phone, address and map links, what to bring, the
+    questions to ask, and the dates, plus Read aloud and Large print.
+  - No patient data, no origin point, no p values or band codes: bands become "Listed for this service" (Likely,
+    and no health-worker reports disagree) or "Call first to check".
+- **Demo flag.** `COMMUNITY_DEMO=1` adds simulated reports in memory for real options at the README point
+  (26.6, 85.48, Sitamarhi), for dialysis and emergency C-section. They are never written. Every line starts
+  "Simulated for the demo:" and the pulse shows a banner. The demo has no "reports disagree" case: even
+  simulated, it would be a negative claim about a real hospital. `checks/a11y_check.py` runs with the flag on.
+- **Deploy.**
+  - Apply `databricks/app_plumbing/field_reports.sql` (4 columns, CHECKs) before binding the secret. Once
+    `REPORTER_KEY` is set, every write queries `reporter_key`.
+  - Then create the `referral-saathi/reporter-key` secret and the app resource, and add
+    `- name: REPORTER_KEY / valueFrom: reporter-key` to the app.yaml that `tools/deploy/deploy.sh` writes.
+- **Tests.**
+  - `test_field.py` (math, write path, rate limit), `test_pulse.py` (k-anonymity, Wilson), `test_journey.py`
+    (card content under node), `test_community_api.py` (no blocking, the note, input bounds).
+  - `test_faithfulness.py` recounts fixed reports against every field line and note (counts and "N days ago",
+    Hindi numbers equal to English). It also downloads the family card for every option in both languages and
+    checks each name, phone and number against the plan.

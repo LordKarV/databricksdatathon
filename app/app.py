@@ -9,12 +9,17 @@ from __future__ import annotations
 import functools
 import json
 import math
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, Literal
 
 import outcomes
+from community import field
+from community import pulse as area_pulse
+from community.reporter import reporter_key
 from facts.engine import Engine
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from inputs import understand
@@ -44,11 +49,22 @@ SHELL_FILES: dict[str, str] = {
     "input.js": "text/javascript; charset=utf-8",
     "lexicon.json": "application/json; charset=utf-8",
     "stories.js": "text/javascript; charset=utf-8",
+    "pulse.js": "text/javascript; charset=utf-8",
+    "journey.js": "text/javascript; charset=utf-8",
+    "community.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
 app = FastAPI(title="Referral Saathi", docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(GZipMiddleware, minimum_size=500)
+
+
+@app.exception_handler(RequestValidationError)
+async def _invalid(_: Request, exc: RequestValidationError) -> JSONResponse:
+    # Without the echoed input: a NaN in the body made the default 422 fail to encode (a 500), and a rejected
+    # point or id has no reason to travel back.
+    return JSONResponse({"detail": [{"loc": e["loc"], "msg": e["msg"], "type": e["type"]} for e in exc.errors()]},
+                        status_code=422)
 
 
 def _shell(name: str) -> FileResponse:
@@ -97,6 +113,10 @@ def _plan(req: PlanRequest) -> dict:
     acc = None if req.accuracy_m is None else round(req.accuracy_m)
     eng = _need_engine()
     plan = attach(eng.plan(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source), eng)
+    # Field reports (community/field.py): never waits on the warehouse; without them the plan is unchanged plus a note.
+    # With them the options are re-ranked and re-worded from the adjusted scores.
+    plan = field.apply_field(plan, field.aggregates(wait=False), datetime.now(UTC), eng)
+    plan["field_reports"] = field.status()
     plan["query"]["depth"] = req.depth
     return plan
 
@@ -177,23 +197,30 @@ class OutcomeRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     outcome_id: str = Field(pattern=outcomes.UUID, description="random UUID from the page; a retry writes once")
-    facility_id: str = Field(max_length=64)
+    facility_id: str = Field(min_length=1, max_length=64)
     service_id: str = Field(max_length=40)
-    outcome: Literal["yes", "no", "no_answer"]
-    said_at_ms: int = Field(ge=0)
+    outcome: Literal["yes", "no", "no_answer", "accepted", "turned_away"]
+    said_at_ms: int = Field(ge=0, le=4_102_444_800_000, description="ms since 1970; before 2100")
     lat: float = Field(ge=6.0, le=37.5, description="rounded to 0.01 degree by the page; only the district is kept")
     lon: float = Field(ge=68.0, le=97.5)
+    # Field reports (community/field.py): fixed enums only, never free text; outcomes.check_report pairs them.
+    kind: Literal["call", "visit"] = "call"
+    reason: Literal[outcomes.REASONS] | None = None
+    wait_bucket: Literal[outcomes.WAIT_BUCKETS] | None = None
 
 
 @app.post("/api/outcome")
-def outcome(req: OutcomeRequest) -> JSONResponse:
-    """What the facility said on the phone (#65). No patient data: ids, the answer, a district, a time."""
+def outcome(req: OutcomeRequest, request: Request) -> JSONResponse:
+    """A phone outcome (#65) or a visit outcome. No patient data: ids, the answer, a district, a time, and a keyed
+    hash of the signed-in health worker (never the user itself)."""
     eng = _need_engine()
     try:
         out = outcomes.record(eng, req.outcome_id, req.facility_id, req.service_id, req.outcome, req.said_at_ms,
-                              req.lat, req.lon)
+                              req.lat, req.lon, req.kind, req.reason, req.wait_bucket, reporter_key(request.headers))
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
+    except outcomes.RateLimited as e:
+        return JSONResponse({"ok": False, "error": str(e)}, status_code=429)
     except outcomes.OutcomeError as e:
         return JSONResponse({"ok": False, "error": str(e)}, status_code=503)
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
@@ -204,6 +231,21 @@ def outcomes_summary() -> JSONResponse:
     """Live count for "How this works": outcomes recorded and how many contradicted the band shown."""
     try:
         out = outcomes.summary(_need_engine())
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/pulse")
+def pulse(district: Annotated[str | None, Query(max_length=60)] = None,
+          service: Annotated[str | None, Query(max_length=40)] = None,
+          lat: Annotated[float | None, Query(ge=6.0, le=37.5)] = None,
+          lon: Annotated[float | None, Query(ge=68.0, le=97.5)] = None) -> JSONResponse:
+    """Area pulse for coordinators and planners: k-anonymous district counts from logged reports only."""
+    try:
+        out = area_pulse.pulse(_need_engine(), district, service, lat, lon)
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
     except outcomes.OutcomeError as e:
         return JSONResponse({"error": str(e)}, status_code=503)
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
