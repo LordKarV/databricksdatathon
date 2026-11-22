@@ -754,6 +754,18 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        # WS1 1b: the readout's receipt is option 1's first quote (a marked piece of it, cut at 60 characters), and
+        # its "Why first" line is marked: why-not rows, ledger rows or the engine's rank rule.
+        o0 = (payload.get("options") or [None])[0]
+        if o0 and o0["evidence"] and "options.0.evidence.0.quote" not in plan_shown:
+            errs.append("plan: receipt quote not shown")
+        receipt = page.evaluate("() => { const e = document.querySelector('#main .answer [data-f=\"options.0.evidence.0.quote\"]');"
+                                " return e ? e.textContent : null; }")
+        if o0 and o0["evidence"] and not (receipt and len(receipt) <= 60 and o0["evidence"][0]["quote"].startswith(receipt)):
+            errs.append(f"plan: receipt {receipt!r} is not the first 60 characters of the first quote")
+        why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
+        if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
+            errs.append("plan: no marked 'Why first' line on the readout")
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []

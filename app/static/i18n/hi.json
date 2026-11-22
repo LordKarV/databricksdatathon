@@ -471,6 +471,11 @@
  "test.pred_hash": "जाँच के अनुमानों का हैश",
  "test.label_hash": "जाँच के लेबल का हैश",
  "place.coords_outside": "ये अक्षांश-देशांतर भारत से बाहर हैं। भारत का पिन कोड, ज़िला या कस्बे का नाम लिखें।",
+ "ans.receipt.from": "इसकी लिस्टिंग में लिखा है",
+ "ans.receipt.source": "स्रोत पेज",
+ "ans.why_first.nearest": "पहले यहीं क्यों: यह इलाज कर सकने वाली सबसे पास की जगह है। {name} की संभावना ज़्यादा है, पर यह {n} मिनट दूर है: पहले यहाँ फ़ोन करें, फिर {name} को।",
+ "ans.why_first.rows": "पहले यहीं क्यों: {rows}।",
+ "ans.why_first.rule": "पहले यहीं क्यों: {rule}",
  "engine": {
   "_about": "Exact English engine text, or a template with {slots}, to Hindi. {label} stands for query.service_label (English on the left, Hindi on the right); other slots copy the payload's own words. A reason joined with '; ' is translated clause by clause. Text not here is shown in English with lang=en.",
   "listing evidence not strong enough to rate it Likely": "लिस्टिंग में इतना सबूत नहीं कि संभावना ज़्यादा कहें",
@@ -632,6 +637,7 @@
   "icu": "ICU",
   "trauma centre": "ट्रॉमा सेंटर",
   "obstetrics": "प्रसव की सुविधा",
-  "anaesthesia": "बेहोशी के डॉक्टर"
+  "anaesthesia": "बेहोशी के डॉक्टर",
+  "Ordered by how sure we are, discounted by travel time.": "हम कितने पक्के हैं उसके हिसाब से क्रम, यात्रा के समय को घटाकर।"
  }
 }
