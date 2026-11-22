@@ -28,6 +28,7 @@ from typing import Any
 LEXICON = Path(__file__).resolve().parent / "lexicon.json"
 PLANNED = {"mri", "cardiac_surgery"}
 TEXT_TIMEOUT_S, VISION_TIMEOUT_S = 8, 15
+NOTE_NO_SERVICE = "the model reply did not name a service from the list"
 MAX_TEXT = 500
 
 # SAFETY.md 3.1 plus the danger checklist on the home screen. Team-written, not clinically reviewed.
@@ -359,7 +360,7 @@ def read_note(image_data_url: str) -> dict[str, Any]:
     trigger = str(ans.get("trigger_phrase") or "").strip()
     svc = ans.get("suggested_service")
     if svc not in NOTE_SERVICES:
-        return {"ok": False, "note": "the model reply did not name a service from the list"}
+        return {"ok": False, "note": NOTE_NO_SERVICE}
     guard = note_guard(detected, trigger, svc)
     # Both fields below come from the model's own reading; nothing checks them against the image (#85 H4). So model
     # text is quoted only when the guard accepts, a red flag counts only if it is in the text the model read, and the

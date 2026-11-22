@@ -44,6 +44,7 @@ from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))
 from facts.ledger_terms import LIST_NAMES, NOT_OBSERVED, TERMS, nabh_text  # noqa: E402
+from facts.places import PIN_GRID, centre_pin  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -88,6 +89,16 @@ NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturo
 
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
 FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
+# Town vs map point (#140 2b, #117): the listed town (address_city, found in place_gazetteer within the record's state)
+# more than TOWN_FAR_KM from the map point flags "town and map point disagree"; such a facility is never emergency
+# option 1. Only gazetteer cities are used: post-office names repeat across a state (a "Chinchwad" office near
+# Kolhapur flagged Chinchwad, Pune). A town not found, or spread wider than TOWN_SPREAD_KM, is not judged.
+TOWN_FAR_KM = 100
+TOWN_SPREAD_KM = 25
+# Hand-checked location disputes (#117, #140): flagged whatever the gazetteer rule finds.
+LOC_DISPUTED = {
+    "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b": "Sharda Hospital: address Greater Noida, map point in Chandauli",
+}
 SITE_CLASSES = {"official", "official_like"}  # a cited URL of these classes is the listed website (kb/crawl targets)
 # BE-001 (#136): a site the crawl could not read is "unchecked", which says nothing against the facility; only positive
 # evidence against the site makes it "unreliable". Neither is ever cited as a source.
@@ -143,6 +154,21 @@ def e164(raw: str) -> str | None:
     return None
 
 
+def town_far(f: pd.DataFrame) -> list[bool]:
+    """Per record: its listed town is more than TOWN_FAR_KM from its map point, or it is in LOC_DISPUTED."""
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "spread_km", "kind"])
+    g = g[(g.kind == "city") & (g.spread_km <= TOWN_SPREAD_KM)].dropna(subset=["lat", "lon"])
+    towns: dict[tuple[str, str], list[tuple[float, float]]] = {}
+    for st, n, la, lo in zip(g.state, g.name, g.lat, g.lon, strict=True):
+        towns.setdefault((st, n), []).append((la, lo))
+    out = []
+    for u, city, st, la, lo in zip(f.unique_id, f.address_city, f.state_final, f.loc_lat, f.loc_lon, strict=True):
+        key = (str(st).upper(), " ".join(str(city).lower().split()))
+        pts = towns.get(key) if isinstance(city, str) and pd.notna(la) and pd.notna(lo) else None
+        out.append(u in LOC_DISPUTED or bool(pts) and min(haversine(la, lo, a, b) for a, b in pts) > TOWN_FAR_KM)
+    return out
+
+
 def col(series: pd.Series, nd: int | None = None) -> list:
     if nd is not None:
         return [None if pd.isna(x) else round(float(x), nd) for x in series]
@@ -173,6 +199,9 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["phone_shared"] = [shared.get(p, 0) if p else 0 for p in phones]
     f["loc_rule"] = f.location_reason_codes.fillna("").str.split("|").map(
         lambda codes: next((c for c in codes if c.startswith("LOC_")), ""))
+    f["town_far"] = town_far(f)
+    print(f"facts.town_far: {int(f.town_far.sum())} records whose listed town is more than {TOWN_FAR_KM} km from "
+          f"the map point ({len(LOC_DISPUTED)} hand-checked)")
 
     urls = pd.read_parquet(V1 / "source_urls.parquet",
                            columns=["unique_id", "url", "source_class", "domain_reliability", "url_kind"])
@@ -621,11 +650,24 @@ def fill_districts(p: pd.DataFrame) -> pd.DataFrame:
     return p
 
 
+def centre_flags(p: pd.DataFrame) -> list[int]:
+    """1 for the PIN that is its district's centre (facts/places.py centre_pin), else 0.
+
+    Chosen here from the raw gazetteer points rounded as packs/build_packs.py rounds them, the integers offline.js
+    districtCentre reads, so a district centre is the same PIN online and offline. Only PINs the gazetteer files under
+    the district count (fill_districts' guesses never become a centre)."""
+    q = p[p.district_from == ""] if "district_from" in p else p
+    q = q.assign(qa=np.round(q.lat * PIN_GRID).astype(int), qo=np.round(q.lon * PIN_GRID).astype(int))
+    centres = {centre_pin(list(zip(g.pin, g.qa, g.qo, strict=True))) for _, g in q.groupby(["state", "district"])}
+    return [int(x in centres) for x in p.pin]
+
+
 def pins() -> dict[str, list]:
     p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "districts", "lat", "lon"])
     p = fill_districts(p.dropna(subset=["lat", "lon", "state"])).dropna(subset=["district"])
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
-            "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from)}
+            "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from),
+            "centre": centre_flags(p)}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
@@ -658,6 +700,57 @@ def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
         if where != own:
             out[str(pin)] = list(where)
     return out
+
+
+GOV = Path(__file__).resolve().parent / "gov"  # small committed inputs, written by gov/build_gov.py (WS4 4b, #140)
+GEO = ROOT / "viz" / "geography" / "data"  # committed district tables of the data stories (viz/geography)
+
+
+def moved_pins() -> dict[str, list[str]]:
+    """pin_districts() as committed in gov/pin_district_moved.csv, so a clean checkout gets the LGD district too."""
+    m = pd.read_csv(GOV / "pin_district_moved.csv", dtype=str)
+    return {p: [d, s] for p, d, s in zip(m.pin, m.district, m.state, strict=True)}
+
+
+def _num(x: object, nd: int) -> float | None:
+    return None if pd.isna(x) else round(float(x), nd)
+
+
+def district_brief() -> dict:
+    """The Area page's district brief (WS4 4b): need, by LGD district, from the committed viz/geography tables, and
+    the government lists. WorldPop people and listings per million (s1), NFHS-5 caesarean and institutional birth
+    rates (s3, by the NFHS-5 district s1 maps it to), LaQshya Maternity OT certificates and PMNDP state counts (gov/).
+    Keys: "STATE|DISTRICT" in India Post spelling -> dist_lgd; dist_lgd -> rows."""
+    lgd = pd.read_csv(GOV / "district_lgd.csv")
+    s1 = pd.read_csv(GEO / "s1_district.csv")
+    s3 = pd.read_csv(GEO / "s3_district.csv").set_index(["nfhs_state", "nfhs_district"])
+    s1_numbers = json.loads((GEO / "s1_numbers.json").read_text())
+    pub, priv = (f"births_in_a_{k}_fac_that_were_delivered_by_csection_5y_pct" for k in ("public", "private"))
+    need = {}
+    for r in s1.itertuples(index=False):
+        n = s3.loc[(r.nfhs_state, r.nfhs_district)] if (r.nfhs_state, r.nfhs_district) in s3.index else None
+        nf = [None] * 5 if n is None else [
+            r.nfhs_district, _num(n.births_delivered_by_csection_5y_pct, 1),
+            _num(n[pub], 1) if n[f"{pub}_flag"] == "ok" else None,
+            _num(n[priv], 1) if n[f"{priv}_flag"] == "ok" else None, _num(n.institutional_birth_5y_pct, 1)]
+        need[str(r.dist_lgd)] = [r.dtname, round(r.pop), int(r.records), _num(r.per_m, 2), *nf]
+    key = {f"{st}|{d}".upper(): str(c) for d, st, c in zip(lgd.district, lgd.state, lgd.dist_lgd, strict=True)}
+    # LaQshya rows -> the LGD district viz/geography/s3_csection.py matched them to (within their NFHS-5 state)
+    code = {(st, d): str(c) for c, d, st in zip(s1.dist_lgd, s1.dtname, s1.nfhs_state, strict=True)}
+    lq = pd.read_csv(GOV / "laqshya.csv").dropna(subset=["lgd_district"])
+    laqshya: dict[str, list] = {}
+    for r in lq.itertuples(index=False):
+        c = code.get((r.nfhs_state, r.lgd_district))
+        if c:
+            laqshya.setdefault(c, []).append([r.name, r.department, r.certified, r.valid_to, r.status])
+    pm = pd.read_csv(GOV / "pmndp_state.csv")
+    pmndp = {k: [int(a), int(b), int(t), d] for k, a, b, t, d in zip(
+        pm.state_key, pm.functional_centres, pm.functional_districts, pm.total_districts, pm.fetched, strict=True)}
+    n_lq = sum(map(len, laqshya.values()))
+    print(f"district brief: {len(need)} LGD districts, {len(key)} India Post district names, "
+          f"{n_lq} LaQshya certificates in {len(laqshya)} districts, {len(pmndp)} PMNDP states")
+    return {"key": key, "need": need, "india_per_million": round(s1_numbers["national_per_m"], 1),
+            "laqshya": laqshya, "pmndp": pmndp}
 
 
 PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
@@ -710,7 +803,7 @@ def main() -> None:
         "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
-                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
+                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5), "town_far": [bool(x) for x in f.town_far],
                 "p_e": col(f.existence_score, 3), "p_l": col(f.location_score, 3), "loc_rule": list(f.loc_rule),
                 "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw), "phone_shared": list(f.phone_shared),
                 "flags": [as_list(x) for x in f.trust_flags],
@@ -726,6 +819,7 @@ def main() -> None:
         "claims": claim_rows,
         "claim_flags": claim_fl,
         "pins": pins(),
+        "district_brief": district_brief(),
     }
     # The hash covers the data only (not built_at or where it was read from), so it changes only when the data does
     # and a rebuild of derived/v1 that matches the repo gives the same hash (#86 step 3).
@@ -736,11 +830,11 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (out / "facts.sha").write_text(facts_hash + "\n")
-    # Outside facts.json and its hash: the file comes from git-ignored data, so a derived/v1 rebuild still matches.
-    moved = pin_districts(facts["pins"])
+    # Outside facts.json and its hash, as before the LGD map was committed (gov/pin_district_moved.csv).
+    moved = moved_pins()
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
-    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
-          if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
+    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in "
+          "(app/facts/gov/pin_district_moved.csv)")
     guessed = Counter(s for s, how in zip(facts["pins"]["state"], facts["pins"]["district_from"], strict=True) if how)
     print(f"pins: {sum(guessed.values())} PINs with no district in the gazetteer kept, district from the nearest PIN "
           f"of the same state ({', '.join(f'{s.title()} {n}' for s, n in guessed.most_common())})")

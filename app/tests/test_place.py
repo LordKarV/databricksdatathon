@@ -69,7 +69,8 @@ def test_text_that_is_not_exactly_six_digits_is_not_a_pin(q):
 def test_district_beats_post_office_of_the_same_name_and_state(places):
     [m] = places.lookup("  bahraich DISTRICT ")
     assert m["kind"] == "district" and m["label"] == "Bahraich district centre, Uttar Pradesh"
-    assert (m["lat"], m["lon"]) == (27.6, 81.55)  # mean of its PIN centroids, as offline.js districtCentre
+    # its own PIN nearest the mean of its PIN points; two PINs tie, so the lower PIN (as offline.js districtCentre)
+    assert (m["lat"], m["lon"]) == (27.5, 81.5)
 
 
 def test_post_office_names_the_nearest_pin_district(places):
@@ -157,7 +158,8 @@ def test_api_resolves_names_and_pins_without_a_pack(q, kind, label):
 @needs_data
 def test_api_nonsense_is_404_with_no_matches():
     r = client.post("/api/place", json={"q": "xqzv plonk"})
-    assert r.status_code == 404 and r.json() == {"error": "place not found", "matches": []}
+    assert r.status_code == 404 and r.json().items() >= {"error": "place not found", "matches": []}.items()
+    assert r.json()["code"] == "place_not_found"
 
 
 def test_api_rejects_bad_bodies_without_echoing_them():

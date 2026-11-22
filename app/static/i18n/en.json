@@ -473,5 +473,13 @@
  "test.model_version": "Model version",
  "test.pred_hash": "Test predictions hash",
  "test.label_hash": "Test labels hash",
- "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India."
+ "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India.",
+ "why.cite.summary": "The list entry behind it ({n})",
+ "why.cite.link": "Open the list entry",
+ "why.cite.from": "From: {source}.",
+ "why.cite.precision": "In a hand check our matches to this list were right {k} of {n} times.",
+ "why.cite.lists": "Official lists",
+ "why.cite.tier.full_accreditation": "NABH full accreditation {id}",
+ "why.cite.tier.entry_level": "NABH entry-level certificate {id}",
+ "why.cite.tier.cghs_echs_empanelment": "CGHS/ECHS empanelment listed on NABH's portal; not accreditation ({id})"
 }

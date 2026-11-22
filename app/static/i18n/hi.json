@@ -636,5 +636,13 @@
   "trauma centre": "ट्रॉमा सेंटर",
   "obstetrics": "प्रसव की सुविधा",
   "anaesthesia": "बेहोशी के डॉक्टर"
- }
+ },
+ "why.cite.summary": "यह किस सूची की एंट्री से है ({n})",
+ "why.cite.link": "सूची में इसकी एंट्री खोलें",
+ "why.cite.from": "स्रोत: {source}।",
+ "why.cite.precision": "हाथ से जाँच में इस सूची से हमारे मिलान {n} में से {k} बार सही निकले।",
+ "why.cite.lists": "आधिकारिक सूचियाँ",
+ "why.cite.tier.full_accreditation": "NABH की पूरी मान्यता {id}",
+ "why.cite.tier.entry_level": "NABH का एंट्री-लेवल प्रमाणपत्र {id}",
+ "why.cite.tier.cghs_echs_empanelment": "CGHS/ECHS पैनल में शामिल, NABH पोर्टल पर दर्ज; यह मान्यता नहीं है ({id})"
 }

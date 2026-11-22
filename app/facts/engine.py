@@ -26,6 +26,9 @@ STRINGS = {
                    "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
     "need_named": {"en": "its listing names it, but not whether it is free today",
                    "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+    # #140 2b: the listed town is far from the map point (facts/build.py town_far); never emergency option 1
+    "town_far": {"en": "Town and map point disagree; check the address",
+                 "hi": "शहर और नक्शे की जगह मेल नहीं खाते; पता पक्का करें"},
     # Route guard (#140 WS2 2c, app/itinerary.py). hi: None until WS2 2e adds the engine table rows to hi.json.
     "route_dropped": {"en": "Go straight to {name}; it is nearer than any other place with evidence for every stage.",
                       "hi": None},
@@ -36,6 +39,12 @@ STRINGS = {
     "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
+# Area district brief (WS4 4b): where each number comes from, for the payload and the page's Sources line.
+NEED_SOURCE = {"people": "WorldPop 2025 (CC BY 4.0), summed over the LGD district polygon",
+               "listings": "the provided facility dataset", "nfhs": "NFHS-5 district fact sheets (2019-21)"}
+LAQSHYA_SOURCE = "NHSRC LaQshya master data, 08-04-2026"
+PMNDP_SOURCE = "NHSRC, PMNDP data (nhsrcindia.org/pmndp-map-table)"
+N_GOV = 5  # government-list rows on the Area brief
 RADIUS_KM = 150  # straight-line search radius
 N_OPTIONS = 3
 N_TRAVEL = 40  # travel estimates for the nearest candidates only
@@ -249,9 +258,11 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status"):  # older exports: no source or site checks
+        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status", "town_far"):  # older exports
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
         self.site_check = facts.get("site_check") or {}
+        self.pin_centre = {int(p): (la, lo) for p, la, lo in zip(self.pins["pin"], self.pins["lat"], self.pins["lon"],
+                                                                 strict=True)}
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
         self.likely_threshold = facts.get("likely_threshold")
@@ -262,6 +273,7 @@ class Engine:
         self.cites, self.list_names = words.get("cites", {}), words.get("lists", {})
         self.fac.setdefault("nabh", [None] * len(self.fac["id"]))
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
+        self.brief = facts.get("district_brief")  # older exports: no district brief, the Area page leaves it out
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
         # The score a pair gets once a second source confirms it (the gold override): used for "what would change".
         self.p_confirmed = min((p.score for rows in self.pairs.values() for p in rows if p.status == "verified_true"),
@@ -416,8 +428,21 @@ class Engine:
         ops = self.fac.get("operator")  # older facts files have no operator column
         return ops[i] if ops else "unknown"
 
+    def _doubt(self, i: int) -> bool:
+        """The map point may be wrong (#140 2b): a doubtful location rule, or the listed town is far from it."""
+        return self._f("loc_rule", i) in LOC_DOUBT or bool(self._f("town_far", i))
+
     def _travel(self, lat: float, lon: float, i: int, state: str | None = None) -> dict:
-        return travel(lat, lon, self._f("lat", i), self._f("lon", i), state)
+        """Travel to the map point. When the point is in doubt (#140 2b), alt is the same estimate to the facility's
+        PIN centre (pin_gazetteer) and high widens to cover both; minutes, low and the order stay on the map point."""
+        t = dict(travel(lat, lon, self._f("lat", i), self._f("lon", i), state))
+        pin = self._f("pin", i)
+        centre = self.pin_centre.get(pin) if self._doubt(i) and pin is not None else None
+        if centre is not None:
+            a = travel(lat, lon, *centre, state)
+            t["alt"] = {"minutes": a["minutes"], "low": a["low"], "high": a["high"], "from": "pin_centre"}
+            t["high"] = max(t["high"], a["high"])
+        return t
 
     def origin_state(self, lat: float, lon: float) -> str | None:
         """State of the nearest facility: the planner's rule when no state is given, so the cards and the route use
@@ -477,6 +502,8 @@ class Engine:
 
     def _flags(self, pr: Pair, i: int) -> list[str]:
         out = list(self._f("reasons", i))
+        if self._f("town_far", i):
+            out.append(STRINGS["town_far"]["en"])
         out += [RISK_PLAIN[r] for r in pr.risks if r in RISK_PLAIN and RISK_PLAIN[r] not in out]
         ignored = [c for c in pr.evidence if c in self.claims and self.claims[c][3] == "other_facility"][:1]
         out += [f'Ignored: "{self.claims[c][1]}" names another facility' for c in ignored]
@@ -540,7 +567,7 @@ class Engine:
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
             "address": self._address(i), "operator": self._operator(i),
-            "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav,
+            "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav, "location_doubt": self._doubt(i),
             "band": band, "band_word": BAND_WORDS[band],
             "band_reason": None if band == "likely" else (
                 "listing evidence not strong enough to rate it Likely" if band == "not_verified"
@@ -581,10 +608,16 @@ class Engine:
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
-        pool = (nearest_plausible(pool, WINDOW[profile]) if profile in NEAREST_FIRST
+        pool = (self._town_checked_first(nearest_plausible(pool, WINDOW[profile])) if profile in NEAREST_FIRST
                 else sorted(pool, key=lambda r: -r[0]))
         unlikely.sort(key=lambda r: r[1])
         return pool, unlikely
+
+    def _town_checked_first(self, pool: list) -> list:
+        """Emergency order (#140 2b): a facility whose listed town disagrees with its map point is never option 1.
+        The first row without that flag moves to the front; the others keep their order."""
+        k = next((j for j, r in enumerate(pool) if not self._f("town_far", r[2].fi)), 0)
+        return [pool[k], *pool[:k], *pool[k + 1:]] if k else pool
 
     def _public_near(self, service: str, lat: float, lon: float, exclude: frozenset = frozenset()) -> tuple[float, int] | None:
         """(km, index) of the nearest facility the public standard (IPHS 2022) expects to offer this service at its
@@ -803,7 +836,8 @@ class Engine:
     def area(self, service: str, lat: float, lon: float, max_pins: int = 40) -> dict:
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pins = self.pins
-        k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
+        c = math.cos(math.radians(lat))  # a degree of longitude is cos(lat) of a degree of latitude
+        k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + ((pins["lon"][j] - lon) * c) ** 2)
         district, state = self.pin_where[k]  # the district the nearest PIN point lies in, not the one it is filed under
         # PINs the gazetteer files under no district (facts/build.py fill_districts) are not counted as the district's
         guessed = pins.get("district_from") or [""] * len(pins["pin"])
@@ -821,8 +855,9 @@ class Engine:
             n_now += bool(likely)
             n_conf += bool(within)
             if not likely:
-                for r in within:
-                    gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
+                for r in within:  # a call to a place whose town disagrees with its map point closes nothing (2b)
+                    if not self._f("town_far", r[2].fi):
+                        gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
             first, backup = (within + [None, None])[:2]
             near = min((r for r in pool if r[2].grade in OWN_EVIDENCE), key=lambda r: r[1], default=None)
             # Data gap vs care gap (#86): no listing claims it at all, or listings claim it but none is confirmed
@@ -845,7 +880,8 @@ class Engine:
         calls = sorted(gains.items(), key=lambda t: (-len(t[1]), self._f("name", t[0])))[:10]
         return {
             "query": {"service": service, "service_label": {"en": label, "hi": info["label_hi"]}},
-            "area": {"district": district.title(), "state": state.title(), "window_min": window},
+            "area": {"district": district.title(), "state": state.title(), "window_min": window,
+                     "need": self._need(district, state), "gov_list": self._gov_list(service, district, state)},
             "as_of": self.meta["as_of"],
             "summary": {"n_pins": len(rows), "n_without_option": sum(r["first"] is None for r in rows),
                         "access_now": round(n_now / n, 2), "access_if_confirmed": round(n_conf / n, 2),
@@ -857,8 +893,55 @@ class Engine:
             "ten_calls": [{"rank": r + 1, "facility_id": self._f("id", fi), "name": self._f("name", fi),
                            "phone_kind": self._phone_kind(fi), "areas": len(p), "access_gain": round(len(p) / n, 3)}
                           for r, (fi, p) in enumerate(calls)],
+            "headline": self._headline(calls, len(rows), n_now, window),
             "meta": self._meta(),
         }
+
+    def _lgd(self, district: str, state: str) -> str | None:
+        return (self.brief or {}).get("key", {}).get(f"{state}|{district}".upper())
+
+    def _need(self, district: str, state: str) -> dict | None:
+        """People, listings per million (against India's) and NFHS-5 birth rates for the area's LGD district. The
+        NFHS-5 numbers are a district survey estimate, not facility data; None where a value is suppressed."""
+        row = (self.brief or {}).get("need", {}).get(self._lgd(district, state) or "")
+        if not row:
+            return None
+        name, people, listings, per_m, nfhs_district, cs, pub, priv, inst = row
+        return {"lgd_district": name, "population": people, "listings": listings, "listings_per_million": per_m,
+                "india_per_million": self.brief["india_per_million"], "nfhs_district": nfhs_district,
+                "csection_pct": cs, "public_csection_pct": pub, "private_csection_pct": priv,
+                "institutional_pct": inst, "source": NEED_SOURCE}
+
+    def _gov_list(self, service: str, district: str, state: str) -> list[dict]:
+        """Government lists for this care in the area: LaQshya Maternity OT certificates in the district for a
+        C-section (valid ones first, latest expiry first), PMNDP's state count for dialysis; [] otherwise."""
+        b = self.brief or {}
+        if service == "emergency_csection":
+            today = datetime.now(UTC).date().isoformat()
+            rows = b.get("laqshya", {}).get(self._lgd(district, state) or "", [])
+            rows = sorted(rows, key=lambda r: r[3], reverse=True)
+            rows = sorted(rows, key=lambda r: r[3] < today)  # stable: valid ones first, each part latest expiry first
+            return [{"list": "laqshya", "name": name, "what": f"LaQshya certificate, {dept}", "department": dept,
+                     "certified": cert, "valid_to": valid, "expired": valid < today, "status": status,
+                     "source": LAQSHYA_SOURCE} for name, dept, cert, valid, status in rows[:N_GOV]]
+        key = re.sub(r"^the ", "", state.lower()).replace("&", "and")
+        if service == "dialysis" and key in b.get("pmndp", {}):
+            centres, working, total, fetched = b["pmndp"][key]
+            return [{"list": "pmndp", "name": f"PMNDP, {state.title()}",
+                     "what": f"{centres} government dialysis centres working in {working} of {total} districts",
+                     "centres": centres, "districts_working": working, "districts_total": total, "fetched": fetched,
+                     "valid_to": None, "expired": False, "source": PMNDP_SOURCE}]
+        return []
+
+    @staticmethod
+    def _headline(calls: list, n: int, now: int, window: int) -> dict:
+        """The Area headline from ten_calls[0]: if it confirms, k of n sampled PIN areas (now `now`) have care in the
+        window; or why there is no such call: every area is covered already, or nothing is claimed in the window."""
+        if calls:
+            _, gained = calls[0]
+            return {"kind": "if_confirms", "rank": 1, "k": now + len(gained), "n": n, "now": now, "window_min": window}
+        return {"kind": "all_covered" if n and now == n else "none_in_window", "n": n, "now": now,
+                "window_min": window}
 
     def _public_pin(self, service: str, lat: float, lon: float) -> dict | None:
         best = self._public_near(service, lat, lon)

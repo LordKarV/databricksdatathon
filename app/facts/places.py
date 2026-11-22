@@ -19,6 +19,7 @@ TOWN_KM = 5  # a town centre this close is named before a nearer post office
 _SUFFIX = re.compile(r"\s+(district|dist|zila|zilla|jila)$")
 _KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is more precise than a district centre
 _GAZ_KIND = {"city": "town", "office": "post_office"}
+PIN_GRID = 1000  # the offline packs keep PIN points to 0.001 degree (packs/build_packs.py PIN_SCALE)
 # A PIN as people copy it: "848 125" (India Post prints it so), "848-125", "PIN 848125", "pin: 848125", "848125.".
 # Same rule as pinOf() in static/app.js, which the offline path uses.
 _PIN = re.compile(r"(?:(?:pin|पिन)(?:\s*code|\s*कोड)?\s*[:#.\-]?\s*)?"
@@ -57,6 +58,20 @@ def norm(s: str) -> str:
     return _SUFFIX.sub("", s)
 
 
+def centre_pin(pts: list[tuple[int, int, int]]) -> int:
+    """The district's own PIN nearest the mean of its PIN points, from (pin, lat, lon) in 0.001 degree integers.
+
+    A plain mean can lie nearer another district's PINs (Anakapalli's is nearest a Visakhapatnam PIN, matrix cluster
+    district_centre_in_other_district), and the area view, which names the district of the nearest PIN, then names
+    the other one. A PIN point of the district itself cannot. Same rule as offline.js districtCentre, on the same
+    integers the packs store, longitude scaled by cos(lat), lowest PIN on a tie (two PINs are always equally far
+    from their mean), so online and offline pick the same PIN.
+    """
+    n, sa, so = len(pts), sum(x[1] for x in pts), sum(x[2] for x in pts)
+    k = math.cos(math.radians(sa / n / PIN_GRID))
+    return min(pts, key=lambda x: ((n * x[1] - sa) ** 2 + ((n * x[2] - so) * k) ** 2, x[0]))[0]
+
+
 def pin_of(q: str) -> str | None:
     """The six digits of a typed PIN, or None when the text is not a PIN in one of the forms _PIN accepts."""
     m = _PIN.fullmatch(q.strip())
@@ -76,20 +91,21 @@ class Places:
     def __init__(self, pins: dict[str, list], places: dict | None) -> None:
         self.pins = pins
         self.pin_at = {p: i for i, p in enumerate(pins["pin"])}
+        # facts/build.py marks each district's centre PIN, chosen from the raw gazetteer points on the packs' grid
+        # (the 5 decimal points here can round to another 0.001 degree); tables without the column choose here
+        marked = pins.get("centre") or [0] * len(pins["pin"])
         # facts/build.py fill_districts: "" when the gazetteer files the PIN under its district, else how we chose one
         self.district_from = pins.get("district_from") or [""] * len(pins["pin"])
         acc: dict[tuple[str, str], list] = {}
-        for d, s, la, lo, how in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], self.district_from,
-                                     strict=True):
-            if how:
-                continue  # a district centre is the mean of the PINs filed there, as offline.js districtCentre
-            a = acc.setdefault((norm(d), s), [d, 0, 0.0, 0.0])
-            a[1] += 1
-            a[2] += la
-            a[3] += lo
+        for i, (d, s, how) in enumerate(zip(pins["district"], pins["state"], self.district_from, strict=True)):
+            if not how:  # a district centre is one of the PINs filed there, as offline.js districtCentre
+                acc.setdefault((norm(d), s), [d, []])[1].append(i)
         self.districts: dict[str, list[tuple[str, str, float, float]]] = {}
-        for (key, s), (d, n, la, lo) in acc.items():
-            self.districts.setdefault(key, []).append((d, s, round(la / n, 5), round(lo / n, 5)))
+        for (key, s), (d, idx) in acc.items():
+            c = [i for i in idx if marked[i]]
+            i = c[0] if len(c) == 1 else self.pin_at[centre_pin(
+                [(pins["pin"][i], round(pins["lat"][i] * PIN_GRID), round(pins["lon"][i] * PIN_GRID)) for i in idx])]
+            self.districts.setdefault(key, []).append((d, s, pins["lat"][i], pins["lon"][i]))
         self.gaz = places
         self.names: dict[str, list[int]] = {}
         if places:
