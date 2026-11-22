@@ -761,3 +761,14 @@ Cut lines:
   installing duckdb and rapidfuzz on serverless is unverified.
 - Every v2 change in sections 3.1 to 3.4 is designed but not run. Its effect on the numbers in
   section 4 is unknown until step 5 of section 7.
+- Routes never use a facility whose map point is in doubt (#183). In the route guard sweep (50 PIN
+  centres, `random.Random(140)`, every service with a care pathway; `app/tests/test_route_guard.py`),
+  cases with a route fell from 218 to 201 of 250. In these 13 there is no route because every pathway
+  stop's map point is in doubt; options still shown, flagged (PIN, service):
+  263139 emergency_csection; 504203 emergency_csection; 504203 trauma_emergency;
+  451660 trauma_emergency; 413412 emergency_csection; 413412 nicu; 413502 emergency_csection;
+  207402 emergency_csection; 670358 emergency_csection; 431720 nicu; 756182 trauma_emergency;
+  243126 emergency_csection; 457772 trauma_emergency.
+  In the other 4, option 1 itself has a doubtful map point, is Likely and has evidence for every
+  stage, so route guard rule 1 drops the farther routes and the note says to go straight to it:
+  670358 nicu; 628007 nicu; 848132 emergency_csection; 713214 trauma_emergency.
