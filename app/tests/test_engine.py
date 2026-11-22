@@ -458,3 +458,18 @@ def test_interim_pairs_keep_the_v1_trust_scores() -> None:
         assert ENGINE._exists_where(pr, pr.fi) == {"p_e": ENGINE.fac["p_e"][pr.fi], "p_l": ENGINE.fac["p_l"][pr.fi]}
     finally:
         pr.model = old
+
+
+# #126 item 4 (lead): a direct route to definitive care inside the window leads; the nearer former first is framed as
+# first care if needed sooner, never as the best option, and "Nearer" only when it really is nearer
+@needs_planner
+def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
+    p = _post("trauma_emergency", 26.15, 85.9)  # Darbhanga
+    o, w = p["options"], p["time_window"]["window_min"]
+    assert o[0]["route_reason"].startswith(f"Go here directly: definitive care within the {w}-minute window")
+    near = next(x for x in o[1:] if (x.get("route_reason") or "").startswith("Nearer: can give first care in about"))
+    assert near["travel"]["minutes"] < o[0]["travel"]["minutes"]
+    assert f"about {near['travel']['minutes']} min" in near["route_reason"]
+    assert not any("best option" in (x.get("route_reason") or "") for x in o[1:])
+    patna = _post("trauma_emergency", 25.6, 85.14)["options"]  # the former first is farther: no "Nearer" line
+    assert not any((x.get("route_reason") or "").startswith("Nearer") for x in patna)
