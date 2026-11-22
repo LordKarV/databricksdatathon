@@ -47,6 +47,7 @@ This notebook is the code and the reasoning behind the app, in plain words first
 2. What is wrong with the data
 3. Cleaning: fixed, flagged, and what cannot be fixed
 4. Sources and external evidence
+   - 4b. What each outside source adds
 5. The knowledge base
 6. The model and an honest evaluation
 7. `recommend(service, location)` with its WHY and HOW, on 3 real queries, including a multi-stop plan
@@ -123,7 +124,7 @@ if not (DATA_ROOT / "derived" / "v1" / "MANIFEST.json").is_file():
     raise FileNotFoundError(f"{DATA_ROOT}/derived/v1/MANIFEST.json not found: check data_root")
 os.environ["DATATHON_ROOT"] = str(DATA_ROOT)  # the app builds below (subprocesses) read the same folder
 V1 = DATA_ROOT / "derived" / "v1"
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
 print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name,
       "| derived/v1 from", "the repository" if DATA_ROOT == ROOT else DATA_ROOT)
 rebuilt = re.search(r"On Free Edition serverless it gave [^.]+\\.", (ROOT / "submission/README.md").read_text())
@@ -344,17 +345,6 @@ plt.show()
 ''')
 
 md("""
-We evaluated 14 public lists as independent evidence (accreditation, blood centres, maternity certification,
-OpenStreetMap and others), with a hand check of the match quality and the licence of each for a public demo.
-Restricted lists are used only as per-facility facts and are never printed here.
-""")
-
-code('''
-show_table(how.table("research/DATASETS.md", "Summary", ["Dataset", "Role", "Licence for a public demo",
-                                                        "Hand check"]))
-''')
-
-md("""
 Two offline witnesses add independent text and tags. Neither can run inside Free Edition: the crawl needs
 outbound HTTP for about an hour, and the matching needs large downloads. Their summaries are committed in `kb/`.
 """)
@@ -367,6 +357,35 @@ print(f"Website crawl: {crawl['sites_reachable']:,} of {crawl['sites_attempted']
 cov = osm["coverage"]
 print(f"Open data: {cov['any_match']['n']:,} of {osm['vf_facilities']:,} records matched to OpenStreetMap or "
       f"Wikidata ({cov['any_match']['share_of_vf']:.0%}); opening hours parsed for {cov['hours_parsed']['n']:,}.")
+''')
+
+md("""
+### 4b. What each outside source adds
+
+We evaluated 14 public lists (`research/DATASETS.md`; four were evaluated and not used), with a hand check of the
+match quality and the licence of each. Restricted lists are used only as per-facility facts and are never printed
+here. The lists the model uses are cited witnesses: each adds points to one facility's ledger row, with a link,
+and none ranks facilities by itself. `validation/source_impact.py` removes one source's points from the frozen v2
+scores at a time (no refit) and counts what changes: the pairs it fires on; the LIKELY pairs that would leave LIKELY
+without it, on the service score (`likely_lost`) or through the existence and location gates, which NABH and
+OpenStreetMap also feed (`likely_lost_gates`); the pairs that would fall to the Unlikely threshold (`reach_t_u`); and
+how often the app's first answer changes over 300 seeded PIN centres, with bands held as shipped. The cell reads its
+output, `validation/out/source_impact.csv`.
+""")
+
+code('''
+si = pd.read_csv(ROOT / "validation/out/source_impact.csv")
+top = [c for c in si.columns if c.startswith("top1_changes_")]
+display(si.set_index("source")[["family", "pairs_fired", "likely_pairs", "likely_lost", "likely_lost_gates",
+                                 "reach_t_u", *top]]
+        .rename(columns={c: c.removeprefix("top1_changes_") for c in top}))
+allx = si[si.family == "X+O"].iloc[0]
+share = {c.removeprefix("top1_changes_"): int(allx[c].split(" of ")[0]) / int(allx[c].split(" of ")[1]) for c in top}
+print(f"Without every list and OpenStreetMap row, the first answer changes for {share['dialysis']:.0%} of dialysis "
+      f"and {share['cardiac_surgery']:.0%} of cardiac surgery searches (bands held as shipped). "
+      f"{int(allx.likely_lost)} LIKELY pairs fall below the LIKELY threshold on the service score; through the "
+      f"existence and location gates {int(allx.likely_lost_gates)} would leave LIKELY, and {int(allx.reach_t_u)} "
+      "pairs would fall to the Unlikely threshold.")
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -513,7 +532,8 @@ print(f"UNLIKELY needs p <= {bt['unlikely']['p']:.2f}{' (fallback value)' if th[
       f"{ul['k_correct']} of {ul['n']} UNLIKELY pairs contradicted (95% {ul['wilson95'][0]:.3f} to {ul['wilson95'][1]:.3f}).")
 print("rule:", bt["rule"])
 bands = card["bands_all_pairs"]
-print("all pairs by band:", ", ".join(f"{k} {v:,}" for k, v in bands.items()), f"(of {sum(bands.values()):,})")
+print("model, all scored pairs by band (frozen; every service):", ", ".join(f"{k} {v:,}" for k, v in bands.items()),
+      f"(of {sum(bands.values()):,})")
 for urgency, c in card["conformal"].items():
     print(f"conformal top-k, {urgency} ({', '.join(c['services'])}): list k = {c['k']}; a confirmed facility is "
           f"among them in {c['coverage_k']} of {c['n_queries']} DEV queries (95% from {c['coverage_wilson95'][0]:.2f}); "
@@ -623,12 +643,58 @@ else:
 ''')
 
 md("""
+**What the TEST does and does not show.** The lead number is the Likely band: how often a Likely answer was
+confirmed. AUROC says how well the score orders options within a list. Two checks read the same TEST labels
+(`model/gold/v3/test_eval/independence.json`, written by `independence.py`, read-only on the frozen predictions):
+- **Independence.** When the facility's own website states the service, the model's website witness and the web
+  check read the same page, so agreement there is expected. The split shows how the score does without it.
+- **Bands, exists and Unlikely.** Each band's verdicts, the existence head (TEST has no "does not exist" label, so
+  the DEV rule counts "unclear after a search" as a negative), and Unlikely by its two routes: a low score, or the
+  c2 rule (text names another facility and no unit of its own).
+""")
+
+code('''
+ind = json.loads((ROOT / "model/gold/v3/test_eval/independence.json").read_text())
+assert ind["test_predictions_sha256"] == sealed_sha and ind["overall"]["auroc"] == te["headline_decided"]["auroc"]
+
+
+def auc_txt(m):
+    return "undefined (no contradicted pair)" if m["auroc"] is None else \
+        f"{m['auroc']:.3f} [{m['auroc_ci95'][0]:.3f}, {m['auroc_ci95'][1]:.3f}]"
+
+
+display(pd.DataFrame(ind["bands"]).assign(**{"confirmed of decided": lambda d: d.confirmed_of_decided.map(
+    lambda w: f"{w['k']} of {w['n']}" if w["n"] else "-")}).set_index("band")[
+    ["pairs", "confirmed", "contradicted", "no_info", "no_info_share", "confirmed of decided"]])
+w = ind["by_website_family"]
+print(f"Own website states the service (W > 0): {w['W_gt_0']['confirmed']} of {w['W_gt_0']['n']} confirmed. "
+      f"Website silent or absent (W <= 0): {w['W_le_0']['n']} pairs, AUROC {auc_txt(w['W_le_0'])}.")
+for k, m in ind["by_label_evidence_source"].items():
+    if isinstance(m, dict) and m["n"] >= 5:
+        print(f"Label evidence from {k.replace('_', ' ')}: {m['n']} pairs, AUROC {auc_txt(m)}")
+b = ind["band_as_score"]
+print(f"The band as a score: AUROC {auc_txt(b['band_ordinal'])}; LIKELY against the rest {auc_txt(b['likely_vs_rest'])}")
+print("Services with no contradicted TEST pair:", ", ".join(ind["services_with_0_test_negatives"]))
+ex = ind["existence_head"]
+print(f"Exists: labels {ex['counts']}; with the DEV rule, AUROC {auc_txt(ex['y_E_rule'])}")
+for split, r in ind["unlikely_by_route"].items():
+    if split != "t_U":
+        print(f"{split} Unlikely right (contradicted): p <= {ind['unlikely_by_route']['t_U']} route "
+              f"{r['p_route']['k']} of {r['p_route']['n']}, c2 route {r['c2_route']['k']} of {r['c2_route']['n']}"
+              + (" (DEV is the fit set)" if split == "DEV" else ""))
+labels = {k: json.loads((ROOT / f"model/gold/v3/{k}_labels.json").read_text())["report"]["overlap"]
+          for k in ("dev", "test")}
+print(f"Label agreement (Cohen's kappa on the verdict): DEV {labels['dev']['kappa_service']}, TEST "
+      f"{labels['test']['kappa_service']}; TEST confirmed-vs-contradicted disagreements: "
+      f"{sum(v for k, v in labels['test']['confusion'].items() if set(k.split('|')) == {'confirmed', 'contradicted'})}")
+''')
+
+md("""
 **A negative result: the reader.** We fine-tuned a small transformer to read each sentence and say whether it is
 about this facility and whether it offers the service. We trained MiniLM on the lead's Mac, and bge-small and
-multilingual-e5 on a Databricks GPU. On the hand-labelled sentences none beats the rules where it
-would have to (the F1 on the class that matters, label 0, with the paired bootstrap interval of the difference
-above zero), and on "offers" every reader is far worse. So the model keeps the rules and the reader slot has
-weight 0.
+multilingual-e5 on a Databricks GPU. On "is this sentence about this facility", two readers score a little
+above the rules, but no interval of the difference (the F1 on label 0, paired bootstrap) is above zero, so no gain
+is shown. On "offers" every reader is far worse. So the model keeps the rules and the reader slot has weight 0.
 """)
 
 code('''
@@ -676,7 +742,7 @@ from itinerary import attach
 
 ENGINE = Engine.load()
 print(f"engine loaded: {len(ENGINE.fid):,} facilities, {sum(len(v) for v in ENGINE.pairs.values()):,} "
-      f"facility-service pairs, {len(ENGINE.claims):,} quotable sentences; data {ENGINE.meta['source']} "
+      f"facility-service pairs the app serves, {len(ENGINE.claims):,} quotable sentences; data {ENGINE.meta['source']} "
       f"as of {ENGINE.meta['as_of']}")
 
 def recommend(service: str, lat: float, lon: float) -> dict:
@@ -696,8 +762,8 @@ def show(plan: dict, n: int = 3) -> None:
               f"{t['km']:.0f} km, about {t['low']}-{t['high']} min ({t['label']})")
         for e in o["evidence"][:2]:
             print(f'   WHY  "{e["quote"]}"  [{e["claim_id"]}]')
-        pts = " + ".join(f"{c['label']} {c['points']:+d}" for c in o["contributions"])
-        print(f"   HOW  {pts} = {sum(c['points'] for c in o['contributions']):+d} points")
+        pts = " + ".join(f"{c['label']} {c['points']:+g}" for c in o["contributions"])
+        print(f"   HOW  {pts} = {sum(c['points'] for c in o['contributions']):+g} points")
         if o.get("why_first_text"):
             print("   FIRST", o["why_first_text"])
         print("   ASK ", o["call_ahead"][0]["question"])
@@ -722,7 +788,7 @@ show(recommend("emergency_csection", 19.88, 75.34))   # Aurangabad district, Mah
 ''')
 
 code('''
-show(recommend("trauma_emergency", 25.15, 83.68))     # NH-19 near Mohania, Bihar: a multi-stop plan
+show(recommend("trauma_emergency", 24.79, 85.0))      # road accident near Gaya, Bihar: a multi-stop plan
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -787,34 +853,24 @@ simulated method finding, not as field evidence.
 """)
 
 code('''
-pc = ROOT / "validation/out/policy_compare.csv"
-if not pc.is_file():
-    print("REAL DATA policy comparison: pending (run validation/policy_compare.py, #93; its CSV is not committed yet).")
-    print("It will show, per policy (app, nearest, best on paper) at the demo places: answers, median travel minutes,")
-    print("how many first picks are inside the service's time window, how many are LIKELY, and the published DEV")
-    print("labels (confirmed or contradicted) where they exist. Real data, not simulated.")
-else:
-    d = pd.read_csv(pc)
-    d = d[d.facility.notna() & d.facility.ne("")]
-    print("REAL DATA at the demo places, not simulated; gold = published DEV labels only, so coverage is small")
-    display(d.groupby("policy").agg(answers=("service", "size"), median_minutes=("minutes", "median"),
-                                    in_window=("in_window", "sum"), likely=("band", lambda b: int((b == "LIKELY").sum())),
-                                    gold_confirmed=("gold", lambda g: int((g == "confirmed").sum())),
-                                    gold_contradicted=("gold", lambda g: int((g == "contradicted").sum()))))
+d = pd.read_csv(ROOT / "validation/out/policy_compare.csv")  # validation/policy_compare.py, #93
+d = d[d.facility.notna() & d.facility.ne("")]
+print(f"REAL DATA at {d.place.nunique()} demo places x {d.service.nunique()} services, not simulated "
+      "(validation/out/policy_compare.csv); gold = published DEV labels only, so coverage is small")
+display(d.groupby("policy").agg(answers=("service", "size"), median_minutes=("minutes", "median"),  # noqa: F821
+                                in_window=("in_window", "sum"), likely=("band", lambda b: int((b == "LIKELY").sum())),
+                                gold_confirmed=("gold", lambda g: int((g == "confirmed").sum())),
+                                gold_contradicted=("gold", lambda g: int((g == "contradicted").sum()))))
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("## 8. Data stories")
 
 code('''
-stories = ROOT / "viz" / "STORYBOOK.md"
-if stories.is_file():
-    heads = [ln.lstrip("# ").strip() for ln in stories.read_text().splitlines() if ln.startswith("## ")]
-    print("Data stories in viz/STORYBOOK.md:")
-    for head in heads:
-        print(" -", head)
-else:
-    print("The data stories (issue #53) are not in this version yet; this cell lists them once viz/ lands.")
+heads = [ln.lstrip("# ").strip() for ln in (ROOT / "viz/STORYBOOK.md").read_text().splitlines() if ln.startswith("## ")]
+print("Data stories in viz/STORYBOOK.md:")
+for head in heads:
+    print(" -", head)
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1025,6 +1081,37 @@ assert abs(100 * int(k.replace(",", "")) / int(n.replace(",", "")) - float(pct))
 print(f"Offline packs: the phone saves every state pack with a facility within {RADIUS_KM} km of the fix. Of "
       f"{n_pins} PIN centroids within {km} km of a state border, the nearest facility offering the service is in "
       f"another state for {pct}% of (PIN, service) pairs ({k} of {n}; app/README.md).")
+''')
+
+md("""
+**For planners: the Genie agent and the AI/BI dashboard.** Both run in the team workspace over the Unity Catalog
+schema `workspace.referral_saathi`, which holds the same v2 scores the app reads.
+- **Genie agent** (`databricks/genie/`, built as code by `space.py`): ask in plain English where facilities show
+  public evidence of a service, how strong it is, and which districts have none. Its answers cite claim ids. The
+  space's test questions are asked through the Conversation API and compared with our own SQL
+  (`test_space.py`, results in `test_results.json`).
+- **District planner dashboard** (`databricks/dashboard/`, built by `build_dashboard.py`): for a state, district
+  and service, how thin the evidence is, how far people are from confirmed care, and which records to check by
+  phone.
+""")
+
+code('''
+from IPython.display import Image
+
+space = json.loads((ROOT / "databricks/genie/genie_space.json").read_text())
+gt = json.loads((ROOT / "databricks/genie/test_results.json").read_text())
+print(f"Genie agent {(ROOT / 'databricks/genie/space_id.txt').read_text().strip()}: "
+      f"{len(space['data_sources']['tables'])} tables; {sum(t['auto_pass'] for t in gt)} of {len(gt)} test questions "
+      "match our SQL (databricks/genie/test_results.json)")
+for t in gt:
+    print(f"  {'PASS' if t['auto_pass'] else 'DIFF'}  {t['question']}")
+dash = json.loads((ROOT / "databricks/dashboard/planner_dashboard.json").read_text())
+print(f"Dashboard {(ROOT / 'databricks/dashboard/dashboard_id.txt').read_text().strip()}: "
+      f"{len(dash['datasets'])} datasets; pages: " + "; ".join(p["displayName"] for p in dash["pages"]))
+stills = sorted((ROOT / "demo/stills").glob("*.png")) if (ROOT / "demo/stills").is_dir() else []
+print(f"{len(stills)} stills in demo/stills/")
+for f in stills[:4]:
+    display(Image(filename=str(f), width=640))  # noqa: F821
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------

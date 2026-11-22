@@ -10,19 +10,24 @@ instead of guessing, and it keeps working offline on a cheap phone.
 **Not the nearest, and not an unreachable "best".** Sending everyone to the closest listing ignores whether it
 really offers the care; sending everyone to the best hospital ignores whether the patient can get there in time.
 Referral Saathi weighs evidence, travel time and the care's time window, and when the right hospital is too far it
-plans a stop to stabilise first. For example, after a road accident near Pusa, Bihar, the definitive trauma hospital
-is about 80 minutes away and misses the 60-minute window. So the app says: call the sub-divisional hospital 19
-minutes away first, and if they say no, call the confirmed private hospital 34 minutes away next. A simulated
-referral world showed that in an emergency the nearest plausible place first, with a call ahead, gets more patients
-to care in time than sending them farther for better evidence (simulated, not a field result). *These numbers come
-from the app and route planner on model v2: list 1 is Sub Divisional Hospital Pusa (not verified), list 2 Miracare
-Hospital (Likely), and the route continues to Ganpati Hospital, Vaishali.*
+plans a stop to stabilise first. For example, after a road accident in Gaya, Bihar (24.79, 85.0), going straight to
+AIIMS Patna takes about 92 minutes and misses the 60-minute window. So the app says: call Dr. A Barkat
+Multispeciality Hospital, half a kilometre away and rated Likely ("Provides 24/7 trauma and emergency care"), for
+first care, then go on to AIIMS Patna. A simulated referral world showed that in an emergency the nearest plausible
+place first, with a call ahead, gets more patients to care in time than sending them farther for better evidence
+(simulated, not a field result). *These numbers come from the app and route planner on model v2 (`/api/plan`,
+trauma, at that point; the route's own sentence is "Going straight to All India Institute of Medical Sciences Patna
+takes 92 min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first
+care in about 1 min.").*
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 
+It is for ASHAs and other front-line health workers deciding where to send a patient, and for district planners
+asking where the evidence of care is thin.
+
 The submission is three things:
 
-- **Video demo:** the app on a phone, start to finish. Link to come (#12).
+- **Video demo:** the app on a phone, start to finish. Video: VIDEO_LINK (placeholder, added after recording, #12).
 - **This repository**, with the code for every step from audit to app.
 - **The notebook**, with all our code and its outputs:
   [`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb). It is readable on GitHub as is, and runs
@@ -30,6 +35,38 @@ The submission is three things:
 
 The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
 tells the same story as the notebook, in plain words.
+
+## What runs on Databricks
+
+- **The App** (Databricks Apps, `referral-saathi`, deployed by `tools/deploy/deploy.sh`). Typed requests the
+  offline lexicon cannot place go to Llama 3.3 70B (`databricks-meta-llama-3-3-70b-instruct`), which also
+  translates quotes. A photo of a referral note is read by Llama 4 Maverick (`databricks-llama-4-maverick`). Both
+  are called through model serving, and a model's answer is kept only when its deciding phrase appears word for
+  word in the input (`app/inputs/understand.py`). Speech goes through faster-whisper small on the App's own CPU:
+  2.1 to 3.0 s per clip, 3 of 3 test clips parsed to the right service (`submission/measured_on_databricks.json`).
+- **Unity Catalog:** schema `workspace.referral_saathi`, 62 tables, including the model v2 scores
+  (`facility_service_scores_v2`, 358,092 rows). The six v1 prototype tables are kept and commented SUPERSEDED.
+  Which tables rebuild from this repo and which need unpublished inputs: `databricks/README.md`.
+- **AI/BI dashboard** "Referral Saathi: district planner": five pages for district planners, built and tested by
+  `databricks/dashboard/build_dashboard.py` (`databricks/dashboard/DASHBOARD.md`).
+- **Genie agent** "Referral Saathi planner": the planners' questions in plain English over the same tables, with
+  instructions, 13 example queries and a 12-question benchmark. Benchmark accuracy: 10 of 12 on the live space
+  (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
+  hospital near Lucknow can handle an emergency C-section?" with claim ids.
+- **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
+  `submission/00_rebuild_derived.ipynb`. Run ids: RUN_IDS (placeholder, filled at release step R6, listed in
+  `submission/README.md`).
+- **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
+  about 7 minutes each; neither beat the rules, so it is a documented negative result (`model/reader/README.md`).
+- Stills of the dashboard and the Genie Benchmark tab: STILLS (placeholder, `demo/stills/`, captured in a signed-in
+  browser at release step R7).
+
+## Data we brought in
+
+DATA_SOURCES_TABLE (placeholder: one row per outside source, with what it testifies, the facilities matched and its
+effect on the answers, read from `validation/out/source_impact.csv` when the WS5 PR lands).
+
+The rule for every outside source: it is a cited witness on the Why page, never the ranking.
 
 ## How it works
 
@@ -39,14 +76,17 @@ provided facility table (Databricks Marketplace, 9,959 usable records)
   -> cleaning/     fix what can be fixed, flag the rest; split every listing into sentences with ids
   -> derived/v1/   cleaned tables + a score with an interval for every data point (pipelines/source_scoring)
   -> kb/           taxonomy of services, care pathways, website crawl and open-data witnesses
-  -> model/        evidence grades, source reliability, scores for "exists", "is here", "offers it"
+  -> model/        the v2 model (model/v2): one score per facility and service, with its ledger of reasons
+  -> derived/v2/   the frozen model's scores, witnesses and model card, which the app reads
   -> app/          FastAPI + one plain HTML page: whom to call, WHY (quotes) and HOW (points), offline packs
      planner/      multi-stop routes for time-critical cases (stabilise first, then definitive care)
      geo/          travel-time estimates, with hill-road factors by state
+     sim/          the simulated referral world that chose the emergency order
+  -> databricks/   Unity Catalog loader, AI/BI dashboard, Genie agent, read-only verification
 ```
 
 At request time the app needs only the Python standard library plus FastAPI. Its data exports are built from
-`derived/v1` in a few seconds.
+`derived/v1` and `derived/v2` in a few seconds.
 
 ## Reproduce
 
@@ -60,7 +100,7 @@ At request time the app needs only the Python standard library plus FastAPI. Its
 **Locally** (Python 3.11+, a venv with pandas, pyarrow, fastapi, uvicorn and pytest):
 
 ```
-make app-data     # planner export, facts, offline packs, "How this works" data (from derived/v1)
+make app-data     # planner export, facts, offline packs, "How this works", stories, website check (derived/v1, v2)
 make test         # app, planner and travel tests
 make serve        # http://127.0.0.1:8000
 make notebook     # re-run the submission notebook and save it with outputs
@@ -80,6 +120,9 @@ upstream cleaning steps; see `derived/v1/README.md`.
 | `cleaning/` | Location and identity cleaning; sentence attribution and service grades |
 | `pipelines/` | Builds `derived/v1` (source reliability and data-point scores) |
 | `derived/v1/` | The cleaned tables every other part reads |
+| `derived/v2/` | The frozen model's outputs: scores, witnesses, model card |
+| `sim/` | The simulated referral world behind the emergency order |
+| `databricks/` | Unity Catalog loader, AI/BI dashboard, Genie agent and their verification |
 | `kb/` | Service taxonomy, care pathways, website crawl, open-data matches |
 | `external/` | Fetch and join code for 14 public lists, with licence notes |
 | `model/` | Model spec, prototypes, gold labels, the statistical review |
@@ -94,24 +137,67 @@ upstream cleaning steps; see `derived/v1/README.md`.
   - 2,489 of 9,959 records (25.0%) carry a sentence that names another facility; in 1,232 it is written as if
     about the record itself, and cleaning quarantines it as evidence;
   - 1,367 of 9,869 map points are more than 50 km from their own PIN code (1,101 more than 100 km).
-- **The model** (`derived/v2/model_card.json`): A_platt, an expert-set scorecard with one calibration step. On
-  221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720, 0.867], log loss 0.427
-  [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made from public web pages,
-  not human-checked; the sealed TEST set was opened once, after the model was frozen.
-- **Likely:** 102 of 120 DEV pairs labelled Likely were confirmed [0.775, 0.903]. Of the 7,980 facility-service
-  pairs the app serves, 4,507 are Likely; the rest say "call to confirm", "no service text: call to ask" or
-  "Unlikely".
-  On the sealed TEST labels, 25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963],
-  `model/gold/v3/test_eval/results.json`). Every option still says to call first, and when nothing is Likely the
-  app says so.
+- **The model** ([`derived/v2/model_card.json`](derived/v2/model_card.json)): A_platt, an expert-set scorecard
+  with one calibration step. On 221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720,
+  0.867], log loss 0.427 [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made
+  from public web pages, not human-checked; the sealed TEST set was opened once, after the model was frozen.
+- **Sealed TEST, the lead number** ([`model/gold/v3/test_eval/results.json`](model/gold/v3/test_eval/results.json)):
+  25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963]). AUROC 0.819 [0.686, 0.924] on
+  the 60 decided pairs says how well the score orders the options in a list, not how often an answer is right. By
+  band ([`independence.json`](model/gold/v3/test_eval/independence.json), `bands`):
+
+  | Band | confirmed | contradicted | no answer on the web |
+  | --- | --- | --- | --- |
+  | LIKELY | 25 | 3 | 35 of 63 |
+  | CALL_FIRST | 0 | 0 | 11 of 11 |
+  | NO_SERVICE_TEXT | 20 | 8 | 44 of 72 |
+  | UNLIKELY | 2 | 2 | 0 of 4 |
+
+  The band the app shows ranks less well than the score behind it: AUROC 0.670 [0.509, 0.813] (`band_as_score`).
+- **How independent the TEST check is** ([`independence.json`](model/gold/v3/test_eval/independence.json),
+  `by_website_family`): where a facility's own website states the service, the model and the web check both see
+  it (21 of 21 confirmed). Where it does not, the score still ranks above chance but weakly: AUROC 0.703 [0.521,
+  0.864] on 39 pairs. On the 19 pairs whose label cites a domain other than the record's own source, AUROC is 0.705
+  [0.400, 0.945] (`by_label_evidence_source`).
+- **Likely on DEV:** the Likely threshold was set on DEV, as the lowest score whose out-of-fold precision is at
+  least 0.85, so 102 of 120 DEV Likely pairs confirmed [0.775, 0.903] is how it was set, not a test; the TEST
+  number above is the test. The model scores 7,980 facility-service pairs for the app's seven services. The app
+  serves 7,618 of them: the 362 at places whose type cannot offer the service (an eye or dental clinic for trauma,
+  #117) are left out. Of the 7,618, 4,457 are Likely; the rest say "call to confirm", "no service text: call to
+  ask" or "Unlikely". Every option still says to call first, and when nothing is Likely the app says so.
+- **Exists and location are not tested.** No TEST label says a facility does not exist or is in the wrong place
+  (114 yes and 36 unclear for each). Counting "unclear after a search" as a negative, the DEV rule, the existence
+  score gets AUROC 0.617 [0.484, 0.749], close to chance
+  ([`independence.json`](model/gold/v3/test_eval/independence.json), `existence_head`).
+- **Two routes to Unlikely** ([`independence.json`](model/gold/v3/test_eval/independence.json),
+  `unlikely_by_route`): a low score (p <= 0.2) was right, that is contradicted, on 9 of 9 labelled pairs (DEV 7,
+  TEST 2). The c2 rule (text names another facility and no unit of its own) with a higher score was right on 3 of
+  10 (DEV 3 of 8, TEST 0 of 2), so a c2 Unlikely means "check", not "no". DEV pairs are the fit set.
+- **Label agreement:** Cohen's kappa 0.834 on DEV and 0.624 on TEST double-labelled pairs; on TEST no pair had
+  one labeller confirm and the other contradict ([`model/gold/v3/README.md`](model/gold/v3/README.md),
+  `report.overlap` in [`dev_labels.json`](model/gold/v3/dev_labels.json) and
+  [`test_labels.json`](model/gold/v3/test_labels.json)).
+- **Simulation, not a field result** ([`submission/sim_results.csv`](submission/sim_results.csv), trauma,
+  `minus_ncf`): in the simulated referral world the app is within 1 to 2 points of "nearest listing plus a call
+  ahead" (S0-high -1.7, S0-low -1.5, S2 -1.0, S3 -1.3 points of patients treated in the window), and ahead only in
+  S1, where the model is assumed right (+1.0). The cause is the citation rule: the app offers only places with a
+  quote from their own listing, so it passes over some near places the baseline phones. In emergencies the score
+  filters and explains, and the call decides. The multi-stop route is not evaluated in the simulation.
 - **Top two:** a confirmed place was among the first 2 options in 27 of 27 emergency and 19 of 20 planned-care
   DEV groups, but a random order does nearly as well (0.97), so this says little about live queries.
-- **Public facilities:** on 31 labelled public pairs (3 contradicted) we could not show that the score ranks public
-  facilities better than chance; the sample is too small to tell.
+- **Public facilities:** on 31 labelled public DEV pairs (3 contradicted) we could not show that the score ranks
+  public facilities better than chance; the sample is too small to tell.
 - **What did not work** in the earlier prototype is listed in `model/MODEL_SPEC.md` section 4.11 and on the app's
   "How this works" page, as history. Its numbers are not comparable with the DEV numbers above.
 - **Faithfulness:** every number and quote the app shows is checked against its stored row by
   `app/tests/test_faithfulness.py` before release.
+- **What the outside lists change** ([`validation/out/source_impact.csv`](validation/out/source_impact.csv)):
+  removing every list and OpenStreetMap row from the frozen scores changes the first answer for 57 of 299 dialysis
+  and 86 of 294 cardiac surgery searches (19% and 29%, over 300 seeded PIN centres; bands held as shipped). On the
+  service score, 0 LIKELY pairs fall below the LIKELY threshold. Through the existence and location gates, which
+  NABH and OpenStreetMap also feed, removing them would take 26 pairs out of LIKELY, and 22 pairs would fall to the
+  Unlikely threshold (`likely_lost`, `likely_lost_gates`, `reach_t_u`). The lists are cited witnesses on a
+  facility's ledger row: they mostly reorder close calls, and they decide few bands.
 
 ## Limits
 
@@ -162,5 +248,10 @@ That is why every answer ends with "call first".
 - **e-RaktKosh blood centres:** no licence stated; shown only as single-centre facts with a link.
 - The full table, with each source's terms and hand-check results, is in `research/DATASETS.md`.
 - What this repository holds, file by file, is in `DATA_AUDIT.md`.
+
+## Licence
+
+The code is under the MIT licence (`LICENSE`). The data in this repository is not: each dataset stays under its own
+terms, listed above and in `research/DATASETS.md`.
 
 Not clinical advice. In an emergency call 108.

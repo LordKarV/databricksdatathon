@@ -17,20 +17,33 @@ MAX_MATCHES = 6
 _SUFFIX = re.compile(r"\s+(district|dist|zila|zilla|jila)$")
 _KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is more precise than a district centre
 _GAZ_KIND = {"city": "town", "office": "post_office"}
+# A PIN as people copy it: "848 125" (India Post prints it so), "848-125", "PIN 848125", "pin: 848125", "848125.".
+# Same rule as pinOf() in static/app.js, which the offline path uses.
+_PIN = re.compile(r"(?:(?:pin|पिन)(?:\s*code|\s*कोड)?\s*[:#.\-]?\s*)?"
+                  r"([0-9](?:[0-9\s\-]*[0-9])?)[.,;:!]*", re.IGNORECASE)
 
 
-class Match(TypedDict):
+class Match(TypedDict, total=False):
     lat: float
     lon: float
     label: str
     kind: str  # pin | district | town | post_office
     state: str
+    district: str  # only with district_from
+    district_from: str  # a PIN the gazetteer files under no district: "nearest_pin" or "gazetteer_list"
 
 
 def norm(s: str) -> str:
     """Lower case, punctuation to spaces, single spaces, no trailing 'district'."""
     s = " ".join(re.sub(r"[^\w\s]", " ", s.lower()).split())
     return _SUFFIX.sub("", s)
+
+
+def pin_of(q: str) -> str | None:
+    """The six digits of a typed PIN, or None when the text is not a PIN in one of the forms _PIN accepts."""
+    m = _PIN.fullmatch(q.strip())
+    d = re.sub(r"[\s\-]", "", m.group(1)) if m else ""
+    return d if len(d) == 6 else None
 
 
 def title(s: str) -> str:
@@ -45,8 +58,13 @@ class Places:
     def __init__(self, pins: dict[str, list], places: dict | None) -> None:
         self.pins = pins
         self.pin_at = {p: i for i, p in enumerate(pins["pin"])}
+        # facts/build.py fill_districts: "" when the gazetteer files the PIN under its district, else how we chose one
+        self.district_from = pins.get("district_from") or [""] * len(pins["pin"])
         acc: dict[tuple[str, str], list] = {}
-        for d, s, la, lo in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], strict=True):
+        for d, s, la, lo, how in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], self.district_from,
+                                     strict=True):
+            if how:
+                continue  # a district centre is the mean of the PINs filed there, as offline.js districtCentre
             a = acc.setdefault((norm(d), s), [d, 0, 0.0, 0.0])
             a[1] += 1
             a[2] += la
@@ -63,7 +81,8 @@ class Places:
     def _district_of(self, lat: float, lon: float) -> str:
         """District of the nearest PIN centroid, only to tell same-named places apart in a label."""
         p, k = self.pins, math.cos(math.radians(lat))
-        i = min(range(len(p["pin"])), key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
+        i = min((j for j, how in enumerate(self.district_from) if not how),
+                key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
         return title(p["district"][i])
 
     def lookup(self, q: str) -> list[Match]:
@@ -72,13 +91,18 @@ class Places:
         'Name, State' keeps only matches in that state.
         """
         q = q.strip()
-        if re.fullmatch(r"\d{6}", q):
-            i = self.pin_at.get(int(q))
+        pin = pin_of(q)
+        if pin:
+            i = self.pin_at.get(int(pin))
             if i is None:
                 return []
-            p = self.pins
+            p, how = self.pins, self.district_from[i]
+            if how:  # the gazetteer files no district here: the label names only the state, the district is a guess
+                return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
+                         "label": f"PIN {q}, {title(p['state'][i])}", "district": title(p["district"][i]),
+                         "district_from": how}]
             return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
-                     "label": f"PIN {q}, {title(p['district'][i])}, {title(p['state'][i])}"}]
+                     "label": f"PIN {pin}, {title(p['district'][i])}, {title(p['state'][i])}"}]
         name, _, state_q = q.rpartition(",") if "," in q else (q, "", "")
         key, sq = norm(name), norm(state_q)
         if not key:

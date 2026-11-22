@@ -41,9 +41,10 @@ TERMS: dict[str, tuple[str, str]] = {
            "इस सेवा के लिए ज़रूरी कोई चीज़ लिखी है, जैसे ICU, ऑपरेशन थिएटर या ब्लड बैंक"),
     "p2": ("It names a second thing this care needs", "इस सेवा के लिए ज़रूरी दूसरी चीज़ का नाम भी है"),
     # X: official and registry lists
-    "x_nabh:department": ("NABH list: it has this department", "NABH सूची में इसका यह विभाग है"),
-    "x_nabh:department_proxy": ("NABH list: it has a related department", "NABH सूची में इससे जुड़ा विभाग है"),
-    "x_nabh:service_code": ("NABH list: it has this service's code", "NABH सूची में इस सेवा का कोड है"),
+    "x_nabh:department": ("NABH's portal lists this department for it", "NABH पोर्टल पर इसका यह विभाग दर्ज है"),
+    "x_nabh:department_proxy": ("NABH's portal lists a related department for it",
+                                "NABH पोर्टल पर इससे जुड़ा विभाग दर्ज है"),
+    "x_nabh:service_code": ("NABH's portal lists this service's code for it", "NABH पोर्टल पर इस सेवा का कोड दर्ज है"),
     "x_nmc:department": ("NMC list: a medical college with a postgraduate course in this",
                          "NMC सूची: इस विषय में PG कोर्स वाला मेडिकल कॉलेज"),
     "x_nmc:department_support": ("NMC list: a medical college with a related postgraduate course",
@@ -104,3 +105,26 @@ NOT_OBSERVED: dict[str, tuple[str, str]] = {
     "K": ("Public standard (IPHS) does not apply or its level is unknown",
           "सरकारी मानक (IPHS) लागू नहीं या इसका स्तर पता नहीं"),
 }
+
+# The NABH portal holds three kinds of entry under one search (derived/v2 facility_attributes nabh_tier); a cite says
+# which, so an entry-level certificate or a CGHS/ECHS empanelment is never read as accreditation (WS4 4a, #140).
+NABH_TIER: dict[str, str] = {
+    "full_accreditation": "NABH full accreditation {acc}",
+    "entry_level": "NABH entry-level certificate {acc}",
+    "cghs_echs_empanelment": "CGHS/ECHS empanelment listed on NABH's portal; not accreditation ({acc})",
+}
+NABH_UNTIERED = "Listed on NABH's portal ({acc})"
+
+# derived/v2 overlay ON_A_PUBLIC_LIST:<list>:<date> -> the list's name on the Why page's "Official lists" line.
+LIST_NAMES: dict[str, str] = {
+    "nabh": "NABH",
+    "nmc": "NMC medical colleges",
+    "eraktkosh": "e-RaktKosh blood centres",
+    "laqshya": "LaQshya (NHSRC)",
+    "mohfw_tcf": "MoHFW trauma care facilities",
+    "pmndp_goa": "Goa PMNDP dialysis centres",
+}
+
+
+def nabh_text(tier: str | None, acc: str) -> str:
+    return NABH_TIER.get(tier or "", NABH_UNTIERED).format(acc=acc)

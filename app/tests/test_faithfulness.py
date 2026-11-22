@@ -52,8 +52,16 @@ from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
 # NO_SERVICE_TEXT (derived/v2 sub-band, from options.N.model_band) names the service (#118): "No line about" is the
 # band's marked part, the label after it is marked query.service_label.en, and ": call to ask" is fixed text.
-BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
-              "NO_SERVICE_TEXT": "No line about"}
+BAND_WORDS = {"likely": ("Likely", "\u0938\u0902\u092d\u093e\u0935\u0928\u093e \u091c\u093c\u094d\u092f\u093e\u0926\u093e"),
+              "not_verified": ("Not confirmed", "\u092a\u0915\u094d\u0915\u093e \u0928\u0939\u0940\u0902"),
+              "unlikely": ("Unlikely", "\u0938\u0902\u092d\u093e\u0935\u0928\u093e \u0915\u092e"),
+              "NO_SERVICE_TEXT": ("No line about", "\u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 "
+                                  "\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902")}
+# UI2 shows one language at a time (design/ui2/SPEC.md); every fixed word below has its Hindi twin from app/static/i18n/hi.json.
+I18N = {lang: json.loads((Path(__file__).resolve().parents[1] / "static" / "i18n" / f"{lang}.json").read_text())
+        for lang in ("en", "hi")}
+WORDS = {k: (I18N["en"][k], I18N["hi"][k]) for k in ("travel.road", "travel.rough", "route.met", "route.not_met",
+                                                      "delta.same", "num.over99", "num.under1")}
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
@@ -96,7 +104,23 @@ REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
                 "nagpur_mri_flagged_sources": ("mri", 21.15, 79.09),
                 # a Likely option 1 that misses the 60-min window, without abstaining; and one that abstains
                 "odisha_csection_likely_far": ("emergency_csection", 20.8, 85.01),
-                "palamu_nicu_out_of_window": ("nicu", 24.0, 84.0)}
+                "palamu_nicu_out_of_window": ("nicu", 24.0, 84.0),
+                # BE-001: Mohania (above) has an unchecked website on option 1; Banda an unreliable one with its reason
+                "banda_trauma_unreliable_site": ("trauma_emergency", 25.48, 80.33)}
+
+
+def check_website_card(payload: dict, shown: set[str]) -> list[str]:
+    """BE-001: a card with a flagged listed website shows its label, and its reason line exactly when unreliable."""
+    errs = []
+    for i, o in enumerate(payload.get("options", [])):
+        w = o.get("website")
+        if not w:
+            continue
+        if f"options.{i}.website.label.en" not in shown:
+            errs.append(f"option {i + 1}: website label not shown")
+        if (f"options.{i}.website.reason_line.en" in shown) != (w["site_status"] == "unreliable"):
+            errs.append(f"option {i + 1}: reason line shown for a {w['site_status']} website, or missing")
+    return errs
 
 
 # ---------- payloads ----------
@@ -269,12 +293,45 @@ def quote_numbers(s: str) -> list[str]:
 def capped_pct_ok(shown: str, value: float) -> bool:
     """A chance shown as a whole percent, capped so a product of model chances never reads as certain."""
     shown = shown.strip()
-    if shown == "over 99%":
+    if shown in WORDS["num.over99"]:
         return value > 0.99
-    if shown == "under 1%":
+    if shown in WORDS["num.under1"]:
         return value < 0.01
     m = re.fullmatch(r"(\d+)%", shown)
     return bool(m) and 0.01 <= value <= 0.99 and within_precision(m[1], 100 * value)
+
+
+def _engine_one(part: str, q: dict | None) -> str | None:
+    table = I18N["hi"]["engine"]
+    if part in table:
+        return table[part]
+    for k, v in table.items():
+        if "{" not in k or k.startswith("_"):
+            continue
+        names: list[str] = []
+        pat = re.escape(k)
+        if q:
+            pat = pat.replace(re.escape("{label}"), re.escape(q["service_label"]["en"]))
+        pat = re.sub(r"\\\{(\w+)\\\}", lambda m: names.append(m[1]) or "(.+?)", pat)
+        m = re.fullmatch(pat, part)
+        if not m:
+            continue
+        vals = {"label": q["service_label"]["hi"] if q else "", **dict(zip(names, m.groups(), strict=True))}
+        if "need" in vals:  # the engine's fixed {need} words have glossary terms (#121 bug 8)
+            vals["need"] = table.get("_needs", {}).get(vals["need"], vals["need"])
+        return re.sub(r"\{(\w+)\}", lambda x: vals.get(x[1], ""), v)
+    return None
+
+
+def engine_hi(text: str, payload: dict) -> str | None:
+    """The Hindi the page must show for an engine template, computed here independently of app.js: an exact row, a
+    row with {slots} (payload words copied, {label} = the service label), or a '; '-joined reason clause by clause."""
+    q = payload.get("query") or (payload.get("area") or {}).get("query")
+    whole = _engine_one(text, q)
+    if whole is not None or "; " not in text:
+        return whole
+    parts = [_engine_one(p if i == 0 else p[0].upper() + p[1:], q) for i, p in enumerate(text.split("; "))]
+    return None if None in parts else "; ".join(parts)
 
 
 def check_item(payload: dict, it: dict) -> str | None:
@@ -304,19 +361,22 @@ def check_item(payload: dict, it: dict) -> str | None:
     elif kind == "tenths":
         ok = int(number(shown)) == round(10 * stored["k_confirmed"] / stored["n"])
     elif kind == "band":
-        ok = shown == BAND_WORDS.get(stored)
+        ok = shown in BAND_WORDS.get(stored, ())
     elif kind == "method":
-        ok = shown == ("road route" if stored == "osrm" else "rough")
-    elif kind == "dur":  # minutes shown as 'N min', 'N h' or 'N day(s)', rounded to that unit
-        m = re.fullmatch(r"(\d+) (min|h|days?)", shown.strip())
-        unit = {"min": 1, "h": 60, "day": 1440, "days": 1440}[m[2]] if m else 0
+        ok = shown in WORDS["travel.road" if stored == "osrm" else "travel.rough"]
+    elif kind == "dur":  # minutes shown as 'N min', 'N h' or 'N day(s)' (Hindi: मिनट, घंटे, दिन), rounded to that unit
+        m = re.fullmatch(r"(\d+) (min|h|days?|\u092e\u093f\u0928\u091f|\u0918\u0902\u091f\u0947|\u0926\u093f\u0928)", shown.strip())
+        unit = {"min": 1, "h": 60, "day": 1440, "days": 1440, "\u092e\u093f\u0928\u091f": 1, "\u0918\u0902\u091f\u0947": 60,
+                "\u0926\u093f\u0928": 1440}[m[2]] if m else 0
         ok = bool(m) and abs(int(m[1]) * unit - stored) <= unit / 2
     elif kind == "delta":  # minutes against the first choice: 'N min closer', 'N min farther', 'about the same time'
-        m = re.fullmatch(r"(\d+) min (closer|farther)", shown.strip())
-        ok = (stored == 0 and shown.strip() == "about the same time") or (
-            bool(m) and int(m[1]) == abs(stored) and (m[2] == "closer") == (stored < 0) and stored != 0)
+        m = re.fullmatch(r"(\d+) (?:min|\u092e\u093f\u0928\u091f) (closer|farther|\u092a\u093e\u0938|\u0926\u0942\u0930)", shown.strip())
+        ok = (stored == 0 and shown.strip() in WORDS["delta.same"]) or (
+            bool(m) and int(m[1]) == abs(stored) and (m[2] in ("closer", "\u092a\u093e\u0938")) == (stored < 0) and stored != 0)
     elif kind == "met":
-        ok = shown == ("met" if stored is True else "not met" if stored is False else None)
+        ok = shown in (WORDS["route.met"] if stored is True else WORDS["route.not_met"] if stored is False else ())
+    elif kind == "template":  # Hindi rendering of a fixed engine template (hi.json "engine"); see engine_hi
+        ok = isinstance(stored, str) and shown == engine_hi(stored, payload)
     elif kind == "part":  # a name or number restored into a translated quote: copied verbatim from the quote
         ok = re.sub(r"\s+", " ", shown).strip() in re.sub(r"\s+", " ", str(stored))
     elif kind == "term":  # a clinical term in its fixed Hindi rendering: any number in it is one of the quote's
@@ -383,10 +443,8 @@ def check_spoken(name: str, payload: dict, spoken: dict, only: int | None, repor
 
 def spoken_on(page) -> dict:
     assert page.locator("#speak").count() == 1, "no Read aloud button"
-    # The Hindi / English toggle changes speech only, and its visible label says so (#121 bug 8).
-    label = page.locator("#say-lang-h").inner_text()
-    assert "speech only" in label and "screen stays in English" in label, label
-    assert page.get_by_role("group", name=label).locator("[data-say-lang]").count() == 2
+    # UI2: no separate read-aloud language toggle; read aloud follows the app language (#121 bug 8 superseded).
+    assert page.locator("[data-say-lang]").count() == 0
     return page.wait_for_function(SPOKEN_JS).json_value()
 
 
@@ -613,17 +671,19 @@ def test_sealed_test_record_equals_the_results_file():
         assert how == want
 
 
-def check_no_text(payload: dict, text: str) -> list[str]:
+def check_no_text(payload: dict, text: str, only: int | None = None) -> list[str]:
     """A NO SERVICE TEXT option (#118): its chip names the service, and a caption above its quotes says they are not
-    about the service, so general emergency lines do not read as contradicting the chip."""
+    about the service, so general emergency lines do not read as contradicting the chip. UI2 shows quotes on the
+    option's own Why page, so the answer screen checks every chip (only=None, caption not required) and each Why page
+    checks its option's chip and caption (only=i)."""
     label = payload["query"]["service_label"]["en"]
     errs = []
-    for o in payload["options"]:
-        if o.get("model_band") != "NO_SERVICE_TEXT":
+    for i, o in enumerate(payload["options"]):
+        if o.get("model_band") != "NO_SERVICE_TEXT" or (only is not None and i != only):
             continue
         if f"No line about {label}: call to ask" not in text:
             errs.append(f"{o['name']}: NO SERVICE TEXT chip does not name {label!r}")
-        if o["evidence"] and not re.search(rf"\b(?:not|none) about {re.escape(label)}\b", text):
+        if only is not None and o["evidence"] and not re.search(rf"\b(?:not|none) about {re.escape(label)}\b", text):
             errs.append(f"{o['name']}: quotes of a NO SERVICE TEXT option have no caption")
     return errs
 
@@ -680,6 +740,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
     page.route("**/api/plan", lambda r: r.fulfill(status=200, content_type="application/json",
                                                   body=json.dumps(payload)))
     page.add_init_script(
+        "localStorage.getItem('rs.lang') || localStorage.setItem('rs.lang', '\"en\"');"
         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
         " source: 'gps', t: Date.now(), label: null}))")
     area = payload.get("area_plan") or area_stub(payload["query"]["service"], 26.6, 85.48)
@@ -692,12 +753,20 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         page.wait_for_selector("article.card")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
+        plan_shown = {it["path"] for it in got["items"]}
+        # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
+        # "inside the limit" while another check (for example definitive care) is not met.
+        checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []
+        if checks:
+            miss = page.evaluate("() => { const w = document.querySelector('#main .route > .window'); return w ? w.classList.contains('miss') : null; }")
+            if miss != any(not c["met"] for c in checks):
+                errs.append(f"plan: route line shows miss={miss}, but checks are {[c['met'] for c in checks]}")
         errs += check_spoken("plan", payload, spoken_on(page), None, report)
         opts = payload["options"]
         far = (opts and opts[0]["band"] != "likely" and any(o["band"] == "likely" for o in opts)
                and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
-        errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
+        errs += [f"plan: {e}" for e in check_website_card(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
         errs += raw_key_errs("plan", payload, text)
@@ -710,18 +779,23 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         shown_note = "The nearest verified" in page.inner_text("#main")
         if bool(far) != shown_note:
             errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
-        # #121: "Why not the nearest?" says plainly when option 1 is already the nearest listing
-        said = NEAREST_LINE in text
-        if said != bool(payload.get("first_is_nearest") and opts and (payload.get("why_not")
-                                                                       or payload.get("what_would_change"))):
-            errs.append(f"plan: first-is-nearest line shown={said}, first_is_nearest={payload.get('first_is_nearest')}")
         for i, o in enumerate(payload["options"]):
             page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
             page.wait_for_selector("#how")
             got = page.evaluate(COLLECT_JS)
             errs += check_screen(f"why/{o['rank']}", payload, got, report)
             errs += check_quotes(f"why/{o['rank']}", payload, got["items"], claims, report)
-            errs += raw_key_errs(f"why/{o['rank']}", payload, page.inner_text("#main"))
+            wtext = page.inner_text("#main")
+            errs += raw_key_errs(f"why/{o['rank']}", payload, wtext)
+            errs += [f"why/{o['rank']}: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", wtext), i)]
+            if i == 0:  # UI2: "Why not the nearest?" sits on option 1's Why page (it explains why option 1 is first)
+                # why-not rows on this page; the window line it also checks is the answer screen's first line
+                errs += [f"why/{o['rank']}: {e}" for e in check_why_not(payload, plan_shown | {it["path"] for it in got["items"]})]
+                # #121: it says plainly when option 1 is already the nearest listing
+                said = NEAREST_LINE in wtext
+                if said != bool(payload.get("first_is_nearest") and (payload.get("why_not") or payload.get("what_would_change"))):
+                    errs.append(f"why/{o['rank']}: first-is-nearest line shown={said}, "
+                                f"first_is_nearest={payload.get('first_is_nearest')}")
             spoken = spoken_on(page)
             errs += check_spoken(f"why/{o['rank']}", payload, spoken, i, report)
             if f"options.{i}.name" not in {f["path"] for f in spoken["en"]["fields"]}:
@@ -734,6 +808,8 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
+            if o.get("website") and f"options.{i}.website.text.en" not in shown:
+                errs.append(f"why/{o['rank']}: website line not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_ledger(o, i, shown, claims)]
             sure = re.sub(r"\s+", " ", page.inner_text("#how-sure"))
             if "()" in sure or re.search(r"(?:^|[:;.]) ?\([+-]", sure):  # a row named without its label
@@ -760,7 +836,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 page.evaluate("h => { location.hash = h; }", f"#/slip/{o['rank']}")
                 page.wait_for_selector(".slip")
                 if lang == "hi":
-                    page.locator("[data-slip-lang=hi]").click()
+                    page.locator("#lang-btn").click()  # UI2: one app-wide language, switched in the top bar
                     page.wait_for_selector(".slip[lang=hi]")
                 got = page.evaluate(COLLECT_JS)
                 errs += check_screen(f"slip/{o['rank']}/{lang}", payload, got, report)
@@ -771,7 +847,8 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 card = Path(dl.value.path()).read_text(encoding="utf-8")
                 errs += check_card(f"card/{o['rank']}/{lang}", payload, card, report)
                 if lang == "hi":
-                    page.locator("[data-slip-lang=en]").click()  # reset for the next option
+                    page.locator("#lang-btn").click()  # back to English for the next option
+                    page.wait_for_selector(".slip[lang=en]")
             page.evaluate("h => { location.hash = h; }", "#/plan")
             page.wait_for_selector("article.card")
         # Compare (S10): asks "patient here?" with no default, then every option side by side.
@@ -790,7 +867,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.{f}" not in shown:
                     errs.append(f"compare: options.{i}.{f} not shown")
         # Area (S11, S12): per-PIN plan, gap split and ten calls.
-        page.locator("[data-depth=area]").click()
+        page.evaluate("h => { location.hash = h; }", "#/area")  # UI2: the Area tab (no nav on the answer screen)
         page.wait_for_selector("#ten-calls")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("area", full, got, report)
@@ -823,6 +900,7 @@ def test_how_page_every_number_is_from_how_json(base_url, browser):
     report = {"values_checked": 0}
     ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
     page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"en\"')")  # UI2 asks for a language on first launch
     try:
         page.goto(base_url + "/#/how")
         page.wait_for_selector("text=Page data built")
@@ -866,7 +944,9 @@ def test_translated_quote_shows_only_the_quotes_numbers(base_url, browser):
     page = ctx.new_page()
     page.route("**/api/plan", json_reply(payload))
     page.route("**/api/translate", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.add_init_script("localStorage.setItem('rs.lang', '\"hi\"')")  # UI2: the translate button is on Hindi screens
     page.add_init_script(
+        "localStorage.getItem('rs.lang') || localStorage.setItem('rs.lang', '\"en\"');"
         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
         " source: 'gps', t: Date.now(), label: null}))")
     P = f"options.{i}.evidence.{j}.quote"
@@ -887,6 +967,54 @@ def test_translated_quote_shows_only_the_quotes_numbers(base_url, browser):
     assert not errs, "\n".join(errs[:20])
     assert quote_numbers(hindi) and set(quote_numbers(hindi)) <= set(quote_numbers(quote)), (hindi, quote)
     assert original == re.sub(r"\s+", " ", quote).strip()
+
+
+# ---------- UI2: the same screens in Hindi (one language at a time) ----------
+REAL = [(n, p) for n, p in PAYLOADS if n.startswith("real-")]
+# English UI strings that must never show on a Hindi screen: the fixed part of each en.json string before any slot.
+EN_UI = sorted({v.split("{")[0].strip() for k, v in I18N["en"].items()
+                if not k.startswith(("_", "svc.", "lang.", "set.size_sample")) and isinstance(v, str)
+                and len(v.split("{")[0].strip()) >= 12})
+
+
+def english_leaks(text: str) -> list[str]:
+    return [e for e in EN_UI if e in text]
+
+
+@pytest.mark.skipif(not REAL, reason="app/facts/out not built: no real payloads")
+@pytest.mark.parametrize("name, payload", REAL, ids=[n for n, _ in REAL])
+def test_hindi_screens_equal_their_rows(name, payload, base_url, browser):
+    """Answer and Why pages in Hindi: every marked value equals its row (engine text as its reviewed Hindi template,
+    kind 'template'), no unmarked number, no raw key, and no English screen string."""
+    report = {"values_checked": 0}
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, timezone_id="Asia/Kolkata", locale="hi-IN",
+                              service_workers="block")
+    page = ctx.new_page()
+    page.route("**/api/plan", json_reply(payload))
+    page.add_init_script("localStorage.setItem('rs.lang', '\"hi\"');"
+                         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+                         " source: 'gps', t: Date.now(), label: null}))")
+    errs: list[str] = []
+    try:
+        page.goto(base_url + "/#/")
+        page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+        page.wait_for_selector("article.card")
+        screens = [("plan", page.evaluate(COLLECT_JS), page.inner_text("#main"))]
+        for o in payload["options"]:
+            page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
+            page.wait_for_selector("#how")
+            screens.append((f"why/{o['rank']}", page.evaluate(COLLECT_JS), page.inner_text("#main")))
+        assert page.evaluate("document.documentElement.lang") == "hi"
+    finally:
+        ctx.close()
+    for screen, got, text in screens:
+        errs += check_screen(f"hi/{screen}", payload, got, report)
+        errs += raw_key_errs(f"hi/{screen}", payload, text)
+        errs += [f"hi/{screen}: English on screen: {e!r}" for e in english_leaks(text)]
+    templ = sum(it["kind"] == "template" for _, got, _ in screens for it in got["items"])
+    print(f"{name} (hi): {report}, {templ} engine templates in Hindi")
+    assert report["values_checked"] > 0
+    assert not errs, "\n".join(errs[:40])
 
 
 @pytest.mark.skipif(not HOW_JSON.is_file(), reason="how.json not built (app/howto/build.py)")
@@ -933,8 +1061,9 @@ def test_number_wording_flags_bracketed_ranges_and_certain_chances():
 
 # ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
 # The vs_direct probabilities stay in the payload for the record; the page shows the plain sentence (#86).
+# #140 WS2 2c adds stops[k].note and vs_direct.direct_minutes for ui2 (WS1) to render; until then they are not shown.
 ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings", "direct_p_objective",
-                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care"}
+                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care", "note", "direct_minutes"}
 
 
 def route_leaves(obj: Any, path: str) -> list[str]:
@@ -979,6 +1108,7 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
     page = ctx.new_page()
     page.route("**/api/plan", json_reply(payload))
     page.add_init_script(
+        "localStorage.getItem('rs.lang') || localStorage.setItem('rs.lang', '\"en\"');"
         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
         " source: 'gps', t: Date.now(), label: null}))")
     try:
@@ -1041,6 +1171,7 @@ def test_field_report_lines_equal_the_aggregates(base_url, browser):
     page = ctx.new_page()
     page.route("**/api/plan", json_reply(payload))
     page.add_init_script(
+        "localStorage.getItem('rs.lang') || localStorage.setItem('rs.lang', '\"en\"');"
         "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
         " source: 'gps', t: Date.now(), label: null}))")
     errs, seen = [], 0
@@ -1048,7 +1179,7 @@ def test_field_report_lines_equal_the_aggregates(base_url, browser):
         page.goto(base_url + "/#/")
         page.locator("[data-svc=dialysis]").first.click()
         page.wait_for_selector("article.card")
-        screens = [("plan", page.evaluate(COLLECT_JS))]
+        screens = []  # UI2: field reports sit on each option's Why page, not on the answer screen
         for o in payload["options"]:
             page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
             page.wait_for_selector("#how")
@@ -1075,10 +1206,10 @@ def test_field_report_lines_equal_the_aggregates(base_url, browser):
                 want = f"{n} report{'s' if n > 1 else ''} of "
                 if not (text.startswith(want) and f"latest {when}." in text):
                     errs.append(f"{screen}: option {i} note {text!r}, expected {n} reports, latest {when}")
-            # The Hindi line carries the same numbers as the English one.
+            # The Hindi line (shown on the Hindi screen) carries the same numbers as the English one shown here.
             for j in range(len(f["lines"])):
                 en = shown.get(f"options.{i}.field.lines.{j}.en", "")
-                hi = shown.get(f"options.{i}.field.lines.{j}.hi", "")
+                hi = f["lines"][j]["hi"]
                 if sorted(re.findall(r"\d+", en)) != sorted(re.findall(r"\d+", hi)):
                     errs.append(f"{screen}: option {i} line {j}: Hindi numbers differ from English")
             seen += 1

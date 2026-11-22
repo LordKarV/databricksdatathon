@@ -3,14 +3,6 @@
 // suggestion ends at a confirm card: one tap to accept, one to change. Danger words and the lexicon run in the
 // browser first, so they also work offline. Voice: /voice.js (speech to text) and /speech.js (read aloud), loaded
 // when a screen needs them.
-
-// Read-aloud language label (#121 bug 8): the toggle changes the spoken language only, so the label says so. One map
-// per language, so it moves into the strings files of the coming app-wide language setting; the screen shows 'en'
-// until then. The Hindi is a draft for native review (#10).
-const SAY_STRINGS = {
-  en: {label: 'Read aloud in (speech only, the screen stays in English):'},
-  hi: {label: 'किस भाषा में पढ़कर सुनाएँ (सिर्फ़ आवाज़, स्क्रीन अंग्रेज़ी में ही रहेगी):'},
-};
 const RSInput = (() => {
   let lex = null;
 
@@ -69,88 +61,78 @@ const RSInput = (() => {
     return danger ? {...r, source: 'danger'} : r;
   }
 
-  // Hindi or English for speaking and listening: one choice, the same localStorage entry as voice.js ('rs.voice').
+  // Speaking and listening use the app language (state.lang, one setting for the whole app).
   const pref = k => { try { return JSON.parse(localStorage.getItem('rs.' + k)); } catch { return null; } };
-  function voiceLang() {
-    const l = (pref('voice') || {}).lang;
-    return l === 'hi' || l === 'en' ? l : (navigator.language || '').toLowerCase().startsWith('hi') ? 'hi' : 'en';
-  }
-  const setVoiceLang = lang => save('voice', {...(pref('voice') || {}), lang});  // save() from app.js: try/catch
-  const sayOn = () => pref('say') !== false;  // read the voice question aloud; on unless switched off
+  const voiceLang = () => (state.lang === 'hi' ? 'hi' : 'en');
+  const sayOn = () => pref('say') !== false;  // read the voice question aloud; on unless switched off in Settings
 
   function setDanger(phrase) {
     if (!phrase) return;
     state.dangerText = phrase;
     renderBar();
-    announce('Danger sign in what you wrote. Call 108 now.');
+    announce(ts('input.danger'));
   }
 
   // ---------- confirm card (screen S2) ----------
-  // After speech to text, the question is asked in the language the user spoke, with big Yes / No buttons.
-  const ASK = {hi: s => `\u0915\u094d\u092f\u093e \u0906\u092a\u0915\u093e \u092e\u0924\u0932\u092c ${s.hi} \u0939\u0948?`, en: s => `Did you mean ${s.en}?`};
-  function askHtml(r, lang) {
-    const s = svc(r.service), hi = lang === 'hi';
-    return `<div class="card"><p lang="${lang}"><strong>${esc(ASK[lang](s))}</strong></p>
-      <p class="small">Because you said: "${esc(r.phrase)}"</p>
-      <button type="button" class="btn btn-primary btn-block" data-confirm="${esc(r.service)}"
-        lang="${lang}">${hi ? '\u0939\u093e\u0901' : 'Yes'}</button>
-      <button type="button" class="btn btn-block" data-voice-no lang="${lang}">${hi ? '\u0928\u0939\u0940\u0902' : 'No'}</button></div>`;
+  // After speech to text, the question is asked in the app language, with big Yes / No buttons.
+  const ASK = s => ts('input.did_you_mean', {svc: s.label});
+  function askHtml(r) {
+    return `<div class="panel"><p><strong>${esc(ASK(svc(r.service)))}</strong></p>
+      <p class="note">${th('input.because_said', {phrase: `<span lang="und">${esc(r.phrase)}</span>`})}</p>
+      <button type="button" class="btn btn-ink btn-block" data-confirm="${esc(r.service)}">${th('input.yes')}</button>
+      <button type="button" class="btn btn-block" data-voice-no>${th('input.no')}</button></div>`;
   }
   function confirmHtml(r, unsure, heard) {
     const parts = [];
     if (r.danger) {
-      parts.push(`<p class="card" role="alert"><strong>Call 108 now.</strong> ${r.from_note ? 'Possible danger sign in the note: please check.' : `You wrote "${esc(r.danger_phrase)}".`}
-        ${r.note === 'planned_dropped' ? ' For chest pain now, call 108. Heart operation and MRI are planned services.' : ''}</p>`);
+      parts.push(`<p class="panel danger-note" role="alert"><strong>${th('input.call_108')}</strong> ${r.from_note ? th('input.note_danger')
+        : th('input.you_wrote', {phrase: `<span lang="und">${esc(r.danger_phrase)}</span>`})}
+        ${r.note === 'planned_dropped' ? ' ' + th('input.planned_dropped') : ''}</p>`);
     }
     if (r.service && svc(r.service) && heard) {
-      parts.push(askHtml(r, heard));
+      parts.push(askHtml(r));
     } else if (r.service && svc(r.service)) {
-      parts.push(`<div class="card">${unsure ? '<p><strong>We are not sure.</strong> Check this, or pick a tile.</p>' : ''}
-        <p>Looking for: a hospital that can do <strong>${esc(svc(r.service).en)}</strong></p>
-        ${r.phrase ? `<p class="small">Because ${r.from_note ? 'the note says' : 'you wrote'}: "${esc(r.phrase)}"</p>` : ''}
-        <button type="button" class="btn btn-primary btn-block" data-confirm="${esc(r.service)}">Yes, that is right</button>
-        <a class="btn btn-block" href="#/">Change service</a></div>`);
+      parts.push(`<div class="panel">${unsure ? `<p><strong>${th('input.unsure')}</strong></p>` : ''}
+        <p>${th('input.looking', {svc: `<strong>${esc(svc(r.service).label)}</strong>`})}</p>
+        ${r.phrase ? `<p class="note">${th(r.from_note ? 'input.because_note' : 'input.because_wrote', {phrase: `<span lang="und">${esc(r.phrase)}</span>`})}</p>` : ''}
+        <button type="button" class="btn btn-ink btn-block" data-confirm="${esc(r.service)}">${th('input.right')}</button>
+        <a class="btn btn-block" href="#/">${th('input.change')}</a></div>`);
     } else if (r.candidates && r.candidates.length) {
-      parts.push(`<div class="card"><p>Which one is it?</p>${r.candidates.map(c => `<button type="button"
-        class="btn btn-block" data-confirm="${esc(c.service)}">${esc(svc(c.service).en)}
-        <span class="small">("${esc(c.phrase)}")</span></button>`).join('')}
-        <a class="btn btn-block" href="#/">None of these</a></div>`);
+      parts.push(`<div class="panel"><p>${th('input.which')}</p>${r.candidates.map(c => `<button type="button"
+        class="btn btn-block" data-confirm="${esc(c.service)}">${esc(svc(c.service).label)}
+        <span class="note">("<span lang="und">${esc(c.phrase)}</span>")</span></button>`).join('')}
+        <a class="btn btn-block" href="#/">${th('input.none_of')}</a></div>`);
     } else if (r.note === 'symptoms_only') {
-      parts.push(`<p class="card">This sounds like symptoms. Ask the PHC doctor which service is needed, or call 108.</p>
-        <a class="btn btn-block" href="#/">Pick a service</a>`);
+      parts.push(`<p class="panel">${th('input.symptoms')}</p><a class="btn btn-block" href="#/">${th('input.pick')}</a>`);
     } else if (!r.danger) {
-      const why = r.source === 'model_unavailable' || r.offline ? ' Reading free text needs the internet and the model, which are not available now.' : '';
-      parts.push(`<p class="card">We could not tell the service from these words.${why} Pick a tile.</p>
-        <a class="btn btn-block" href="#/">Pick a service</a>`);
+      const why = r.source === 'model_unavailable' || r.offline ? ' ' + th('input.no_model') : '';
+      parts.push(`<p class="panel">${th('input.no_service')}${why} ${th('input.pick_tile')}</p>
+        <a class="btn btn-block" href="#/">${th('input.pick')}</a>`);
     } else {
-      parts.push('<a class="btn btn-block" href="#/">Pick a service</a>');
+      parts.push(`<a class="btn btn-block" href="#/">${th('input.pick')}</a>`);
     }
     return parts.join('');
   }
   function bindConfirm(root) {
     root.querySelectorAll('[data-confirm]').forEach(b => b.addEventListener('click', () => pickService(b.dataset.confirm)));
     root.querySelectorAll('[data-voice-no]').forEach(b => b.addEventListener('click', () => {
-      root.innerHTML = `<p class="card"><span lang="hi">\u092b\u093f\u0930 \u0938\u0947 \u092c\u094b\u0932\u0947\u0902 \u092f\u093e \u0932\u093f\u0916\u0947\u0902\u0964</span> Say it again, or type it.</p>
-        <a class="btn btn-block" href="#/">Pick a service</a>`;
+      root.innerHTML = `<p class="panel">${th('input.again')}</p><a class="btn btn-block" href="#/">${th('input.pick')}</a>`;
       $('#desc').focus();
     }));
   }
 
   // ---------- "Describe it in your words" ----------
   function describeScreen() {
-    return `<a class="btn" href="#/">&larr; Back</a>
-      <h1 tabindex="-1">Describe it in your words</h1>
-      <p class="small">English, Hindi or Hinglish. Tap Speak, or use your keyboard's microphone.</p>
-      <label for="desc">What does the patient need?</label>
-      <textarea id="desc" rows="3" maxlength="500" lang="${navigator.language && navigator.language.startsWith('hi') ? 'hi' : 'en'}"
-        >${esc(state.descText || '')}</textarea>
-      <div id="voice"></div>
-      <label class="check small"><input type="checkbox" id="say-q" ${sayOn() ? 'checked' : ''}>
-        Read the question aloud after I speak</label>
-      <button type="button" id="desc-go" class="btn btn-primary btn-block">Find the service</button>
+    return `<a class="back" href="#/">${rsIcon('back')} ${th('nav.back')}</a>
+      <h1 tabindex="-1">${th('input.describe_h')}</h1>
+      <p class="note">${th('input.describe_help')}</p>
+      <div id="voice" class="section"></div>
+      <label for="desc" class="section">${th('home.need_h')}</label>
+      <textarea id="desc" rows="3" maxlength="500" lang="${voiceLang()}">${esc(state.descText || '')}</textarea>
+      <label class="check"><input type="checkbox" id="say-q" ${sayOn() ? 'checked' : ''}> ${th('input.say_q')}</label>
+      <button type="button" id="desc-go" class="btn btn-ink btn-block">${th('input.find')}</button>
       <div id="desc-out" aria-live="polite"></div>
-      <p class="small muted">When the words do not name a service, the text is sent once to a Databricks model to read it.
-        It is not stored.</p>`;
+      <p class="note section">${th('input.model_note')}</p>`;
   }
   async function bindDescribe() {
     await load();
@@ -163,7 +145,7 @@ const RSInput = (() => {
       if (!r.service && !r.candidates.length && !r.danger) {
         if (!navigator.onLine) r = {...r, offline: true};
         else {
-          out.innerHTML = '<p>Reading...</p>';
+          out.innerHTML = `<p>${th('input.reading')}</p>`;
           try {
             const res = await fetch('/api/parse', {method: 'POST', headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({text}), signal: AbortSignal.timeout(10000)});
@@ -175,11 +157,10 @@ const RSInput = (() => {
       const ask = heard && r.service && svc(r.service);
       out.innerHTML = confirmHtml(r, false, ask ? heard : null);
       bindConfirm(out);
-      announce(ask ? ASK[heard](ask) : r.service ? `Suggested: ${svc(r.service).en}. Confirm or change.`
-        : 'No service found. Pick a tile.');
+      announce(ask ? ASK(ask) : r.service ? ts('input.suggested', {svc: svc(r.service).label}) : ts('input.none_found'));
       if (ask && sayOn() && canSpeak()) {
         loadScript('/speech.js', 'RSSpeech').then(() => RSSpeech.load()).then(() => {
-          const said = RSSpeech.speak(ASK[heard](ask), heard, {fallback: ASK.en(ask)});
+          const said = RSSpeech.speak(ASK(ask), voiceLang(), {fallback: `Did you mean ${ask.en}?`});
           if (said.message) announce(said.message);
         }).catch(() => {});
       }
@@ -189,7 +170,7 @@ const RSInput = (() => {
     $('#desc').addEventListener('input', e => setDanger(dangerHit(e.target.value)));
     $('#say-q').addEventListener('change', e => save('say', e.target.checked));
     loadScript('/voice.js', 'initVoice').then(() => initVoice($('#voice'), (text, lang) => onHeard(text, lang)),
-      () => { $('#voice').innerHTML = `<p class="small">Use your keyboard's mic to speak.</p>`; });
+      () => { $('#voice').innerHTML = `<p class="note">${th('input.keyboard_mic')}</p>`; });
   }
   // The microphone's transcript goes through the same path as typed text, then the spoken Yes / No question.
   let onHeard = () => {};
@@ -197,14 +178,14 @@ const RSInput = (() => {
   // ---------- "Scan referral note" ----------
   function noteScreen() {
     if (!navigator.onLine) {
-      return `<a class="btn" href="#/">&larr; Back</a><h1 tabindex="-1">Scan referral note</h1>
-        <p class="card">Reading a note needs the internet. Use the search box or a tile.</p>`;
+      return `<a class="back" href="#/">${rsIcon('back')} ${th('nav.back')}</a><h1 tabindex="-1">${th('home.scan')}</h1>
+        <p class="panel">${th('input.note_offline')}</p>`;
     }
-    return `<a class="btn" href="#/">&larr; Back</a>
-      <h1 tabindex="-1">Scan referral note</h1>
-      <div class="card"><p><strong>Ask the patient first. Cover the name before taking the photo.</strong></p>
-        <p class="small">We do not keep the photo. It is sent once to a Databricks model to read it.</p></div>
-      <label class="btn btn-primary btn-block" for="note-file">Take a photo of the note</label>
+    return `<a class="back" href="#/">${rsIcon('back')} ${th('nav.back')}</a>
+      <h1 tabindex="-1">${th('home.scan')}</h1>
+      <div class="panel"><p><strong>${th('input.note_ask')}</strong></p>
+        <p class="note">${th('input.note_keep')}</p></div>
+      <label class="btn btn-ink btn-block section" for="note-file">${th('input.note_photo')}</label>
       <input id="note-file" class="visually-hidden" type="file" accept="image/*" capture="environment">
       <div id="note-out" aria-live="polite"></div>`;
   }
@@ -225,7 +206,7 @@ const RSInput = (() => {
       const file = input.files && input.files[0];
       const out = $('#note-out');
       if (!file) return;
-      out.innerHTML = '<p>Reading the note...</p>';
+      out.innerHTML = `<p>${th('input.note_reading')}</p>`;
       let r;
       try {
         const image = await shrink(file);
@@ -235,20 +216,20 @@ const RSInput = (() => {
         r = res.ok ? await res.json() : {ok: false};
       } catch { r = {ok: false}; }
       if (!r.ok) {
-        out.innerHTML = '<p class="card">Could not read the note now. Pick a service.</p><a class="btn btn-block" href="#/">Pick a service</a>';
-        announce('Could not read the note.');
+        out.innerHTML = `<p class="panel">${th('input.note_failed')}</p><a class="btn btn-block" href="#/">${th('input.pick')}</a>`;
+        announce(ts('input.note_failed'));
         return;
       }
       if (r.danger) {  // from a photo: a possible sign to check, never a quote of what the note "says"
         state.dangerText = 'possible danger sign in the note';
         renderBar();
-        announce('Possible danger sign in the note. Please check. Call 108 now.');
+        announce(ts('input.note_danger_say'));
       }
       const shown = {...r, from_note: true, candidates: [], note: null};
-      out.innerHTML = confirmHtml(shown, !r.sure) + (r.detected_text ? `<details><summary>What we read from the photo</summary>
-        <p class="small" style="white-space: pre-wrap">${esc(r.detected_text)}</p></details>` : '');
+      out.innerHTML = confirmHtml(shown, !r.sure) + (r.detected_text ? `<details><summary>${th('input.note_read')}</summary>
+        <p class="note" lang="und" style="white-space: pre-wrap">${esc(r.detected_text)}</p></details>` : '');
       bindConfirm(out);
-      announce(r.service ? `Suggested: ${svc(r.service).en}. Confirm or change.` : 'No service found. Pick a tile.');
+      announce(r.service ? ts('input.suggested', {svc: svc(r.service).label}) : ts('input.none_found'));
     });
   }
 
@@ -258,39 +239,28 @@ const RSInput = (() => {
   const canSpeak = () => 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
   function speakHtml() {
     if (!canSpeak()) return '';
-    const l = voiceLang(), t = (v, label) => `<button type="button" data-say-lang="${v}" aria-pressed="${l === v}"
-      class="${l === v ? 'btn-primary' : ''}">${label}</button>`;
-    return `<p id="say-lang-h" class="small say-lang-label">${esc(SAY_STRINGS.en.label)}</p>
-      <div class="row" role="group" aria-labelledby="say-lang-h">${t('hi', '<span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span>&nbsp;Hindi')}
-      ${t('en', 'English')}</div>
-      <button type="button" id="speak" class="btn-block" aria-pressed="false"><span aria-hidden="true">&#128266;</span
-      > Read aloud</button><p id="speak-note" class="small muted" aria-live="polite"></p>`;
+    return `<button type="button" id="speak" class="btn" aria-pressed="false">${rsIcon('speaker')} <span>${th('ans.listen')}</span></button>`;
   }
   // opts: buildSpeech options from the screen ({danger}, plus {only: i} on the why / call-ahead page).
+  // state.spoken keeps both languages so the faithfulness test checks every spoken value; the button speaks the
+  // app language.
   async function bindSpeak(opts) {
     const b = $('#speak'), plan = state.plan;
     state.spoken = null;
     if (!b || !plan) return;
-    const idle = () => { b.setAttribute('aria-pressed', 'false'); b.lastChild.textContent = ' Read aloud'; };
-    document.querySelectorAll('[data-say-lang]').forEach(t => t.addEventListener('click', () => {
-      setVoiceLang(t.dataset.sayLang);
-      document.querySelectorAll('[data-say-lang]').forEach(x => {  // filled = chosen, not only aria-pressed
-        x.setAttribute('aria-pressed', String(x === t));
-        x.classList.toggle('btn-primary', x === t);
-      });
-      if (window.RSSpeech) RSSpeech.stop();
-      idle();
-    }));
+    const label = b.querySelector('span');
+    const idle = () => { b.setAttribute('aria-pressed', 'false'); label.textContent = ts('ans.listen'); };
+    const note = m => { const n = $('#speak-note'); if (n) n.textContent = m; };
     try { await loadScript('/speech.js', 'RSSpeech'); } catch { /* offline and not cached: handled below */ }
-    if (!window.RSSpeech || !(await RSSpeech.load())) { b.disabled = true; $('#speak-note').textContent = 'Read aloud is not available now.'; return; }
+    if (!window.RSSpeech || !(await RSSpeech.load())) { b.disabled = true; note(ts('ans.listen_na')); return; }
     if (!b.isConnected) return;  // the screen changed while loading
     state.spoken = {hi: RSSpeech.buildSpeech(plan, 'hi', opts), en: RSSpeech.buildSpeech(plan, 'en', opts)};
     b.addEventListener('click', () => {
       if (b.getAttribute('aria-pressed') === 'true') { RSSpeech.stop(); idle(); return; }
       const lang = voiceLang();
       const r = RSSpeech.speak(state.spoken[lang].text, lang, {fallback: state.spoken.en.text, onend: idle,
-        onstart: () => { b.setAttribute('aria-pressed', 'true'); b.lastChild.textContent = ' Stop reading'; }});
-      $('#speak-note').textContent = r.message || '';
+        onstart: () => { b.setAttribute('aria-pressed', 'true'); label.textContent = ts('ans.stop'); }});
+      note(r.message || '');
     });
   }
   window.addEventListener('hashchange', () => { if (canSpeak()) speechSynthesis.cancel(); });

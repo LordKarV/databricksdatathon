@@ -1,108 +1,21 @@
-// Referral Saathi skeleton (issue #5). Plain JS, no framework, hash routes:
-//   #/ home (S1)  #/gps (S1a)  #/change (S1b)  #/plan (S3 / S3x)  #/why/<rank> (S4 + S5 + S6)
+// Referral Saathi (UI2, design/ui2/SPEC.md). Plain JS, no framework, hash routes:
+//   #/lang chooser  #/ home  #/gps  #/change  #/plan answer  #/why/<rank>  #/slip/<rank>  #/settings
+//   #/recent  #/area  #/pulse  #/how  #/stories  #/describe  #/note  #/report
+// One language on screen at a time: every string comes from /i18n/<lang>.json through ts() / th().
 'use strict';
-// New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
-// {label} is the service label (data-f). The screen shows 'en' until that setting lands.
-const STR121 = {
-  first_is_nearest: {en: 'The first choice is already the nearest listing that offers {label}.',
-    hi: '\u092a\u0939\u0932\u093e \u0935\u093f\u0915\u0932\u094d\u092a \u092a\u0939\u0932\u0947 \u0938\u0947 \u0939\u0940 {label} \u0935\u093e\u0932\u0940 \u0938\u092c\u0938\u0947 \u092a\u093e\u0938 \u0915\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0939\u0948\u0964'},
-  rows_farther: {en: 'The places below are farther away.', hi: '\u0928\u0940\u091a\u0947 \u0926\u0940 \u0917\u0908 \u091c\u0917\u0939\u0947\u0902 \u0907\u0938\u0938\u0947 \u0926\u0942\u0930 \u0939\u0948\u0902\u0964'},
-};
 
-// Change location strings (#121 bug 5): one map per language, so they move into the strings files of the coming
-// app-wide language setting. The screen shows 'en' until then. The Hindi is a draft for native review (#10).
-const PLACE_STRINGS = {
-  en: {
-    label: "PIN, district, town or post office, or 'lat, lon'",
-    help: 'With internet: any PIN, district, town or post office name in India. Add the state if many places share ' +
-      'the name, for example Rampur, Bihar. Without internet: a PIN or district of a state saved on this phone. ' +
-      'Coordinates always work, for example 26.59, 85.48.',
-    gpsBlocked: 'GPS is blocked for this site. Type a PIN, district, town or post office instead.',
-    gpsBlockedHint: 'GPS is blocked for this site. Type where the patient is: a PIN, district, town or post office ' +
-      'name. Coordinates work too.',
-    typePlace: 'Type a place',
-    tryGps: 'Try GPS again',
-    typedPlace: 'typed place',
-    choose: n => `${n} places have this name. Choose one:`,
-    empty: 'Type a PIN, a district, town or post office name, or coordinates as "lat, lon".',
-    pinMissing: v => `PIN ${v} is not in our PIN list. Check the number, or type the district or town name.`,
-    nameMissing: v => `No PIN, district, town or post office called "${v}" in our data. Check the spelling, try ` +
-      'the district name, or type coordinates as "lat, lon".',
-    noNet: 'No internet',
-    noAnswer: 'The place search is not answering',
-    notSaved: (why, v, st) => `${why}, and "${v}" is not in the data saved on this phone (${st}). Without ` +
-      'internet, type a PIN or district of a saved state, or coordinates as "lat, lon", for example 26.59, 85.48.',
-    nothingSaved: why => `${why}, and no place data is saved on this phone yet. Type coordinates as "lat, lon", ` +
-      'for example 26.59, 85.48, or use GPS. After one answer with internet, PINs and districts of that state ' +
-      'work offline.',
-  },
-  hi: {
-    label: "पिन कोड, ज़िला, कस्बा या डाकघर, या 'lat, lon'",
-    help: 'इंटरनेट के साथ: भारत का कोई भी पिन कोड, ज़िला, कस्बा या डाकघर का नाम। अगर कई जगहों का एक ही नाम है ' +
-      'तो राज्य भी लिखें, जैसे Rampur, Bihar। इंटरनेट के बिना: इस फ़ोन पर सेव किए गए राज्य का पिन कोड या ज़िला। ' +
-      'अक्षांश-देशांतर हमेशा काम करते हैं, जैसे 26.59, 85.48।',
-    gpsBlocked: 'इस साइट के लिए GPS बंद है। इसकी जगह पिन कोड, ज़िला, कस्बा या डाकघर लिखें।',
-    gpsBlockedHint: 'इस साइट के लिए GPS बंद है। मरीज़ कहाँ है, लिखें: पिन कोड, ज़िला, कस्बा या डाकघर का नाम। ' +
-      'अक्षांश-देशांतर भी चलते हैं।',
-    typePlace: 'जगह लिखें',
-    tryGps: 'GPS फिर से आज़माएँ',
-    typedPlace: 'लिखी गई जगह',
-    choose: n => `${n} जगहों का यही नाम है। एक चुनें:`,
-    empty: 'पिन कोड, ज़िला, कस्बा या डाकघर का नाम, या अक्षांश-देशांतर "lat, lon" लिखें।',
-    pinMissing: v => `पिन कोड ${v} हमारी सूची में नहीं है। नंबर जाँचें, या ज़िले या कस्बे का नाम लिखें।`,
-    nameMissing: v => `"${v}" नाम का कोई पिन कोड, ज़िला, कस्बा या डाकघर हमारे डेटा में नहीं है। वर्तनी जाँचें, ` +
-      'ज़िले का नाम लिखें, या अक्षांश-देशांतर "lat, lon" लिखें।',
-    noNet: 'इंटरनेट नहीं है',
-    noAnswer: 'जगह की खोज जवाब नहीं दे रही',
-    notSaved: (why, v, st) => `${why}, और "${v}" इस फ़ोन पर सेव डेटा (${st}) में नहीं है। इंटरनेट के बिना, सेव ` +
-      'किए गए राज्य का पिन कोड या ज़िला लिखें, या अक्षांश-देशांतर "lat, lon", जैसे 26.59, 85.48।',
-    nothingSaved: why => `${why}, और इस फ़ोन पर अभी जगह का कोई डेटा सेव नहीं है। अक्षांश-देशांतर "lat, lon" ` +
-      'लिखें, जैसे 26.59, 85.48, या GPS चलाएँ। इंटरनेट के साथ एक जवाब के बाद उस राज्य के पिन कोड और ज़िले ' +
-      'बिना इंटरनेट भी चलेंगे।',
-  },
-};
-const PT = PLACE_STRINGS.en;
+const SERVICES = [  // fixed order, emergencies first (spec 3.1); labels come from the strings files (svc.<key>)
+  ['emergency_csection', 'emergency'], ['nicu', 'urgent'], ['trauma_emergency', 'emergency'], ['burn_care', 'emergency'],
+  ['dialysis', 'scheduled'], ['mri', 'planned'], ['cardiac_surgery', 'planned'], ['other', null],
+].map(([key, profile]) => ({key, profile,
+  get en() { return (I18N.en || {})['svc.' + key] || key; }, get hi() { return (I18N.hi || {})['svc.' + key] || key; },
+  get label() { return ts('svc.' + key); }}));
+const N_DANGER = 6;
+const I18N = {};
+const LANGS = ['hi', 'en'];
+const SIZES = [100, 125, 150];
 
-const SERVICES = [
-  // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
-  {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
-  {key: 'nicu', hi: '\u0928\u0935\u091c\u093e\u0924 ICU', en: 'Newborn ICU (NICU)', profile: 'urgent'},
-  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f \u092f\u093e \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
-  {key: 'burn_care', hi: '\u091c\u0932\u0928\u0947 \u0915\u0940 \u091a\u094b\u091f', en: 'Burns', profile: 'emergency'},
-  {key: 'dialysis', hi: '\u0921\u093e\u092f\u0932\u093f\u0938\u093f\u0938', en: 'Dialysis', profile: 'scheduled'},
-  {key: 'mri', hi: 'MRI \u0938\u094d\u0915\u0948\u0928', en: 'MRI scan (planned)', profile: 'planned'},
-  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u0940 \u0938\u0930\u094d\u091c\u0930\u0940', en: 'Heart surgery (planned)', profile: 'planned'},
-  {key: 'other', hi: '\u0915\u0941\u091b \u0914\u0930 / \u092a\u0924\u093e \u0928\u0939\u0940\u0902', en: 'Other / not sure', profile: null},
-];
-const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
-  'Labour with bleeding or baby stuck', 'Chest pain', 'Burn on face or large area'];
-const BAND_ICON = {likely: '\u2714', not_verified: '?', unlikely: '\u2716'};
-// A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
-// Hindi per kb/taxonomy/HINDI_GLOSSARY.md; shown once the app-wide language setting lands.
-const NO_OPTION = {
-  en: {title: 'Search again to see this option',
-    body: 'Options stay only while this page is open. A reloaded page or a shared link does not carry them.',
-    button: 'Search again'},
-  hi: {title: '\u092f\u0939 \u0935\u093f\u0915\u0932\u094d\u092a \u0926\u0947\u0916\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f \u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902',
-    body: '\u0935\u093f\u0915\u0932\u094d\u092a \u0938\u093f\u0930\u094d\u092b\u093c \u0924\u092c \u0924\u0915 \u0930\u0939\u0924\u0947 \u0939\u0948\u0902 \u091c\u092c \u0924\u0915 \u092f\u0939 \u092a\u0947\u091c \u0916\u0941\u0932\u093e \u0939\u0948\u0964 \u092a\u0947\u091c \u0926\u094b\u092c\u093e\u0930\u093e \u0916\u094b\u0932\u0928\u0947 \u092f\u093e \u0936\u0947\u092f\u0930 \u0915\u093f\u090f \u0917\u090f \u0932\u093f\u0902\u0915 \u092e\u0947\u0902 \u0935\u0947 \u0928\u0939\u0940\u0902 \u0906\u0924\u0947\u0964',
-    button: '\u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902'},
-};
-// Number wording (#121), en and hi, ready for the app-wide language setting; these screens show 'en' today.
-// Hindi uses kb/taxonomy/HINDI_GLOSSARY.md terms (listing, confirmed).
-const NUM_TEXT = {
-  offers: {en: 'Offers', hi: '\u0938\u0947\u0935\u093e'},
-  score: {en: 'score', hi: '\u0938\u094d\u0915\u094b\u0930'},
-  similar: {en: 'similar listings confirmed', hi: '\u092e\u093f\u0932\u0924\u0940-\u091c\u0941\u0932\u0924\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u091c\u094b \u092a\u0915\u094d\u0915\u0940 \u0928\u093f\u0915\u0932\u0940\u0902'},
-  to: {en: 'to', hi: '\u0938\u0947'},
-  range: {en: 'range', hi: '\u0926\u093e\u092f\u0930\u093e'},
-  chance_any: {en: 'Chance at least one of these {k} checks out', hi: '\u0907\u0928 {k} \u092e\u0947\u0902 \u0938\u0947 \u0915\u092e \u0938\u0947 \u0915\u092e \u090f\u0915 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
-  chance_one: {en: 'Chance this listing checks out', hi: '\u0907\u0938 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
-  over99: {en: 'over 99%', hi: '99% \u0938\u0947 \u091c\u093c\u094d\u092f\u093e\u0926\u093e'},
-  under1: {en: 'under 1%', hi: '1% \u0938\u0947 \u0915\u092e'},
-};
-const NT = k => NUM_TEXT[k].en;
-
-const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: ''};
+const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: '', lang: null};
 
 function load(k) { try { return JSON.parse(localStorage.getItem('rs.' + k)); } catch { return null; } }
 function save(k, v) { try { localStorage.setItem('rs.' + k, JSON.stringify(v)); } catch { /* private mode */ } }
@@ -112,33 +25,127 @@ function esc(s) {
 const $ = sel => document.querySelector(sel);
 const svc = key => SERVICES.find(s => s.key === key);
 function announce(text) { $('#status').textContent = ''; setTimeout(() => { $('#status').textContent = text; }, 50); }
-function timeStr(t) { return new Date(t).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}); }
+function timeStr(t) { return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN', {hour: '2-digit', minute: '2-digit'}); }
+const locale = () => (state.lang === 'hi' ? 'hi-IN' : 'en-IN');
+
+// ---------- strings ----------
+function raw(key) { return (I18N[state.lang] || {})[key] ?? (I18N.en || {})[key] ?? key; }
+// ts: plain text (announcements, labels, speech). th: HTML; the template is escaped, vars go in as given (callers
+// pass escaped text or F() markup, so payload values keep their data-f marker inside a translated sentence).
+function ts(key, vars = {}) { return raw(key).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)); }
+function th(key, vars = {}) { return esc(raw(key)).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)); }
+window.ts = ts;
+window.rsEngHi = text => engHi(String(text), curQuery());  // slip.js and journey.js: the same Hindi templates
+window.th = th;
+async function loadStrings() {
+  const get = l => fetch(`/i18n/${l}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  [I18N.en, I18N.hi] = await Promise.all([get('en'), get('hi')]);
+}
+function pickLang() {
+  const l = load('lang');
+  if (l === 'hi' || l === 'en') return l;
+  const old = (load('voice') || {}).lang;  // UI1 kept a read-aloud language; it becomes the app language once
+  return old === 'hi' || old === 'en' ? old : null;
+}
+function phoneLang() { return (navigator.language || '').toLowerCase().startsWith('hi') ? 'hi' : 'en'; }
+
+// Engine text (band reasons, why-not reasons, call-ahead questions, route words) is English in the payload. In Hindi
+// the reviewed template from hi.json "engine" is shown, marked data-k="template" with the payload path; a sentence
+// joined with "; " is translated clause by clause; text with no template stays English, marked lang="en".
+const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function engHi(text, q) {
+  const map = (I18N.hi || {}).engine || {};
+  const one = part => {
+    if (map[part] != null) return map[part];
+    for (const [k, v] of Object.entries(map)) {
+      if (!k.includes('{') || k.startsWith('_')) continue;
+      const names = [];
+      let pat = reEsc(k);
+      if (q) pat = pat.split('\\{label\\}').join(reEsc(q.service_label.en));
+      pat = pat.replace(/\\\{(\w+)\\\}/g, (_, n) => { names.push(n); return '(.+?)'; });
+      const m = part.match(new RegExp('^' + pat + '$'));
+      if (!m) continue;
+      const vals = {label: q ? q.service_label.hi : ''};
+      names.forEach((n, i) => { vals[n] = n === 'need' && (map._needs || {})[m[i + 1]] || m[i + 1]; });
+      return v.replace(/\{(\w+)\}/g, (_, n) => vals[n] ?? '');
+    }
+    return null;
+  };
+  const whole = one(text);
+  if (whole != null || !text.includes('; ')) return whole;
+  const parts = text.split('; ').map((p, i) => one(i ? p[0].toUpperCase() + p.slice(1) : p));
+  return parts.every(p => p != null) ? parts.join('; ') : null;
+}
+function E(path, text, q = curQuery()) {
+  if (state.lang !== 'hi') return F(path, text);
+  const hi = engHi(String(text), q);
+  return hi != null ? `<span data-f="${path}" data-k="template">${esc(hi)}</span>` : `<span lang="en">${F(path, text)}</span>`;
+}
+const curQuery = () => (state.plan && state.plan.query) || (state.area && state.area.query) || null;
+
+// ---------- icons: 24 px grid, 2 px stroke, round ends (design/ui2/SPEC.md, components) ----------
+const ICONS = {
+  pin: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  phone: '<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+  speaker: '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  sliders: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  map: '<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  wifiOff: '<path d="M3 3l18 18"/><path d="M8.5 16.5a5 5 0 0 1 7 0M5 12.5a10 10 0 0 1 5-2.7M14.5 9.9A10 10 0 0 1 19 12.5M2 8.8A15 15 0 0 1 6.6 6M11 5.1A15 15 0 0 1 22 8.8"/><path d="M12 20h.01"/>',
+  ok: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  keyboard: '<rect x="2" y="6" width="20" height="12" rx="1"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+  camera: '<path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13" r="4"/>',
+  emergency_csection: '<circle cx="11" cy="4.5" r="2"/><path d="M9 21v-6l-1-1V9.5A2.5 2.5 0 0 1 10.5 7h1A3.5 3.5 0 0 1 15 10.5c1.7.6 2.5 2 2.5 3.5 0 1.9-1.6 3-3.5 3H13v4"/>',
+  nicu: '<path d="M3 19h18M5 19v-6a7 7 0 0 1 14 0v6"/><circle cx="9.5" cy="14.5" r="2"/><path d="M11.5 15.5h4"/>',
+  trauma_emergency: '<rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-45 12 12)"/><path d="M10 10h.01M14 14h.01M10 14h.01M14 10h.01"/>',
+  burn_care: '<path d="M12 21c-4 0-7-2.7-7-6.5 0-3.5 3-5.5 3-9 2.5 1.5 4 3.5 4 6 1-1 1.5-2 1.5-3.5 2.5 2 4.5 4.5 4.5 7 0 3.6-2.5 6-6 6z"/>',
+  dialysis: '<path d="M14 4c-4-1.5-9 1.5-9 7.5S9 21 13 20c2.5-.6 2.5-3 1.5-4.5S12 12 14.5 10.5 18 6 14 4z"/><path d="M19 12.5l1.5 2.5a1.8 1.8 0 1 1-3 0z"/>',
+  mri: '<circle cx="12" cy="10" r="7"/><circle cx="12" cy="10" r="3"/><path d="M3 20h18M7 17v3M17 17v3"/>',
+  cardiac_surgery: '<path d="M12 20s-8-4.8-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.2 12 20 12 20z"/><path d="M4.5 12H9l1.5-2.5 2 5L14 12h5.5"/>',
+};
+ICONS.other = ICONS.help;
+const icon = name => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
+window.rsIcon = icon;
+const BAND_SVG = {
+  likely: '<circle cx="8" cy="8" r="7"/><path d="M4.5 8.5l2.2 2.2 4.8-5" fill="none"/>',
+  not_verified: '<path d="M8 1l7 7-7 7-7-7z"/><path d="M6.4 6.3a1.7 1.7 0 1 1 2.3 1.6c-.5.2-.7.6-.7 1.1M8 11.4v.1" fill="none"/>',
+  unlikely: '<rect x="1.5" y="1.5" width="13" height="13"/><path d="M5 5l6 6M11 5l-6 6"/>',
+};
+const bandSvg = b => `<svg class="bs" viewBox="0 0 16 16" aria-hidden="true">${BAND_SVG[b] || BAND_SVG.not_verified}</svg>`;
 
 // ---------- 108 bar ----------
 function isEmergency() {
   const s = svc(state.service);
   return state.danger.size > 0 || !!state.dangerText || (s && (s.profile === 'emergency' || s.profile === 'urgent'));
 }
+const has102 = key => key === 'emergency_csection' || key === 'nicu';
+function sosHtml(with102) {
+  return `<a href="tel:108">${icon('phone')}<span><b>${th('sos.108')}</b> <span>${th('sos.free')}</span></span></a>
+    ${with102 ? `<a href="tel:102">${icon('phone')}<span><b>${th('sos.102')}</b> <span>${th('sos.102_sub')}</span></span></a>` : ''}`;
+}
 function renderBar() {
   const s = svc(state.service);
-  const show102 = s && (s.key === 'emergency_csection' || s.key === 'nicu');
-  const onPlan = location.hash.startsWith('#/plan') || location.hash.startsWith('#/why') || location.hash === '#/gps';
+  const h = location.hash;
+  const onPlan = h.startsWith('#/plan') || h.startsWith('#/why') || h === '#/gps';
   if (!(isEmergency() && (onPlan || state.danger.size || state.dangerText))) { $('#bar108').innerHTML = ''; return; }
-  $('#bar108').innerHTML = `<div class="bar-108" role="region" aria-label="Emergency numbers">
-    <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;CALL 108 ambulance (free)</a>
-    ${show102 ? '<a href="tel:102"><span aria-hidden="true">&#9742;</span>&nbsp;Call 102: pregnant women, babies (free). No answer? Call 108</a>' : ''}
-  </div>`;
+  $('#bar108').innerHTML = `<nav class="sos" aria-label="${th('sos.label')}">${sosHtml(s && has102(s.key))}</nav>`;
 }
 
 // ---------- location ----------
 function locLine(loc) {
-  if (!loc) return 'No location yet.';
-  const src = {gps: `GPS ${loc.accuracy_m ?? '?'} m`, last_fix: 'last GPS fix', manual: 'typed coordinates',
-    pin: 'PIN centre', district: 'district centre', place: PT.typedPlace}[loc.source] || loc.source;
+  if (!loc) return th('loc.none');
+  const src = {gps: ts('loc.gps', {m: loc.accuracy_m ?? '?'}), last_fix: ts('loc.last_fix'), manual: ts('loc.manual'),
+    pin: ts('loc.pin'), district: ts('loc.district'), place: ts('loc.place')}[loc.source] || loc.source;
+  if (loc.label && ['pin', 'district', 'place'].includes(loc.source)) return `<span lang="en">${esc(loc.label)}</span>, ${timeStr(loc.t)}`;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
-  if (!('geolocation' in navigator)) { onDone('This phone has no GPS in the browser. Choose a place instead.'); return; }
+  if (!('geolocation' in navigator)) { onDone(ts('gps.none')); return; }
   navigator.geolocation.getCurrentPosition(p => {
     state.loc = {lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
       source: 'gps', t: Date.now(), label: null};
@@ -146,8 +153,7 @@ function getGps(onDone) {
     onDone(null);
   }, e => {
     if (e.code === 1) state.gpsDenied = true;
-    onDone(e.code === 1 ? PT.gpsBlocked
-      : 'Could not get GPS. Stand outside, or choose a place instead.');
+    onDone(e.code === 1 ? ts('gps.blocked') : ts('gps.failed'));
   },
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
@@ -155,8 +161,8 @@ function getGps(onDone) {
 // ---------- offline (spec S9; logic in offline.js, loaded lazily) ----------
 function savedLine() {
   const m = load('pack');
-  if (!m) return 'Saved for offline: not yet. It saves after your first online answer.';
-  return `Saved for offline: ${esc(m.state)}, ${new Date(m.saved_at).toLocaleDateString([], {day: 'numeric', month: 'short'})}.`;
+  if (!m) return th('offline.not_yet');
+  return th('offline.saved', {state: esc(m.state), date: esc(new Date(m.saved_at).toLocaleDateString(locale(), {day: 'numeric', month: 'short'}))});
 }
 function needScripts(srcs) {
   return Promise.all(srcs.map(src => document.querySelector(`script[src="${src}"]`)?.dataset.loaded === '1'
@@ -173,11 +179,11 @@ async function loadArea() {
   try {
     const r = await fetch('/api/area', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2)}), redirect: 'manual'});
-    if (!r.ok) throw new Error('The area plan is not available (' + (r.status || 'signed out') + ').');
+    if (!r.ok) throw new Error(ts('area.unavailable', {code: r.status || ts('err.signed_out')}));
     state.area = await r.json();
-    announce('Area plan loaded.');
+    announce(ts('area.loaded'));
   } catch (e) {
-    state.area = {error: navigator.onLine ? e.message : 'The area plan needs internet.'};
+    state.area = {error: navigator.onLine ? e.message : ts('area.needs_net')};
   }
   render();
 }
@@ -195,62 +201,93 @@ async function offlinePlan(reason) {
       if (state.plan && state.plan.offline) {
         state.plan.confirmed = true;
         if (state.plan.pack) state.plan.answer = R.answer(state.plan.pack, fix, state.service);
-        announce('Updated to GPS now.'); render();
+        announce(ts('gps.updated')); render();
       }
     });
   }
   state.plan = p;
-  announce('No internet. ' + (p.answer ? `${p.answer.options.length} saved options.` : 'Showing what is saved on this phone.'));
+  announce(ts('off.h') + '. ' + (p.answer ? ts('off.n_saved', {n: p.answer.options.length}) : ts('off.showing')));
 }
 function offlineScreen(s) {
   const p = state.plan, R = window.RSOffline;
   if (!R) {
-    return `<h1 tabindex="-1">No internet</h1><p>${esc(p.reason)}</p><p class="card">Nothing is saved on this phone yet.</p>
-      <a class="btn btn-primary btn-block" href="tel:108"><span aria-hidden="true">&#9742;</span> Call 108</a>`;
+    return `<h1 tabindex="-1">${th('off.h')}</h1>${offNotice(p.reason)}<p class="panel">${th('off.nothing')}</p>
+      <a class="btn btn-hazard btn-block" href="tel:108">${icon('phone')} ${th('sos.108')}</a>`;
   }
-  return R.render(p.answer, {serviceLabel: s.en, locLine: locLine(state.loc), reason: p.reason,
-    show102: s.key === 'emergency_csection' || s.key === 'nicu', gettingGps: !!state.stopWatch,
+  return offNotice(p.reason) + R.render(p.answer, {serviceLabel: s.label, locLine: locLine(state.loc), reason: p.reason,
+    show102: has102(s.key), gettingGps: !!state.stopWatch,
     fresh: p.confirmed || R.fixIsFresh(state.loc), hasPack: !!p.pack});
+}
+function offNotice(reason) {
+  return `<div class="offline-note" role="status">${icon('wifiOff')}<div><b>${th('off.h')}</b><p>${esc(reason)}</p>
+    <p>${th('off.next')}</p></div></div>
+    <button type="button" class="btn btn-block" id="retry">${th('off.retry')}</button>`;
 }
 function saveOfflinePack() {
   const l = state.loc;
   needScripts(['/pack.js', '/offline.js']).then(() => window.RSOffline.savePack(l.lat, l.lon)).catch(() => {});
 }
 
-// ---------- screens ----------
+// ---------- chooser (first launch) ----------
+function chooserScreen() {
+  const pre = state.lang || phoneLang();
+  const order = pre === 'hi' ? ['hi', 'en'] : ['en', 'hi'];
+  const S = l => I18N[l] || {};
+  return `<div class="chooser">
+    <svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><path d="M5 14h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="6" cy="14" r="4" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/><circle cx="22" cy="14" r="4.5" fill="var(--go)"/></svg>
+    <h1 tabindex="-1" lang="${order[0]}">${esc(S(order[0])['lang.choose_h'])}</h1><p class="sub" lang="${order[1]}">${esc(S(order[1])['lang.choose_h'])}</p>
+    <fieldset><legend class="visually-hidden">${esc(S('hi')['lang.choose_h'])} / ${esc(S('en')['lang.choose_h'])}</legend><div class="choice">
+      ${order.map(l => `<label lang="${l}"><input type="radio" name="first-lang" value="${l}" ${l === pre ? 'checked' : ''}> ${esc(S(l)['lang.name'])}</label>`).join('')}
+    </div></fieldset>
+    <button type="button" class="btn btn-block btn-big btn-ink" id="lang-go" lang="${pre}">${esc(S(pre)['lang.continue'])}</button>
+    <p class="note" id="lang-note" lang="${pre}">${esc(S(pre)['lang.later'])}</p></div>`;
+}
+function bindChooser() {
+  document.querySelectorAll('input[name=first-lang]').forEach(r => r.addEventListener('change', () => {
+    const l = r.value;
+    Object.assign($('#lang-go'), {lang: l, textContent: I18N[l]['lang.continue']});
+    Object.assign($('#lang-note'), {lang: l, textContent: I18N[l]['lang.later']});
+  }));
+  $('#lang-go').addEventListener('click', () => {
+    setLang(document.querySelector('input[name=first-lang]:checked').value, {rerender: false});
+    location.hash = state.afterLang || '#/';
+    state.afterLang = null;
+  });
+}
+
+// ---------- home ----------
 function home() {
-  const tiles = SERVICES.map(s => `<button type="button" class="tile" data-svc="${s.key}"
-      aria-pressed="${state.service === s.key}"><span class="hi" lang="hi">${esc(s.hi)}</span>
-      <span class="en">${esc(s.en)}</span></button>`).join('');
+  const tiles = SERVICES.map(s => `<button type="button" class="tile${s.profile === 'emergency' || s.profile === 'urgent' ? ' emergency' : ''}"
+      data-svc="${s.key}" aria-pressed="${state.service === s.key}">${icon(s.key)}<span>${esc(s.label)}</span></button>`).join('');
   const where = state.loc
-    ? `<div class="where"><p><span aria-hidden="true">&#128205;</span> ${locLine(state.loc)}</p>
-        <div class="row"><a class="btn" href="#/change">Change location</a>
-        <button type="button" id="regps">Update GPS</button></div></div>`
+    ? `<a class="where" href="#/change">${icon('pin')}<span class="where-text"><b data-device>${locLine(state.loc)}</b></span>
+        <span class="where-change">${th('home.change')}</span></a>
+       <button type="button" class="btn btn-block" id="regps">${th('home.update_gps')}</button>`
     : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
-      ? `<p class="small place-hint">${PT.gpsBlocked}</p>
-         <a class="btn btn-primary btn-block" href="#/change">${PT.typePlace}</a>
-         <button type="button" class="btn btn-block" id="gps"><span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>`
-      : `<button type="button" class="btn btn-primary btn-block" id="gps">
-        <span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>
-       <a class="btn btn-block" href="#/change">Choose a place instead</a>`;
-  const boxes = DANGER_SIGNS.map((d, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
-      ${state.danger.has(i) ? 'checked' : ''}> ${esc(d)}</label>`).join('');
-  return `<h1 tabindex="-1">Where is the patient?</h1>
-    ${state.msg ? `<p class="card" role="alert">${esc(state.msg)}</p>` : ''}
-    ${where}
-    <h2>What does the patient need?</h2>
-    <label for="q">Search a service</label>
-    <input id="q" type="search" autocomplete="off" placeholder="kidney, delivery, MRI...">
-    <div id="matches"></div>
-    <div class="tiles" role="group" aria-label="Services">${tiles}</div>
-    <div class="row"><a class="btn" href="#/describe">Describe in your words</a>
-      <a class="btn" href="#/note">Scan referral note</a></div>
-    <div class="bar-108 compact"><span>Chest pain or stroke now?</span>
-      <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108</a></div>
-    <details><summary>Danger signs now?</summary>${boxes}
-      <p class="small muted">Checklist written by the team, not clinically reviewed.</p></details>
-    ${RECENT().length ? `<a class="btn btn-block" href="#/report">How did a referral go? <span lang="hi">(\u0930\u0947\u092b\u093c\u0930\u0932 \u0915\u0948\u0938\u093e \u0930\u0939\u093e?)</span></a>` : ''}
-    <p class="small muted">${savedLine()}</p>`;
+      ? `<p class="note place-hint">${th('gps.blocked')}</p>
+         <a class="btn btn-ink btn-block" href="#/change">${th('place.type')}</a>
+         <button type="button" class="btn btn-block" id="gps">${icon('pin')} ${th('home.use_gps')}</button>`
+      : `<button type="button" class="btn btn-ink btn-block" id="gps">${icon('pin')} ${th('home.use_gps')}</button>
+         <a class="btn btn-block" href="#/change">${th('home.choose_place')}</a>`;
+  const boxes = Array.from({length: N_DANGER}, (_, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
+      ${state.danger.has(i) ? 'checked' : ''}> ${th('danger.' + i)}</label>`).join('');
+  return `<h1 class="visually-hidden" tabindex="-1">${th('home.h')}</h1>
+    <div class="sos-row"><p>${th('home.sos')}</p><a class="btn btn-hazard" href="tel:108">${icon('phone')} 108</a></div>
+    ${state.msg ? `<p class="panel" role="alert">${esc(state.msg)}</p>` : ''}
+    <section class="section" aria-labelledby="h-where"><h2 id="h-where">${th('home.where')}</h2><div class="stack-sm">${where}</div></section>
+    <section class="section" aria-labelledby="h-need"><h2 id="h-need">${th('home.need_h')}</h2>
+      <a class="btn btn-block btn-big btn-ink" href="#/describe">${icon('mic')} ${th('home.speak')}</a>
+      <label for="q" class="search-label">${th('home.search')}</label>
+      <input id="q" type="search" autocomplete="off" placeholder="${th('home.search_ph')}">
+      <div id="matches"></div>
+      <div class="tiles" role="group" aria-label="${th('home.need_h')}">${tiles}</div>
+      <div class="pair"><a class="btn" href="#/describe">${icon('keyboard')} ${th('home.type')}</a>
+        <a class="btn" href="#/note">${icon('camera')} ${th('home.scan')}</a></div></section>
+    <details class="section"><summary>${th('home.danger_h')}</summary>${boxes}
+      <p class="note">${th('home.danger_note')}</p></details>
+    ${RECENT().length ? `<a class="btn btn-block section" href="#/report">${th('report.link')}</a>` : ''}
+    <p class="note section">${savedLine()}</p>`;
 }
 function bindHome() {
   $('#gps')?.addEventListener('click', () => { location.hash = '#/gps'; });
@@ -259,35 +296,35 @@ function bindHome() {
   document.querySelectorAll('[data-danger]').forEach(c => c.addEventListener('change', () => {
     c.checked ? state.danger.add(+c.dataset.danger) : state.danger.delete(+c.dataset.danger);
     renderBar();
-    if (c.checked) announce('Danger sign ticked. Call 108 now.');
+    if (c.checked) announce(ts('home.danger_ticked'));
   }));
   $('#q').addEventListener('input', e => {
     const v = e.target.value.trim().toLowerCase();
     RSInput.setDanger(RSInput.dangerHit(v));
     const hits = RSInput.searchHits(v);
     $('#matches').innerHTML = hits.map(k => `<button type="button" class="btn btn-block" data-svc="${k}">
-      ${esc(svc(k).en)}</button>`).join('') || (v.length >= 2 ? '<p class="small">No match. Try the tiles.</p>' : '');
+      ${esc(svc(k).label)}</button>`).join('') || (v.length >= 2 ? `<p class="note">${th('home.no_match')}</p>` : '');
     $('#matches').querySelectorAll('[data-svc]').forEach(b => b.addEventListener('click', () => pickService(b.dataset.svc)));
   });
 }
 function pickService(key) {
   if (key === 'other') { location.hash = '#/describe'; return; }
   state.service = key; state.msg = '';
-  if (!state.loc) { state.msg = 'First tell us where the patient is.'; render(); return; }
+  if (!state.loc) { state.msg = ts('home.where_first'); render(); return; }
   location.hash = '#/plan';
 }
 
 function gpsScreen() {
-  return `<h1 tabindex="-1">Getting GPS from satellites...</h1>
-    <p>Stand outside. This can take up to 2 minutes.</p>
-    ${state.loc ? `<p>Using now: ${locLine(state.loc)}</p>` : ''}
-    <a class="btn btn-block" href="#/change">Choose place instead</a>
-    <a class="btn btn-block" href="#/">Back</a>`;
+  return `<h1 tabindex="-1">${th('gps.h')}</h1>
+    <p>${th('gps.wait')}</p>
+    ${state.loc ? `<p data-device>${th('gps.using', {loc: locLine(state.loc)})}</p>` : ''}
+    <a class="btn btn-block section" href="#/change">${th('home.choose_place')}</a>
+    <a class="btn btn-block" href="#/">${th('nav.back')}</a>`;
 }
 function bindGps() {
   getGps(err => {
     state.msg = err || '';
-    if (!err) announce('Location found.');
+    if (!err) announce(ts('gps.found'));
     // GPS blocked: go straight to typing the place, which then comes first (#121 bug 5).
     location.hash = state.gpsDenied && !state.loc ? '#/change' : '#/';
   });
@@ -297,21 +334,27 @@ function bindGps() {
 // offline only the saved pack can, so PINs and districts of a saved state. Coordinates always work.
 const PLACE_SOURCE = {pin: 'pin', district: 'district', town: 'place', post_office: 'place'};
 function changeScreen() {
-  const gpsBtn = `<button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> ${
-    state.gpsDenied ? PT.tryGps : 'Back to my GPS location'}</button>`;
-  return `<h1 tabindex="-1">Change location</h1>
-    ${state.gpsDenied ? `<p class="card place-hint">${PT.gpsBlockedHint}</p>` : gpsBtn}
-    <form id="place-form" novalidate>
-      <label for="place">${PT.label}</label>
+  const gpsBtn = `<button type="button" class="btn btn-block section" id="back-gps">${icon('pin')} ${th(state.gpsDenied ? 'place.try_gps' : 'place.back_gps')}</button>`;
+  return `<h1 tabindex="-1">${th('place.h')}</h1>
+    ${state.gpsDenied ? `<p class="panel place-hint section">${th('place.gps_blocked_hint')}</p>` : gpsBtn}
+    <form id="place-form" class="section" novalidate>
+      <label for="place">${th('place.label')}</label>
       <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
-      <p id="place-help" class="small muted">${PT.help}</p>
-      <p id="place-err" role="alert"></p>
+      <p id="place-help" class="note">${th('place.help')}</p>
+      <p id="place-err" class="err" role="alert">${state.placeMsg ? esc(state.placeMsg) : ''}</p>
       <div id="place-choices"></div>
-      <button type="submit" class="btn btn-primary btn-block">Use this place</button>
+      <button type="submit" class="btn btn-ink btn-block">${th('place.use')}</button>
     </form>
-    <div id="district-pick"></div>
+    <div id="district-pick" class="section"></div>
     ${state.gpsDenied ? gpsBtn : ''}
-    <a class="btn btn-block" href="#/">Cancel</a>`;
+    <a class="btn btn-block section" href="#/">${th('nav.cancel')}</a>`;
+}
+// The six digits of a typed PIN ("848 125", "848-125", "PIN 848125", "pin: 848125", "848125."), else null.
+// Same rule as pin_of() in facts/places.py, so a PIN that resolves online also resolves from a saved pack.
+function pinOf(v) {
+  const m = String(v || '').trim().match(/^(?:(?:pin|\u092a\u093f\u0928)(?:\s*code|\s*\u0915\u094b\u0921)?\s*[:#.-]?\s*)?([0-9](?:[0-9\s-]*[0-9])?)[.,;:!]*$/i);
+  const d = m ? m[1].replace(/[\s-]/g, '') : '';
+  return d.length === 6 ? d : null;
 }
 function usePlace(hit, source) {
   state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
@@ -334,7 +377,7 @@ async function serverPlace(q) {
 }
 function placeChoices(matches) {
   $('#place-choices').innerHTML = `<div role="group" aria-labelledby="place-choices-h" class="place-choices">
-    <p id="place-choices-h">${PT.choose(matches.length)}</p>
+    <p id="place-choices-h">${th('place.choose', {n: matches.length})}</p>
     ${matches.map((m, i) => `<button type="button" class="btn btn-block" data-place="${i}">${esc(m.label)}</button>`).join('')}
     </div>`;
   $('#place-choices').querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
@@ -349,7 +392,8 @@ async function packHit(v) {
     await needScripts(['/pack.js', '/offline.js']);
     const pack = await window.RSOffline.loadPack();
     if (!pack) return {pack: null};
-    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const pin = pinOf(v);
+    if (pin) return {pack, hit: window.RSOffline.resolvePin(pack, pin), source: 'pin'};
     const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
       .replace(/ (district|dist|zila|zilla|jila)$/, '');
     for (const p of pack.packs || [pack]) {
@@ -361,28 +405,27 @@ async function packHit(v) {
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
+  if (state.placeMsg) { state.placeMsg = ''; $('#place').focus(); }  // #134: straight to typing the place
   districtPicker();
   $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = $('#place').value.trim();
     $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
-    const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+    const m = v.match(/^(-?\d+(?:\.\d+)?)[\s,]+(-?\d+(?:\.\d+)?)$/);  // "26.59, 85.48" or "26.59 85.48"
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
       usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    if (!v) { placeErr(PT.empty); return; }
+    if (m && !pinOf(v)) { placeErr(ts('place.coords_outside')); return; }  // coordinates, not in India (#134); "848 125" is a PIN
+    if (!v) { placeErr(ts('place.empty')); return; }
     const online = await serverPlace(v);
     if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
     if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
-    if (online) {
-      placeErr(/^\d{6}$/.test(v) ? PT.pinMissing(v) : PT.nameMissing(v));
-      return;
-    }
+    if (online) { placeErr(pinOf(v) ? ts('place.pin_missing', {v: pinOf(v)}) : ts('place.name_missing', {v})); return; }
     const {pack, hit, source} = await packHit(v);
     if (hit) { usePlace(hit, source); return; }
-    const why = navigator.onLine ? PT.noAnswer : PT.noNet;
+    const why = ts(navigator.onLine ? 'place.no_answer' : 'place.no_net');
     const saved = load('pack');
-    placeErr(pack ? PT.notSaved(why, v, saved ? saved.state : '') : PT.nothingSaved(why));
+    placeErr(pack ? ts('place.not_saved', {why, v, st: saved ? saved.state : ''}) : ts('place.nothing_saved', {why}));
   });
 }
 
@@ -405,9 +448,9 @@ async function districtPicker() {
     await needScripts(['/pack.js', '/offline.js']);
     const pack = await window.RSOffline.loadPack();
     if (!pack || !$('#district-pick')) return;
-    $('#district-pick').innerHTML = `<label for="district">Or choose a district (saved data)</label>
+    $('#district-pick').innerHTML = `<label for="district">${th('place.district')}</label>
       <select id="district">${pack.districts.filter(Boolean).map(d => `<option>${esc(d)}</option>`).join('')}</select>
-      <button type="button" class="btn btn-block" id="use-district">Use district centre</button>`;
+      <button type="button" class="btn btn-block" id="use-district">${th('place.use_district')}</button>`;
     $('#use-district').addEventListener('click', () => packPlace(p => p.district($('#district').value), 'district'));
   } catch { /* no saved pack */ }
 }
@@ -416,121 +459,110 @@ async function districtPicker() {
 // kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+const N = (path, v) => F(path, v, 'num');
 // Model v2's p_lo / p_hi are the score bin's observed confirmed rate (derived/v2 field_descriptions), not an interval
 // around p, so they are shown apart from p as a percent, never in brackets next to it (#121). Interim scores keep a range.
 function similarHtml(o, P) {
   const pc = x => String(Math.round(100 * x));
   return o.range_kind === 'similar_scores'
-    ? `${NT('similar')}: ${F(P + '.p_lo', pc(o.p_lo), 'pct')} ${NT('to')} ${F(P + '.p_hi', pc(o.p_hi), 'pct')}%`
-    : `${NT('range')} ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} ${NT('to')} ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}`;
+    ? th('num.similar', {lo: F(P + '.p_lo', pc(o.p_lo), 'pct'), hi: F(P + '.p_hi', pc(o.p_hi), 'pct')})
+    : th('num.range', {lo: N(P + '.p_lo', o.p_lo.toFixed(2)), hi: N(P + '.p_hi', o.p_hi.toFixed(2))});
 }
 // A chance shown as a whole percent, capped: never "100%" or "1.00" from a product of model chances (#121).
-const capPct = x => (x > 0.99 ? NT('over99') : x < 0.01 ? NT('under1') : `${Math.round(100 * x)}%`);
+const capPct = x => (x > 0.99 ? ts('num.over99') : x < 0.01 ? ts('num.under1') : `${Math.round(100 * x)}%`);
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
-  if (!tr) return 'Listings like this: not checked yet';
-  if (tr.n < 10) return `Listings like this: too few checks yet (${F(P + '.n', tr.n, 'num')} checked)`;
+  if (!tr) return th('track.none');
+  if (tr.n < 10) return th('track.few', {n: N(P + '.n', tr.n)});
   if (tr.k_no_info === null || tr.k_no_info === undefined) {
-    return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
-      `(${F(P + '.n', tr.n, 'num')} checked with a clear answer; checks that found nothing were not counted)`;
+    return th('track.tenths', {k: F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths'), n: N(P + '.n', tr.n)});
   }
-  return `Of ${F(P + '.n', tr.n, 'num')} listings like this (${F(P + '.basis', tr.basis)}) we checked: ` +
-    `${F(P + '.k_confirmed', tr.k_confirmed, 'num')} ` +
-    `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
-    `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
+  return th('track.full', {n: N(P + '.n', tr.n), basis: E(P + '.basis', tr.basis), k: N(P + '.k_confirmed', tr.k_confirmed),
+    c: N(P + '.k_contradicted', tr.k_contradicted), u: N(P + '.k_no_info', tr.k_no_info)});
+}
+function trackBar(tr) {
+  if (!tr || tr.n < 10 || tr.k_no_info == null) return '';
+  const pct = v => (100 * v / tr.n).toFixed(1);
+  return `<div class="track-bar" aria-hidden="true"><i class="tb-k" style="width:${pct(tr.k_confirmed)}%"></i><i class="tb-c" style="width:${pct(tr.k_contradicted)}%"></i><i class="tb-u" style="width:${pct(tr.k_no_info)}%"></i></div>
+    <ul class="track-key" aria-hidden="true"><li><span class="sw tb-k"></span>${th('track.k')}</li><li><span class="sw tb-c"></span>${th('track.c')}</li><li><span class="sw tb-u"></span>${th('track.u')}</li></ul>`;
 }
 // Sealed TEST record of the Likely band (#86, #66): every number and hash from meta.test_record, which app/facts/build.py
-// copies from model/gold/v3/test_eval/results.json. Hindi gloss is a draft until native-speaker review (#10).
+// copies from model/gold/v3/test_eval/results.json.
 function testRecordHtml(tr) {
   if (!tr) return '';
   const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
-  return `<div class="test-record"><p class="small"><strong>Sealed test record</strong>
-    <span lang="hi">(\u0938\u0940\u0932\u092c\u0902\u0926 \u091c\u093e\u0901\u091a \u0915\u093e \u0928\u0924\u0940\u091c\u093e)</span>:
-    Likely: ${M('k')} of ${M('n')} confirmed (${M('pct')}%, interval ${M('lo_pct')} to ${M('hi_pct')}%) on a test set
-    sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities
-    (${M('public_n')} public test pairs with a verdict).</p>
-    <details class="small"><summary>Opening log and commitment hashes</summary>
-      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, opened ${M('opened')} UTC.
-      Results: ${M('source')}.</p>
-      <p>Model version <code>${M('model_version')}</code><br>Test predictions hash
-        <code>${M('predictions_sha256')}</code><br>Test labels hash <code>${M('labels_sha256')}</code></p>
+  return `<div class="test-record"><p class="note"><strong>${th('test.h')}</strong>: ${th('test.line', {k: M('k'), n: M('n'),
+    pct: M('pct'), lo: M('lo_pct'), hi: M('hi_pct'), pub: M('public_n')})}</p>
+    <details class="note"><summary>${th('test.hashes')}</summary>
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: M('opened')})}
+      ${th('test.results')}: ${M('source')}.</p>
+      <p>${th('test.model_version')} <code>${M('model_version')}</code><br>${th('test.pred_hash')}
+        <code>${M('predictions_sha256')}</code><br>${th('test.label_hash')} <code>${M('labels_sha256')}</code></p>
     </details></div>`;
 }
+function methodHtml(t, P) { return F(P + '.method', ts(t.method === 'osrm' ? 'travel.road' : 'travel.rough'), 'method'); }
 function travelHtml(t, P) {
-  return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
-    `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
+  return th('travel.line', {km: N(P + '.km', Math.round(t.km)), low: N(P + '.low', t.low), high: N(P + '.high', t.high),
+    method: methodHtml(t, P)});
 }
-function bandHtml(o, P) {
-  // derived/v2 sub-bands of "Not verified": the listing describes the service but nothing confirms it (CALL FIRST),
-  // or the listing has no sentence about the service at all (NO SERVICE TEXT; its p is not shown as a chance)
-  if (o.model_band === 'NO_SERVICE_TEXT') return noTextBandHtml(o, P, state.plan.query);
-  const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
-}
-// NO SERVICE TEXT names the service (#118): "NO SERVICE TEXT" next to general emergency quotes read as a contradiction
-// on camera. The fixed words are the band (data-k band), the service label is the payload's own (query.service_label).
+// Band: a shape plus the word (never colour alone). NO SERVICE TEXT names the service (#118).
 const SL = 'query.service_label';
-function noTextBandHtml(o, P, q) {
-  return `<span class="band band-${o.band}"><span aria-hidden="true">${BAND_ICON[o.band]}</span>
-    <span><span data-f="${P}.model_band" data-k="band">No line about</span> ${F(SL + '.en', q.service_label.en)}: call to ask</span></span>
-    <span class="small" lang="hi">(${F(SL + '.hi', q.service_label.hi)} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902 \u0932\u093f\u0916\u093e, \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0915\u0947 \u092a\u0942\u091b\u0947\u0902)</span>`;
+function bandHtml(o, P) {
+  const q = state.plan.query;
+  if (o.model_band === 'NO_SERVICE_TEXT') {
+    return `<span class="band band-${o.band}">${bandSvg(o.band)}<span>${th('band.no_text', {
+      word: `<span data-f="${P}.model_band" data-k="band">${th('band.no_text_word')}</span>`,
+      label: F(SL + '.' + labelLang(q), q.service_label[labelLang(q)])})}</span></span>`;
+  }
+  return `<span class="band band-${o.band}">${bandSvg(o.band)}<span data-f="${P}.band" data-k="band">${th('band.' + o.band)}</span></span>`;
 }
+const labelLang = q => (state.lang === 'hi' && q.service_label.hi ? 'hi' : 'en');
+const labelF = (q = state.plan.query) => F(SL + '.' + labelLang(q), q.service_label[labelLang(q)]);
 // Caption above the quotes of a NO SERVICE TEXT option: they are the listing's general lines, not about the service.
-// Trauma's are general emergency lines (v1 cites emergency sentences for it); other services get the plain form.
 function noTextCaptionHtml(o, q) {
   if (o.model_band !== 'NO_SERVICE_TEXT' || !o.evidence.length) return '';
-  const en = F(SL + '.en', q.service_label.en), hi = F(SL + '.hi', q.service_label.hi);
-  const line = q.service === 'trauma_emergency'
-    ? `General emergency lines, not about ${en} <span lang="hi">(\u0907\u092e\u0930\u091c\u0947\u0902\u0938\u0940 \u0915\u0940 \u0906\u092e \u092c\u093e\u0924\u0947\u0902, ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902)</span>`
-    : `Lines from the listing, none about ${en} on its own <span lang="hi">(\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0940 \u092c\u093e\u0924\u0947\u0902, \u0907\u0928\u092e\u0947\u0902 ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0905\u0932\u0917 \u0938\u0947 \u0915\u0941\u091b \u0928\u0939\u0940\u0902)</span>`;
-  return `<p class="small quote-caption">${line}</p>`;
+  return `<p class="note quote-caption">${th(q.service === 'trauma_emergency' ? 'quote.caption_trauma' : 'quote.caption', {label: labelF(q)})}</p>`;
 }
 // Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
 function quoteFlagsHtml(e, P) {
   return (e.flags || []).map((f, j) => {
     const Q = `${P}.flags.${j}`;
-    return `<span class="audit${f.weak ? ' audit-weak' : ''}"><span aria-hidden="true">&#9888;</span> ${F(Q + '.text', f.text)}` +
-      `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
+    return `<span class="audit${f.weak ? ' audit-weak' : ''}">${icon('warn')} ${E(Q + '.text', f.text)}` +
+      `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${th('quote.km_away', {km: N(Q + '.km', f.km)})}` : ''}</span>`;
   }).join('');
 }
 // A quote's claim id stays in the page (marked, for the evidence ledger and the faithfulness test) but is not printed:
 // "61731339:proc:3" means nothing to a family (#121).
 function claimHtml(path, id) { return `<span hidden>${F(path, id)}</span>`; }
 function quoteHtml(e, P) {
-  return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    `${claimHtml(P + '.claim_id', e.claim_id)}${quoteFlagsHtml(e, P)}`;
+  return `<p lang="en">"${F(P + '.quote', e.quote)}"</p><p class="tags"><span class="tag">${E(P + '.field', e.field)}</span>` +
+    `${claimHtml(P + '.claim_id', e.claim_id)}</p>${quoteFlagsHtml(e, P)}`;
 }
 // "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
 // engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
 function deltaHtml(path, v) {
-  return F(path, v === 0 ? 'about the same time' : `${Math.abs(v)} min ${v < 0 ? 'closer' : 'farther'}`, 'delta');
+  return F(path, v === 0 ? ts('delta.same') : ts(v < 0 ? 'delta.closer' : 'delta.farther', {n: Math.abs(v)}), 'delta');
 }
 function changeHtml(p) {
   const c = p.what_would_change;
   if (!c) return '';
-  const L = F('query.service_label.en', p.query.service_label.en);
   const d = deltaHtml('what_would_change.minutes_vs_first', c.minutes_vs_first);
   const line = c.kind === 'confirm_nearer'
-    ? `If ${F('what_would_change.name', c.name)} confirms on the phone that it offers ${L}, it becomes the first choice (${d}).`
-    : `If ${F('what_would_change.first_name', c.first_name)} cannot take the patient, call ${F('what_would_change.name', c.name)} next (${d}).`;
-  return `<p><strong>What would change this answer:</strong> ${line}</p>`;
+    ? th('whynot.confirm_nearer', {name: F('what_would_change.name', c.name), label: labelF(p.query), d})
+    : th('whynot.first_says_no', {first: F('what_would_change.first_name', c.first_name), name: F('what_would_change.name', c.name), d});
+  return `<p><strong>${th('whynot.change_h')}</strong> ${line}</p>`;
 }
 // The answer's first line when option 1 misses the service's time window (#86, lead's decision on the issue): say so,
 // show 108/102, and the nearest hospital the public standard expects to offer the care, never as verified.
 function windowHtml(p) {
   const w = p.time_window;
   if (!w || !w.first_outside || !p.options.length) return '';
-  const s = svc(p.query.service);
-  const show102 = s && (s.key === 'emergency_csection' || s.key === 'nicu');
   const po = p.public_option;
-  return `<section class="card window-miss" aria-label="Time window">
-    <p><strong>The best-evidenced option is about ${F('options.0.travel.minutes', p.options[0].travel.minutes, 'num')} min away;
-      that misses the ${F('time_window.window_min', w.window_min, 'num')}-min window for this care.</strong></p>
-    <div class="bar-108 compact"><a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108 ambulance</a>
-      ${show102 ? '<a href="tel:102"><span aria-hidden="true">&#9742;</span>&nbsp;Call 102 (mother and baby)</a>' : ''}</div>
-    ${po ? `<p>Nearest public hospital: <strong>${F('public_option.name', po.name)}</strong>
-      (${F('public_option.label', po.label)}). ${travelHtml(po.travel, 'public_option.travel')}.</p>`
-      : '<p>No hospital in our data nearby is one the public standard expects to offer this care.</p>'}
+  return `<section class="panel window-miss" aria-label="${th('window.label')}">
+    <p><strong>${th('window.miss', {min: N('options.0.travel.minutes', p.options[0].travel.minutes), win: N('time_window.window_min', w.window_min)})}</strong></p>
+    <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
+    ${po ? `<p>${th('window.public', {name: `<strong>${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+      ${travelHtml(po.travel, 'public_option.travel')}.</p>` : `<p>${th('window.no_public')}</p>`}
   </section>`;
 }
 function whyNotHtml(p) {
@@ -539,63 +571,39 @@ function whyNotHtml(p) {
   const items = rows.map((w, k) => {
     const W = `why_not.${k}`;
     const where = w.minutes_vs_first != null ? ` (${deltaHtml(W + '.minutes_vs_first', w.minutes_vs_first)})` : '';
-    return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
-      ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
+    return `<li><b lang="en">${F(W + '.name', w.name)}</b>${w.option_rank ? `, ${th('whynot.option', {n: N(W + '.option_rank', w.option_rank)})}` : ''}:
+      ${N(W + '.travel.km', Math.round(w.travel.km))} ${th('unit.km')}${where}${th('punct.stop')} ${E(W + '.reason', w.reason)}${th('punct.stop')}</li>`;
   }).join('');
   // #121: when option 1 is already the nearest, say so; the rows are then farther places, not nearer alternatives.
-  const [pre, post] = STR121.first_is_nearest.en.split('{label}');
   const nearest = p.first_is_nearest && p.options.length
-    ? `<p class="why-not-nearest">${pre}${F('query.service_label.en', p.query.service_label.en)}${post}${
-      rows.length ? ' ' + STR121.rows_farther.en : ''}</p>` : '';
-  return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
-    ${nearest}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
-    <p class="small muted">This describes our data, not the facility.</p></section>`;
+    ? `<p class="why-not-nearest">${th('whynot.nearest', {label: labelF(p.query)})}${rows.length ? ' ' + th('whynot.below_farther') : ''}</p>` : '';
+  return `<section class="section" aria-labelledby="why-not-h"><h2 id="why-not-h">${th('whynot.h')}</h2>
+    ${nearest}${items ? `<ul class="rows why-not">${items}</ul>` : ''}${changeHtml(p)}
+    <p class="note">${th('whynot.about_data')}</p></section>`;
 }
-function card(o, label, i) {
-  const P = `options.${i}`;
-  const fb = state.plan.itinerary && state.plan.itinerary.fallback;  // route only if card 1 cannot treat (#126)
-  const q = o.evidence[0];
-  return `<article class="card" aria-labelledby="opt-${o.rank}">
-    ${o.call_first ? '<p class="call-first">Call first</p>' : ''}
-    <p>${F(P + '.rank', o.rank, 'num')}. ${bandHtml(o, P)}</p>
-    <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
-    ${o.route_reason ? `<p class="small">${F(P + '.route_reason', o.route_reason)}</p>` : ''}
-    ${i === 0 && fb ? `<p class="small"><strong>${F('itinerary.fallback.ask', fb.ask)}</strong></p>
-      <p class="small">${F('itinerary.fallback.text', fb.text)}</p>` : ''}
-    <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
-    <p>${travelHtml(o.travel, P + '.travel')}</p>
-    ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
-    <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
-    ${fieldHtml(o, P)}
-    <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
-      <a class="btn" href="#/why/${o.rank}">Why this? <span class="visually-hidden">${F(P + '.name', o.name)}</span></a></div>
-  </article>`;
-}
-// Field reports (community/field.py): the server's dated lines, English and Hindi, shown verbatim and marked.
+// Field reports (community/field.py): the server's dated lines, in the app language, shown verbatim and marked.
 function fieldHtml(o, P) {
   const f = o.field;
   if (!f || !(f.lines.length || f.notes.length)) return '';
-  const both = (x, Q) => `<p class="small">${F(Q + '.en', x.en)}<br><span lang="hi">${F(Q + '.hi', x.hi)}</span></p>`;
-  return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="small"><strong>Field reports
-    <span lang="hi">(\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
-    ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
-    ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
+  const l = state.lang === 'hi' ? 'hi' : 'en';
+  const one = (x, Q) => `<p class="note">${F(Q + '.' + l, x[l])}</p>`;
+  return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="note"><strong>${th('field.h')}</strong></p>
+    ${f.lines.map((x, j) => one(x, `${P}.field.lines.${j}`)).join('')}
+    ${f.notes.map((x, j) => one(x, `${P}.field.notes.${j}`)).join('')}</div>`;
 }
-// Tie-break from health-worker reports (#86): one named row on the why page of each tied option; cards add nothing.
+// Tie-break from health-worker reports (#86): one named row on the why page of each tied option.
 function tieHtml(p, o) {
   const t = p.tie_break, T = 'tie_break';
   if (!t || !t.options.some(x => x.facility_id === o.facility_id)) return '';
   const each = t.options.map((x, j) => {
     const i = p.options.findIndex(y => y.facility_id === x.facility_id), Q = `${T}.options.${j}`;
-    return `${F(`options.${i}.rank`, p.options[i].rank, 'num')}. ${F(`options.${i}.name`, p.options[i].name)}: ` +
-      (x.net === null ? `fewer than ${F(T + '.min_reporters', t.min_reporters, 'num')} health workers, not counted`
-        : `${F(Q + '.net', x.net.toFixed(2), 'num')} from ${F(Q + '.n_reporters', x.n_reporters, 'num')} health workers`);
+    return `${N(`options.${i}.rank`, p.options[i].rank)}. ${F(`options.${i}.name`, p.options[i].name)}: ` +
+      (x.net === null ? th('tie.few', {n: N(T + '.min_reporters', t.min_reporters)})
+        : th('tie.net', {net: N(Q + '.net', x.net.toFixed(2)), n: N(Q + '.n_reporters', x.n_reporters)}));
   }).join('; ');
-  return `<table class="tie-break"><caption>Order among tied options</caption><tbody><tr>
-    <th scope="row">${F(T + '.label', t.label)}</th><td>After field reports these are in the same band, with chances
-    within ${F(T + '.p_within', t.p_within.toFixed(2), 'num')} and travel within ${F(T + '.minutes_within', t.minutes_within, 'num')} min,
-    so reports set their order: accepted, plus phone yes at half weight, minus "does not offer"; recent reports count
-    more. ${each}.</td></tr></tbody></table>`;
+  return `<table class="ledger tie-break"><caption>${th('tie.caption')}</caption><tbody><tr>
+    <th scope="row">${F(T + '.label', t.label)}</th><td>${th('tie.rule', {p: N(T + '.p_within', t.p_within.toFixed(2)),
+      m: N(T + '.minutes_within', t.minutes_within)})} ${each}.</td></tr></tbody></table>`;
 }
 const RECENT = () => (load('recent') || []).filter(r => r && !r.reported && Date.now() - r.at < 7 * 864e5);
 // Lead's rule on #42: when the nearest verified option is far and nearer ones are not verified, say so up front.
@@ -607,19 +615,17 @@ function farVerifiedNote(p) {
   const nearer = opts.filter(o => o.band !== 'likely' && o.travel.minutes < likely.travel.minutes);
   if (!nearer.length) return '';
   const k = opts.indexOf(likely);
-  const r = o => F(`options.${opts.indexOf(o)}.rank`, o.rank, 'num');
-  const which = nearer.length === 1 ? `Option ${r(nearer[0])} is` : nearer.length === 2
-    ? `Options ${r(nearer[0])} and ${r(nearer[1])} are` : `Options ${nearer.map(r).join(', ')} are`;
-  return `<p class="card"><strong>The nearest verified ${F('query.service_label.en', p.query.service_label.en)} is
-    ${F(`options.${k}.travel.km`, Math.round(likely.travel.km), 'num')} km away (option ${r(likely)}).</strong>
-    ${which} closer but not verified: call first.</p>`;
+  const r = o => N(`options.${opts.indexOf(o)}.rank`, o.rank);
+  return `<p class="panel"><strong>${th('far.line', {label: labelF(p.query), km: N(`options.${k}.travel.km`, Math.round(likely.travel.km)), rank: r(likely)})}</strong>
+    ${th(nearer.length === 1 ? 'far.one' : 'far.many', {ranks: nearer.map(r).join(', ')})}</p>`;
 }
-// ---------- Multi-stop route (#47): the planner's itinerary, shown above the options to call ----------
+
+// ---------- Multi-stop route (#47): a compact strip and stop list on the answer, every field under "Route details" ----------
 // Durations use kind 'dur' (minutes, hours or days back to stored minutes); met / not met uses kind 'met'.
 function durText(m) {
-  if (m < 120) return `${m} min`;
-  if (m >= 1440) return `${Math.round(m / 1440)} day${Math.round(m / 1440) === 1 ? '' : 's'}`;
-  return `${Math.round(m / 60)} h`;
+  if (m < 120) return ts('dur.min', {n: m});
+  if (m >= 1440) return ts(Math.round(m / 1440) === 1 ? 'dur.day' : 'dur.days', {n: Math.round(m / 1440)});
+  return ts('dur.h', {n: Math.round(m / 60)});
 }
 function stopGroups(stops) {
   const g = [];
@@ -629,224 +635,251 @@ function stopGroups(stops) {
   });
   return g;
 }
+function evidenceHtml(s, S) {
+  if (!s.evidence.length) return `<p class="note">${th(s.n_evidence ? 'route.ev_not_here' : 'route.ev_none')}</p>`;
+  return `<ul class="quotes">${s.evidence.map((e, j) => `<li lang="en">"${F(`${S}.evidence.${j}.quote`, e.quote)}"
+    ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
+    ${s.n_evidence > s.evidence.length ? `<p class="note">${th('route.ev_more')}</p>` : ''}`;
+}
 function stopHtml(r, g, P) {
   const s0 = r.stops[g.ks[0]];
   const S0 = `${P}.stops.${g.ks[0]}`;
   const ph = s0.phone && s0.phone.e164;
   const stages = g.ks.map(k => {
     const s = r.stops[k], S = `${P}.stops.${k}`;
-    return `<li><strong>${F(S + '.purpose_word', s.purpose_word)}</strong>.
-      Chance this stop can do it: ${F(S + '.p', s.p.toFixed(2), 'num')}.
-      ${s.dwell_minutes != null ? `Stay about ${F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}.` : ''}
-      Least sure: ${F(S + '.weakest_capability', s.weakest_capability)} (${F(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2), 'num')}).
-      ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
-      <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
-        ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-          ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
-          ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
-          : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
-      </details>
-      ${s.fallback ? `<p class="small">If turned away: ${F(S + '.fallback.name', s.fallback.name)}, arriving about
-        ${F(S + '.fallback.eta_minutes', s.fallback.eta_minutes, 'num')} min from the start
-        (chance ${F(S + '.fallback.p', s.fallback.p.toFixed(2), 'num')}).</p>` : ''}
-      ${s.flags.map((f, j) => `<p class="small">${F(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
+    return `<li><strong>${E(S + '.purpose_word', s.purpose_word)}</strong>.
+      ${th('route.p', {p: N(S + '.p', s.p.toFixed(2))})}
+      ${s.dwell_minutes != null ? th('route.stay', {d: F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}) : ''}
+      ${th('route.weakest', {cap: E(S + '.weakest_capability', s.weakest_capability), p: N(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2))})}
+      ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
+      <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
+        ${evidenceHtml(s, S)}</details>
+      ${s.fallback ? `<p class="note">${th('route.fallback', {name: F(S + '.fallback.name', s.fallback.name),
+        eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: N(S + '.fallback.p', s.fallback.p.toFixed(2))})}</p>` : ''}
+      ${s.flags.map((f, j) => `<p class="note">${E(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
   }).join('');
-  return `<li><p class="stop-name"><strong>${F(S0 + '.name', s0.name)}</strong></p>
-    <p class="small">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}Arrive about
-      ${F(S0 + '.eta_low', s0.eta_low, 'num')}-${F(S0 + '.eta_high', s0.eta_high, 'num')} min from the start.
-      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>`
-        : s0.phone && s0.phone.display ? `Phone: ${F(S0 + '.phone.display', s0.phone.display)}` : 'No phone number in our data.'}</p>
+  const phone = ph ? `<a href="tel:${esc(ph)}">${th('route.call', {phone: F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)})}</a>`
+    : s0.phone && s0.phone.display ? th('route.phone', {phone: F(S0 + '.phone.display', s0.phone.display)}) : th('route.no_phone');
+  return `<li><p class="stop-name"><strong lang="en">${F(S0 + '.name', s0.name)}</strong></p>
+    <p class="note">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
+      ${phone}</p>
     <ul>${stages}</ul></li>`;
-}
-// Route strip (design/ui/DESIGN.md): the plan against the clock, drawn only when the plan has a time window.
-// One lane per stop group; each arrival is a capsule from eta_low to eta_high (the range, not a guessed minute);
-// the window is a rule at the first check's limit with the time past it hatched. Every number carries data-f.
-// The SVG has no viewBox: x is a percentage of the axis, y is px, so strokes and dashes never stretch.
-const STRIP_LANE = 72, STRIP_Y0 = 80, STRIP_DRAW_MS = 700;
-function stripHtml(r, P) {
-  const c = r.window_checks[0];
-  if (!c) return '';
-  const C = `${P}.window_checks.0`;
-  const lanes = stopGroups(r.stops).map(g => ({s: r.stops[g.ks[0]], S: `${P}.stops.${g.ks[0]}`}));
-  const span = 1.08 * Math.max(c.limit_minutes, ...lanes.map(l => l.s.eta_high));
-  const x = m => +(100 * m / span).toFixed(2);
-  const y = k => STRIP_Y0 + k * STRIP_LANE;
-  let at = 0;  // the line only moves forward in time, even if a later stop's range starts earlier
-  const xs = lanes.map(l => (at = Math.max(at, x(l.s.eta_low))));
-  // Segments in drawing order: along lane k-1 to the next arrival, then down to lane k. Lengths are estimated
-  // for a 300 px axis so the whole line takes STRIP_DRAW_MS.
-  const segs = [[0, y(0), xs[0], y(0)]];
-  xs.slice(1).forEach((xk, k) => segs.push([xs[k], y(k), xk, y(k)], [xk, y(k), xk, y(k + 1)]));
-  const len = segs.map(([x1, y1, x2, y2]) => Math.abs(x2 - x1) * 3 + Math.abs(y2 - y1) + 1);
-  const total = len.reduce((a, b) => a + b, 0);
-  let t = 0;
-  const line = segs.map(([x1, y1, x2, y2], i) => {
-    const ms = Math.round(STRIP_DRAW_MS * len[i] / total), style = `animation-duration:${ms}ms;animation-delay:${t}ms`;
-    t += ms;
-    return `<line class="strip-path" x1="${x1}%" y1="${y1}" x2="${x2}%" y2="${y2}" pathLength="1" style="${style}"/>`;
-  }).join('');
-  const wx = x(c.limit_minutes);
-  const win = wx < 60 ? `left:calc(${wx}% + 6px)` : `right:calc(${(100 - wx).toFixed(2)}% + 6px)`;
-  const marks = lanes.map((l, k) => {
-    // the label sits above its lane, on the far side of the drop that arrives there
-    const pos = xs[k] <= 55 ? `left:calc(${xs[k]}% + 18px)` : `right:calc(${(100 - xs[k]).toFixed(2)}% + 18px);text-align:right`;
-    const delay = `animation-delay:${STRIP_DRAW_MS * len.slice(0, 2 * k + 1).reduce((a, b) => a + b, 0) / total | 0}ms`;
-    return `<span class="strip-stop" aria-hidden="true" style="left:${xs[k]}%;top:${y(k)}px;${delay}">${k + 1}</span>
-      <span class="strip-lab" style="${pos};top:${y(k) - 52}px"><b>${F(l.S + '.eta_low', l.s.eta_low, 'num')}-${F(l.S + '.eta_high', l.s.eta_high, 'num')} min</b>
-      ${F(l.S + '.purpose_word', l.s.purpose_word)}</span>`;
-  }).join('');
-  return `<div class="strip" role="img" aria-label="The route drawn against the clock. The stops and times are listed below."
-      style="height:${y(lanes.length - 1) + 48}px">
-    <div class="strip-late" style="left:${wx}%"></div>
-    <span class="strip-win" style="${win}">Window ${F(C + '.limit_minutes', c.limit_minutes, 'num')} min</span>
-    <svg aria-hidden="true">${lanes.map((l, k) => `<line class="strip-eta" x1="${x(l.s.eta_low)}%" x2="${x(l.s.eta_high)}%"
-      y1="${y(k)}" y2="${y(k)}"/>`).join('')}${line}</svg>
-    <span class="strip-origin" style="left:0;top:${y(0)}px"></span>${marks}
-    <div class="strip-axis"><span>Start</span><span>minutes from the start</span></div></div>`;
 }
 function routePlanHtml(r, P) {
   const t = r.totals, v = r.vs_direct;
-  return `<p>${F(P + '.type_word', r.type_word)}.</p>${stripHtml(r, P)}
-    <ol class="stops">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
-    ${t.minutes_to_definitive != null ? `<p>Definitive care in about ${F(P + '.totals.minutes_to_definitive', t.minutes_to_definitive, 'num')} min
-      (${F(P + '.totals.low', t.low, 'num')}-${F(P + '.totals.high', t.high, 'num')}).
-      Chance of first care in time: ${F(P + '.totals.p_first_care', t.p_first_care.toFixed(2), 'num')}.
-      Chance of being treated: ${F(P + '.totals.p_treated', t.p_treated.toFixed(2), 'num')}.</p>` : ''}
-    ${r.window_checks.map((c, j) => `<p class="small check-${c.met ? 'met' : 'miss'}">${F(`${P}.window_checks.${j}.check`, c.check)} within
-      ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
-      <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
-      (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small vs-direct">${F(P + '.vs_direct.text', v.text)}
-      ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
+  return `<p>${E(P + '.type_word', r.type_word)}.</p>
+    <ol class="stops-full">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
+    ${t.minutes_to_definitive != null ? `<p>${th('route.totals', {min: N(P + '.totals.minutes_to_definitive', t.minutes_to_definitive),
+      low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: N(P + '.totals.p_first_care', t.p_first_care.toFixed(2)),
+      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p>` : ''}
+    ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
+    ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
+      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
+}
+function checkHtml(c, C, full) {
+  return `<p class="window${c.met ? '' : ' miss'}">${icon(c.met ? 'ok' : 'warn')}<span>${th(full ? 'route.check' : 'route.check_short', {
+    check: E(C + '.check', c.check), limit: N(C + '.limit_minutes', c.limit_minutes),
+    met: `<strong>${F(C + '.met', ts(c.met ? 'route.met' : 'route.not_met'), 'met')}</strong>`, eta: N(C + '.eta_minutes', c.eta_minutes)})}</span></p>`;
+}
+// Route strip (design/ui2/SPEC.md): one lane against the clock; each arrival a capsule from eta_low to eta_high; the
+// window a rule with the time past it hatched; the line draws once and the first stop pulses. aria-hidden: the stop
+// list under it is the accessible version and carries the marked numbers.
+// A missed check comes first (safety): the strip and the line under it never show a green "inside the limit" while
+// another check (for example definitive care) is not met.
+const keyCheck = r => r.window_checks.find(w => !w.met) || r.window_checks[0];
+function stripHtml(r) {
+  const c = keyCheck(r);
+  if (!c) return '';
+  const lanes = stopGroups(r.stops).map(g => r.stops[g.ks[0]]);
+  const span = 1.1 * Math.max(c.limit_minutes, ...lanes.map(s => s.eta_high));
+  const x = m => +(100 * m / span).toFixed(2);
+  const wx = x(c.limit_minutes);
+  const short = n => n.replace(/^(Sub Divisional|District|Sadar) Hospital,? /, 'SDH ').replace(/ (Hospital|Medical College).*$/, '');
+  const labs = lanes.map((s, k) => {
+    const S = `itinerary.plans.0.stops.${r.stops.indexOf(s)}`;
+    return `<span class="strip-lab" style="${x(s.eta_low) < 50 ? `left:max(0px, calc(${x(s.eta_low)}% - 7px))` : 'right:0;text-align:right'}"><span lang="en">${k + 1}. ${esc(short(s.name))}</span>
+    <span class="num">${N(S + '.eta_low', s.eta_low)}-${N(S + '.eta_high', s.eta_high)}</span></span>`;
+  }).join('');
+  return `<div class="strip" aria-hidden="true">
+    <svg><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="6" fill="var(--hazard)" opacity=".5"/></pattern></defs>
+      <rect class="late" x="${wx}%" y="12" width="${(100 - wx).toFixed(2)}%" height="24"/><line class="limit" x1="${wx}%" x2="${wx}%" y1="2" y2="44"/>
+      ${lanes.map(s => `<line class="eta" x1="${x(s.eta_low)}%" x2="${x(s.eta_high)}%" y1="24" y2="24"/>`).join('')}
+      <line class="path" x1="0" x2="${x(lanes[lanes.length - 1].eta_low)}%" y1="24" y2="24" pathLength="1"/>
+      <circle cx="0" cy="24" r="4" class="origin"/>${lanes.map((s, k) => `<circle class="stop${k === 0 ? ' now' : ''}" cx="${x(s.eta_low)}%" cy="24" r="7"/>`).join('')}</svg>
+    <span class="strip-limit" style="left:calc(${wx}% + 4px)">${c.limit_minutes} ${th('unit.min')}</span>${labs}</div>`;
 }
 function routeHtml(p) {
   const it = p.itinerary;
-  if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
-  const head = `<h2>Suggested route</h2>
-    <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
-      estimates.</p>
-    ${it.stop_1_note ? `<p class="small">${F('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
-  if (it.abstain) return head + `<p class="card"><strong>${F('itinerary.abstain', it.abstain)}</strong></p>`;
+  if (!it) return p.itinerary_note ? `<p class="panel note">${E('itinerary_note', p.itinerary_note)}</p>` : '';
+  const head = `<h2 id="h-route">${th('route.h')}</h2>
+    <p class="note">${th('route.intro', {name: E('itinerary.pathway_name', it.pathway_name)})}</p>
+    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
+  if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
   if (!it.plans.length) return '';
-  const best = `<article class="card route" aria-labelledby="route-1"><h3 id="route-1">Route
-    ${F('itinerary.plans.0.rank', it.plans[0].rank, 'num')}</h3>${routePlanHtml(it.plans[0], 'itinerary.plans.0')}</article>`;
-  const more = it.plans.slice(1).map((r, k) => `<details><summary>Route&nbsp;${F(`itinerary.plans.${k + 1}.rank`, r.rank, 'num')}:&nbsp;${F(`itinerary.plans.${k + 1}.type_word`, r.type_word)}</summary>${routePlanHtml(r, `itinerary.plans.${k + 1}`)}</details>`).join('');
-  return head + best + more;
+  const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
+  const compact = stopGroups(r.stops).map(g => {
+    const s = r.stops[g.ks[0]], S = `${P}.stops.${g.ks[0]}`;
+    return `<li><b lang="en">${F(S + '.name', s.name)}</b><span>${g.ks.map(k => E(`${P}.stops.${k}.purpose_word`, r.stops[k].purpose_word)).join(', ')}${c
+      ? `, ${th('route.eta', {low: N(S + '.eta_low', s.eta_low), high: N(S + '.eta_high', s.eta_high)})}` : ''}</span></li>`;
+  }).join('');
+  const legend = c ? `<ul class="legend" aria-hidden="true"><li><span class="sw sw-route"></span>${th('route.legend_route')}</li>
+    <li><span class="sw sw-range"></span>${th('route.legend_range')}</li><li><span class="sw sw-late"></span>${th('route.legend_late')}</li></ul>` : '';
+  const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
+  return `<section class="section" aria-labelledby="h-route">${head}
+    <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
+      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}${legend}
+      <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
 }
 
+// ---------- the answer (S3): one readout, then the next two, then the route ----------
+// A listed website flagged by the facts build (#136): its label, and why it is unreliable, in the app language.
+function websiteHtml(o, P) {
+  const w = o.website, l = state.lang === 'hi' && o.website && o.website.label.hi ? 'hi' : 'en';
+  if (!w) return '';
+  return `<p class="note site-line">${F(`${P}.website.label.${l}`, w.label[l])}${w.reason_line
+    ? `<br>${F(`${P}.website.reason_line.${l}`, w.reason_line[l])}` : ''}</p>`;
+}
+function telOf(o) { return o.phone && o.phone.e164 ? `tel:${esc(o.phone.e164)}` : null; }
+function opLabel(o) { return o.operator === 'private' ? th('op.private') : o.operator === 'public' ? th('op.public') : ''; }
+function sureHtml(o, P) {
+  const key = o.model_band === 'NO_SERVICE_TEXT' ? 'no_text' : o.band;
+  const cls = o.band === 'likely' ? 'sure-ok' : o.band === 'unlikely' ? 'sure-no' : 'sure-nv';
+  // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
+  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
+}
+function answerPanel(p, o, i) {
+  const P = `options.${i}`, tr = o.travel, tel = telOf(o);
+  const fb = p.itinerary && p.itinerary.fallback;  // the route only if card 1 cannot treat (#126)
+  return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}">
+    <h2 class="kicker">${th(o.call_first || i === 0 ? 'ans.call_first' : 'ans.option', {n: N(P + '.rank', o.rank)})}</h2>
+    <h3 id="opt-${o.rank}" class="name" lang="en">${F(P + '.name', o.name)}</h3>
+    <p class="place"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
+    ${o.route_reason ? `<p class="note">${E(P + '.route_reason', o.route_reason)}</p>` : ''}
+    ${websiteHtml(o, P)}
+    ${i === 0 && fb ? `<p class="note"><strong>${E('itinerary.fallback.ask', fb.ask)}</strong> ${E('itinerary.fallback.text', fb.text)}</p>` : ''}
+    <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
+      <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
+    ${sureHtml(o, P)}
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
+      : `<p class="note">${th('ans.no_phone')}</p>`}
+    <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
+    <p id="speak-note" class="note" aria-live="polite"></p>
+  </article>`;
+}
+function nextRows(p, from) {
+  const rows = p.options.slice(from).map((o, j) => {
+    const i = j + from, P = `options.${i}`, tel = telOf(o);
+    return `<li class="next-row"><span class="rank">${N(P + '.rank', o.rank)}</span>
+      <a class="nm" href="#/why/${o.rank}"><b lang="en">${F(P + '.name', o.name)}</b>
+        <span>${th('ans.eta', {low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}, ${bandHtml(o, P)}</span>${websiteHtml(o, P)}</a>
+      ${tel ? `<a class="btn btn-go-line call" href="${tel}" aria-label="${esc(ts('ans.call_name', {name: o.name}))}">${icon('phone')}</a>` : ''}</li>`;
+  }).join('');
+  return rows ? `<section class="section" aria-labelledby="h-no"><h2 id="h-no">${th('ans.if_no')}</h2><ol class="rows">${rows}</ol></section>` : '';
+}
 function planScreen() {
   const s = svc(state.service);
   if (!s || !state.loc) return home();
   const p = state.plan;
   if (p && p.offline) return offlineScreen(s);
-  const head = `<h1 tabindex="-1">${esc(s.en)} near you</h1><p class="small" data-device>${locLine(state.loc)}</p>`;
-  if (!p) return head + '<p>Finding options...</p>';
-  if (p.error) return head + `<p class="card" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">Back</a>`;
-  const label = p.query.service_label.en;
+  const head = `<h1 tabindex="-1">${esc(s.label)}</h1><p class="note" data-device>${locLine(state.loc)}</p>`;
+  if (!p) return head + `<p class="section">${th('ans.finding')}</p>`;
+  if (p.error) return head + `<p class="panel section" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">${th('nav.back')}</a>`;
   const depth = state.depth || 'quick';
-  const toggle = `<div class="row" role="group" aria-label="Detail">${['quick', 'compare', 'area'].map(d =>
-    `<button type="button" data-depth="${d}" aria-pressed="${depth === d}">${d[0].toUpperCase() + d.slice(1)}</button>`).join('')}</div>`;
-  const fr = p.field_reports && p.field_reports.note;
-  const foot = `<p class="small muted">Data as of ${F('as_of', p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
-    ${fr ? `<p class="small muted">${F('field_reports.note.en', fr.en)} <span lang="hi">${F('field_reports.note.hi', fr.hi)}</span></p>` : ''}
-    <a class="btn btn-block" href="#/pulse">Your area: what health workers reported <span lang="hi">(\u0906\u092a\u0915\u093e \u0915\u094d\u0937\u0947\u0924\u094d\u0930)</span></a>
-    <a class="btn btn-block" href="#/">New search</a>`;
-  if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
-  if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
+  const foot = `<p class="note section">${th('ans.as_of', {date: F('as_of', p.as_of)})} ${th('ans.not_advice')}
+      ${p.meta.stub ? th('ans.stub') : ''}</p>
+    ${p.field_reports && p.field_reports.note ? `<p class="note">${F('field_reports.note.' + (state.lang === 'hi' ? 'hi' : 'en'), p.field_reports.note[state.lang === 'hi' ? 'hi' : 'en'])}</p>` : ''}
+    <div class="pair section"><button type="button" class="btn" data-depth="${depth === 'compare' ? 'quick' : 'compare'}">${th(depth === 'compare' ? 'ans.back_answer' : 'ans.compare')}</button>
+      <a class="btn" href="#/">${th('ans.new')}</a></div>`;
+  state.speak = {danger: isEmergency()};  // read aloud: options, route and questions, from p only
+  if (depth === 'compare') return head + compareHtml(p) + foot;
   let body;
-  // When the route is only the fallback (#126), it goes below the options, not above the fold.
-  const fb = p.itinerary && p.itinerary.fallback, route = fb ? '' : routeHtml(p), after = fb ? routeHtml(p) : '';
   if (p.abstain) {
     const oo = p.abstain.outside_option;
-    body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
-      ${route}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
-      ${whyNotHtml(p)}${after}
-      ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
-        ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
-        <p>${F('abstain.outside_option.text', oo.text)}</p>
-        <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
+    body = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>
+      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${nextRows(p, 1)}
+      ${oo && !windowHtml(p) ? `<article class="panel section"><h3 lang="en">${F('abstain.outside_option.name', oo.name)}</h3>
+        ${oo.label ? `<p class="note"><strong>${E('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
+        <p>${E('abstain.outside_option.text', oo.text)}</p>
+        <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}${routeHtml(p)}`;
+    if (!p.options.length) body = body + `<p class="note">${RSInput.speakHtml()}</p><p id="speak-note" class="note" aria-live="polite"></p>`;
   } else {
-    body = route + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p) + after;
+    // The readout first, so Call is above the fold on small phones; the far-verified note qualifies it right under it.
+    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + farVerifiedNote(p) + nextRows(p, 1) + routeHtml(p);
   }
-  state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
-  return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;
+  return head + windowHtml(p) + body + foot;
 }
 
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
-  ['Band', (o, P) => bandHtml(o, P)],
-  [NT('offers'), (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}; ${similarHtml(o, P)}`],
-  ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
-  ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
-  ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
-  ['Quote', (o, P) => o.evidence.length ? noTextCaptionHtml(o, state.plan.query) + quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
-  ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
-  ['Phone', (o, P) => !o.phone || !o.phone.e164 ? 'no number in our data'
-    : o.phone.shared_listings > 1 ? `shared by ${F(P + '.phone.shared_listings', o.phone.shared_listings, 'num')} listings` : 'number on file, not shared'],
-  ['Public / private', (o, P) => F(P + '.operator', o.operator)],
-  ['Ask on call', (o, P) => o.call_ahead.length ? F(P + '.call_ahead.0.question', o.call_ahead[0].question) : '-'],
-  ['Phone result', o => { const r = (state.outcomes || {})[o.rank]; return r ? `<span data-device>${esc(r.said)} ${timeStr(r.at)}</span>` : '-'; }],
+  ['cmp.band', (o, P) => bandHtml(o, P)],
+  ['cmp.offers', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? th('cmp.no_sentence') : `${th('num.score')} ${N(P + '.p', o.p.toFixed(2))}; ${similarHtml(o, P)}`],
+  ['cmp.track', (o, P) => o.track_record ? th('cmp.track_line', {k: N(P + '.track_record.k_confirmed', o.track_record.k_confirmed), n: N(P + '.track_record.n', o.track_record.n)}) : th('track.none')],
+  ['cmp.exists', (o, P) => `${N(P + '.p_e', o.p_e.toFixed(2))} / ${N(P + '.p_l', o.p_l.toFixed(2))}`],
+  ['cmp.road', (o, P) => `${N(P + '.travel.km', Math.round(o.travel.km))}, ${N(P + '.travel.low', o.travel.low)}-${N(P + '.travel.high', o.travel.high)}`],
+  ['cmp.quote', (o, P) => o.evidence.length ? noTextCaptionHtml(o, state.plan.query) + quoteHtml(o.evidence[0], P + '.evidence.0') : th('cmp.none_data')],
+  ['cmp.warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => E(`${P}.flags.${j}`, f)).join('; ') : th('cmp.none')],
+  ['cmp.phone', (o, P) => !o.phone || !o.phone.e164 ? th('cmp.no_number')
+    : o.phone.shared_listings > 1 ? th('cmp.shared', {n: N(P + '.phone.shared_listings', o.phone.shared_listings)}) : th('cmp.not_shared')],
+  ['cmp.operator', (o, P) => F(P + '.operator', o.operator)],
+  ['cmp.ask', (o, P) => o.call_ahead.length ? E(P + '.call_ahead.0.question', o.call_ahead[0].question) : '-'],
+  ['cmp.result', o => { const r = (state.outcomes || {})[o.rank]; return r ? `<span data-device>${th('why.out.' + r.said)} ${timeStr(r.at)}</span>` : '-'; }],
 ];
 function compareHtml(p) {
   if (state.patientHere == null) {
-    return `<fieldset class="card"><legend>Is the patient here, at this location?</legend>
-      <label class="check"><input type="radio" name="here" value="yes"> Yes</label>
-      <label class="check"><input type="radio" name="here" value="no"> No</label></fieldset>
-      <p class="small">Choose one to see the comparison.</p>`;
+    return `<fieldset class="panel section"><legend>${th('cmp.here_q')}</legend>
+      <label class="check"><input type="radio" name="here" value="yes"> ${th('cmp.yes')}</label>
+      <label class="check"><input type="radio" name="here" value="no"> ${th('cmp.no')}</label></fieldset>
+      <p class="note">${th('cmp.choose')}</p>`;
   }
   const opts = p.options;
   const P = i => `options.${i}`;
+  // At least one checks out (#121 item 3): capped at "over 99%" and stated with k; assumes independent failures.
   const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
-  const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', then ');
-  const which = opts.length > 1 ? NT('chance_any').replace('{k}', F('options', opts.length, 'count')) : NT('chance_one');
-  const head = `<p>${state.patientHere ? 'Patient is at this location.' : 'Patient is elsewhere: distances are from this location.'}</p>
-    <p>Plan: ${names}.</p>
-    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} (assumes they fail independently).</p>` : ''}`;
-  const table = `<div class="compare-table"><table><caption>${F('query.service_label.en', p.query.service_label.en)}: options side by side</caption>
-    <thead><tr><th scope="col">Row</th>${opts.map((o, i) => `<th scope="col">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
-    <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${esc(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
+  const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', ');
+  const which = opts.length > 1 ? th('num.chance_any', {k: F('options', opts.length, 'count')}) : th('num.chance_one');
+  const head = `<p class="section">${th(state.patientHere ? 'cmp.here' : 'cmp.elsewhere')}</p>
+    <p>${th('cmp.plan', {names})}</p>
+    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} ${th('num.independent')}</p>` : ''}`;
+  const table = `<div class="compare-table table-scroll" tabindex="0" role="region" aria-label="${th('cmp.h')}"><table class="ledger"><caption>${th('cmp.caption', {label: labelF(p.query)})}</caption>
+    <thead><tr><th scope="col">${th('cmp.row')}</th>${opts.map((o, i) => `<th scope="col">${N(P(i) + '.rank', o.rank)}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
+    <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${th(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
     </table></div>`;
-  const cards = `<div class="compare-cards">${opts.map((o, i) => `<article class="card" aria-labelledby="cmp-${o.rank}">
-    <h3 id="cmp-${o.rank}">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</h3>
-    <dl class="rows">${COMPARE_ROWS.map(([lab, fn]) => `<dt>${esc(lab)}</dt><dd>${fn(o, P(i))}</dd>`).join('')}</dl>
-    <a class="btn" href="#/why/${o.rank}">Why / how <span class="visually-hidden">${F(P(i) + '.name', o.name)}</span></a></article>`).join('')}</div>`;
-  const why = opts[0] && opts[0].why_first_text ? `<p><strong>Why first:</strong> ${F(P(0) + '.why_first_text', opts[0].why_first_text)}</p>` : '';
-  return head + '<h2>Side by side</h2>' + table + cards + why;
+  const cards = `<div class="compare-cards">${opts.map((o, i) => `<article class="panel" aria-labelledby="cmp-${o.rank}">
+    <h3 id="cmp-${o.rank}">${N(P(i) + '.rank', o.rank)}. <span lang="en">${F(P(i) + '.name', o.name)}</span></h3>
+    <dl class="facts">${COMPARE_ROWS.map(([lab, fn]) => `<div><dt>${th(lab)}</dt><dd>${fn(o, P(i))}</dd></div>`).join('')}</dl>
+    <a class="btn btn-block" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P(i) + '.name', o.name)}</span></a></article>`).join('')}</div>`;
+  const why = opts[0] && opts[0].why_first_text ? `<p><strong>${th('cmp.why_first')}</strong> ${E(P(0) + '.why_first_text', opts[0].why_first_text)}</p>` : '';
+  return head + `<h2 class="section">${th('cmp.h')}</h2>` + table + cards + why;
 }
 
-// ---------- Area depth (S11 standing plan, S12 ten calls); data from POST /api/area ----------
+// ---------- Area (S11 standing plan, S12 ten calls); data from POST /api/area; the bottom-nav "Area" tab ----------
 // Data gap vs care gap (#86): "no listing claims it" means we cannot tell; "claimed but not confirmed / far" is care.
 function gapHtml(a) {
   const g = a.gap;
   if (!g) return '';
-  const G = k => F('area.gap.' + k, g[k], 'num');
-  const W = F('area.area.window_min', a.area.window_min, 'num');
-  const L = F('area.query.service_label.en', a.query.service_label.en);
+  const G = k => N('area.gap.' + k, g[k]);
+  const W = N('area.area.window_min', a.area.window_min);
+  const L = F('area.query.service_label.' + labelLang(a.query), a.query.service_label[labelLang(a.query)]);
   const allCare = g.pins_sampled > 0 && g.covered === 0 && g.no_claim === 0;
-  return `<h3>Data gap or care gap?</h3>
-    ${allCare ? `<p class="card"><strong>Care gap across the sampled district:</strong> none of the ${G('pins_sampled')}
-      PIN areas has a confirmed option within ${W} min.</p>` : ''}
+  return `<h3 class="section">${th('area.gap_h')}</h3>
+    ${allCare ? `<p class="panel">${th('area.all_care', {n: G('pins_sampled'), w: W})}</p>` : ''}
     ${emergencyNumbers(a)}
-    <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
-      ${G('district_confirmed')} of them rated Likely. The PIN areas below also count listings in other districts.</p>
+    <p>${th('area.claiming', {n: G('district_claiming'), district: F('area.area.district', a.area.district), label: L, k: G('district_confirmed')})}
+      ${th('area.other_districts')}</p>
     <ul class="gap">
-      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a Likely option within ${W} min.</li>
-      <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
-        say they offer it, none rated Likely. A phone call can settle it.</li>
-      <li><strong>Care gap, too far:</strong> ${G('far')} PIN areas: every listing that claims it is more than ${W} min away.</li>
-      <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
-        We cannot tell whether care exists there.</li>
+      <li>${th('area.covered', {n: G('covered'), w: W})}</li>
+      <li>${th('area.not_confirmed', {n: G('not_confirmed'), w: W})}</li>
+      <li>${th('area.far', {n: G('far'), w: W})}</li>
+      <li>${th('area.no_claim', {n: G('no_claim'), r: G('radius_km')})}</li>
     </ul>
-    <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>
+    <p class="note">${th('area.sample', {n: G('pins_sampled'), of: G('pins_in_district')})}</p>
     ${publicHtml(a)}`;
 }
 // Emergency care with no confirmed option in reach: the area plan says what to do until the gap closes (#86 item 3).
 function emergencyNumbers(a) {
   const s = svc(a.query.service);
   if (!s || !(s.profile === 'emergency' || s.profile === 'urgent') || a.summary.n_without_option === 0) return '';
-  const with102 = s.key === 'emergency_csection' || s.key === 'nicu';
-  return `<p><strong>Until then, emergencies here go by ambulance:</strong> <a href="tel:108">108</a> (free)${with102
-    ? ', or <a href="tel:102">102</a> for pregnant women and babies' : ''}.</p>`;
+  return `<p>${th(has102(s.key) ? 'area.until_102' : 'area.until')}</p>`;
 }
 // Where the area shows no public evidence, name the hospitals the public standard expects to offer acute care (#86).
 function publicHtml(a) {
@@ -854,71 +887,95 @@ function publicHtml(a) {
   if (!ps || !(a.summary.n_without_option > 0 || a.summary.no_public_evidence > 0)) return '';
   if (!ps.length) {
     const g = a.gap, D = F('area.area.district', a.area.district), pn = g.public_nearest;
-    return `<p>The public standard expects a public hospital for this care in every district. Our data lists none in
-      ${D}: ${F('area.gap.district_listings', g.district_listings, 'num')} listing(s) in the district in all, so check the
-      district's own hospital list before planning.</p>
-      <p>${pn ? `Nearest public hospital in our data: ${F('area.gap.public_nearest.name', pn.name)}
-        (${F('area.gap.public_nearest.label', pn.label)}), ${F('area.gap.public_nearest.km', pn.km, 'num')} km.`
-        : `No public hospital in our data within ${F('area.gap.radius_km', g.radius_km, 'num')} km.`}</p>`;
+    return `<p>${th('area.public_none', {district: D, n: N('area.gap.district_listings', g.district_listings)})}</p>
+      <p>${pn ? th('area.public_nearest', {name: F('area.gap.public_nearest.name', pn.name), label: E('area.gap.public_nearest.label', pn.label),
+        km: N('area.gap.public_nearest.km', pn.km)}) : th('area.public_far', {r: N('area.gap.radius_km', g.radius_km)})}</p>`;
   }
-  return `<p>Hospitals in ${F('area.area.district', a.area.district)} the public standard expects to offer it:</p>
+  return `<p>${th('area.public_list', {district: F('area.area.district', a.area.district)})}</p>
     <ul class="gap">${ps.map((h, k) => `<li>${F(`area.gap.public_standard.${k}.name`, h.name)}
-      (${F(`area.gap.public_standard.${k}.label`, h.label)})</li>`).join('')}</ul>`;
+      (${E(`area.gap.public_standard.${k}.label`, h.label)})</li>`).join('')}</ul>`;
 }
 function areaHtml(a) {
-  if (!a || a.loading) return '<p>Loading the area plan...</p>';
-  if (a.error) return `<p class="card" role="alert">${esc(a.error)}</p>`;
+  if (!a || a.loading) return `<p>${th('area.loading')}</p>`;
+  if (a.error) return `<p class="panel" role="alert">${esc(a.error)}</p>`;
   const S = a.summary;
-  const n = x => F('area.' + x, (x.split('.').reduce((o, k) => o[k], a)).toFixed(2), 'num');
+  const n = x => N('area.' + x, (x.split('.').reduce((o, k) => o[k], a)).toFixed(2));
+  const W = N('area.area.window_min', a.area.window_min);
   const rows = a.pins.map((r, i) => {
     const R = `area.pins.${i}`;
     return r.first
-      ? `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td>${F(R + '.first.name', r.first.name)}</td>
-          <td>${r.backup ? F(R + '.backup.name', r.backup.name) : 'none'}</td>
-          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td></tr>`
-      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="3"><span aria-hidden="true">&#9888;</span>
-          No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
-          ${r.nearest_km != null ? `nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km` : 'none with its own sentence in our data'}${r.public ? `.<br>Public hospital:
-          ${F(R + '.public.name', r.public.name)} (${F(R + '.public.label', r.public.label)}),
-          ${F(R + '.public.km', r.public.km, 'num')} km` : ''}</td></tr>`;
+      ? `<tr><th scope="row">${N(R + '.pin', r.pin)}</th><td>${F(R + '.first.name', r.first.name)}</td>
+          <td>${r.backup ? F(R + '.backup.name', r.backup.name) : th('area.none')}</td>
+          <td>${N(R + '.travel.low', r.travel.low)}-${N(R + '.travel.high', r.travel.high)}</td></tr>`
+      : `<tr><th scope="row">${N(R + '.pin', r.pin)}</th><td colspan="3">${icon('warn')}
+          ${th('area.pin_none', {w: W})}
+          ${r.nearest_km != null ? th('area.nearest', {km: N(R + '.nearest_km', r.nearest_km)}) : th('area.none_sentence')}${r.public ? `.<br>${th('area.public_row', {
+            name: F(R + '.public.name', r.public.name), label: E(R + '.public.label', r.public.label), km: N(R + '.public.km', r.public.km)})}` : ''}</td></tr>`;
   }).join('');
   const calls = a.ten_calls.map((c, i) => {
     const C = `area.ten_calls.${i}`;
-    return `<tr><th scope="row">${F(C + '.rank', c.rank, 'num')}</th><td>${F(C + '.name', c.name)}</td>
-      <td>${F(C + '.phone_kind', c.phone_kind)}</td><td class="num">${F(C + '.areas', c.areas, 'num')}</td>
-      <td class="num">+${F(C + '.access_gain', c.access_gain.toFixed(3), 'num')}</td></tr>`;
+    return `<tr><th scope="row">${N(C + '.rank', c.rank)}</th><td>${F(C + '.name', c.name)}</td>
+      <td>${F(C + '.phone_kind', c.phone_kind)}</td><td class="num">${N(C + '.areas', c.areas)}</td>
+      <td class="num">+${N(C + '.access_gain', c.access_gain.toFixed(3))}</td></tr>`;
   }).join('');
   const csv = [['pin', 'first_choice', 'backup', 'min_low', 'min_high', 'call_first', 'nearest_km_if_none']]
     .concat(a.pins.map(r => [r.pin, r.first ? r.first.name : '', r.backup ? r.backup.name : '', r.travel ? r.travel.low : '',
       r.travel ? r.travel.high : '', r.call_first || '', r.nearest_km ?? '']))
     .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-  return `<h2>Standing referral plan: ${F('area.query.service_label.en', a.query.service_label.en)}</h2>
-    <p>${F('area.area.district', a.area.district)}, ${F('area.area.state', a.area.state)}.
-      ${F('area.summary.n_pins', S.n_pins, 'num')} PIN areas.</p>
-    <p><strong>${F('area.summary.n_without_option', S.n_without_option, 'num')} of ${F('area.summary.n_pins', S.n_pins, 'num')}
-      PIN areas: no option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min.</strong></p>
-    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the sampled PIN areas,
-      counting listings in any district within ${F('area.area.window_min', a.area.window_min, 'num')} min</caption><tbody>
-      <tr><th scope="row">Access now: a Likely listing in reach</th><td class="num">${n('summary.access_now')}</td></tr>
-      <tr><th scope="row">If calls confirm the listings</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
-      <tr><th scope="row">Calls could close</th><td class="num">${n('summary.calls_could_close')}</td></tr>
-      <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
-    </tbody></table>
-    <p>${F('area.caveat', a.caveat)}</p>
+  const L = F('area.query.service_label.' + labelLang(a.query), a.query.service_label[labelLang(a.query)]);
+  return `<h2>${th('area.plan_h', {label: L})}</h2>
+    <p>${F('area.area.district', a.area.district)}, ${F('area.area.state', a.area.state)}. ${th('area.n_pins', {n: N('area.summary.n_pins', S.n_pins)})}</p>
+    <p><strong>${th('area.without', {k: N('area.summary.n_without_option', S.n_without_option), n: N('area.summary.n_pins', S.n_pins), w: W})}</strong></p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="${th('area.access_caption_short')}"><table class="ledger"><caption>${th('area.access_caption', {label: L, w: W})}</caption><tbody>
+      <tr><th scope="row">${th('area.row_now')}</th><td class="num">${n('summary.access_now')}</td></tr>
+      <tr><th scope="row">${th('area.row_confirmed')}</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
+      <tr><th scope="row">${th('area.row_close')}</th><td class="num">${n('summary.calls_could_close')}</td></tr>
+      <tr><th scope="row">${th('area.row_none')}</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
+    </tbody></table></div>
+    <p>${E('area.caveat', a.caveat)}</p>
     ${gapHtml(a)}
-    <div class="table-scroll" tabindex="0" role="region" aria-label="Plan per PIN area"><table><caption>Plan per PIN area</caption>
-      <thead><tr><th scope="col">PIN</th><th scope="col">First choice: call first</th><th scope="col">Backup</th><th scope="col">Minutes</th></tr></thead>
+    <div class="table-scroll section" tabindex="0" role="region" aria-label="${th('area.pins_caption')}"><table class="ledger"><caption>${th('area.pins_caption')}</caption>
+      <thead><tr><th scope="col">PIN</th><th scope="col">${th('area.col_first')}</th><th scope="col">${th('area.col_backup')}</th><th scope="col">${th('area.col_min')}</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
-    <h2 id="ten-calls">Calls that close the most of the gap</h2>
-    ${calls ? `<div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
-      <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
-      <tbody>${calls}</tbody></table></div>`
-      : '<p>No call would close a gap here: every sampled PIN area either has a Likely listing in reach already or has no listing with its own sentence about this care within the time window.</p>'}
-    <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
-      <button type="button" id="area-print">Print chart</button></div>
-    ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;
+    <h2 id="ten-calls" class="section">${th('area.calls_h')}</h2>
+    ${calls ? `<div class="table-scroll" tabindex="0" role="region" aria-label="${th('area.calls_h')}"><table class="ledger"><caption>${th('area.calls_caption')}</caption>
+      <thead><tr><th scope="col">#</th><th scope="col">${th('area.col_facility')}</th><th scope="col">${th('area.col_phone')}</th><th scope="col" class="num">${th('area.col_areas')}</th><th scope="col" class="num">${th('area.col_gain')}</th></tr></thead>
+      <tbody>${calls}</tbody></table></div>` : `<p>${th('area.no_calls')}</p>`}
+    <div class="pair section"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">${th('area.csv')}</a>
+      <button type="button" class="btn" id="area-print">${th('area.print')}</button></div>
+    ${a.meta && a.meta.stub ? `<p class="note">${th('area.stub')}</p>` : ''}`;
+}
+function areaScreen() {
+  const s = svc(state.service);
+  const plan = s && s.profile && state.loc
+    ? `<p class="note" data-device>${esc(s.label)}. ${locLine(state.loc)}</p>${areaHtml(state.area)}`
+    : `<p class="panel">${th('area.pick_first')}</p>`;
+  return `<h1 tabindex="-1">${th('area.h')}</h1>${plan}
+    <a class="btn btn-block section" href="#/pulse">${th('area.pulse_link')}</a>`;
+}
+function bindArea() {
+  $('#area-print')?.addEventListener('click', () => window.print());
+  const s = svc(state.service);
+  if (s && s.profile && state.loc && !state.area) loadArea();
+}
+
+// /api/plan 422 with a location code (#134, BE-T2): say what is wrong in the app language (the server's text, or ours)
+// and open Change location with the box focused. Never the generic "could not make a plan" for these.
+const LOCATION_CODES = {location_outside_india: 'place.outside_india', location_too_coarse: 'place.too_coarse'};
+async function badLocation(r) {
+  let body = null;
+  try { body = await r.clone().json(); } catch { return false; }
+  const key = body && LOCATION_CODES[body.code];
+  if (!key) return false;
+  const l = state.lang === 'hi' ? 'hi' : 'en';
+  const pick = x => (x && typeof x === 'object' ? x[l] : null);
+  state.placeMsg = pick(body.text) || pick(body.message) || (typeof body[l] === 'string' ? body[l] : null) || ts(key);
+  announce(state.placeMsg);
+  location.hash = '#/change';
+  return true;
 }
 async function bindPlan() {
+  $('#retry')?.addEventListener('click', () => { state.plan = null; render(); });
   if (state.plan && state.plan.offline) {
     $('#patient-here')?.addEventListener('click', () => {
       const p = state.plan;
@@ -934,14 +991,9 @@ async function bindPlan() {
   document.querySelectorAll('input[name=here]').forEach(r => r.addEventListener('change', () => {
     state.patientHere = r.value === 'yes'; render();
   }));
-  $('#area-print')?.addEventListener('click', () => window.print());
-  if (state.plan && !state.plan.error && state.depth === 'area' && !state.area) {
-    loadArea();
-    return;
-  }
   if (!state.service || !state.loc || state.plan) return;
   // Offline per spec 3.2.3: navigator.onLine false, a failed /api call, or one slower than 8 s.
-  if (!navigator.onLine) { await offlinePlan('This phone has no internet.'); render(); return; }
+  if (!navigator.onLine) { await offlinePlan(ts('off.no_net')); render(); return; }
   const l = state.loc;
   // Rounded to 0.01 deg on the phone too; the point goes in the body, never the URL.
   const body = {service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2), accuracy_m: l.accuracy_m,
@@ -952,153 +1004,162 @@ async function bindPlan() {
     const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body), redirect: 'manual', signal: ctl.signal});
     if (r.type === 'opaqueredirect') {
-      await offlinePlan('Signed out. Reload the page to sign in again. Showing saved data meanwhile.');
+      await offlinePlan(ts('off.signed_out'));
     } else if (r.status >= 500) {
-      await offlinePlan('The server is not answering. Showing saved data.');
+      await offlinePlan(ts('off.server_down'));
+    } else if (r.status === 422 && await badLocation(r)) {
+      return;  // #134: the phone's point is outside India or too rough; typing the place is the way on
     } else if (!r.ok) {
-      state.plan = {error: 'The server could not make a plan (' + r.status + ').'};
+      state.plan = {error: ts('err.plan', {code: r.status})};
       announce(state.plan.error);
     } else {
       state.plan = await r.json();
-      announce(state.plan.abstain ? 'No confident option. Showing places to call.' : `${state.plan.options.length} options found.`);
+      const o = state.plan.options[0];
+      announce(state.plan.abstain ? ts('ans.abstain_found') : o ? ts('ans.found', {n: state.plan.options.length, name: o.name}) : '');
       saveOfflinePack();  // background, never on the critical path
     }
   } catch (e) {
-    await offlinePlan(e.name === 'AbortError' ? 'The server took more than 8 seconds. Showing saved data.'
-      : 'Could not reach the server. Showing saved data.');
+    await offlinePlan(ts(e.name === 'AbortError' ? 'off.slow' : 'off.unreachable'));
   } finally {
     clearTimeout(timer);
   }
   render();
 }
 
-// The option a #/why or #/slip link names, or null. An offline plan has no options list, so this never throws.
-function planOption(rank) {
+// ---------- Why this place? (S4 + S5 + S6): evidence, call-ahead, track record, ledger, checks ----------
+function whyScreen(rank) {
   const p = state.plan;
-  return p && !p.error && Array.isArray(p.options) ? p.options.find(x => x.rank === rank) || null : null;
+  const o = p && !p.error && !p.offline && p.options.find(x => x.rank === rank);
+  if (!o) return notFound();
+  const i = p.options.indexOf(o), P = `options.${i}`;
+  const width = o.p_hi - o.p_lo;
+  const tel = telOf(o);
+  const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
+  const split = ts(o.track_record && o.track_record.split === 'test' ? 'why.split_test' : 'why.split_dev');
+  state.speak = {danger: isEmergency(), only: i};  // this option, its reason and its questions
+  const quotes = o.evidence.length ? o.evidence.map((e, j) => `<blockquote><p class="from">${th('why.quote_from')}</p>${quoteHtml(e, `${P}.evidence.${j}`)}
+      ${e.source_url ? `<p class="quote-tools"><a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('why.source')}</a></p>` : ''}</blockquote>`).join('')
+    : `<p>${th('why.no_quote', {label: labelF(p.query)})}</p>`;
+  const sure = o.model_band === 'NO_SERVICE_TEXT'
+    ? noTextSureHtml(o, P, p.query)
+    : th('why.sure_score', {band: E(P + '.band_word', o.band_word), p: N(P + '.p', o.p.toFixed(2)), similar: similarHtml(o, P)});
+  const outcomes = ['yes', 'no', 'none', 'wrong'];
+  return `<a class="back" href="#/plan">${icon('back')} ${th('why.back')}</a>
+    <header class="why-head"><h1 tabindex="-1"><span lang="en">${F(P + '.name', o.name)}</span></h1>
+      <p>${bandHtml(o, P)}</p><p class="note"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
+      <p>${th('why.distance', {km: N(P + '.travel.km', o.travel.km), low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}
+        <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p></header>
+
+    <section class="section" aria-labelledby="h-q"><h2 id="h-q">${th('why.quotes_h')}</h2>${noTextCaptionHtml(o, p.query)}${quotes}</section>
+    <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
+      ${ledgerHtml(o, P, p.query)}
+      <p class="note">${th('why.model', {hash: F('meta.model_hash', p.meta.model_hash), id: F(P + '.facility_id', o.facility_id)})}</p></section>
+
+    <section class="section" aria-labelledby="h-fam"><h2 id="h-fam">${th('why.family_h')}</h2>
+      <p class="panel">${E(P + '.say_to_family.en', o.say_to_family.en)}</p></section>
+
+    <section class="section" aria-labelledby="call"><h2 id="call" tabindex="-1">${th('why.ask_h')}</h2>
+      ${isEmergency() ? `<p><strong>${th('why.call_108_first')}</strong></p>` : ''}
+      ${tel ? `<a class="btn btn-go btn-block btn-big" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display)}</span></a>`
+        : `<p class="panel">${th('why.no_dial')}</p>`}
+      <div class="pair">${RSInput.speakHtml()}</div><p id="speak-note" class="note" aria-live="polite"></p>
+      <ol class="script">
+        <li>${th('script.is_this', {name: `<span lang="en">${F(P + '.name', o.name)}</span>`, town: F(P + '.town', o.town)})}</li>
+        <li>${th('script.need', {label: labelF(p.query)})}</li>
+        ${o.call_ahead.map((c, j) => `<li>${E(`${P}.call_ahead.${j}.question`, c.question)}
+          <span class="because">${th('why.ask_because', {why: E(`${P}.call_ahead.${j}.asked_because`, c.asked_because)})}</span></li>`).join('')}
+        <li>${th('script.if_not')}</li>
+        <li>${th('script.whom')}</li>
+      </ol>
+      <h3 class="section">${th('why.outcome_h')}</h3>
+      <div class="outcomes" role="group" aria-label="${th('why.outcome_h')}">${outcomes.map(k => `<button type="button" class="btn" aria-pressed="false" data-outcome="${k}">${th('why.out.' + k)}</button>`).join('')}</div>
+      <div id="reason-step"></div>
+      <p class="note">${th('why.out_note')}</p></section>
+
+    <section class="section" aria-labelledby="h-sure"><h2 id="h-sure">${th('why.sure_h')}</h2>
+      <p id="how-sure">${sure} ${width > 0.4 ? th('why.very_unsure') : ''}</p>
+      <p>${trackHtml(o.track_record, P + '.track_record')} (${esc(split)}).</p>${trackBar(o.track_record)}
+      ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
+      ${fieldHtml(o, P)}
+      ${o.why_first_text ? `<p><strong>${th('why.ranks_h')}</strong> ${E(P + '.why_first_text', o.why_first_text)}</p>` : ''}
+      ${tieHtml(p, o)}</section>
+
+    ${i === 0 ? whyNotHtml(p) : ''}
+
+    <section class="section" aria-labelledby="h-chk"><h2 id="h-chk">${th('why.checks_h')}</h2><dl class="facts">
+      <div><dt>${th('why.real')}</dt><dd>${o.is_real.map((x, j) => E(`${P}.is_real.${j}`, x)).join('; ')}</dd></div>
+      <div><dt>${th('why.where')}</dt><dd>${E(P + '.where_check', o.where_check)}</dd></div>
+      ${o.website ? `<div><dt>${th('why.website')}</dt><dd>${F(`${P}.website.text.${state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'}`,
+        o.website.text[state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'])}</dd></div>` : ''}
+      ${o.flags.map((f, j) => `<div><dt>${th('why.warn')}</dt><dd class="warn">${icon('warn')}<span>${E(`${P}.flags.${j}`, f)}</span></dd></div>`).join('')}
+      </dl></section>
+
+    <section class="section" aria-labelledby="h-web"><h2 id="h-web">${th('why.web_h')}</h2>
+      <p class="note">${th('why.web_note')}</p>
+      <button type="button" id="verify-btn" class="btn btn-block">${th('why.web')}</button>
+      <div id="verify-out" aria-live="polite">${verifyHtml((state.verify || {})[o.facility_id])}</div></section>
+
+    <section class="section stack-sm" aria-labelledby="h-act"><h2 id="h-act">${th('why.actions_h')}</h2>
+      <a class="btn btn-block" href="#/slip/${o.rank}">${th('why.slip')}</a>
+      <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">${th('why.maps')}</a></section>`;
 }
-function noOptionHtml() {
-  const t = NO_OPTION.en;
-  const back = svc(state.service) && state.loc ? '#/plan' : '#/';  // the saved answer, or the service tiles
-  return `<h1 tabindex="-1">${esc(t.title)}</h1><p>${esc(t.body)}</p>
-    <a class="btn btn-block" href="${back}">${esc(t.button)}</a>`;
+// The model's witness ledger (derived/v2, #132): one row per named term, in points (10 per unit of log-odds), summing to
+// the total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
+// see for this listing add nothing and share one muted line. Hindi shows each row's own label_hi from the payload.
+const signed = n => (n > 0 ? '+' : '') + (Number.isInteger(n) ? String(n) : n.toFixed(1));
+function rowLabel(c, path) {
+  if (state.lang === 'hi' && c.label_hi) return F(path + '.label_hi', c.label_hi);
+  return c.label_hi === undefined ? E(path + '.label', c.label) : F(path + '.label', c.label);
 }
-// The model's witness ledger (derived/v2): one row per named term, in points (10 per unit of log-odds), summing to the
-// total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
-// see for this listing add nothing and share one muted line.
-const signed = n => (n > 0 ? '+' : '') + n.toFixed(1);
-function ledgerHtml(o, P, L) {
+function ledgerHtml(o, P, q) {
   const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const rows = o.contributions.map((c, j) => {
     const C = `${P}.contributions.${j}`;
-    const label = F(C + '.label', c.label);
+    const label = rowLabel(c, C);
     const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
-    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
-      <td class="num">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+    // the row's quotes go full width under it, so a 320 px screen never scrolls sideways
+    return `<tr${quotes ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
+      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}`;
   }).join('');
   const unseen = o.not_observed || [];
-  return `<table class="ledger"><caption>Points for "offers ${L}"</caption>
-      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
+  return `<table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(q)})}</caption>
+      <thead><tr><th scope="col">${th('why.ledger_col')}</th><th scope="col" class="pts">${th('why.ledger_pts')}</th></tr></thead>
       <tbody>${rows}</tbody>
-      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', signed(total), 'sum')} &rarr;
-        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
+      <tfoot><tr><th scope="row">${th('why.ledger_total')}</th><td class="pts">${F(P + '.contributions', signed(total), 'sum')} &rarr;
+        ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
     </table>
-    ${unseen.length ? `<p class="small muted">Counts neither for nor against:
-      ${unseen.map((x, j) => F(`${P}.not_observed.${j}.label`, x.label)).join('; ')}.</p>` : ''}`;
+    ${unseen.length ? `<p class="note">${th('why.not_observed', {list: unseen.map((x, j) => rowLabel(x, `${P}.not_observed.${j}`)).join('; ')})}</p>` : ''}`;
 }
-// How sure for NO SERVICE TEXT (derived/v2/README): no line describes the service as its own unit, so it is never
-// Likely, but its score still comes from the ledger's other rows. The two rows that add most are named, so this line
-// and the ledger agree. Trauma's quotes are general emergency lines (noTextCaptionHtml), the reason it is a first stop.
-function noTextSureHtml(o, P, L, q) {
+// How sure for NO SERVICE TEXT (derived/v2/README): never Likely, but its score still comes from the ledger's other
+// rows; the two that add most are named, so this line and the ledger agree.
+function noTextSureHtml(o, P, q) {
   const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
     .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
-    .map(([c, j]) => `${F(`${P}.contributions.${j}.label`, c.label)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
-  const still = q.service === 'trauma_emergency' && o.evidence.length
-    ? 'It is still plausible for first care: its listing has general emergency lines (quoted above), and the model scores it'
-    : 'It is still plausible: the model scores it';
-  return `${F(P + '.band_word', o.band_word)}: no line in its listing describes ${L} as its own service, so it is not
-    rated Likely. ${still} ${F(P + '.p', o.p.toFixed(2), 'num')} from the rest of its record (How we decided,
-    below)${top.length ? `. Largest rows: ${top.join('; ')}` : ''}. Call to ask.`;
+    .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+  return th(q.service === 'trauma_emergency' && o.evidence.length ? 'why.no_text_trauma' : 'why.no_text_other',
+    {band: E(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
+    + (top.length ? ' ' + th('why.largest', {rows: top.join('; ')}) : '') + ' ' + th('why.call_to_ask');
 }
-function whyScreen(rank) {
-  const p = state.plan;
-  const o = planOption(rank);
-  if (!o) return noOptionHtml();
-  const P = `options.${p.options.indexOf(o)}`;
-  const label = p.query.service_label.en;
-  const L = F('query.service_label.en', label);
-  const width = o.p_hi - o.p_lo;
-  const phone = o.phone && o.phone.e164
-    ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${F(P + '.phone.display', o.phone.display)}</a>`
-    : '<p class="card">No dialable number in our data for this listing.</p>';
-  const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
-  const split = o.track_record && o.track_record.split === 'test' ? 'final test' : 'dev, not final test';
-  state.speak = {danger: isEmergency(), only: p.options.indexOf(o)};  // this option, its reason and its questions
-  return `<a class="btn" href="#/plan">&larr; Plan</a>
-    <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
-    <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
-    <h2>From its own listing</h2>
-    ${noTextCaptionHtml(o, p.query)}${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
-      <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
-      : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
-    <h2>Check the website now</h2>
-    <p class="small">Opens this facility's own website now (a few pages, a few seconds). It does not change the label above.</p>
-    <button type="button" id="verify-btn" class="btn-block">Check website now</button>
-    <div id="verify-out" aria-live="polite">${verifyHtml((state.verify || {})[o.facility_id])}</div>
-    <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
-    <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
-    ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p id="how-sure">${o.model_band === 'NO_SERVICE_TEXT'
-    ? noTextSureHtml(o, P, L, p.query)
-    : `${F(P + '.band_word', o.band_word)}, ${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}. ${similarHtml(o, P).replace(/^./, c => c.toUpperCase())}.`}
-      ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
-    ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
-    ${fieldHtml(o, P)}
-    ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
-    ${tieHtml(p, o)}
-    <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
-      (${F(P + '.travel.label', o.travel.label)}).</p>
-    <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">Directions in Google Maps</a>
-    <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
-
-    <h2 id="how">How we decided</h2>
-    ${ledgerHtml(o, P, L)}
-    <p class="small muted">Model ${F('meta.model_hash', p.meta.model_hash)}. Facility id ${F(P + '.facility_id', o.facility_id)}.</p>
-
-    <h2 id="call" tabindex="-1">Call ahead</h2>
-    ${isEmergency() ? '<p><strong>Call 108 first. Do not wait for this call to send the patient.</strong></p>' : ''}
-    ${RSInput.speakHtml()}
-    ${phone}
-    <ol class="script">
-      <li>"Is this ${F(P + '.name', o.name)}, ${F(P + '.town', o.town)}?"</li>
-      <li>"I have a patient who needs ${L}."</li>
-      ${o.call_ahead.map((c, j) => `<li>"${F(`${P}.call_ahead.${j}.question`, c.question)}" <span class="small muted">(asked because:
-        ${F(`${P}.call_ahead.${j}.asked_because`, c.asked_because)})</span></li>`).join('')}
-      <li>"If you cannot, which hospital nearby can?"</li>
-      <li>"Whom should we ask for when we arrive?"</li>
-    </ol>
-    <div class="row" role="group" aria-label="What did they say?">
-      ${['Said yes', 'Said no', 'No answer', 'Wrong number'].map(x => `<button type="button" data-outcome="${x}">${x}</button>`).join('')}
-    </div>
-    <div id="reason-step"></div>
-    <p class="small muted">Yes, no or no answer is sent to improve the data: this facility, the service, the district and
-      the time. No patient details.</p>`;
+// A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
+function notFound() {
+  const back = svc(state.service) && state.loc ? '#/plan' : '#/';  // the saved answer, or the service tiles
+  return `<h1 tabindex="-1">${th('err.not_found')}</h1><p>${th('err.not_found_help')}</p>
+    <a class="btn btn-ink btn-block section" href="${back}">${th('err.search_again')}</a>`;
 }
 // ---------- live website check (#37): a dated line next to the plan; never changes the band ----------
 function verifyHtml(v) {
   if (!v) return '';
-  if (v.loading) return '<p>Checking the website...</p>';
-  if (v.error) return `<p class="card">${esc(v.error)}</p>`;
+  if (v.loading) return `<p>${th('verify.loading')}</p>`;
+  if (v.error) return `<p class="panel">${esc(v.error)}</p>`;
   const d = new Date(v.checked_at_ms);
-  const day = d.toDateString() === new Date().toDateString() ? 'today' : d.toLocaleDateString([], {day: 'numeric', month: 'short'});
-  const when = `Checked ${F('verify.checked_at_ms', timeStr(v.checked_at_ms), 'clock')} ${esc(day)}`;
-  const q = (x, j) => `<blockquote>"${F(`verify.quotes.${j}.text`, x.text)}"
-    <br><a class="small" href="${esc(x.url)}" rel="noopener noreferrer">${F(`verify.quotes.${j}.url`, x.url)}</a></blockquote>`;
-  if (v.status === 'found') {
-    return `<p class="card">${when}: ${F('verify.status_text', v.status_text)}:</p>${v.quotes.map(q).join('')}`;
-  }
-  const said = v.quotes.length ? `<p>It mentions it only like this:</p>${v.quotes.map(q).join('')}` : '';
-  return `<p class="card">${when}: ${F('verify.status_text', v.status_text)}.</p>${said}`;
+  const day = d.toDateString() === new Date().toDateString() ? ts('verify.today') : d.toLocaleDateString(locale(), {day: 'numeric', month: 'short'});
+  const when = th('verify.when', {time: F('verify.checked_at_ms', timeStr(v.checked_at_ms), 'clock'), day: esc(day)});
+  const q = (x, j) => `<blockquote><p lang="en">"${F(`verify.quotes.${j}.text`, x.text)}"</p>
+    <p class="quote-tools"><a href="${esc(x.url)}" rel="noopener noreferrer">${F(`verify.quotes.${j}.url`, x.url)}</a></p></blockquote>`;
+  const status = `<span lang="en">${F('verify.status_text', v.status_text)}</span>`;
+  if (v.status === 'found') return `<p class="panel">${when}: ${status}:</p>${v.quotes.map(q).join('')}`;
+  const said = v.quotes.length ? `<p>${th('verify.only')}</p>${v.quotes.map(q).join('')}` : '';
+  return `<p class="panel">${when}: ${status}.</p>${said}`;
 }
 async function runVerify(o) {
   const key = o.facility_id;
@@ -1108,40 +1169,42 @@ async function runVerify(o) {
     const r = await fetch('/api/verify', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({facility_id: o.facility_id, service_id: state.service}), redirect: 'manual'});
     const body = r.ok || r.status === 503 ? await r.json() : null;
-    state.verify[key] = r.ok ? body : {error: body && body.error ? 'Website check not available: ' + body.error + '.'
-      : `Website check failed (${r.status || 'signed out'}).`};
+    state.verify[key] = r.ok ? body : {error: body && body.error ? ts('verify.na', {why: body.error})
+      : ts('verify.failed', {code: r.status || ts('err.signed_out')})};
   } catch {
-    state.verify[key] = {error: 'Website check needs internet.'};
+    state.verify[key] = {error: ts('verify.needs_net')};
   }
   const out = $('#verify-out');
   if (out) {
     out.innerHTML = verifyHtml(state.verify[key]);
-    announce(state.verify[key].error || `Website checked: ${state.verify[key].status_text}.`);
+    announce(state.verify[key].error || ts('verify.done', {status: state.verify[key].status_text}));
   }
 }
+// Outcome buttons carry a code; the slip and the outcome queue use the same codes (said: yes | no | none | wrong).
 function bindWhy() {
   const rank = parseInt(location.hash.split('/')[2], 10);
-  const o = planOption(rank);
+  const o = state.plan && !state.plan.error && !state.plan.offline && state.plan.options.find(x => x.rank === rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   loadScript('/community.js', 'RSCommunity').catch(() => {});  // the reason step; without it a "no" goes alone
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
-    const at = Date.now();
-    (state.outcomes ||= {})[rank] = {said: b.dataset.outcome, at};  // for the slip (#24)
+    const at = Date.now(), said = b.dataset.outcome;
+    document.querySelectorAll('[data-outcome]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    (state.outcomes ||= {})[rank] = {said, at};  // for the slip (#24)
     window.RSCommunity?.dropPending();  // a corrected tap replaces an unsent "no"
     $('#reason-step').innerHTML = '';
-    if (b.dataset.outcome === 'Said no' && o && window.RSCommunity) {
-      RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, 'Said no', at, reason ? {reason} : {}), announce);
-      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092b\u093c\u094b\u0928 \u092a\u0930 \u0928\u093e \u0915\u0939\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
+    if (said === 'no' && o && window.RSCommunity) {
+      RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, said, at, reason ? {reason} : {}), announce);
+      announce(ts('why.noted_no'));
       return;
     }
-    const sent = o && queueOutcome(o, b.dataset.outcome, at);
-    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip${sent ? ' and is sent to improve the data, with no patient details' : ''}.`);
+    const sent = o && queueOutcome(o, said, at);
+    announce(ts(sent ? 'why.noted_sent' : 'why.noted', {said: ts('why.out.' + said)}));
   }));
   if (location.hash.endsWith('#call')) $('#call')?.focus();
 }
 
 // ---------- call outcomes (#65): ids, the answer, a district; queued offline, flushed when back online ----------
-const OUTCOME_CODE = {'Said yes': 'yes', 'Said no': 'no', 'No answer': 'no_answer'};  // "Wrong number" is not sent
+const OUTCOME_CODE = {yes: 'yes', no: 'no', none: 'no_answer'};  // "Wrong number" is not sent
 function queueOutcome(o, said, at, extra = {}) {
   const outcome = OUTCOME_CODE[said];
   if (!outcome || !state.loc || !state.service) return false;
@@ -1172,58 +1235,41 @@ async function flushOutcomes() {
 }
 window.addEventListener('online', flushOutcomes);
 
-// ---------- referral slip (S8, #24): slip.js loads only on this route ----------
+// ---------- referral slip (S8, #24): slip.js loads only on this route; its language is the app language ----------
 function slipScreen(rank) {
-  const o = planOption(rank);
-  if (!o) return noOptionHtml();
-  const lang = state.slipLang || 'en';
-  return `<a class="btn no-print" href="#/why/${rank}">&larr; Why this</a>
-    <h1 tabindex="-1" class="no-print">Referral slip</h1>
-    <div class="row no-print" role="group" aria-label="Slip language">
-      <button type="button" data-slip-lang="en" aria-pressed="${lang === 'en'}">English</button>
-      <button type="button" data-slip-lang="hi" aria-pressed="${lang === 'hi'}"><span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span></button>
+  const p = state.plan;
+  const o = p && !p.error && !p.offline && p.options.find(x => x.rank === rank);
+  if (!o) return notFound();
+  return `<a class="back no-print" href="#/why/${rank}">${icon('back')} ${th('slip.back')}</a>
+    <h1 tabindex="-1" class="no-print">${th('slip.h')}</h1>
+    <p class="no-print"><strong>${th('slip.ask')}</strong> ${th('slip.no_name')}</p>
+    <div id="slip-out"><p>${th('slip.preparing')}</p></div>
+    <div class="pair no-print section">
+      <button type="button" class="btn" id="slip-big">${th('slip.big')}</button>
+      <button type="button" class="btn" id="slip-print">${th('slip.print')}</button>
+      <a class="btn" id="slip-wa" href="#" rel="noopener noreferrer">${th('slip.wa')}</a>
+      <a class="btn" id="slip-sms" href="#">${th('slip.sms')}</a>
+      <button type="button" class="btn btn-ink" id="slip-card">${th('slip.card')}</button>
     </div>
-    <p class="no-print"><strong>Ask the patient before sending.</strong> No patient name or location goes on the slip.</p>
-    <div id="slip-out"><p>Preparing slip...</p></div>
-    <div class="row no-print">
-      <button type="button" id="slip-big">Show big</button>
-      <button type="button" id="slip-print">Print</button>
-      <a class="btn" id="slip-wa" href="#" rel="noopener noreferrer">Send on WhatsApp</a>
-      <a class="btn" id="slip-sms" href="#">Send by SMS</a>
-      <button type="button" id="slip-card">Send to family <span lang="hi">(\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u094b \u092d\u0947\u091c\u0947\u0902)</span></button>
-    </div>
-    <p class="small no-print">The family card is a file that opens on any phone without a login: places, phones and
-      what to bring, no patient details. <span lang="hi">\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948\u0964 \u0907\u0938\u092e\u0947\u0902 \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0928\u0902\u092c\u0930 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901 \u0932\u093f\u0916\u093e \u0939\u0948; \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
+    <p class="note no-print">${th('slip.card_note')}</p>`;
 }
-function loadSlipJs() {
-  if (window.RSSlip) return Promise.resolve();
-  return new Promise((ok, fail) => {
-    const s = document.createElement('script');
-    s.src = '/slip.js';
-    s.onload = ok;
-    s.onerror = fail;
-    document.head.appendChild(s);
-  });
-}
+function loadSlipJs() { return loadScript('/slip.js', 'RSSlip'); }
 async function bindSlip() {
   const rank = parseInt(location.hash.split('/')[2], 10);
   const p = state.plan;
-  const o = planOption(rank);
+  const o = p && !p.error && !p.offline && p.options.find(x => x.rank === rank);
   if (!o) return;
-  try { await loadSlipJs(); } catch { $('#slip-out').innerHTML = '<p role="alert">Could not load the slip. Check the connection.</p>'; return; }
+  try { await loadSlipJs(); } catch { $('#slip-out').innerHTML = `<p role="alert">${th('slip.load_failed')}</p>`; return; }
   const backup = p.options.find(x => x.rank !== rank) || null;
-  const lang = state.slipLang || 'en';
-  const m = RSSlip.slipModel(p, o, backup, (state.outcomes || {})[rank] || null);
+  const lang = state.lang;
+  const out = (state.outcomes || {})[rank];
+  const m = RSSlip.slipModel(p, o, backup, out ? {said: {yes: 'Said yes', no: 'Said no', none: 'No answer', wrong: 'Wrong number'}[out.said], at: out.at} : null);
   $('#slip-out').innerHTML = RSSlip.toHtml(m, lang);
   $('#slip-wa').href = RSSlip.toWhatsApp(m, lang).url;
   $('#slip-sms').href = RSSlip.toSms(m, lang).url;
-  document.querySelectorAll('[data-slip-lang]').forEach(b => b.addEventListener('click', () => {
-    state.slipLang = b.dataset.slipLang;
-    render();
-  }));
   $('#slip-big').addEventListener('click', () => {
     const on = document.body.classList.toggle('slip-big');
-    $('#slip-big').textContent = on ? 'Normal size' : 'Show big';
+    $('#slip-big').textContent = ts(on ? 'slip.normal' : 'slip.big');
   });
   $('#slip-print').addEventListener('click', () => window.print());
   loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.remember(p, o, state.loc)).catch(() => {});
@@ -1234,15 +1280,14 @@ async function bindSlip() {
       const r = await RSSlip.shareJourney(p, lang, {rank});
       announce(msg(r === 'downloaded' ? 'cardSaved' : r === 'shared' ? 'cardShared' : 'cardCancelled'));
     } catch {
-      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
+      announce(msg('cardFailed') || ts('slip.card_failed'));
     }
   });
 }
 
-// ---------- How this works (#45): how.js and /api/how load only on this route ----------
-function howScreen() {
-  return `<h1 tabindex="-1">How this works</h1><div id="how-out"><p>Loading...</p></div>`;
-}
+// ---------- How this works (#45) and Data stories (#53): long English pages built from the data ----------
+function enOnly() { return state.lang === 'hi' ? `<p class="panel" lang="hi">${th('page.english_only')}</p>` : ''; }
+function howScreen() { return `<h1 tabindex="-1">${th('nav.how')}</h1>${enOnly()}<div id="how-out"><p>${th('page.loading')}</p></div>`; }
 function loadScript(src, name) {
   if (window[name]) return Promise.resolve();
   return new Promise((ok, fail) => {
@@ -1257,11 +1302,11 @@ async function bindHow() {
   try {
     const [, r] = await Promise.all([loadScript('/how.js', 'RSHow'), fetch('/api/how', {redirect: 'manual'})]);
     if (!r.ok) throw new Error();
-    const html = RSHow.render(await r.json());
-    $('#main').innerHTML = html;
+    $('#main').innerHTML = enOnly() + `<div lang="en">${RSHow.render(await r.json())}</div>
+      <a class="btn btn-block section" href="#/stories">${th('nav.stories')}</a>`;
     $('#main h1').focus();
   } catch {
-    $('#how-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+    $('#how-out').innerHTML = `<p role="alert">${th('page.failed')}</p>`;
     return;
   }
   liveOutcomes();
@@ -1284,43 +1329,120 @@ async function liveOutcomes() {
     reviewed, not fed back into the scores automatically.</p>`;
   built.before(sec);
 }
-
-// ---------- Data stories (#53): stories.js and /api/stories load only on this route ----------
-function storiesScreen() {
-  return `<h1 tabindex="-1">Data stories</h1><div id="stories-out"><p>Loading...</p></div>`;
-}
+function storiesScreen() { return `<h1 tabindex="-1">${th('nav.stories')}</h1>${enOnly()}<div id="stories-out"><p>${th('page.loading')}</p></div>`; }
 async function bindStories() {
   try {
     const [, r] = await Promise.all([loadScript('/stories.js', 'RSStories'), fetch('/api/stories', {redirect: 'manual'})]);
     if (!r.ok) throw new Error();
-    $('#main').innerHTML = RSStories.render(await r.json());
+    $('#main').innerHTML = enOnly() + `<div lang="en">${RSStories.render(await r.json())}</div>`;
     RSStories.bind($('#main'));
     $('#main h1').focus();
   } catch {
-    $('#stories-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+    $('#stories-out').innerHTML = `<p role="alert">${th('page.failed')}</p>`;
   }
 }
 
-// ---------- How did this referral go? (community.js): a visit report on a recent referral ----------
+// ---------- Recent: referrals made on this phone, and "How did this referral go?" ----------
+function recentScreen() {
+  const list = RECENT();
+  return `<h1 tabindex="-1">${th('nav.recent')}</h1>
+    ${list.length ? `<ul class="rows section">${list.map(r => `<li class="recent-row"><b lang="en">${esc(r.name)}</b>
+      <span class="note">${esc(svc(r.service)?.label || r.service)}</span></li>`).join('')}</ul>
+      <a class="btn btn-ink btn-block section" href="#/report">${th('report.link')}</a>`
+      : `<p class="panel section">${th('recent.none')}</p>`}`;
+}
 function bindReport() {
   loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.bindReport($('#report-out'), queueItem, announce))
-    .catch(() => { $('#report-out').innerHTML += '<p role="alert">Could not load this page. Check the connection.</p>'; });
+    .catch(() => { $('#report-out').innerHTML += `<p role="alert">${th('page.failed')}</p>`; });
 }
-
 // ---------- Your area (pulse.js): anonymous district counts, loaded only on this route ----------
 function bindPulse() {
   const out = $('#pulse-out');
   const cards = Object.fromEntries((state.plan?.options || []).map(o => [o.facility_id, `#/why/${o.rank}`]));
   loadScript('/pulse.js', 'RSPulse')
-    .then(() => RSPulse.initPulse(out, {services: SERVICES.filter(s => s.profile), service: state.service, loc: state.loc, cards}))
-    .catch(() => { out.innerHTML += '<p role="alert">Could not load this page. Check the connection.</p>'; });
+    .then(() => RSPulse.initPulse(out, {services: SERVICES.filter(s => s.profile), service: state.service, loc: state.loc, cards, lang: state.lang}))
+    .catch(() => { out.innerHTML += `<p role="alert">${th('page.failed')}</p>`; });
+}
+
+// ---------- Settings: language, text size, voice, screen colour, saved data ----------
+function settingsScreen() {
+  const radio = (name, v, label, cur, attrs = '') => `<label ${attrs}><input type="radio" name="${name}" id="${name}-${v}" value="${v}" ${String(cur) === String(v) ? 'checked' : ''}> <span>${label}</span></label>`;
+  const size = load('size') || 100, theme = load('theme') || 'system';
+  return `<h1 tabindex="-1">${th('set.h')}</h1>
+    <fieldset class="section"><legend>${th('set.lang_h')}</legend><div class="choice">
+      ${LANGS.map(l => radio('lang', l, esc(I18N[l]['lang.name']), state.lang, `lang="${l}"`)).join('')}</div>
+      <p class="note">${th('set.lang_note')}</p></fieldset>
+    <fieldset class="section"><legend>${th('set.size_h')}</legend><div class="seg">
+      ${SIZES.map(v => radio('size', v, `${v}%`, size)).join('')}</div>
+      <p class="panel sample">${th('set.size_sample')}</p></fieldset>
+    <fieldset class="section"><legend>${th('set.voice_h')}</legend>
+      <label class="check"><input type="checkbox" id="opt-say" ${load('say') !== false ? 'checked' : ''}> ${th('set.read')}</label></fieldset>
+    <fieldset class="section"><legend>${th('set.theme_h')}</legend><div class="seg">
+      ${['system', 'light', 'dark'].map(v => radio('theme', v, th('set.theme.' + v), theme)).join('')}</div></fieldset>
+    <section class="section" aria-labelledby="h-off"><h2 id="h-off">${th('set.offline_h')}</h2><p>${savedLine()}</p></section>`;
+}
+function bindSettings() {
+  document.querySelectorAll('input[name=lang]').forEach(r => r.addEventListener('change', () => setLang(r.value, {focus: '#lang-' + r.value})));
+  document.querySelectorAll('input[name=size]').forEach(r => r.addEventListener('change', () => { save('size', +r.value); applyPrefs(); }));
+  document.querySelectorAll('input[name=theme]').forEach(r => r.addEventListener('change', () => { save('theme', r.value); applyPrefs(); }));
+  $('#opt-say').addEventListener('change', e => save('say', e.target.checked));
+}
+function applyPrefs() {
+  const html = document.documentElement, size = load('size') || 100, theme = load('theme') || 'system';
+  html.style.fontSize = SIZES.includes(size) && size !== 100 ? size + '%' : '';
+  if (theme === 'light' || theme === 'dark') html.dataset.theme = theme; else delete html.dataset.theme;
+}
+// One tap switches every string, read-aloud, voice input, the slip and the card; focus and scroll stay put.
+function setLang(l, opts = {}) {
+  if (!LANGS.includes(l)) return;
+  state.lang = l;
+  save('lang', l);
+  save('voice', {...(load('voice') || {}), lang: l});  // voice.js and speech read the same language
+  document.documentElement.lang = l;
+  if (opts.rerender === false) return;
+  const y = window.scrollY;
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  render({keepFocus: true});
+  window.scrollTo(0, y);
+  $(opts.focus || '#lang-btn')?.focus({preventScroll: true});
+  announce(ts('lang.changed'));
+}
+
+// ---------- chrome: top bar and bottom navigation ----------
+function topBar() {
+  const other = state.lang === 'hi' ? 'en' : 'hi';
+  $('#top').innerHTML = `<a class="brand" href="#/"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 14h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="6" cy="14" r="4" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/><circle cx="22" cy="14" r="4.5" fill="var(--go)"/></svg>
+      <span>${th('app.name')}</span></a>
+    <button type="button" class="btn lang-btn" id="lang-btn" lang="${other}" data-lang="${other}">${esc(I18N[other]['lang.name'])}</button>
+    <a class="btn icon-btn" href="#/settings" aria-label="${th('nav.settings')}">${icon('sliders')}</a>`;
+  $('#lang-btn').addEventListener('click', e => setLang(e.currentTarget.dataset.lang));
+  $('#skip').textContent = ts('skip');
+  $('#offline').setAttribute('aria-label', ts('off.h'));
+  $('#offline').innerHTML = `${icon('wifiOff')}<span><b>${th('off.h')}</b> ${th('off.banner')}</span>`;
+  $('#status').lang = state.lang;
+}
+function bottomNav(route) {
+  const tab = route === 'recent' || route === 'report' ? 'recent' : route === 'area' || route === 'pulse' ? 'area'
+    : route === 'how' || route === 'stories' ? 'how' : route === 'settings' ? '' : 'home';
+  const item = (href, name, key) => `<a href="${href}"${tab === key ? ' aria-current="page"' : ''}>${icon(name)}<span>${th('nav.' + key)}</span></a>`;
+  $('#nav').innerHTML = item('#/', 'home', 'home') + item('#/recent', 'clock', 'recent') + item('#/area', 'map', 'area') + item('#/how', 'help', 'how');
+  $('#nav').setAttribute('aria-label', ts('nav.label'));
 }
 
 // ---------- router ----------
-function render() {
+function render(opts = {}) {
   const h = location.hash || '#/';
-  let html, bind;
-  if (h === '#/gps') [html, bind] = [gpsScreen(), bindGps];
+  if (!state.lang && h !== '#/lang') {
+    // a fresh phone opening a deep link (#/change, #/why/1, a shared link) goes there once the language is chosen
+    if (h !== '#/' && h !== '#') state.afterLang = h;
+    location.hash = '#/lang';
+    return;
+  }
+  const route = (h.match(/^#\/(\w*)/) || [])[1] || '';
+  let html, bind = () => {};
+  if (route === 'lang') [html, bind] = [chooserScreen(), bindChooser];
+  else if (h === '#/gps') [html, bind] = [gpsScreen(), bindGps];
   else if (h === '#/change') [html, bind] = [changeScreen(), bindChange];
   else if (h === '#/plan') [html, bind] = [planScreen(), bindPlan];
   else if (h.startsWith('#/why/')) [html, bind] = [whyScreen(parseInt(h.split('/')[2], 10)), bindWhy];
@@ -1329,23 +1451,30 @@ function render() {
   else if (h === '#/describe') [html, bind] = [RSInput.describeScreen(), RSInput.bindDescribe];
   else if (h === '#/note') [html, bind] = [RSInput.noteScreen(), RSInput.bindNote];
   else if (h === '#/stories') [html, bind] = [storiesScreen(), bindStories];
-  else if (h === '#/report') [html, bind] = ['<div id="report-out"><h1 tabindex="-1">How did this referral go?</h1><p>Loading...</p></div>', bindReport];
-  else if (h === '#/pulse') [html, bind] = ['<div id="pulse-out"><h1 tabindex="-1">Your area</h1><p>Loading...</p></div>', bindPulse];
+  else if (h === '#/settings') [html, bind] = [settingsScreen(), bindSettings];
+  else if (h === '#/recent') html = recentScreen();
+  else if (h === '#/area') [html, bind] = [areaScreen(), bindArea];
+  else if (h === '#/report') [html, bind] = [`<div id="report-out"><h1 tabindex="-1">${th('report.link')}</h1><p>${th('page.loading')}</p></div>`, bindReport];
+  else if (h === '#/pulse') [html, bind] = [`<div id="pulse-out"><h1 tabindex="-1">${th('pulse.h')}</h1><p>${th('page.loading')}</p></div>`, bindPulse];
   else [html, bind] = [home(), bindHome];
+  const bare = route === 'lang';
+  document.body.classList.toggle('bare', bare);
+  if (!bare) { topBar(); bottomNav(route); }
   $('#main').innerHTML = html;
-  document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));
+  document.body.classList.toggle('wide', (h === '#/plan' && state.depth === 'compare') || h === '#/area');
+  document.body.classList.toggle('on-plan', h === '#/plan');  // no bottom nav on the answer: Call needs the room
   renderBar();
   const h1 = $('#main h1');
-  if (h1 && !h.endsWith('#call')) h1.focus({preventScroll: false});
-  document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
+  if (h1 && !opts.keepFocus && !h.endsWith('#call')) h1.focus({preventScroll: false});
+  document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + ts('app.name');
   bind();
   if ($('#speak')) RSInput.bindSpeak(state.speak);
-  if (state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
+  if (state.lang === 'hi' && state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
 }
 window.addEventListener('hashchange', () => {
   window.RSCommunity?.sendPending();  // a "no" left without a reason is sent as it is
   if (location.hash === '#/' || location.hash === '#/change') {
-    state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; state.verify = {}; stopWatch();
+    state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; state.verify = {}; state.depth = 'quick'; stopWatch();
   }
   document.body.classList.remove('slip-big');
   render();
@@ -1356,7 +1485,14 @@ window.addEventListener('offline', setOnline);
 
 document.addEventListener('DOMContentLoaded', async () => {
   // The skip link must not change the hash: the router owns it.
-  document.querySelector('a[href="#main"]').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
+  $('#skip').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
+  applyPrefs();
+  try { await loadStrings(); } catch {
+    $('#main').innerHTML = '<h1>Referral Saathi</h1><p>Could not load the app. In an emergency call <a href="tel:108">108</a>.</p>';
+    return;
+  }
+  state.lang = pickLang();
+  if (state.lang) { document.documentElement.lang = state.lang; save('lang', state.lang); }
   setOnline();
   RSInput.load();
   flushOutcomes();

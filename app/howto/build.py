@@ -33,7 +33,7 @@ V1 = "derived/v1"
 V2CARD = "derived/v2/model_card.json"
 REPORT, SPEC, DATASETS = "REPORT.md", "model/MODEL_SPEC.md", "research/DATASETS.md"
 EVAL = SPEC  # the earlier prototype's evaluation, shown on the page as history only
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
 FAR_KM = 50  # the report's threshold for "far from its own PIN"; shown on the page as a fact
 FAR2_KM = 100  # the report's second threshold
 HOURS = re.compile(r"\b24 ?(?:x|/|\*|hrs?|hours) ?7?\b|round the clock|\bopen(?:s)? (?:from|daily|on|till)|"
@@ -237,7 +237,19 @@ def facts(c: dict[str, float]) -> dict:
         "bihar_records": fact(bihar, floc, "state_final = Bihar", of=len(loc)),
         "hours_records": fact(int(hours), claims_src,
                               "records with any sentence about opening hours or 24/7", of=len(loc)),
-    } | test
+    } | site_facts(eng.site_check) | test
+
+
+def site_facts(sc: dict) -> dict:
+    """Listed websites the crawl could not check or flags unreliable (#117 A, BE-001): the app cites neither, the
+    frozen model still reads them."""
+    if not sc or "n_unchecked" not in sc:
+        return {}
+    src, of = "app/facts/build.py", sc["n_with_site"]
+    return {"sites_unchecked": fact(sc["n_unchecked"], src, "site_status unchecked: no usable page on the listed "
+                                    "website, of those with a crawled website", of=of),
+            "sites_unreliable": fact(sc["n_unreliable"], src, "site_status unreliable: no page names the facility, "
+                                     "or another organisation, of those with a crawled website", of=of)}
 
 
 def sealed_test_facts(tr: dict | None) -> dict:

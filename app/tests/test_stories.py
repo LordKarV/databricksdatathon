@@ -34,7 +34,8 @@ def built(tmp_path_factory):
 def test_build_copies_the_gallery_verbatim(built):
     gallery = json.loads((ROOT / "viz/gallery.json").read_text(encoding="utf-8"))
     by_id = {s["id"]: s for s in gallery["stories"]}
-    assert len(built["stories"]) == len(gallery["stories"]) > 0
+    kept = [s for s in gallery["stories"] if not s["id"].startswith(build.SUPERSEDED_PREFIX)]
+    assert len(built["stories"]) == len(kept) > 0
     assert [s["order"] for s in built["stories"]] == sorted(s["order"] for s in built["stories"])
     for s in built["stories"]:
         g = by_id[s["id"]]
@@ -48,6 +49,13 @@ def test_build_copies_the_gallery_verbatim(built):
     assert built["acts"] == list(dict.fromkeys(s["act"] for s in built["stories"]))
     assert built["missing_data_files"] == [f"{s['id']}: {c['path']}" for s in built["stories"] for c in s["data_csv"]
                                            if not c["in_repo"]]
+
+
+def test_v1_model_stories_are_left_out(built):
+    """The model_ stories describe the superseded v1 model; their numbers contradict the v2 TEST (6a)."""
+    text = json.dumps(built)
+    assert not any(s["id"].startswith("model_") for s in built["stories"])
+    assert "71 sealed" not in text and "0.776" not in text
 
 
 def test_as_list_reads_the_gallery_list_formats():
@@ -65,7 +73,7 @@ def test_endpoints_serve_the_page_data_and_only_listed_charts(built):
     for bad in ("nope.svg", "..%2Fstories.json", "stories.json", "%2e%2e%2f%2e%2e%2fapp.py"):
         assert client.get(f"/api/stories/chart/{bad}").status_code == 404
     assert client.get("/stories.js").status_code == 200
-    assert "#/stories" in client.get("/").text
+    assert "#/stories" in client.get("/app.js").text  # UI2: linked from the How it works tab
 
 
 def test_page_data_missing_is_a_clear_503(tmp_path, monkeypatch):

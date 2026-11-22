@@ -49,7 +49,7 @@
       asOf: '\u0905\u0938\u094d\u092a\u0924\u093e\u0932 \u0921\u0947\u091f\u093e \u0915\u0940 \u0924\u093e\u0930\u0940\u0916',
       old: '\u092f\u0939 \u092a\u0930\u094d\u091a\u0940 \u090f\u0915 \u0926\u093f\u0928 \u0938\u0947 \u092a\u0941\u0930\u093e\u0928\u0940 \u0939\u094b \u0924\u094b \u091c\u093e\u0928\u0947 \u0938\u0947 \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0947\u0902\u0964',
       ask: '\u092d\u0947\u091c\u0928\u0947 \u0938\u0947 \u092a\u0939\u0932\u0947 \u092e\u0930\u0940\u091c\u093c \u0938\u0947 \u092a\u0942\u091b\u0947\u0902\u0964',
-      draft: '(Hindi draft, not reviewed)',
+      draft: '',
       listing: '\u0907\u0938\u0915\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0932\u093f\u0916\u093e \u0939\u0948',
       source: '\u0938\u094d\u0930\u094b\u0924',
       route: '\u0938\u0941\u091d\u093e\u092f\u093e \u0917\u092f\u093e \u0930\u093e\u0938\u094d\u0924\u093e',
@@ -57,6 +57,19 @@
     },
   };
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const MONTHS_HI = ['\u091c\u0928\u0935\u0930\u0940', '\u092b\u093c\u0930\u0935\u0930\u0940', '\u092e\u093e\u0930\u094d\u091a',
+    '\u0905\u092a\u094d\u0930\u0948\u0932', '\u092e\u0908', '\u091c\u0942\u0928', '\u091c\u0941\u0932\u093e\u0908',
+    '\u0905\u0917\u0938\u094d\u0924', '\u0938\u093f\u0924\u0902\u092c\u0930', '\u0905\u0915\u094d\u091f\u0942\u092c\u0930',
+    '\u0928\u0935\u0902\u092c\u0930', '\u0926\u093f\u0938\u0902\u092c\u0930'];
+  // UI2: on a Hindi slip, the stamp's month and the engine's English words (travel label, route purposes) are Hindi.
+  // app.js exposes the reviewed engine table as rsEngHi; without it (node harness) the English stays.
+  const madeIn = (made, lang) => (lang === 'hi' ? made.replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/,
+    x => MONTHS_HI[MONTHS.indexOf(x)]) : made);
+  const engHi = (text, lang) => (lang === 'hi' && root.rsEngHi ? root.rsEngHi(text) : null);
+  function E(path, text, lang) {
+    const hi = engHi(text, lang);
+    return hi != null ? `<span data-f="${path}" data-k="template">${esc(hi)}</span>` : `<span lang="en">${F(path, text)}</span>`;
+  }
   const OUTCOME_KEY = {'Said yes': 'yes', 'Said no': 'no', 'No answer': 'none', 'Wrong number': 'wrong'};
 
   function esc(s) {
@@ -114,14 +127,16 @@
     });
     return out;
   }
-  function durText(m) {
-    if (m < 120) return `${m} min`;
-    if (m >= 1440) return `${Math.round(m / 1440)} day${Math.round(m / 1440) === 1 ? '' : 's'}`;
-    return `${Math.round(m / 60)} h`;
+  function durText(m, lang) {
+    const hi = lang === 'hi';
+    if (m < 120) return `${m} ${hi ? '\u092e\u093f\u0928\u091f' : 'min'}`;
+    const d = Math.round(m / 1440);
+    if (m >= 1440) return hi ? `${d} \u0926\u093f\u0928` : `${d} day${d === 1 ? '' : 's'}`;
+    return `${Math.round(m / 60)} ${hi ? '\u0918\u0902\u091f\u0947' : 'h'}`;
   }
 
-  function travelText(g, t) {
-    return `${g.km} ${t.km}, ${t.about} ${g.low}-${g.high} ${t.min} (${g.label})`;
+  function travelText(g, t, lang) {
+    return `${g.km} ${t.km}, ${t.about} ${g.low}-${g.high} ${t.min} (${engHi(g.label, lang) ?? g.label})`;
   }
   function outcomeText(m, t) {
     return m.outcome ? `${t.said[m.outcome.key]}${t.at ? ' ' + t.at : ''} ${m.outcome.at}.` : t.noCall;
@@ -130,13 +145,13 @@
   /** Plain-text lines shared by the WhatsApp text; same content as the printed slip. */
   function lines(m, lang) {
     const t = T[lang] || T.en;
-    const out = [`${t.title.toUpperCase()}  ${m.made}`];
+    const out = [`${t.title.toUpperCase()}  ${madeIn(m.made, lang)}`];
     if (t.draft) out.push(t.draft);
     if (m.stub) out.push('SAMPLE DATA, not a real referral.');
     out.push(`${t.service}: ${m.service[lang] || m.service.en}`);
     out.push(`${t.go}: ${m.go.name}, ${m.go.address}`);
     out.push(`${t.phone}: ${m.go.phone || t.noPhone}`);
-    out.push(`${t.travel}: ${travelText(m.go, t)}`);
+    out.push(`${t.travel}: ${travelText(m.go, t, lang)}`);
     out.push(`${t.map}: ${m.go.map}`);
     if (m.quotes.length) {
       out.push(`${t.why}: ${t.listing}:`);
@@ -146,13 +161,13 @@
     if (m.backup) out.push(`${t.ifNot}: ${m.backup.name}, ${m.backup.km} ${t.km}. ${t.phone}: ${m.backup.phone || t.noPhone}`);
     if (m.route) {
       out.push(`${t.route}:`);
-      m.route.forEach((g, k) => out.push(`${k + 1}. ${g.name} (${g.stages.map(x => x.purpose).join(', ')}), ` +
+      m.route.forEach((g, k) => out.push(`${k + 1}. ${g.name} (${g.stages.map(x => engHi(x.purpose, lang) ?? x.purpose).join(', ')}), ` +
         `${t.about} ${g.low}-${g.high} ${t.min}. ${t.phone}: ${g.phone || t.noPhone}`));
     }
     out.push(t.numbers);
     if (m.has102) out.push(t.n102);
     out.push(t.worse, t.note);
-    out.push(`${t.made}: ${m.made}. ${t.asOf}: ${m.asOf}.`, t.old);
+    out.push(`${t.made}: ${madeIn(m.made, lang)}. ${t.asOf}: ${m.asOf}.`, t.old);
     return out;
   }
 
@@ -170,7 +185,7 @@
       `${t.go}: ${cut(m.go.name, 50)}, ${cut(m.go.town, 25)}. ${t.phone} ${m.go.phone || '-'}.`,
       m.backup ? `${t.ifNot}: ${cut(m.backup.name, 40)} ${m.backup.phone || ''}.` : '',
       m.has102 ? '108 / 102.' : '108.',
-      `${t.made} ${m.made}.`,
+      `${t.made} ${madeIn(m.made, lang)}.`,
     ].filter(Boolean);
     let text = parts.join(' ').replace(/\s+/g, ' ').trim();
     if (text.length > 300) text = text.slice(0, 299) + '.';
@@ -182,9 +197,9 @@
   function phoneHtml(g) {
     return g.phone ? `<a href="tel:${esc(g.phone.replace(/[^+\d]/g, ''))}">${F(g.path + '.phone.' + g.phoneKey, g.phone)}</a>` : null;
   }
-  function travelHtml(g, t) {
+  function travelHtml(g, t, lang) {
     return `${F(g.path + '.travel.km', g.km, 'num')} ${esc(t.km)}, ${esc(t.about)} ${F(g.path + '.travel.low', g.low, 'num')}-` +
-      `${F(g.path + '.travel.high', g.high, 'num')} ${esc(t.min)} (${F(g.path + '.travel.label', g.label)})`;
+      `${F(g.path + '.travel.high', g.high, 'num')} ${esc(t.min)} (${lang === 'hi' ? E(g.path + '.travel.label', g.label, lang) : F(g.path + '.travel.label', g.label)})`;
   }
 
   /** Printable slip markup (one A5/A4 page with the print stylesheet). */
@@ -194,29 +209,29 @@
     const go = m.go;
     const svcKey = m.service[lang] && lang === 'hi' ? 'hi' : 'en';
     return `<article class="slip" lang="${lang === 'hi' ? 'hi' : 'en'}" aria-labelledby="slip-title">
-      <h2 id="slip-title">${esc(t.title)} <span class="small" data-device>${esc(m.made)}</span></h2>
+      <h2 id="slip-title">${esc(t.title)} <span class="small" data-device>${esc(madeIn(m.made, lang))}</span></h2>
       ${t.draft ? `<p class="small" lang="en">${esc(t.draft)}</p>` : ''}
       ${m.stub ? '<p class="small" lang="en"><strong>Sample data, not a real referral.</strong></p>' : ''}
       <table class="slip-table"><tbody>
         ${row(t.service, F('query.service_label.' + svcKey, m.service[svcKey]))}
         ${row(t.go, `<strong>${F(go.path + '.name', go.name)}</strong><br>${F(go.path + '.' + go.addrKey, go.address)}`)}
         ${row(t.phone, phoneHtml(go) || esc(t.noPhone))}
-        ${row(t.travel, travelHtml(go, t))}
+        ${row(t.travel, travelHtml(go, t, lang))}
         ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer">${F(go.path, go.map, 'mapsurl')}</a>`)}
         ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="und">${F(q.path + '.quote', q.text)}</span>"
-          <span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)})</span><span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
+          ${q.source ? `<span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)})</span>` : ''}<span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
         ${row(t.call, `<span data-device>${esc(outcomeText(m, t))}</span>`)}
         ${m.backup ? row(t.ifNot, `${F(m.backup.path + '.name', m.backup.name)}, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
         ${m.route ? row(t.route, `<ol>${m.route.map(g => `<li><strong>${F(g.path + '.name', g.name)}</strong>:
-          ${g.stages.map(x => `<span lang="en">${F(x.path + '.purpose_word', x.purpose)}</span>${x.dwell != null
-            ? ` (${esc(t.stay)} ${F(x.path + '.dwell_minutes', durText(x.dwell), 'dur')})` : ''}`).join(', ')}.
+          ${g.stages.map(x => `${lang === 'hi' ? E(x.path + '.purpose_word', x.purpose, lang) : F(x.path + '.purpose_word', x.purpose)}${x.dwell != null
+            ? ` (${esc(t.stay)} ${F(x.path + '.dwell_minutes', durText(x.dwell, lang), 'dur')})` : ''}`).join(', ')}.
           ${esc(t.about)} ${F(g.path + '.eta_low', g.low, 'num')}-${F(g.path + '.eta_high', g.high, 'num')} ${esc(t.min)}.
           ${esc(t.phone)}: ${phoneHtml(g) || esc(t.noPhone)}</li>`).join('')}</ol>`) : ''}
       </tbody></table>
       <p><strong>${esc(t.numbers)}</strong>${m.has102 ? ' ' + esc(t.n102) : ''}</p>
       <p>${esc(t.worse)} ${esc(t.note)}</p>
       <p class="slip-name">${esc(t.name)}</p>
-      <p class="small"><span data-device>${esc(t.made)}: ${esc(m.made)}.</span> ${esc(t.asOf)}: ${F('as_of', m.asOf)}. ${esc(t.old)}</p>
+      <p class="small"><span data-device>${esc(t.made)}: ${esc(madeIn(m.made, lang))}.</span> ${esc(t.asOf)}: ${F('as_of', m.asOf)}. ${esc(t.old)}</p>
     </article>`;
   }
 
