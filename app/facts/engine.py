@@ -87,6 +87,7 @@ class Engine:
         self.meta, self.rules, self.fac, self.claims, self.pins = (
             facts["meta"], facts["rules"], facts["fac"], facts["claims"], facts["pins"])
         self.sha = sha
+        self.track_bins = facts.get("track_bins", [])
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
@@ -126,6 +127,19 @@ class Engine:
             contrib.append({"label": "checked against a second source: " +
                             ("confirmed" if pr.status == "verified_true" else "contradicted"), "points": gold})
         return band, pr.score, pr.lo, pr.hi, contrib + self._listings(pr), ev
+
+    def _track(self, p: float, rule: dict) -> dict:
+        """Of the checked listings at this level, how many were confirmed, contradicted or left without information.
+
+        From the model card's score bin when published (#82 H2). Before that, the evidence rule's hand checks, which
+        recorded only confirmed and contradicted: k_no_info is None (not recorded), never a made-up 0.
+        """
+        for b in self.track_bins:
+            if b["lo"] <= p < b["hi"] or (p == b["hi"] == 1):
+                return {**{k: b[k] for k in ("n", "k_confirmed", "k_contradicted", "k_no_info", "split")},
+                        "basis": f"score {b['lo']:.1f} to {b['hi']:.1f}"}
+        return {"n": rule["n"], "k_confirmed": rule["k_confirmed"], "k_contradicted": rule["k_contradicted"],
+                "k_no_info": None, "split": "dev", "basis": "evidence rule"}
 
     @staticmethod
     def _listings(pr: Pair) -> list[dict]:
@@ -222,9 +236,7 @@ class Engine:
                           "source_url": url or ""} for c in ev],
             "contributions": contrib, "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
-            "track_record": {"n": rule["n"], "k_confirmed": rule["k_confirmed"],
-                             "k_contradicted": rule["k_contradicted"],
-                             "k_no_info": 0, "split": "dev"},
+            "track_record": self._track(p, rule),
             "phone": self._phone(i), "is_real": self._is_real(i),
             "where_check": WHERE.get(self._f("loc_rule", i), "Location not checked"),
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},

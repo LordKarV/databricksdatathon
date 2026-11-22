@@ -264,11 +264,17 @@ async function districtPicker() {
 // kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+// Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return 'Listings like this: not checked yet';
   if (tr.n < 10) return `Listings like this: too few checks yet (${F(P + '.n', tr.n, 'num')} checked)`;
-  return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
-    `(${F(P + '.n', tr.n, 'num')} checked)`;
+  if (tr.k_no_info === null || tr.k_no_info === undefined) {
+    return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
+      `(${F(P + '.n', tr.n, 'num')} checked with a clear answer; checks that found nothing were not counted)`;
+  }
+  return `Of ${F(P + '.n', tr.n, 'num')} listings like this we checked: ${F(P + '.k_confirmed', tr.k_confirmed, 'num')} ` +
+    `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
+    `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
 function travelHtml(t, P) {
   return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +

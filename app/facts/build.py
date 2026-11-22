@@ -35,12 +35,17 @@ from common.eligibility import (  # noqa: E402, RUF100
 
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
+MODEL_CARD = ROOT / "derived" / "v2" / "model_card.json"
 PLANNER = ROOT / "planner" / "out" / "planner_v1.json.gz"  # its cited claims ride along, so route stops show quotes
 OUT = Path(__file__).resolve().parent / "out"
 # app service id -> derived/v1 service name (cleaning/claims lexicon keys)
 SERVICE_MAP = {"burn_care": "burns", "cardiac_surgery": "cardiac_surgery", "dialysis": "dialysis",
                "emergency_csection": "csection", "mri": "mri", "nicu": "nicu", "trauma_emergency": "trauma"}
 V1_TO_APP = {v: k for k, v in SERVICE_MAP.items()}
+# kb/taxonomy service ids (derived/v2) where they differ from the app's ids (#82 H4). Without this alias v2's
+# trauma_care rows fail the join and trauma silently keeps the interim scores.
+APP_TO_TAXONOMY = {"trauma_emergency": "trauma_care"}
+TAXONOMY_TO_V1 = {APP_TO_TAXONOMY.get(a, a): v1 for a, v1 in SERVICE_MAP.items()}
 MAX_EVIDENCE = 3
 # Facilities the public standard expects to offer acute care (used only for the abstention "outside option").
 PUBLIC_STANDARD = re.compile(r"\b(?:district hospital|sadar hospital|medical college|aiims"
@@ -122,7 +127,8 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     report("facts.duplicates", counts)
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
-        v2["service"] = v2.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+        v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
+        v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
                                                                   "band": "m_band"}), on=["unique_id", "service"],
                     how="left")
@@ -157,6 +163,21 @@ def claims(ids: set[str]) -> dict[str, list]:
     return {r.claim_id: [r.field, r.text, bool(r.nonoffer), r.attribution] for r in c.itertuples(index=False)}
 
 
+def track_bins(path: Path | None = None) -> list[dict]:
+    """Three-outcome track record per score bin from derived/v2/model_card.json (#63, #82 H2); [] until published.
+
+    Expected shape: {"calibration": {"bins": [{"lo", "hi", "n", "k_confirmed", "k_contradicted", "k_no_info",
+    "split"}, ...]}}. A bin missing any count is dropped rather than shown with a made-up zero.
+    """
+    path = path or MODEL_CARD
+    if not path.is_file():
+        return []
+    bins = json.loads(path.read_text()).get("calibration", {}).get("bins", [])
+    keys = ("lo", "hi", "n", "k_confirmed", "k_contradicted", "k_no_info")
+    return [{k: b[k] for k in (*keys, "split") if k in b} | {"split": b.get("split", "dev")}
+            for b in bins if all(isinstance(b.get(k), (int, float)) for k in keys)]
+
+
 def rules() -> dict[str, dict]:
     e = pd.read_parquet(V1 / "evidence_rules.parquet")
     return {r.rule: {"n": int(r.handcheck_true + r.handcheck_false + r.dev_true + r.dev_false),
@@ -183,6 +204,7 @@ def main() -> None:
                  "interim: derived/v1 data_point_scores (likely only when verified true)",
                  "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
         "rules": rules(),
+        "track_bins": track_bins(),
         "fac": {"id": list(f.unique_id), "name": list(f.name), "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
