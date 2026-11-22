@@ -21,15 +21,17 @@ is, and one tap for directions." HEALTH WORKER taps Call. Cut: the PATIENT on a 
 ## Part 2: why you can trust that answer (0:35 to 2:15)
 
 **0:35 the data.** Data stories page. "We were given 10,000 hospital records scraped from the web, and whether
-they are true was up to us. So we audited them first. A quarter carry a sentence about a different hospital,
-from merged sources; 1,171 map points were more than 25 km off, and we moved them. Ask a chatbot, Llama 3.3 70B,
-and it said a Nagpur hospital offers dialysis, confidence 1, from a Mumbai hospital's sentences."
-[REPORT.md, cleaning/geo_identity/summary.json, audit/capabilities/aiq2_rerun_20261122.json]
+they are true was up to us. So we audited them: a quarter carry a sentence about a different hospital, from
+merged sources, and 1,171 map points were more than 25 km off; we moved them. Then we added what the data lacked:
+eight public sources, from NABH accreditation and government trauma centres to blood banks and OpenStreetMap, plus
+a crawl of the hospitals' own websites. A chatbot can't do this: Llama 3.3 70B said a Nagpur hospital offers
+dialysis, confidence 1, from a Mumbai hospital's sentences." [REPORT.md, cleaning/geo_identity/summary.json,
+README.md source table, audit/capabilities/aiq2_rerun_20261122.json]
 
 **1:00 the model.** Tap "Why this place?". "Our model is a calibrated statistical scorecard. Each row is a
-witness: the hospital's own sentence, whether that sentence is really about it, its website, and outside lists we
-added: government trauma centres, NABH accreditation, medical colleges, blood banks, OpenStreetMap and NFHS-5. The
-rows add up to a probability; location is scored separately. Barkat: [96] out of 100." [derived/v2/README.md]
+witness: the hospital's own sentence, whether that sentence is really about it, its own website, and the public
+lists we joined. The rows add up to a probability; location is scored separately. Barkat: [96] out of 100."
+[derived/v2/README.md]
 
 **1:25 the proof.** The dots at the top. "We fixed the rule before fitting, and the transparent model beat fitted
 models and three transformers trained on a Databricks GPU. Then we froze it and opened a sealed test: 25 of 28
