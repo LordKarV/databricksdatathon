@@ -82,9 +82,11 @@ upstream cleaning steps; see `derived/v1/README.md`.
 - **The data problem** (`REPORT.md`, hand-checked):
   - about 14% of records carry a sentence about another facility;
   - 1,367 of 9,869 map points are more than 50 km from their own PIN code.
-- **What the app can confirm today:** 45 of the 8,012 facility-service pairs it serves are confirmed by a second
-  source and shown as "Likely". Every other option says "Not verified: call to confirm", and when nothing is
-  confirmed the app says so.
+- **What the app shows today** (`app/howto/out/how.json`, model v2): of the 7,980 facility-service pairs it
+  serves, 4,507 are "Likely", 314 "Not verified: call to confirm", 3,011 "No service text: call to ask" and 148
+  "Unlikely". On the sealed TEST labels, 25 of the 28 Likely pairs with a verdict were confirmed (0.893
+  [0.728, 0.963], `model/gold/v3/test_eval/results.json`). Every option still says to call first, and when nothing
+  is Likely the app says so.
 - **Ranking quality** on 71 held-out pairs (`model/MODEL_SPEC.md` section 4.2): the prototype scored AUROC 0.776
   [0.680, 0.862], against 0.585 for an LLM judge (llama-3.3-70b) and 0.560 for "any mention". An unfitted expert
   prior did as well (0.789). We report this rather than claim the fitted model beats it.
