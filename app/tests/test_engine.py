@@ -277,3 +277,43 @@ def test_ownership_line_only_when_the_operator_is_unknown():
             if o["operator"] == "public":
                 assert not any("cost" in c["question"] for c in o["call_ahead"]), (o["name"], o["call_ahead"])
     assert {"public", "private"} <= seen
+
+
+def test_likely_options_show_the_values_the_band_rule_tested() -> None:
+    """#121: a Likely card showed location 0.34 (derived/v1 facility trust) while the model's own P_L was above 0.7.
+    Over every served pair, a LIKELY pair's p, p_l and p_e meet derived/v2 model_card band_thresholds.likely."""
+    import json
+
+    from facts.build import MODEL_CARD
+    t = json.loads(MODEL_CARD.read_text())["band_thresholds"]["likely"]
+    n, bad = 0, []
+    for svc, rows in ENGINE.pairs.items():
+        for pr in rows:
+            if ENGINE.model_band(pr) != "LIKELY":
+                continue
+            n += 1
+            shown = ENGINE._exists_where(pr, pr.fi)
+            assert (shown["p_l"], shown["p_e"]) == (pr.model[5], pr.model[6])
+            if pr.model[1] < t["p"] or shown["p_l"] < t["p_location"] or shown["p_e"] < t["p_exists"]:
+                bad.append((svc, ENGINE.fac["name"][pr.fi], pr.model[1], shown["p_l"], shown["p_e"]))
+    assert n > 1000 and not bad, bad[:5]
+
+
+def test_option_p_l_is_the_model_value_not_the_v1_trust_score() -> None:
+    plan = ENGINE.plan("trauma_emergency", 25.6, 85.95, 40, "gps")  # the Pusa demo query from #121
+    assert plan["options"]
+    for o in plan["options"]:
+        pr = ENGINE.index["trauma_emergency"][ENGINE.fid[o["facility_id"]]]
+        assert (o["p_l"], o["p_e"]) == (pr.model[5], pr.model[6])
+        if o["model_band"] == "LIKELY":
+            assert o["p_l"] >= 0.7 and o["p_e"] >= 0.7
+
+
+def test_interim_pairs_keep_the_v1_trust_scores() -> None:
+    pr = ENGINE.pairs["dialysis"][0]
+    old = pr.model
+    try:
+        pr.model = None
+        assert ENGINE._exists_where(pr, pr.fi) == {"p_e": ENGINE.fac["p_e"][pr.fi], "p_l": ENGINE.fac["p_l"][pr.fi]}
+    finally:
+        pr.model = old

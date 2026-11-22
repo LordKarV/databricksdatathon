@@ -4,8 +4,9 @@ The app reads only that file at start-up (standard library, no pandas), the same
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
 counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
 common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
-When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each
-pair and engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
+When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi / p_location / p_exists are
+exported next to each pair and engine.score() uses them; the cards then show the model's own P_L and P_E, not the
+derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -215,6 +216,26 @@ def v2_only(m: pd.DataFrame) -> pd.DataFrame:
     return m[m.m_band.notna()]
 
 
+def band_rule_violations(m: pd.DataFrame, card_path: Path | None = None) -> int:
+    """LIKELY pairs whose exported p, P_L or P_E is below the model card's band_thresholds.likely (#121). The T >= 2
+    term is not in the export, so it is not rechecked here."""
+    card_path = card_path or MODEL_CARD
+    if not card_path.is_file():
+        return 0
+    t = json.loads(card_path.read_text())["band_thresholds"]["likely"]
+    lk = m[m.m_band.str.upper() == "LIKELY"]
+    return int(((lk.m_p < t["p"]) | (lk.m_pl < t["p_location"]) | (lk.m_pe < t["p_exists"])).sum())
+
+
+def check_band_rule(m: pd.DataFrame, card_path: Path | None = None) -> None:
+    """Fail when a served LIKELY pair breaks the rule the How page states. The model is frozen, so a failure is a
+    model or export issue to report, never something to re-band here."""
+    n = band_rule_violations(m, card_path)
+    if n:
+        raise SystemExit(f"{n} derived/v2 LIKELY pairs break band_thresholds.likely in model_card.json: report it to "
+                         "the model owner; do not re-band in the app")
+
+
 def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     dps = pd.read_parquet(V1 / "data_point_scores.parquet", columns=[
         "dp_type", "unique_id", "service", "score", "score_lo", "score_hi", "status", "rule", "q_ev", "score_model"])
@@ -235,16 +256,19 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     m, counts = to_sites(m, sites)
     report("facts.duplicates", counts)
     if V2.is_file():
-        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
+        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
+                                          "p_exists"])
         v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
         v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         bad = set(v2.band.str.upper()) - set(V2_BAND)
         if bad:
             raise SystemExit(f"derived/v2 has bands the app does not map: {sorted(bad)}")
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
-                                                                  "band": "m_band"}), on=["unique_id", "service"],
-                    how="left")
+                                                                  "band": "m_band", "p_location": "m_pl",
+                                                                  "p_exists": "m_pe"}),
+                    on=["unique_id", "service"], how="left")
         m = v2_only(m)
+        check_band_rule(m)
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
@@ -252,7 +276,9 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
         cited.update(ev)
         missing = [c[4:] for c in pre_cols if isinstance(getattr(r, c), (bool,)) and getattr(r, c) is False]
         risks = [c[5:] for c in risk_cols if getattr(r, c) is True] + (["scope"] if r.scope_conflict else [])
-        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper()]
+        # P_L and P_E are the model's own (derived/v2 p_location, p_exists): the values its LIKELY rule tested.
+        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper(), round(float(r.m_pl), 3),
+                  round(float(r.m_pe), 3)]
                  if "m_band" in m.columns and isinstance(r.m_band, str) else None)
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
