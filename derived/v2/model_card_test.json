@@ -1,0 +1,392 @@
+{
+ "about": "Frozen model v2 on the sealed gold v3 TEST, opened once (model/gold/v3/OPENING_LOG.md). Read-only summary of model/gold/v3/test_eval/results.json; model_card.json is unchanged.",
+ "model_version": "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a",
+ "test_predictions_sha256": "1b85f4c81afd936a057d9349247c716f7fa65091931d51e30ccdcef83f6e3ff4",
+ "labels_sha256_full": "3e8c00de50e42022d06427fc46f4b24fbbb829ca18b44abf5bb06c01ef8fba97",
+ "labels_sha256_verdicts": "5ec3e8c33de444a28bda2d6069ae20e0b9f0fbcc2bbd33dc566e6576015bd0cb",
+ "model_card_sha256": "2ca60fa03a5c56c2176c5d981917a3d7eae5bbd3c2b7d6f97061e13b006d3b5d",
+ "code": [
+  "model/gold/v3/test_eval/evaluate.py",
+  "model/gold/v3/test_eval/top1_benchmark.py"
+ ],
+ "intervals": "95%: pair bootstrap (2,000 resamples, seeded) for AUROC, log loss and ECE; Wilson for rates",
+ "verdicts": {
+  "no_info": 90,
+  "confirmed": 47,
+  "contradicted": 13
+ },
+ "service": {
+  "auroc_decided": {
+   "n": 60,
+   "value": 0.819,
+   "ci95": [
+    0.686,
+    0.924
+   ]
+  },
+  "dev_oof_auroc": [
+   0.8,
+   0.72,
+   0.867
+  ],
+  "log_loss_decided": {
+   "value": 0.406,
+   "ci95": [
+    0.295,
+    0.529
+   ],
+   "base_rate": 0.523
+  },
+  "ece5_decided": {
+   "value": 0.068,
+   "ci95": [
+    0.05,
+    0.174
+   ]
+  },
+  "likely_precision_decided": {
+   "k": 25,
+   "n": 28,
+   "rate": 0.893,
+   "ci95": [
+    0.728,
+    0.963
+   ]
+  },
+  "likely_precision_dev": {
+   "n": 120,
+   "k_correct": 102,
+   "rate": 0.85,
+   "wilson95": [
+    0.7753,
+    0.903
+   ]
+  },
+  "auroc_public": {
+   "n": 25,
+   "value": 0.759,
+   "ci95": [
+    0.491,
+    0.958
+   ]
+  },
+  "auroc_private": {
+   "n": 33,
+   "value": 0.852,
+   "ci95": [
+    0.681,
+    0.97
+   ]
+  },
+  "sensitivity_no_info_as_0": {
+   "auroc": {
+    "n": 150,
+    "value": 0.687,
+    "ci95": [
+     0.59,
+     0.78
+    ]
+   },
+   "likely_precision": {
+    "k": 25,
+    "n": 63,
+    "rate": 0.397,
+    "ci95": [
+     0.285,
+     0.52
+    ]
+   }
+  }
+ },
+ "calibration_by_score_bin": [
+  {
+   "bin": 0,
+   "p_min": 0.0,
+   "p_max": 0.2,
+   "n": 2,
+   "mean_p_decided": 0.176,
+   "confirmed_rate": {
+    "k": 0,
+    "n": 2,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.658
+    ]
+   },
+   "dev": {
+    "n_decided": 7,
+    "k_confirmed": 0,
+    "mean_p": 0.168,
+    "confirmed_rate": 0.0,
+    "ci95": [
+     0.0,
+     0.354
+    ]
+   }
+  },
+  {
+   "bin": 1,
+   "p_min": 0.2,
+   "p_max": 0.4,
+   "n": 7,
+   "mean_p_decided": 0.346,
+   "confirmed_rate": {
+    "k": 3,
+    "n": 4,
+    "rate": 0.75,
+    "ci95": [
+     0.301,
+     0.954
+    ]
+   },
+   "dev": {
+    "n_decided": 17,
+    "k_confirmed": 5,
+    "mean_p": 0.316,
+    "confirmed_rate": 0.294,
+    "ci95": [
+     0.133,
+     0.531
+    ]
+   }
+  },
+  {
+   "bin": 2,
+   "p_min": 0.4,
+   "p_max": 0.6,
+   "n": 33,
+   "mean_p_decided": 0.492,
+   "confirmed_rate": {
+    "k": 5,
+    "n": 10,
+    "rate": 0.5,
+    "ci95": [
+     0.237,
+     0.763
+    ]
+   },
+   "dev": {
+    "n_decided": 22,
+    "k_confirmed": 11,
+    "mean_p": 0.535,
+    "confirmed_rate": 0.5,
+    "ci95": [
+     0.307,
+     0.693
+    ]
+   }
+  },
+  {
+   "bin": 3,
+   "p_min": 0.6,
+   "p_max": 0.8,
+   "n": 49,
+   "mean_p_decided": 0.718,
+   "confirmed_rate": {
+    "k": 9,
+    "n": 13,
+    "rate": 0.692,
+    "ci95": [
+     0.424,
+     0.873
+    ]
+   },
+   "dev": {
+    "n_decided": 47,
+    "k_confirmed": 38,
+    "mean_p": 0.697,
+    "confirmed_rate": 0.809,
+    "ci95": [
+     0.675,
+     0.896
+    ]
+   }
+  },
+  {
+   "bin": 4,
+   "p_min": 0.8,
+   "p_max": 1.0,
+   "n": 59,
+   "mean_p_decided": 0.912,
+   "confirmed_rate": {
+    "k": 30,
+    "n": 31,
+    "rate": 0.968,
+    "ci95": [
+     0.838,
+     0.994
+    ]
+   },
+   "dev": {
+    "n_decided": 128,
+    "k_confirmed": 114,
+    "mean_p": 0.913,
+    "confirmed_rate": 0.891,
+    "ci95": [
+     0.825,
+     0.934
+    ]
+   }
+  }
+ ],
+ "location_head": {
+  "counts": {
+   "yes": 114,
+   "unclear": 36
+  },
+  "auroc_yes_no": null,
+  "auroc_yes_no_ci95": null,
+  "why": "no negative rows: AUROC is undefined",
+  "mean_p_yes_no_rows": 0.936,
+  "observed_yes": {
+   "k": 114,
+   "n": 114,
+   "rate": 1.0,
+   "ci95": [
+    0.967,
+    1.0
+   ]
+  }
+ },
+ "existence_head": {
+  "counts": {
+   "yes": 114,
+   "unclear": 36
+  },
+  "auroc_yes_no": null,
+  "auroc_yes_no_ci95": null,
+  "why": "no negative rows: AUROC is undefined",
+  "y_E_rule": {
+   "n": 134,
+   "positives": 114,
+   "negatives": 20,
+   "auroc": 0.617,
+   "auroc_ci95": [
+    0.481,
+    0.743
+   ],
+   "mean_p": 0.931,
+   "observed_rate": {
+    "k": 114,
+    "n": 134,
+    "rate": 0.851,
+    "ci95": [
+     0.781,
+     0.901
+    ]
+   },
+   "ece5": 0.095,
+   "ece5_ci95": [
+    0.041,
+    0.155
+   ]
+  }
+ },
+ "head_source": "derived/v2/facility_service_scores.parquet (p_location, p_exists), model_version column checked equal to the frozen model_version; not in the frozen test_predictions.parquet",
+ "conformal": {
+  "emergency": {
+   "k": 2,
+   "claimed_level": 0.9,
+   "n_queries": 5,
+   "n_informative": 0,
+   "coverage": {
+    "k": 5,
+    "n": 5,
+    "rate": 1.0,
+    "ci95": [
+     0.566,
+     1.0
+    ]
+   }
+  },
+  "planned": {
+   "k": 2,
+   "claimed_level": 0.9,
+   "n_queries": 2,
+   "n_informative": 0,
+   "coverage": {
+    "k": 2,
+    "n": 2,
+    "rate": 1.0,
+    "ci95": [
+     0.342,
+     1.0
+    ]
+   }
+  },
+  "why": "TEST is single pairs drawn one per leakage group, not query lists. Grouping decided TEST pairs by (service, state), model_card's own pseudo-query rule, gives groups of size [2, 3]. A query is informative only if it has more than k pairs and could miss with k picks: none is, so coverage is 1 by construction and says nothing about live queries. The end-to-end top-1 check (e2e_top1_benchmark) is the closest real-query evidence."
+ },
+ "e2e_top1_benchmark": {
+  "current": {
+   "commit": null,
+   "engine_blob": "ac1d10e25c102f603391ea747ab3e467c07e025c",
+   "answered": 38,
+   "n_with_gold_verdict": 8,
+   "confirmed": 8,
+   "contradicted": 0,
+   "unknown": 32,
+   "unknown_no_info": 18,
+   "unknown_no_label": 12,
+   "no_answer": 2,
+   "confirmed_of_decided": {
+    "k": 8,
+    "n": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.676,
+     1.0
+    ]
+   },
+   "decided_by_source": {
+    "e2e": 8
+   },
+   "trauma_top1_emergency_24x7_verdicts": {
+    "no_info": 4,
+    "confirmed": 1
+   }
+  },
+  "alt": {
+   "commit": "6d678af422003e736231e77655b4ef85ba79563c",
+   "engine_blob": "b9e8bb397b928a264760b050d97a94d8e6ac8855",
+   "answered": 38,
+   "n_with_gold_verdict": 8,
+   "confirmed": 8,
+   "contradicted": 0,
+   "unknown": 32,
+   "unknown_no_info": 18,
+   "unknown_no_label": 12,
+   "no_answer": 2,
+   "confirmed_of_decided": {
+    "k": 8,
+    "n": 8,
+    "rate": 1.0,
+    "ci95": [
+     0.676,
+     1.0
+    ]
+   },
+   "decided_by_source": {
+    "e2e": 8
+   },
+   "trauma_top1_emergency_24x7_verdicts": {
+    "no_info": 2,
+    "confirmed": 1
+   }
+  },
+  "alt_is": "app/facts/engine.py at origin/issue-92-emergency-rank (PR #101, emergency nearest-plausible order)",
+  "n_queries": 40,
+  "same_top1": 38
+ },
+ "notes": [
+  "Agent-labelled, not human-checked: no person has read the cited URLs.",
+  "90 of 150 TEST pairs (60%) are no_info; the headline uses the 60 decided pairs, so intervals are wide.",
+  "TEST was opened once; nothing was refitted or retuned on it. model_card.json (DEV) is unchanged.",
+  "P_L and P_E come from derived/v2/facility_service_scores.parquet at the frozen model_version, not from the frozen predictions file.",
+  "Location: 0 'no' and 36 'unclear' of 150; existence: 0 'no' and 36 'unclear'. AUROC on yes/no rows needs both classes.",
+  "ECE intervals are percentile bootstrap; ECE is biased upward in small samples.",
+  "Conformal: 0 informative TEST pseudo-queries (more than k pairs and able to miss); the TEST coverage does not test the top-k claim.",
+  "Public facilities: the AUROC interval includes 0.5, so TEST shows no ranking ability there.",
+  "End-to-end top-1: decided verdicts by gold source {'e2e': 8}; only v3_test is held out from the fit, and e2e labels were drawn from prototype top-1 answers. Trauma top-1s are looked up as trauma_care, which has v3 labels only."
+ ]
+}

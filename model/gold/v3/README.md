@@ -16,7 +16,7 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
 | `test_labels.sha256` | SHA-256 of the TEST labels file | when TEST is labelled |
 | `test_labels.json` | TEST labels, published after the one opening | yes |
 | `OPENING_LOG.md` | the one opening of TEST | written by `seal.py open` |
-| `test_eval/` | the TEST evaluation of frozen model v2 (`evaluate.py`, `results.json`) | yes |
+| `test_eval/` | the TEST evaluation of frozen model v2 (`evaluate.py`, `results.json`; `top1_benchmark.py/.json`) | yes |
 
 ## Sample
 
@@ -138,18 +138,56 @@ Labellers see the name, place and website, never the dataset's claims or the str
 ## TEST results (opened once, 2026-11-22 04:24 UTC; `OPENING_LOG.md`)
 
 Frozen model v2 (model_version `eed29abe...`, test_predictions sha256 `1b85f4c8...6e3ff4`) against the 150 sealed
-labels. Code: `test_eval/evaluate.py`; every number below is in `test_eval/results.json`. Agent-labelled, not
-human-checked. Intervals: 95% pair bootstrap (AUROC, log loss) or Wilson (proportions).
+labels. Code: `test_eval/evaluate.py` and `test_eval/top1_benchmark.py` (run first; it needs `app/facts/out`);
+every number below is in `test_eval/results.json`, and the compact summary for the app, How page and notebook is
+`derived/v2/model_card_test.json` (#66). Agent-labelled, not human-checked. Intervals: 95% pair bootstrap (AUROC,
+log loss, ECE) or Wilson (proportions).
 
 - **Verdicts:** 47 confirmed, 13 contradicted, 90 no_info (60%). Public facilities: 64% no_info, private 57%.
 - **Headline, decided pairs (n 60):**
   - AUROC **0.819 [0.686, 0.924]**, against DEV OOF 0.800 [0.720, 0.867].
-  - Log loss 0.406 [0.295, 0.529], against 0.523 for the base rate. Brier 0.132. ECE (5 bins) 0.068.
+  - Log loss 0.406 [0.295, 0.529], against 0.523 for the base rate. Brier 0.132. ECE (5 bins) 0.068
+    [0.050, 0.174].
   - **LIKELY:** 25 of 28 confirmed, **0.893 [0.728, 0.963]**, against DEV 102 of 120.
 - **By operator (decided):**
   - Private (n 33): AUROC 0.852 [0.681, 0.970].
   - Public (n 25): AUROC 0.759 [0.491, 0.958]. The interval includes 0.5, so TEST does not show ranking ability on
     public facilities, as DEV did not. LIKELY public: 11 of 12.
+- **Calibration by score bin** (model_card's bins, decided pairs; confirmed rate with Wilson 95%, DEV in brackets):
+
+  | p bin | TEST pairs | decided | mean p | TEST confirmed | DEV confirmed |
+  | --- | --- | --- | --- | --- | --- |
+  | 0.0-0.2 | 2 | 2 | 0.18 | 0 of 2, 0.00 [0.00, 0.66] | 0 of 7 [0.00, 0.35] |
+  | 0.2-0.4 | 7 | 4 | 0.35 | 3 of 4, 0.75 [0.30, 0.95] | 5 of 17 [0.13, 0.53] |
+  | 0.4-0.6 | 33 | 10 | 0.49 | 5 of 10, 0.50 [0.24, 0.76] | 11 of 22 [0.31, 0.69] |
+  | 0.6-0.8 | 49 | 13 | 0.72 | 9 of 13, 0.69 [0.42, 0.87] | 38 of 47 [0.68, 0.90] |
+  | 0.8-1.0 | 59 | 31 | 0.91 | 30 of 31, 0.97 [0.84, 0.99] | 114 of 128 [0.82, 0.93] |
+
+  Every TEST interval overlaps its DEV interval; the low bins hold too few decided pairs to say more.
+- **Location and existence heads** (P_L, P_E from `derived/v2/facility_service_scores.parquet`; its model_version
+  column equals the frozen one. They are not in the frozen predictions file):
+  - Labels: 114 yes, 36 unclear, **no "no"** for either `location_ok` or `exists` (the same 36 rows). AUROC on
+    yes/no rows is undefined for both heads.
+  - Location: mean P_L 0.936 on the 114 yes rows, all yes (Wilson [0.967, 1.0]); 92% have P_L of at least 0.7.
+  - Existence, on the DEV target rule (`y_E`: unclear after a search counts as 0; 114 yes, 20 searched unclear):
+    AUROC **0.617 [0.481, 0.743]**, mean P_E 0.931 against 0.851 observed, ECE 0.095 [0.041, 0.155]. The interval
+    includes 0.5: TEST does not show that P_E separates findable from unfindable facilities.
+- **Conformal (model_card k 2 at 90%):** TEST is single pairs, not query lists. model_card's own pseudo-query rule
+  ((service, state) groups of decided pairs) gives 5 emergency and 2 planned groups of 2 or 3 pairs, none with more
+  pairs than k that could miss. Coverage is 1 by construction (5 of 5, 2 of 2) and does not test the claim.
+- **End-to-end top-1 on the 40 benchmark queries** (`model/gold/queries.json`; options[0] of `Engine.plan`, scored
+  against all gold: v1, v2, e2e, v3 DEV and TEST):
+
+  | | current dev engine | PR #101 engine (emergency nearest-plausible) |
+  | --- | --- | --- |
+  | answered | 38 | 38 |
+  | with a gold verdict | 8 | 8 |
+  | confirmed / contradicted | 8 / 0, 1.00 [0.68, 1.00] | 8 / 0, 1.00 [0.68, 1.00] |
+  | unknown (no_info / no label) | 18 / 12 | 18 / 12 |
+
+  - The two engines differ on 2 trauma queries, neither with a label.
+  - All 8 verdicts are e2e labels, drawn from prototype top-1 answers and used in the fit. No top-1 is a TEST pair.
+  - Trauma top-1s are scored as trauma_care, which has v3 labels only.
 - **Sensitivity (MODEL_SPEC 3.2, no_info counted as not offered, n 150):** AUROC 0.687 [0.590, 0.780]. LIKELY is
   confirmed on 25 of 63 (0.397). Most of the drop is pairs with no findable web evidence, not contradictions.
 - **Method:**
