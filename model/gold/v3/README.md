@@ -14,8 +14,9 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
 | `merge_labels.py` | merges labelling batches, computes kappa and the no_info rates | yes |
 | `seal.py` | commitment scheme for the TEST labels | yes |
 | `test_labels.sha256` | SHA-256 of the TEST labels file | when TEST is labelled |
-| `test_labels.json` | TEST labels | **no**: kept by the custodian until the model freeze below |
+| `test_labels.json` | TEST labels, published after the one opening | yes |
 | `OPENING_LOG.md` | the one opening of TEST | written by `seal.py open` |
+| `test_eval/` | the TEST evaluation of frozen model v2 (`evaluate.py`, `results.json`) | yes |
 
 ## Sample
 
@@ -134,5 +135,36 @@ Labellers see the name, place and website, never the dataset's claims or the str
    `OPENING_LOG.md`, and refuses a second. Then publish `test_labels.json` unchanged. Anyone can run
    `python model/gold/v3/seal.py verify --labels model/gold/v3/test_labels.json`.
 
-Status: TEST is redrawn and not yet labelled (130 of 150 pairs need labels; 20 carry over from the discarded draw,
-same facility and service). Labelling needs the web-search budget; it is not sealed.
+## TEST results (opened once, 2026-11-22 04:24 UTC; `OPENING_LOG.md`)
+
+Frozen model v2 (model_version `eed29abe...`, test_predictions sha256 `1b85f4c8...6e3ff4`) against the 150 sealed
+labels. Code: `test_eval/evaluate.py`; every number below is in `test_eval/results.json`. Agent-labelled, not
+human-checked. Intervals: 95% pair bootstrap (AUROC, log loss) or Wilson (proportions).
+
+- **Verdicts:** 47 confirmed, 13 contradicted, 90 no_info (60%). Public facilities: 64% no_info, private 57%.
+- **Headline, decided pairs (n 60):**
+  - AUROC **0.819 [0.686, 0.924]**, against DEV OOF 0.800 [0.720, 0.867].
+  - Log loss 0.406 [0.295, 0.529], against 0.523 for the base rate. Brier 0.132. ECE (5 bins) 0.068.
+  - **LIKELY:** 25 of 28 confirmed, **0.893 [0.728, 0.963]**, against DEV 102 of 120.
+- **By operator (decided):**
+  - Private (n 33): AUROC 0.852 [0.681, 0.970].
+  - Public (n 25): AUROC 0.759 [0.491, 0.958]. The interval includes 0.5, so TEST does not show ranking ability on
+    public facilities, as DEV did not. LIKELY public: 11 of 12.
+- **Sensitivity (MODEL_SPEC 3.2, no_info counted as not offered, n 150):** AUROC 0.687 [0.590, 0.780]. LIKELY is
+  confirmed on 25 of 63 (0.397). Most of the drop is pairs with no findable web evidence, not contradictions.
+- **Method:**
+  - 107 searched pairs, 43 fetch-only. The search budget ran out twice.
+  - Decided fetch-only pairs (n 12): AUROC 0.829 [0.531, 1.0].
+  - no_info rate: searched 55%, fetch-only 72%.
+- **Agreement on the 38 double-labelled pairs:** 81.6% raw.
+  - Kappa 0.624 on the verdict, 0.598 on decided vs no_info.
+  - **No confirmed vs contradicted disagreement.** All 7 disagreements are one labeller finding evidence and the
+    other not.
+- **Custody:**
+  - One custodian session (tm-AA2026) ran every batch, after the reassignment on #51 on the owner's decision.
+    Each batch was a separate blind subagent that saw only its batch's inputs and the rubric. B never saw A.
+  - The custodian checked only the schema before the seal.
+  - A relabel of 23 public fetch-only pairs (A07) got search on 3 before the budget ended. Only those 3 searched
+    rows replaced earlier labels, a rule set by method and never by verdict. The full A07 file is kept off the
+    repo for audit.
+  - In OPENING_LOG.md, the "who" field was changed from the machine's login to the agent name before commit.

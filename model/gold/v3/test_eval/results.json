@@ -1,0 +1,453 @@
+{
+ "about": "Gold v3 TEST, opened once (OPENING_LOG.md), against frozen model v2 predictions. Agent-labelled, not human-checked.",
+ "model_version": "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a",
+ "test_predictions_sha256": "1b85f4c81afd936a057d9349247c716f7fa65091931d51e30ccdcef83f6e3ff4",
+ "verdicts": {
+  "no_info": 90,
+  "confirmed": 47,
+  "contradicted": 13
+ },
+ "pairs_by_method": {
+  "search": 107,
+  "fetch_only": 43
+ },
+ "headline_decided": {
+  "n": 60,
+  "confirmed": 47,
+  "contradicted": 13,
+  "auroc": 0.819,
+  "auroc_ci95": [
+   0.686,
+   0.924
+  ],
+  "log_loss": 0.406,
+  "log_loss_ci95": [
+   0.295,
+   0.529
+  ],
+  "base_rate_log_loss": 0.523,
+  "brier": 0.132,
+  "ece5": 0.068,
+  "mean_p": 0.738,
+  "confirmed_rate": 0.783,
+  "LIKELY_confirmed": {
+   "k": 25,
+   "n": 28,
+   "rate": 0.893,
+   "ci95": [
+    0.728,
+    0.963
+   ]
+  },
+  "CALL_FIRST_confirmed": {
+   "k": 0,
+   "n": 0,
+   "rate": null,
+   "ci95": null
+  },
+  "NO_SERVICE_TEXT_confirmed": {
+   "k": 20,
+   "n": 28,
+   "rate": 0.714,
+   "ci95": [
+    0.529,
+    0.847
+   ]
+  },
+  "UNLIKELY_confirmed": {
+   "k": 2,
+   "n": 4,
+   "rate": 0.5,
+   "ci95": [
+    0.15,
+    0.85
+   ]
+  }
+ },
+ "sensitivity_no_info_as_0": {
+  "n": 150,
+  "confirmed": 47,
+  "contradicted": 103,
+  "auroc": 0.687,
+  "auroc_ci95": [
+   0.59,
+   0.78
+  ],
+  "log_loss": 1.046,
+  "log_loss_ci95": [
+   0.902,
+   1.195
+  ],
+  "base_rate_log_loss": 0.622,
+  "brier": 0.361,
+  "ece5": 0.407,
+  "mean_p": 0.713,
+  "confirmed_rate": 0.313,
+  "LIKELY_confirmed": {
+   "k": 25,
+   "n": 63,
+   "rate": 0.397,
+   "ci95": [
+    0.285,
+    0.52
+   ]
+  },
+  "CALL_FIRST_confirmed": {
+   "k": 0,
+   "n": 11,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.259
+   ]
+  },
+  "NO_SERVICE_TEXT_confirmed": {
+   "k": 20,
+   "n": 72,
+   "rate": 0.278,
+   "ci95": [
+    0.188,
+    0.39
+   ]
+  },
+  "UNLIKELY_confirmed": {
+   "k": 2,
+   "n": 4,
+   "rate": 0.5,
+   "ci95": [
+    0.15,
+    0.85
+   ]
+  }
+ },
+ "by_operator_decided": {
+  "private": {
+   "n": 33,
+   "confirmed": 26,
+   "contradicted": 7,
+   "auroc": 0.852,
+   "auroc_ci95": [
+    0.681,
+    0.97
+   ],
+   "log_loss": 0.386,
+   "log_loss_ci95": [
+    0.262,
+    0.521
+   ],
+   "base_rate_log_loss": 0.517,
+   "brier": 0.128,
+   "ece5": 0.123,
+   "mean_p": 0.688,
+   "confirmed_rate": 0.788,
+   "LIKELY_confirmed": {
+    "k": 13,
+    "n": 15,
+    "rate": 0.867,
+    "ci95": [
+     0.621,
+     0.963
+    ]
+   },
+   "CALL_FIRST_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "NO_SERVICE_TEXT_confirmed": {
+    "k": 12,
+    "n": 15,
+    "rate": 0.8,
+    "ci95": [
+     0.548,
+     0.93
+    ]
+   },
+   "UNLIKELY_confirmed": {
+    "k": 1,
+    "n": 3,
+    "rate": 0.333,
+    "ci95": [
+     0.061,
+     0.792
+    ]
+   }
+  },
+  "public": {
+   "n": 25,
+   "confirmed": 19,
+   "contradicted": 6,
+   "auroc": 0.759,
+   "auroc_ci95": [
+    0.491,
+    0.958
+   ],
+   "log_loss": 0.456,
+   "log_loss_ci95": [
+    0.26,
+    0.711
+   ],
+   "base_rate_log_loss": 0.551,
+   "brier": 0.147,
+   "ece5": 0.032,
+   "mean_p": 0.792,
+   "confirmed_rate": 0.76,
+   "LIKELY_confirmed": {
+    "k": 11,
+    "n": 12,
+    "rate": 0.917,
+    "ci95": [
+     0.646,
+     0.985
+    ]
+   },
+   "CALL_FIRST_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "NO_SERVICE_TEXT_confirmed": {
+    "k": 7,
+    "n": 12,
+    "rate": 0.583,
+    "ci95": [
+     0.32,
+     0.807
+    ]
+   },
+   "UNLIKELY_confirmed": {
+    "k": 1,
+    "n": 1,
+    "rate": 1.0,
+    "ci95": [
+     0.207,
+     1.0
+    ]
+   }
+  },
+  "unknown": {
+   "n": 2,
+   "confirmed": 2,
+   "contradicted": 0,
+   "auroc": null,
+   "auroc_ci95": null,
+   "log_loss": 0.114,
+   "log_loss_ci95": [
+    0.086,
+    0.141
+   ],
+   "base_rate_log_loss": -0.0,
+   "brier": 0.012,
+   "ece5": 0.107,
+   "mean_p": 0.893,
+   "confirmed_rate": 1.0,
+   "LIKELY_confirmed": {
+    "k": 1,
+    "n": 1,
+    "rate": 1.0,
+    "ci95": [
+     0.207,
+     1.0
+    ]
+   },
+   "CALL_FIRST_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "NO_SERVICE_TEXT_confirmed": {
+    "k": 1,
+    "n": 1,
+    "rate": 1.0,
+    "ci95": [
+     0.207,
+     1.0
+    ]
+   },
+   "UNLIKELY_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   }
+  }
+ },
+ "by_method_decided": {
+  "fetch_only": {
+   "n": 12,
+   "confirmed": 7,
+   "contradicted": 5,
+   "auroc": 0.829,
+   "auroc_ci95": [
+    0.531,
+    1.0
+   ],
+   "log_loss": 0.518,
+   "log_loss_ci95": [
+    0.256,
+    0.802
+   ],
+   "base_rate_log_loss": 0.679,
+   "brier": 0.182,
+   "ece5": 0.169,
+   "mean_p": 0.703,
+   "confirmed_rate": 0.583,
+   "LIKELY_confirmed": {
+    "k": 5,
+    "n": 6,
+    "rate": 0.833,
+    "ci95": [
+     0.436,
+     0.97
+    ]
+   },
+   "CALL_FIRST_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "NO_SERVICE_TEXT_confirmed": {
+    "k": 2,
+    "n": 5,
+    "rate": 0.4,
+    "ci95": [
+     0.118,
+     0.769
+    ]
+   },
+   "UNLIKELY_confirmed": {
+    "k": 0,
+    "n": 1,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.793
+    ]
+   }
+  },
+  "search": {
+   "n": 48,
+   "confirmed": 40,
+   "contradicted": 8,
+   "auroc": 0.816,
+   "auroc_ci95": [
+    0.63,
+    0.954
+   ],
+   "log_loss": 0.378,
+   "log_loss_ci95": [
+    0.258,
+    0.517
+   ],
+   "base_rate_log_loss": 0.451,
+   "brier": 0.119,
+   "ece5": 0.095,
+   "mean_p": 0.747,
+   "confirmed_rate": 0.833,
+   "LIKELY_confirmed": {
+    "k": 20,
+    "n": 22,
+    "rate": 0.909,
+    "ci95": [
+     0.722,
+     0.975
+    ]
+   },
+   "CALL_FIRST_confirmed": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   },
+   "NO_SERVICE_TEXT_confirmed": {
+    "k": 18,
+    "n": 23,
+    "rate": 0.783,
+    "ci95": [
+     0.581,
+     0.903
+    ]
+   },
+   "UNLIKELY_confirmed": {
+    "k": 2,
+    "n": 3,
+    "rate": 0.667,
+    "ci95": [
+     0.208,
+     0.939
+    ]
+   }
+  }
+ },
+ "no_info_by_operator": {
+  "private": {
+   "k": 44,
+   "n": 77,
+   "rate": 0.571,
+   "ci95": [
+    0.46,
+    0.676
+   ]
+  },
+  "public": {
+   "k": 45,
+   "n": 70,
+   "rate": 0.643,
+   "ci95": [
+    0.526,
+    0.745
+   ]
+  },
+  "unknown": {
+   "k": 1,
+   "n": 3,
+   "rate": 0.333,
+   "ci95": [
+    0.061,
+    0.792
+   ]
+  }
+ },
+ "by_service_decided": {
+  "burn_care": {
+   "n": 6,
+   "confirmed": 4
+  },
+  "cardiac_surgery": {
+   "n": 6,
+   "confirmed": 4
+  },
+  "dialysis": {
+   "n": 4,
+   "confirmed": 2
+  },
+  "emergency_24x7": {
+   "n": 7,
+   "confirmed": 7
+  },
+  "emergency_csection": {
+   "n": 7,
+   "confirmed": 7
+  },
+  "mri": {
+   "n": 7,
+   "confirmed": 5
+  },
+  "nicu": {
+   "n": 8,
+   "confirmed": 8
+  },
+  "stemi_thrombolysis": {
+   "n": 3,
+   "confirmed": 3
+  },
+  "trauma_care": {
+   "n": 12,
+   "confirmed": 7
+  }
+ }
+}
