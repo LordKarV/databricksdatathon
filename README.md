@@ -2,7 +2,9 @@
 
 A health worker in rural India types a service (dialysis, emergency caesarean, accident care) and gets whom to call
 first, two backups and the one question to ask on the phone, each with the facility's own words as evidence and
-how sure we are, in plain language. It reads a messy public facility list honestly. It says "call to confirm"
+how sure we are, in plain language. The facility list we were given was messy; the one the app uses is much
+cleaner (duplicates removed, map points and states repaired, see Limits). What remains is mostly service claims
+nobody can verify from the web, plus phone and hours facts no listing carries. So the app says "call to confirm"
 instead of guessing, and it keeps working offline on a cheap phone.
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
@@ -95,10 +97,40 @@ then.
 
 ## Limits
 
+**What the cleaning fixed** (`cleaning/geo_identity/summary.json`, before -> after):
+- duplicate records: 9,970 -> 9,959;
+- map points outside India: 6 -> 0;
+- listing points more than 50 km from their PIN code: 1,405 of 9,672 -> 1,367 of 9,869 (against the repaired
+  PIN centres; the conflicts left are settled by rule and flagged, and 1,171 ranking points moved more than 25 km);
+- busy PIN codes whose centre is more than 25 km from their facilities' median point: 78 -> 43 (of 1,051);
+- records with a resolved state: 9,877 -> 9,927.
+
+**What remains** (no cleaning can fix these from the data we have):
+- **Service claims are mostly unverifiable.** On the sealed gold TEST, 90 of 150 pairs (60%) are no_info: no
+  public page confirms or contradicts the claim. Public facilities 64%, private 57%; DEV 166 of 300 (55%)
+  (`model/gold/v3/test_eval/results.json`, `model/gold/v3/README.md`).
+- **Public facilities: ranking is not shown.** On 25 decided public TEST pairs, AUROC is 0.759 [0.491, 0.958]. The
+  interval includes 0.5, and DEV did not show it either. Private: 0.852 [0.681, 0.970].
+- **Listings omit services.** On TEST, 20 of 28 decided NO_SERVICE_TEXT pairs (no sentence of their own about the
+  service) were confirmed on the web. A missing sentence is not evidence that a service is missing.
+- **Phones are unverified.** 9,548 of 9,959 records (96%) list a number (`records_with_display_phone`); none has
+  been checked to reach the facility.
+- **Locations:** 1,680 map points are low-confidence (1,142) or disputed (538). 868 are placed at a postcode
+  centre and 235 at a city centre (`loc_conf`, `loc_src`).
+- **No checked opening hours, 24x7 status or live capacity.** The provided table has no hours field. 4,320 of
+  9,959 records say anything about hours, only in free text (notebook section 9), and OpenStreetMap adds 134
+  opening_hours facts (`kb/opendata/OPENDATA.md`); none is checked. Bed capacity is missing on 7,454 of 9,970 raw
+  records (`REPORT.md`, claims-09). Nothing says whether a bed or a slot is free today.
+- **Labels are agent-made** from public web pages, not from phone calls or visits. A human spot-check of 25 pairs
+  is set up (PR #105, `model/gold/v3/human_check/`) and not yet done.
 - Rural coverage is thin: 260 of 9,959 records are in Bihar.
-- Labels come from public web pages, not from phone calls or visits.
-- The data says nothing about whether a bed or a slot is free today, which is why every answer ends with a call.
 - Travel times are rough estimates, shown as ranges.
+
+That is why every answer ends with "call first".
+
+**Paths forward:**
+- **Field reports:** the app's call-outcome reports (#65) are the path for phones, hours and turn-aways.
+- **An official public-facility source** (for example, state health department lists) is future work.
 
 ## Data sources and licences
 

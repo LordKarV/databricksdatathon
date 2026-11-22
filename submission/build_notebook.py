@@ -391,8 +391,8 @@ def show(plan: dict, n: int = 3) -> None:
                   f"chance {s['p']:.2f}, {s['n_evidence']} evidence lines")
         if r["vs_direct"]:
             v = r["vs_direct"]
-            print(f"   vs going straight to {v['direct_name']} ({v['direct_minutes']} min): chance of care in time "
-                  f"{v['direct_p_objective']:.2f} direct against {v['plan_p_objective']:.2f} with this route")
+            print(f"   vs direct: {v['text']} Chance of care in time {v['direct_p_objective']:.2f} direct against "
+                  f"{v['plan_p_objective']:.2f} with this route")
 ''')
 
 code('''
@@ -422,18 +422,75 @@ else:
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
-md("## 9. Limits")
+md("""
+## 9. Limits
+
+The dataset the app uses is much cleaner than the one we were given: the first cell below shows what the cleaning
+fixed. What remains is mostly service claims nobody can verify from the web, plus phone and hours facts no listing
+carries. That is why the app says "call first". Every number is read from the named file.
+""")
+
+code('''
+geo = json.loads((ROOT / "cleaning/geo_identity/summary.json").read_text())
+far = geo["coords_gt50km_from_pin_before(audit)_after(repaired)"]
+busy = geo["busy_pins_gt25km_from_facility_median_before_after"]
+print("What the cleaning fixed (cleaning/geo_identity/summary.json, before -> after):")
+for label, (a, b) in [("duplicate records", geo["rows_before_after_dedup"]),
+                      ("map points outside India", geo["coords_outside_india_before_used_after"]),
+                      ("records with a resolved state", geo["stated_state_resolved_before_after"])]:
+    print(f"  {label:58} {a:>6,} -> {b:,}")
+print(f"  {'listing points > 50 km from their PIN (repaired PIN centres)':58} {far[0][0]:>6,} -> {far[1][0]:,}"
+      f"  (of {far[0][1]:,} -> {far[1][1]:,} measurable)")
+print(f"  {'busy PIN centres > 25 km from their facilities median':58} {busy[0]:>6,} -> {busy[1]:,}  (of {busy[2]:,})")
+''')
 
 code('''
 h = json.loads((ROOT / "app/howto/out/how.json").read_text())["facts"]
+test = json.loads((ROOT / "model/gold/v3/test_eval/results.json").read_text())
+dev = json.loads((ROOT / "model/gold/v3/dev_labels.json").read_text())["report"]
+v, ni = test["verdicts"], test["no_info_by_operator"]
+pub, prv = test["by_operator_decided"]["public"], test["by_operator_decided"]["private"]
+nst = test["headline_decided"]["NO_SERVICE_TEXT_confirmed"]
+trust = geo["trust"]
+n_rec = geo["rows_before_after_dedup"][1]
+lc = geo["loc_conf"]
+src = geo["loc_src"]
+cap = next(r for r in how.table("REPORT.md", "Service claim evidence")["rows"] if r[0] == "claims-09")[2]
+cap = cap.split(";")[0]
+assert cap.startswith("Capacity missing"), cap
+ci = lambda x: f"[{x[0]:.3f}, {x[1]:.3f}]"  # noqa: E731
+n_test = sum(v.values())
+print("What remains (gold v3: model/gold/v3/test_eval/results.json and dev_labels.json):")
+print(f"- Service claims are mostly unverifiable: {v['no_info']} of {n_test} TEST pairs "
+      f"({v['no_info'] / n_test:.0%}) are no_info; public {ni['public']['rate']:.0%}, private "
+      f"{ni['private']['rate']:.0%}. DEV: {dev['verdicts']['no_info']} of {dev['pairs']} ({dev['no_info_rate']:.0%}).")
+print(f"- Public facilities, ranking not shown: TEST AUROC {pub['auroc']:.3f} {ci(pub['auroc_ci95'])} on "
+      f"{pub['n']} decided public pairs; the interval includes 0.5, as on DEV. "
+      f"Private: {prv['auroc']:.3f} {ci(prv['auroc_ci95'])}.")
+print(f"- Listings omit services: {nst['k']} of {nst['n']} decided TEST pairs with no sentence of their own about "
+      "the service (NO_SERVICE_TEXT) were confirmed on the web.")
+print(f"- Phones are unverified: {trust['records_with_display_phone']:,} of {n_rec:,} records "
+      f"({trust['records_with_display_phone'] / n_rec:.0%}) list a number; none has been checked to reach the "
+      "facility.")
+print(f"- Locations: {lc['low'] + lc['disputed']:,} map points are low-confidence ({lc['low']:,}) or disputed "
+      f"({lc['disputed']:,}); {src['postcode_centre']:,} sit at a postcode centre and {src['address_city_centre']:,} "
+      "at a city centre.")
+print(f"- No checked opening hours, 24x7 status or live capacity: the provided table has no hours field; "
+      f"{h['hours_records']['value']:,} of {h['hours_records']['of']:,} records say anything about hours, only in "
+      "free text, and OpenStreetMap adds 134 opening_hours facts (kb/opendata/OPENDATA.md); none is checked. Bed "
+      f"capacity: {cap.lower()} raw records (REPORT.md claims-09). Nothing says whether a bed or a slot is free today.")
+print("- Gold labels are agent-made from public web pages, not phone calls or visits. A human spot-check of 25 pairs "
+      "is set up (PR #105, model/gold/v3/human_check/) and not yet done.")
 print(f"- Thin rural coverage: {h['bihar_records']['value']:,} of {h['bihar_records']['of']:,} records are in Bihar.")
 print(f"- Only {h['app_likely']['value']} of {h['app_pairs']['value']:,} facility-service pairs the app serves are "
       "confirmed by a second source; everything else is 'call first'.")
-print("- Labels come from public web pages, not from phone calls or visits.")
-print(f"- Opening hours: {h['hours_records']['value']:,} of {h['hours_records']['of']:,} records mention hours at all; "
-      "nothing says whether a bed or a slot is free today.")
 print("- Travel times are rough estimates (straight line times a road factor), shown as ranges.")
 ''')
+
+md("""
+**Paths forward.** The app's call-outcome reports (#65, section 9b) are the path for phones, hours and
+turn-aways. An official public-facility source, such as state health department lists, is future work.
+""")
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("""
