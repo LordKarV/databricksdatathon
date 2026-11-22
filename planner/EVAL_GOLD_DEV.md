@@ -5,6 +5,11 @@ Question: when the planner picks a definitive facility, is it one the gold label
 Run: `.venv/bin/python planner/eval_gold_dev.py` (after `planner/export_v1.py`). Output:
 `planner/out_eval/gold_dev.json` (git-ignored). TEST pairs are never read.
 
+Databricks: `planner/eval_gold_dev_notebook.py` is the same evaluation in notebook format. With
+`PLANNER_EVAL_SOURCE=uc` it reads `gold_pairs` (dev rows only), `grades`, `facility_location`,
+`pin_gazetteer`, `claims` and `data_point_scores` from `workspace.referral_saathi`. The local path
+was run; the Unity Catalog path has not been run on a workspace.
+
 ## Setup
 
 - 63 gold DEV pairs whose service has a pathway (burns 10, dialysis 13, trauma 13, C-section 14,
@@ -50,9 +55,11 @@ none.
    lends a discounted probability to the ones it implies, shown on the stop as "implied by a
    strongly evidenced ...", with no quote attached. 18 of the 63 best plans use one: laboratory 8,
    nephrology 8, blood transfusion 7, IV fluids 1. It changed the pick in 13 queries.
-3. Blood from the blood-centre list: built and tested on synthetic fixtures, NOT measured. The
-   e-RaktKosh outputs are not in git, so every number above still takes blood from record text or
-   from the caesarean implication.
+3. Blood from the blood-centre list. The e-RaktKosh outputs are not in git, so the table above was
+   run without them (blood from record text or from the caesarean implication). The lead ran the
+   list-based path on the machine that has them (365 matched facilities, 5,230 centres) and
+   reported on issue #70: the planner picks the gold facility 13 of 20 times when it is confirmed
+   and 0 of 4 times when it is contradicted. That run's full table is not in this file.
 
 ## What is still missed
 
@@ -74,5 +81,7 @@ four. With 4 cases the intervals overlap.
 - Stub probabilities, estimated travel. Numbers will change with the fitted model.
 - The strengths of the implications (0.6 to 0.9) and the "strongly evidenced" cut (0.75) are
   assumptions. They were set once, before this run, and were not tuned on these labels.
-- The ranking change was made after seeing these results, so its gain is in-sample for that one
-  decision.
+- The ranking of scheduled plans (least travel first) was chosen after seeing these DEV results.
+  Its gain here is in-sample for that decision. Only the sealed TEST evaluation (issue #66) counts
+  as independent evidence for it. The lead reviewed the change and kept it as clinically sound for
+  dialysis three times a week.

@@ -23,13 +23,16 @@ How the stub probability is made (this is a placeholder, not a fitted model):
 Needs pandas and pyarrow. The planner core does not.
 """
 import json
+import os
 import re
 from pathlib import Path
 
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-V1 = ROOT / "derived" / "v1"
+# DATATHON_ROOT moves the data root (for example a Databricks Volume holding derived/v1); code stays in ROOT
+DATA_ROOT = Path(os.environ.get("DATATHON_ROOT") or ROOT)
+V1 = DATA_ROOT / "derived" / "v1"
 CAPS = ROOT / "kb" / "pathways" / "capabilities.json"
 NO_MENTION_P = 0.02   # assumption: chance a capability exists when the record never mentions it
 MAX_EVIDENCE = 3

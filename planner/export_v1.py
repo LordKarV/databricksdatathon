@@ -12,6 +12,7 @@ Run: .venv/bin/python planner/export_v1.py        (needs pandas and pyarrow; abo
 """
 import gzip
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -21,9 +22,10 @@ sys.path.insert(0, str(ROOT))
 
 import pandas as pd  # noqa: E402
 
-from planner.data_v1 import NO_MENTION_P, V1, V1Store  # noqa: E402
+from planner.data_v1 import DATA_ROOT, NO_MENTION_P, V1, V1Store  # noqa: E402
 
-OUT = Path(__file__).resolve().parent / "out" / "planner_v1.json.gz"
+# PLANNER_OUT moves the output folder (for example when the code folder is read-only)
+OUT = Path(os.environ.get("PLANNER_OUT") or Path(__file__).resolve().parent / "out") / "planner_v1.json.gz"
 
 
 def pins():
@@ -34,7 +36,7 @@ def pins():
             "s": [code[s] for s in g.state]}
 
 
-ERK = ROOT / "data" / "external" / "eraktkosh_blood_centres"
+ERK = DATA_ROOT / "data" / "external" / "eraktkosh_blood_centres"
 
 
 def blood(idx):
@@ -74,7 +76,7 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with gzip.open(OUT, "wt", encoding="utf-8") as fh:
         json.dump(doc, fh, separators=(",", ":"))
-    print(f"wrote {OUT.relative_to(ROOT)}: {len(fac)} facilities, {len(caps)} capabilities, {len(doc['pins']['s'])} PIN "
+    print(f"wrote {OUT}: {len(fac)} facilities, {len(caps)} capabilities, {len(doc['pins']['s'])} PIN "
           f"centroids, {OUT.stat().st_size / 1024:.0f} KB")
     if doc["blood"]:
         print(f"  blood list: {len(doc['blood']['matched'])} matched facilities, {len(doc['blood']['centres']['lat'])} centres")
