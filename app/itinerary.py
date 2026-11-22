@@ -163,13 +163,23 @@ def _has(groups: list[list[str]]) -> str:
     return words[0] if len(words) == 1 else f"{', '.join(words[:-1])} and {words[-1]}"
 
 
-def lead_lines(route: dict, options: list[dict], first_stop: dict | None, note: str | None) -> dict[str, str]:
+def lead_lines(route: dict, options: list[dict], first_stop: dict | None, note: str | None,
+               window_min: int | None = None) -> dict[str, str]:
     """{facility_id: line} for an emergency whose route starts elsewhere than option 1 (#121): the route's first stop
-    leads the cards with the stop_1_note reason in the positive, and the former option 1 says what it lacks."""
+    leads the cards with the stop_1_note reason in the positive, and the former option 1 says what it lacks. When the
+    route goes straight to definitive care inside the window and the former option 1 can give first care, that one
+    is framed as the nearer first-care place, never as the best option (lead on #126, item 4)."""
     s, d, y = route["stops"][0], route["stops"][-1], options[0]
     fs = first_stop if first_stop and first_stop["facility_id"] == y["facility_id"] else {}
     need = (fs.get("missing_first_care") if fs.get("in_data") and not fs.get("first_care") else
             fs.get("missing_definitive") if s is d else None)
+    if s is d and fs.get("in_data") and fs.get("first_care") and window_min and d["eta_high"] <= window_min \
+            and y["travel"]["minutes"] < s["eta_low"]:  # "Nearer" only when it is
+        has = f"; it has evidence of {_has(need)}, which {y['name']} does not show" if need else ""
+        lacks = f"; our data shows no evidence of {_lacks(need)} here" if need else ""
+        return {s["facility_id"]: f"Go here directly: definitive care within the {window_min}-minute window{has}.",
+                y["facility_id"]: f"Nearer: can give first care in about {y['travel']['minutes']} min if the patient "
+                                  f"needs it sooner{lacks}."}
     if not need:
         return {s["facility_id"]: f"First: {note[0].lower()}{note[1:]}" if note else "First: the suggested route starts here."}
     # "Nearest" only when it is nearer than every option and the low end of the stop's own estimate
@@ -250,7 +260,8 @@ def lead_with_route(plan: dict, eng: Engine) -> dict:
             or route["stops"][0]["facility_id"] == plan["options"][0]["facility_id"]:
         return plan
     loc = plan["location"]
-    lead = lead_lines(route, plan["options"], first_stop, it["stop_1_note"])
+    window = (plan.get("time_window") or {}).get("window_min")
+    lead = lead_lines(route, plan["options"], first_stop, it["stop_1_note"], window)
     fresh = eng.plan(plan["query"]["service"], loc["lat"], loc["lon"], loc["accuracy_m"], loc["source"], lead=lead)
     head, minutes = fresh["options"][0], fresh["options"][0]["travel"]["minutes"]
     if head["facility_id"] == route["stops"][0]["facility_id"] and (
