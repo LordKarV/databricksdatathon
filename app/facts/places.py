@@ -17,6 +17,10 @@ MAX_MATCHES = 6
 _SUFFIX = re.compile(r"\s+(district|dist|zila|zilla|jila)$")
 _KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is more precise than a district centre
 _GAZ_KIND = {"city": "town", "office": "post_office"}
+# A PIN as people copy it: "848 125" (India Post prints it so), "848-125", "PIN 848125", "pin: 848125", "848125.".
+# Same rule as pinOf() in static/app.js, which the offline path uses.
+_PIN = re.compile(r"(?:(?:pin|पिन)(?:\s*code|\s*कोड)?\s*[:#.\-]?\s*)?"
+                  r"([0-9](?:[0-9\s\-]*[0-9])?)[.,;:!]*", re.IGNORECASE)
 
 
 class Match(TypedDict):
@@ -31,6 +35,13 @@ def norm(s: str) -> str:
     """Lower case, punctuation to spaces, single spaces, no trailing 'district'."""
     s = " ".join(re.sub(r"[^\w\s]", " ", s.lower()).split())
     return _SUFFIX.sub("", s)
+
+
+def pin_of(q: str) -> str | None:
+    """The six digits of a typed PIN, or None when the text is not a PIN in one of the forms _PIN accepts."""
+    m = _PIN.fullmatch(q.strip())
+    d = re.sub(r"[\s\-]", "", m.group(1)) if m else ""
+    return d if len(d) == 6 else None
 
 
 def title(s: str) -> str:
@@ -72,13 +83,14 @@ class Places:
         'Name, State' keeps only matches in that state.
         """
         q = q.strip()
-        if re.fullmatch(r"\d{6}", q):
-            i = self.pin_at.get(int(q))
+        pin = pin_of(q)
+        if pin:
+            i = self.pin_at.get(int(pin))
             if i is None:
                 return []
             p = self.pins
             return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
-                     "label": f"PIN {q}, {title(p['district'][i])}, {title(p['state'][i])}"}]
+                     "label": f"PIN {pin}, {title(p['district'][i])}, {title(p['state'][i])}"}]
         name, _, state_q = q.rpartition(",") if "," in q else (q, "", "")
         key, sq = norm(name), norm(state_q)
         if not key:
