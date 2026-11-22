@@ -356,6 +356,8 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
     elif kind == "count":  # how many items a list holds: '3' for three options
         ok = isinstance(stored, list) and number(shown) == len(stored)
+    elif kind == "likely":  # how many options in a list are in the Likely band: '2' in "2 of 3 options are Likely"
+        ok = isinstance(stored, list) and number(shown) == sum(o["band"] == "likely" for o in stored)
     elif kind == "atleast":  # 1 - prod(1 - p) as a capped percent: 'over 99%', 'under 1%' or 'N%' (#121)
         ok = capped_pct_ok(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
@@ -786,6 +788,13 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        # WS1 1c: the golden-hour sentence sits under the route strip, outside Route details, when the route has one
+        it0 = payload.get("itinerary") or {}
+        vd = None if it0.get("abstain") else (((it0.get("plans") or [{}])[0].get("vs_direct") or {}).get("text"))
+        main_vd = page.evaluate("""() => [...document.querySelectorAll('#main [data-f="itinerary.plans.0.vs_direct.text"]')]
+          .filter(e => !e.closest('details')).length""")
+        if bool(vd) != (main_vd == 1):
+            errs.append(f"plan: golden-hour sentence shown {main_vd} times outside Route details, vs_direct.text={bool(vd)}")
         # WS1 1b: the readout's receipt is option 1's first quote (a marked piece of it, cut at 60 characters), and
         # its "Why first" line is marked: why-not rows, ledger rows or the engine's rank rule.
         o0 = (payload.get("options") or [None])[0]
@@ -902,6 +911,12 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("compare", payload, got, report)
         errs += [f"compare: {e}" for e in check_number_wording(page.inner_text("#main"))]
+        # #140 3e: band counts, never a "Chance ... checks out" line, on Compare
+        kinds = {(it["path"], it["kind"]) for it in got["items"]}
+        if payload["options"] and not {("options", "likely"), ("options", "count")} <= kinds:
+            errs.append("compare: the Likely count line is not shown")
+        if re.search(r"\bchance\b", page.inner_text("#main"), re.IGNORECASE):
+            errs.append("compare: a 'chance' label is still shown")
         errs += check_quotes("compare", payload, got["items"], claims, report)
         shown = {it["path"] for it in got["items"]}
         for i in range(len(payload["options"])):
@@ -1056,6 +1071,7 @@ def test_hindi_screens_equal_their_rows(name, payload, base_url, browser):
         errs += check_screen(f"hi/{screen}", payload, got, report)
         errs += raw_key_errs(f"hi/{screen}", payload, text)
         errs += [f"hi/{screen}: English on screen: {e!r}" for e in english_leaks(text)]
+        errs += [f"hi/{screen}: Latin am/pm in a Hindi time: {m!r}" for m in re.findall(r"\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)\b", text)]
     templ = sum(it["kind"] == "template" for _, got, _ in screens for it in got["items"])
     print(f"{name} (hi): {report}, {templ} engine templates in Hindi")
     assert report["values_checked"] > 0
@@ -1108,7 +1124,7 @@ def test_number_wording_flags_bracketed_ranges_and_certain_chances():
 # The vs_direct probabilities stay in the payload for the record; the page shows the plain sentence (#86).
 # #140 WS2 2c adds stops[k].note and vs_direct.direct_minutes for ui2 (WS1) to render; until then they are not shown.
 ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings", "direct_p_objective",
-                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care", "note", "direct_minutes"}
+                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care"}  # note, direct_minutes: shown (#152)
 
 
 def route_leaves(obj: Any, path: str) -> list[str]:
@@ -1161,8 +1177,15 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
         page.locator(f"[data-svc={payload['query']['service']}]").first.click()
         page.wait_for_selector("text=Suggested route")
         got = page.evaluate(COLLECT_JS)
+        route_text = page.evaluate("() => document.querySelector('#h-route').closest('section').textContent")
     finally:
         ctx.close()
+    # #140 3e: the route says "score", never "chance"; its totals name their assumption; windows count from departure
+    assert not re.search(r"\bchance\b", route_text, re.IGNORECASE), f"{name}: 'chance' on the route"
+    if any(p["totals"].get("minutes_to_definitive") is not None for p in payload["itinerary"]["plans"]):
+        assert "Score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
+    if any(p["window_checks"] for p in payload["itinerary"]["plans"]):
+        assert "counted from when the patient leaves" in route_text
     shown = {it["path"] for it in got["items"]}
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"
