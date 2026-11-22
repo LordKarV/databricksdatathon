@@ -141,6 +141,22 @@ directory phones 292; Bihar records per million 1.948; `pmndp_state.state_lgd` j
 - `grades_v1`: 10,799 rows, key (unique_id, service), from `{derived}/grades_v1.parquet`. Grader v1 reference grades (frozen before the web verdicts), same columns as grades.
   Columns: unique_id, service, name, facilityTypeId, grade, rule, rank, n_mentions, n_own, n_own_distinct, n_specific, n_ambiguous, n_other_facility, n_nonoffer, ... (51 columns).
 
+### Model v2 tables (group derived_v2)
+
+Loaded 2026-11-21 from derived/v2 (commit 539268e) with
+`uv run --with pyyaml --python .venv/bin/python python databricks/load_tables.py --only derived_v2`.
+The `_v2` suffix keeps every v1 table the app and notebook read in place. `reader_scores` (negative result,
+not shipped) and all gold or label tables are not loaded. Table and column comments are in tables.yaml.
+
+- `facility_service_scores_v2`: 358,092 rows, key (unique_id, service_id). Bands LIKELY, CALL_FIRST,
+  NO_SERVICE_TEXT, UNLIKELY; lo/hi are the score bin's DEV track record, not an interval around p.
+- `facility_attributes_v2`: 9,959 rows, key (unique_id). Operator, level, type, 24x7, hours, beds, lists.
+- `witnesses_v2`: 4,011,386 rows, key (witness_id).
+- `claim_atoms_v2`: 79,806 rows, key (atom_id).
+- `facility_features_v2`: 358,524 rows, key (unique_id, service).
+
+All five: UC rows equal local rows, 0 duplicate keys, 0 null keys, 3/3 spot values equal.
+
 ### Knowledge base tables (group kb)
 
 - `services`: 37 rows, key (service_id), from `build_staging.services()`. Canonical referral service taxonomy v1.1: 36 services in 11 categories plus 1 candidate, with names, definition, urgency, required capabilities, evidence, IPHS 2022 levels, phrase routing and answer_mode. Nested values are JSON strings.

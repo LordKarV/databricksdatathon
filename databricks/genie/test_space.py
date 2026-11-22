@@ -1,4 +1,4 @@
-"""Ask the Genie space 6 planner questions through the Conversation API and compare with our own SQL.
+"""Ask the Genie space 7 planner questions through the Conversation API and compare with our own SQL.
 
     python databricks/genie/test_space.py        # writes test_results.json next to this file
 
@@ -63,6 +63,11 @@ TESTS = [
          sql=f"SELECT n_claim, n_corr FROM {S}.geo_dialysis_district WHERE nfhs_state = 'Bihar' "
              "AND nfhs_district = 'Madhubani'",
          check=lambda gt, rows, text: num_in(0.0, rows, text) and not BANNED.search(text)),
+    dict(q="How many facilities in Bihar does model v2 band Likely for dialysis?",
+         sql=f"SELECT COUNT(*) FROM {S}.facility_service_scores_v2 s JOIN {S}.geo_facility g "
+             "ON g.unique_id = s.unique_id WHERE s.service_id = 'dialysis' AND s.band = 'LIKELY' "
+             "AND g.stname = 'BIHAR'",
+         check=lambda gt, rows, text: num_in(float(gt[0][0]), rows, text)),
 ]
 
 

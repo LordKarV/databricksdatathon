@@ -1,6 +1,6 @@
 # Manifest for load_tables.py. One entry per Unity Catalog table in workspace.referral_saathi.
 #   table:       target table name
-#   group:       derived | kb | dashboard | lists (usable in --only)
+#   group:       derived | derived_v2 | kb | dashboard | lists (usable in --only)
 #   file:        local source, relative to the project root. {derived} expands to --derived (default derived/v1).
 #                .csv files are converted to parquet in build/databricks_staging/ before upload.
 #   build:       instead of file, a function in build_staging.py that writes the staged parquet
@@ -244,6 +244,124 @@ tables:
   spot: grade
   description: >-
     Grader v1 reference grades (frozen before the web verdicts), same columns as grades. Copy of cleaning/claims/out/grades_v1.parquet.
+
+# ---------------------------------------------------------------- derived/v2, model v2 (derived/v2/README.md)
+# Separate _v2 names so the v1 tables the app and notebook read are untouched. Not loaded on purpose:
+# reader_scores (negative result, not shipped) and every gold/label table (eval schema stays separate).
+
+- table: facility_service_scores_v2
+  group: derived_v2
+  file: derived/v2/facility_service_scores.parquet
+  primary_key: [unique_id, service_id]
+  spot: p
+  description: >-
+    Model v2 (A_platt) service scores: one row per (unique_id, service_id), 9,947 eligible facilities x 36
+    services. The 12 exclude_review records are not scored. Show the band, not p, for NO_SERVICE_TEXT rows.
+    Bands map to the app as LIKELY = likely, CALL_FIRST and NO_SERVICE_TEXT = not_verified, UNLIKELY = unlikely.
+    lo/hi are the observed confirmed rate of DEV pairs in the same score bin, not an interval around p.
+    The model has no demonstrated ranking ability for public facilities (model_card.json public_note).
+    Source: derived/v2/facility_service_scores.parquet, see derived/v2/README.md and derived/v2/model_card.json.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    service_id: "Service id from kb/taxonomy/services.json (36 services)"
+    band: "LIKELY (p >= 0.3686, P_L and P_E >= 0.7, own-unit text T >= 2), UNLIKELY (p <= 0.20, or contamination C = 2 with T <= 1), CALL_FIRST (neither, T >= 2) or NO_SERVICE_TEXT (neither, T < 2: no sentence about the service as its own unit, p rests on context only; show the band, not p)"
+    overlays: "Flags beside the band, not bands: BORDERLINE (LIKELY with p - t_L < 0.05), PLACE_UNCLEAR, ON_A_PUBLIC_LIST:list:fetched_date"
+    p: "P_S: the chance that a web check which finds a decisive answer confirms the service. Not the chance that a phone call finds it."
+    lo: "Lower end of the Wilson 95% interval of the observed confirmed rate among decided DEV pairs whose out-of-fold P_S falls in the same 0.2-wide score bin as p. The bin's track record, NOT an interval around p: every row of a bin carries the same lo/hi and p need not lie inside it."
+    hi: "Upper end of the Wilson 95% interval of the observed confirmed rate among decided DEV pairs in the same 0.2-wide score bin as p. The bin's track record, NOT an interval around p."
+    p_location: "Location head P_L: P(the cleaned location is right)"
+    p_exists: "Existence head P_E: P(the facility exists)"
+    base: "Scorecard base: logit(p) = base + sum(points) / (20 / ln 2)"
+    contributions: "JSON list of {label, family, points, evidence_ids, card_phrase}; each evidence id is a witnesses_v2.evidence_id or a claim_atoms_v2.atom_id"
+    operator: "public, private or unknown (from facility_attributes_v2)"
+    is_24x7: "24x7 flag from facility_attributes_v2"
+    hours_text: "Hours text from facility_attributes_v2"
+    as_of: "Build date"
+    model_version: "Model version, equal to model_card.json model_version"
+
+- table: facility_attributes_v2
+  group: derived_v2
+  file: derived/v2/facility_attributes.parquet
+  primary_key: [unique_id]
+  spot: operator
+  description: >-
+    Model v2 facility attributes: one row per facility record (9,959, including the 12 exclude_review records
+    that facility_service_scores_v2 does not score). Operator, facility level and type, 24x7 flags for 10 scopes
+    with source and date, OPD hours, beds, empanelment, accreditation and NABH list status, website state.
+    Has no state or district: join facility_location for those. Built by model/v2/assemble/build.py, see
+    model/v2/assemble/ASSEMBLE.md.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    operator: "public (469), private (8,805) or unknown (685)"
+    operator_src: "operatorTypeId, name or none"
+    facility_level: "Public level from the name: mc, dh, sdh, phc, chc or unknown"
+    facility_type: "Facility type, retyped from name or specialties for 1,300 rows (for example dental clinics to dentist)"
+    opd_hours: "OPD hours (web or dataset text), with _src, _quote, _evidence and _date columns"
+    beds: "Beds from the cleaned capacity field"
+    empanel_pmjay: "PM-JAY empanelment from text or web"
+    nabh_list_status: "Status on the NABH list where matched"
+    web_state: "Website state: alive, dead or none"
+
+- table: witnesses_v2
+  group: derived_v2
+  file: derived/v2/witnesses.parquet
+  primary_key: [witness_id]
+  spot: witness
+  description: >-
+    Model v2 witness knowledge base: one row per (facility, service, witness), 4,011,386 rows of which 349,290
+    are present. Every (facility, service, family) has at least one row; placeholder rows (absent or
+    not_observable) carry value 0, no evidence and no quote. service '*' marks a facility-level witness.
+    Built by model/v2/assemble/build.py, see model/v2/assemble/ASSEMBLE.md.
+  columns:
+    witness_id: "Row id"
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id, or * for a facility-level witness"
+    family: "T C N S P X W O D R K"
+    witness: "Named witness, for example vf_text_unit, nabh_code_DIA, web_service_A, iphs_expected"
+    role: "offer, unit_or_equipment, list, department, certificate, designation, prerequisite, existence, location_warning, level_prior ..."
+    value: "1 for a plain witness; the specialty evidence weight for specialties; 0.5 for a weaker form"
+    observability: "present, absent (the source sees the facility and says nothing) or not_observable (the source cannot see it)"
+    evidence_id: "claim_id, list record id or stored page path; referenced by facility_service_scores_v2.contributions"
+    evidence_url: "Where the evidence can be checked"
+    quote: "Verbatim quote from the source"
+
+- table: claim_atoms_v2
+  group: derived_v2
+  file: derived/v2/claim_atoms.parquet
+  primary_key: [atom_id]
+  spot: service
+  description: >-
+    Model v2 claim atoms: one row per (claim sentence or specialties item, service), 79,806 atoms in 48,752 echo
+    units, with ownership, attribution and quarantine. Built by model/v2/assemble/build.py, see
+    model/v2/assemble/ASSEMBLE.md.
+  columns:
+    atom_id: "Atom id; referenced by facility_service_scores_v2.contributions"
+    claim_id: "Claim sentence id (one sentence can name several services)"
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id"
+    text: "Claim sentence text"
+    attribution: "Sentence attribution: own_anchored, unanchored, ambiguous, other_facility"
+    counts_as_own: "True when the atom counts as the facility's own unit"
+    unit_id: "Echo unit the atom collapses into"
+    is_unit_rep: "True for the representative atom of its echo unit"
+
+- table: facility_features_v2
+  group: derived_v2
+  file: derived/v2/facility_features.parquet
+  primary_key: [unique_id, service]
+  spot: a_T
+  description: >-
+    Model v2 feature matrix: one row per (facility, service), 9,959 x 36 = 358,524 rows, 137 columns (the 64
+    features kept by the feature study plus the per-facility fusion inputs). List and website features are NaN
+    where the source cannot see the pair; obs_<family> gives present / absent / not_observable per family.
+    Built by model/v2/assemble/build.py, see model/v2/assemble/ASSEMBLE.md.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id"
+    a_T: "Own-text level T"
+    a_contamination: "Contamination level C"
+    operator_public: "1 public, 0 private, null unknown"
+    web_state: "alive, dead or none"
 
 # ---------------------------------------------------------------- kb
 
