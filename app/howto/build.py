@@ -9,7 +9,9 @@ Every number on the page comes from here, and every entry names the repo file it
   model/MODEL_SPEC.md and research/DATASETS.md, found by their heading; a missing heading or table fails the build;
 - drift check (validation H6): the REPORT.md cells the page shows for findings 1 and 2, the far-from-PIN Flagged row
   and the NFHS Fixed row are parsed and compared with counts computed from derived/v1; a mismatch fails the build;
-- ranking constants are read from app/facts/engine.py, so the page cannot drift from the code.
+- ranking constants are read from app/facts/engine.py, so the page cannot drift from the code;
+- the "One record, two answers" card (key "trap", #140) comes from app/howto/trap.py: the raw ai_query re-run and
+  the engine's own plan; without the raw file the key is absent and the page shows no card.
 Run from the repo root after app/facts/build.py:
     .venv-app/bin/python app/howto/build.py
 """
@@ -347,6 +349,18 @@ def source_classes() -> dict:
                       f"{float(r['ci05']):.2f} to {float(r['ci95']):.2f}"] for r in rows]}
 
 
+def trap_card() -> dict | None:
+    """DEMO-TRAP-1 (#140): the "One record, two answers" card; None when its raw re-run file is absent."""
+    sys.path.insert(0, str(APP))
+    from facts import engine  # noqa: PLC0415
+    from services import SERVICES  # noqa: PLC0415
+
+    from howto import trap  # noqa: PLC0415
+    claims = pd.read_parquet(ROOT / V1 / "claims.parquet", columns=["unique_id", "field", "text", "services"])
+    card = trap.build(ROOT, engine.Engine.load(), claims, SERVICES)
+    return card and {**card, "repo_url": REPO_URL}
+
+
 def main() -> None:
     card = load_card()
     c = counts()
@@ -375,6 +389,8 @@ def main() -> None:
     n_checked = drift_check(t, c)
     for k, n in {"n_fixed": "fixed", "n_flagged": "flagged", "n_cannot": "cannot"}.items():
         how["facts"][k] = fact(len(t[n]["rows"]), t[n]["source"], f"rows in the '{t[n]['heading']}' table")
+    if (card := trap_card()) is not None:
+        how["trap"] = card
     OUT.mkdir(exist_ok=True)
     (OUT / "how.json").write_text(json.dumps(how, indent=1, ensure_ascii=False))
     size = (OUT / "how.json").stat().st_size
