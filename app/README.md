@@ -72,6 +72,8 @@ Response:
     "track_record": {"n", "k_confirmed", "k_contradicted", "k_no_info", "split": "dev | test"},
     "phone": {"e164": null | "+91...", "display", "shared_listings"},
     "is_real": ["..."], "where_check": "...", "why_first_text": null | "...",
+    "website": null | {"reason": "no_usable_page | no_identity | other_org", "label": {"en", "hi"},
+                       "text": {"en", "hi"}},   // #117 A: listed website unreliable; its page is not cited
     "say_to_family": {"en": "...", "hi": null | "..."}
   }],
   "why_not": [{"facility_id", "name", "travel", "option_rank", "minutes_vs_first", "band",

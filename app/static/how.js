@@ -2,6 +2,33 @@
 // every number and table cell carries data-f with its path in how.json, and every source links to its repo file.
 'use strict';
 (function (root) {
+  // New strings (#117 A), en and hi, ready for the app-wide language setting. {n} and {of} are marked numbers.
+  const TEXT = {
+    sites_unreliable: {
+      en: 'Listed websites: {n} of {of} facilities with a crawled website have one our crawl marks unreliable (no ' +
+        'usable page, no page naming the facility, or another organisation). The app does not cite these pages. ' +
+        'The frozen model still reads the crawl through its website terms (W family), so a score can include ' +
+        'website points for a site the card marks unreliable.',
+      hi: '\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0926\u0940 \u0917\u0908 ' +
+        '\u0935\u0947\u092c\u0938\u093e\u0907\u091f: \u0935\u0947\u092c\u0938\u093e\u0907\u091f ' +
+        '\u0935\u093e\u0932\u0947 {of} \u0905\u0938\u094d\u092a\u0924\u093e\u0932\u094b\u0902 ' +
+        '\u092e\u0947\u0902 \u0938\u0947 {n} \u0915\u0940 \u0935\u0947\u092c\u0938\u093e\u0907\u091f ' +
+        '\u0939\u092e\u093e\u0930\u0940 \u091c\u093e\u0901\u091a \u092e\u0947\u0902 ' +
+        '\u092d\u0930\u094b\u0938\u0947 \u0932\u093e\u092f\u0915 \u0928\u0939\u0940\u0902 ' +
+        '\u0928\u093f\u0915\u0932\u0940 (\u0915\u094b\u0908 \u0915\u093e\u092e \u0915\u093e ' +
+        '\u092a\u0947\u091c \u0928\u0939\u0940\u0902, \u0915\u093f\u0938\u0940 \u092a\u0947\u091c ' +
+        '\u092a\u0930 \u0905\u0938\u094d\u092a\u0924\u093e\u0932 \u0915\u093e \u0928\u093e\u092e ' +
+        '\u0928\u0939\u0940\u0902, \u092f\u093e \u0915\u093f\u0938\u0940 \u0926\u0942\u0938\u0930\u0940 ' +
+        '\u0938\u0902\u0938\u094d\u0925\u093e \u0915\u0940)\u0964 \u0910\u092a \u0907\u0928 ' +
+        '\u092a\u0947\u091c\u094b\u0902 \u0915\u094b \u0938\u092c\u0942\u0924 \u0915\u0947 \u0924\u094c\u0930 ' +
+        '\u092a\u0930 \u0928\u0939\u0940\u0902 \u0926\u093f\u0916\u093e\u0924\u093e\u0964 ' +
+        '\u092e\u0949\u0921\u0932 \u0928\u0939\u0940\u0902 \u092c\u0926\u0932\u093e \u0917\u092f\u093e ' +
+        '\u0939\u0948, \u0907\u0938\u0932\u093f\u090f \u0909\u0938\u0915\u0947 ' +
+        '\u0935\u0947\u092c\u0938\u093e\u0907\u091f \u0935\u093e\u0932\u0947 \u0905\u0902\u0915 (W) ' +
+        '\u0905\u092c \u092d\u0940 \u0909\u0938\u0940 \u091c\u093e\u0901\u091a \u0938\u0947 ' +
+        '\u0906\u0924\u0947 \u0939\u0948\u0902\u0964',
+    },
+  };
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   }
@@ -144,6 +171,8 @@
       <li>Opening hours: ${n('hours_records')} of ${of('hours_records')} records say anything about hours, mostly a
         generic round-the-clock claim ${src('hours_records')}. No data says whether a bed or slot is free today.</li>
       <li>Bed counts, staff on duty and today's slots are not in the data: phone first.</li>
+      ${f.sites_unreliable ? `<li>${TEXT.sites_unreliable.en.replace('{n}', n('sites_unreliable'))
+    .replace('{of}', of('sites_unreliable'))} ${src('sites_unreliable')}</li>` : ''}
     </ul>
     <p class="small muted">Page data built ${F('built_at', h.built_at)}.</p>`;
   }

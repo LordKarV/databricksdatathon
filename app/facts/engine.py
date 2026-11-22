@@ -46,6 +46,16 @@ RANK_RULE = {
 WINDOW = {"emergency": 60, "urgent": 60, "scheduled": 120, "planned": 240}
 OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
+# Listed website flagged unreliable by the crawl (#117 A, facts/build.py site_flags), en and hi like STRINGS above.
+SITE_STRINGS = {
+    "label": {"en": "Listed website unreliable", "hi": "लिस्टिंग में दी गई वेबसाइट भरोसे लायक नहीं"},
+    "no_usable_page": {"en": "our crawl found no usable page on it (dead, parked, spam, moved elsewhere or blocked)",
+                       "hi": "हमारी जाँच में इस पर काम का कोई पेज नहीं मिला (बंद, बिकाऊ, स्पैम, कहीं और जाती है या रोकी गई)"},
+    "no_identity": {"en": "it opens, but no page on it names this facility",
+                    "hi": "वेबसाइट खुलती है, पर किसी पेज पर इस अस्पताल का नाम नहीं है"},
+    "other_org": {"en": "it may belong to another organisation", "hi": "यह किसी दूसरी संस्था की वेबसाइट हो सकती है"},
+    "not_cited": {"en": "We do not cite it as a source.", "hi": "हम इसे सबूत के तौर पर नहीं दिखाते।"},
+}
 # Tie-break from health-worker reports (#86, lead's rule): leading options in the same band whose shown p differ by
 # at most TIE_P and whose travel differs by at most TIE_TRAVEL_MIN are tied; only those are reordered, and only for
 # TIE_BREAK_PROFILES: scheduled and planned care. Emergency (#101) and urgent care (NICU: a sick newborn is
@@ -207,8 +217,9 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place"):  # older exports: no source checks, so no source warnings
+        for k in ("url_kind", "url_place", "url_site", "site_flag"):  # older exports: no source or site checks
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
+        self.site_check = facts.get("site_check") or {}
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
         self.likely_threshold = facts.get("likely_threshold")
@@ -392,9 +403,26 @@ class Engine:
         out += [f'Ignored: "{self.claims[c][1]}" names another facility' for c in ignored]
         return out
 
+    def cited_url(self, i: int) -> str:
+        """The source page a quote links to; "" when that page is the listed website and the crawl flags it (#117 A)."""
+        if self._f("site_flag", i) and self._f("url_site", i):
+            return ""
+        return self._f("url", i) or ""
+
+    def website(self, i: int) -> dict | None:
+        """{reason, label, text} in en and hi when the listed website is unreliable (#117 A); None otherwise."""
+        code = self._f("site_flag", i)
+        if not code:
+            return None
+        s = SITE_STRINGS
+        return {"reason": code, "label": dict(s["label"]),
+                "text": {k: f"{s['label'][k]}: {s[code][k]}. {s['not_cited'][k]}" for k in ("en", "hi")}}
+
     def _is_real(self, i: int) -> list[str]:
         out = []
-        if self._f("website_own", i):
+        if self._f("site_flag", i):  # an unreliable site is no sign that the facility is real (#117 A)
+            out.append(SITE_STRINGS["label"]["en"])
+        elif self._f("website_own", i):
             out.append("own website")
         if self._f("phone_e164", i):
             out.append("phone not shared with other listings" if self._f("phone_shared", i) <= 1
@@ -413,8 +441,8 @@ class Engine:
         fid = self._f("id", i)
         band, p, lo, hi, contrib, ev = self._scored(fid, service, scores)
         rule = self.rules.get(pr.rule, {"n": 0, "k_confirmed": 0, "k_contradicted": 0})
-        url = self._f("url", i)
-        evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url or "",
+        url = self.cited_url(i)
+        evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url,
                      "flags": self.quote_flags(c, i)} for c in ev]
         say = (f"This hospital's listing says it offers {label}. It is about {round(trav['km'])} kilometres away. "
                "We will phone before going.") if band == "likely" else (
@@ -439,7 +467,7 @@ class Engine:
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
             "track_record": self._track(p, rule),
-            "phone": self._phone(i), "is_real": self._is_real(i),
+            "phone": self._phone(i), "is_real": self._is_real(i), "website": self.website(i),
             "where_check": WHERE.get(self._f("loc_rule", i), "Location not checked"),
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},
         }

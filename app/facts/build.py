@@ -72,6 +72,7 @@ NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturo
 
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
 FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
+SITE_CLASSES = {"official", "official_like"}  # a cited URL of these classes is the listed website (kb/crawl targets)
 
 
 def _places() -> dict[str, list[tuple[float, float]]]:
@@ -167,6 +168,8 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     best = best.drop_duplicates("unique_id").set_index("unique_id")
     f["url"] = f.unique_id.map(best.url)
     f["url_kind"] = f.unique_id.map(best.url_kind)
+    f["url_site"] = f.unique_id.map(best.source_class).isin(SITE_CLASSES)
+    f["site_flag"] = site_flags(f.unique_id, f.trust_flags)
     f["url_place"] = [wiki_place(u, la, lo) if k != "about" else None
                       for u, k, la, lo in zip(f.url, f.url_kind, f.loc_lat, f.loc_lon, strict=True)]
     f["public_standard"] = public_standard(f.unique_id, f.name)
@@ -200,6 +203,39 @@ def operators(ids: pd.Series) -> list[str]:
         return ["unknown"] * len(ids)
     op = pd.read_parquet(ATTRS, columns=["unique_id", "operator"]).drop_duplicates("unique_id").set_index("unique_id")
     return [x if x in OPERATORS else "unknown" for x in ids.map(op.operator)]
+
+
+def _web_state(ids: pd.Series) -> pd.Series:
+    """derived/v2 web_state per id: alive, dead or none (kb/crawl/sites.parquet, model/v2/assemble/build.py)."""
+    ws = pd.read_parquet(ATTRS, columns=["unique_id", "web_state"]).drop_duplicates("unique_id")
+    return ids.map(ws.set_index("unique_id").web_state)
+
+
+def site_flags(ids: pd.Series, trust_flags: pd.Series) -> list[str | None]:
+    """Why the listed website is unreliable (#117 A), from existing crawl outputs; None when no reason is known.
+
+    other_org: record_trust flag website_may_belong_to_other_org. no_usable_page: derived/v2 web_state "dead", i.e.
+    no kb/crawl target of the record ended ok or ok_thin (dead, parked, spam, a redirect elsewhere, or blocked).
+    no_identity: the site is live but no page names the facility, or it is a for-sale page (e_identity_conf 0).
+    Display only: the frozen model reads the same crawl through its W-family terms and is not changed.
+    """
+    other = [any(x == "website_may_belong_to_other_org" for x in as_list(t)) for t in trust_flags]
+    if not (ATTRS.is_file() and FEATURES.is_file()):
+        return ["other_org" if o else None for o in other]
+    conf = pd.read_parquet(FEATURES, columns=["unique_id", "e_identity_conf"]).groupby("unique_id").e_identity_conf
+    state, idc = _web_state(ids), ids.map(conf.max())
+    return ["other_org" if o else "no_usable_page" if s == "dead" else "no_identity" if s == "alive" and c == 0
+            else None for o, s, c in zip(other, state, idc, strict=True)]
+
+
+def site_check(f: pd.DataFrame) -> dict:
+    """Counts for the How page: facilities with a crawled website, and how many are flagged, by reason."""
+    if not ATTRS.is_file():
+        return {}
+    flags = f.site_flag.dropna()
+    return {"n_with_site": int(_web_state(f.unique_id).isin(["alive", "dead"]).sum()), "n_unreliable": len(flags),
+            "by_reason": {k: int(v) for k, v in flags.value_counts().items()},
+            "n_cited_site": int((f.site_flag.notna() & f.url_site).sum())}
 
 
 def v2_only(m: pd.DataFrame) -> pd.DataFrame:
@@ -442,6 +478,7 @@ def main() -> None:
         "track_bins": track_bins(),
         "likely_threshold": likely_threshold(),
         "test_record": sealed_test_record(),
+        "site_check": site_check(f),
         "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
@@ -452,6 +489,7 @@ def main() -> None:
                 "reasons": [as_list(x) for x in f.trust_reasons],
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
                 "url_kind": col(f.url_kind), "url_place": list(f.url_place),
+                "url_site": [bool(x) for x in f.url_site], "site_flag": col(f.site_flag),
                 "public_standard": list(f.public_standard), "public_level": list(f.public_level),
                 "operator": list(f.operator)},
         "pairs": pr,
@@ -474,6 +512,7 @@ def main() -> None:
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
           if moved else f"pin districts: {LGD_PINS.relative_to(ROOT)} not found, area view uses each PIN's own district")
     print(f"scores: {facts['meta']['scores']}")
+    print(f"listed websites (#117 A): {facts['site_check']}")
     n_pairs = sum(len(v) for v in pr.values())
     print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
           f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "

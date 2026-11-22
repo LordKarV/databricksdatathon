@@ -237,7 +237,16 @@ def facts(c: dict[str, float]) -> dict:
         "bihar_records": fact(bihar, floc, "state_final = Bihar", of=len(loc)),
         "hours_records": fact(int(hours), claims_src,
                               "records with any sentence about opening hours or 24/7", of=len(loc)),
-    } | test
+    } | site_facts(eng.site_check) | test
+
+
+def site_facts(sc: dict) -> dict:
+    """Listed websites the crawl flags unreliable (#117 A): the app stops citing them, the frozen model does not."""
+    if not sc:
+        return {}
+    src = "app/facts/build.py"
+    return {"sites_unreliable": fact(sc["n_unreliable"], src, "site_flags: facilities whose listed website is "
+                                     "flagged, of those with a crawled website", of=sc["n_with_site"])}
 
 
 def sealed_test_facts(tr: dict | None) -> dict:

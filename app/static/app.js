@@ -403,6 +403,7 @@ function card(o, label, i) {
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
+    ${o.website ? `<p class="small">${F(P + '.website.label.en', o.website.label.en)}</p>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
@@ -830,8 +831,9 @@ function whyScreen(rank) {
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
     <h2>From its own listing</h2>
     ${noTextCaptionHtml(o, p.query)}${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
-      <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
+      ${e.source_url ? `<br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a>` : ''}</blockquote>`).join('')
       : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
+    ${o.website ? `<p class="small">${F(P + '.website.text.en', o.website.text.en)}</p>` : ''}
     <h2>Check the website now</h2>
     <p class="small">Opens this facility's own website now (a few pages, a few seconds). It does not change the label above.</p>
     <button type="button" id="verify-btn" class="btn-block">Check website now</button>

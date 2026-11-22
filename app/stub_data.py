@@ -65,6 +65,7 @@ def _option(rank: int, fid: str, name: str, operator: str, band: Band, p: tuple[
                          "k_no_info": max(n_checked - 1, 0), "split": "dev"},
         "phone": {"e164": None, "display": None, "shared_listings": 0},
         "is_real": ["own website", "mobile number not shared with other listings"],
+        "website": None,
         "where_check": "PIN, map point and city agree (within 3 km)",
         "why_first_text": ("Sample: a nearer option exists, but the evidence here is stronger, so this ranks first."
                            if rank == 1 else None),
