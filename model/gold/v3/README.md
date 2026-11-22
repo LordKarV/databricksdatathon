@@ -6,6 +6,7 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
 | --- | --- | --- |
 | `build_sample_v3.py` | stratified sample, seed 20261121 | yes |
 | `dev_sample.json` | 300 DEV pairs, with what a labeller needs (name, place, own website domain) | yes |
+| `build_test_v3.py` | TEST redraw after review (PR #76): leakage-group disjoint, operator stratified | yes |
 | `test_sample.json` | 150 TEST pair ids only | yes |
 | `overlap.json` | the 25% of each split labelled twice (75 DEV, 38 TEST) | yes |
 | `sample_stats.json` | frame size, pool sizes and inclusion probability per cell | yes |
@@ -13,7 +14,8 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
 | `merge_labels.py` | merges labelling batches, computes kappa and the no_info rates | yes |
 | `seal.py` | commitment scheme for the TEST labels | yes |
 | `test_labels.sha256` | SHA-256 of the TEST labels file | when TEST is labelled |
-| `test_labels.json` | TEST labels | **no**: kept by the custodian until "[type: update] model frozen" on #11 |
+| `test_labels.json` | TEST labels | **no**: kept by the custodian until the model freeze below |
+| `OPENING_LOG.md` | the one opening of TEST | written by `seal.py open` |
 
 ## Sample
 
@@ -33,15 +35,34 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
   - **Why:** a 20-pair pilot on a looser frame (any own site or a public name, with the "best source URL")
     reached 60% no_info. In 9 of the 20 pilot pairs the URL belonged to another facility or a directory. The pilot
     labels are not used.
-- **Excluded:** every facility in `model/gold/` (any file) or `derived/v1/gold_pairs`, plus their duplicate groups.
-  One pair per facility across DEV and TEST.
+- **Excluded (DEV):** every facility in `model/gold/` or `derived/v1/gold_pairs`, plus their duplicate groups.
+  One pair per facility across DEV and TEST. DEV can share leakage groups with earlier gold DEV (both train).
 - **Draw:** each (service, stratum) cell is split into the focus states (Bihar, UP, Jharkhand, Odisha, Assam) and
   the rest, and each sub-cell is a simple random sample.
   - The scarcest cells are drawn first.
   - The inclusion probability is k/N per sub-cell. It is approximate where one facility sits in several pools.
-  - TEST is every third pick within each cell, after a shuffle.
-  - Focus-state share: 40% of DEV, 41% of TEST.
+  - Focus-state share of DEV: 40%.
 - **Thin cell:** `stemi_thrombolysis` has small strong and suspect pools.
+
+## TEST (redrawn after review on PR #76)
+
+The first TEST draw shared facilities and leakage groups with labels the model trains on (4 identical pairs with the
+e2e set, 8 leakage groups across DEV and TEST). It was discarded before sealing; `build_test_v3.py` draws it again:
+
+- **Excluded:** every facility in any earlier gold set (all of `model/gold/**`, the e2e pairs in
+  `model/proto/decision/e2e_pairs_to_label.json`, `model/v2/labels/out/gold_dev_pairs` and `gold_dev_facility`,
+  `derived/v1/gold_pairs`) and every v3 DEV facility, then everything in the same `leakage_group_id` or duplicate
+  group, to a fixed point: 654 facilities named, 1,272 blocked.
+- **Frame by operator** (`derived/v2/facility_attributes.operator`): public, every eligible public facility (329);
+  private or unknown, the DEV website frame (5,585).
+- **Draw:** each (service, stratum) cell is split by operator, 40% public where the pool allows; simple random
+  sample per sub-cell (seed 20261122), scarcest cells first, one pair per leakage group. 150 pairs, 70 public.
+- **Checks (the build fails otherwise):** no TEST facility in earlier gold or v3 DEV; no TEST leakage group shared
+  with either; no two TEST pairs in one group. 145 TEST facilities have rows in `pu_labels`: the lead's label build
+  drops them and their groups before the refit.
+- **Blinding:** TEST labellers get the facility name, city, state and service, plus the record's own website
+  domain for private facilities (as DEV), and the rubric. They read no `derived/`, `model/`, `app/` or `kb/` output.
+- **Wording:** the TEST labels are unseen; the TEST ids are public.
 
 ## Rubric (applied exactly; full text in `RUBRIC.md` and `FETCH_ONLY.md`)
 
@@ -78,6 +99,8 @@ Labellers see the name, place and website, never the dataset's claims or the str
 
 - **Agreement:** on the 75 double-labelled pairs, raw agreement is 90.7%.
   - Cohen's kappa is **0.834** on the 3-way verdict and **0.840** on decided vs no_info. v2 had 0.38.
+  - On the 39 pairs where at least one labeller found evidence, kappa is **0.528**: the easy shared no_info cell
+    inflates the overall figure.
   - Disagreements: 3 no_info vs confirmed, 2 confirmed vs no_info, 1 confirmed vs contradicted, 1 no_info vs
     contradicted.
   - Both labellers often met the same dead site. Agreement on "no_info" is the largest cell (36 of 75), so kappa
@@ -90,17 +113,26 @@ Labellers see the name, place and website, never the dataset's claims or the str
   - Their no_info rate is 54%, against 56% for searched labels. Search was used mostly to find a facility's real
     site once the given one failed.
   - Fetch-only no_info pairs are the first to relabel when search is available.
+- **Weighted (1 / `inclusion_prob`, Kish effective n):** confirmed of decided 0.764 (134 pairs, n_eff 43);
+  confirmed of all 0.296 (300 pairs, n_eff 70). The weights are uneven, so the effective n is small.
+- **Provenance:** agent-labelled, not human-checked. No person has read the cited URLs.
 - **Use for #11:** DEV only. Weight by 1 / `inclusion_prob` for frame-level estimates, and report precision per
-  stratum.
+  stratum. Headline metric: confirmed vs contradicted; MODEL_SPEC 3.2 (searched no_info as 0) is the sensitivity.
 
-## Sealing protocol (TEST)
+## Sealing protocol (TEST), as decided on PR #76
 
-1. Label `test_sample.json` and keep `test_labels.json` outside the repo
-   (`~/.cache/referral-saathi-gold-v3/test_labels.json`):
-   `merge_labels.py test <batches> --out <that path>` refuses a path inside the repo.
-2. `python model/gold/v3/seal.py commit` checks that the labels cover exactly the TEST ids, then writes
-   `test_labels.sha256`. Commit that file.
-3. After the lead posts "[type: update] model frozen" with a model hash on #11, publish `test_labels.json`
-   unchanged. Anyone can then run `python model/gold/v3/seal.py verify --labels model/gold/v3/test_labels.json`.
+1. Label TEST off the repo. `merge_labels.py test <batches> --out ~/.cache/referral-saathi-gold-v3/test_labels.json`
+   refuses a path inside the repo. The custodian keeps a second copy outside any cache directory and one with their
+   human.
+2. `python model/gold/v3/seal.py commit` checks that the labels cover exactly the TEST ids and writes
+   `test_labels.sha256` with two SHA-256 hashes over a canonical form (rows sorted by pair_id, sorted keys, compact
+   separators, UTF-8): every field, and pair_id + verdict only. It never overwrites a seal. Commit the file and post
+   both hashes on #51.
+3. Model freeze: the lead commits `model/v2/test_predictions.parquet` (TEST pair ids, p, band, model_version) and
+   its sha256, posted on #51.
+4. `seal.py open --model-hash <that sha256>` checks the labels against the seal, appends the one allowed opening to
+   `OPENING_LOG.md`, and refuses a second. Then publish `test_labels.json` unchanged. Anyone can run
+   `python model/gold/v3/seal.py verify --labels model/gold/v3/test_labels.json`.
 
-Status: TEST is not labelled yet. It needs the web-search budget, which this session has used up.
+Status: TEST is redrawn and not yet labelled (130 of 150 pairs need labels; 20 carry over from the discarded draw,
+same facility and service). Labelling needs the web-search budget; it is not sealed.

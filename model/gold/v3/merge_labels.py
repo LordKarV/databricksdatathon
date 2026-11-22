@@ -36,6 +36,23 @@ def kappa(a: list[str], b: list[str]) -> float | None:
     return round((po - pe) / (1 - pe), 3) if pe < 1 else 1.0
 
 
+def weighted(rows: list[dict]) -> dict:
+    """Design-weighted rates (weight 1 / inclusion_prob) with Kish's effective n.
+
+    headline: confirmed / (confirmed + contradicted); a dead or empty website is not evidence of absence (PR #76).
+    sensitivity: MODEL_SPEC 3.2, a searched no_info counts as not offered: confirmed / all pairs.
+    """
+    def rate(sel: list[dict], num: str) -> dict:
+        w = [1 / r["inclusion_prob"] for r in sel if r.get("inclusion_prob")]
+        if not w:
+            return {"rate": None, "n": 0, "n_eff": 0}
+        hit = sum(1 / r["inclusion_prob"] for r in sel if r.get("inclusion_prob") and r["service"] == num)
+        return {"rate": round(hit / sum(w), 3), "n": len(w), "n_eff": round(sum(w) ** 2 / sum(x * x for x in w), 1)}
+    decided = [r for r in rows if r["service"] != "no_info"]
+    return {"headline_confirmed_of_decided": rate(decided, "confirmed"),
+            "sensitivity_confirmed_of_all": rate(rows, "confirmed")}
+
+
 def method(r: dict) -> str:
     """search (up to 5 searches plus fetches) or fetch_only (no search: the session's search budget ran out)."""
     if r.get("method") == "fetch_only" or BUDGET.search(r.get("notes") or ""):
@@ -79,6 +96,7 @@ def main() -> int:
             r["second_label"] = {k: second[i][k] for k in ("exists", "location_ok", "service", "confidence")}
         rows.append(r)
     both = [i for i in ids if i in second and i in overlap]
+    found = [i for i in both if prim[i]["service"] != "no_info" or second[i]["service"] != "no_info"]
     va, vb = [prim[i]["service"] for i in both], [second[i]["service"] for i in both]
     dec = [("decided" if v != "no_info" else "no_info") for v in va]
     decb = [("decided" if v != "no_info" else "no_info") for v in vb]
@@ -95,11 +113,16 @@ def main() -> int:
                     "agreement": (round(sum(x == y for x, y in zip(va, vb, strict=True)) / len(both), 3)
                                   if both else None),
                     "kappa_service": kappa(va, vb), "kappa_decided": kappa(dec, decb),
+                    "found_by_either": len(found),
+                    "kappa_service_found_by_either": kappa([prim[i]["service"] for i in found],
+                                                           [second[i]["service"] for i in found]),
                     "confusion": dict(Counter(f"{x}|{y}" for x, y in zip(va, vb, strict=True)))},
         "no_info_rate_by_method": {m: round(sum(r["service"] == "no_info" for r in rows if r["method"] == m)
                                             / max(1, sum(r["method"] == m for r in rows)), 3)
                                    for m in ("search", "fetch_only")},
         "pairs_by_method": dict(Counter(r["method"] for r in rows)),
+        "weighted": weighted(rows),
+        "provenance": "agent-labelled, not human-checked",
         "searches": sum(int(r.get("searches_used") or 0) for r in rows),
     }
     doc = {"about": "Gold v3 web labels (issue #51); rubric and method in model/gold/v3/README.md.",

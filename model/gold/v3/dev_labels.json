@@ -83,6 +83,8 @@
    "agreement": 0.907,
    "kappa_service": 0.834,
    "kappa_decided": 0.84,
+   "found_by_either": 39,
+   "kappa_service_found_by_either": 0.528,
    "confusion": {
     "no_info|no_info": 36,
     "confirmed|confirmed": 27,
@@ -101,6 +103,19 @@
    "search": 200,
    "fetch_only": 100
   },
+  "weighted": {
+   "headline_confirmed_of_decided": {
+    "rate": 0.764,
+    "n": 134,
+    "n_eff": 43.2
+   },
+   "sensitivity_confirmed_of_all": {
+    "rate": 0.296,
+    "n": 300,
+    "n_eff": 70.3
+   }
+  },
+  "provenance": "agent-labelled, not human-checked",
   "searches": 191
  },
  "results": [
