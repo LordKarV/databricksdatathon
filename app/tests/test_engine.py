@@ -77,7 +77,7 @@ def test_abstains_when_nothing_is_confirmed():
 
 def test_score_is_the_single_swap_point(monkeypatch):
     def everything_likely(self, facility_id, service_id):
-        return "likely", 0.9, 0.8, 0.95, [{"label": "test model", "points": 22}], []
+        return "likely", 0.9, 0.8, 0.95, [{"label": "test model", "points": 22}], [next(iter(ENGINE.claims))]
 
     monkeypatch.setattr(Engine, "score", everything_likely)
     p = ENGINE.plan("dialysis", 24.79, 85.0, 40, "gps")
@@ -163,3 +163,33 @@ def test_no_route_when_planner_data_missing(monkeypatch):
     monkeypatch.setattr(svc, "plan_for_service", not_built)
     r = client.post("/api/plan", json={"service": "trauma_emergency", "lat": 25.15, "lon": 83.68}).json()
     assert r["itinerary"] is None and r["options"]
+
+
+def test_pair_with_no_quote_is_not_offered(monkeypatch):
+    # #85: every recommendation cites facility text, so a pair with no usable quote is never an option
+    def no_quote(self, facility_id, service_id):
+        return "likely", 0.9, 0.8, 0.95, [], []
+    monkeypatch.setattr(Engine, "score", no_quote)
+    assert ENGINE.plan("dialysis", 25.6, 85.1, 40, "gps")["options"] == []
+
+
+def test_second_source_outranks_the_grade():
+    import dataclasses
+    svc = next(iter(ENGINE.index))
+    fi, pr = next(iter(ENGINE.index[svc].items()))
+    fid = ENGINE._f("id", fi) if isinstance(fi, int) else fi
+    saved = ENGINE.index[svc][fi]
+    try:
+        ENGINE.index[svc][fi] = dataclasses.replace(pr, model=None, status="verified_true", grade="counter_evidence")
+        assert ENGINE.score(fid, svc)[0] == "likely"
+    finally:
+        ENGINE.index[svc][fi] = saved
+
+
+def test_cards_use_the_route_terrain():
+    # #85: a hill-state origin must get the hill constants on the cards too, as the route planner does
+    assert ENGINE.origin_state(30.32, 78.03).casefold() == "uttarakhand"  # Dehradun
+    hill, plain = ENGINE._travel(30.32, 78.03, 0, "Uttarakhand"), ENGINE._travel(30.32, 78.03, 0, "Bihar")
+    if plain["terrain"] is None:
+        pytest.skip("geo/ travel constants not available")
+    assert hill["terrain"] == "hill" and plain["terrain"] == "plain" and hill["high"] >= plain["high"]

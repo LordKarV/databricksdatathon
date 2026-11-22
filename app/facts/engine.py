@@ -110,10 +110,14 @@ class Engine:
             return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
                                      *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
-        if pr.status == "verified_false" or pr.grade in UNLIKELY_GRADES:
+        # A second-source check outranks the text grade: it is the stronger evidence (#85: two confirmed pairs were
+        # banded Unlikely because the grade was tested first).
+        if pr.status == "verified_false":
             band = "unlikely"
         elif pr.status == "verified_true":
             band = "likely"
+        elif pr.grade in UNLIKELY_GRADES:
+            band = "unlikely"
         else:
             band = "not_verified"
         # Points are the stored score split in log-odds x 10: evidence rule, then sources, then the gold check.
@@ -138,8 +142,17 @@ class Engine:
     def _f(self, k: str, i: int):
         return self.fac[k][i]
 
-    def _travel(self, lat: float, lon: float, i: int) -> dict:
-        return travel(lat, lon, self._f("lat", i), self._f("lon", i))
+    def _travel(self, lat: float, lon: float, i: int, state: str | None = None) -> dict:
+        return travel(lat, lon, self._f("lat", i), self._f("lon", i), state)
+
+    def origin_state(self, lat: float, lon: float) -> str | None:
+        """State of the nearest facility: the planner's rule when no state is given, so the cards and the route use
+        the same terrain constants (#85: one hospital showed 31-52 min on its card and 37-112 min on the route)."""
+        # equirectangular distance is enough to pick the nearest point; computed once per request
+        k = math.cos(math.radians(lat))
+        la, lo = self.fac["lat"], self.fac["lon"]
+        best = min(range(len(la)), default=None, key=lambda i: (la[i] - lat) ** 2 + ((lo[i] - lon) * k) ** 2)
+        return None if best is None else self._f("state", best)
 
     def _near(self, service: str, lat: float, lon: float) -> list[tuple[float, Pair]]:
         out = []
@@ -230,13 +243,16 @@ class Engine:
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},
         }
 
-    def _ranked(self, service: str, lat: float, lon: float) -> tuple[list, list]:
+    def _ranked(self, service: str, lat: float, lon: float, state: str | None = None) -> tuple[list, list]:
         """(pool, unlikely): [(utility, minutes, pair, travel, band)] sorted best first / nearest first."""
         scale = TIME_SCALE[SERVICES[service]["profile"]]
         pool, unlikely = [], []
+        state = state or self.origin_state(lat, lon)
         for _, pr in self._near(service, lat, lon):
-            band, p, *_ = self.score(self._f("id", pr.fi), service)
-            tr = self._travel(lat, lon, pr.fi)
+            band, p, *_, ev = self.score(self._f("id", pr.fi), service)
+            if not ev and band != "unlikely":
+                continue  # every recommendation cites facility text (#85): a pair with no usable quote is not offered
+            tr = self._travel(lat, lon, pr.fi, state)
             row = (p * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
@@ -257,7 +273,7 @@ class Engine:
         i = best[1]
         return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": "unknown",
                 "text": "By the public standard a hospital at this level should offer it; not verified in our data.",
-                "travel": self._travel(lat, lon, i)}
+                "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
 
     # ---------- /api/plan ----------
     def plan(self, service: str, lat: float, lon: float, accuracy_m: float | None, source: str) -> dict:
@@ -313,7 +329,7 @@ class Engine:
         rows, gains, n_now, n_conf = [], {}, 0, 0
         for j in idx:
             plat, plon = pins["lat"][j], pins["lon"][j]
-            pool, _ = self._ranked(service, plat, plon)
+            pool, _ = self._ranked(service, plat, plon, state)
             within = [r for r in pool if r[1] <= window and r[2].grade in OWN_EVIDENCE | {"tag_only", "weak"}
                       and (r[4] == "likely" or r[2].grade in OWN_EVIDENCE)]
             likely = [r for r in within if r[4] == "likely"]
