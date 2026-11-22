@@ -157,7 +157,7 @@ def _facility(eng: Engine, fid: str, sid: str, g: list[dict]) -> dict[str, Any]:
             "turned_away": sum(r.get("outcome") == TURNED_AWAY for r in visits),
             "band": band, "band_word": BAND_WORDS.get(band),
             # The cited listing sentence behind today's band, so the count never stands without its evidence.
-            "evidence": {"claim_id": ev[0], "quote": eng.claims[ev[0]][1], "source_url": eng.fac["url"][i] or ""}
+            "evidence": {"claim_id": ev[0], "quote": eng.claims[ev[0]][1], "source_url": eng.cited_url(i)}
             if ev else None}
 
 
