@@ -261,3 +261,19 @@ def test_every_planner_route_type_has_words() -> None:
     import itinerary
     for key in ("direct", "one_stop", "two_stop", "single_site", "two_sites", "three_sites"):
         assert key in itinerary.TYPE and "_" not in itinerary.TYPE[key]
+
+
+def test_ownership_line_only_when_the_operator_is_unknown():
+    """#121: "our data does not say if it is public or private" sat on a card labelled Government, and on every card.
+    Pusa trauma option 1 is Sub Divisional Hospital Pusa (public)."""
+    seen = set()
+    for svc, la, lo in [("trauma_emergency", 25.6, 85.95), *QUERIES.values()]:
+        for o in ENGINE.plan(svc, la, lo, 40, "gps")["options"]:
+            seen.add(o["operator"])
+            reasons = [c["asked_because"] for c in o["call_ahead"]]
+            unknown = "our data does not say if it is public or private" in reasons
+            if o["operator"] != "unknown":
+                assert not unknown, (o["name"], o["operator"], reasons)
+            if o["operator"] == "public":
+                assert not any("cost" in c["question"] for c in o["call_ahead"]), (o["name"], o["call_ahead"])
+    assert {"public", "private"} <= seen
