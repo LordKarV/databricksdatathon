@@ -29,13 +29,15 @@ STRINGS = {
     # #140 2b: the listed town is far from the map point (facts/build.py town_far); never emergency option 1
     "town_far": {"en": "Town and map point disagree; check the address",
                  "hi": "शहर और नक्शे की जगह मेल नहीं खाते; पता पक्का करें"},
-    # Route guard (#140 WS2 2c, app/itinerary.py). hi: None until WS2 2e adds the engine table rows to hi.json.
+    # Route guard (#140 WS2 2c, app/itinerary.py). hi is the hi.json engine row (WS2 2e, test_i18n_engine.py).
     "route_dropped": {"en": "Go straight to {name}; it is nearer than any other place with evidence for every stage.",
-                      "hi": None},
-    "stop_no_line": {"en": "No line in its listing names {need}; ask on the phone.", "hi": None},
+                      "hi": "सीधे {name} जाएँ; हर कदम के सबूत वाली जगहों में यह सबसे पास है।"},
+    "stop_no_line": {"en": "No line in its listing names {need}; ask on the phone.",
+                     "hi": "इसकी लिस्टिंग में {need} के बारे में कोई लाइन नहीं; फ़ोन पर पूछें।"},
     "stop_1_unlisted": {"en": "The route starts at {name}, which is not in the options list: no listing near here "
                               "names this service itself, so each stop is chosen on the evidence for its own stage.",
-                        "hi": None},
+                        "hi": "रास्ता {name} से शुरू होता है, जो विकल्पों की सूची में नहीं है: यहाँ पास की किसी लिस्टिंग में "
+                              "यह सेवा खुद नहीं लिखी है, इसलिए हर जगह उसके अपने कदम के सबूत पर चुनी गई है।"},
     "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
