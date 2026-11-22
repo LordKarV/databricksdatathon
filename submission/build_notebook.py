@@ -1,4 +1,4 @@
-"""Write and run submission/referral_saathi.ipynb (issue #57).
+"""Write and run submission/bharosa.ipynb (issue #57), and its identical copy referral_saathi.ipynb.
 
 The notebook's cells live here as plain strings, so a reviewer can read the notebook source in one diff. This script
 writes the .ipynb, executes it top to bottom with the local kernel and saves it WITH outputs, which is what judges
@@ -17,7 +17,8 @@ from nbclient import NotebookClient
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
 HERE = Path(__file__).resolve().parent
-NB = HERE / "referral_saathi.ipynb"
+NB = HERE / "bharosa.ipynb"
+NB_OLD_NAME = HERE / "referral_saathi.ipynb"  # same bytes; the deployed Databricks job and older links use this name
 MAX_MB = 20
 
 CELLS: list[tuple[str, str]] = []
@@ -1178,6 +1179,7 @@ def main() -> int:
             nbformat.write(nb, NB)
             return 1
     nbformat.write(nb, NB)
+    NB_OLD_NAME.write_bytes(NB.read_bytes())
     mb = NB.stat().st_size / 1e6
     print(f"wrote {NB.name}: {len(nb.cells)} cells, {mb:.2f} MB")
     return 0 if mb < MAX_MB else 1

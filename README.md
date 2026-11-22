@@ -17,7 +17,7 @@ first care, then go on to AIIMS Patna. A simulated referral world showed that in
 place first, with a call ahead, gets more patients to care in time than sending them farther for better evidence,
 and the app stays within 1 to 2 points of the nearest listing plus a call ahead (simulated, not a field result).
 *These numbers come from the route planner on model v2, as printed in section 7 of
-[`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb) (trauma, at that point; the route's own
+[`submission/bharosa.ipynb`](submission/bharosa.ipynb) (trauma, at that point; the route's own
 sentence is "Going straight to All India Institute of Medical Sciences Patna takes 92 min and misses the 60-minute
 window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about 1 min.").*
 
@@ -31,7 +31,7 @@ The submission is three things:
 - **Video demo:** the app on a phone, start to finish. Video: VIDEO_LINK (placeholder, added after recording, #12).
 - **This repository**, with the code for every step from audit to app.
 - **The notebook**, with all our code and its outputs:
-  [`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb). It is readable on GitHub as is, and runs
+  [`submission/bharosa.ipynb`](submission/bharosa.ipynb). It is readable on GitHub as is, and runs
   on Databricks Free Edition ([`submission/README.md`](submission/README.md)).
 
 The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
@@ -55,7 +55,7 @@ tells the same story as the notebook, in plain words.
   10 of 12 on the live space (two runs,
   [`databricks/genie/benchmark_results.json`](databricks/genie/benchmark_results.json)); two of the 12 share an
   example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" with claim ids.
-- **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
+- **Notebooks** on serverless: `submission/bharosa.ipynb` (also kept as `referral_saathi.ipynb`, the name the deployed job runs), `submission/02_simulation.ipynb` and
   `submission/00_rebuild_derived.ipynb`. All three ran on Databricks serverless on 2026-11-22: run ids 796897435272535,
   418325743233710 and 245706239328385 ([release runs](submission/README.md#release-runs-2026-11-22-ran-on-databricks-serverless)).
 - **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
@@ -108,7 +108,7 @@ At request time the app needs only the Python standard library plus FastAPI. Its
 **On Databricks Free Edition:**
 1. Install the Marketplace listing.
 2. Add this repository as a Git folder.
-3. Open `submission/referral_saathi.ipynb`, attach serverless compute, and Run all.
+3. Open `submission/bharosa.ipynb`, attach serverless compute, and Run all.
    - If your catalog has a different name, set `CATALOG` in its first code cell.
    - Details are in `submission/README.md`.
 
