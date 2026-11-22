@@ -31,7 +31,7 @@
       ],
     },
     hi: {
-      title: '\u0906\u092a\u0915\u093e \u0915\u094d\u0937\u0947\u0924\u094d\u0930', lang: '\u092d\u093e\u0937\u093e', draft: '(Hindi draft, not reviewed)',
+      title: '\u0906\u092a\u0915\u093e \u0915\u094d\u0937\u0947\u0924\u094d\u0930', lang: '\u092d\u093e\u0937\u093e', draft: '',
       intro: '\u090f\u0915 \u091c\u093c\u093f\u0932\u0947 \u092e\u0947\u0902 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0928\u0947 \u092b\u093c\u094b\u0928 \u0914\u0930 \u0930\u0947\u092b\u093c\u0930\u0932 \u0915\u0947 \u092c\u093e\u0926 \u0915\u094d\u092f\u093e \u0926\u0930\u094d\u091c \u0915\u093f\u092f\u093e\u0964 \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964 \u0915\u094b\u0911\u0930\u094d\u0921\u093f\u0928\u0947\u091f\u0930 \u0914\u0930 \u092f\u094b\u091c\u0928\u093e \u092c\u0928\u093e\u0928\u0947 \u0935\u093e\u0932\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f\u0964',
       district: '\u091c\u093c\u093f\u0932\u093e', service: '\u0938\u0947\u0935\u093e', all: '\u0938\u092d\u0940 \u0938\u0947\u0935\u093e\u090f\u0901', show: '\u0926\u093f\u0916\u093e\u090f\u0901', loading: '\u0932\u094b\u0921 \u0939\u094b \u0930\u0939\u093e \u0939\u0948...',
       needDistrict: '\u091c\u093c\u093f\u0932\u0947 \u0915\u093e \u0928\u093e\u092e \u0932\u093f\u0916\u0947\u0902\u0964',
@@ -75,11 +75,6 @@ border:2px solid var(--muted);border-radius:8px;background:var(--bg);color:var(-
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   }
-  function getLang() {
-    try { const l = localStorage.getItem('rs.pulseLang'); if (l === 'en' || l === 'hi') return l; } catch { /* private mode */ }
-    return (navigator.language || '').startsWith('hi') ? 'hi' : 'en';
-  }
-  function setLang(l) { try { localStorage.setItem('rs.pulseLang', l); } catch { /* private mode */ } }
   function svcName(opts, id, lang) {
     const s = (opts.services || []).find(x => x.key === id);
     return s ? (s[lang] || s.en) : id.replace(/_/g, ' ');
@@ -129,7 +124,7 @@ border:2px solid var(--muted);border-radius:8px;background:var(--bg);color:var(-
       st.textContent = CSS;
       document.head.appendChild(st);
     }
-    let lang = getLang();
+    const lang = opts.lang === 'hi' ? 'hi' : 'en';  // the app language; no toggle of its own
     let last = null;  // {data} or {error}
     const loc = opts.loc;
     let query = {district: opts.district || '', service: opts.service && opts.service !== 'other' ? opts.service : ''};
@@ -148,24 +143,15 @@ border:2px solid var(--muted);border-radius:8px;background:var(--bg);color:var(-
     function draw() {
       const t = T[lang];
       container.innerHTML = `<h1 tabindex="-1">${esc(t.title)}</h1>
-        <div class="row" role="group" aria-label="${esc(t.lang)}">
-          <button type="button" data-pl="en" aria-pressed="${lang === 'en'}">English</button>
-          <button type="button" data-pl="hi" aria-pressed="${lang === 'hi'}"><span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span></button></div>
-        <div lang="${lang}"><p>${esc(t.intro)}</p>${t.draft ? `<p class="small" lang="en">${esc(t.draft)}</p>` : ''}
+        <div><p>${esc(t.intro)}</p>${t.draft ? `<p class="small" lang="en">${esc(t.draft)}</p>` : ''}
         <form class="pulse-form" novalidate>
           <label for="pulse-d">${esc(t.district)}</label>
           <input id="pulse-d" name="district" autocomplete="off" maxlength="60" value="${esc(query.district)}">
           <label for="pulse-s">${esc(t.service)}</label>
           <select id="pulse-s" name="service"><option value="">${esc(t.all)}</option>
             ${(opts.services || []).map(s => `<option value="${esc(s.key)}"${s.key === query.service ? ' selected' : ''}>${esc(s[lang] || s.en)}</option>`).join('')}</select>
-          <button type="submit" class="btn btn-primary">${esc(t.show)}</button></form>
+          <button type="submit" class="btn btn-ink">${esc(t.show)}</button></form>
         <div id="pulse-res" aria-live="polite">${resHtml()}</div></div>`;
-      container.querySelectorAll('[data-pl]').forEach(b => b.addEventListener('click', () => {
-        lang = b.dataset.pl;
-        setLang(lang);
-        draw();
-        container.querySelector(`[data-pl="${lang}"]`).focus();
-      }));
       container.querySelector('form').addEventListener('submit', e => {
         e.preventDefault();
         query = {district: container.querySelector('#pulse-d').value.trim(), service: container.querySelector('#pulse-s').value};

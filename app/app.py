@@ -459,4 +459,27 @@ def static_file(name: str) -> FileResponse:
     return _shell(name)
 
 
+# UI2 (design/ui2/SPEC.md): the strings files and the self-hosted fonts. Fixed allowlists, so no client string reaches
+# the filesystem path. Fonts never change under a name, so they may be cached for a year; strings revalidate.
+STRING_FILES = {"en.json", "hi.json"}
+FONT_FILES = {"barlow-500.woff2", "barlow-600.woff2", "barlow-condensed-600.woff2", "plex-mono-500-digits.woff2",
+              "hind-500-deva.woff2", "hind-600-deva.woff2"}
+
+
+@app.get("/i18n/{name}")
+def strings_file(name: str) -> FileResponse:
+    if name not in STRING_FILES:
+        raise HTTPException(404)
+    return FileResponse(STATIC / "i18n" / name, media_type="application/json; charset=utf-8",
+                        headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/fonts/{name}")
+def font_file(name: str) -> FileResponse:
+    if name not in FONT_FILES:
+        raise HTTPException(404)
+    return FileResponse(STATIC / "fonts" / name, media_type="font/woff2",
+                        headers={"Cache-Control": "public, max-age=31536000, immutable"})
+
+
 _engine()  # load the facts at start-up, not on the first request
