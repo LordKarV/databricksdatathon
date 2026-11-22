@@ -1,4 +1,4 @@
-# Referral Saathi
+# Bharosa
 
 A health worker in rural India types a service (dialysis, emergency caesarean, accident care) and gets whom to call
 first, two backups and the one question to ask on the phone, each with the facility's own words as evidence and
@@ -9,7 +9,7 @@ instead of guessing, and it keeps working offline on a cheap phone.
 
 **Not the nearest, and not an unreachable "best".** Sending everyone to the closest listing ignores whether it
 really offers the care; sending everyone to the best hospital ignores whether the patient can get there in time.
-Referral Saathi weighs evidence, travel time and the care's time window, and when the right hospital is too far it
+Bharosa weighs evidence, travel time and the care's time window, and when the right hospital is too far it
 plans a stop to stabilise first. For example, after a road accident in Gaya, Bihar (24.79, 85.0), going straight to
 AIIMS Patna takes about 92 minutes and misses the 60-minute window. So the app says: call Dr. A Barkat
 Multispeciality Hospital, half a kilometre away and rated Likely ("Provides 24/7 trauma and emergency care"), for

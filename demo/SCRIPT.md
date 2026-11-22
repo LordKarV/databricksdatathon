@@ -15,7 +15,7 @@ cleaning/geo_identity/summary.json]
 
 **0:35 why a chatbot is not enough.** "We asked Llama 3.3 70B, on our Databricks workspace, whether Wockhardt
 Hospital Nagpur offers dialysis. Yes, confidence 1. But that record is stitched together from Mumbai hospitals'
-sentences. Referral Saathi catches it: near Thane, it passes Wockhardt over and says why."
+sentences. Bharosa catches it: near Thane, it passes Wockhardt over and says why."
 [audit/capabilities/aiq2_rerun_20261122.json] Show the Thane answer's Why page: the Passed over line.
 
 **0:55 a model you can read.** Open a Likely card's Why page. "Every score is a sum of named witnesses: the

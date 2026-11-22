@@ -33,12 +33,12 @@ def code(s: str) -> None:
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("""
-# Referral Saathi: whom to call first, and why
+# Bharosa: whom to call first, and why
 
 A health worker in rural India has a patient who needs dialysis, an emergency caesarean or trauma care. The
 facility list she could search says many things that are not true: hospitals that "offer" a service because a
 sentence about another hospital was pasted into their record, map points in the wrong district, and claims no one
-has checked. **Referral Saathi** reads every listing sentence, keeps only evidence about the facility itself,
+has checked. **Bharosa** reads every listing sentence, keeps only evidence about the facility itself,
 says how sure it is in words, and tells her whom to call first and why. It works offline and on a cheap phone.
 
 This notebook is the code and the reasoning behind the app, in plain words first:

@@ -1,7 +1,7 @@
 # Shared chart style
 
 `viz/style.py` is the one style every chart in this project uses, so the figures read as one
-system on slides, in the report and in the Referral Saathi app. `_demo/demo.py` is a working example.
+system on slides, in the report and in the Bharosa app. `_demo/demo.py` is a working example.
 
 ## Environment
 

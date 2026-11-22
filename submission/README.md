@@ -1,6 +1,6 @@
 # Submission notebook
 
-`referral_saathi.ipynb` is the code and the reasoning behind Referral Saathi, in plain words first. It is
+`referral_saathi.ipynb` is the code and the reasoning behind Bharosa, in plain words first. It is
 committed with its outputs, so it can be read on GitHub without running it. It runs end to end on Databricks
 Free Edition, and also locally.
 
