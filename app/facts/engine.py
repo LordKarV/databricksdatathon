@@ -852,21 +852,25 @@ class Engine:
         for j in idx:
             plat, plon = pins["lat"][j], pins["lon"][j]
             pool, _ = self._ranked(service, plat, plon, state)
-            within = [r for r in pool if r[1] <= window and r[2].grade in OWN_EVIDENCE | {"tag_only", "weak"}
+            # A listing claims the care when its own text describes it, or it is Likely; a specialty tag alone
+            # (tag_only, weak) that is not Likely is no claim, as for the options and the ten calls.
+            claims = [r for r in pool if r[2].grade in OWN_EVIDENCE | {"tag_only", "weak"}
                       and (r[4] == "likely" or r[2].grade in OWN_EVIDENCE)]
+            within = [r for r in claims if r[1] <= window]
             likely = [r for r in within if r[4] == "likely"]
+            # A call to a place whose town disagrees with its map point closes nothing (2b), so an area with no Likely
+            # option neither counts it nor names it as the row's call first: its travel time rests on that point.
+            callable_ = [] if likely else [r for r in within if not self._f("town_far", r[2].fi)]
             n_now += bool(likely)
-            n_conf += bool(within)
-            if not likely:
-                for r in within:  # a call to a place whose town disagrees with its map point closes nothing (2b)
-                    if not self._f("town_far", r[2].fi):
-                        gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
-            first, backup = (within + [None, None])[:2]
+            n_conf += bool(likely or callable_)
+            for r in callable_:
+                gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
+            first, backup = ((within if likely else callable_) + [None, None])[:2]
             near = min((r for r in pool if r[2].grade in OWN_EVIDENCE), key=lambda r: r[1], default=None)
             # Data gap vs care gap (#86): no listing claims it at all, or listings claim it but none is confirmed
-            # in the window, or all of them are farther than the window.
-            gap = ("covered" if likely else "not_confirmed" if any(r[1] <= window for r in pool)
-                   else "far" if pool else "no_claim")
+            # in the window, or all of them are farther than the window. "not_confirmed" is exactly the areas a
+            # call can add (gains above), so the headline and the ten calls agree with this list (#167 review).
+            gap = ("covered" if likely else "not_confirmed" if callable_ else "far" if claims else "no_claim")
             rows.append({
                 "pin": pins["pin"][j], "lat": plat, "lon": plon,
                 "first": {"facility_id": self._f("id", first[2].fi), "name": self._f("name", first[2].fi)}
@@ -896,7 +900,7 @@ class Engine:
             "ten_calls": [{"rank": r + 1, "facility_id": self._f("id", fi), "name": self._f("name", fi),
                            "phone_kind": self._phone_kind(fi), "areas": len(p), "access_gain": round(len(p) / n, 3)}
                           for r, (fi, p) in enumerate(calls)],
-            "headline": self._headline(calls, len(rows), n_now, window),
+            "headline": self._headline(calls, rows, window),
             "meta": self._meta(),
         }
 
@@ -937,9 +941,12 @@ class Engine:
         return []
 
     @staticmethod
-    def _headline(calls: list, n: int, now: int, window: int) -> dict:
+    def _headline(calls: list, rows: list[dict], window: int) -> dict:
         """The Area headline from ten_calls[0]: if it confirms, k of n sampled PIN areas (now `now`) have care in the
-        window; or why there is no such call: every area is covered already, or nothing is claimed in the window."""
+        window; or why there is no such call: every area is covered already, or nothing is claimed in the window.
+        Counted from the rows' `gap`, the same field the gap list counts: `calls` is non-empty exactly when some
+        area is "not_confirmed", since each such area adds itself to a call's gains."""
+        n, now = len(rows), sum(r["gap"] == "covered" for r in rows)
         if calls:
             _, gained = calls[0]
             return {"kind": "if_confirms", "rank": 1, "k": now + len(gained), "n": n, "now": now, "window_min": window}
