@@ -73,12 +73,12 @@ def _stop(eng: Engine, s: dict, question: str | None) -> dict:
     }
 
 
-def _vs_direct(v: dict | None, eng: Engine, plan_type: str) -> dict | None:
+def _vs_direct(v: dict | None, plan_type: str) -> dict | None:
+    """The planner's one plain sentence against going direct, plus what would change the answer (#86 decision 3).
+    The probabilities ride along for the record but are not in the sentence."""
     if not v or plan_type in ("direct", "single_site") or v.get("direct_minutes") is None:
         return None
-    i = eng.fid.get(v.get("direct_facility_id"))
-    return {"direct_name": eng._f("name", i) if i is not None else "the best direct option",
-            "direct_minutes": v["direct_minutes"],
+    return {"text": v["text"], "what_would_change": v.get("what_would_change"),
             "direct_p_objective": v["direct_p_objective"], "plan_p_objective": v["plan_p_objective"],
             "direct_p_first_care": v["direct_p_first_care"], "plan_p_first_care": v["plan_p_first_care"]}
 
@@ -94,11 +94,28 @@ def _plan(eng: Engine, rank: int, o: dict) -> dict:
                    if t.get(k) is not None},
         "window_checks": [{k: c[k] for k in ("check", "limit_minutes", "eta_minutes", "met")}
                           for c in r["window_checks"]],
-        "vs_direct": _vs_direct(r.get("vs_direct"), eng, r["type"]),
+        "vs_direct": _vs_direct(r.get("vs_direct"), r["type"]),
     }
 
 
-def itinerary(eng: Engine, service: str, lat: float, lon: float) -> dict[str, Any] | None:
+def stop_1_note(route: dict, first_option: dict | None) -> str | None:
+    """One plain line when route 1's first stop is not the options list's first choice (#86 decision 2)."""
+    if not first_option or not route.get("stops"):
+        return None
+    s, d = route["stops"][0], route["stops"][-1]
+    if s["facility_id"] == first_option["facility_id"]:
+        return None
+    y = first_option["name"]
+    if s["purpose"] == "stabilise":
+        if s["eta_minutes"] < first_option["travel"]["minutes"]:
+            return f"Stop first to stabilise at {s['name']}, which is nearer than the best option {y}."
+        return f"Stop first to stabilise at {s['name']}, which the route rates above the best option {y} for first care on the way to {d['name']}."
+    if s is d:
+        return f"The route goes straight to {s['name']}, which has evidence for every part of this care; the best option {y} is ranked on this service alone."
+    return f"The route starts at {s['name']} for {PURPOSE.get(s['purpose'], s['purpose']).lower()}; the best option {y} is ranked on this service alone."
+
+
+def itinerary(eng: Engine, service: str, lat: float, lon: float, first_option: dict | None = None) -> dict[str, Any] | None:
     svc = _planner()
     if svc is None or svc.pathway_for(service) is None:
         return None
@@ -112,7 +129,8 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float) -> dict[str, An
         "pathway": out["pathway"], "pathway_name": pw["name"].split(":")[0], "urgency": out.get("urgency"),
         "abstain": (out.get("abstain") or {}).get("text"),
         "plans": [_plan(eng, k + 1, o) for k, o in enumerate(out["options"])],
-        "meta": {"stub": bool(meta.get("stub")), "origin_state": meta.get("origin_state"),
+        "stop_1_note": stop_1_note(out["options"][0]["route"], first_option) if out["options"] else None,
+        "meta": {"origin_state": meta.get("origin_state"),
                  "terrain": meta.get("terrain"),
                  "plans_considered": (out.get("considered") or {}).get("plans")},
     }
@@ -124,7 +142,8 @@ def attach(plan: dict, eng: Engine) -> dict:
     # The options do not need the planner: a broken planner file, pathway or geo table must never fail /api/plan
     # (#85 H3). Any error here leaves the options and says plainly that the route is missing.
     try:
-        plan["itinerary"] = itinerary(eng, plan["query"]["service"], loc["lat"], loc["lon"])
+        first = plan["options"][0] if plan.get("options") else None
+        plan["itinerary"] = itinerary(eng, plan["query"]["service"], loc["lat"], loc["lon"], first)
     except Exception:  # noqa: BLE001 - deliberate boundary: the route is optional
         plan["itinerary"] = None
         plan["itinerary_note"] = ROUTE_DOWN

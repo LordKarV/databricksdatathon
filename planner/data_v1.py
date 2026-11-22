@@ -1,4 +1,5 @@
-"""Stub inputs for the planner from derived/v1, until the model (#11) publishes scores.
+"""Stub inputs for the planner from derived/v1, from before model v2. Kept only for the stub-era data stories
+in viz/journeys; the app and planner/store.py read planner/export_v2.py's model v2 export instead.
 
     store = V1Store()
     store.facilities()                       -> list of facility dicts for planner.plan

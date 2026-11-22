@@ -3,6 +3,7 @@
 Run from the repo root with a venv that has fastapi, uvicorn, playwright, axe-playwright-python:
     .venv-app/bin/python app/checks/a11y_check.py
 Writes app/checks/a11y_results.json and app/checks/screens/<state>-<scheme>.png.
+The server runs with COMMUNITY_DEMO=1, so the field-report lines and the area pulse have (simulated) content.
 """
 from __future__ import annotations
 
@@ -28,6 +29,7 @@ BASE = f"http://127.0.0.1:{PORT}"
 AXE_JS = (Path(axe_playwright_python.__file__).parent / "axe.min.js").read_text()
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]  # spec section 7
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
+BIHAR_UP_BORDER = {"latitude": 26.50, "longitude": 84.25, "accuracy": 40}  # west of Gopalganj, near Kushinagar
 VIEWPORT = {"width": 360, "height": 780}
 
 
@@ -226,11 +228,30 @@ def offline_pin_picker(ctx, page: Page) -> dict:
     return {"district_select": page.evaluate("location.hash")}
 
 
+def offline_border(ctx, page: Page) -> dict:
+    """Near the Bihar-UP border: the Bihar and UP packs are both saved and a card names the other state."""
+    ctx.set_geolocation(BIHAR_UP_BORDER)
+    sw_ready(ctx, page)
+    home_located(page)
+    page.locator(".tile", has_text="Dialysis").click()
+    page.locator("article.card").first.wait_for()
+    page.wait_for_function("Object.keys((JSON.parse(localStorage.getItem('rs.pack')) || {}).packs || {}).length > 1",
+                           timeout=60000)
+    ctx.set_offline(True)
+    go(page, "#/")
+    page.locator(".tile", has_text="Dialysis").click()
+    page.get_by_text("Call before you go").wait_for()
+    saved = page.evaluate("Object.keys(JSON.parse(localStorage.getItem('rs.pack')).packs).sort()")
+    return {"saved_packs": saved, "options": page.locator("article.card").count(),
+            "other_state_cards": page.locator("article.card", has_text="In Uttar Pradesh,").count()}
+
+
 OFFLINE_STATES = {
     "offline_answer_dialysis": offline_answer,
     "offline_no_saved_pack": offline_no_pack,
     "offline_old_fix_confirm": offline_old_fix,
     "offline_pin_picker": offline_pin_picker,
+    "offline_border_dialysis": offline_border,
 }
 
 
@@ -287,6 +308,43 @@ def stories_page(page: Page) -> None:
     page.wait_for_function("[...document.querySelectorAll('#main img')].every(i => i.complete && i.naturalWidth > 0)")
 
 
+def reason_step(page: Page) -> None:
+    """Why page after "Said no": the optional reason buttons (community.js)."""
+    why(page)
+    page.get_by_role("button", name="Said no").click()
+    page.locator(".reason-step").wait_for()
+
+
+def visit_report(page: Page) -> None:
+    """'How did this referral go?' on a referral remembered when its slip was made, turned away chosen."""
+    plan_for("Dialysis")(page)
+    go(page, "#/slip/1")
+    page.locator(".slip").wait_for()
+    page.wait_for_function("!!localStorage.getItem('rs.recent')")
+    go(page, "#/report")
+    page.locator("#visit-form").wait_for()
+    page.locator("input[name=outcome][value=turned_away]").check()
+
+
+def pulse_panel(page: Page) -> None:
+    """'Your area' (pulse.js) for the demo district, from the results screen."""
+    plan_for("Dialysis")(page)
+    go(page, "#/pulse")
+    page.locator("#main h2").first.wait_for()
+    page.wait_for_function("!document.querySelector('#main').innerText.includes('Loading')")
+
+
+def journey_card(page: Page) -> None:
+    """The family journey card (journey.js) in Hindi, opened as the family would open the file."""
+    plan_for("Dialysis")(page)
+    go(page, "#/slip/1")
+    page.locator(".slip").wait_for()
+    html = page.evaluate("""() => new Promise((ok, fail) => { const s = document.createElement('script');
+      s.src = '/journey.js'; s.onload = () => ok(RSJourney.buildJourney(state.plan, 'hi', {rank: 1}).html);
+      s.onerror = fail; document.head.appendChild(s); })""")
+    page.set_content(html)
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -312,13 +370,18 @@ STATES: dict[str, Callable[[Page], None]] = {
     "route_trauma": route_all_open,
     "how_this_works": how_page,
     "data_stories": stories_page,
+    "reason_step": reason_step,
+    "visit_report": visit_report,
+    "pulse_panel": pulse_panel,
+    "journey_card": journey_card,
 }
 
 
 def main() -> int:
     SCREENS.mkdir(parents=True, exist_ok=True)
     server = subprocess.Popen([sys.executable, "-m", "uvicorn", "app:app", "--port", str(PORT), "--no-access-log"],
-                              cwd=APP, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                              cwd=APP, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                              env={**os.environ, "COMMUNITY_DEMO": "1"})
     results: dict = {"axe_tags": AXE_TAGS, "viewport": VIEWPORT, "states": {}}
     try:
         wait_up()

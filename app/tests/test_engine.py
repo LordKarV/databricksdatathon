@@ -124,7 +124,7 @@ def test_nearer_first_but_a_confirmed_listing_in_reach_is_never_hidden():
 
 # ---------- multi-stop route (#47) ----------
 ROUTED = itinerary.itinerary(ENGINE, "trauma_emergency", 25.15, 83.68) if ENGINE else None
-needs_planner = pytest.mark.skipif(ROUTED is None, reason="planner/out not built (planner/export_v1.py)")
+needs_planner = pytest.mark.skipif(ROUTED is None, reason="planner/out not built (planner/export_v2.py)")
 
 
 @needs_planner
@@ -137,6 +137,11 @@ def test_route_rides_along_in_budget(name):
     it = r.json()["itinerary"]
     assert r.status_code == 200 and ms < 500 and len(r.content) < 20_000, (ms, len(r.content))
     assert it["pathway"] and (it["plans"] or it["abstain"])
+    assert "stub" not in it["meta"]
+    opts = r.json()["options"]
+    if it["plans"] and opts:  # route stop 1 is the list's first choice, or one plain line says why (#86)
+        same = it["plans"][0]["stops"][0]["facility_id"] == opts[0]["facility_id"]
+        assert same or (it["stop_1_note"] and opts[0]["name"] in it["stop_1_note"])
     for plan in it["plans"]:
         assert plan["stops"][-1]["purpose"] in ("definitive", "recurring")
         for st in plan["stops"]:

@@ -1,13 +1,17 @@
 """Planner inputs at run time, standard library only.
 
-    store = Store.load()                     # planner/out/planner_v1.json.gz, or None if not built
+    store = Store.load()                     # planner/out/planner_v2.json.gz, or None if not built
     store.facilities()                       -> list of facility dicts for planner.plan
     store.capability_p(facility_id, cap)     -> (p, evidence_ids)
+    store.band(facility_id, cap)             -> "LIKELY" | "CALL_FIRST" | "NO_SERVICE_TEXT" (model v2
+                                                tags; the last has p 0), "TEXT" (support tags v2 does not
+                                                score), or None (UNLIKELY, or no mention)
     store.state_near((lat, lon))             -> state of the nearest PIN centroid (for hill-road
                                                 constants); nearest facility if the file has no PINs
 
-capability_p is the swap point for the model (#11): give planner.service a different function and
-nothing else changes. The file is written by planner/export_v1.py.
+Probabilities come from model v2 (derived/v2) for the tags that map to a v2 service. A v2 pair that
+is not in the file (NO_SERVICE_TEXT or UNLIKELY) has p 0, so it is never a stop. The file is written by
+planner/export_v2.py.
 """
 import gzip
 import json
@@ -16,7 +20,8 @@ from pathlib import Path
 
 from .core import hav_km
 
-OUT = Path(os.environ.get("PLANNER_OUT") or Path(__file__).resolve().parent / "out") / "planner_v1.json.gz"
+BANDS = {"L": "LIKELY", "C": "CALL_FIRST", "T": "TEXT"}
+OUT = Path(os.environ.get("PLANNER_OUT") or Path(__file__).resolve().parent / "out") / "planner_v2.json.gz"
 
 
 class Store:
@@ -30,8 +35,11 @@ class Store:
         pins = doc.get("pins") or {}
         self._pins = [(la, lo, pins["states"][s]) for la, lo, s in zip(pins.get("lat", []), pins.get("lon", []), pins.get("s", []))]
         self._blood = doc.get("blood")
-        self._caps = {cap: {f["id"][i]: (p, e) for i, p, e in zip(c["i"], c["p"], c["e"])}
+        self._caps = {cap: {f["id"][i]: (p, e, b) for i, p, e, b in zip(c["i"], c["p"], c["e"], c["b"])}
                       for cap, c in doc["capabilities"].items()}
+        # tags scored by model v2: an absent pair was judged NO_SERVICE_TEXT or UNLIKELY, so it is not offered
+        self.v2_caps = {cap for cap, c in doc["capabilities"].items() if c["source"].startswith("derived/v2")}
+        self._silent = {cap: {f["id"][i] for i in c.get("n", [])} for cap, c in doc["capabilities"].items()}
 
     @classmethod
     def load(cls, path=OUT):
@@ -47,8 +55,16 @@ class Store:
     def capability_p(self, facility_id, capability):
         if capability not in self._caps:
             raise KeyError(f"unknown capability {capability!r}")
-        p, ids = self._caps[capability].get(facility_id, (self.no_mention_p, []))
-        return p, list(ids)
+        row = self._caps[capability].get(facility_id)
+        if row is None:
+            return (0.0 if capability in self.v2_caps else self.no_mention_p), []
+        return row[0], list(row[1])
+
+    def band(self, facility_id, capability):
+        row = self._caps.get(capability, {}).get(facility_id)
+        if row is None:
+            return "NO_SERVICE_TEXT" if facility_id in self._silent.get(capability, ()) else None
+        return BANDS[row[2]]
 
     def blood_facts(self):
         """List facts for blood (planner/implied.py), or None when the export has none."""

@@ -55,7 +55,8 @@ def test_all_built_picks_state_of_nearest_pin(packs, lat, lon, slug):
 
 def test_partial_build_never_answers_another_state(packs):
     packs(["bihar"])
-    assert locate(26.5951, 85.4808).json() == {"slug": "bihar", "state": "BIHAR"}
+    assert locate(26.5951, 85.4808).json() == {"slug": "bihar", "state": "BIHAR",
+                                               "packs": [{"slug": "bihar", "state": "BIHAR"}]}
     for lat, lon, slug, state in [(19.07, 72.88, "maharashtra", "MAHARASHTRA"), (28.61, 77.21, "delhi", "DELHI")]:
         r = locate(lat, lon)
         assert r.status_code == 404

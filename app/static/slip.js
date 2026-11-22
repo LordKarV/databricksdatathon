@@ -220,5 +220,19 @@
     </article>`;
   }
 
-  root.RSSlip = {slipModel, toHtml, toWhatsApp, toSms, lines, strings: T};
+  /** Family journey card (journey.js, loaded on first use): shares or downloads it; resolves to
+   *  'shared' | 'downloaded' | 'cancelled'. The WhatsApp and SMS text slip above stay as the fallback. */
+  function shareJourney(plan, lang, opts) {
+    const go = () => root.RSJourney.shareJourney(plan, lang, opts);
+    if (root.RSJourney) return go();
+    return new Promise((ok, fail) => {
+      const s = document.createElement('script');
+      s.src = '/journey.js';
+      s.onload = ok;
+      s.onerror = fail;
+      document.head.appendChild(s);
+    }).then(go);
+  }
+
+  root.RSSlip = {slipModel, toHtml, toWhatsApp, toSms, lines, shareJourney, strings: T, util: {esc, stamp, routeModel}};
 })(typeof window !== 'undefined' ? window : globalThis);

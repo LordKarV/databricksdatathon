@@ -303,9 +303,25 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed):
                    "gate_rule": gate_rule["id"] if gate_rule else None}
 
 
+def _order(plans):
+    """Best first. A plan leads when no other beats it by MARGIN on (1) P(care in time), then on (2) P(first care
+    in time); among plans within MARGIN on both, the fewest expected minutes wins. Model probabilities a few
+    hundredths apart are not a reason to send a patient 15 minutes farther (#86: the route's first stop and
+    the options list disagreed on 0.01)."""
+    rest, out = list(plans), []
+    while rest:
+        top = max(p["p_objective"] for p in rest)
+        near = [p for p in rest if p["p_objective"] > top - MARGIN]
+        top = max(p["p_first_care"] for p in near)
+        near = [p for p in near if p["p_first_care"] > top - MARGIN]
+        best = min(near, key=lambda p: (p["expected_minutes"], -p["p_objective"], -p["p_first_care"]))
+        out.append(best)
+        rest.remove(best)
+    return out
+
+
 def _finish_emergency(plans, ctx, pathway, elapsed):
-    key = lambda p: (-round(p["p_objective"], 6), -round(p["p_first_care"], 6), p["expected_minutes"])  # noqa: E731
-    directs = sorted((p for p in plans if p["type"] == "direct"), key=key)
+    directs = _order([p for p in plans if p["type"] == "direct"])
     best_direct = directs[0] if directs else None
     kept, dropped = list(directs), 0
     for p in plans:
@@ -317,7 +333,7 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
             kept.append(p)
         else:
             dropped += 1
-    kept.sort(key=key)
+    kept = _order(kept)
     chosen, seen = [], set()
     for p in kept:
         sig = tuple(s["facility_id"] for s in p["stops"])
@@ -339,37 +355,14 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
         vs = None
         if best_direct is not None:
             gain = p["p_objective"] - best_direct["p_objective"]
-            # every number the sentence quotes, rounded exactly as it is printed, so a page can check
-            # the text against fields
-            shown = {"direct_p_objective": round(best_direct["p_objective"], 2), "plan_p_objective": round(p["p_objective"], 2),
-                     "direct_p_first_care": round(best_direct["p_first_care"], 2),
-                     "plan_p_first_care": round(p["p_first_care"], 2),
-                     "direct_minutes": best_direct["stops"][-1]["eta_minutes"], "threshold_minutes": ctx["gate"]}
-            if p is best_direct:
-                text, used = "This is the best direct plan.", []
-            elif p["type"] == "one_stop" and gain >= MARGIN:
-                used = ["direct_p_objective", "plan_p_objective", "direct_minutes", "threshold_minutes"]
-                text = (f"Stopping first raises the chance of care in time from {shown['direct_p_objective']:.2f} to "
-                        f"{shown['plan_p_objective']:.2f}; going direct to {best_direct['stops'][-1]['name']} takes "
-                        f"{shown['direct_minutes']} min, beyond the {shown['threshold_minutes']} min threshold.")
-            elif p["type"] == "one_stop":
-                used = ["plan_p_objective", "direct_p_objective", "direct_p_first_care", "plan_p_first_care", "direct_minutes"]
-                text = (f"Definitive care cannot be reached in time either way ({shown['plan_p_objective']:.2f} against "
-                        f"{shown['direct_p_objective']:.2f}). Stopping first raises the chance of first care in time from "
-                        f"{shown['direct_p_first_care']:.2f} to {shown['plan_p_first_care']:.2f}; going direct to "
-                        f"{best_direct['stops'][-1]['name']} takes {shown['direct_minutes']} min.")
-            else:
-                used = ["plan_p_objective", "direct_p_objective"]
-                text = (f"Direct to a different facility: chance of care in time {shown['plan_p_objective']:.2f} against "
-                        f"{shown['direct_p_objective']:.2f} for the best direct plan.")
+            text, shown = _vs_direct_text(p, best_direct, ctx["t1"], elapsed)
             vs = {"direct_facility_id": best_direct["stops"][-1]["facility_id"],
                   "direct_name": best_direct["stops"][-1]["name"],
                   "direct_minutes": best_direct["stops"][-1]["eta_minutes"],
                   "direct_p_objective": round(best_direct["p_objective"], 4),
                   "direct_p_first_care": round(best_direct["p_first_care"], 4),
                   "plan_p_objective": round(p["p_objective"], 4), "plan_p_first_care": round(p["p_first_care"], 4),
-                  "gain": round(gain, 4), "text": text,
-                  "text_numbers": {k: shown[k] for k in used}}
+                  "gain": round(gain, 4), "text": text, "text_numbers": shown}
         out.append({"type": p["type"], "stops": p["stops"],
                     "totals": {"minutes_to_definitive": p["stops"][-1]["eta_minutes"],
                                "low": p["stops"][-1]["eta_low"], "high": p["stops"][-1]["eta_high"],
@@ -379,6 +372,26 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
                                "minutes_if_treated": None if p["minutes_if_treated"] is None else round(p["minutes_if_treated"], 1)},
                     "window_checks": checks, "vs_direct": vs})
     return out, dropped
+
+
+def _vs_direct_text(p, best_direct, t1, elapsed):
+    """One plain sentence against going straight to the best direct facility, and every number it quotes.
+    Minutes only: the probabilities stay in the vs_direct fields, not in the sentence (#86 decision 3)."""
+    d = best_direct["stops"][-1]
+    shown = {"direct_minutes": d["eta_minutes"]}
+    direct = f"Going straight to {d['name']} takes {d['eta_minutes']} min"
+    if t1 is not None:
+        shown["window_minutes"] = t1
+        missed = d["eta_minutes"] + elapsed > t1
+        direct += f" and misses the {t1}-minute window" if missed else f", within the {t1}-minute window"
+    if p["type"] == "one_stop":
+        s = p["stops"][0]
+        shown["first_care_minutes"] = s["eta_minutes"]
+        return f"{direct}; stopping first at {s['name']} gives first care in about {s['eta_minutes']} min.", shown
+    if p is best_direct:
+        return f"{direct}.", shown
+    shown["plan_minutes"] = p["stops"][-1]["eta_minutes"]
+    return f"{direct}; this route goes straight to {p['stops'][-1]['name']} instead, in about {shown['plan_minutes']} min.", shown
 
 
 def _scheduled(origin, pathway, facilities, capability_p, travel_fn):

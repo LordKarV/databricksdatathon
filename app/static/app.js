@@ -157,6 +157,7 @@ function home() {
       <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108</a></div>
     <details><summary>Danger signs now?</summary>${boxes}
       <p class="small muted">Checklist written by the team, not clinically reviewed.</p></details>
+    ${RECENT().length ? `<a class="btn btn-block" href="#/report">How did a referral go? <span lang="hi">(\u0930\u0947\u092b\u093c\u0930\u0932 \u0915\u0948\u0938\u093e \u0930\u0939\u093e?)</span></a>` : ''}
     <p class="small muted">${savedLine()}</p>`;
 }
 function bindHome() {
@@ -358,10 +359,22 @@ function card(o, label, i) {
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
+    ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
       <a class="btn" href="#/why/${o.rank}">Why this? <span class="visually-hidden">${F(P + '.name', o.name)}</span></a></div>
   </article>`;
 }
+// Field reports (community/field.py): the server's dated lines, English and Hindi, shown verbatim and marked.
+function fieldHtml(o, P) {
+  const f = o.field;
+  if (!f || !(f.lines.length || f.notes.length)) return '';
+  const both = (x, Q) => `<p class="small">${F(Q + '.en', x.en)}<br><span lang="hi">${F(Q + '.hi', x.hi)}</span></p>`;
+  return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="small"><strong>Field reports
+    <span lang="hi">(\u092b\u093c\u0940\u0932\u094d\u0921 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
+    ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
+    ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
+}
+const RECENT = () => (load('recent') || []).filter(r => r && !r.reported && Date.now() - r.at < 7 * 864e5);
 // Lead's rule on #42: when the nearest verified option is far and nearer ones are not verified, say so up front.
 function farVerifiedNote(p) {
   const opts = p.options;
@@ -433,19 +446,16 @@ function routePlanHtml(r, P) {
       ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
       <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
       (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small">Going straight to ${F(P + '.vs_direct.direct_name', v.direct_name)} takes about
-      ${F(P + '.vs_direct.direct_minutes', v.direct_minutes, 'num')} min. Chance of care in time: direct
-      ${F(P + '.vs_direct.direct_p_objective', v.direct_p_objective.toFixed(2), 'num')}, this route
-      ${F(P + '.vs_direct.plan_p_objective', v.plan_p_objective.toFixed(2), 'num')}. First care in time: direct
-      ${F(P + '.vs_direct.direct_p_first_care', v.direct_p_first_care.toFixed(2), 'num')}, this route
-      ${F(P + '.vs_direct.plan_p_first_care', v.plan_p_first_care.toFixed(2), 'num')}.</p>` : ''}`;
+    ${v ? `<p class="small">${F(P + '.vs_direct.text', v.text)}
+      ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
 }
 function routeHtml(p) {
   const it = p.itinerary;
   if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2>Suggested route</h2>
     <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
-      estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
+      estimates.</p>
+    ${it.stop_1_note ? `<p class="small">${F('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
   if (it.abstain) return head + `<p class="card"><strong>${F('itinerary.abstain', it.abstain)}</strong></p>`;
   if (!it.plans.length) return '';
   const best = `<article class="card route" aria-labelledby="route-1"><h3 id="route-1">Route
@@ -466,7 +476,10 @@ function planScreen() {
   const depth = state.depth || 'quick';
   const toggle = `<div class="row" role="group" aria-label="Detail">${['quick', 'compare', 'area'].map(d =>
     `<button type="button" data-depth="${d}" aria-pressed="${depth === d}">${d[0].toUpperCase() + d.slice(1)}</button>`).join('')}</div>`;
+  const fr = p.field_reports && p.field_reports.note;
   const foot = `<p class="small muted">Data as of ${F('as_of', p.as_of)}. ${p.meta.stub ? 'Sample data from a stub, not a real recommendation.' : ''}</p>
+    ${fr ? `<p class="small muted">${F('field_reports.note.en', fr.en)} <span lang="hi">${F('field_reports.note.hi', fr.hi)}</span></p>` : ''}
+    <a class="btn btn-block" href="#/pulse">Your area: what health workers reported <span lang="hi">(\u0906\u092a\u0915\u093e \u0915\u094d\u0937\u0947\u0924\u094d\u0930)</span></a>
     <a class="btn btn-block" href="#/">New search</a>`;
   if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
   if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
@@ -700,6 +713,7 @@ function whyScreen(rank) {
     : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
       ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
+    ${fieldHtml(o, P)}
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
       (${F(P + '.travel.label', o.travel.label)}).</p>
@@ -731,6 +745,7 @@ function whyScreen(rank) {
     <div class="row" role="group" aria-label="What did they say?">
       ${['Said yes', 'Said no', 'No answer', 'Wrong number'].map(x => `<button type="button" data-outcome="${x}">${x}</button>`).join('')}
     </div>
+    <div id="reason-step"></div>
     <p class="small muted">Yes, no or no answer is sent to improve the data: this facility, the service, the district and
       the time. No patient details.</p>`;
 }
@@ -773,9 +788,17 @@ function bindWhy() {
   const rank = parseInt(location.hash.split('/')[2], 10);
   const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
+  loadScript('/community.js', 'RSCommunity').catch(() => {});  // the reason step; without it a "no" goes alone
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
     const at = Date.now();
     (state.outcomes ||= {})[rank] = {said: b.dataset.outcome, at};  // for the slip (#24)
+    window.RSCommunity?.dropPending();  // a corrected tap replaces an unsent "no"
+    $('#reason-step').innerHTML = '';
+    if (b.dataset.outcome === 'Said no' && o && window.RSCommunity) {
+      RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, 'Said no', at, reason ? {reason} : {}), announce);
+      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092e\u0928\u093e \u0915\u093f\u092f\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
+      return;
+    }
     const sent = o && queueOutcome(o, b.dataset.outcome, at);
     announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip${sent ? ' and is sent to improve the data, with no patient details' : ''}.`);
   }));
@@ -784,15 +807,16 @@ function bindWhy() {
 
 // ---------- call outcomes (#65): ids, the answer, a district; queued offline, flushed when back online ----------
 const OUTCOME_CODE = {'Said yes': 'yes', 'Said no': 'no', 'No answer': 'no_answer'};  // "Wrong number" is not sent
-function queueOutcome(o, said, at) {
+function queueOutcome(o, said, at, extra = {}) {
   const outcome = OUTCOME_CODE[said];
   if (!outcome || !state.loc || !state.service) return false;
-  const q = load('outq') || [];
-  q.push({outcome_id: crypto.randomUUID(), facility_id: o.facility_id, service_id: state.service, outcome,
-    said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100});
-  save('outq', q.slice(-50));
-  flushOutcomes();
+  queueItem({outcome_id: crypto.randomUUID(), facility_id: o.facility_id, service_id: state.service, outcome,
+    said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100, ...extra});
   return true;
+}
+function queueItem(item) {  // also the visit reports from community.js
+  save('outq', [...(load('outq') || []), item].slice(-50));
+  flushOutcomes();
 }
 let flushing = false;
 async function flushOutcomes() {
@@ -832,7 +856,10 @@ function slipScreen(rank) {
       <button type="button" id="slip-print">Print</button>
       <a class="btn" id="slip-wa" href="#" rel="noopener noreferrer">Send on WhatsApp</a>
       <a class="btn" id="slip-sms" href="#">Send by SMS</a>
-    </div>`;
+      <button type="button" id="slip-card">Send to family <span lang="hi">(\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u094b \u092d\u0947\u091c\u0947\u0902)</span></button>
+    </div>
+    <p class="small no-print">The family card is a file that opens on any phone without a login: places, phones and
+      what to bring, no patient details. <span lang="hi">\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948: \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901, \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
 }
 function loadSlipJs() {
   if (window.RSSlip) return Promise.resolve();
@@ -865,6 +892,17 @@ async function bindSlip() {
     $('#slip-big').textContent = on ? 'Normal size' : 'Show big';
   });
   $('#slip-print').addEventListener('click', () => window.print());
+  loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.remember(p, o, state.loc)).catch(() => {});
+  $('#slip-card').addEventListener('click', async () => {
+    const C = window.RSCommunity;
+    const msg = k => (C ? C.say(k) : '');
+    try {
+      const r = await RSSlip.shareJourney(p, lang, {rank});
+      announce(msg(r === 'downloaded' ? 'cardSaved' : r === 'shared' ? 'cardShared' : 'cardCancelled'));
+    } catch {
+      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
+    }
+  });
 }
 
 // ---------- How this works (#45): how.js and /api/how load only on this route ----------
@@ -929,6 +967,21 @@ async function bindStories() {
   }
 }
 
+// ---------- How did this referral go? (community.js): a visit report on a recent referral ----------
+function bindReport() {
+  loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.bindReport($('#report-out'), queueItem, announce))
+    .catch(() => { $('#report-out').innerHTML += '<p role="alert">Could not load this page. Check the connection.</p>'; });
+}
+
+// ---------- Your area (pulse.js): anonymous district counts, loaded only on this route ----------
+function bindPulse() {
+  const out = $('#pulse-out');
+  const cards = Object.fromEntries((state.plan?.options || []).map(o => [o.facility_id, `#/why/${o.rank}`]));
+  loadScript('/pulse.js', 'RSPulse')
+    .then(() => RSPulse.initPulse(out, {services: SERVICES.filter(s => s.profile), service: state.service, loc: state.loc, cards}))
+    .catch(() => { out.innerHTML += '<p role="alert">Could not load this page. Check the connection.</p>'; });
+}
+
 // ---------- router ----------
 function render() {
   const h = location.hash || '#/';
@@ -942,6 +995,8 @@ function render() {
   else if (h === '#/describe') [html, bind] = [RSInput.describeScreen(), RSInput.bindDescribe];
   else if (h === '#/note') [html, bind] = [RSInput.noteScreen(), RSInput.bindNote];
   else if (h === '#/stories') [html, bind] = [storiesScreen(), bindStories];
+  else if (h === '#/report') [html, bind] = ['<div id="report-out"><h1 tabindex="-1">How did this referral go?</h1><p>Loading...</p></div>', bindReport];
+  else if (h === '#/pulse') [html, bind] = ['<div id="pulse-out"><h1 tabindex="-1">Your area</h1><p>Loading...</p></div>', bindPulse];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
   document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));
@@ -953,6 +1008,7 @@ function render() {
   if ($('#speak')) RSInput.bindSpeak(state.speak);
 }
 window.addEventListener('hashchange', () => {
+  window.RSCommunity?.sendPending();  // a "no" left without a reason is sent as it is
   if (location.hash === '#/' || location.hash === '#/change') {
     state.plan = null; state.outcomes = {}; state.area = null; state.patientHere = null; state.verify = {}; stopWatch();
   }

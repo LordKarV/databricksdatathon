@@ -1,12 +1,14 @@
 // Offline answer (spec S9, section 3.2.3; issue #23). Plain script, attaches window.RSOffline.
 // Packs live in IndexedDB, kept by the service worker (sw.js). Loaded lazily by app.js (never on the critical path); the service worker precaches it with pack.js.
-// Answers only from the state pack saved on this phone; shows no number the pack does not contain.
+// Answers only from the state packs saved on this phone (the home state plus every state with a facility within the
+// search radius); shows no number the packs do not contain.
 'use strict';
 (function (root) {
-  const KEY = 'rs.pack';  // {slug, state, built, saved_at}
+  const KEY = 'rs.pack';  // home {slug, state, built, saved_at, persisted}, packs: {slug: {state, saved_at, seen}}
   const DAY = 86400000;
   const FRESH_FIX_MS = 6 * 3600000;  // spec 3.2.3 step 1: older fixes need "Patient is here"
   const ACCEPT_M = 1000;  // step 2: accept a satellite fix of 1,000 m or better
+  const GRACE_MS = 30 * DAY;  // a neighbour pack no fix has needed for this long is dropped
 
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -25,30 +27,54 @@
     return null;
   }
 
-  // ---------- saving the pack (online, in the background) ----------
+  // ---------- saving the packs (online, in the background) ----------
+  function toWorker(reg, msg) {
+    return new Promise(resolve => {
+      const ch = new MessageChannel();
+      ch.port1.onmessage = e => resolve(e.data);
+      reg.active.postMessage(msg, [ch.port2]);
+      setTimeout(() => resolve({status: 'timeout'}), 60000);
+    });
+  }
+
+  // Saves the home pack and every pack /api/pack/locate names for this fix; drops packs no fix has needed for
+  // GRACE_MS. Returns the home pack's status.
   async function savePack(lat, lon) {
     if (!('serviceWorker' in navigator)) return {status: 'no-service-worker'};
     const r = await fetch('/api/pack/locate', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({lat: +lat.toFixed(2), lon: +lon.toFixed(2)}), redirect: 'manual'});
     if (!r.ok) return {status: 'no-pack'};
     const loc = await r.json();
+    const want = loc.packs || [{slug: loc.slug, state: loc.state}];
     const reg = await navigator.serviceWorker.ready;
-    const res = await new Promise(resolve => {
-      const ch = new MessageChannel();
-      ch.port1.onmessage = e => resolve(e.data);
-      reg.active.postMessage({type: 'cache-pack', slug: loc.slug}, [ch.port2]);
-      setTimeout(() => resolve({status: 'timeout'}), 60000);
-    });
-    if (res.status === 'saved' || res.status === 'unchanged') {
-      const old = meta();
-      const fresh = res.status === 'saved' || !old || old.slug !== loc.slug;
-      // Ask once that the browser not evict the pack under storage pressure (#32). Chrome grants it silently
+    const old = meta();
+    const now = Date.now();
+    const packs = Object.assign({}, old && old.packs);
+    let home = null;
+    for (const w of want) {
+      const res = await toWorker(reg, {type: 'cache-pack', slug: w.slug});
+      if (w.slug === loc.slug) home = res;
+      if (res.status !== 'saved' && res.status !== 'unchanged') continue;
+      const prev = packs[w.slug];
+      packs[w.slug] = {state: w.state, seen: now, saved_at: res.status === 'saved' || !prev ? now : prev.saved_at};
+    }
+    for (const slug of Object.keys(packs)) {
+      if (slug !== loc.slug && now - packs[slug].seen > GRACE_MS) {
+        await toWorker(reg, {type: 'drop-pack', slug});
+        delete packs[slug];
+      }
+    }
+    if (home.status === 'saved' || home.status === 'unchanged') {
+      const fresh = home.status === 'saved' || !old || old.slug !== loc.slug;
+      // Ask once that the browser not evict the packs under storage pressure (#32). Chrome grants it silently
       // for installed or engaged sites; Firefox may prompt. A refusal changes nothing else.
       const persisted = old && old.persisted ? true : await persist();
-      setMeta({slug: loc.slug, state: loc.state, sha256: res.sha256, persisted,
-        saved_at: fresh ? Date.now() : old.saved_at, built: old && !fresh ? old.built : null});
+      setMeta({slug: loc.slug, state: loc.state, sha256: home.sha256, persisted, packs,
+        saved_at: fresh ? now : old.saved_at, built: old && !fresh ? old.built : null});
+    } else if (old) {
+      setMeta(Object.assign({}, old, {packs}));
     }
-    return res;
+    return home;
   }
 
   async function persist() {
@@ -59,23 +85,28 @@
     } catch { return false; }
   }
 
+  // The home pack, decoded, with .packs holding every saved pack (home first) for answer() and resolvePin().
   async function loadPack() {
     const m = meta();
     if (!m) return null;
-    const r = await fetch('/api/pack/' + m.slug).catch(() => null);
-    if (!r || !r.ok) return null;
-    const pack = root.RSPack.decode(await r.json());
-    if (m.built !== pack.built) setMeta(Object.assign(m, {built: pack.built}));
-    return pack;
+    const get = slug => fetch('/api/pack/' + slug).then(r => r.ok ? r.json() : null).catch(() => null);
+    const home = await get(m.slug);
+    if (!home) return null;
+    const pack = root.RSPack.decode(home);
+    if (m.built !== pack.built) setMeta(Object.assign({}, m, {built: pack.built}));
+    const others = await Promise.all(Object.keys(m.packs || {}).filter(s => s !== m.slug).map(get));
+    return Object.assign({}, pack, {packs: [pack].concat(others.filter(Boolean).map(root.RSPack.decode))});
   }
 
   function titleCase(s) { return String(s || '').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); }
 
   // ---------- offline place picker from the pack ----------
   function resolvePin(pack, pin) {
-    const i = pack.pins.pin.indexOf(+pin);
-    if (i < 0) return null;
-    return {lat: pack.pins.lat[i], lon: pack.pins.lon[i], label: `PIN ${pin}, ${titleCase(pack.districts[pack.pins.d[i]])}`};
+    for (const p of pack.packs || [pack]) {
+      const i = p.pins.pin.indexOf(+pin);
+      if (i >= 0) return {lat: p.pins.lat[i], lon: p.pins.lon[i], label: `PIN ${pin}, ${titleCase(p.districts[p.pins.d[i]])}`};
+    }
+    return null;
   }
   function districtCentre(pack, d) {
     const di = pack.districts.indexOf(d);
@@ -100,17 +131,22 @@
 
   // ---------- the S9 screen ----------
   function answer(pack, loc, service) {
-    const res = root.RSPack.query(pack, loc.lat, loc.lon, service);
-    return Object.assign(res, {state: pack.state, band_note: pack.band_note});
+    const res = root.RSPack.queryAll(pack.packs || [pack], loc.lat, loc.lon, service);
+    return Object.assign(res, {state: res.state || pack.state, band_note: pack.band_note});
   }
 
   function render(o, ctx) {
     // ctx: {serviceLabel, locLine (already escaped HTML), show102, fresh, hasPack, gettingGps, reason}
     const m = meta();
-    const age = m ? daysAgo(m.saved_at) : null;
+    // The oldest saved pack sets the age warning; build dates are listed per state when they differ.
+    const savedAt = m ? Math.min(m.saved_at, ...Object.values(m.packs || {}).map(x => x.saved_at)) : null;
+    const age = m ? daysAgo(savedAt) : null;
+    const builts = o && o.packs ? [...new Set(o.packs.map(x => x.built))] : [];
+    const built = builts.length > 1 ? o.packs.map(x => `${x.built} (${titleCase(x.state)})`).join(', ')
+      : o && o.built || m && m.built || '?';
     const ageClass = age == null ? '' : age > 90 ? 'stale-red' : age > 30 ? 'stale-amber' : '';
-    const dates = m ? `<p class="${ageClass}">Facility data built ${esc(o && o.built || m.built || '?')}.
-      Saved to this phone ${dateStr(m.saved_at)} (${age === 0 ? 'today' : age + (age === 1 ? ' day' : ' days') + ' ago'}).
+    const dates = m ? `<p class="${ageClass}">Facility data built ${esc(built)}.
+      Saved to this phone ${dateStr(savedAt)} (${age === 0 ? 'today' : age + (age === 1 ? ' day' : ' days') + ' ago'}).
       ${age > 90 ? '<strong>Phone numbers may have changed.</strong>' : ''}</p>` : '';
     const calls = `<div class="row"><a class="btn" href="tel:108"><span aria-hidden="true">&#9742;</span> Call 108</a>
       ${ctx.show102 ? '<a class="btn" href="tel:102"><span aria-hidden="true">&#9742;</span> Call 102</a>' : ''}</div>`;
@@ -128,16 +164,16 @@
     }
     const prov = String(o.band_note || '').startsWith('placeholder')
       ? '<p class="small muted">Labels are provisional: the model has not published its scores yet.</p>' : '';
-    const cards = o.options.length ? o.options.map((x, i) => card(x, i + 1, ctx.serviceLabel)).join('')
+    const cards = o.options.length ? o.options.map((x, i) => card(x, i + 1, ctx.serviceLabel, o.state)).join('')
       : `<p class="card">No facility in the saved data lists ${esc(ctx.serviceLabel)} near here.</p>`;
     return head + gps + `<p class="small">${ctx.locLine}. Plan made for PIN ${esc(o.pin)} centre
         (${esc(titleCase(o.district))}), ${esc(o.km_to_pin)} km from you.</p>
       <h2>Call before you go</h2>${prov}${cards}
-      <p class="small muted">Needs internet: note scan, map, road times, places outside ${esc(titleCase(o.state))}
-        and its border.</p>${choose}`;
+      <p class="small muted">Needs internet: note scan, map, road times, places outside
+        ${esc([...new Set((o.packs || [o]).map(x => titleCase(x.state)))].join(', '))}.</p>${choose}`;
   }
 
-  function card(x, n, label) {
+  function card(x, n, label, userState) {
     const band = x.likely
       ? '<span class="band band-likely"><span aria-hidden="true">&#10004;</span> LIKELY</span>'
       : '<span class="band band-not_verified"><span aria-hidden="true">?</span> NOT VERIFIED: call to confirm</span>';
@@ -149,7 +185,7 @@
       `${tel ? 'Phone ' + tel.slice(4) + '. ' : ''}Call before going. Emergency 108.`);
     return `<article class="card" aria-labelledby="off-${n}"><p>${n}. ${band}</p>
       <h3 id="off-${n}">${esc(x.name)}</h3>
-      <p>${esc(x.km_straight)} km in a straight line (road is longer).${x.loc_low ? ' Map point may be wrong.' : ''}</p>
+      <p>${x.state && userState && x.state !== userState ? `In ${esc(titleCase(x.state))}, ` : ''}${esc(x.km_straight)} km in a straight line (road is longer).${x.loc_low ? ' Map point may be wrong.' : ''}</p>
       ${x.listings > 1 ? `<p class="small muted">Listed ${esc(x.listings)} times in the data; shown once, with the best evidenced listing's score.</p>` : ''}
       ${quotes}
       ${tel ? `<a class="btn btn-primary btn-block" href="${esc(tel)}"><span aria-hidden="true">&#9742;</span>

@@ -12,7 +12,7 @@ derived:  ## rebuild derived/v1 from data/raw (needs the raw dataset and the ups
 	zsh pipelines/source_scoring/run_all.sh
 
 app-data:  ## build the app's run-time exports from derived/v1, in deploy order
-	$(PY) planner/export_v1.py
+	$(PY) planner/export_v2.py
 	$(PY) app/facts/build.py
 	$(PY) app/packs/build_packs.py
 	$(PY) app/howto/build.py

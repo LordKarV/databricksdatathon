@@ -20,16 +20,16 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | File | What |
 |---|---|
 | `core.py` | The planner. Standard library only; data and probabilities are passed in |
-| `data_v1.py` | Stub inputs from `derived/v1`: facility list and `capability_p` (needs pandas) |
-| `export_v1.py` | Build step: writes `planner/out/planner_v1.json.gz` from the stub (needs pandas, about 6 s) |
-| `store.py` | Loads that file with the standard library: `facilities()`, `capability_p`, `state_near` |
+| `export_v2.py` | Build step: writes `planner/out/planner_v2.json.gz` from model v2 (`derived/v2`; needs pandas, about 7 s) |
+| `store.py` | Loads that file with the standard library: `facilities()`, `capability_p`, `band`, `state_near` |
+| `data_v1.py` | The old derived/v1 stub, kept only for the stub-era stories in `viz/journeys` |
 | `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
 | `implied.py` | Wrapper around any `capability_p`: implied capabilities and blood from the blood-centre list |
 | `eval_gold_dev.py`, `EVAL_GOLD_DEV.md` | The planner against the gold DEV labels, before and after |
 | `eval_gold_dev_notebook.py` | The same evaluation as a Databricks-format notebook (local path run; Unity Catalog path not run) |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
-| `test_planner.py` | 26 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
+| `test_planner.py` | 27 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
 
 ## Calling it from the app
 
@@ -37,21 +37,20 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 from planner.service import plan_for_service
 out = plan_for_service("trauma_emergency", 26.45, 85.95)
 # {"pathway": "major_trauma", "options": [...], "abstain": None, "thresholds": {...},
-#  "instructions": [...], "considered": {...}, "assumptions": {...}, "meta": {"stub": True, ...}}
+#  "instructions": [...], "considered": {...}, "assumptions": {...}, "meta": {"planner_data": {...}, ...}}
 ```
 
 - `DATATHON_ROOT` moves the data root (where `derived/v1` and `data/external` live), `PLANNER_OUT` the
   export folder and `PLANNER_EVAL_OUT` the evaluation output, for machines where the code folder is
   read-only.
-- Build the data once: `.venv/bin/python planner/export_v1.py` (about 0.9 MB, git-ignored). At run time
+- Build the data once: `uv run --no-project --with pandas --with pyarrow python planner/export_v2.py` (about 0.9 MB, git-ignored). At run time
   nothing but the standard library is imported. Measured on this machine with system Python and no
   pandas installed: 0.1 s for the first call including the load, then 8 to 22 ms per plan.
 - A service with no pathway returns `{"pathway": None}`: keep the single-destination ranking.
 - Service ids: `emergency_csection -> obstetric_emergency`, `nicu -> sick_newborn`,
   `trauma_emergency -> major_trauma`, `burn_care -> burns`, `dialysis -> dialysis_start`, plus
   `stemi` and `snakebite` if tiles are added. `mri` and `cardiac_surgery` have no pathway.
-- Pass `capability_p=` (and `facilities=`) to use the model instead of the stub. `meta.stub` then
-  turns false and the placeholder warning leaves `flags`.
+- Pass `capability_p=` (and `facilities=`) to plan with other probabilities (tests do).
 - `state=` (optional): the origin's state, e.g. from the app's PIN index. It selects the hill-road
   travel constants. When it is not passed, the state of the nearest PIN centroid in the export is
   used (near a border this can be the neighbouring state). `meta.origin_state`,
@@ -80,21 +79,25 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
   caesarean implication, and `meta.implications.blood_from_list` is false.
 - The strengths (0.6 to 0.9), the 0.75 cut, 0.50, 0.02 and 5 km are assumptions.
 
-## The swap point
+## Probabilities: model v2
 
-`capability_p(facility_id, capability) -> (p, evidence_ids)` is the only source of probabilities.
-`planner.core` never reads a data file. To use the model, pass a function backed by
-`derived/v2/facility_service_scores.parquet`; nothing else changes.
+`capability_p(facility_id, capability) -> (p, evidence_ids)` is the only source of probabilities;
+`planner.core` never reads a data file. `export_v2.py` builds it from `derived/v2`:
 
-The stub in `data_v1.py` is a placeholder, not a fitted model:
-
-- Capability mapped to a graded service (6 tags): the `service_claim` score from
-  `data_point_scores.parquet`, evidence = the claim ids `grades.parquet` cites.
-- Proposed capability (20 tags): sentences in the facility's own record that contain one of the
-  tag's evidence words. One sentence gets the median score of `weak` graded claims (0.715), two or
-  more the median of `moderate` graded claims (0.783). Both medians are read from the data. That
-  a keyword mention is as reliable as a weak or moderate graded claim is an untested assumption.
-- No mention: 0.02 (assumption).
+- A tag with a `v2_service` in `kb/pathways/capabilities.json` (15 of 26: emergency, trauma care, ICU,
+  CT, blood bank, C-section, NICU, dialysis, cath lab, ...) takes the v2 p of that facility and service.
+  Only LIKELY and CALL_FIRST pairs are offered. NO_SERVICE_TEXT and UNLIKELY pairs get p 0, so they are
+  never a stop, and implications never lift them: for these tags v2's band is final. A stop that rests
+  on a CALL_FIRST pair carries `call_first: true` and the flag "Call first to check: ... is not
+  confirmed in our data."
+- The other 11 tags (operating theatre, ECG, laboratory, nephrology, fistula surgery, basic EmOC,
+  newborn stabilisation, SNCU, IV fluids, burn dressings, plastic surgery) are support tags v2 does not
+  score. They come from the record's own offer sentences that name them (0.7 for one sentence, 0.78 for
+  two or more, 0.02 for none: assumptions), or from an implication (below).
+- Facilities: only those v2 scores (so the 12 exclude_review records are gone) and no dental or eye
+  clinic (2,190 records): none of the pathways is theirs to serve (validation H2; eye hospital as cath lab).
+- Evidence: own offer sentences only. Not another facility's sentence, not a non-offer, plan, camp,
+  staff or list sentence (validation H3), and never a sentence that names a doctor (#86).
 
 ## Method
 
@@ -107,7 +110,8 @@ The stub in `data_v1.py` is a placeholder, not a fitted model:
   - Timeline = travel (`geo.travel`) + dwell from the pathway. A facility that cannot deliver costs
     15 minutes, then the patient goes on: from S to D, from D to one fallback facility.
   - Ranking, in order: P(first care by T1 and definitive care by T2); P(first care by T1);
-    expected minutes to definitive care. T1 is the stabilising stage window, else the add-stop
+    expected minutes to definitive care. Differences under 0.05 (the margin) on the first two count as
+    ties, so near-equal chances go to the plan with fewer expected minutes. T1 is the stabilising stage window, else the add-stop
     threshold. T2 is the definitive stage window. Reaching definitive care counts as first care.
   - A stop plan is dropped unless it beats the best direct plan by 0.05 on the first measure, or
     matches it there and beats it by 0.05 on the second.
@@ -142,7 +146,8 @@ The stub in `data_v1.py` is a placeholder, not a fitted model:
                        "met_at_high_estimate"}],
     "vs_direct": {"direct_facility_id", "direct_name", "direct_minutes", "direct_p_objective",
                   "direct_p_first_care", "plan_p_objective", "plan_p_first_care", "gain", "text",
-                  "text_numbers": {<every number quoted in text, rounded as printed>}}
+                  "text_numbers": {<every number quoted in text, rounded as printed>},
+                  "what_would_change", "what_would_change_facility_id"}}
   }],
   "abstain": null | {"text"},
   "instructions": [{"rule", "type", "when", "then", "basis", "source"}],
@@ -151,13 +156,18 @@ The stub in `data_v1.py` is a placeholder, not a fitted model:
 }
 ```
 
+`vs_direct.text` is one plain sentence in minutes ("Going straight to X takes 84 min and misses the
+60-minute window; stopping first at Y gives first care in about 34 min."); the probabilities stay in the
+fields. `what_would_change` (from `service.py`, model v2 store only) names the nearer facility a phone
+"yes" would bring in: v2 rules out none of the first stop's stage tags there.
+
 `app_contract.to_options(result)` turns each plan into one `/api/plan` option for its definitive
 facility (`rank, facility_id, name, town, district, state, lat, lon, travel, p, evidence, flags,
 call_ahead, call_first`) plus a `route` object holding `type, stops, totals, window_checks,
 vs_direct`. It does not fill `band, p_lo, p_hi, p_e, p_l, contributions, track_record, phone`:
 those come from the model and the app's facts tables.
 
-## What it does on real data (stub probabilities)
+## What it did on real data before model v2 (stub probabilities, history)
 
 Rural Madhubani, Bihar, major trauma: stabilise at Madhubani Medical College (25 min), then
 Rajeshwar Hospital, Patna (180 min, range 154 to 247). Chance of first care in time 0.91; going
@@ -178,7 +188,7 @@ pathway (9,959 facilities, estimate travel):
 
 ## Limits
 
-- Probabilities are the stub above. Every number that depends on them will change with the model.
+- Support tags without a v2 service rest on text mentions with assumed probabilities (above).
 - Snakebite abstains for all 40 queries: only 5 of 9,959 records mention anti-snake venom. The
   guideline answer (nearest public facility, call to confirm stock) needs a facility-type prior
   the stub does not have.

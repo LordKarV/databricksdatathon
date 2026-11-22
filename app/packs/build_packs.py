@@ -21,8 +21,8 @@ derived/v1 score and interval. Each pack records its band source. Ranking is str
 the decision layer's expected time to treatment.
 
 Run from the repo root:  .venv-app/bin/python app/packs/build_packs.py [--states BIHAR,...]
-Writes app/packs/out/<slug>.json.gz (git-ignored: facility data), out/index.json, app/packs/sizes.json
-and app/packs/SIZES.md.
+Writes app/packs/out/<slug>.json.gz (git-ignored: facility data), out/index.json (with each state's facility
+points for the radius rule in /api/pack/locate), app/packs/sizes.json and app/packs/SIZES.md.
 """
 from __future__ import annotations
 
@@ -61,6 +61,7 @@ TOP_K = 3
 QUOTE_MAX = 160  # characters on a phone card; longer quotes are cut with "..."
 FAC_SCALE = 10_000  # facility coordinates in 1e-4 degree (about 11 m)
 PIN_SCALE = 1_000  # PIN centroids in 1e-3 degree (about 110 m)
+PTS_SCALE = 10  # index.json facility points in 0.1 degree (at most about 8 km off): enough for a 150 km radius test
 MODEL_SCORES = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
 
 # derived/v1 service names -> app service keys (app/stub_data.py). "icu" has no app tile, so it is dropped.
@@ -85,13 +86,14 @@ def _is_list(x: object) -> bool:
 def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Returns facilities, candidate (facility, service) evidence rows, and PINs."""
     loc = pd.read_parquet(DERIVED / "facility_location.parquet",
-                          columns=["unique_id", "name", "loc_lat", "loc_lon", "loc_conf"])
+                          columns=["unique_id", "name", "loc_lat", "loc_lon", "loc_conf", "state_final"])
     trust = pd.read_parquet(DERIVED / "record_trust.parquet",
                             columns=["unique_id", "display_phones", "trust_flags", "trust_level"])
     fac = loc.merge(trust, on="unique_id", how="left")
     keep, counts = eligible_facilities(fac)  # same rule as the facts engine and the planner (#78)
     report("packs.facilities", counts)
     fac = fac[keep]
+    fac["state_final"] = fac.state_final.fillna("")
     # Facility switchboard only: the record's own first phone, never a chain helpline. A phone the cleaning
     # step marked as a directory number is kept but flagged so the card can say so.
     fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if _is_list(p) and len(p) else "")
@@ -235,6 +237,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
         index[s] = [lists.setdefault(tuple(evidx[i] for i in lst), len(lists)) for lst in per_service[s]]
     districts = sorted(set(sp.district))
     didx = {d: i for i, d in enumerate(districts)}
+    fac_states = sorted(set(f.state_final))  # a card says "in <state>" when the facility is across the border
 
     return {
         "v": FORMAT_VERSION, "state": state, "built": built, "source": "derived/v1",
@@ -246,7 +249,9 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
             "tel_dir": f.tel_dir.tolist(), "loc_low": [int(c != "high") for c in f.loc_conf],
             "dup": f.unique_id.map(listings).fillna(1).astype(int).tolist(),  # duplicate listings merged (#78)
             "lat": delta(np.round(f.loc_lat * FAC_SCALE)), "lon": delta(np.round(f.loc_lon * FAC_SCALE)),
+            "st": [fac_states.index(x) for x in f.state_final],
         },
+        "fac_states": fac_states,
         "ev": {
             "f": delta(ev.f), "s": ev.s.tolist(), "likely": ev.likely.tolist(),
             "p": np.round(ev.score * 100).astype(int).tolist(),
@@ -266,6 +271,16 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
         "index": index,
         "scale": {"fac": FAC_SCALE, "pin": PIN_SCALE},
     }
+
+
+def state_points(state: str, fac: pd.DataFrame, svc: pd.DataFrame) -> list[list[int]]:
+    """Distinct 0.1-degree points of the state's own facilities that offer any app service, for index.json.
+
+    /api/pack/locate saves every pack with such a point within the planner's radius of the phone.
+    """
+    f = fac[(fac.state_final == state) & fac.unique_id.isin(svc.unique_id)]
+    pts = np.unique(np.round(f[["loc_lat", "loc_lon"]].to_numpy() * PTS_SCALE).astype(int), axis=0)
+    return pts.tolist()
 
 
 def encode(pack: dict) -> tuple[bytes, bytes]:
@@ -339,7 +354,7 @@ def main() -> int:
         name = slug(st)
         (OUT / f"{name}.json.gz").write_bytes(gz)
         index[name] = {"state": st, "gzip_bytes": len(gz), "sha256": hashlib.sha256(gz).hexdigest()[:16],
-                       "built": built}
+                       "built": built, "pts": state_points(st, fac, svc)}
         rows.append({"state": st, "slug": name, "built": built, "pins": len(pack["pins"]["d"]),
                      "facilities": len(pack["fac"]["name"]), "evidence_rows": len(pack["ev"]["s"]),
                      "quotes": len(pack["q"]), "lists": len(pack["lists"]),
@@ -349,7 +364,8 @@ def main() -> int:
     if args.states and old_index.is_file():
         prev = json.loads(old_index.read_text()).get("packs", {})
         index = {**{k: v for k, v in prev.items() if (OUT / f"{k}.json.gz").is_file()}, **index}
-    (OUT / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "packs": index}, indent=1) + "\n")
+    (OUT / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "pts_scale": PTS_SCALE, "packs": index},
+                                               separators=(",", ":")) + "\n")
     write_pin_index(pins)
     rows.sort(key=lambda r: -r["gzip_bytes"])
     if not args.states:
