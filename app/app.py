@@ -12,13 +12,14 @@ import math
 from pathlib import Path
 from typing import Annotated, Literal
 
+import outcomes
+from facts.engine import Engine
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
-from pydantic import BaseModel, ConfigDict, Field
-
-from facts.engine import Engine
+from inputs import understand
 from itinerary import attach
+from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES
 from verify.check import Checker
 
@@ -40,6 +41,9 @@ SHELL_FILES: dict[str, str] = {
     "offline.js": "text/javascript; charset=utf-8",
     "slip.js": "text/javascript; charset=utf-8",
     "how.js": "text/javascript; charset=utf-8",
+    "input.js": "text/javascript; charset=utf-8",
+    "lexicon.json": "application/json; charset=utf-8",
+    "stories.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -49,7 +53,8 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 
 def _shell(name: str) -> FileResponse:
     # no-cache = revalidate every time; the service worker, not the HTTP cache, owns offline.
-    return FileResponse(STATIC / name, media_type=SHELL_FILES[name], headers={"Cache-Control": "no-cache"})
+    path = understand.LEXICON if name == "lexicon.json" else STATIC / name
+    return FileResponse(path, media_type=SHELL_FILES[name], headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/")
@@ -141,6 +146,69 @@ def verify(req: VerifyRequest) -> JSONResponse:
     return JSONResponse(ch.check(req.facility_id, req.service_id), headers={"Cache-Control": "no-store"})
 
 
+class ParseRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: str = Field(min_length=1, max_length=understand.MAX_TEXT)
+
+
+@app.post("/api/parse")
+def parse(req: ParseRequest) -> JSONResponse:
+    """Free text -> a suggested service and the words that decided it (#64). The user confirms with one tap."""
+    return JSONResponse(understand.parse_text(req.text), headers={"Cache-Control": "no-store"})
+
+
+NOTE_IMAGE = r"^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$"
+
+
+class NoteRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    image: str = Field(max_length=4_000_000, pattern=NOTE_IMAGE, description="JPEG re-encoded in the browser")
+
+
+@app.post("/api/read-note")
+def read_note(req: NoteRequest) -> JSONResponse:
+    """Referral-note photo -> detected text and a guarded suggestion (#64). The image is not stored or logged."""
+    return JSONResponse(understand.read_note(req.image), headers={"Cache-Control": "no-store"})
+
+
+class OutcomeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    outcome_id: str = Field(pattern=outcomes.UUID, description="random UUID from the page; a retry writes once")
+    facility_id: str = Field(max_length=64)
+    service_id: str = Field(max_length=40)
+    outcome: Literal["yes", "no", "no_answer"]
+    said_at_ms: int = Field(ge=0)
+    lat: float = Field(ge=6.0, le=37.5, description="rounded to 0.01 degree by the page; only the district is kept")
+    lon: float = Field(ge=68.0, le=97.5)
+
+
+@app.post("/api/outcome")
+def outcome(req: OutcomeRequest) -> JSONResponse:
+    """What the facility said on the phone (#65). No patient data: ids, the answer, a district, a time."""
+    eng = _need_engine()
+    try:
+        out = outcomes.record(eng, req.outcome_id, req.facility_id, req.service_id, req.outcome, req.said_at_ms,
+                              req.lat, req.lon)
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"ok": False, "error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/outcomes/summary")
+def outcomes_summary() -> JSONResponse:
+    """Live count for "How this works": outcomes recorded and how many contradicted the band shown."""
+    try:
+        out = outcomes.summary(_need_engine())
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
+
+
 HOW = HERE / "howto" / "out" / "how.json"  # built by howto/build.py (git-ignored)
 
 
@@ -151,6 +219,35 @@ def how() -> Response:
         return JSONResponse({"error": "page data is not built on this server (run app/howto/build.py)"},
                             status_code=503)
     return FileResponse(HOW, media_type="application/json", headers={"Cache-Control": "no-cache"})
+
+
+STORIES = HERE / "stories" / "out"  # built by stories/build.py from viz/gallery.json (git-ignored)
+
+
+def _stories_doc() -> dict | None:
+    path = STORIES / "stories.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
+@app.get("/api/stories")
+def stories() -> Response:
+    """Data for the 'Data stories' page (#53): text copied from viz/gallery.json, charts by name."""
+    if not (STORIES / "stories.json").is_file():
+        return JSONResponse({"error": "page data is not built on this server (run app/stories/build.py)"},
+                            status_code=503)
+    return FileResponse(STORIES / "stories.json", media_type="application/json", headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/api/stories/chart/{name}")
+def story_chart(name: str) -> Response:
+    """One chart as SVG. Only names listed in stories.json are served."""
+    doc = _stories_doc()
+    allowed = {c["file"] for s in doc["stories"] for c in s["charts"]} if doc else set()
+    if name not in allowed or not (STORIES / "charts" / name).is_file():
+        raise HTTPException(status_code=404)
+    return FileResponse(STORIES / "charts" / name, media_type="image/svg+xml",
+                        headers={"Cache-Control": "public, max-age=3600", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'",
+                                 "X-Content-Type-Options": "nosniff"})
 
 
 @app.get("/api/recommend")

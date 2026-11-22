@@ -1,0 +1,62 @@
+{
+ "name": "minilm-l12",
+ "backbone": "microsoft/MiniLM-L12-H384-uncased",
+ "device": "mps",
+ "params": 33360770,
+ "train_examples": 123947,
+ "val_examples": 14407,
+ "args": {
+  "epochs": 3,
+  "bs": 128,
+  "lr": 3e-05,
+  "eps": 0.05,
+  "max_len": 192,
+  "seed": 7,
+  "limit": 0,
+  "checkpoint_every": 500,
+  "eval_bs": 512,
+  "log_every": 100,
+  "max_cells": 4915200
+ },
+ "epochs": [
+  {
+   "loss": 0.2869717768128611,
+   "about_auroc": 0.9859224334600759,
+   "about_ap": 0.9916664968930344,
+   "about_acc": 0.9329159212880143,
+   "offers_auroc": 0.987991161523339,
+   "offers_ap": 0.9872822687440155,
+   "offers_acc": 0.9399805210616021,
+   "epoch": 0,
+   "train_loss_ema": 0.2759926000850388,
+   "seconds": 846
+  },
+  {
+   "loss": 0.26633401214352437,
+   "about_auroc": 0.987564258555133,
+   "about_ap": 0.9928006733979409,
+   "about_acc": 0.936046511627907,
+   "offers_auroc": 0.993257845422703,
+   "offers_ap": 0.9929862822829115,
+   "offers_acc": 0.9616508400292184,
+   "epoch": 1,
+   "train_loss_ema": 0.2506569853422346,
+   "seconds": 4601
+  },
+  {
+   "loss": 0.26177399883894487,
+   "about_auroc": 0.9879286121673003,
+   "about_ap": 0.9930191399019496,
+   "about_acc": 0.9423076923076923,
+   "offers_auroc": 0.9944418621747823,
+   "offers_ap": 0.9943152415330067,
+   "offers_acc": 0.9662770878987095,
+   "epoch": 2,
+   "train_loss_ema": 0.2344390589730108,
+   "seconds": 7571
+  }
+ ],
+ "resumed_from_step": [],
+ "best_epoch": 2,
+ "train_seconds": 7571
+}

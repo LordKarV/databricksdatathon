@@ -1,0 +1,248 @@
+[
+ {
+  "n": 1,
+  "question": "How many districts in Uttar Pradesh have no confirmed dialysis facility, and how many people live in them?",
+  "ground_truth_sql": "SELECT COUNT(*), ROUND(SUM(pop)/1e6, 1) FROM workspace.referral_saathi.geo_dialysis_district WHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0",
+  "ground_truth": [
+   [
+    "54",
+    "149.5"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e6028f031c50b65cbee35c9f7904",
+   "message_id": "01f1e6028f9e17e4b4485d4c5e4363d7",
+   "sql": "SELECT COUNT(*) AS n_districts, ROUND(try_divide(SUM(pop),1e6), 2) AS pop_millions\nFROM workspace.referral_saathi.geo_dialysis_district\nWHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0",
+   "text": "You want to know how many districts in Uttar Pradesh have no confirmed dialysis facilities and the total population living in those districts.\nThere are **54 districts** in Uttar Pradesh with **no confirmed dialysis facility** (evidence level: n_corr = 0), and a total population of **149.54 million** people living in these districts. This represents all districts in the dataset with no public evidence of a confirmed dialysis facility.\n",
+   "columns": [
+    "n_districts",
+    "pop_millions"
+   ],
+   "rows": [
+    [
+     "54",
+     "149.54"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ },
+ {
+  "n": 2,
+  "question": "Among states with at least 100 trauma or emergency claims, which has the lowest share confirmed by a second source?",
+  "ground_truth_sql": "SELECT stname, COUNT(*) n, ROUND(100*AVG(CASE WHEN trauma_corroborated THEN 1 ELSE 0 END), 1) pct FROM workspace.referral_saathi.geo_facility WHERE trauma_claimed GROUP BY stname HAVING COUNT(*) >= 100 ORDER BY pct LIMIT 1",
+  "ground_truth": [
+   [
+    "GUJARAT",
+    "281",
+    "38.8"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e6029cab12abb5fd9a322d8ec1f7",
+   "message_id": "01f1e6029cb619e7b58603f6e64b60e7",
+   "sql": "SELECT stname, COUNT(*) AS n_trauma_claims, SUM(CASE WHEN trauma_corroborated THEN 1 ELSE 0 END) AS n_confirmed, ROUND(try_divide(100 * SUM(CASE WHEN trauma_corroborated THEN 1 ELSE 0 END),COUNT(*)), 1) AS pct_confirmed\nFROM workspace.referral_saathi.geo_facility\nWHERE trauma_claimed\nGROUP BY stname\nHAVING COUNT(*) >= 100\nORDER BY pct_confirmed ASC\nLIMIT 1",
+   "text": "You want to find the state that has at least 100 trauma or emergency claims and has the lowest percentage of those claims confirmed by a second source.\nAmong states with at least 100 trauma or emergency claims, **GUJARAT** has the lowest share confirmed by a second source, with **109 out of 281 claims** confirmed (**38.8%**). This result is based on public evidence from the Virtue Foundation records, with n = 281 trauma or emergency claims and n = 109 confirmed by a second source.\n",
+   "columns": [
+    "stname",
+    "n_trauma_claims",
+    "n_confirmed",
+    "pct_confirmed"
+   ],
+   "rows": [
+    [
+     "GUJARAT",
+     "281",
+     "109",
+     "38.8"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ },
+ {
+  "n": 3,
+  "question": "Cite the claim ids behind the dialysis claim of Ford Hospital And Research Center in Patna.",
+  "ground_truth_sql": "SELECT e.claim_id FROM (SELECT EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) e FROM workspace.referral_saathi.grades gr JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = gr.unique_id WHERE gr.service = 'dialysis' AND g.name = 'Ford Hospital And Research Center' AND g.dtname = 'Patna')",
+  "ground_truth": [
+   [
+    "e8396ece:equi:5"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e602aa1c1506b191460b54c0f6ce",
+   "message_id": "01f1e602aa241f75a3ed4be837d38d43",
+   "sql": "WITH cited AS (\n  SELECT gr.unique_id, gr.grade,\n    EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) AS e\n  FROM workspace.referral_saathi.grades gr\n  WHERE gr.service = 'dialysis')\nSELECT g.name, cited.grade, cited.e.claim_id AS claim_id, cited.e.field AS field, cited.e.text AS claim_text,\n  c.attribution\nFROM cited\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = cited.unique_id\nLEFT JOIN workspace.referral_saathi.claims c ON c.claim_id = cited.e.claim_id\nWHERE g.name = 'Ford Hospital And Research Center' AND g.dtname = 'Patna'\nORDER BY CASE cited.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 ELSE 3 END",
+   "text": "You want to see the claim sentences that support the dialysis service claim for Ford Hospital And Research Center in Patna district.\nFor Ford Hospital And Research Center in Patna, the dialysis claim is supported by claim ID **e8396ece:equi:5** with a grade of **strong** evidence, citing \"Dialysis unit\" as the claim text. The attribution for this claim is listed as **unanchored**. There is **1 claim** with strong evidence behind the dialysis service at this facility.\n",
+   "columns": [
+    "name",
+    "grade",
+    "claim_id",
+    "field",
+    "claim_text",
+    "attribution"
+   ],
+   "rows": [
+    [
+     "Ford Hospital And Research Center",
+     "strong",
+     "e8396ece:equi:5",
+     "equipment",
+     "Dialysis unit",
+     "unanchored"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ },
+ {
+  "n": 4,
+  "question": "How many facilities in Maharashtra hold a LaQshya certificate that is still valid?",
+  "ground_truth_sql": "SELECT COUNT(DISTINCT l.unique_id) FROM workspace.referral_saathi.facility_list_facts l JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id WHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' AND g.stname = 'MAHARASHTRA'",
+  "ground_truth": [
+   [
+    "2"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e602b3b41e208b4d5f66878a7f2d",
+   "message_id": "01f1e602b3bf144c9e21e8ba2e36a661",
+   "sql": "SELECT COUNT(DISTINCT l.unique_id) AS facilities_with_valid_laqshya\nFROM workspace.referral_saathi.facility_list_facts l\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id\nWHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' AND g.stname = 'MAHARASHTRA'",
+   "text": "You want to know the number of distinct facilities in Maharashtra that currently hold a valid LaQshya certificate.\nThere are **2 facilities** in Maharashtra with a LaQshya certificate that is listed as **certified, valid** in this dataset. This count is based on public evidence from facility list records, not verified facts.\n",
+   "columns": [
+    "facilities_with_valid_laqshya"
+   ],
+   "rows": [
+    [
+     "2"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ },
+ {
+  "n": 5,
+  "question": "Which Bihar districts have zero facility records?",
+  "ground_truth_sql": "SELECT dtname FROM workspace.referral_saathi.geo_district WHERE stname = 'BIHAR' AND records = 0 ORDER BY dtname",
+  "ground_truth": [
+   [
+    "Araria"
+   ],
+   [
+    "Arwal"
+   ],
+   [
+    "Banka"
+   ],
+   [
+    "Jamui"
+   ],
+   [
+    "Jehanabad"
+   ],
+   [
+    "Lakhisarai"
+   ],
+   [
+    "Sheohar"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e602bcfb1c54af73ffa89202cff9",
+   "message_id": "01f1e602bd0512d28ebee346c3f08603",
+   "sql": "SELECT d.dtname, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.records\nFROM workspace.referral_saathi.geo_district d\nWHERE d.stname = 'BIHAR' AND d.records = 0\nORDER BY d.pop DESC",
+   "text": "You want to see the districts in Bihar that have no facility records in the dataset, along with their population in millions and the number of records, ordered by population size.\nThere are **7 Bihar districts** with **zero facility records** in this dataset, meaning there is no public evidence of facilities for these districts. Examples include:\n- **Araria** (population: 4.12 million)\n- **Jamui** (population: 2.51 million)\n- **Banka** (population: 2.46 million)\n- **Jehanabad** (population: 1.35 million)\n- **Lakhisarai** (population: 1.06 million)\nThis represents 7 districts with no public evidence in this dataset, not a statement about actual facility presence.\n",
+   "columns": [
+    "dtname",
+    "pop_millions",
+    "records"
+   ],
+   "rows": [
+    [
+     "Araria",
+     "4.12",
+     "0"
+    ],
+    [
+     "Jamui",
+     "2.51",
+     "0"
+    ],
+    [
+     "Banka",
+     "2.46",
+     "0"
+    ],
+    [
+     "Jehanabad",
+     "1.35",
+     "0"
+    ],
+    [
+     "Lakhisarai",
+     "1.06",
+     "0"
+    ],
+    [
+     "Arwal",
+     "0.64",
+     "0"
+    ],
+    [
+     "Sheohar",
+     "0.61",
+     "0"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ },
+ {
+  "n": 6,
+  "question": "Is there dialysis care in Madhubani district of Bihar?",
+  "ground_truth_sql": "SELECT n_claim, n_corr FROM workspace.referral_saathi.geo_dialysis_district WHERE nfhs_state = 'Bihar' AND nfhs_district = 'Madhubani'",
+  "ground_truth": [
+   [
+    "0",
+    "0"
+   ]
+  ],
+  "genie": {
+   "status": "COMPLETED",
+   "conversation_id": "01f1e602c9241ae39c2432106275f928",
+   "message_id": "01f1e602c931141eaca47b8ce97e6125",
+   "sql": "SELECT d.nfhs_district, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis, d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Bihar' AND d.nfhs_district = 'Madhubani'",
+   "text": "You want to see the population, number of facilities claiming dialysis, number of facilities confirmed to provide dialysis, percentage of people within 60 minutes of confirmed dialysis, and whether the district is considered high-need and underserved for Madhubani district in Bihar.\nIn Madhubani district of Bihar, there are **0 facilities claiming dialysis care** and **0 facilities confirmed for dialysis care** in this dataset (n = 0, evidence level: claim and confirmed). Only **0.5% of people** are within 60 minutes of a confirmed dialysis facility. This means there is **no public evidence in this dataset** of dialysis care in Madhubani district.\n",
+   "columns": [
+    "nfhs_district",
+    "pop_millions",
+    "facilities_claiming_dialysis",
+    "facilities_confirmed_dialysis",
+    "pct_people_within_60_min_confirmed",
+    "hot"
+   ],
+   "rows": [
+    [
+     "Madhubani",
+     "5.95",
+     "0",
+     "0",
+     "0.5",
+     "false"
+    ]
+   ],
+   "error": null
+  },
+  "auto_pass": true
+ }
+]

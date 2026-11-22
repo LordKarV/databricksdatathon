@@ -1,0 +1,100 @@
+{
+ "v3_dev_present": false,
+ "gold_rows": 301,
+ "gold_primary": 301,
+ "by_version": {
+  "v2": 140,
+  "e2e": 125,
+  "v1": 36
+ },
+ "dup_conflicts": 0,
+ "gold_cites_list": 9,
+ "y_S": {
+  "burn_care": {
+   "pos": 5,
+   "neg": 12,
+   "missing": 22
+  },
+  "cardiac_surgery": {
+   "pos": 13,
+   "neg": 17,
+   "missing": 13
+  },
+  "dialysis": {
+   "pos": 14,
+   "neg": 25,
+   "missing": 6
+  },
+  "emergency_csection": {
+   "pos": 9,
+   "neg": 30,
+   "missing": 9
+  },
+  "mri": {
+   "pos": 6,
+   "neg": 12,
+   "missing": 15
+  },
+  "nicu": {
+   "pos": 8,
+   "neg": 22,
+   "missing": 16
+  },
+  "trauma_care": {
+   "pos": 7,
+   "neg": 15,
+   "missing": 25
+  }
+ },
+ "y_S_by_version": {
+  "e2e": {
+   "pos": 16,
+   "neg": 62,
+   "missing": 47
+  },
+  "v1": {
+   "pos": 15,
+   "neg": 20,
+   "missing": 1
+  },
+  "v2": {
+   "pos": 31,
+   "neg": 51,
+   "missing": 58
+  }
+ },
+ "fac_rows": 346,
+ "fac_by_src": {
+  "gold_dev": 290,
+  "geo_hand_check": 30,
+  "cleaning_hand_check": 26
+ },
+ "y_L": {
+  "cleaning_hand_check": {
+   "pos": 22,
+   "neg": 4,
+   "missing": 0
+  },
+  "geo_hand_check": {
+   "pos": 28,
+   "neg": 2,
+   "missing": 0
+  },
+  "gold_dev": {
+   "pos": 131,
+   "neg": 31,
+   "missing": 128
+  }
+ },
+ "y_E": {
+  "1.0": 163,
+  "NaN": 117,
+  "0.0": 10
+ },
+ "y_E_strict": {
+  "1.0": 163,
+  "NaN": 127
+ },
+ "gold_groups": 274,
+ "gold_states": 33
+}

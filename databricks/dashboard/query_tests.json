@@ -1,0 +1,294 @@
+{
+ "datasets": {
+  "ds_facility": {
+   "state": "SUCCEEDED",
+   "rows": 9959,
+   "seconds": 1.7
+  },
+  "ds_state": {
+   "state": "SUCCEEDED",
+   "rows": 32,
+   "seconds": 1.5
+  },
+  "ds_district": {
+   "state": "SUCCEEDED",
+   "rows": 784,
+   "seconds": 1.1
+  },
+  "ds_dialysis_district": {
+   "state": "SUCCEEDED",
+   "rows": 781,
+   "seconds": 1.4
+  },
+  "ds_csection_district": {
+   "state": "SUCCEEDED",
+   "rows": 169,
+   "seconds": 1.4
+  },
+  "ds_dialysis_burden": {
+   "state": "SUCCEEDED",
+   "rows": 780,
+   "seconds": 1.5
+  },
+  "ds_settlement": {
+   "state": "SUCCEEDED",
+   "rows": 9,
+   "seconds": 1.3
+  },
+  "ds_pmndp": {
+   "state": "SUCCEEDED",
+   "rows": 36,
+   "seconds": 1.3
+  },
+  "ds_funnel": {
+   "state": "SUCCEEDED",
+   "rows": 9244,
+   "seconds": 1.6
+  },
+  "ds_pairs": {
+   "state": "SUCCEEDED",
+   "rows": 69713,
+   "seconds": 1.7
+  },
+  "ds_list_facts": {
+   "state": "SUCCEEDED",
+   "rows": 3062,
+   "seconds": 2.2
+  },
+  "ds_plans": {
+   "state": "SUCCEEDED",
+   "rows": 3150,
+   "seconds": 1.4
+  },
+  "ds_plans_window": {
+   "state": "SUCCEEDED",
+   "rows": 21,
+   "seconds": 1.7
+  },
+  "ds_plans_concentration": {
+   "state": "SUCCEEDED",
+   "rows": 18,
+   "seconds": 1.4
+  },
+  "ds_test_metrics": {
+   "state": "SUCCEEDED",
+   "rows": 14,
+   "seconds": 1.6
+  },
+  "ds_test_labels": {
+   "state": "SUCCEEDED",
+   "rows": 4,
+   "seconds": 1.1
+  }
+ },
+ "checks": [
+  {
+   "check": "ds_facility national: records, high conf, names other, directory phones (spec 9959, 7762, 1232, 292)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "9959",
+     "7762",
+     "1232",
+     "292"
+    ]
+   ]
+  },
+  {
+   "check": "ds_facility cleaning: cannot_fix, rated_no_concerns, both (spec 2610, 7812, 1589)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "2610",
+     "7812",
+     "1589"
+    ]
+   ]
+  },
+  {
+   "check": "ds_facility hours: any, 24x7, schedule (spec 6074, 2829, 2808)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "6074",
+     "2829",
+     "2808"
+    ]
+   ]
+  },
+  {
+   "check": "ds_state Bihar per_m, lo, hi, records, pop_m (spec 1.95, 1.72, 2.20, 260, 133.5)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "1.95",
+     "1.72",
+     "2.2",
+     "260",
+     "133.5"
+    ]
+   ]
+  },
+  {
+   "check": "geo_dialysis_district hot districts and people (spec 69, 103.8 M)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "69",
+     "103.8"
+    ]
+   ]
+  },
+  {
+   "check": "geo_csection_district districts in the two low bands (spec 152 = 39 + 113)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "5-10%",
+     "113"
+    ],
+    [
+     "under 5%",
+     "39"
+    ]
+   ]
+  },
+  {
+   "check": "ds_funnel national: mentioned, own checks, own and outside (spec 7969, 1798, 837)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "7969",
+     "1798",
+     "837"
+    ]
+   ]
+  },
+  {
+   "check": "ds_pairs bands (spec Unlikely 37108, Unverified 32603, Likely 2)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "Likely",
+     "2"
+    ],
+    [
+     "Unlikely",
+     "37108"
+    ],
+    [
+     "Unverified",
+     "32603"
+    ]
+   ]
+  },
+  {
+   "check": "ds_plans_window Bihar major trauma (spec 15 of 150)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "15",
+     "150",
+     "0.1",
+     "0.062",
+     "0.158"
+    ]
+   ]
+  },
+  {
+   "check": "ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "obstetric_emergency",
+     "Sub Divisional Hospital Pusa",
+     "81",
+     "131"
+    ],
+    [
+     "major_trauma",
+     "Rajeshwar Hospital",
+     "79",
+     "134"
+    ]
+   ]
+  },
+  {
+   "check": "ds_test_metrics shipped vs priors, all 71 (storybook 0.776 [0.680, 0.862] vs 0.789; ECE IPW 0.197)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "AUROC",
+     "Same scorecard, expert priors",
+     "0.7887",
+     "0.6923",
+     "0.875",
+     "0.684"
+    ],
+    [
+     "AUROC",
+     "Fitted ledger (shipped)",
+     "0.7756",
+     "0.6804",
+     "0.8619",
+     "0.6149"
+    ],
+    [
+     "ECE (lower is better)",
+     "Fitted ledger (shipped)",
+     "0.097",
+     "0.0783",
+     "0.1804",
+     "0.1966"
+    ]
+   ]
+  },
+  {
+   "check": "ds_test_labels (storybook 17, 1, 21, 32 of 71)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "Confirmed",
+     "17",
+     "71"
+    ],
+    [
+     "Contradicted",
+     "1",
+     "71"
+    ],
+    [
+     "No public information, searched",
+     "21",
+     "71"
+    ],
+    [
+     "No public information, never searched",
+     "32",
+     "71"
+    ]
+   ]
+  },
+  {
+   "check": "ds_dialysis_district coverage: NFHS districts reached and LGD rows",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "704",
+     "781"
+    ]
+   ]
+  },
+  {
+   "check": "filter values: states in ds_facility, districts in ds_facility",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "34",
+     "557"
+    ]
+   ]
+  }
+ ],
+ "run_at": "2026-11-21 18:25:08"
+}

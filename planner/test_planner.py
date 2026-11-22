@@ -181,18 +181,25 @@ def scheduled_pathway():
                        st("sessions", "recurring", "unit", None, {"per_week": 3, "basis": "assumption", "why": "test value"})]}
 
 
-def test_scheduled_prefers_one_site_then_least_travel():
+def test_scheduled_prefers_least_travel_then_fewer_sites():
     f = [fac("all_in_one", 60), fac("near_unit", 10), fac("near_clinic", 5), fac("near_surgery", 8)]
     table = {"all_in_one": {"clinic": 0.8, "surgery": 0.8, "unit": 0.8}, "near_unit": {"unit": 0.9},
              "near_clinic": {"clinic": 0.9}, "near_surgery": {"surgery": 0.9}}
     r = core.plan(O, scheduled_pathway(), f, caps(table), travel_60)
     best = r["plans"][0]
-    assert best["type"] == "single_site" and {s["facility_id"] for s in best["stops"]} == {"all_in_one"}
-    assert best["totals"]["travel_minutes_over_planning_weeks"] == 2 * 60 * (1 + 1 + 3 * core.PLANNING_WEEKS)
-    assert best["stops"][-1]["per_week"] == 3
-    other = r["plans"][1]
-    assert other["totals"]["distinct_sites"] > 1 and "against one site" in other["vs_direct"]["text"]
-    assert other["totals"]["travel_minutes_over_planning_weeks"] < best["totals"]["travel_minutes_over_planning_weeks"]
+    # sessions three times a week dominate travel, so the near unit wins even though it needs three sites
+    assert [s["facility_id"] for s in best["stops"]] == ["near_clinic", "near_surgery", "near_unit"]
+    assert best["type"] == "three_sites" and best["stops"][-1]["per_week"] == 3
+    assert best["totals"]["travel_minutes_over_planning_weeks"] == 2 * (5 + 8 + 10 * 3 * core.PLANNING_WEEKS)
+    single = next(p for p in r["plans"] if p["type"] == "single_site")
+    assert {s["facility_id"] for s in single["stops"]} == {"all_in_one"}
+    assert single["totals"]["travel_minutes_over_planning_weeks"] == 2 * 60 * (1 + 1 + 3 * core.PLANNING_WEEKS)
+    assert "against one site" in best["vs_direct"]["text"]
+    # equal travel: the plan with fewer sites comes first
+    same = [fac("one", 10), fac("clinic_here", 10, km_east=0.001), fac("unit_here", 10, km_east=0.002)]
+    t2 = {"one": {"clinic": 0.9, "surgery": 0.9, "unit": 0.9}, "clinic_here": {"clinic": 0.9}, "unit_here": {"unit": 0.9}}
+    r2 = core.plan(O, scheduled_pathway(), same, caps(t2), travel_60)
+    assert r2["plans"][0]["type"] == "single_site"
 
 
 def test_scheduled_abstains_and_names_the_missing_stage():
@@ -354,3 +361,102 @@ def test_every_number_in_the_comparison_sentence_is_a_field():
             assert numbers_in(text) == sorted(float(v) for v in vs["text_numbers"].values()), vs
             seen.add(tuple(sorted(vs["text_numbers"])))
     assert len(seen) >= 4   # the sentence variants were all exercised
+
+
+def test_gold_eval_summary_counts():
+    from planner import eval_gold_dev as ev
+    assert ev.wilson(0, 0) == [None, None] and ev.rate(1, 4)["share"] == 0.25
+    base = {"baseline_pick": None, "baseline_is_gold": False, "baseline_verdict": None, "pathway": "p"}
+    rows = [
+        {**base, "gold_verdict": "confirmed", "planner_pick": "a", "planner_is_gold": True, "planner_verdict": "confirmed", "why_not_gold": None},
+        {**base, "gold_verdict": "confirmed", "planner_pick": "b", "planner_is_gold": False, "planner_verdict": "unknown",
+         "why_not_gold": {"was_candidate": False, "weakest_capability": "blood_transfusion"}},
+        {**base, "gold_verdict": "contradicted", "planner_pick": "c", "planner_is_gold": False, "planner_verdict": "contradicted",
+         "why_not_gold": {"was_candidate": True, "weakest_capability": "icu"}},
+        {**base, "gold_verdict": "no_info", "planner_pick": None, "planner_is_gold": False, "planner_verdict": None,
+         "why_not_gold": {"was_candidate": False, "weakest_capability": "icu"}},
+    ]
+    s = ev.summarise(rows, "planner")
+    assert (s["queries"], s["abstained"]) == (4, 1)
+    assert s["picked_verdict"]["confirmed"]["k"] == 1 and s["picked_verdict"]["unknown"]["k"] == 1
+    assert s["picks_gold_facility_by_gold_verdict"]["confirmed"] == {"k": 1, "n": 2, "share": 0.5, "ci95": ev.wilson(1, 2)}
+    assert s["confirmed_among_picks_with_a_clear_label"]["k"] == 1 and s["confirmed_among_picks_with_a_clear_label"]["n"] == 2
+    m = ev.missed_summary(rows)
+    assert (m["n"], m["not_a_candidate"], m["candidate_but_outranked"]) == (1, 1, 0)
+    assert m["not_a_candidate_by_missing_capability"] == {"p: blood_transfusion": 1}
+
+
+# ---- implied capabilities and list-based blood (issue #70) ----
+
+def test_strong_source_implies_a_weaker_probability_without_evidence():
+    from planner.implied import IMPLIES, STRONG, with_implications
+    base = caps({"unit": {"haemodialysis_unit": 0.9}, "weak": {"haemodialysis_unit": 0.5},
+                 "own": {"haemodialysis_unit": 0.9, "nephrology": 0.95}})
+    cp = with_implications(base)
+    p, ids = cp("unit", "nephrology")
+    assert p == pytest.approx(0.8 * 0.9) and ids == []                 # discounted, and no quote attached
+    note = cp.explain("unit", "nephrology")
+    assert note["basis"] == "implied" and note["implied_by"] == "haemodialysis_unit"
+    assert note["text"] == "implied by a strongly evidenced haemodialysis unit" and note["own_p"] == 0.0
+    assert cp("weak", "nephrology") == (0.0, []) and cp.explain("weak", "nephrology") is None     # source below STRONG
+    assert cp("own", "nephrology") == (0.95, ["own:nephrology"]) and cp.explain("own", "nephrology") is None
+    assert cp("unit", "haemodialysis_unit") == (0.9, ["unit:haemodialysis_unit"])                 # sources are untouched
+    assert 0 < STRONG < 1 and all(0 < s < 1 for rules in IMPLIES.values() for _, s, _ in rules)
+    assert cp.describe()["blood_from_list"] is False
+
+
+def test_implication_is_one_level_only():
+    from planner.implied import with_implications
+    cp = with_implications(caps({"n": {"nicu": 0.9}}))
+    assert cp("n", "sncu")[0] == pytest.approx(0.72)                   # nicu -> sncu
+    assert cp("n", "neonatal_stabilisation")[0] == pytest.approx(0.81)  # from nicu directly, not via the implied sncu
+
+
+def test_blood_comes_from_the_list_when_list_facts_are_given():
+    from planner.implied import P_LIST_MATCH, P_LIST_NEAR, P_LIST_NONE, with_implications
+    base = caps({"says_blood": {"blood_transfusion": 0.9}, "matched": {}, "near": {}, "far": {},
+                 "fru": {"comprehensive_emoc": 0.9}})
+    dist = {"near": (2.0, "City Blood Centre"), "far": (40.0, "Far Blood Centre"), "says_blood": (30.0, "Far Blood Centre")}
+    blood = {"matched": {"matched": {"name": "District Hospital Blood Centre", "type": "Blood Bank"}}, "nearest": dist.get}
+    cp = with_implications(base, blood=blood)
+    assert cp("matched", "blood_transfusion") == (P_LIST_MATCH, []) and cp.explain("matched", "blood_transfusion")["basis"] == "list"
+    assert cp("near", "blood_transfusion")[0] == P_LIST_NEAR and "2.0 km away" in cp.explain("near", "blood_transfusion")["text"]
+    assert cp("far", "blood_transfusion")[0] == P_LIST_NONE
+    assert cp("says_blood", "blood_transfusion")[0] == P_LIST_NONE      # record text is not used once the list is there
+    p, ids = cp("fru", "blood_transfusion")                              # no list fact, but a strong caesarean service
+    assert p == pytest.approx(0.6 * 0.9) and ids == [] and cp.explain("fru", "blood_transfusion")["basis"] == "implied"
+    without = with_implications(base)
+    assert without("says_blood", "blood_transfusion") == (0.9, ["says_blood:blood_transfusion"])   # no list: text as before
+
+
+def test_planner_uses_and_reports_implied_capabilities():
+    from planner import service
+    pw = service.pathways()["dialysis_start"]
+    f = [fac("unit_only", 10), fac("full", 120)]
+    table = {"unit_only": {"haemodialysis_unit": 0.9, "vascular_access_surgery": 0.8},
+             "full": {"haemodialysis_unit": 0.9, "nephrology": 0.9, "laboratory": 0.9, "vascular_access_surgery": 0.9}}
+    plain = core.plan(O, pw, f, caps(table), travel_60)
+    assert {s["facility_id"] for s in plain["plans"][0]["stops"]} == {"full", "unit_only"}       # assessment must go far
+    out = service.plan_for_service("dialysis", O[0], O[1], capability_p=caps(table), facilities=f, travel_fn=travel_60)
+    best = out["options"][0]["route"]
+    assert {s["facility_id"] for s in best["stops"]} == {"unit_only"}
+    notes = best["stops"][0]["capability_notes"]
+    assert {n["capability"] for n in notes} == {"nephrology", "laboratory"} and all(n["basis"] == "implied" for n in notes)
+    assert best["stops"][0]["evidence_ids"] == []                       # implied capabilities bring no quotes
+    assert out["meta"]["implications"]["blood_from_list"] is False
+    off = service.plan_for_service("dialysis", O[0], O[1], capability_p=caps(table), facilities=f, travel_fn=travel_60,
+                                   implications=False)
+    assert off["meta"]["implications"] is None
+    assert all(s["capability_notes"] == [] for s in off["options"][0]["route"]["stops"])
+
+
+def test_store_blood_facts_from_an_export_with_a_blood_list():
+    from planner.store import Store
+    doc = synthetic_doc()
+    assert Store(doc).blood_facts() is None
+    doc["blood"] = {"source": "test", "matched": {"a": {"name": "A Blood Centre", "type": "Blood Bank"}},
+                    "centres": {"lat": [O[0] + 0.9], "lon": [O[1]], "name": ["North Blood Centre"]}}
+    b = Store(doc).blood_facts()
+    assert b["matched"]["a"]["name"] == "A Blood Centre"
+    km, name = b["nearest"]("b")
+    assert name == "North Blood Centre" and km < 1.0 and b["nearest"]("missing") is None

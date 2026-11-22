@@ -13,16 +13,6 @@ const SERVICES = [
   {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u093e \u0911\u092a\u0930\u0947\u0936\u0928', en: 'Heart surgery (planned)', profile: 'planned'},
   {key: 'other', hi: '\u0915\u0941\u091b \u0914\u0930 / \u092a\u0924\u093e \u0928\u0939\u0940\u0902', en: 'Other / not sure', profile: null},
 ];
-// Tiny offline lexicon stub; the real one comes from the taxonomy synonyms (spec 3.1 step 2).
-const LEXICON = {
-  emergency_csection: ['c-section', 'caesarean', 'cesarean', 'lscs', 'operation se delivery', 'delivery'],
-  nicu: ['nicu', 'newborn', 'navjaat', 'sncu', 'baby icu'],
-  trauma_emergency: ['accident', 'injury', 'chot', 'trauma', 'fracture'],
-  burn_care: ['burn', 'jalna', 'jal gaya'],
-  dialysis: ['dialysis', 'kidney', 'khoon saaf', 'kidney machine'],
-  mri: ['mri', 'scan'],
-  cardiac_surgery: ['heart', 'dil', 'bypass', 'cardiac', 'valve'],
-};
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
   'Labour with bleeding or baby stuck', 'Chest pain', 'Burn on face or large area'];
 const BAND_ICON = {likely: '\u2714', not_verified: '?', unlikely: '\u2716'};
@@ -42,13 +32,13 @@ function timeStr(t) { return new Date(t).toLocaleTimeString([], {hour: '2-digit'
 // ---------- 108 bar ----------
 function isEmergency() {
   const s = svc(state.service);
-  return state.danger.size > 0 || (s && (s.profile === 'emergency' || s.profile === 'urgent'));
+  return state.danger.size > 0 || !!state.dangerText || (s && (s.profile === 'emergency' || s.profile === 'urgent'));
 }
 function renderBar() {
   const s = svc(state.service);
   const show102 = s && (s.key === 'emergency_csection' || s.key === 'nicu');
   const onPlan = location.hash.startsWith('#/plan') || location.hash.startsWith('#/why') || location.hash === '#/gps';
-  if (!(isEmergency() && (onPlan || state.danger.size))) { $('#bar108').innerHTML = ''; return; }
+  if (!(isEmergency() && (onPlan || state.danger.size || state.dangerText))) { $('#bar108').innerHTML = ''; return; }
   $('#bar108').innerHTML = `<div class="bar-108" role="region" aria-label="Emergency numbers">
     <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;CALL 108 ambulance (free)</a>
     ${show102 ? '<a href="tel:102"><span aria-hidden="true">&#9742;</span>&nbsp;Call 102: pregnant women, babies (free). No answer? Call 108</a>' : ''}
@@ -161,6 +151,8 @@ function home() {
     <input id="q" type="search" autocomplete="off" placeholder="kidney, delivery, MRI...">
     <div id="matches"></div>
     <div class="tiles" role="group" aria-label="Services">${tiles}</div>
+    <div class="row"><a class="btn" href="#/describe">Describe in your words</a>
+      <a class="btn" href="#/note">Scan referral note</a></div>
     <div class="bar-108 compact"><span>Chest pain or stroke now?</span>
       <a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108</a></div>
     <details><summary>Danger signs now?</summary>${boxes}
@@ -178,17 +170,15 @@ function bindHome() {
   }));
   $('#q').addEventListener('input', e => {
     const v = e.target.value.trim().toLowerCase();
-    const hits = v.length < 2 ? [] : Object.keys(LEXICON).filter(k => LEXICON[k].some(w => w.includes(v) || v.includes(w)));
+    RSInput.setDanger(RSInput.dangerHit(v));
+    const hits = RSInput.searchHits(v);
     $('#matches').innerHTML = hits.map(k => `<button type="button" class="btn btn-block" data-svc="${k}">
       ${esc(svc(k).en)}</button>`).join('') || (v.length >= 2 ? '<p class="small">No match. Try the tiles.</p>' : '');
     $('#matches').querySelectorAll('[data-svc]').forEach(b => b.addEventListener('click', () => pickService(b.dataset.svc)));
   });
 }
 function pickService(key) {
-  if (key === 'other') {
-    state.msg = 'Describing a need in your own words needs the model (not built yet). Try the search box or a tile.';
-    render(); $('#q').focus(); return;
-  }
+  if (key === 'other') { location.hash = '#/describe'; return; }
   state.service = key; state.msg = '';
   if (!state.loc) { state.msg = 'First tell us where the patient is.'; render(); return; }
   location.hash = '#/plan';
@@ -429,7 +419,19 @@ function planScreen() {
         ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');
   }
-  return head + toggle + body + foot;
+  state.speak = {en: planSpeech(p)};
+  return head + toggle + RSInput.speakHtml() + body + foot;
+}
+// Read aloud (#64): the one-line answer, built from the same payload fields the cards show.
+function planSpeech(p) {
+  const [a, b] = p.options;
+  const line = o => `${o.name}, ${o.band_word}, about ${o.travel.low} to ${o.travel.high} minutes by road.`;
+  const parts = [];
+  if (p.abstain) parts.push(p.abstain.text);
+  if (a) parts.push(`Call first: ${line(a)}`);
+  if (b) parts.push(`Backup: ${line(b)}`);
+  if (isEmergency()) parts.unshift('Call 108 first.');
+  return parts.join(' ');
 }
 
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
@@ -595,6 +597,7 @@ function whyScreen(rank) {
   return `<a class="btn" href="#/plan">&larr; Plan</a>
     <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
+    ${(state.speak = {en: o.say_to_family.en, hi: o.say_to_family.hi}) && RSInput.speakHtml()}
     <h2>From its own listing</h2>
     ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
@@ -638,7 +641,9 @@ function whyScreen(rank) {
     </ol>
     <div class="row" role="group" aria-label="What did they say?">
       ${['Said yes', 'Said no', 'No answer', 'Wrong number'].map(x => `<button type="button" data-outcome="${x}">${x}</button>`).join('')}
-    </div>`;
+    </div>
+    <p class="small muted">Yes, no or no answer is sent to improve the data: this facility, the service, the district and
+      the time. No patient details.</p>`;
 }
 // ---------- live website check (#37): a dated line next to the plan; never changes the band ----------
 function verifyHtml(v) {
@@ -680,12 +685,44 @@ function bindWhy() {
   const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
-    // Kept in page memory only, for the slip (#24); never sent or stored.
-    (state.outcomes ||= {})[parseInt(location.hash.split('/')[2], 10)] = {said: b.dataset.outcome, at: Date.now()};
-    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip; nothing is sent.`);
+    const at = Date.now();
+    (state.outcomes ||= {})[rank] = {said: b.dataset.outcome, at};  // for the slip (#24)
+    const sent = o && queueOutcome(o, b.dataset.outcome, at);
+    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip${sent ? ' and is sent to improve the data, with no patient details' : ''}.`);
   }));
   if (location.hash.endsWith('#call')) $('#call')?.focus();
 }
+
+// ---------- call outcomes (#65): ids, the answer, a district; queued offline, flushed when back online ----------
+const OUTCOME_CODE = {'Said yes': 'yes', 'Said no': 'no', 'No answer': 'no_answer'};  // "Wrong number" is not sent
+function queueOutcome(o, said, at) {
+  const outcome = OUTCOME_CODE[said];
+  if (!outcome || !state.loc || !state.service) return false;
+  const q = load('outq') || [];
+  q.push({outcome_id: crypto.randomUUID(), facility_id: o.facility_id, service_id: state.service, outcome,
+    said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100});
+  save('outq', q.slice(-50));
+  flushOutcomes();
+  return true;
+}
+let flushing = false;
+async function flushOutcomes() {
+  if (flushing || !navigator.onLine) return;
+  flushing = true;
+  try {
+    for (const item of load('outq') || []) {
+      let drop = false;
+      try {
+        const r = await fetch('/api/outcome', {method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(item), signal: AbortSignal.timeout(15000)});
+        drop = r.ok || (r.status >= 400 && r.status < 500);  // 4xx will never succeed; 5xx and network errors retry
+      } catch { /* offline again: keep it */ }
+      if (!drop) break;
+      save('outq', (load('outq') || []).filter(x => x.outcome_id !== item.outcome_id));
+    }
+  } finally { flushing = false; }
+}
+window.addEventListener('online', flushOutcomes);
 
 // ---------- referral slip (S8, #24): slip.js loads only on this route ----------
 function slipScreen(rank) {
@@ -764,6 +801,42 @@ async function bindHow() {
     $('#main h1').focus();
   } catch {
     $('#how-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+    return;
+  }
+  liveOutcomes();
+}
+// Live count from the call_outcomes table (#65). Marked data-device: a live reading, not a page-data number.
+async function liveOutcomes() {
+  let s;
+  try {
+    const r = await fetch('/api/outcomes/summary', {signal: AbortSignal.timeout(10000)});
+    if (!r.ok) return;
+    s = await r.json();
+  } catch { return; }
+  const built = [...document.querySelectorAll('#main p.small.muted')].pop();
+  if (!built) return;
+  const sec = document.createElement('section');
+  sec.innerHTML = `<h2>What callers told us</h2><p data-device>${s.recorded} call results recorded so far
+    (${s.yes} said yes, ${s.no} said no, ${s.no_answer} no answer). Of the ${s.answered} answered calls,
+    ${s.contradicted} contradicted the label the app showed and ${s.agreed} agreed with it; the rest were for
+    "Not verified" options. Live from the call_outcomes table at ${esc(timeStr(s.as_of))}. These results are
+    reviewed, not fed back into the scores automatically.</p>`;
+  built.before(sec);
+}
+
+// ---------- Data stories (#53): stories.js and /api/stories load only on this route ----------
+function storiesScreen() {
+  return `<h1 tabindex="-1">Data stories</h1><div id="stories-out"><p>Loading...</p></div>`;
+}
+async function bindStories() {
+  try {
+    const [, r] = await Promise.all([loadScript('/stories.js', 'RSStories'), fetch('/api/stories', {redirect: 'manual'})]);
+    if (!r.ok) throw new Error();
+    $('#main').innerHTML = RSStories.render(await r.json());
+    RSStories.bind($('#main'));
+    $('#main h1').focus();
+  } catch {
+    $('#stories-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
   }
 }
 
@@ -777,6 +850,9 @@ function render() {
   else if (h.startsWith('#/why/')) [html, bind] = [whyScreen(parseInt(h.split('/')[2], 10)), bindWhy];
   else if (h.startsWith('#/slip/')) [html, bind] = [slipScreen(parseInt(h.split('/')[2], 10)), bindSlip];
   else if (h === '#/how') [html, bind] = [howScreen(), bindHow];
+  else if (h === '#/describe') [html, bind] = [RSInput.describeScreen(), RSInput.bindDescribe];
+  else if (h === '#/note') [html, bind] = [RSInput.noteScreen(), RSInput.bindNote];
+  else if (h === '#/stories') [html, bind] = [storiesScreen(), bindStories];
   else [html, bind] = [home(), bindHome];
   $('#main').innerHTML = html;
   document.body.classList.toggle('wide', h === '#/plan' && (state.depth === 'compare' || state.depth === 'area'));
@@ -785,6 +861,7 @@ function render() {
   if (h1 && !h.endsWith('#call')) h1.focus({preventScroll: false});
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
   bind();
+  if ($('#speak')) RSInput.bindSpeak(state.speak || {});
 }
 window.addEventListener('hashchange', () => {
   if (location.hash === '#/' || location.hash === '#/change') {
@@ -801,6 +878,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // The skip link must not change the hash: the router owns it.
   document.querySelector('a[href="#main"]').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
   setOnline();
+  RSInput.load();
+  flushOutcomes();
   render();
   // GPS is the default: refresh silently when permission is already granted (no prompt on load).
   try {

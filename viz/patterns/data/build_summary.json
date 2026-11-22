@@ -1,0 +1,22 @@
+{
+ "rows": 9959,
+ "discovery": 6970,
+ "holdout": 2989,
+ "contaminated": 2487,
+ "drift50": 1367,
+ "drift_n": 9869,
+ "year_known": 4754,
+ "services": 37,
+ "facilities_with_any_service": 6001,
+ "operator": {
+  "private": 8805,
+  "unknown": 687,
+  "public": 467
+ },
+ "ftype": {
+  "hospital": 5610,
+  "clinic": 3770,
+  "dentist": 488,
+  "other": 91
+ }
+}

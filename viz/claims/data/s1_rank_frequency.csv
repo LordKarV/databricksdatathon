@@ -1,0 +1,2933 @@
+rank,specialty,service_id,kind,n_facilities,method
+1,internalMedicine,too_general,too_general,6836,rule
+2,familyMedicine,too_general,too_general,5175,rule
+3,gynecologyAndObstetrics,too_general,too_general,4489,rule
+4,dentistry,out_of_scope,out_of_scope,4190,rule
+5,orthopedicSurgery,too_general,too_general,3519,rule
+6,pediatrics,too_general,too_general,3429,rule
+7,generalSurgery,too_general,too_general,3191,rule
+8,cardiology,too_general,too_general,3003,rule
+9,radiology,too_general,too_general,2993,rule
+10,ophthalmology,too_general,too_general,2823,rule
+11,otolaryngology,out_of_scope,out_of_scope,2699,rule
+12,urology,out_of_scope,out_of_scope,2624,rule
+13,gastroenterology,out_of_scope,out_of_scope,2419,rule
+14,dermatology,out_of_scope,out_of_scope,2328,rule
+15,pathology,out_of_scope,out_of_scope,2248,rule
+16,nephrology,too_general,too_general,2153,rule
+17,emergencyMedicine,emergency_24x7,service,2079,rule
+18,neurology,too_general,too_general,1958,rule
+19,reproductiveEndocrinologyAndInfertility,out_of_scope,out_of_scope,1845,rule
+20,endocrinologyAndDiabetesAndMetabolism,out_of_scope,out_of_scope,1838,rule
+21,endodontics,out_of_scope,out_of_scope,1799,rule
+22,neurosurgery,neurosurgery,service,1690,rule
+23,orthodontics,out_of_scope,out_of_scope,1679,rule
+24,criticalCareMedicine,icu,service,1673,rule
+25,oralAndMaxillofacialSurgery,out_of_scope,out_of_scope,1669,rule
+26,physicalMedicineAndRehabilitation,out_of_scope,out_of_scope,1592,rule
+27,pulmonology,too_general,too_general,1589,rule
+28,plasticSurgery,too_general,too_general,1582,rule
+29,medicalOncology,chemotherapy,service,1435,rule
+30,prosthodontics,out_of_scope,out_of_scope,1360,rule
+31,anesthesia,too_general,too_general,1320,rule
+32,neonatologyPerinatalMedicine,too_general,too_general,1252,rule
+33,psychiatry,psychiatric_care,service,1172,rule
+34,pediatricDentistry,out_of_scope,out_of_scope,1063,rule
+35,surgicalOncology,surgical_oncology,service,974,rule
+36,infectiousDiseases,too_general,too_general,965,rule
+37,aestheticDentistry,out_of_scope,out_of_scope,874,rule
+38,maternalFetalMedicineOrPerinatology,high_risk_pregnancy,service,739,rule
+39,spineNeurosurgery,neurosurgery,service,687,rule
+40,cataractAndAnteriorSegmentSurgery,cataract_surgery,service,680,rule
+41,pediatricSurgery,out_of_scope,out_of_scope,644,rule
+42,periodontics,out_of_scope,out_of_scope,633,rule
+43,cosmeticDentistry,out_of_scope,out_of_scope,604,rule
+44,retinaAndVitreoretinalOphthalmology,out_of_scope,out_of_scope,601,rule
+45,cardiacSurgery,cardiac_surgery,service,587,rule
+46,clinicalPathology,out_of_scope,out_of_scope,535,rule
+47,rheumatology,out_of_scope,out_of_scope,509,rule
+48,preventiveMedicine,out_of_scope,out_of_scope,500,rule
+49,jointReconstructionSurgery,out_of_scope,out_of_scope,494,rule
+50,corneaOphthalmology,out_of_scope,out_of_scope,489,rule
+51,glaucomaOphthalmology,out_of_scope,out_of_scope,484,rule
+52,vascularSurgery,out_of_scope,out_of_scope,471,rule
+53,refractiveSurgeryOphthalmology,out_of_scope,out_of_scope,471,rule
+54,transplantSurgery,too_general,too_general,468,rule
+55,hematology,too_general,too_general,463,rule
+56,colorectalSurgery,out_of_scope,out_of_scope,453,rule
+57,dentoalveolarSurgery,out_of_scope,out_of_scope,435,rule
+58,oculoplasticsAndReconstructiveOrbitalSurgery,out_of_scope,out_of_scope,428,rule
+59,cosmeticDermatology,out_of_scope,out_of_scope,382,rule
+60,generalDentistry,out_of_scope,out_of_scope,378,rule
+61,minimallyInvasiveSurgeryAndEndourology,too_general,too_general,378,rule
+62,bariatricSurgery,out_of_scope,out_of_scope,370,rule
+63,gynecology,out_of_scope,out_of_scope,364,rule
+64,pediatricsAndStrabismusOphthalmology,out_of_scope,out_of_scope,361,rule
+65,obstetricsAndMaternityCare,institutional_delivery,service,358,rule
+66,interventionalRadiology,too_general,too_general,296,rule
+67,painMedicinePMR,out_of_scope,out_of_scope,293,rule
+68,allergyAndImmunology,out_of_scope,out_of_scope,289,rule
+69,andrologyAndMaleFertility,out_of_scope,out_of_scope,276,rule
+70,shoulderAndElbowOrthopedicSurgery,out_of_scope,out_of_scope,276,rule
+71,eyeTraumaAndEmergencyEyeCare,eye_emergency,service,266,rule
+72,geriatricsInternalMedicine,too_general,too_general,253,rule
+73,generalMedicine,too_general,too_general,251,rule
+74,headacheMedicine,out_of_scope,out_of_scope,221,llm
+75,hepatopancreatobiliarySurgery,out_of_scope,out_of_scope,221,rule
+76,chronicDiseasePreventionAndLifestyleMedicine,out_of_scope,out_of_scope,218,rule
+77,pediatricCriticalCareMedicine,picu,service,218,rule
+78,sleepMedicine,out_of_scope,out_of_scope,208,rule
+79,pediatricCardiology,too_general,too_general,202,rule
+80,familyPlanningAndComplexContraception,out_of_scope,out_of_scope,202,rule
+81,headAndNeckSurgeryOtolaryngology,out_of_scope,out_of_scope,196,rule
+82,pediatricOrthopedicSurgery,out_of_scope,out_of_scope,194,rule
+83,cardiothoracicSurgery,cardiac_surgery,service,190,rule
+84,addictionPsychiatry,de_addiction;psychiatric_care,service,183,manual
+85,reconstructivePlasticSurgery,too_general,too_general,183,rule
+86,oralMedicine,out_of_scope,out_of_scope,174,rule
+87,diagnosticRadiology,too_general,too_general,169,rule
+88,gynecologicalOncology,surgical_oncology,service,168,rule
+89,hospiceAndPalliativeInternalMedicine,out_of_scope,out_of_scope,164,rule
+90,anesthesiology,too_general,too_general,162,rule
+91,craniofacialAndCleftOralMaxillofacialSurgery,out_of_scope,out_of_scope,159,rule
+92,podiatry,out_of_scope,out_of_scope,157,rule
+93,nuclearMedicineAndMolecularImaging,out_of_scope,out_of_scope,156,rule
+94,neuroOphthalmology,out_of_scope,out_of_scope,150,rule
+95,developmental–behavioralPediatrics,out_of_scope,out_of_scope,145,rule
+96,skullBaseNeurosurgery,neurosurgery,service,144,rule
+97,breastImaging,too_general,too_general,140,rule
+98,epilepsyNeurology,out_of_scope,out_of_scope,135,llm
+99,uveitisOphthalmology,out_of_scope,out_of_scope,135,rule
+100,burnAndTraumaPlasticSurgery,burn_care,service,131,rule
+101,adolescentMedicine,out_of_scope,out_of_scope,130,rule
+102,sportsMedicinePMR,out_of_scope,out_of_scope,130,rule
+103,pediatricUrology,out_of_scope,out_of_scope,129,rule
+104,neuropsychiatry,psychiatric_care,service,123,rule
+105,pediatricHematologyOncology,chemotherapy,service,123,rule
+106,maternalAndChildHealth,too_general,too_general,123,llm
+107,urologicOncology,surgical_oncology,service,122,rule
+108,anatomicPathology,out_of_scope,out_of_scope,117,rule
+109,pediatricEndocrinology,out_of_scope,out_of_scope,116,rule
+110,pediatricOtolaryngology,out_of_scope,out_of_scope,114,rule
+111,renalTransplantationUrology,kidney_transplant,service,111,rule
+112,radiationOncology,radiotherapy,service,110,rule
+113,breastSurgery,out_of_scope,out_of_scope,107,rule
+114,clinicalNeurophysiology,out_of_scope,out_of_scope,105,rule
+115,pediatricGastroenterology,out_of_scope,out_of_scope,100,rule
+116,orthopedicSpineSurgery,too_general,too_general,99,rule
+117,pediatricNeurodevelopmentalDisabilities,out_of_scope,out_of_scope,96,rule
+118,pediatricNephrology,too_general,too_general,92,rule
+119,childAndAdolescentPsychiatry,psychiatric_care,service,92,rule
+120,dentalAnesthesia,out_of_scope,out_of_scope,91,rule
+121,urogynecologyAndReconstructivePelvisSurgery,out_of_scope,out_of_scope,91,rule
+122,pediatricDermatology,out_of_scope,out_of_scope,88,rule
+123,pediatricOphthalmology,out_of_scope,out_of_scope,88,rule
+124,publicHealth,not_a_service,not_a_service,88,rule
+125,footAndAnkleOrthopedicSurgery,out_of_scope,out_of_scope,83,rule
+126,oncology,too_general,too_general,82,rule
+127,pediatricPulmonology,too_general,too_general,81,rule
+128,microbiology,out_of_scope,out_of_scope,79,rule
+129,orthopedicOncology,surgical_oncology,service,78,rule
+130,pediatricAllergyAndImmunology,out_of_scope,out_of_scope,78,rule
+131,pediatricNeurosurgery,neurosurgery,service,78,rule
+132,aestheticAndCosmeticSurgery,out_of_scope,out_of_scope,77,rule
+133,hairAndNailDisorders,out_of_scope,out_of_scope,65,rule
+134,movementDisorders,out_of_scope,out_of_scope,65,llm
+135,pediatricNeurology,too_general,too_general,65,rule
+136,pedodontics,out_of_scope,out_of_scope,65,rule
+137,orthopedicSportsMedicine,out_of_scope,out_of_scope,63,rule
+138,pediatricRehabilitationMedicine,out_of_scope,out_of_scope,63,rule
+139,endocrineSurgery,out_of_scope,out_of_scope,62,rule
+140,handOrUpperExtremityAndPeripheralNerveSurgery,out_of_scope,out_of_scope,61,rule
+141,dentalImplants,out_of_scope,out_of_scope,60,rule
+142,diabetology,out_of_scope,out_of_scope,60,rule
+143,pediatricInfectiousDiseases,too_general,too_general,60,rule
+144,proceduralDermatology,out_of_scope,out_of_scope,60,rule
+145,endocrinology,out_of_scope,out_of_scope,57,rule
+146,physiotherapy,out_of_scope,out_of_scope,56,rule
+147,sleepMedicineOtolaryngology,out_of_scope,out_of_scope,56,rule
+148,menopauseAndMidlifeHealth,out_of_scope,out_of_scope,55,rule
+149,ocularOncology,out_of_scope,out_of_scope,51,rule
+150,cosmeticMaxillofacialSurgery,out_of_scope,out_of_scope,50,rule
+151,upperGIAndForegutSurgery,out_of_scope,out_of_scope,49,rule
+152,neuroOncology,out_of_scope,out_of_scope,48,llm
+153,obstetricsAndGynaecology,too_general,too_general,48,rule
+154,andrology,out_of_scope,out_of_scope,47,rule
+155,addictionMedicinePM,de_addiction,service,46,rule
+156,interventionalCardiology,cath_lab_angioplasty,service,46,rule
+157,pediatricEmergencyMedicine,emergency_24x7,service,46,rule
+158,paediatricSurgery,out_of_scope,out_of_scope,45,rule
+159,gynecologicOncology,surgical_oncology,service,44,rule
+160,neuroradiology,too_general,too_general,42,rule
+161,nutritionAndDietetics,out_of_scope,out_of_scope,42,rule
+162,neuromuscularMedicinePMR,out_of_scope,out_of_scope,42,rule
+163,jointReplacementSurgery,out_of_scope,out_of_scope,41,rule
+164,orthognathicSurgery,out_of_scope,out_of_scope,41,rule
+165,sportsInternalMedicine,too_general,too_general,41,rule
+166,surgicalGastroenterology,out_of_scope,out_of_scope,41,rule
+167,genitourinaryReconstructiveSurgery,out_of_scope,out_of_scope,40,rule
+168,orthopedics,too_general,too_general,40,rule
+169,obstetricsAndGynecology,too_general,too_general,39,rule
+170,geriatricPsychiatry,psychiatric_care,service,38,rule
+171,psychology,out_of_scope,out_of_scope,37,rule
+172,laryngology,out_of_scope,out_of_scope,37,rule
+173,oralPathology,out_of_scope,out_of_scope,37,rule
+174,cardiothoracicRadiology,too_general,too_general,35,rule
+175,childNeurology,too_general,too_general,35,rule
+176,haematology,too_general,too_general,35,rule
+177,cosmeticSurgery,out_of_scope,out_of_scope,34,rule
+178,handAndUpperExtremitiesSurgery,out_of_scope,out_of_scope,33,rule
+179,brainInjuryNeurology,too_general,too_general,31,rule
+180,laserDentistry,out_of_scope,out_of_scope,31,rule
+181,restorativeDentistry,out_of_scope,out_of_scope,31,rule
+182,woundHealingAndDermatologicRegenerativeMedicine,out_of_scope,out_of_scope,31,rule
+183,spinalCordInjuryMedicine,out_of_scope,out_of_scope,29,rule
+184,generalThoracicSurgery,out_of_scope,out_of_scope,29,rule
+185,ent,out_of_scope,out_of_scope,29,rule
+186,gynecologicalSurgery,out_of_scope,out_of_scope,28,rule
+187,pediatricRadiology,too_general,too_general,28,rule
+188,vascularNeurology,stroke_care,service,28,rule
+189,amputeeAndProstheticsAndOrthoticsRehabilitation,out_of_scope,out_of_scope,28,rule
+190,hepatology,out_of_scope,out_of_scope,27,rule
+191,orthopaedics,too_general,too_general,27,rule
+192,painManagement,out_of_scope,out_of_scope,26,rule
+193,cerebrovascularNeurosurgery,neurosurgery,service,25,rule
+194,underseaAndHyperbaricMedicine,out_of_scope,out_of_scope,25,llm
+195,clinicalPsychology,out_of_scope,out_of_scope,24,rule
+196,cosmetology,out_of_scope,out_of_scope,24,rule
+197,orthopedicTraumaAndFractureSurgery,orthopaedic_trauma_surgery,service,23,rule
+198,pulmonaryMedicine,too_general,too_general,23,rule
+199,preventiveDentistry,out_of_scope,out_of_scope,23,rule
+200,pediatricRheumatology,out_of_scope,out_of_scope,23,rule
+201,biochemistry,out_of_scope,out_of_scope,23,rule
+202,occupationalAndVocationalRehabilitation,out_of_scope,out_of_scope,23,rule
+203,neuroimmunology,out_of_scope,out_of_scope,23,rule
+204,gastrointestinalSurgery,out_of_scope,out_of_scope,23,rule
+205,boneMarrowTransplant,chemotherapy,service,23,rule
+206,cognitiveAndBehavioralNeurology,out_of_scope,out_of_scope,22,rule
+207,dietetics,out_of_scope,out_of_scope,22,rule
+208,podiatricDiabeticLimbSalvageAndWoundCare,out_of_scope,out_of_scope,22,rule
+209,implantology,out_of_scope,out_of_scope,21,rule
+210,neurotologyAndOtology,out_of_scope,out_of_scope,21,rule
+211,rhinology,out_of_scope,out_of_scope,21,rule
+212,handOrUpperExtremitiesSurgery,out_of_scope,out_of_scope,21,rule
+213,audiology,out_of_scope,out_of_scope,21,rule
+214,histopathology,out_of_scope,out_of_scope,20,rule
+215,nuclearMedicine,out_of_scope,out_of_scope,20,rule
+216,conservativeDentistry,out_of_scope,out_of_scope,19,rule
+217,genderAffirmingSurgery,out_of_scope,out_of_scope,19,rule
+218,oculoplasty,out_of_scope,out_of_scope,19,rule
+219,paediatricOphthalmology,out_of_scope,out_of_scope,19,rule
+220,paediatrics,too_general,too_general,19,rule
+221,sleepMedicineNeurology,out_of_scope,out_of_scope,19,rule
+222,painMedicineAnesthesiology,out_of_scope,out_of_scope,18,rule
+223,transfusionMedicine,blood_bank,service,18,rule
+224,proctology,out_of_scope,out_of_scope,18,rule
+225,implantDentistry,out_of_scope,out_of_scope,18,rule
+226,paediatricDentistry,out_of_scope,out_of_scope,18,rule
+227,orthopaedicSurgery,too_general,too_general,18,rule
+228,neurocriticalCare,icu,service,18,rule
+229,pediatricAnesthesiology,too_general,too_general,17,rule
+230,respiratoryMedicine,too_general,too_general,17,rule
+231,pediatricsAndNeonatology,too_general,too_general,17,rule
+232,pediatricOncology,chemotherapy,service,17,rule
+233,diabeticRetinopathy,out_of_scope,out_of_scope,17,rule
+234,paediatricCardiology,too_general,too_general,17,rule
+235,addictionInternalMedicine,de_addiction,service,17,rule
+236,TMJSurgery,out_of_scope,out_of_scope,17,rule
+237,dermatopathology,out_of_scope,out_of_scope,16,rule
+238,fertility,out_of_scope,out_of_scope,16,rule
+239,occupationalAndEnvironmentalMedicine,out_of_scope,out_of_scope,16,llm
+240,oncologyAndReconstructiveOralAndMaxillofacialSurgery,out_of_scope,out_of_scope,16,rule
+241,roboticSurgery,out_of_scope,out_of_scope,16,rule
+242,sportsMedicine,out_of_scope,out_of_scope,15,rule
+243,oralMedicineAndRadiology,out_of_scope,out_of_scope,15,rule
+244,neurosciences,too_general,too_general,14,rule
+245,polytrauma,trauma_care,service,14,rule
+246,pediatricSleepMedicine,out_of_scope,out_of_scope,14,rule
+247,pediatricAndAdolescentGynecology,out_of_scope,out_of_scope,14,rule
+248,palliativeRehabilitationAndSupportiveCare,out_of_scope,out_of_scope,14,rule
+249,orthopaedicOncology,surgical_oncology,service,14,rule
+250,obstetricAnesthesiology,too_general,too_general,14,rule
+251,Physiotherapy,out_of_scope,out_of_scope,14,rule
+252,neuroanesthesiology,too_general,too_general,14,rule
+253,maxillofacialSurgery,out_of_scope,out_of_scope,14,rule
+254,immunology,out_of_scope,out_of_scope,14,rule
+255,handOrUpperExtremitiesAndPeripheralNerveSurgery,out_of_scope,out_of_scope,14,rule
+256,criticalCare,icu,service,14,rule
+257,neonatology,too_general,too_general,14,rule
+258,laparoscopicSurgery,too_general,too_general,13,rule
+259,sedationDentistry,out_of_scope,out_of_scope,13,rule
+260,reconstructiveSurgery,too_general,too_general,13,rule
+261,neurogeneticsAndRareDiseases,out_of_scope,out_of_scope,13,rule
+262,peripheralNerveNeurosurgery,neurosurgery,service,13,rule
+263,functionalNeurosurgery,neurosurgery,service,13,rule
+264,femaleUrology,out_of_scope,out_of_scope,13,rule
+265,dental,out_of_scope,out_of_scope,13,rule
+266,ayurveda,out_of_scope,out_of_scope,13,rule
+267,genetics,out_of_scope,out_of_scope,12,rule
+268,spineSurgery,too_general,too_general,12,rule
+269,serology,out_of_scope,out_of_scope,12,rule
+270,paediatricsAndNeonatology,too_general,too_general,12,rule
+271,oralAndMaxilloFacialSurgery,out_of_scope,out_of_scope,12,rule
+272,neuroUrology,out_of_scope,out_of_scope,12,rule
+273,medicalGastroenterology,out_of_scope,out_of_scope,12,rule
+274,infertility,out_of_scope,out_of_scope,12,rule
+275,hepatopancreatobiliSurgery,out_of_scope,out_of_scope,12,rule
+276,Urology,out_of_scope,out_of_scope,12,rule
+277,endourology,out_of_scope,out_of_scope,12,rule
+278,dialysis,dialysis,service,12,rule
+279,communityMedicine,not_a_service,not_a_service,12,rule
+280,cancerRehabilitation,out_of_scope,out_of_scope,12,rule
+281,anaesthesiology,too_general,too_general,12,rule
+282,alternativeMedicine,out_of_scope,out_of_scope,12,rule
+283,Cardiology,too_general,too_general,12,rule
+284,Orthodontics,out_of_scope,out_of_scope,12,rule
+285,dieteticsAndNutrition,out_of_scope,out_of_scope,12,rule
+286,paediatricNeurology,too_general,too_general,11,rule
+287,uveaOphthalmology,out_of_scope,out_of_scope,11,rule
+288,pharmacology,not_a_service,not_a_service,11,rule
+289,periodontology,out_of_scope,out_of_scope,11,rule
+290,paediatricOncology,chemotherapy,service,11,rule
+291,consultationLiaisonPsychiatry,psychiatric_care,service,11,rule
+292,laboratoryMedicine,out_of_scope,out_of_scope,11,rule
+293,epidemiology,not_a_service,not_a_service,11,rule
+294,craniomaxillofacialTraumaSurgery,out_of_scope,out_of_scope,11,rule
+295,clinicalBiochemistry,out_of_scope,out_of_scope,11,rule
+296,Orthopaedics,too_general,too_general,11,rule
+297,genitourinarySurgery,out_of_scope,out_of_scope,10,rule
+298,perinatalAndReproductivePsychiatry,psychiatric_care,service,10,rule
+299,publicHealthDentistry,out_of_scope,out_of_scope,10,rule
+300,gastroSurgery,out_of_scope,out_of_scope,10,rule
+301,cytology,out_of_scope,out_of_scope,10,rule
+302,footSurgery,out_of_scope,out_of_scope,9,rule
+303,pediatricsSportsMedicine,out_of_scope,out_of_scope,9,rule
+304,neuroSurgery,neurosurgery,service,9,rule
+305,immunodermatologyAndComplexMedicalDermatology,out_of_scope,out_of_scope,9,rule
+306,histopathologyLaboratory,out_of_scope,out_of_scope,9,rule
+307,geriatricDentistry,out_of_scope,out_of_scope,9,rule
+308,neonatalPerinatalMedicine,too_general,too_general,9,rule
+309,dermatologicOncology,out_of_scope,out_of_scope,9,rule
+310,cytologyLaboratory,out_of_scope,out_of_scope,9,rule
+311,clinicalInformatics,not_a_service,not_a_service,9,llm
+312,Neurosurgery,neurosurgery,service,9,rule
+313,Neurology,too_general,too_general,9,rule
+314,Nephrology,too_general,too_general,9,rule
+315,cytopathology,out_of_scope,out_of_scope,9,rule
+316,pediatricAndStrabismusOphthalmology,out_of_scope,out_of_scope,8,rule
+317,occupationalTherapy,out_of_scope,out_of_scope,8,rule
+318,paediatricNephrology,too_general,too_general,8,rule
+319,paediatricOrthopaedics,out_of_scope,out_of_scope,8,llm
+320,thoracicSurgery,out_of_scope,out_of_scope,8,rule
+321,physiology,out_of_scope,out_of_scope,8,rule
+322,prostheticDentistry,out_of_scope,out_of_scope,8,rule
+323,reproductiveMedicine,out_of_scope,out_of_scope,8,rule
+324,nonInvasiveCardiology,too_general,too_general,8,rule
+325,occupationalAndIndustrialHygiene,out_of_scope,out_of_scope,8,llm
+326,General Surgery,too_general,too_general,8,rule
+327,neurotraumaNeurosurgery,neurosurgery,service,8,rule
+328,geriatricRehabilitation,out_of_scope,out_of_scope,8,rule
+329,femalePelvicMedicineAndReconstructiveSurgery,out_of_scope,out_of_scope,8,rule
+330,criticalCareMedicineAnesthesiology,icu,service,8,rule
+331,clinicalOncology,too_general,too_general,8,llm
+332,Pedodontics,out_of_scope,out_of_scope,8,rule
+333,ENT/ Otorhinolaryngologist,out_of_scope,out_of_scope,8,rule
+334,Gastroenterology,out_of_scope,out_of_scope,8,rule
+335,Fertility,out_of_scope,out_of_scope,8,rule
+336,neuroOncologyNeurosurgery,neurosurgery,service,8,rule
+337,pediatricHospitalMedicine,out_of_scope,out_of_scope,7,llm
+338,nutrition,out_of_scope,out_of_scope,7,rule
+339,organTransplant,too_general,too_general,7,rule
+340,orth orthopedicSurgery,out_of_scope,out_of_scope,7,rule
+341,painMedicine,out_of_scope,out_of_scope,7,rule
+342,palliativeCare,out_of_scope,out_of_scope,7,rule
+343,uroOncology,surgical_oncology,service,7,rule
+344,preventiveOncology,out_of_scope,out_of_scope,7,rule
+345,psychoOncology,out_of_scope,out_of_scope,7,llm
+346,retinopathyOfPrematurity,out_of_scope,out_of_scope,7,llm
+347,squintEyeTreatment,out_of_scope,out_of_scope,7,rule
+348,neuroRehabilitation,out_of_scope,out_of_scope,7,rule
+349,neurocriticalCareNeurosurgery,neurosurgery;icu,service,7,manual
+350,oralMaxillofacialSurgery,out_of_scope,out_of_scope,7,rule
+351,minimallyInvasiveSurgery,too_general,too_general,7,rule
+352,ambulatoryAnesthesiology,too_general,too_general,7,rule
+353,Dermatology,out_of_scope,out_of_scope,7,rule
+354,microsurgeryAndTransplantPlasticSurgery,too_general,too_general,7,rule
+355,Diabetology,out_of_scope,out_of_scope,7,rule
+356,ENT,out_of_scope,out_of_scope,7,rule
+357,Endodontics,out_of_scope,out_of_scope,7,rule
+358,Prosthodontics,out_of_scope,out_of_scope,7,rule
+359,Hematology,too_general,too_general,7,rule
+360,arthroscopicSurgery,out_of_scope,out_of_scope,7,rule
+361,electrophysiology,out_of_scope,out_of_scope,7,rule
+362,keratoconus,out_of_scope,out_of_scope,7,rule
+363,liverTransplantation,too_general,too_general,7,rule
+364,lowVision,out_of_scope,out_of_scope,7,rule
+365,parasitologyLaboratory,out_of_scope,out_of_scope,6,rule
+366,nephrologyIncludingDialysis,dialysis,service,6,rule
+367,mycologyLaboratory,out_of_scope,out_of_scope,6,rule
+368,neuroMedicine,out_of_scope,out_of_scope,6,llm
+369,oralAndMaxillofacialPathology,out_of_scope,out_of_scope,6,rule
+370,orbitAndOculoplasty,out_of_scope,out_of_scope,6,rule
+371,otorhinolaryngology,out_of_scope,out_of_scope,6,rule
+372,uroSurgery,out_of_scope,out_of_scope,6,rule
+373,pedodonticsAndPreventiveDentistry,out_of_scope,out_of_scope,6,rule
+374,periodontalSurgery,out_of_scope,out_of_scope,6,rule
+375,reconstructiveUrology,out_of_scope,out_of_scope,6,rule
+376,retinaDiseases,out_of_scope,out_of_scope,6,rule
+377,specialEducation,not_a_service,not_a_service,6,llm
+378,sportsDentistry,out_of_scope,out_of_scope,6,rule
+379,urologyAndAndrology,out_of_scope,out_of_scope,6,rule
+380,molecularDiagnostics,out_of_scope,out_of_scope,6,rule
+381,musculoskeletalRadiology,out_of_scope,out_of_scope,6,llm
+382,dietitian/nutritionist,out_of_scope,out_of_scope,6,rule
+383,microbiologyLaboratory,out_of_scope,out_of_scope,6,rule
+384,arthroscopy,out_of_scope,out_of_scope,6,rule
+385,interventionalCardiologyCentre,cath_lab_angioplasty,service,6,rule
+386,Andrology,out_of_scope,out_of_scope,6,rule
+387,Dentistry,out_of_scope,out_of_scope,6,rule
+388,Pathology,out_of_scope,out_of_scope,6,rule
+389,Periodontics,out_of_scope,out_of_scope,6,rule
+390,Radiology,too_general,too_general,6,rule
+391,anesthesiologyAndCriticalCare,icu,service,6,rule
+392,Microbiology,out_of_scope,out_of_scope,6,rule
+393,biochemistryLab,out_of_scope,out_of_scope,6,rule
+394,dentofacialOrthopedics,out_of_scope,out_of_scope,6,rule
+395,endoscopy,out_of_scope,out_of_scope,6,rule
+396,generalPhysician,too_general,too_general,6,rule
+397,headAndNeckOncology,surgical_oncology,service,6,rule
+398,dentalSurgery,out_of_scope,out_of_scope,6,rule
+399,homeopathy,out_of_scope,out_of_scope,6,rule
+400,neurovascularSurgery,neurosurgery,service,5,rule
+401,paediatricGastroenterology,out_of_scope,out_of_scope,5,rule
+402,organTransplantation,too_general,too_general,5,rule
+403,oncosurgery,surgical_oncology,service,5,rule
+404,obesity,out_of_scope,out_of_scope,5,rule
+405,neuroSciences,too_general,too_general,5,fuzzy
+406,neuroscience,too_general,too_general,5,rule
+407,neurointerventionalSurgery,stroke_care,service,5,rule
+408,maxillofacialProsthesis,out_of_scope,out_of_scope,5,rule
+409,lasikSurgery,out_of_scope,out_of_scope,5,rule
+410,paedodontics,out_of_scope,out_of_scope,5,rule
+411,paediatricPulmonology,too_general,too_general,5,rule
+412,sexology,out_of_scope,out_of_scope,5,llm
+413,painPalliativeMedicine,out_of_scope,out_of_scope,5,rule
+414,palliativeMedicine,out_of_scope,out_of_scope,5,rule
+415,preventiveCardiology,too_general,too_general,5,rule
+416,radiotherapy,radiotherapy,service,5,rule
+417,refractiveSurgeries,out_of_scope,out_of_scope,5,rule
+418,refractiveSurgery,out_of_scope,out_of_scope,5,rule
+419,rehabilitation,out_of_scope,out_of_scope,5,rule
+420,serologyLab,out_of_scope,out_of_scope,5,rule
+421,speechTherapy,out_of_scope,out_of_scope,5,rule
+422,thoracicOncology,surgical_oncology,service,5,rule
+423,virologyLab,out_of_scope,out_of_scope,5,rule
+424,immunotherapy,out_of_scope,out_of_scope,5,llm
+425,intensiveCareUnit,icu,service,5,rule
+426,Paediatrics,too_general,too_general,5,rule
+427,immunologyLab,out_of_scope,out_of_scope,5,rule
+428,cardiologist,too_general,too_general,5,rule
+429,hormonalAssaysLab,out_of_scope,out_of_scope,5,rule
+430,IVF,out_of_scope,out_of_scope,5,rule
+431,Internal Medicine,too_general,too_general,5,rule
+432,Oncology,too_general,too_general,5,rule
+433,Histopathology,out_of_scope,out_of_scope,5,rule
+434,Plastic Surgery,too_general,too_general,5,rule
+435,accidentAndEmergency,emergency_24x7,service,5,rule
+436,audiologyAndSpeechTherapy,out_of_scope,out_of_scope,5,rule
+437,cancerCare,too_general,too_general,5,rule
+438,cardiacAndPulmonaryRehabilitation,too_general,too_general,5,rule
+439,cardiacSciences,too_general,too_general,5,rule
+440,Ophthalmology,too_general,too_general,5,rule
+441,communityAndPublicPsychiatry,psychiatric_care,service,5,rule
+442,geneticDermatology,out_of_scope,out_of_scope,5,rule
+443,crownsAndBridges,out_of_scope,out_of_scope,5,llm
+444,hepatobiliarySurgery,out_of_scope,out_of_scope,5,rule
+445,handSurgery,out_of_scope,out_of_scope,5,rule
+446,geriatricInternalMedicine,out_of_scope,out_of_scope,5,rule
+447,globalHealthAndInternationalHealth,not_a_service,not_a_service,5,llm
+448,generalAndLaparoscopicSurgery,too_general,too_general,5,rule
+449,fullMouthRehabilitation,out_of_scope,out_of_scope,5,rule
+450,facialPlasticsAndReconstructiveOtolaryngology,out_of_scope,out_of_scope,5,rule
+451,emergencyPsychiatry,psychiatric_care,service,5,rule
+452,obstetrics,too_general,too_general,4,rule
+453,liverTransplant,too_general,too_general,4,rule
+454,neurophysiology,out_of_scope,out_of_scope,4,rule
+455,nephrologyAndDialysis,dialysis,service,4,rule
+456,neonatalPerinatal,too_general,too_general,4,rule
+457,multispeciality,too_general,too_general,4,llm
+458,metabolicSurgery,out_of_scope,out_of_scope,4,rule
+459,medicalGenetics,out_of_scope,out_of_scope,4,rule
+460,infertilityMedicine,out_of_scope,out_of_scope,4,rule
+461,kneeReplacementSurgery,out_of_scope,out_of_scope,4,rule
+462,kidneyTransplantation,kidney_transplant,service,4,rule
+463,jointReplacement,out_of_scope,out_of_scope,4,rule
+464,jawOrthopedics,out_of_scope,out_of_scope,4,llm
+465,integrativeMedicine,out_of_scope,out_of_scope,4,rule
+466,infectiousDiseaseControl,too_general,too_general,4,rule
+467,iclSurgery,out_of_scope,out_of_scope,4,rule
+468,oralSurgery,out_of_scope,out_of_scope,4,rule
+469,oculoplastyAndReconstructiveOrbitalSurgery,out_of_scope,out_of_scope,4,rule
+470,rheumatologyAndImmunology,out_of_scope,out_of_scope,4,rule
+471,paediatricEndocrinology,out_of_scope,out_of_scope,4,rule
+472,pediatricHospiceAndPalliativeMedicine,out_of_scope,out_of_scope,4,rule
+473,teethWhitening,out_of_scope,out_of_scope,4,rule
+474,squintSurgery,out_of_scope,out_of_scope,4,rule
+475,squint,out_of_scope,out_of_scope,4,rule
+476,specialCareDentistry,out_of_scope,out_of_scope,4,rule
+477,roboticAssistedSurgery,out_of_scope,out_of_scope,4,rule
+478,haematologyLaboratory,too_general,too_general,4,rule
+479,rheumatologyAndClinicalImmunology,out_of_scope,out_of_scope,4,rule
+480,radiodiagnosis,too_general,too_general,4,rule
+481,prkSurgery,out_of_scope,out_of_scope,4,rule
+482,plasticAndReconstructiveSurgery,too_general,too_general,4,rule
+483,pharmacy,not_a_service,not_a_service,4,llm
+484,pelvicHealthAndUrogynPMR,out_of_scope,out_of_scope,4,rule
+485,pediatricsSurgery,out_of_scope,out_of_scope,4,rule
+486,pediatricOrthopedics,out_of_scope,out_of_scope,4,llm
+487,pediatricOrthopaedicSurgery,out_of_scope,out_of_scope,4,rule
+488,herniaSurgery,out_of_scope,out_of_scope,4,rule
+489,painPalliative,out_of_scope,out_of_scope,4,rule
+490,genitoUrinarySurgeries,out_of_scope,out_of_scope,4,llm
+491,Haematology,too_general,too_general,4,rule
+492,bariatrics,out_of_scope,out_of_scope,4,rule
+493,bacteriologyLab,out_of_scope,out_of_scope,4,rule
+494,anaesthesia,too_general,too_general,4,rule
+495,addictionMedicinePMR,de_addiction,service,4,rule
+496,Radiation Oncology,radiotherapy,service,4,rule
+497,Orthopedics,too_general,too_general,4,rule
+498,Obstetrics & Gynaecology,too_general,too_general,4,rule
+499,Endodontist,out_of_scope,out_of_scope,4,rule
+500,cardiacAnesthesia,too_general,too_general,4,rule
+501,Endocrinology,out_of_scope,out_of_scope,4,rule
+502,Emergency Medicine,emergency_24x7,service,4,rule
+503,Dietitian/Nutritionist,out_of_scope,out_of_scope,4,rule
+504,Ayurveda,out_of_scope,out_of_scope,4,rule
+505,Arthroscopy,out_of_scope,out_of_scope,4,rule
+506,gastrointestinalOncology,out_of_scope,out_of_scope,4,rule
+507,Anaesthesiology,too_general,too_general,4,rule
+508,bloodBank,blood_bank,service,4,rule
+509,Biochemistry,out_of_scope,out_of_scope,4,rule
+510,cardioThoracicSurgery,cardiac_surgery,service,4,rule
+511,diabetologist,out_of_scope,out_of_scope,4,rule
+512,gastroIntestinalSurgery,out_of_scope,out_of_scope,4,rule
+513,forensicMedicineAndToxicology,too_general,too_general,4,rule
+514,eyeCheckup,out_of_scope,out_of_scope,4,rule
+515,endovascularSurgery,out_of_scope,out_of_scope,4,rule
+516,endocrinologyAndDiabetology,out_of_scope,out_of_scope,4,rule
+517,dryEye,out_of_scope,out_of_scope,4,rule
+518,dietitian,not_a_service,not_a_service,4,llm
+519,familyDentistry,out_of_scope,out_of_scope,4,rule
+520,diabetesAndEndocrinology,out_of_scope,out_of_scope,4,rule
+521,clinicalImmunologyAndRheumatology,out_of_scope,out_of_scope,4,rule
+522,chestMedicine,too_general,too_general,4,rule
+523,dentures,out_of_scope,out_of_scope,4,rule
+524,forensicPsychiatry,psychiatric_care,service,4,rule
+525,contouraLasik,out_of_scope,out_of_scope,4,rule
+526,dentalAndMaxillofacialSurgery,out_of_scope,out_of_scope,4,rule
+527,dentalImplant,out_of_scope,out_of_scope,4,rule
+528,orthopaedicsAndJointReplacement,too_general,too_general,3,rule
+529,nephrosurgery,out_of_scope,out_of_scope,3,rule
+530,mammography,out_of_scope,out_of_scope,3,llm
+531,medicalToxicologyEM,too_general,too_general,3,rule
+532,medicine,too_general,too_general,3,rule
+533,molecularBiology,out_of_scope,out_of_scope,3,rule
+534,nephrologyAndUrology,too_general,too_general,3,rule
+535,neuroAnesthesiology,too_general,too_general,3,rule
+536,laproscopicUrology,out_of_scope,out_of_scope,3,rule
+537,neurologyAndNeurosurgery,neurosurgery,service,3,rule
+538,nonInvasiveCardiologyCentre,too_general,too_general,3,rule
+539,ocularProsthesis,out_of_scope,out_of_scope,3,rule
+540,oncopathology,out_of_scope,out_of_scope,3,rule
+541,oralAndMaxillofacialRadiology,out_of_scope,out_of_scope,3,rule
+542,nutritionDietetics,out_of_scope,out_of_scope,3,rule
+543,implantologist,out_of_scope,out_of_scope,3,rule
+544,jointReplacementCentre,out_of_scope,out_of_scope,3,rule
+545,interventionalPulmonology,too_general,too_general,3,rule
+546,interventionalPainManagement,out_of_scope,out_of_scope,3,rule
+547,interventionalNeurology,out_of_scope,out_of_scope,3,llm
+548,integratedMedicine,out_of_scope,out_of_scope,3,llm
+549,implants,out_of_scope,out_of_scope,3,llm
+550,headNeckSurgeryOtolaryngology,out_of_scope,out_of_scope,3,rule
+551,icuAndCriticalCare,icu,service,3,rule
+552,hospitalMedicine,out_of_scope,out_of_scope,3,llm
+553,hospiceAndPalliativeMedicine,out_of_scope,out_of_scope,3,rule
+554,hipReplacementSurgery,out_of_scope,out_of_scope,3,rule
+555,hematologyOncology,too_general,too_general,3,rule
+556,hematoOncology,chemotherapy,service,3,rule
+557,heartTransplant,cardiac_surgery,service,3,rule
+558,paediatricHaematologyOncologyAndBMT,chemotherapy,service,3,rule
+559,osteoporosis,out_of_scope,out_of_scope,3,rule
+560,renalCare,out_of_scope,out_of_scope,3,llm
+561,paediatricOrthopaedicSurgery,out_of_scope,out_of_scope,3,rule
+562,stemCellTherapy,out_of_scope,out_of_scope,3,llm
+563,renalTransplantation,kidney_transplant,service,3,rule
+564,retinalDetachment,eye_emergency,service,3,rule
+565,sexualMedicine,out_of_scope,out_of_scope,3,llm
+566,smileDesigning,out_of_scope,out_of_scope,3,rule
+567,speechMedicinePMR,out_of_scope,out_of_scope,3,rule
+568,spineCare,too_general,too_general,3,rule
+569,targetedTherapy,out_of_scope,out_of_scope,3,llm
+570,painClinic,out_of_scope,out_of_scope,3,rule
+571,urogynaecologyAndReconstructivePelvisSurgery,out_of_scope,out_of_scope,3,rule
+572,uveaOcularInflammation,out_of_scope,out_of_scope,3,rule
+573,vascularAndEndovascularSurgery,out_of_scope,out_of_scope,3,rule
+574,vascularEndovascularSurgery,out_of_scope,out_of_scope,3,rule
+575,vascularNeurosurgery,neurosurgery,service,3,rule
+576,haematologyAndHaematoncology,too_general,too_general,3,rule
+577,renalSciences,too_general,too_general,3,rule
+578,regionalAnesthesiologyAndAcutePain,too_general,too_general,3,rule
+579,pulmonary,too_general,too_general,3,rule
+580,prosthodontist,out_of_scope,out_of_scope,3,rule
+581,preventiveMedicalToxicology,too_general,too_general,3,rule
+582,preventiveAndCommunityDentistry,out_of_scope,out_of_scope,3,rule
+583,podiatricOncology,out_of_scope,out_of_scope,3,rule
+584,podiatricDiabeticFoot,out_of_scope,out_of_scope,3,rule
+585,podiary,out_of_scope,out_of_scope,3,llm
+586,physiotherapyAndRehabilitation,out_of_scope,out_of_scope,3,rule
+587,physicalMedicineAnd Rehabilitation,out_of_scope,out_of_scope,3,rule
+588,periodontalPlasticSurgery,out_of_scope,out_of_scope,3,rule
+589,pediatricsNeonatology,too_general,too_general,3,rule
+590,pediatricNeonatology,too_general,too_general,3,rule
+591,pediatricDialysis,dialysis,service,3,rule
+592,pediatricCardiacSurgery,cardiac_surgery,service,3,rule
+593,parasitology,out_of_scope,out_of_scope,3,llm
+594,handAndWristSurgery,out_of_scope,out_of_scope,3,rule
+595,mycology,out_of_scope,out_of_scope,3,llm
+596,haematoOncology,chemotherapy,service,3,rule
+597,Pulmonology,too_general,too_general,3,rule
+598,Neuroscience,too_general,too_general,3,rule
+599,Oral Surgery,out_of_scope,out_of_scope,3,rule
+600,Paediatric Ophthalmology,out_of_scope,out_of_scope,3,rule
+601,Pediatric Orthopedics,out_of_scope,out_of_scope,3,llm
+602,Periodontist,out_of_scope,out_of_scope,3,rule
+603,Psychiatry,psychiatric_care,service,3,rule
+604,Serology,out_of_scope,out_of_scope,3,rule
+605,burnGeneralSurgery,burn_care,service,3,rule
+606,Sports Medicine,out_of_scope,out_of_scope,3,rule
+607,Surgical Oncology,surgical_oncology,service,3,rule
+608,anatomy,not_a_service,not_a_service,3,rule
+609,andrologyAndSexology,out_of_scope,out_of_scope,3,rule
+610,arthroscopyAndSportsMedicine,out_of_scope,out_of_scope,3,rule
+611,boneMarrowTransplantation,chemotherapy,service,3,rule
+612,Medical Oncology,chemotherapy,service,3,rule
+613,Laser Dentistry,out_of_scope,out_of_scope,3,rule
+614,Interventional Cardiology,cath_lab_angioplasty,service,3,rule
+615,Infertility,out_of_scope,out_of_scope,3,rule
+616,IVF Treatment,out_of_scope,out_of_scope,3,rule
+617,IUI,out_of_scope,out_of_scope,3,rule
+618,Hepatology,out_of_scope,out_of_scope,3,rule
+619,Genetic testing (PGT-A & PGT-M),out_of_scope,out_of_scope,3,rule
+620,General Medicine,too_general,too_general,3,rule
+621,General & Laparoscopic Surgery,too_general,too_general,3,rule
+622,GI Surgery,out_of_scope,out_of_scope,3,rule
+623,Diabetic Retinopathy,out_of_scope,out_of_scope,3,rule
+624,Cytopathology,out_of_scope,out_of_scope,3,rule
+625,Cryopreservation,out_of_scope,out_of_scope,3,llm
+626,Cosmetic Dentistry,out_of_scope,out_of_scope,3,rule
+627,Cardio Thoracic Surgery,cardiac_surgery,service,3,rule
+628,gynaecology,out_of_scope,out_of_scope,3,rule
+629,breastCentre,out_of_scope,out_of_scope,3,rule
+630,Neuro Sciences,too_general,too_general,3,fuzzy
+631,burns,burn_care,service,3,rule
+632,foetalMedicine,high_risk_pregnancy,service,3,rule
+633,dietitianAndNutritionist,out_of_scope,out_of_scope,3,rule
+634,dietitianNutritionist,out_of_scope,out_of_scope,3,rule
+635,emergencyDentistry,out_of_scope,out_of_scope,3,rule
+636,emergencyMedicalServices,emergency_24x7,service,3,manual
+637,eyeBank,out_of_scope,out_of_scope,3,rule
+638,fertilityPreservation,out_of_scope,out_of_scope,3,rule
+639,footAndAnkleSurgery,out_of_scope,out_of_scope,3,rule
+640,developmentalPediatrics,out_of_scope,out_of_scope,3,rule
+641,gastrosciences,out_of_scope,out_of_scope,3,rule
+642,gastrosurgery,out_of_scope,out_of_scope,3,rule
+643,geriatricMedicine,out_of_scope,out_of_scope,3,rule
+644,glaucoma,out_of_scope,out_of_scope,3,rule
+645,cardiacAnesthesiology,too_general,too_general,3,rule
+646,gynaecologicOncology,surgical_oncology,service,3,rule
+647,dietAndNutrition,out_of_scope,out_of_scope,3,rule
+648,endoscopicSurgery,out_of_scope,out_of_scope,3,rule
+649,dermatosurgery,out_of_scope,out_of_scope,3,rule
+650,conservativeDentistryAndEndodontics,out_of_scope,out_of_scope,3,rule
+651,cardiacCare,too_general,too_general,3,rule
+652,cardiovascularSurgery,cardiac_surgery,service,3,rule
+653,chemotherapy,chemotherapy,service,3,rule
+654,chestSurgery,too_general,too_general,3,rule
+655,clinicalImaging,out_of_scope,out_of_scope,3,llm
+656,communityDentistry,out_of_scope,out_of_scope,3,rule
+657,clinicalImmunology,out_of_scope,out_of_scope,3,rule
+658,contactLens,out_of_scope,out_of_scope,3,llm
+659,cosmeticAndCosmeticSurgery,out_of_scope,out_of_scope,3,rule
+660,cosmeticAndPlasticSurgery,out_of_scope,out_of_scope,3,rule
+661,cosmeticGynecology,out_of_scope,out_of_scope,3,rule
+662,cytogenetics,out_of_scope,out_of_scope,3,rule
+663,dentalImplantology,out_of_scope,out_of_scope,3,rule
+664,musculoskeletalOncology,surgical_oncology,service,2,rule
+665,neuroEndovascularTherapy,neurosurgery,service,2,llm
+666,neuroCriticalCare,icu,service,2,rule
+667,nephrologyWithDialysis,dialysis,service,2,rule
+668,nephroSurgery,out_of_scope,out_of_scope,2,rule
+669,neonatalSurgery,too_general,too_general,2,rule
+670,myopiaClinic,out_of_scope,out_of_scope,2,llm
+671,metabolicAndBariatricSurgery,out_of_scope,out_of_scope,2,rule
+672,molecularTesting,out_of_scope,out_of_scope,2,rule
+673,molecularPathology,out_of_scope,out_of_scope,2,rule
+674,minimallyInvasiveSpineSurgery,too_general,too_general,2,rule
+675,microvascularSurgery,out_of_scope,out_of_scope,2,rule
+676,microscopicDentistry,out_of_scope,out_of_scope,2,rule
+677,mentalHealthAndBehaviouralSciences,out_of_scope,out_of_scope,2,rule
+678,neurointensiveCare,icu,service,2,rule
+679,neuroendocrinology,out_of_scope,out_of_scope,2,rule
+680,orofacialPain,out_of_scope,out_of_scope,2,rule
+681,neuromuscularDentistry,out_of_scope,out_of_scope,2,rule
+682,neurophthalmology,out_of_scope,out_of_scope,2,rule
+683,maxillofacialProsthetics,out_of_scope,out_of_scope,2,rule
+684,orthopedicTrauma,orthopaedic_trauma_surgery,service,2,rule
+685,oralSurgicalProcedures,out_of_scope,out_of_scope,2,rule
+686,oralRadiologyAndDiagnosis,out_of_scope,out_of_scope,2,rule
+687,oralRadiology,out_of_scope,out_of_scope,2,rule
+688,oralPathologyAndMicrobiology,out_of_scope,out_of_scope,2,rule
+689,oralMaxillofacialRadiology,out_of_scope,out_of_scope,2,rule
+690,oralImplantology,out_of_scope,out_of_scope,2,rule
+691,optometry,out_of_scope,out_of_scope,2,rule
+692,opthalmology,too_general,too_general,2,rule
+693,oculoplasticSurgery,out_of_scope,out_of_scope,2,rule
+694,nutritionDietetic,out_of_scope,out_of_scope,2,rule
+695,nutritionAndDiet,out_of_scope,out_of_scope,2,rule
+696,neurourology,out_of_scope,out_of_scope,2,fuzzy
+697,neurosurgeryAndSpineSurgery,neurosurgery,service,2,rule
+698,medicalOphthalmology,out_of_scope,out_of_scope,2,rule
+699,gynaecologicSurgery,out_of_scope,out_of_scope,2,rule
+700,maxillofacialAndDentalSurgery,out_of_scope,out_of_scope,2,rule
+701,maxilloFacialSurgery,out_of_scope,out_of_scope,2,rule
+702,infertilityCentre,out_of_scope,out_of_scope,2,rule
+703,infertilityAndIVF,out_of_scope,out_of_scope,2,rule
+704,implantProsthesis,out_of_scope,out_of_scope,2,llm
+705,hormones,out_of_scope,out_of_scope,2,llm
+706,holisticDentistry,out_of_scope,out_of_scope,2,rule
+707,histocytopathology,out_of_scope,out_of_scope,2,rule
+708,histoPathology,out_of_scope,out_of_scope,2,rule
+709,highRiskPregnancyAndInfertility,high_risk_pregnancy,service,2,rule
+710,hematoOncologyAndBMT,chemotherapy,service,2,rule
+711,healthCheckup,not_a_service,not_a_service,2,llm
+712,hairTransplant,too_general,too_general,2,rule
+713,gynaecologyAndObstetrics,too_general,too_general,2,rule
+714,otology,out_of_scope,out_of_scope,2,rule
+715,geriatrics,out_of_scope,out_of_scope,2,rule
+716,geriatricOncology,out_of_scope,out_of_scope,2,rule
+717,infertilityTreatment,out_of_scope,out_of_scope,2,rule
+718,intensiveCareMedicine,icu,service,2,rule
+719,internal Medicine,too_general,too_general,2,rule
+720,lasikEyeSurgery,out_of_scope,out_of_scope,2,rule
+721,maleInfertility,out_of_scope,out_of_scope,2,rule
+722,macularHole,out_of_scope,out_of_scope,2,llm
+723,macularEdema,out_of_scope,out_of_scope,2,llm
+724,lungTransplant,too_general,too_general,2,rule
+725,lowVisionRehabilitation,out_of_scope,out_of_scope,2,rule
+726,liverTransplantationCentre,too_general,too_general,2,rule
+727,laserSurgery,out_of_scope,out_of_scope,2,rule
+728,internalMedicineAndCriticalCare,icu,service,2,rule
+729,laparoscopySurgery,too_general,too_general,2,rule
+730,kidneyTransplantationCentre,kidney_transplant,service,2,rule
+731,keratoplasty,out_of_scope,out_of_scope,2,rule
+732,keratoconusTreatmentDoctors,out_of_scope,out_of_scope,2,rule
+733,kayachikitsa,out_of_scope,out_of_scope,2,llm
+734,interventionalPainMedicine,out_of_scope,out_of_scope,2,rule
+735,orthoptics,out_of_scope,out_of_scope,2,llm
+736,precisionMedicine,out_of_scope,out_of_scope,2,llm
+737,ozoneTherapy,out_of_scope,out_of_scope,2,llm
+738,psychiatryAndPsychology,psychiatric_care,service,2,rule
+739,speechAndAudiology,out_of_scope,out_of_scope,2,rule
+740,sonology,out_of_scope,out_of_scope,2,llm
+741,sonography,ultrasound,service,2,rule
+742,socialAndBehavioralSciences,out_of_scope,out_of_scope,2,rule
+743,smileDesign,out_of_scope,out_of_scope,2,rule
+744,smile,out_of_scope,out_of_scope,2,rule
+745,sleepDentistry,out_of_scope,out_of_scope,2,rule
+746,skinOfColorDermatology,out_of_scope,out_of_scope,2,rule
+747,shoulderAndUpperLimbSurgery,out_of_scope,out_of_scope,2,rule
+748,sexologists,out_of_scope,out_of_scope,2,llm
+749,retinopathyPrematurity,out_of_scope,out_of_scope,2,llm
+750,respiratoryAndSleepMedicine,out_of_scope,out_of_scope,2,rule
+751,radiationOncologist,radiotherapy,service,2,rule
+752,pulmonologist,too_general,too_general,2,rule
+753,pterygiumSurgery,out_of_scope,out_of_scope,2,rule
+754,spinalSurgery,too_general,too_general,2,rule
+755,sportMedicinePMR,out_of_scope,out_of_scope,2,rule
+756,squintAndOrthoptics,out_of_scope,out_of_scope,2,rule
+757,traumaSurgery,trauma_care,service,2,rule
+758,gastrology,out_of_scope,out_of_scope,2,rule
+759,visionTherapy,out_of_scope,out_of_scope,2,llm
+760,vascularSurgeryAndInterventionalRadiology,too_general,too_general,2,rule
+761,urologyRenalTransplant,kidney_transplant,service,2,rule
+762,urologicalSurgery,out_of_scope,out_of_scope,2,rule
+763,traumatology,trauma_care,service,2,rule
+764,traumaCare,trauma_care,service,2,rule
+765,squintAndPaediatricOphthalmology,out_of_scope,out_of_scope,2,rule
+766,toothExtractions,out_of_scope,out_of_scope,2,rule
+767,thyroidSurgery,out_of_scope,out_of_scope,2,rule
+768,superspeciality,not_a_service,not_a_service,2,llm
+769,stereotacticSurgery,out_of_scope,out_of_scope,2,rule
+770,squintOrthoptics,out_of_scope,out_of_scope,2,rule
+771,squintCorrection,out_of_scope,out_of_scope,2,rule
+772,psychotherapy,psychiatric_care,service,2,llm
+773,psychiatryAndDeaddictionTherapy,psychiatric_care;de_addiction,service,2,manual
+774,pacemakerClinic,out_of_scope,out_of_scope,2,llm
+775,prosthodonticsWithCrownAndBridge,out_of_scope,out_of_scope,2,rule
+776,peadiatricOphthalmology,out_of_scope,out_of_scope,2,rule
+777,pancreaticSurgery,out_of_scope,out_of_scope,2,rule
+778,painPalliativeCare,out_of_scope,out_of_scope,2,rule
+779,painNeurology,out_of_scope,out_of_scope,2,rule
+780,painManagementPMR,out_of_scope,out_of_scope,2,rule
+781,painFreeDentistry,out_of_scope,out_of_scope,2,rule
+782,painAndPalliativeMedicine,out_of_scope,out_of_scope,2,rule
+783,paediatricsNeonatology,too_general,too_general,2,rule
+784,paediatricsAndStrabismusOphthalmology,out_of_scope,out_of_scope,2,rule
+785,paediatricRefractiveErrors,out_of_scope,out_of_scope,2,rule
+786,paediatricOrthopaedic,too_general,too_general,2,manual
+787,paediatricNeurosciences,too_general,too_general,2,rule
+788,paediatricHematoOncologyAndBMT,chemotherapy,service,2,rule
+789,paediatricCardiacCentre,too_general,too_general,2,manual
+790,paediatric,too_general,too_general,2,rule
+791,pediatricAndPreventiveDentistry,out_of_scope,out_of_scope,2,rule
+792,pediatricEyeCare,out_of_scope,out_of_scope,2,rule
+793,pediatricHematoOncology,chemotherapy,service,2,rule
+794,physiotherapist,out_of_scope,out_of_scope,2,rule
+795,prosthodonticsAndImplantology,out_of_scope,out_of_scope,2,rule
+796,presurgicalOrthodontics,out_of_scope,out_of_scope,2,rule
+797,polyTrauma,trauma_care,service,2,rule
+798,podiatricSportsMedicine,out_of_scope,out_of_scope,2,rule
+799,podiatricDermatology,out_of_scope,out_of_scope,2,rule
+800,pilonidalSinus,out_of_scope,out_of_scope,2,rule
+801,periodontists,out_of_scope,out_of_scope,2,rule
+802,pediatricHepatology,out_of_scope,out_of_scope,2,rule
+803,periodonticsAndImplantology,out_of_scope,out_of_scope,2,rule
+804,periodontia,out_of_scope,out_of_scope,2,rule
+805,pedodontist,out_of_scope,out_of_scope,2,rule
+806,pediatricThoracicSurgery,out_of_scope,out_of_scope,2,rule
+807,pediatricRheumatologyAndImmunology,out_of_scope,out_of_scope,2,rule
+808,pediatricOphthalmologyAndSquint,out_of_scope,out_of_scope,2,rule
+809,generalOphthalmology,out_of_scope,out_of_scope,2,rule
+810,Sedation Dentistry,out_of_scope,out_of_scope,2,rule
+811,gastroenterologyAndHepatology,out_of_scope,out_of_scope,2,rule
+812,LASIK,out_of_scope,out_of_scope,2,rule
+813,PGS PGD Screening Treatment,out_of_scope,out_of_scope,2,llm
+814,Ovulation Induction,out_of_scope,out_of_scope,2,llm
+815,Orthopaedics & Joint Replacement,too_general,too_general,2,rule
+816,Orthodontist,out_of_scope,out_of_scope,2,rule
+817,Oral Pathology,out_of_scope,out_of_scope,2,rule
+818,Oral And MaxillofacialSurgery,out_of_scope,out_of_scope,2,rule
+819,Oocyte Vitrification,out_of_scope,out_of_scope,2,llm
+820,Non-Invasive Cardiology,too_general,too_general,2,rule
+821,MicroBiology,out_of_scope,out_of_scope,2,fuzzy
+822,Micro Biology,out_of_scope,out_of_scope,2,fuzzy
+823,Medicine,too_general,too_general,2,rule
+824,Maxillofacial Surgery,out_of_scope,out_of_scope,2,rule
+825,Liver Transplant,too_general,too_general,2,rule
+826,Lasik Surgery,out_of_scope,out_of_scope,2,rule
+827,Laparoscopy,too_general,too_general,2,rule
+828,Pediatric Cardiology,too_general,too_general,2,rule
+829,Pedodontist,out_of_scope,out_of_scope,2,rule
+830,Plastic & Reconstructive Surgery,too_general,too_general,2,rule
+831,ShoulderAndElbowOrthopedicSurgery,out_of_scope,out_of_scope,2,rule
+832,accidentAndTrauma,trauma_care,service,2,rule
+833,accidentAndCriticalCare,icu,service,2,rule
+834,Vascular Surgery,out_of_scope,out_of_scope,2,rule
+835,Teeth Whitening,out_of_scope,out_of_scope,2,rule
+836,Surgical Gastroenterology,out_of_scope,out_of_scope,2,rule
+837,Sperm Retrieval,out_of_scope,out_of_scope,2,llm
+838,Sexologists,out_of_scope,out_of_scope,2,llm
+839,Polytrauma,trauma_care,service,2,rule
+840,Semen / Sperm Freezing,out_of_scope,out_of_scope,2,llm
+841,Root Canal,out_of_scope,out_of_scope,2,llm
+842,Reproductive Surgery,out_of_scope,out_of_scope,2,rule
+843,Refractive Surgeries,out_of_scope,out_of_scope,2,rule
+844,Reconstructive Surgery,too_general,too_general,2,rule
+845,Prosthodontist,out_of_scope,out_of_scope,2,rule
+846,Laparoscopic Surgery,too_general,too_general,2,rule
+847,Kids Dentistry,out_of_scope,out_of_scope,2,rule
+848,anesthesiaAndCriticalCare,icu,service,2,rule
+849,Kidney Transplant,kidney_transplant,service,2,rule
+850,Era Endometrial Receptivity Array Treatment,out_of_scope,out_of_scope,2,llm
+851,Dietitian,not_a_service,not_a_service,2,llm
+852,Dietetics,out_of_scope,out_of_scope,2,rule
+853,Dentures,out_of_scope,out_of_scope,2,rule
+854,Dental,out_of_scope,out_of_scope,2,rule
+855,Cytology,out_of_scope,out_of_scope,2,rule
+856,Critical Care Medicine,icu,service,2,rule
+857,Critical Care,icu,service,2,rule
+858,Conservative Dentistry,out_of_scope,out_of_scope,2,rule
+859,Cancer Care,too_general,too_general,2,rule
+860,CTVS,cardiac_surgery,service,2,rule
+861,Bariatric Surgery,out_of_scope,out_of_scope,2,rule
+862,Anaesthesia,too_general,too_general,2,rule
+863, retinaAndVitreoretinalOphthalmology,out_of_scope,out_of_scope,2,rule
+864,gastroenterologyAndHepatobiliarySciences,out_of_scope,out_of_scope,2,rule
+865,GI Oncology,surgical_oncology,service,2,rule
+866,Gastrointestinal & Hepatobiliary Oncology,out_of_scope,out_of_scope,2,rule
+867,General Dentistry,out_of_scope,out_of_scope,2,rule
+868,ICSI Treatment,out_of_scope,out_of_scope,2,llm
+869,Kayachikitsa,out_of_scope,out_of_scope,2,llm
+870,Invisalign,out_of_scope,out_of_scope,2,llm
+871,Interventional Radiology,too_general,too_general,2,rule
+872,Implantologist,out_of_scope,out_of_scope,2,rule
+873,Immunology,out_of_scope,out_of_scope,2,rule
+874,IUI Treatment,out_of_scope,out_of_scope,2,rule
+875,ICSI,out_of_scope,out_of_scope,2,llm
+876,Genetics,out_of_scope,out_of_scope,2,rule
+877,Homoeopathy,out_of_scope,out_of_scope,2,rule
+878,Hernia Surgery,out_of_scope,out_of_scope,2,rule
+879,HepatopancreatobiliarySurgery,out_of_scope,out_of_scope,2,rule
+880,HSG,out_of_scope,out_of_scope,2,llm
+881,Gynaeoncology,out_of_scope,out_of_scope,2,llm
+882,Gynaecology,out_of_scope,out_of_scope,2,rule
+883,anaesthesiologyAndCriticalCare,icu,service,2,rule
+884,Ear-Nose-Throat (ENT) Specialist,out_of_scope,out_of_scope,2,rule
+885,anorectalSurgery,out_of_scope,out_of_scope,2,rule
+886,dieteticsAndClinicalNutrition,out_of_scope,out_of_scope,2,rule
+887,diabetesCentre,out_of_scope,out_of_scope,2,rule
+888,diabetes,out_of_scope,out_of_scope,2,rule
+889,dentalRadiology,out_of_scope,out_of_scope,2,rule
+890,dentalOncology,out_of_scope,out_of_scope,2,rule
+891,dentalMaxillofacialSurgery,out_of_scope,out_of_scope,2,rule
+892,dentalMaterials,out_of_scope,out_of_scope,2,rule
+893,dentalFillings,out_of_scope,out_of_scope,2,rule
+894,dentalCare,out_of_scope,out_of_scope,2,rule
+895,dentalAndMaxillofacial,out_of_scope,out_of_scope,2,rule
+896,crownAndBridge,out_of_scope,out_of_scope,2,llm
+897,craniomaxillofacialSurgery,out_of_scope,out_of_scope,2,rule
+898,counseling,out_of_scope,out_of_scope,2,rule
+899,cosmetologist,out_of_scope,out_of_scope,2,rule
+900,cosmeticGynaecology,out_of_scope,out_of_scope,2,rule
+901,cosmeticFillings,out_of_scope,out_of_scope,2,rule
+902,diabetologyAndEndocrinology,out_of_scope,out_of_scope,2,rule
+903,dieteticsNutrition,out_of_scope,out_of_scope,2,rule
+904,contactLensAndLowVisionAids,hiv_art,service,2,rule
+905,digitalDentistry,out_of_scope,out_of_scope,2,rule
+906,fetalMedicineAndRadiology,high_risk_pregnancy,service,2,rule
+907,antenatalCare,institutional_delivery,service,2,rule
+908,fertilityCentre,out_of_scope,out_of_scope,2,rule
+909,fertilityAndIVF,out_of_scope,out_of_scope,2,rule
+910,familyAndGeneralMedicine,too_general,too_general,2,llm
+911,facialAsymmetryCorrection,out_of_scope,out_of_scope,2,llm
+912,endovascularNeurosurgery,stroke_care,service,2,rule
+913,endoscopyCentre,out_of_scope,out_of_scope,2,rule
+914,endometriosis,out_of_scope,out_of_scope,2,llm
+915,emergencyPreparednessAndDisasterResponse,out_of_scope,out_of_scope,2,llm
+916,emergencyDentalCare,out_of_scope,out_of_scope,2,rule
+917,emergencyCriticalCare,icu,service,2,rule
+918,echocardiography,out_of_scope,out_of_scope,2,llm
+919,dryEyes,out_of_scope,out_of_scope,2,llm
+920,digitalSmileDesign,out_of_scope,out_of_scope,2,rule
+921,coronaryAngiography,cath_lab_angioplasty,service,2,llm
+922,endocrinologyAndMetabolism,out_of_scope,out_of_scope,2,rule
+923,conservativeAndEndodontics,out_of_scope,out_of_scope,2,rule
+924,brainInjuryMedicinePMR,too_general,too_general,2,rule
+925,cardiacElectrophysiology,too_general,too_general,2,rule
+926,cancerMarker,out_of_scope,out_of_scope,2,llm
+927,burnsAndTraumaPlasticSurgery,burn_care,service,2,rule
+928,burnsAndPlasticSurgery,burn_care,service,2,rule
+929,burnAndPlasticSurgery,burn_care,service,2,rule
+930,bridgesAndCrowns,out_of_scope,out_of_scope,2,llm
+931,binocularVisionAndOrthoptics,out_of_scope,out_of_scope,2,rule
+932,cardioThoracicAndVascularSurgery,cardiac_surgery,service,2,rule
+933,bacteriology,out_of_scope,out_of_scope,2,llm
+934,audiometry,out_of_scope,out_of_scope,2,llm
+935,arthroscopyCentre,out_of_scope,out_of_scope,2,rule
+936,communityChildHealth,out_of_scope,out_of_scope,2,llm
+937,audiologyAndSpeechPathology,out_of_scope,out_of_scope,2,rule
+938,arthroscopySportsInjury,out_of_scope,out_of_scope,2,rule
+939,cardiacScience,too_general,too_general,2,rule
+940,bacteriologyLaboratory,out_of_scope,out_of_scope,2,rule
+941,cardiologyAndCardiothoracicSurgery,cardiac_surgery,service,2,rule
+942,childPsychology,out_of_scope,out_of_scope,2,rule
+943,clinicalNutritionAndDietetics,out_of_scope,out_of_scope,2,rule
+944,cardiothoracic,cardiac_surgery,service,2,rule
+945,clinicalLaboratory,out_of_scope,out_of_scope,2,rule
+946,clinicalImagingInterventionalRadiology,too_general,too_general,2,rule
+947,clinicalNutrition,out_of_scope,out_of_scope,2,rule
+948,clinicalHaematology,too_general,too_general,2,rule
+949,clinicalChemistry,out_of_scope,out_of_scope,2,llm
+950,clinicalHematology,too_general,too_general,2,rule
+951,coloproctology,out_of_scope,out_of_scope,2,rule
+952,cardiovascularAndThoracicSurgery,cardiac_surgery,service,2,rule
+953,childAbusePediatrics,out_of_scope,out_of_scope,2,llm
+954,cardiothoracicVascularSurgery,cardiac_surgery,service,2,rule
+955,chestPhysician,too_general,too_general,2,rule
+956,cardiovascularThoracicSurgery,out_of_scope,out_of_scope,2,rule
+957,menstrualProblems,out_of_scope,out_of_scope,1,llm
+958,mentalHealthCounseling,out_of_scope,out_of_scope,1,rule
+959,metabolicPhysician,too_general,too_general,1,rule
+960,microbiologyLab,out_of_scope,out_of_scope,1,rule
+961,metabolicsurgery,out_of_scope,out_of_scope,1,rule
+962,metabolicdisorder,out_of_scope,out_of_scope,1,rule
+963,microbiologyAndInfectiousDieaseSerology,too_general,too_general,1,rule
+964,microDentistry,out_of_scope,out_of_scope,1,rule
+965,microSurgery,out_of_scope,out_of_scope,1,rule
+966,microbialKeratitis,out_of_scope,out_of_scope,1,llm
+967,microbiologyAndImmunology,out_of_scope,out_of_scope,1,rule
+968,menopause,out_of_scope,out_of_scope,1,rule
+969,medicalMicrobiology,out_of_scope,out_of_scope,1,rule
+970,menIntimateHealth,out_of_scope,out_of_scope,1,llm
+971,medicineGenetics,out_of_scope,out_of_scope,1,rule
+972,medicineAndCriticalCare,icu,service,1,rule
+973,medicalPhysicsAndRadiationSafety,out_of_scope,out_of_scope,1,llm
+974,medicalPhysics,out_of_scope,out_of_scope,1,llm
+975,medicalDepartment,too_general,too_general,1,llm
+976,maxillofacial-prosthesis,out_of_scope,out_of_scope,1,rule
+977,maxilloFacialProsthodontics,out_of_scope,out_of_scope,1,rule
+978,maxilloFacialProsthetics,out_of_scope,out_of_scope,1,rule
+979,maxillaFractureTreatment,orthopaedic_trauma_surgery,service,1,rule
+980,microvascular,out_of_scope,out_of_scope,1,llm
+981,maleFertility,out_of_scope,out_of_scope,1,rule
+982,maleBreastReduction,out_of_scope,out_of_scope,1,rule
+983,malalignedTeeth,out_of_scope,out_of_scope,1,rule
+984,microscopeDentistry,out_of_scope,out_of_scope,1,rule
+985,molecularBiologyAndGenetics,out_of_scope,out_of_scope,1,rule
+986,midwifery,institutional_delivery,service,1,rule
+987,militaryPsychiatry,psychiatric_care,service,1,rule
+988,neonatalAndPaediatrics,too_general,too_general,1,rule
+989,neonatalCare,too_general,too_general,1,rule
+990,lungTransplantation,too_general,too_general,1,rule
+991,neonatalAndPaediatricSurgery,too_general,too_general,1,rule
+992,naturopathy,out_of_scope,out_of_scope,1,rule
+993,myopiaTreatment,out_of_scope,out_of_scope,1,llm
+994,myopiaManagement,out_of_scope,out_of_scope,1,llm
+995,myopia,out_of_scope,out_of_scope,1,llm
+996,myocardialInfarction,out_of_scope,out_of_scope,1,llm
+997,multipleSclerosis,out_of_scope,out_of_scope,1,llm
+998,multiVisceralAndAbdominalOrganTransplant,too_general,too_general,1,rule
+999,motherAndChild,too_general,too_general,1,llm
+1000,molecularOncology,out_of_scope,out_of_scope,1,rule
+1001,molecularMicrobiology,out_of_scope,out_of_scope,1,rule
+1002,molecularLaboratory,out_of_scope,out_of_scope,1,rule
+1003,miscarriageClinic,out_of_scope,out_of_scope,1,llm
+1004,minimallyInvasiveOrthopaedicSurgery,out_of_scope,out_of_scope,1,rule
+1005,minimallyInvasiveLaserSurgeon,out_of_scope,out_of_scope,1,rule
+1006,minimallyInvasiveAdvancedLaparoscopicSurgery,too_general,too_general,1,rule
+1007,minimallyInvasiveAdvancedLaparoscopicSurgeries,too_general,too_general,1,rule
+1008,minimallyAccessBariatricAndMetabolicSurgery,out_of_scope,out_of_scope,1,rule
+1009,minimalInvasiveSpineSurgery,too_general,too_general,1,rule
+1010,minimalInvasiveNeurosurgery,neurosurgery,service,1,rule
+1011,minimalAccessSurgery,too_general,too_general,1,rule
+1012,minimalAccessRoboticSurgery,out_of_scope,out_of_scope,1,rule
+1013,minimalAccessGastroIntestinalAndHepatobiliarySurgery,out_of_scope,out_of_scope,1,rule
+1014,miniImplants,out_of_scope,out_of_scope,1,llm
+1015,lungTransplantationChestSurgery,too_general,too_general,1,rule
+1016,laserEyeSurgeries,out_of_scope,out_of_scope,1,rule
+1017,lumbarPunctureAndIntrathecalChemotherapy,chemotherapy,service,1,rule
+1018,laserTreatments,out_of_scope,out_of_scope,1,llm
+1019,laserLipSurgery,out_of_scope,out_of_scope,1,rule
+1020,laserEyeSurgery,out_of_scope,out_of_scope,1,rule
+1021,laserDentistory,out_of_scope,out_of_scope,1,rule
+1022,laser-lung-surgery,out_of_scope,out_of_scope,1,rule
+1023,laproscopicSurgery,out_of_scope,out_of_scope,1,rule
+1024,laprascopy,out_of_scope,out_of_scope,1,llm
+1025,laparoscopy,too_general,too_general,1,rule
+1026,laparoscopicGeneralSurgery,too_general,too_general,1,rule
+1027,languageTherapy,out_of_scope,out_of_scope,1,llm
+1028,lactationConsultancy,out_of_scope,out_of_scope,1,llm
+1029,laboratoryServices,out_of_scope,out_of_scope,1,rule
+1030,laboratorySciences,out_of_scope,out_of_scope,1,rule
+1031,laboratoryAndOncopathology,out_of_scope,out_of_scope,1,rule
+1032,laboratory,out_of_scope,out_of_scope,1,rule
+1033,labMedicine,out_of_scope,out_of_scope,1,rule
+1034,kriyaSarira,not_a_service,not_a_service,1,rule
+1035,koumarbhritya,out_of_scope,out_of_scope,1,llm
+1036,kneeSurgery,out_of_scope,out_of_scope,1,rule
+1037,kneeReplacement,out_of_scope,out_of_scope,1,rule
+1038,kneeJointReplacement,out_of_scope,out_of_scope,1,rule
+1039,kneeJointPreservation,out_of_scope,out_of_scope,1,rule
+1040,kneeArthroscopy,out_of_scope,out_of_scope,1,rule
+1041,kneeAndJointReplacement,out_of_scope,out_of_scope,1,rule
+1042,kidneyTransplant,kidney_transplant,service,1,rule
+1043,kidneyStones,out_of_scope,out_of_scope,1,rule
+1044,neonatalIntensiveCareUnit,nicu,service,1,rule
+1045,kidneySciences,too_general,too_general,1,manual
+1046,laserTherapyPLDD,out_of_scope,out_of_scope,1,llm
+1047,lasers,out_of_scope,out_of_scope,1,llm
+1048,lowVisionClinic,out_of_scope,out_of_scope,1,rule
+1049,lasik,out_of_scope,out_of_scope,1,rule
+1050,lowVisionCheckup,out_of_scope,out_of_scope,1,rule
+1051,lowVisionCare,out_of_scope,out_of_scope,1,rule
+1052,lowVisionAssessment,out_of_scope,out_of_scope,1,rule
+1053,lowVisionAndRehabilitation,out_of_scope,out_of_scope,1,rule
+1054,lowVisionAidsAndContactLenses,hiv_art,service,1,rule
+1055,lowVisionAids,hiv_art,service,1,rule
+1056,lowVisionAid,out_of_scope,out_of_scope,1,rule
+1057,liverTransplantationAndHepatobiliarySurgery,too_general,too_general,1,rule
+1058,liverTransplantAndHepatobiliarySurgery,too_general,too_general,1,rule
+1059,liverTransplantAndHepatobiliarySciences,too_general,too_general,1,rule
+1060,liverTransplantAndGISurgery,too_general,too_general,1,rule
+1061,liverTransplantAndBiliarySciences,too_general,too_general,1,rule
+1062,liverDiseasesCentre,out_of_scope,out_of_scope,1,rule
+1063,liverDiseases,out_of_scope,out_of_scope,1,rule
+1064,liverCare,out_of_scope,out_of_scope,1,rule
+1065,liverAndPancreasSurgery,out_of_scope,out_of_scope,1,rule
+1066,liposuction,out_of_scope,out_of_scope,1,llm
+1067,limbalStemCellDeficiency,out_of_scope,out_of_scope,1,llm
+1068,limbReconstruction,orthopaedic_trauma_surgery,service,1,llm
+1069,limbLengthening,orthopaedic_trauma_surgery,service,1,llm
+1070,lifestyleDiseases,out_of_scope,out_of_scope,1,rule
+1071,learningDisabilityTest,out_of_scope,out_of_scope,1,rule
+1072,lazyEye,out_of_scope,out_of_scope,1,rule
+1073,lasikTreatment,out_of_scope,out_of_scope,1,rule
+1074,lasikRefractiveEyeSurgery,out_of_scope,out_of_scope,1,rule
+1075,lasikAndRefractiveSurgery,out_of_scope,out_of_scope,1,rule
+1076,lasikAndRefractiveSurgeries,out_of_scope,out_of_scope,1,rule
+1077,neonatalCriticalCare,nicu,service,1,rule
+1078,ob-gy,too_general,too_general,1,llm
+1079,neonatalPediatricSurgery,too_general,too_general,1,rule
+1080,oculoplastyAndOcularOncology,out_of_scope,out_of_scope,1,rule
+1081,oculoplastyAestheticEyeSurgery,out_of_scope,out_of_scope,1,rule
+1082,oculoPlasticsAndReconstructiveOrbitalSurgery,too_general,too_general,1,rule
+1083,oculoPlasticSurgery,too_general,too_general,1,rule
+1084,ocularProsthetics,out_of_scope,out_of_scope,1,rule
+1085,ocularProstheticClinic,out_of_scope,out_of_scope,1,rule
+1086,ocularImmunologyAndUveitis,out_of_scope,out_of_scope,1,rule
+1087,occupationalTherapist,out_of_scope,out_of_scope,1,llm
+1088,occupationalHealth,out_of_scope,out_of_scope,1,llm
+1089,occupational therapy,out_of_scope,out_of_scope,1,rule
+1090,occuloplastyAndCosmeticEnhancements,out_of_scope,out_of_scope,1,rule
+1091,occuloplastyAndAdnexa,out_of_scope,out_of_scope,1,llm
+1092,occuloplasty,out_of_scope,out_of_scope,1,fuzzy
+1093,obstetrics_gynecology,too_general,too_general,1,rule
+1094,obstetricsAndGynacology,too_general,too_general,1,rule
+1095,obstetricAndGynecology,too_general,too_general,1,rule
+1096,obsessiveCompulsiveDisorders,out_of_scope,out_of_scope,1,llm
+1097,obsessiveCompulsiveDisorder,out_of_scope,out_of_scope,1,llm
+1098,obesityAndDiabeticSurgery,out_of_scope,out_of_scope,1,rule
+1099,keyholeArthroscopy,out_of_scope,out_of_scope,1,rule
+1100,nutritionists,out_of_scope,out_of_scope,1,rule
+1101,nutritionist,out_of_scope,out_of_scope,1,rule
+1102,nutritionalOncology,out_of_scope,out_of_scope,1,rule
+1103,nutritionalAssessment,out_of_scope,out_of_scope,1,rule
+1104,nutritionScreening,out_of_scope,out_of_scope,1,rule
+1105,nutritionAndWellness,out_of_scope,out_of_scope,1,rule
+1106,nutritionAndDietetic,out_of_scope,out_of_scope,1,rule
+1107,nutritionAndDietary,out_of_scope,out_of_scope,1,rule
+1108,oculoplastyAndAestheticEyeSurgery,out_of_scope,out_of_scope,1,rule
+1109,oculoplastyAndOncology,out_of_scope,out_of_scope,1,rule
+1110,nuclearMedicineAndTheranostics,out_of_scope,out_of_scope,1,rule
+1111,oculoplastyAndProstheticEye,out_of_scope,out_of_scope,1,rule
+1112,oralAndMaxillo-FacialSurgery,out_of_scope,out_of_scope,1,rule
+1113,oralAndDentalSurgery,out_of_scope,out_of_scope,1,rule
+1114,oralAndCraniomaxillofacialSurgery,out_of_scope,out_of_scope,1,rule
+1115,oral cancer detection and management,out_of_scope,out_of_scope,1,rule
+1116,oral and maxillofacial surgery,out_of_scope,out_of_scope,1,rule
+1117,oral and maxillofacial pathology,out_of_scope,out_of_scope,1,rule
+1118,opticalsAndContactLenses,out_of_scope,out_of_scope,1,llm
+1119,opticalShop,not_a_service,not_a_service,1,llm
+1120,opticalAndContactLens,out_of_scope,out_of_scope,1,llm
+1121,ophthalmologist,too_general,too_general,1,rule
+1122,ophthalmicPlasticAndFacialAestheticSurgery,too_general,too_general,1,rule
+1123,ooculoplasticsAndReconstructiveOrbitalSurgery,out_of_scope,out_of_scope,1,rule
+1124,one-sitting-root-canal-treatment,out_of_scope,out_of_scope,1,llm
+1125,one-day-complete-denture,out_of_scope,out_of_scope,1,rule
+1126,oncologyOncosurgery,surgical_oncology,service,1,rule
+1127,oncologyNursing,too_general,too_general,1,rule
+1128,oncologyAndOncosurgery,surgical_oncology,service,1,rule
+1129,oncologyAndOncologySurgery,too_general,too_general,1,rule
+1130,oncologyAndOncoSurgery,surgical_oncology,service,1,rule
+1131,oncology-oncosurgery,surgical_oncology,service,1,rule
+1132,oncologist,too_general,too_general,1,rule
+1133,oncologicReconstruction,too_general,too_general,1,rule
+1134,oncodermatology,out_of_scope,out_of_scope,1,rule
+1135,oncoanesthesiology,too_general,too_general,1,rule
+1136,oncoSurgeryChemoTherapyUnit,surgical_oncology,service,1,rule
+1137,oncoSurgery,surgical_oncology,service,1,rule
+1138,oldAgeCare,out_of_scope,out_of_scope,1,llm
+1139,nuclearTherapy,out_of_scope,out_of_scope,1,llm
+1140,nuclearMedicineAndBoneDensitometry,out_of_scope,out_of_scope,1,rule
+1141,neonatalogyPerinatalMedicine,too_general,too_general,1,rule
+1142,neuroPsychology,out_of_scope,out_of_scope,1,rule
+1143,neuroPathology,out_of_scope,out_of_scope,1,rule
+1144,neuroOtolaryngology,out_of_scope,out_of_scope,1,rule
+1145,neuroMuscularDentistry,out_of_scope,out_of_scope,1,rule
+1146,neuroIntervention,stroke_care,service,1,rule
+1147,neuroIntensiveCare,icu,service,1,rule
+1148,neuroImmunology,out_of_scope,out_of_scope,1,rule
+1149,neuroImaging,out_of_scope,out_of_scope,1,llm
+1150,neuroEndovascularSurgery,out_of_scope,out_of_scope,1,rule
+1151,neuroEndoscopySurgery,out_of_scope,out_of_scope,1,rule
+1152,neuroEndoscopy,out_of_scope,out_of_scope,1,rule
+1153,neuroElectrophysiology,out_of_scope,out_of_scope,1,rule
+1154,neuroCriticalCareNeurosurgery,neurosurgery;icu,service,1,manual
+1155,neuroAndSpineSurgery,too_general,too_general,1,rule
+1156,neuroAnaesthesiology,too_general,too_general,1,rule
+1157,neuro-ophthalmology,out_of_scope,out_of_scope,1,rule
+1158,nerveInjury,out_of_scope,out_of_scope,1,llm
+1159,nephroticSyndrome,out_of_scope,out_of_scope,1,llm
+1160,nephrosciences,too_general,too_general,1,llm
+1161,nephropathology,out_of_scope,out_of_scope,1,rule
+1162,nephrologyUrology,too_general,too_general,1,rule
+1163,nephrologyTransplantMedicine,too_general,too_general,1,rule
+1164,nephrologyDialysis,dialysis,service,1,rule
+1165,nephrologyAndRenalTransplant,kidney_transplant,service,1,rule
+1166,nephrologyAndRenalScience,too_general,too_general,1,rule
+1167,nephrology-urology,too_general,too_general,1,rule
+1168,nephrology & renal science,too_general,too_general,1,rule
+1169,nephriticSyndrome,out_of_scope,out_of_scope,1,llm
+1170,neuroPsychiatry,psychiatric_care,service,1,rule
+1171,neuroScience,too_general,too_general,1,fuzzy
+1172,noseReconstructionSurgery,out_of_scope,out_of_scope,1,rule
+1173,neuroSpinalSurgery,too_general,too_general,1,rule
+1174,noninvasiveCardiology,too_general,too_general,1,rule
+1175,non-invasiveCardiologyCentre,too_general,too_general,1,rule
+1176,non-invasiveCardiology,too_general,too_general,1,rule
+1177,neurovascularDisorders,stroke_care,service,1,rule
+1178,neurotrauma,trauma_care,service,1,fuzzy
+1179,neurotherapy/ Naturopathy Centres,out_of_scope,out_of_scope,1,rule
+1180,neurosurgicalPediatrics,neurosurgery,service,1,rule
+1181,neurosurgerySpineSurgery,neurosurgery,service,1,rule
+1182,neurosurgeon,neurosurgery,service,1,rule
+1183,neuropsychiatryAndDrugDeAddiction,psychiatric_care;de_addiction,service,1,manual
+1184,neuroplasticPlasticSurgery,too_general,too_general,1,rule
+1185,neuroplasticNeurosurgery,neurosurgery,service,1,rule
+1186,neuronavigation,out_of_scope,out_of_scope,1,llm
+1187,neuromuscularMedicine,too_general,too_general,1,llm
+1188,neuromuscularDisorders,out_of_scope,out_of_scope,1,llm
+1189,neuromodulation,out_of_scope,out_of_scope,1,llm
+1190,neurologyTests,out_of_scope,out_of_scope,1,manual
+1191,neurology-neuro-surgery,neurosurgery,service,1,rule
+1192,neurointerventionAndStroke,stroke_care,service,1,rule
+1193,neurointervention,stroke_care,service,1,rule
+1194,neuroendoscopySurgery,out_of_scope,out_of_scope,1,rule
+1195,neuroendoscopy,out_of_scope,out_of_scope,1,rule
+1196,neurodegenerativeDisorders,out_of_scope,out_of_scope,1,llm
+1197,neurocriticalCareAnesthesia,icu,service,1,rule
+1198,neuroUrologyAndUrodynamicsCentre,out_of_scope,out_of_scope,1,rule
+1199,neuroTraumaSurgery,trauma_care,service,1,rule
+1200,neuroTrauma,trauma_care,service,1,rule
+1201,kidneyHealthCentre,too_general,too_general,1,manual
+1202,immunohematologyandbloodtransfusion,blood_bank,service,1,rule
+1203,ketamineInfusionTherapy,out_of_scope,out_of_scope,1,llm
+1204,growth,out_of_scope,out_of_scope,1,llm
+1205,glaucomaSurgeon,out_of_scope,out_of_scope,1,rule
+1206,glaucomaService,out_of_scope,out_of_scope,1,rule
+1207,glaucomaManagement,out_of_scope,out_of_scope,1,rule
+1208,glaucomaDiagnosisAndTreatment,out_of_scope,out_of_scope,1,rule
+1209,gingivoplasty,out_of_scope,out_of_scope,1,llm
+1210,gestationalDiabetes,out_of_scope,out_of_scope,1,rule
+1211,geriatrician,out_of_scope,out_of_scope,1,rule
+1212,geriatricOrthopedics,out_of_scope,out_of_scope,1,rule
+1213,geriatricDermatology,out_of_scope,out_of_scope,1,rule
+1214,geratricsInternalMedicine,too_general,too_general,1,fuzzy
+1215,genomicsAndMolecularDiagnostics,out_of_scope,out_of_scope,1,rule
+1216,genomics,out_of_scope,out_of_scope,1,rule
+1217,genitalSurgery,out_of_scope,out_of_scope,1,rule
+1218,geneticsAndRareDiseases,out_of_scope,out_of_scope,1,rule
+1219,geneticsAndDiagnostics,out_of_scope,out_of_scope,1,rule
+1220,geneticist,out_of_scope,out_of_scope,1,rule
+1221,geneticScreening,out_of_scope,out_of_scope,1,rule
+1222,geneticCounsellingScreeningAndTesting,out_of_scope,out_of_scope,1,rule
+1223,geneticCounselling,out_of_scope,out_of_scope,1,rule
+1224,generalSurgeon,too_general,too_general,1,rule
+1225,generalPhysicians,too_general,too_general,1,rule
+1226,generalPathology,out_of_scope,out_of_scope,1,rule
+1227,generalMedicineAndICU,icu,service,1,rule
+1228,generalMedicineAndEmergency,too_general,too_general,1,llm
+1229,generalMedicineAndDiabetology,out_of_scope,out_of_scope,1,rule
+1230,generalLaparoscopicSurgery,too_general,too_general,1,rule
+1231,generalInternalMedicine,too_general,too_general,1,llm
+1232,groupTherapy,out_of_scope,out_of_scope,1,llm
+1233,growthdisorders,out_of_scope,out_of_scope,1,llm
+1234,generalAndCancerSurgery,surgical_oncology,service,1,rule
+1235,gumDepigmentation,out_of_scope,out_of_scope,1,llm
+1236,handAndFootSurgeries,out_of_scope,out_of_scope,1,rule
+1237,hairTransplantSurgeon,too_general,too_general,1,rule
+1238,haemodialysis,dialysis,service,1,rule
+1239,haematopathology,out_of_scope,out_of_scope,1,rule
+1240,haematologyAutomation,out_of_scope,out_of_scope,1,rule
+1241,haematologyAndHaematoOncology,chemotherapy,service,1,rule
+1242,haematologyAndBMT,chemotherapy,service,1,rule
+1243,haematologist,too_general,too_general,1,rule
+1244,gynecomastia,out_of_scope,out_of_scope,1,llm
+1245,gynecologyObstetrics,too_general,too_general,1,rule
+1246,gynecologyObstetricSurgery,too_general,too_general,1,rule
+1247,gynecologyAndUrogynecology,out_of_scope,out_of_scope,1,rule
+1248,gynecologyAndObstetricsSurgery,too_general,too_general,1,rule
+1249,gynecologistAndObstetrician,too_general,too_general,1,rule
+1250,gynecologist/obstetrician,too_general,too_general,1,rule
+1251,gynecologist,out_of_scope,out_of_scope,1,rule
+1252,gynecologicalAndLaproscopicSurgery,out_of_scope,out_of_scope,1,rule
+1253,gynecologicOncologist,surgical_oncology,service,1,rule
+1254,gyneOncology,surgical_oncology,service,1,llm
+1255,gynaeoncology,surgical_oncology,service,1,llm
+1256,gynaecologyAndGynaeOncology,out_of_scope,out_of_scope,1,rule
+1257,gynaecologicalOncology,surgical_oncology,service,1,rule
+1258,gynaecOncology,surgical_oncology,service,1,llm
+1259,gynaeOncology,out_of_scope,out_of_scope,1,llm
+1260,gumTreatments,out_of_scope,out_of_scope,1,llm
+1261,gumSurgery,out_of_scope,out_of_scope,1,rule
+1262,gumSpecialists,out_of_scope,out_of_scope,1,llm
+1263,generalGastroIntestinalSurgery,out_of_scope,out_of_scope,1,rule
+1264,generalAnatomy,not_a_service,not_a_service,1,llm
+1265,kayaChikitsa,out_of_scope,out_of_scope,1,llm
+1266,fractureAndTraumaClinic,orthopaedic_trauma_surgery,service,1,rule
+1267,flowCytometry,out_of_scope,out_of_scope,1,llm
+1268,flapSurgery,out_of_scope,out_of_scope,1,rule
+1269,fibroscan,out_of_scope,out_of_scope,1,llm
+1270,fetomaternalMedicine,high_risk_pregnancy,service,1,rule
+1271,fetalPrenatalEcoCardiography,out_of_scope,out_of_scope,1,llm
+1272,fetalAndMaternalMedicine,high_risk_pregnancy,service,1,rule
+1273,fertilityClinicIvf,out_of_scope,out_of_scope,1,rule
+1274,fertilityClinic,out_of_scope,out_of_scope,1,rule
+1275,fertilityAndReproductiveMedicineAndCentreForGynaecLaparoscopy,too_general,too_general,1,rule
+1276,femaleUrologyCentre,out_of_scope,out_of_scope,1,rule
+1277,femaleUrologicalDisease,out_of_scope,out_of_scope,1,rule
+1278,femaleUrogyneacology,out_of_scope,out_of_scope,1,rule
+1279,femaleInfertilityTreatment,out_of_scope,out_of_scope,1,rule
+1280,fasciomaxillarySurgery,out_of_scope,out_of_scope,1,rule
+1281,familyPlanningAndContraception,out_of_scope,out_of_scope,1,rule
+1282,familyPlanning,out_of_scope,out_of_scope,1,rule
+1283,familyPhysician,too_general,too_general,1,rule
+1284,familyCounselling,out_of_scope,out_of_scope,1,rule
+1285,familyAndPreventiveMedicine,out_of_scope,out_of_scope,1,rule
+1286,facialTraumaCare,out_of_scope,out_of_scope,1,rule
+1287,facialTrauma,out_of_scope,out_of_scope,1,rule
+1288,facialPlastsAndReconstructiveOtolaryngology,out_of_scope,out_of_scope,1,rule
+1289,facialPlasticSurgery,out_of_scope,out_of_scope,1,rule
+1290,facialGrowthGuidance,out_of_scope,out_of_scope,1,llm
+1291,facialFractureTreatment,orthopaedic_trauma_surgery,service,1,rule
+1292,facialFeminizationSurgery,out_of_scope,out_of_scope,1,rule
+1293,oralAndMaxillofacialPathologyAndMicrobiology,out_of_scope,out_of_scope,1,rule
+1294,fluencyStutteringTherapy,out_of_scope,out_of_scope,1,llm
+1295,fractureTreatment,orthopaedic_trauma_surgery,service,1,rule
+1296,generalAdministration,not_a_service,not_a_service,1,llm
+1297,full-mouth-reconstruction,out_of_scope,out_of_scope,1,llm
+1298,general-surgery,too_general,too_general,1,rule
+1299,general physician,too_general,too_general,1,rule
+1300,general & laparoscopic surgery,too_general,too_general,1,rule
+1301,genderAffirmationSurgery,out_of_scope,out_of_scope,1,rule
+1302,gastroscience,out_of_scope,out_of_scope,1,rule
+1303,gastrointestinalSurgeon,out_of_scope,out_of_scope,1,rule
+1304,gastrointestinalScience,out_of_scope,out_of_scope,1,rule
+1305,gastrointestinalAndMinimallyInvasiveSurgery,too_general,too_general,1,rule
+1306,gastrointestinalAndLaparoscopicSurgery,too_general,too_general,1,rule
+1307,gastrointestinalAndHPBSurgery,out_of_scope,out_of_scope,1,rule
+1308,gastrointestinalAndGeneralSurgery,out_of_scope,out_of_scope,1,rule
+1309,gastroentrologyAndLaproscopicSurgery,out_of_scope,out_of_scope,1,rule
+1310,gastroentrology,out_of_scope,out_of_scope,1,rule
+1311,gastroenterologyAndLaparoscopicSurgery,too_general,too_general,1,rule
+1312,gastroenterologyAndHepatobiliarySurgery,out_of_scope,out_of_scope,1,rule
+1313,gastroenterologist,out_of_scope,out_of_scope,1,rule
+1314,gastroSciences,out_of_scope,out_of_scope,1,rule
+1315,gastroIntestinalSurgeon,out_of_scope,out_of_scope,1,rule
+1316,gastroIntestinalOncosurgery,surgical_oncology,service,1,rule
+1317,gastroIntestinalAndBreastSurgicalOncology,surgical_oncology,service,1,rule
+1318,gastroEnterologyAndLaproscopicSurgery,out_of_scope,out_of_scope,1,rule
+1319,gastro-intestinal-endoscopy,out_of_scope,out_of_scope,1,rule
+1320,gastricSurgery,out_of_scope,out_of_scope,1,rule
+1321,gallbladderStones,out_of_scope,out_of_scope,1,llm
+1322,gallStoneSurgery,out_of_scope,out_of_scope,1,rule
+1323,functionalNeurologicalDisorder,out_of_scope,out_of_scope,1,llm
+1324,fullEndoscopicSpineSurgery,too_general,too_general,1,rule
+1325,handAndMicroSurgery,out_of_scope,out_of_scope,1,rule
+1326,handTraumaSurgery,trauma_care,service,1,rule
+1327,headAndNeckCancer,too_general,too_general,1,rule
+1328,interventionalOncology,surgical_oncology,service,1,llm
+1329,interventionalNeuroRadiology,too_general,too_general,1,fuzzy
+1330,interventional cardiology,cath_lab_angioplasty,service,1,rule
+1331,interventional,out_of_scope,out_of_scope,1,llm
+1332,interstitialLungDisease,out_of_scope,out_of_scope,1,llm
+1333,internalMedicineAndDiabetology,too_general,too_general,1,rule
+1334,internal-medicine,too_general,too_general,1,rule
+1335,intensivist,icu,service,1,rule
+1336,intensiveCarePhysicianAndCriticalCare,icu,service,1,rule
+1337,intensiveCare,icu,service,1,rule
+1338,intensiveCardiacCareCentre,icu,service,1,llm
+1339,intensiveAndCriticalCare,icu,service,1,rule
+1340,intensive/critical care,icu,service,1,rule
+1341,integrativeMedicineYoga,out_of_scope,out_of_scope,1,rule
+1342,integrativeCare,out_of_scope,out_of_scope,1,rule
+1343,instant-teeth-whitening,out_of_scope,out_of_scope,1,rule
+1344,inlaysAndOnlays,out_of_scope,out_of_scope,1,llm
+1345,inflammatoryDiseases,out_of_scope,out_of_scope,1,llm
+1346,infertilityImaging,out_of_scope,out_of_scope,1,rule
+1347,infertilityEvaluationAndTreatment,out_of_scope,out_of_scope,1,rule
+1348,infertilityCenter,out_of_scope,out_of_scope,1,rule
+1349,infertilityCare,out_of_scope,out_of_scope,1,rule
+1350,infertilityAndLaparoscopicSurgery,too_general,too_general,1,rule
+1351,infertility/IVF,out_of_scope,out_of_scope,1,rule
+1352,infectionControl,too_general,too_general,1,rule
+1353,infantAndYoungChildNutritionSpecialist,out_of_scope,out_of_scope,1,rule
+1354,independentDivisions,not_a_service,not_a_service,1,manual
+1355,inVitroFertilizationIVFSpecialist,out_of_scope,out_of_scope,1,rule
+1356,interventionalNeuroradiology,too_general,too_general,1,rule
+1357,interventionalPainPhysicians,out_of_scope,out_of_scope,1,rule
+1358,headAndNeckOncologicSurgery,surgical_oncology,service,1,rule
+1359,interventionalPainTherapy,out_of_scope,out_of_scope,1,rule
+1360,kaumarabhritya,out_of_scope,out_of_scope,1,llm
+1361,karyotyping,out_of_scope,out_of_scope,1,llm
+1362,jointReplacementAndSpineSurgery,too_general,too_general,1,rule
+1363,jointRegeneration,out_of_scope,out_of_scope,1,rule
+1364,jointPreservationSurgery,out_of_scope,out_of_scope,1,rule
+1365,jointPreservation,out_of_scope,out_of_scope,1,rule
+1366,jointDislocationTreatment,out_of_scope,out_of_scope,1,rule
+1367,jointAndReplacementSurgery,out_of_scope,out_of_scope,1,rule
+1368,joint-replacement-surgery,out_of_scope,out_of_scope,1,rule
+1369,ivfTreatmentForFertility,out_of_scope,out_of_scope,1,rule
+1370,ivfFertilityClinic,out_of_scope,out_of_scope,1,rule
+1371,ivfCentre,out_of_scope,out_of_scope,1,rule
+1372,iuiCentre,out_of_scope,out_of_scope,1,rule
+1373,isolationICU,icu,service,1,rule
+1374,invisibleTeethAligners,out_of_scope,out_of_scope,1,rule
+1375,invisibleBracesAndClearAligners,out_of_scope,out_of_scope,1,llm
+1376,invisibleBraces,out_of_scope,out_of_scope,1,llm
+1377,invisalignTreatment,out_of_scope,out_of_scope,1,llm
+1378,invisalignProvider,out_of_scope,out_of_scope,1,llm
+1379,invisalignAndBraces,out_of_scope,out_of_scope,1,llm
+1380,invisalign,out_of_scope,out_of_scope,1,llm
+1381,intravitrealInjection,out_of_scope,out_of_scope,1,llm
+1382,intrathecalDrugDeliverySystem,out_of_scope,out_of_scope,1,rule
+1383,interventionalRadiologyAndImaging,too_general,too_general,1,rule
+1384,interventionalRadiology & Imaging Services,too_general,too_general,1,rule
+1385,interventionalPulmonologyAndChestMedicine,too_general,too_general,1,rule
+1386,interventionalPsychiatry,psychiatric_care,service,1,rule
+1387,implantalogy,out_of_scope,out_of_scope,1,llm
+1388,implantableContactsLenses,out_of_scope,out_of_scope,1,llm
+1389,implantServices,out_of_scope,out_of_scope,1,llm
+1390,implant-dentistry,out_of_scope,out_of_scope,1,rule
+1391,hipecAndPipacSurgery,out_of_scope,out_of_scope,1,rule
+1392,hipReplacement,out_of_scope,out_of_scope,1,rule
+1393,hipPreservation,out_of_scope,out_of_scope,1,rule
+1394,hipJointReplacement,out_of_scope,out_of_scope,1,rule
+1395,hipJointPreservation,out_of_scope,out_of_scope,1,rule
+1396,highRiskPregnancyCare,high_risk_pregnancy,service,1,rule
+1397,highEndTesting,not_a_service,not_a_service,1,llm
+1398,herniaRepairSurgery,out_of_scope,out_of_scope,1,rule
+1399,hernia,out_of_scope,out_of_scope,1,rule
+1400,hepatologyAndLiverDiseases,out_of_scope,out_of_scope,1,rule
+1401,hepatologyAndGastroenterology,out_of_scope,out_of_scope,1,rule
+1402,hepatologist,out_of_scope,out_of_scope,1,rule
+1403,hepatobiliarySurgeryCentre,out_of_scope,out_of_scope,1,rule
+1404,hepatoBililarySurgery,out_of_scope,out_of_scope,1,rule
+1405,hepato-biliarySurgery,out_of_scope,out_of_scope,1,rule
+1406,hemifacialMicrosomia,out_of_scope,out_of_scope,1,llm
+1407,hematopoieticStemCellTransplant,too_general,too_general,1,rule
+1408,hematopathology,out_of_scope,out_of_scope,1,rule
+1409,hematologyLaboratory,too_general,too_general,1,rule
+1410,heartValveCentre,cardiac_surgery,service,1,llm
+1411,heartFailureClinic,too_general,too_general,1,manual
+1412,heartAndLungTransplantation,too_general,too_general,1,rule
+1413,heartAndLungTransplantCentre,too_general,too_general,1,rule
+1414,heartAndLungTransplant,too_general,too_general,1,rule
+1415,headNeckOncology,surgical_oncology,service,1,llm
+1416,headAndNeckSurgicalOncology,surgical_oncology,service,1,rule
+1417,headAndNeckSurgery,out_of_scope,out_of_scope,1,rule
+1418,holisticMedicineSpecialist,out_of_scope,out_of_scope,1,llm
+1419,holisticTherapies,out_of_scope,out_of_scope,1,llm
+1420,homeCareServices,not_a_service,not_a_service,1,llm
+1421,imagingTests,too_general,too_general,1,rule
+1422,implant dentistry,out_of_scope,out_of_scope,1,rule
+1423,implant,out_of_scope,out_of_scope,1,llm
+1424,impactionToothExtraction,out_of_scope,out_of_scope,1,rule
+1425,impactedToothExtraction,out_of_scope,out_of_scope,1,rule
+1426,immunologyLaboratory,out_of_scope,out_of_scope,1,rule
+1427,immunologyAndAutoimmunityLab,out_of_scope,out_of_scope,1,rule
+1428,immunologist,out_of_scope,out_of_scope,1,rule
+1429,immunohematologyBloodTransfusion,blood_bank,service,1,rule
+1430,immunohematologyAndBloodTransfusion,blood_bank,service,1,rule
+1431,immunoassays,out_of_scope,out_of_scope,1,llm
+1432,immunoassay,out_of_scope,out_of_scope,1,llm
+1433,immunoHaematology,too_general,too_general,1,rule
+1434,imagingInterventionalRadiology,too_general,too_general,1,rule
+1435,homeopath,out_of_scope,out_of_scope,1,rule
+1436,imageGuidedInterventions,out_of_scope,out_of_scope,1,llm
+1437,icl,not_a_service,not_a_service,1,llm
+1438,hypnodontics,out_of_scope,out_of_scope,1,rule
+1439,hypertension,out_of_scope,out_of_scope,1,llm
+1440,hydrocele,out_of_scope,out_of_scope,1,llm
+1441,hospiceAndPalliativeMedicineAnesthesiology,too_general,too_general,1,rule
+1442,hormoneLaboratory,out_of_scope,out_of_scope,1,rule
+1443,hormonalTherapy,out_of_scope,out_of_scope,1,llm
+1444,hormonalAssays,out_of_scope,out_of_scope,1,llm
+1445,homoeopath,out_of_scope,out_of_scope,1,rule
+1446,homeopathicDoctors,out_of_scope,out_of_scope,1,rule
+1447,homeopathic,out_of_scope,out_of_scope,1,rule
+1448,oralAndMaxilloSurgery,out_of_scope,out_of_scope,1,rule
+1449,visualFieldTestingServices,out_of_scope,out_of_scope,1,llm
+1450,oralAndMaxillofacialPathologyAndOralMicrobiology,out_of_scope,out_of_scope,1,rule
+1451,speechAndSwallowingTherapy,out_of_scope,out_of_scope,1,rule
+1452,speechAndLanguageTherapy,out_of_scope,out_of_scope,1,rule
+1453,speechAndLanguage,out_of_scope,out_of_scope,1,rule
+1454,specializedVisionTherapy,out_of_scope,out_of_scope,1,llm
+1455,specializedGeneticTesting,out_of_scope,out_of_scope,1,rule
+1456,specialistConsultation,too_general,too_general,1,llm
+1457,specialisedPediatricHematologyAndOncologyServices,too_general,too_general,1,rule
+1458,specialSerology,out_of_scope,out_of_scope,1,rule
+1459,solidOrganTransplantation,too_general,too_general,1,rule
+1460,solidMalignancies,out_of_scope,out_of_scope,1,llm
+1461,snoringAndSleepApnoeaSurgery,out_of_scope,out_of_scope,1,rule
+1462,smokingMedicinePMR,out_of_scope,out_of_scope,1,rule
+1463,smilePro,out_of_scope,out_of_scope,1,rule
+1464,slippedDisc,out_of_scope,out_of_scope,1,llm
+1465,sleepingDentistry,out_of_scope,out_of_scope,1,rule
+1466,sleepDisorders,out_of_scope,out_of_scope,1,rule
+1467,sleepAirwayDentistry,out_of_scope,out_of_scope,1,rule
+1468,skullBaseSurgery,neurosurgery,service,1,rule
+1469,skinAndVD,out_of_scope,out_of_scope,1,rule
+1470,skinAndCosmetic,out_of_scope,out_of_scope,1,rule
+1471,silk,not_a_service,not_a_service,1,llm
+1472,shoulderReplacementSurgery,out_of_scope,out_of_scope,1,rule
+1473,shalyatantra,out_of_scope,out_of_scope,1,llm
+1474,shalakyatantra,out_of_scope,out_of_scope,1,llm
+1475,sexualProblems,out_of_scope,out_of_scope,1,llm
+1476,sexualMedicineAndMaritalTherapy,out_of_scope,out_of_scope,1,llm
+1477,sexualDisorders,out_of_scope,out_of_scope,1,llm
+1478,sexologist,out_of_scope,out_of_scope,1,llm
+1479,speechAndSwallowClinic,out_of_scope,out_of_scope,1,rule
+1480,speechPathologyAndAudiology,out_of_scope,out_of_scope,1,rule
+1481,sexClinic,out_of_scope,out_of_scope,1,llm
+1482,speechTherapist,out_of_scope,out_of_scope,1,rule
+1483,substanceAbuseAndAddictionTreatment,de_addiction,service,1,rule
+1484,strokeRehabilitation,out_of_scope,out_of_scope,1,rule
+1485,strokeManagement,stroke_care,service,1,rule
+1486,strokeCentre,stroke_care,service,1,rule
+1487,stressManagement,out_of_scope,out_of_scope,1,llm
+1488,stereotacticRadiosurgery,radiotherapy,service,1,rule
+1489,stemCellTransplant,too_general,too_general,1,rule
+1490,stemCellPreservation,out_of_scope,out_of_scope,1,llm
+1491,stemCellBanking,out_of_scope,out_of_scope,1,llm
+1492,squintChildhoodAndAdult,out_of_scope,out_of_scope,1,rule
+1493,squintAndPediatricOphthalmology,out_of_scope,out_of_scope,1,rule
+1494,squintAndMotility,out_of_scope,out_of_scope,1,rule
+1495,squintAndEyeAlignmentSurgery,out_of_scope,out_of_scope,1,rule
+1496,sportsInjuryAndSportsMedicine,out_of_scope,out_of_scope,1,rule
+1497,sportsInjury,out_of_scope,out_of_scope,1,rule
+1498,sportsDentistryAndMouthguards,out_of_scope,out_of_scope,1,rule
+1499,sportMedicine,out_of_scope,out_of_scope,1,fuzzy
+1500,sportInjuryRehabilitation,out_of_scope,out_of_scope,1,rule
+1501,spondylosisSpondylolisthesis,out_of_scope,out_of_scope,1,llm
+1502,spineEndoscopy,too_general,too_general,1,rule
+1503,spine-surgery,too_general,too_general,1,rule
+1504,spinalTuberculosis,tb_care,service,1,rule
+1505,spinalPainTherapy,out_of_scope,out_of_scope,1,rule
+1506,spinalNeurosurgery,neurosurgery,service,1,rule
+1507,spinalInfections,too_general,too_general,1,rule
+1508,spinalCordStimulation,out_of_scope,out_of_scope,1,llm
+1509,spinalCordInjury,out_of_scope,out_of_scope,1,rule
+1510,sexMedicine,out_of_scope,out_of_scope,1,llm
+1511,severeInfections,too_general,too_general,1,rule
+1512,surgery,out_of_scope,out_of_scope,1,rule
+1513,removablePartialDentures,out_of_scope,out_of_scope,1,rule
+1514,regenerativeMedicinePMR,out_of_scope,out_of_scope,1,rule
+1515,regenerativeMedicine,out_of_scope,out_of_scope,1,llm
+1516,refractiveSurgeryServices,out_of_scope,out_of_scope,1,rule
+1517,refractiveErrorsTreatment,out_of_scope,out_of_scope,1,rule
+1518,refractiveErrors,out_of_scope,out_of_scope,1,rule
+1519,reconstructiveGynecology,out_of_scope,out_of_scope,1,rule
+1520,reconstructionSurgery,out_of_scope,out_of_scope,1,rule
+1521,radiofrequencyAblation,out_of_scope,out_of_scope,1,llm
+1522,radiationTherapy,radiotherapy,service,1,rule
+1523,radiationSurgery,out_of_scope,out_of_scope,1,rule
+1524,rachanasarira,not_a_service,not_a_service,1,rule
+1525,pulmonologyRespiratoryCare,too_general,too_general,1,rule
+1526,pulmonologyPFT,too_general,too_general,1,rule
+1527,pulmonologyAndRespiratoryMedicine,too_general,too_general,1,rule
+1528,pulmonology-sleep-study,too_general,too_general,1,rule
+1529,pulmonaryVascularMedicineSpecialist,out_of_scope,out_of_scope,1,manual
+1530,pulmonarySciencesAndCriticalCare,icu,service,1,rule
+1531,pulmonaryAndSleepMedicine,too_general,too_general,1,rule
+1532,pulmanology,out_of_scope,out_of_scope,1,llm
+1533,public health dentistry,out_of_scope,out_of_scope,1,rule
+1534,puberty,out_of_scope,out_of_scope,1,llm
+1535,psychotherapyAndCounselling,out_of_scope,out_of_scope,1,rule
+1536,psychologyAndMentalWellness,out_of_scope,out_of_scope,1,rule
+1537,psychologyAndCounselling,out_of_scope,out_of_scope,1,rule
+1538,psychologist,out_of_scope,out_of_scope,1,rule
+1539,psychologicalMedicine,out_of_scope,out_of_scope,1,rule
+1540,psychologicalAssessment,out_of_scope,out_of_scope,1,rule
+1541,rehabilitationMedicine,out_of_scope,out_of_scope,1,rule
+1542,renalSciencesAndKidneyTransplant,kidney_transplant,service,1,rule
+1543,serologyLaboratory,out_of_scope,out_of_scope,1,rule
+1544,replacements,out_of_scope,out_of_scope,1,llm
+1545,sensoryIntegrationTherapy,out_of_scope,out_of_scope,1,llm
+1546,sedationForNervousPatients,out_of_scope,out_of_scope,1,llm
+1547,scarRevision,out_of_scope,out_of_scope,1,llm
+1548,scalingAndRootPlaning,out_of_scope,out_of_scope,1,llm
+1549,salivaryGlandSurgery,out_of_scope,out_of_scope,1,rule
+1550,routineMicrobiology,out_of_scope,out_of_scope,1,rule
+1551,rootCanalTreatment,out_of_scope,out_of_scope,1,llm
+1552,rootCanalSpecialists,out_of_scope,out_of_scope,1,llm
+1553,roganidanam,out_of_scope,out_of_scope,1,llm
+1554,roboticUrology,out_of_scope,out_of_scope,1,rule
+1555,roboticOrthopedicSurgery,out_of_scope,out_of_scope,1,rule
+1556,roboticKneeReplacement,out_of_scope,out_of_scope,1,rule
+1557,roboticJointReplacement,out_of_scope,out_of_scope,1,rule
+1558,roboticHipReplacement,out_of_scope,out_of_scope,1,rule
+1559,robotAssistedSurgery,out_of_scope,out_of_scope,1,rule
+1560,rhinoplastyAndFacialPlasticSurgery,out_of_scope,out_of_scope,1,rule
+1561,rhinoplasty,out_of_scope,out_of_scope,1,rule
+1562,rheumatologyAndBoneHealth,out_of_scope,out_of_scope,1,rule
+1563,rheumatology & immunology,out_of_scope,out_of_scope,1,rule
+1564,retinalDiseases,out_of_scope,out_of_scope,1,rule
+1565,retinaAndUveitis,out_of_scope,out_of_scope,1,rule
+1566,retinaAndROP,out_of_scope,out_of_scope,1,rule
+1567,restorativePediatricDentistry,out_of_scope,out_of_scope,1,rule
+1568,restorativeAndProstheticDentistry,out_of_scope,out_of_scope,1,rule
+1569,respiratoryMedicineAndInterventionalPulmonology,too_general,too_general,1,rule
+1570,respiratoryMedicineAndCriticalCare,icu,service,1,rule
+1571,respiratory,out_of_scope,out_of_scope,1,llm
+1572,substanceUseDisorder,de_addiction,service,1,rule
+1573,surgicalGastro,out_of_scope,out_of_scope,1,rule
+1574,oralBiopsyProcedures,out_of_scope,out_of_scope,1,rule
+1575,vascularInterventions,out_of_scope,out_of_scope,1,llm
+1576,vascularAndThoracicSurgery,out_of_scope,out_of_scope,1,rule
+1577,vascularAndInterventionalRadiology,too_general,too_general,1,rule
+1578,vascular-surgery,out_of_scope,out_of_scope,1,rule
+1579,varicoseVeins,out_of_scope,out_of_scope,1,rule
+1580,valvularHeartSurgery,cardiac_surgery,service,1,rule
+1581,vaccinology,out_of_scope,out_of_scope,1,rule
+1582,uveitisAndOcularImmunology,out_of_scope,out_of_scope,1,rule
+1583,urosurgery,out_of_scope,out_of_scope,1,rule
+1584,urologyReconstructiveUroSurgery,out_of_scope,out_of_scope,1,rule
+1585,urologyNephrology,too_general,too_general,1,rule
+1586,urologyAndNephrology,too_general,too_general,1,rule
+1587,urologicalOncology,surgical_oncology,service,1,rule
+1588,urogynecologyAndReconstructivePelvicSurgery,out_of_scope,out_of_scope,1,rule
+1589,urogynecology,out_of_scope,out_of_scope,1,rule
+1590,urodynamicLab,out_of_scope,out_of_scope,1,rule
+1591,uroOncosurgery,surgical_oncology,service,1,rule
+1592,uroOncoTreatment,surgical_oncology,service,1,llm
+1593,uroGynaecology,out_of_scope,out_of_scope,1,rule
+1594,uroGynaecologicalSurgery,out_of_scope,out_of_scope,1,rule
+1595,urinaryIncontinence,out_of_scope,out_of_scope,1,llm
+1596,unaniHospitals,out_of_scope,out_of_scope,1,rule
+1597,ultrasound,ultrasound,service,1,rule
+1598,tumorMarker,out_of_scope,out_of_scope,1,llm
+1599,tuboplasty,out_of_scope,out_of_scope,1,llm
+1600,tuberculosisAndRespiratoryDiseases,tb_care,service,1,rule
+1601,tuberculosis,tb_care,service,1,rule
+1602,tropicalDermatology,out_of_scope,out_of_scope,1,rule
+1603,vascularDiseases,out_of_scope,out_of_scope,1,llm
+1604,vascularSciences,too_general,too_general,1,llm
+1605,treatmentOfMigraine,out_of_scope,out_of_scope,1,llm
+1606,venereology,out_of_scope,out_of_scope,1,rule
+1607,zoomTeethWhitening,out_of_scope,out_of_scope,1,rule
+1608,yogaAndNaturopathy,out_of_scope,out_of_scope,1,rule
+1609,woundHealingAnDermatologicRegenerativeMedicine,out_of_scope,out_of_scope,1,rule
+1610,womensCardiologyCare,too_general,too_general,1,rule
+1611,womenMentalHealth,psychiatric_care,service,1,llm
+1612,wisdomToothRemoval,out_of_scope,out_of_scope,1,rule
+1613,wisdom tooth removal,out_of_scope,out_of_scope,1,rule
+1614,wellWomenClinic,out_of_scope,out_of_scope,1,manual
+1615,voiceTherapy,out_of_scope,out_of_scope,1,llm
+1616,voiceAndFluency,out_of_scope,out_of_scope,1,llm
+1617,vitreoretinalSurgery,out_of_scope,out_of_scope,1,rule
+1618,vitreoRetinalSurgery,out_of_scope,out_of_scope,1,rule
+1619,vitrectomySurgery,out_of_scope,out_of_scope,1,rule
+1620,vitrectomy,out_of_scope,out_of_scope,1,llm
+1621,vitiligoSurgery,out_of_scope,out_of_scope,1,rule
+1622,facial,out_of_scope,out_of_scope,1,llm
+1623,visualElectroPhysiology,out_of_scope,out_of_scope,1,rule
+1624,visionTherapyAndRehabilitation,out_of_scope,out_of_scope,1,rule
+1625,visionRehabilitationServices,out_of_scope,out_of_scope,1,rule
+1626,visionRehabilitation,out_of_scope,out_of_scope,1,rule
+1627,visionEnhancementAndRehabilitation,out_of_scope,out_of_scope,1,rule
+1628,visionCorrection,out_of_scope,out_of_scope,1,llm
+1629,virologyLaboratory,out_of_scope,out_of_scope,1,rule
+1630,virology,out_of_scope,out_of_scope,1,llm
+1631,vestibularRehabilitation,out_of_scope,out_of_scope,1,rule
+1632,vertebroplasty,out_of_scope,out_of_scope,1,rule
+1633,venereologyAndSexology,out_of_scope,out_of_scope,1,rule
+1634,trichology,out_of_scope,out_of_scope,1,rule
+1635,treatmentOfHeadache,out_of_scope,out_of_scope,1,llm
+1636,surgicalGastroEnterology,out_of_scope,out_of_scope,1,rule
+1637,tmjDisorderTreatments,out_of_scope,out_of_scope,1,rule
+1638,tmj,out_of_scope,out_of_scope,1,rule
+1639,tmJointSurgery,out_of_scope,out_of_scope,1,rule
+1640,tinnitusManagement,out_of_scope,out_of_scope,1,llm
+1641,thyroidHealth,out_of_scope,out_of_scope,1,rule
+1642,thyroidAndParathyroidDisorders,out_of_scope,out_of_scope,1,rule
+1643,thyroidAndParathyroidClinic,out_of_scope,out_of_scope,1,rule
+1644,threeDimensionalScanners,out_of_scope,out_of_scope,1,llm
+1645,thoracicSyndrome,out_of_scope,out_of_scope,1,llm
+1646,thoracicMedicine,out_of_scope,out_of_scope,1,llm
+1647,thoracicAndVascularSurgery,out_of_scope,out_of_scope,1,rule
+1648,thoracic-surgery,out_of_scope,out_of_scope,1,rule
+1649,temporomandibularJointTherapy,out_of_scope,out_of_scope,1,rule
+1650,temporomandibularDisorders,out_of_scope,out_of_scope,1,llm
+1651,telemedicine,out_of_scope,out_of_scope,1,llm
+1652,teethStraightening,out_of_scope,out_of_scope,1,rule
+1653,teethReplacement,out_of_scope,out_of_scope,1,rule
+1654,teethBleaching,out_of_scope,out_of_scope,1,rule
+1655,tbAndChestRespiratory,tb_care,service,1,rule
+1656,tavr-tavi-centre,out_of_scope,out_of_scope,1,llm
+1657,targetedTherapies,out_of_scope,out_of_scope,1,llm
+1658,sympatheticNerveBlock,out_of_scope,out_of_scope,1,llm
+1659,swasthavritta,out_of_scope,out_of_scope,1,rule
+1660,swallowingAndFeedingTherapy,out_of_scope,out_of_scope,1,llm
+1661,swallowingAndDysphagia,out_of_scope,out_of_scope,1,llm
+1662,surgicalPathology,out_of_scope,out_of_scope,1,rule
+1663,surgicalOncologyAndReconstructiveSurgery,surgical_oncology,service,1,rule
+1664,surgicalGastroenterologyAndLiverTransplantation,too_general,too_general,1,rule
+1665,tmj-disorder-or-tmd,out_of_scope,out_of_scope,1,rule
+1666,tmjTreatment,out_of_scope,out_of_scope,1,rule
+1667,traumaFractureCare,orthopaedic_trauma_surgery,service,1,rule
+1668,tobaccoCessationClinic,out_of_scope,out_of_scope,1,llm
+1669,traumaCriticalCare,trauma_care;icu,service,1,manual
+1670,traumaCentre,trauma_care,service,1,rule
+1671,traumaAnesthesiology,trauma_care,service,1,rule
+1672,traumaAndOrthopaedics,orthopaedic_trauma_surgery,service,1,rule
+1673,traumaAndJointReplacement,orthopaedic_trauma_surgery,service,1,rule
+1674,traumaAndFractureSurgery,orthopaedic_trauma_surgery,service,1,rule
+1675,traumaAndEmergency,trauma_care,service,1,rule
+1676,trauma-care-centre,trauma_care,service,1,rule
+1677,transradialCardiology,cath_lab_angioplasty,service,1,rule
+1678,transplantImmunologyImmunogenetics,too_general,too_general,1,rule
+1679,transplantImmunologyAndImmunogenetics,too_general,too_general,1,rule
+1680,transplantAnesthesiology,too_general,too_general,1,rule
+1681,translationalMedicine,out_of_scope,out_of_scope,1,llm
+1682,transfusionTherapy,blood_bank,service,1,rule
+1683,transfusionMedicineOrBloodBank,blood_bank,service,1,rule
+1684,transfusionMedicineAndCellularTherapy,blood_bank,service,1,rule
+1685,transfusionMedicineAndBloodCentre,blood_bank,service,1,rule
+1686,transfusionMedicineAndBloodBank,blood_bank,service,1,rule
+1687,transforaminalBlocks,out_of_scope,out_of_scope,1,llm
+1688,transPRKSurgery,out_of_scope,out_of_scope,1,rule
+1689,toxicologyAndOccupationalHealth,too_general,too_general,1,rule
+1690,toxicology,too_general,too_general,1,rule
+1691,totalKneeReplacement,out_of_scope,out_of_scope,1,rule
+1692,totalHipReplacement,out_of_scope,out_of_scope,1,rule
+1693,toothWhitening,out_of_scope,out_of_scope,1,rule
+1694,toothExtraction,out_of_scope,out_of_scope,1,rule
+1695,toothColourFillings,out_of_scope,out_of_scope,1,rule
+1696,psychiatryPsychology,psychiatric_care,service,1,rule
+1697,psychiatryAndBehavioralHealth,psychiatric_care,service,1,rule
+1698,psychiatrist,psychiatric_care,service,1,rule
+1699,painlessLaserGumSurgery,out_of_scope,out_of_scope,1,rule
+1700,painRelief,out_of_scope,out_of_scope,1,rule
+1701,painManagementInterventional,out_of_scope,out_of_scope,1,rule
+1702,painManagementClinic,out_of_scope,out_of_scope,1,rule
+1703,painManagementAndPalliativeCare,out_of_scope,out_of_scope,1,rule
+1704,painAndPalliativeCare,out_of_scope,out_of_scope,1,rule
+1705,pain-management,out_of_scope,out_of_scope,1,rule
+1706,paediatricUrology,out_of_scope,out_of_scope,1,rule
+1707,paediatricSurgeryAndPediatricUrology,out_of_scope,out_of_scope,1,rule
+1708,paediatricSurgeries,out_of_scope,out_of_scope,1,rule
+1709,paediatricRheumatology,out_of_scope,out_of_scope,1,rule
+1710,paediatricRenalCentre,out_of_scope,out_of_scope,1,llm
+1711,paediatricRadiology,too_general,too_general,1,rule
+1712,paediatricPsychiatry,psychiatric_care,service,1,rule
+1713,paediatricPlasticSurgery,too_general,too_general,1,rule
+1714,paediatricOtolaryngology,out_of_scope,out_of_scope,1,rule
+1715,paediatricOphthamology,out_of_scope,out_of_scope,1,fuzzy
+1716,paediatricOphthalmologyAndSquint,out_of_scope,out_of_scope,1,rule
+1717,paediatricNutrition,out_of_scope,out_of_scope,1,rule
+1718,paediatricNeurosurgery,neurosurgery,service,1,rule
+1719,paediatricNeonatology,too_general,too_general,1,rule
+1720,paediatricMedicine,too_general,too_general,1,rule
+1721,paediatricIntensiveCareUnit,picu,service,1,rule
+1722,paediatricHematologyOncology,chemotherapy,service,1,rule
+1723,paediatricHematoOncology,chemotherapy,service,1,rule
+1724,paediatricHaematologyOncology,chemotherapy,service,1,rule
+1725,paediatricHaematologyAndBMT,chemotherapy,service,1,rule
+1726,paediatricGastroentrologyAndHepatology,out_of_scope,out_of_scope,1,rule
+1727,painlessDentistry,out_of_scope,out_of_scope,1,rule
+1728,palateSurgery,out_of_scope,out_of_scope,1,rule
+1729,paediatricDialysis,dialysis,service,1,rule
+1730,palliativeCareAndCancerPainManagement,out_of_scope,out_of_scope,1,rule
+1731,pediatricHemato-Oncology,chemotherapy,service,1,rule
+1732,pediatricHeadInjuryAndBurns,burn_care,service,1,rule
+1733,pediatricHaematologyOncology,chemotherapy,service,1,rule
+1734,pediatricHaematology,too_general,too_general,1,rule
+1735,pediatricGeneticsAndRareDiseases,out_of_scope,out_of_scope,1,rule
+1736,pediatricEndoscopy,out_of_scope,out_of_scope,1,rule
+1737,pediatricEndodontics,out_of_scope,out_of_scope,1,rule
+1738,pediatricDevelopmentalDisabilities,out_of_scope,out_of_scope,1,rule
+1739,pediatricDentalEmergency,out_of_scope,out_of_scope,1,rule
+1740,pediatricDental,out_of_scope,out_of_scope,1,rule
+1741,pediatricCardiologist,too_general,too_general,1,rule
+1742,pediatricCardiacServices,too_general,too_general,1,llm
+1743,pediatricCardiacCentre,too_general,too_general,1,llm
+1744,pediatricAnesthesia,too_general,too_general,1,rule
+1745,pediatricAndAdolescentPsychiatry,psychiatric_care,service,1,rule
+1746,pediatricAdolescentGynecology,out_of_scope,out_of_scope,1,rule
+1747,pediatricAdolescentEndocrinology,out_of_scope,out_of_scope,1,rule
+1748,peadiatricSurgery,out_of_scope,out_of_scope,1,rule
+1749,pcrTesting,out_of_scope,out_of_scope,1,llm
+1750,pcodManagement,out_of_scope,out_of_scope,1,llm
+1751,pathologyAndMicrobiology,out_of_scope,out_of_scope,1,rule
+1752,pathologyAndCytology,out_of_scope,out_of_scope,1,rule
+1753,parkinsonsDisease,out_of_scope,out_of_scope,1,llm
+1754,pancreaticTransplantationCentre,too_general,too_general,1,rule
+1755,pancreasTransplantation,too_general,too_general,1,rule
+1756,panchakarma,out_of_scope,out_of_scope,1,rule
+1757,palliativeOncology,out_of_scope,out_of_scope,1,rule
+1758,paediatricEmergency,emergency_24x7,service,1,rule
+1759,paediatricDermatology,out_of_scope,out_of_scope,1,rule
+1760,psychiatricSocialWork,psychiatric_care,service,1,rule
+1761,orthopaedicRoboticSurgery,out_of_scope,out_of_scope,1,rule
+1762,orthogeriatrics,out_of_scope,out_of_scope,1,rule
+1763,orthodontist,out_of_scope,out_of_scope,1,rule
+1764,orthodonticsAndDentofacialOrthopedics,out_of_scope,out_of_scope,1,rule
+1765,orthodonticsAndDentofacialOrthopaedics,out_of_scope,out_of_scope,1,rule
+1766,orth orthopedic? wrong,too_general,too_general,1,llm
+1767,orth orthodontics,out_of_scope,out_of_scope,1,rule
+1768,orofacialPainAndOralMedicine,out_of_scope,out_of_scope,1,rule
+1769,organTesting,out_of_scope,out_of_scope,1,llm
+1770,orbitAndOculoplastyDepartment,out_of_scope,out_of_scope,1,rule
+1771,orbitAndOcculoplasty,out_of_scope,out_of_scope,1,rule
+1772,oralSurgeryProcedures,out_of_scope,out_of_scope,1,rule
+1773,oralSubmucousFibrosisTreatment,out_of_scope,out_of_scope,1,rule
+1774,oralSubmucousFibrosis,out_of_scope,out_of_scope,1,rule
+1775,oralProphylaxis,out_of_scope,out_of_scope,1,rule
+1776,oralPathologyAndForensicOdontology,out_of_scope,out_of_scope,1,rule
+1777,oralOncology,out_of_scope,out_of_scope,1,rule
+1778,oralMotricity,out_of_scope,out_of_scope,1,rule
+1779,oralMaxillofacial,out_of_scope,out_of_scope,1,rule
+1780,oralHistology,out_of_scope,out_of_scope,1,rule
+1781,oralDiagnosisRadiology,out_of_scope,out_of_scope,1,rule
+1782,oralDiagnosisMedicineAndRadiology,out_of_scope,out_of_scope,1,rule
+1783,oralDiagnosisAndRadiology,out_of_scope,out_of_scope,1,rule
+1784,oralCancers,out_of_scope,out_of_scope,1,rule
+1785,oralCancerScreenings,out_of_scope,out_of_scope,1,rule
+1786,oralCancerDiagnosisAndTreatment,out_of_scope,out_of_scope,1,rule
+1787,oralCancerCare,out_of_scope,out_of_scope,1,rule
+1788,oralCancer,out_of_scope,out_of_scope,1,rule
+1789,orthopaedicRehabilitation,out_of_scope,out_of_scope,1,rule
+1790,orthopaedicTumorAndOncology,out_of_scope,out_of_scope,1,llm
+1791,paediatricCriticalCareMedicine,picu,service,1,rule
+1792,orthopaedicsAndSportsMedicine,too_general,too_general,1,rule
+1793,paediatricCounsellingCentre,out_of_scope,out_of_scope,1,rule
+1794,paediatricCare,too_general,too_general,1,rule
+1795,paediatricCardiacSciences,too_general,too_general,1,rule
+1796,paediatricBoneMarrowTransplant,chemotherapy,service,1,rule
+1797,paediatricAndChildCare,too_general,too_general,1,llm
+1798,pacemakerImplantation,out_of_scope,out_of_scope,1,llm
+1799,pacemakerImplantTechniques,out_of_scope,out_of_scope,1,llm
+1800,overdenture,out_of_scope,out_of_scope,1,rule
+1801,outpatientServices,not_a_service,not_a_service,1,llm
+1802,otologyAndNeurotology,out_of_scope,out_of_scope,1,rule
+1803,otherSpecialties,not_a_service,not_a_service,1,llm
+1804,otherDiseases,not_a_service,not_a_service,1,llm
+1805,osteoporosisTreatment,out_of_scope,out_of_scope,1,rule
+1806,osteoporosisManagement,out_of_scope,out_of_scope,1,rule
+1807,orthotics-Prosthetics,out_of_scope,out_of_scope,1,rule
+1808,orthopedist,too_general,too_general,1,rule
+1809,orthopedicsSportsMedicine,out_of_scope,out_of_scope,1,rule
+1810,orthopedicsJointReplacement,out_of_scope,out_of_scope,1,rule
+1811,orthopedicsAndTraumatology,orthopaedic_trauma_surgery,service,1,rule
+1812,orthopedicsAndJointReplacementSurgery,too_general,too_general,1,rule
+1813,orthopedicsAndJointReplacement,too_general,too_general,1,rule
+1814,orthopedicTraumaCare,orthopaedic_trauma_surgery,service,1,rule
+1815,orthopedicTraumaAndComplexFractureSurgery,orthopaedic_trauma_surgery,service,1,rule
+1816,orthopedicSurgeryAndProcedures,too_general,too_general,1,llm
+1817,orthopedicRheumatology,out_of_scope,out_of_scope,1,rule
+1818,orthopedicOncologist,surgical_oncology,service,1,rule
+1819,orthopaedicsAndTrauma,orthopaedic_trauma_surgery,service,1,rule
+1820,pediatricHemato-oncology,chemotherapy,service,1,rule
+1821,pediatricImmunologyAndRheumatology,out_of_scope,out_of_scope,1,rule
+1822,pediatricIntensiveCare,picu,service,1,rule
+1823,preventiveAndCommunity,out_of_scope,out_of_scope,1,rule
+1824,pregnancyCare,institutional_delivery,service,1,rule
+1825,precisionOncology,out_of_scope,out_of_scope,1,llm
+1826,preDescemetsEndothelialKeratoplasty,out_of_scope,out_of_scope,1,rule
+1827,pre-descemets-endothelial-keratoplasty,out_of_scope,out_of_scope,1,rule
+1828,prasutiTantraEvumStriRoga,out_of_scope,out_of_scope,1,llm
+1829,prasoothithantra,out_of_scope,out_of_scope,1,llm
+1830,postSurgical,out_of_scope,out_of_scope,1,llm
+1831,polytraumaAndFracture,trauma_care;orthopaedic_trauma_surgery,service,1,manual
+1832,polyTraumaAndAccidentCare,trauma_care,service,1,rule
+1833,poisoningSnakeBite,snakebite_antivenom,service,1,rule
+1834,podiatrySportsMedicine,out_of_scope,out_of_scope,1,rule
+1835,podiatricOrthopedicsAndBiomechanics,out_of_scope,out_of_scope,1,rule
+1836,plasticsurgery,too_general,too_general,1,rule
+1837,plasticReconstructiveSurgery,too_general,too_general,1,rule
+1838,plasticAndCosmeticSurgery,out_of_scope,out_of_scope,1,rule
+1839,plastic-cosmetic-surgery,out_of_scope,out_of_scope,1,rule
+1840,placentalAbruption,too_general,too_general,1,rule
+1841,pl asticSurgery,out_of_scope,out_of_scope,1,rule
+1842,pituitaryDisorders,out_of_scope,out_of_scope,1,llm
+1843,pilesSurgery,out_of_scope,out_of_scope,1,rule
+1844,pilesFissureAndHaemorrhoids,out_of_scope,out_of_scope,1,rule
+1845,physiotherapyWellness,out_of_scope,out_of_scope,1,rule
+1846,physiotherapyTreatment,out_of_scope,out_of_scope,1,rule
+1847,physiotheraphy,out_of_scope,out_of_scope,1,rule
+1848,physPhysicalMedicineAndRehabilitation,out_of_scope,out_of_scope,1,rule
+1849,photorefractiveKeratectomy,out_of_scope,out_of_scope,1,rule
+1850,phlebology,out_of_scope,out_of_scope,1,llm
+1851,prenatalGeneticScreening,out_of_scope,out_of_scope,1,rule
+1852,preventiveAndMinimallyInvasiveDentistry,out_of_scope,out_of_scope,1,rule
+1853,pediatricIntensiveCareUnit,picu,service,1,rule
+1854,preventiveCardiologist,too_general,too_general,1,rule
+1855,psychiatricMedicineAndPsychology,psychiatric_care,service,1,rule
+1856,prpTherapy,out_of_scope,out_of_scope,1,llm
+1857,prosthodonticsRestorativeDentistry,out_of_scope,out_of_scope,1,rule
+1858,prosthodonticsCrownBridgeImplantology,out_of_scope,out_of_scope,1,rule
+1859,prosthodonticsAndCrownAndBridge,out_of_scope,out_of_scope,1,rule
+1860,prosthodontics(Crown & Bridge),out_of_scope,out_of_scope,1,rule
+1861,prosthodontics & Implantology,out_of_scope,out_of_scope,1,rule
+1862,prosthodontia,out_of_scope,out_of_scope,1,rule
+1863,prostheticsOrthotics,out_of_scope,out_of_scope,1,rule
+1864,prostheticsAndOrthoticsDepartment,out_of_scope,out_of_scope,1,rule
+1865,prostheticsAndOrthotics,out_of_scope,out_of_scope,1,rule
+1866,prosthetics,out_of_scope,out_of_scope,1,rule
+1867,prostheticRehabilitation,out_of_scope,out_of_scope,1,rule
+1868,prostheticOrthotic,out_of_scope,out_of_scope,1,rule
+1869,prosthesis,out_of_scope,out_of_scope,1,llm
+1870,prostateDiseaseManagement,out_of_scope,out_of_scope,1,rule
+1871,prophylaxis,out_of_scope,out_of_scope,1,llm
+1872,prolapseOfThePelvicOrgans,out_of_scope,out_of_scope,1,rule
+1873,proctologySurgery,out_of_scope,out_of_scope,1,rule
+1874,proctology-surgery,out_of_scope,out_of_scope,1,rule
+1875,preventivePediatricDentistry,out_of_scope,out_of_scope,1,rule
+1876,preventiveOncologyAndScreening,out_of_scope,out_of_scope,1,rule
+1877,preventiveNephrology,too_general,too_general,1,rule
+1878,preventiveHealthCheckUp,out_of_scope,out_of_scope,1,rule
+1879,preventiveDentalCare,out_of_scope,out_of_scope,1,rule
+1880,preventiveCommunityOncology,out_of_scope,out_of_scope,1,rule
+1881,preventiveCareForSeniors,out_of_scope,out_of_scope,1,rule
+1882,phacoSurgery,cataract_surgery,service,1,rule
+1883,pgt-m,out_of_scope,out_of_scope,1,llm
+1884,pgt-a,out_of_scope,out_of_scope,1,llm
+1885,peritonealSurfaceMalignancy,out_of_scope,out_of_scope,1,llm
+1886,pediatricTuberculosisTreatment,tb_care,service,1,rule
+1887,pediatricTrauma,trauma_care,service,1,rule
+1888,pediatricSurgeries,out_of_scope,out_of_scope,1,rule
+1889,pediatricSquintCorrection,out_of_scope,out_of_scope,1,rule
+1890,pediatricSpeechTherapy,out_of_scope,out_of_scope,1,rule
+1891,pediatricSST,out_of_scope,out_of_scope,1,llm
+1892,pediatricRootCanalsAndCrown,out_of_scope,out_of_scope,1,llm
+1893,pediatricRefractiveLaserEyeSurgery,out_of_scope,out_of_scope,1,rule
+1894,pediatricReconstructiveSurgery,out_of_scope,out_of_scope,1,rule
+1895,pediatricPulmonary,too_general,too_general,1,rule
+1896,pediatricPodiatry,out_of_scope,out_of_scope,1,rule
+1897,pediatricPlasticSurgeryNeurosurgery,neurosurgery,service,1,rule
+1898,pediatricPlasticSurgeryAndNeurosurgery,neurosurgery,service,1,rule
+1899,pediatricOrthopedicsDeformityCorrection,out_of_scope,out_of_scope,1,llm
+1900,pediatricOrthopedic,too_general,too_general,1,llm
+1901,pediatricOrthopaedic,too_general,too_general,1,llm
+1902,pediatricOncosurgery,surgical_oncology,service,1,rule
+1903,pediatricOncologyAndHematologyCentre,chemotherapy,service,1,rule
+1904,pediatricNutritionExpert,out_of_scope,out_of_scope,1,rule
+1905,pediatricNeurosurgeryAndTrauma,neurosurgery;trauma_care,service,1,manual
+1906,pediatricNeuroradiology,too_general,too_general,1,rule
+1907,pediatricNeontology,too_general,too_general,1,fuzzy
+1908,pediatricMinimallyInvasiveSurgery,too_general,too_general,1,rule
+1909,pediatricMedicalGeneticist,out_of_scope,out_of_scope,1,rule
+1910,pediatricLiverTransplantation,too_general,too_general,1,rule
+1911,pediatricKidneyTransplant,kidney_transplant,service,1,rule
+1912,pediatricIntensivist,icu,service,1,rule
+1913,pediatrician,too_general,too_general,1,rule
+1914,pediatricsAndChildCare,too_general,too_general,1,llm
+1915,pediatricsAndPediatricSurgery,out_of_scope,out_of_scope,1,rule
+1916,periodonticSurgery,out_of_scope,out_of_scope,1,rule
+1917,peritonealSurfaceMalignancies,out_of_scope,out_of_scope,1,llm
+1918,peripheralVascularSurgery,out_of_scope,out_of_scope,1,rule
+1919,peripheralVascularAndEndovascularSciences,out_of_scope,out_of_scope,1,llm
+1920,peripheralNerveSurgery,out_of_scope,out_of_scope,1,rule
+1921,peripheralAngiography,out_of_scope,out_of_scope,1,llm
+1922,peripheralAndEndovascularSurgery,out_of_scope,out_of_scope,1,rule
+1923,perioperativeAnesthesia,too_general,too_general,1,rule
+1924,periodontologyAndOralImplantology,out_of_scope,out_of_scope,1,rule
+1925,periodontologyAndImplantology,out_of_scope,out_of_scope,1,rule
+1926,periodontist,out_of_scope,out_of_scope,1,rule
+1927,periodonticsAndOralImplantology,out_of_scope,out_of_scope,1,rule
+1928,periodonticsAndDentalImplants,out_of_scope,out_of_scope,1,rule
+1929,periodontalGumCare,out_of_scope,out_of_scope,1,rule
+1930,pediatricsAndPreventiveDentistry,out_of_scope,out_of_scope,1,rule
+1931,periodontalFlapSurgery,out_of_scope,out_of_scope,1,rule
+1932,periodontalDentistry,out_of_scope,out_of_scope,1,rule
+1933,periodontalCare,out_of_scope,out_of_scope,1,rule
+1934,periodontal,out_of_scope,out_of_scope,1,rule
+1935,peridontics,out_of_scope,out_of_scope,1,fuzzy
+1936,pelvicAcetabular,out_of_scope,out_of_scope,1,rule
+1937,pelviacetabularSurgery,out_of_scope,out_of_scope,1,rule
+1938,pedodonticsOrPediatricDentistry,out_of_scope,out_of_scope,1,rule
+1939,pedodontia,out_of_scope,out_of_scope,1,rule
+1940,pediatricsNeonatalogy,too_general,too_general,1,rule
+1941,pediatricsNeonatalCriticalCare,nicu,service,1,rule
+1942,pediatricsInfectiousDiseases,too_general,too_general,1,rule
+1943,facial aesthetics,out_of_scope,out_of_scope,1,rule
+1944,Scalp Tumor,out_of_scope,out_of_scope,1,llm
+1945,faceReconstructionSurgery,out_of_scope,out_of_scope,1,rule
+1946,Nephrology & Dialysis,dialysis,service,1,rule
+1947,NeonatologyPerinatalMedicine,too_general,too_general,1,rule
+1948,Neonatology,too_general,too_general,1,rule
+1949,Neonatal-Perinatal,too_general,too_general,1,rule
+1950,Neonatal and Paediatric Surgery,too_general,too_general,1,rule
+1951,Nail Problem,out_of_scope,out_of_scope,1,rule
+1952,NICU/ PICU/ Neonatology,nicu;picu,service,1,manual
+1953,NEURO ELECTRO-PHYSIOLOGY,out_of_scope,out_of_scope,1,rule
+1954,Multispeciality,too_general,too_general,1,llm
+1955,Multi-organ Transplant,too_general,too_general,1,rule
+1956,MolecularPathology,out_of_scope,out_of_scope,1,rule
+1957,Molecular pathology,out_of_scope,out_of_scope,1,rule
+1958,Molecular biology.,out_of_scope,out_of_scope,1,rule
+1959,Molecular Diagnostics,out_of_scope,out_of_scope,1,rule
+1960,Mole Removal,out_of_scope,out_of_scope,1,llm
+1961,MinimallyInvasiveSurgeryAndEndourology,too_general,too_general,1,rule
+1962,Minimally Access Bariatric and Metabolic Surgery,out_of_scope,out_of_scope,1,rule
+1963,Minimal Invasive Surgery,too_general,too_general,1,rule
+1964,Migraine Management,out_of_scope,out_of_scope,1,llm
+1965,Micro Vascular Surgery,out_of_scope,out_of_scope,1,rule
+1966,Meru chikitsa,out_of_scope,out_of_scope,1,llm
+1967,Melasma Treatment,out_of_scope,out_of_scope,1,llm
+1968,Medical Retina,out_of_scope,out_of_scope,1,rule
+1969,Medical Genetics & Genetic Counseling,out_of_scope,out_of_scope,1,rule
+1970,Medical Gastroenterology,out_of_scope,out_of_scope,1,rule
+1971,Maxillo Facial Surgery,out_of_scope,out_of_scope,1,rule
+1972,Maxillo Facial Prosthodontics,out_of_scope,out_of_scope,1,rule
+1973,Mastectomy in Breast Cancer,surgical_oncology,service,1,rule
+1974,Nephro Surgery,out_of_scope,out_of_scope,1,rule
+1975,Nephrology and Renal Science,too_general,too_general,1,rule
+1976,Male Infertility,out_of_scope,out_of_scope,1,rule
+1977,Nerve Surgeries,neurosurgery,service,1,llm
+1978,Oestopathy,out_of_scope,out_of_scope,1,llm
+1979,Oculoplasty,out_of_scope,out_of_scope,1,rule
+1980,Occupational Therapy,out_of_scope,out_of_scope,1,rule
+1981,Obstetrics&Gynaecology,too_general,too_general,1,rule
+1982,Obstetrics and Gynaecology,too_general,too_general,1,rule
+1983,Obstetrics And Gynaecology,too_general,too_general,1,rule
+1984,Obstetrics & Gynecology,too_general,too_general,1,rule
+1985,Obsessive Compulsive Disorder (OCD,psychiatric_care,service,1,llm
+1986,Obesity/weight loss programs,out_of_scope,out_of_scope,1,rule
+1987,ORTHOPAEDICS,too_general,too_general,1,rule
+1988,OBSTETRICS & GYNAECOLOGY,too_general,too_general,1,rule
+1989,OBSTERICS & GYNAECOLOGY,out_of_scope,out_of_scope,1,rule
+1990,OBG,too_general,too_general,1,rule
+1991,Nutrition/Dietician,out_of_scope,out_of_scope,1,rule
+1992,Nutrition and Dietetics,out_of_scope,out_of_scope,1,rule
+1993,Nuclear Medicine,out_of_scope,out_of_scope,1,rule
+1994,Non-Interventional Cardiology,too_general,too_general,1,rule
+1995,New Born Screening,out_of_scope,out_of_scope,1,llm
+1996,Nevas Removal,out_of_scope,out_of_scope,1,llm
+1997,Neurosciences & Spinal Disorders,too_general,too_general,1,rule
+1998,Neurosciences,too_general,too_general,1,rule
+1999,Neuropsychiatry,psychiatric_care,service,1,rule
+2000,Neuropelveology,out_of_scope,out_of_scope,1,llm
+2001,Neuromuscular Orthodontics,out_of_scope,out_of_scope,1,rule
+2002,Neurolysis Surgery,out_of_scope,out_of_scope,1,rule
+2003,Neuro Ophthalmology,out_of_scope,out_of_scope,1,rule
+2004,Nerve Tumor Treatment,neurosurgery,service,1,llm
+2005,Marma chikitsa,out_of_scope,out_of_scope,1,llm
+2006,Magnet Therapy,out_of_scope,out_of_scope,1,llm
+2007,Onco Surgery,surgical_oncology,service,1,rule
+2008,Knee Surgery,out_of_scope,out_of_scope,1,rule
+2009,Knee & Shoulder Arthroscropy,out_of_scope,out_of_scope,1,rule
+2010,Kidney Transplant Surgery,kidney_transplant,service,1,rule
+2011,Kidney Stone Surgery,out_of_scope,out_of_scope,1,rule
+2012,Keratoplasty,out_of_scope,out_of_scope,1,rule
+2013,Keratoconus,out_of_scope,out_of_scope,1,rule
+2014,Keloid treatment,out_of_scope,out_of_scope,1,llm
+2015,Karyotyping,out_of_scope,out_of_scope,1,llm
+2016,KERATOCONUS,out_of_scope,out_of_scope,1,rule
+2017,Joint Replacement Surgery,out_of_scope,out_of_scope,1,rule
+2018,Joint Replacement Surgeries,out_of_scope,out_of_scope,1,rule
+2019,Joint Replacement,out_of_scope,out_of_scope,1,rule
+2020,InvisalignOrthodontics,out_of_scope,out_of_scope,1,rule
+2021,Interventional pain management,out_of_scope,out_of_scope,1,rule
+2022,Interventional Cardiologist,cath_lab_angioplasty,service,1,rule
+2023,Intensive care,icu,service,1,rule
+2024,Intensive Care Physician and Critical Care,icu,service,1,rule
+2025,InfertilityAndArtificialReproductiveTechniques,out_of_scope,out_of_scope,1,rule
+2026,Infertility Clinic,out_of_scope,out_of_scope,1,rule
+2027,Infertility / IVF,out_of_scope,out_of_scope,1,rule
+2028,Infertility & Impotency,out_of_scope,out_of_scope,1,rule
+2029,Implant Prosthesis,out_of_scope,out_of_scope,1,llm
+2030,Implant Dentistry,out_of_scope,out_of_scope,1,rule
+2031,Immunopathology,out_of_scope,out_of_scope,1,rule
+2032,INTENSIVIST & ANAESTHESIOLOGIST,icu,service,1,rule
+2033,ICU & Critical Care,icu,service,1,rule
+2034,ICL Surgery,out_of_scope,out_of_scope,1,rule
+2035,ICL,out_of_scope,out_of_scope,1,llm
+2036,Knee Replacement Specialist,out_of_scope,out_of_scope,1,rule
+2037,Koumarbhritya,out_of_scope,out_of_scope,1,llm
+2038,MacularDegeneration,out_of_scope,out_of_scope,1,llm
+2039,LAPAROSCOPIC SURGEON,too_general,too_general,1,rule
+2040,MICS & Cataract,cataract_surgery,service,1,rule
+2041,Lymphedema Supermicrosurgery,out_of_scope,out_of_scope,1,rule
+2042,Lymphedema,out_of_scope,out_of_scope,1,llm
+2043,Low Back pain,out_of_scope,out_of_scope,1,rule
+2044,Liver and Pancreas Surgery,out_of_scope,out_of_scope,1,rule
+2045,Lithotripsy,out_of_scope,out_of_scope,1,llm
+2046,Limb Replantation,orthopaedic_trauma_surgery,service,1,rule
+2047,Lifestyle Diseases,out_of_scope,out_of_scope,1,rule
+2048,Leprosy Treatment,out_of_scope,out_of_scope,1,rule
+2049,Lasik,out_of_scope,out_of_scope,1,rule
+2050,Laser dentistry,out_of_scope,out_of_scope,1,rule
+2051,Laser Pigmentation Removal,out_of_scope,out_of_scope,1,llm
+2052,Laser Peel Treatment,out_of_scope,out_of_scope,1,llm
+2053,Laser Hair Removal,out_of_scope,out_of_scope,1,rule
+2054,Laser Assisted Hatching,out_of_scope,out_of_scope,1,llm
+2055,Lapsrscopic Nepherctomy,out_of_scope,out_of_scope,1,llm
+2056,LaproscopicSurgery,out_of_scope,out_of_scope,1,rule
+2057,Laparoscopy & Laser Surgery,too_general,too_general,1,rule
+2058,Laparoscopic Varicocelectomy,too_general,too_general,1,rule
+2059,Laparoscopic Pyeloplasty,too_general,too_general,1,rule
+2060,Laparoscopic Kidney Surgery,too_general,too_general,1,rule
+2061,Lacrimal Gland Tumor,out_of_scope,out_of_scope,1,llm
+2062,Laboratory sciences,out_of_scope,out_of_scope,1,rule
+2063,Laboratory Sciences,out_of_scope,out_of_scope,1,rule
+2064,LU-177 PSMA Therapy,out_of_scope,out_of_scope,1,llm
+2065,LASIK Surgery,out_of_scope,out_of_scope,1,rule
+2066,LASIK (Refractive Surgery),out_of_scope,out_of_scope,1,rule
+2067,Onco Care,too_general,too_general,1,manual
+2068,Oncologist/Cancer Specialist,too_general,too_general,1,rule
+2069,eyeSurgeon,out_of_scope,out_of_scope,1,rule
+2070,Plastic Surgery & Cosmetic Surgery,out_of_scope,out_of_scope,1,rule
+2071,Plastic & Cosmetic Surgery,out_of_scope,out_of_scope,1,rule
+2072,Pilonidal sinus,out_of_scope,out_of_scope,1,rule
+2073,Piles / Arsha,out_of_scope,out_of_scope,1,rule
+2074,Piles,out_of_scope,out_of_scope,1,rule
+2075,Physiotherapist,out_of_scope,out_of_scope,1,rule
+2076,Physiothearpy,out_of_scope,out_of_scope,1,rule
+2077,Physical Medicine,out_of_scope,out_of_scope,1,rule
+2078,Periondontics,out_of_scope,out_of_scope,1,rule
+2079,Periodontology And Implantology,out_of_scope,out_of_scope,1,rule
+2080,Periodontology,out_of_scope,out_of_scope,1,rule
+2081,Periodontists,out_of_scope,out_of_scope,1,rule
+2082,Periodontics Plastic Surgery,out_of_scope,out_of_scope,1,rule
+2083,Periarticular Surgeries,orthopaedic_trauma_surgery,service,1,llm
+2084,Pedodontics Dentistry,out_of_scope,out_of_scope,1,rule
+2085,Pediatrics & Neonatology,too_general,too_general,1,rule
+2086,Pediatrics,too_general,too_general,1,rule
+2087,Pediatric dermatology,out_of_scope,out_of_scope,1,rule
+2088,Pediatric Surgery,out_of_scope,out_of_scope,1,rule
+2089,Pediatric Opthalmology,out_of_scope,out_of_scope,1,rule
+2090,Pediatric Ophthalmology,out_of_scope,out_of_scope,1,rule
+2091,Pediatric Neurology,too_general,too_general,1,rule
+2092,Pediatric ENT,out_of_scope,out_of_scope,1,rule
+2093,Pediatric Dentistry,out_of_scope,out_of_scope,1,rule
+2094,Pediatric CVTS - Cardio Vascular and Thoracic Surgery,cardiac_surgery,service,1,rule
+2095,Peadiatrics & Neonatology,too_general,too_general,1,rule
+2096,Pathology laboratory,out_of_scope,out_of_scope,1,rule
+2097,Pathology Laboratory,out_of_scope,out_of_scope,1,rule
+2098,Plastic & Reconstructive surgery,too_general,too_general,1,rule
+2099,Pollicization,out_of_scope,out_of_scope,1,llm
+2100,Parkinson’s Disease,out_of_scope,out_of_scope,1,llm
+2101,Polycystic Ovarian Syndrome(PCOS) Management,out_of_scope,out_of_scope,1,rule
+2102,RenalTransplantationUrology,kidney_transplant,service,1,rule
+2103,Renal Sciences,too_general,too_general,1,rule
+2104,Rectal Prolapse,out_of_scope,out_of_scope,1,rule
+2105,Reconstruction of Congenital Deformities,out_of_scope,out_of_scope,1,llm
+2106,Rasayana chikitsa,out_of_scope,out_of_scope,1,llm
+2107,Rasa chikitsa,out_of_scope,out_of_scope,1,llm
+2108,Radiology/Ultrasonology,ultrasound,service,1,rule
+2109,Radio Diagnostics,out_of_scope,out_of_scope,1,rule
+2110,ROP,out_of_scope,out_of_scope,1,llm
+2111,RFT Test,out_of_scope,out_of_scope,1,llm
+2112,Pulmonology and Respiratory Medicine,too_general,too_general,1,rule
+2113,Pulmonologist,too_general,too_general,1,rule
+2114,Public Health Dentistry,out_of_scope,out_of_scope,1,rule
+2115,Pterygium & Pinguecula,out_of_scope,out_of_scope,1,llm
+2116,Pterygium,out_of_scope,out_of_scope,1,llm
+2117,Psychotherapy,psychiatric_care,service,1,llm
+2118,Psoriasis Treatment,out_of_scope,out_of_scope,1,llm
+2119,Pruritus Ani,out_of_scope,out_of_scope,1,llm
+2120,Prosthodontoics,out_of_scope,out_of_scope,1,rule
+2121,Prosthodontics And Crown & Bridge,out_of_scope,out_of_scope,1,rule
+2122,Prostate Surgery,out_of_scope,out_of_scope,1,rule
+2123,Prostate Cancer,too_general,too_general,1,rule
+2124,Prostate BPH,out_of_scope,out_of_scope,1,rule
+2125,Preventive Dentistry,out_of_scope,out_of_scope,1,rule
+2126,Preventive Cardiology,too_general,too_general,1,rule
+2127,PrasutiTantraEvumStriRoga,out_of_scope,out_of_scope,1,llm
+2128,Prasoothi Thanthra,out_of_scope,out_of_scope,1,llm
+2129,Parotid Mass,out_of_scope,out_of_scope,1,llm
+2130,Panchkarma,out_of_scope,out_of_scope,1,fuzzy
+2131,Oncology & Oncology Surgery,too_general,too_general,1,rule
+2132,Other Neuro-Psychiatric Disorders,psychiatric_care,service,1,rule
+2133,Osteoporosis & Osteoporotic Fracture,out_of_scope,out_of_scope,1,rule
+2134,Osteoarthritis Specialist,out_of_scope,out_of_scope,1,rule
+2135,Orthopedics & Traumatology,orthopaedic_trauma_surgery,service,1,rule
+2136,Orthopedics & Joint Replacement,too_general,too_general,1,rule
+2137,Orthopedic Trauma Specialist,orthopaedic_trauma_surgery,service,1,rule
+2138,Orthopedic Surgery,too_general,too_general,1,rule
+2139,OrthopaedicsTraumaAndSportsMedicine,trauma_care,service,1,rule
+2140,Orthopaedics and Trauma,orthopaedic_trauma_surgery,service,1,rule
+2141,Orthopaedic Trauma & Facture Management,orthopaedic_trauma_surgery,service,1,rule
+2142,Orthopaedic Oncology,surgical_oncology,service,1,rule
+2143,Orthognathic surgery,out_of_scope,out_of_scope,1,rule
+2144,Orthodontics And Clear Aligners,out_of_scope,out_of_scope,1,rule
+2145,Oromaxillo Facial and Reconstructive Surgery,out_of_scope,out_of_scope,1,rule
+2146,Orbit Oculoplasty and Squint Surgery,out_of_scope,out_of_scope,1,rule
+2147,OralAndMaxillofacialSurgery,out_of_scope,out_of_scope,1,rule
+2148,Oral and maxillofacial surgery,out_of_scope,out_of_scope,1,rule
+2149,Oral and maxillofacial surgeon,out_of_scope,out_of_scope,1,rule
+2150,Oral and MaxillofacialSurgery,out_of_scope,out_of_scope,1,rule
+2151,Oral and Maxillofacial Surgery,out_of_scope,out_of_scope,1,rule
+2152,Oral Medicine and Radiology,out_of_scope,out_of_scope,1,rule
+2153,Oral Medicine Radiology and Pathology,out_of_scope,out_of_scope,1,rule
+2154,Oral Medicine & Radiology,out_of_scope,out_of_scope,1,rule
+2155,Oral Medicine,out_of_scope,out_of_scope,1,rule
+2156,Oral Cancer Screenings,out_of_scope,out_of_scope,1,rule
+2157,Oral And Maxillofacial Surgery,out_of_scope,out_of_scope,1,rule
+2158,Oral & Maxillo-Facial Radiology,out_of_scope,out_of_scope,1,rule
+2159,Open pores treatment,out_of_scope,out_of_scope,1,llm
+2160,Other Diseases,out_of_scope,out_of_scope,1,llm
+2161,Otologist/ Neurotologist,out_of_scope,out_of_scope,1,rule
+2162,Panchakarma chikitsa,out_of_scope,out_of_scope,1,rule
+2163,Ovarian Mass,out_of_scope,out_of_scope,1,llm
+2164,Panchakarma,out_of_scope,out_of_scope,1,rule
+2165,Palliative care,out_of_scope,out_of_scope,1,rule
+2166,Pain Management,out_of_scope,out_of_scope,1,rule
+2167,Paedodontist,out_of_scope,out_of_scope,1,rule
+2168,Paediatrics & Neonatology,too_general,too_general,1,rule
+2169,Paediatrics & Neonatal Care,too_general,too_general,1,rule
+2170,PaediatricSurgery,out_of_scope,out_of_scope,1,rule
+2171,PaediatricRehabilitation,out_of_scope,out_of_scope,1,rule
+2172,PaediatricOrthopedics,too_general,too_general,1,manual
+2173,PaediatricEndocrinology,out_of_scope,out_of_scope,1,rule
+2174,Paediatric Surgery,out_of_scope,out_of_scope,1,rule
+2175,Paediatric Hemato Oncology & BMT,chemotherapy,service,1,rule
+2176,Paediatric Dentistry,out_of_scope,out_of_scope,1,rule
+2177,PTOSIS ( Droopy Lid),out_of_scope,out_of_scope,1,llm
+2178,PSYCHOLOGY,out_of_scope,out_of_scope,1,rule
+2179,PSYCHIATRY,psychiatric_care,service,1,rule
+2180,PRPTherapy,out_of_scope,out_of_scope,1,llm
+2181,PRP Therapy,out_of_scope,out_of_scope,1,llm
+2182,PRP,out_of_scope,out_of_scope,1,llm
+2183,PRK Surgery,out_of_scope,out_of_scope,1,rule
+2184,PLASTIC SURGEON,too_general,too_general,1,rule
+2185,PHYSIOTHERAPIST,out_of_scope,out_of_scope,1,rule
+2186,PHYSICIAN,too_general,too_general,1,rule
+2187,PGS/PGD,out_of_scope,out_of_scope,1,llm
+2188,PCR Testing,out_of_scope,out_of_scope,1,llm
+2189,PCOS,out_of_scope,out_of_scope,1,rule
+2190,PAEDIATRICS & NEONATOLOGY,too_general,too_general,1,rule
+2191,IBS,out_of_scope,out_of_scope,1,llm
+2192,I.C.U.,icu,service,1,llm
+2193,Hysterectomy,out_of_scope,out_of_scope,1,llm
+2194,Contoura Lasik,out_of_scope,out_of_scope,1,rule
+2195,Computer Vision Syndrome,out_of_scope,out_of_scope,1,llm
+2196,Community ophthalmology,out_of_scope,out_of_scope,1,rule
+2197,Colposcopy,out_of_scope,out_of_scope,1,llm
+2198,Colorectal & Peritoneal Surface Malignancies (CRS + HIPEC),out_of_scope,out_of_scope,1,rule
+2199,Color Doppler,ultrasound,service,1,rule
+2200,Clinical Psychology,out_of_scope,out_of_scope,1,rule
+2201,Cleft and Craniofacial Surgery,out_of_scope,out_of_scope,1,rule
+2202,Clear aligners,out_of_scope,out_of_scope,1,llm
+2203,Circumcision,out_of_scope,out_of_scope,1,llm
+2204,Children Eye care,out_of_scope,out_of_scope,1,rule
+2205,Child & Adolescent Counselling,out_of_scope,out_of_scope,1,rule
+2206,Chest Physician,too_general,too_general,1,rule
+2207,Chest Medicine,too_general,too_general,1,rule
+2208,Cavity Filling,out_of_scope,out_of_scope,1,llm
+2209,Care/risk management of women's health,too_general,too_general,1,llm
+2210,Care/risk management of pediatric asthma,too_general,too_general,1,llm
+2211,Care/risk management of heart disease,too_general,too_general,1,llm
+2212,Care/risk management of diabetes,out_of_scope,out_of_scope,1,rule
+2213,Care/risk management of adult asthma,too_general,too_general,1,llm
+2214,Cardiothoracic Surgery,cardiac_surgery,service,1,rule
+2215,Cardiology and Critical Coronary Care,too_general,too_general,1,rule
+2216,Cardio-Thoracic,cardiac_surgery,service,1,rule
+2217,Cardiac Sciences,too_general,too_general,1,rule
+2218,Cardiac Rehabilitation,too_general,too_general,1,rule
+2219,Cardiac Electrophysiology,too_general,too_general,1,rule
+2220,Cardiac Diseases,too_general,too_general,1,rule
+2221,Cancer Surgery,surgical_oncology,service,1,rule
+2222,Constipation,out_of_scope,out_of_scope,1,llm
+2223,Contoura Vision,out_of_scope,out_of_scope,1,llm
+2224,Ca Maxilla,out_of_scope,out_of_scope,1,llm
+2225,Contract Genetic Testing,out_of_scope,out_of_scope,1,rule
+2226,Dental implants,out_of_scope,out_of_scope,1,rule
+2227,Dental Veneers,out_of_scope,out_of_scope,1,rule
+2228,Dental Science,out_of_scope,out_of_scope,1,rule
+2229,Dental Medicine,out_of_scope,out_of_scope,1,rule
+2230,Dental Lab,out_of_scope,out_of_scope,1,rule
+2231,Dental Implants,out_of_scope,out_of_scope,1,rule
+2232,Dental Implantology,out_of_scope,out_of_scope,1,rule
+2233,Deep Scaling and Polishing,out_of_scope,out_of_scope,1,llm
+2234,DNA Sexing,out_of_scope,out_of_scope,1,llm
+2235,DEXA,out_of_scope,out_of_scope,1,llm
+2236,Cytology & Histopathology,out_of_scope,out_of_scope,1,rule
+2237,Cytogenetics,out_of_scope,out_of_scope,1,rule
+2238,Cystolitholapaxy,out_of_scope,out_of_scope,1,llm
+2239,Ctvs,cardiac_surgery,service,1,rule
+2240,Crowns,out_of_scope,out_of_scope,1,llm
+2241,Crown and Bridge,out_of_scope,out_of_scope,1,llm
+2242,Crown Lengthening,out_of_scope,out_of_scope,1,llm
+2243,Crown & Bridges,out_of_scope,out_of_scope,1,llm
+2244,Critaical Care & Emergency,emergency_24x7,service,1,llm
+2245,Counseling/Clinical Psychology,out_of_scope,out_of_scope,1,rule
+2246,Cosmetology & Dermatology,out_of_scope,out_of_scope,1,rule
+2247,Cosmetology,out_of_scope,out_of_scope,1,rule
+2248,Cosmetics Dentistry,out_of_scope,out_of_scope,1,rule
+2249,Cosmetic and Plastic Surgery,out_of_scope,out_of_scope,1,rule
+2250,Cosmetic Surgery,out_of_scope,out_of_scope,1,rule
+2251,Corneal Disease,out_of_scope,out_of_scope,1,rule
+2252,Corneal Cross Linking,out_of_scope,out_of_scope,1,rule
+2253,Ca Thyroid,out_of_scope,out_of_scope,1,rule
+2254,CVTS,cardiac_surgery,service,1,rule
+2255,Hypertension Management,out_of_scope,out_of_scope,1,llm
+2256,Armd treatment,out_of_scope,out_of_scope,1,llm
+2257,Ankylosing Spondylitis,out_of_scope,out_of_scope,1,llm
+2258,Anesthesiology Department,too_general,too_general,1,rule
+2259,Anesthesiology,too_general,too_general,1,rule
+2260,Anal Warts,out_of_scope,out_of_scope,1,rule
+2261,Anal Polyp,out_of_scope,out_of_scope,1,rule
+2262,Anal Fistula,out_of_scope,out_of_scope,1,rule
+2263,Anal Fissure,out_of_scope,out_of_scope,1,rule
+2264,Anal Abscess,out_of_scope,out_of_scope,1,rule
+2265,Anaesthesiology & Critical Care,icu,service,1,rule
+2266,Anaesthesia & Intensive Care,icu,service,1,rule
+2267,Anaesthesia & Critical Care,icu,service,1,rule
+2268,All on 4/6 implant,out_of_scope,out_of_scope,1,llm
+2269,Acupressure,out_of_scope,out_of_scope,1,llm
+2270,Acne Scar Treatment,out_of_scope,out_of_scope,1,llm
+2271,Accident & Trauma,trauma_care,service,1,rule
+2272,Abbe Flap Ca Lip,out_of_scope,out_of_scope,1,llm
+2273,AV Fistula creation for dialysis,dialysis,service,1,rule
+2274,ABO-i Kidney Transplant,kidney_transplant,service,1,rule
+2275,3d_4d_Sonography,ultrasound,service,1,rule
+2276,3D-4D Sonography and Ultrasound,ultrasound,service,1,rule
+2277,24 hrs Digital X Ray,out_of_scope,out_of_scope,1,llm
+2278,24 hrs Diagnostics,out_of_scope,out_of_scope,1,rule
+2279, skullBaseNeurosurgery,neurosurgery,service,1,rule
+2280, reproductiveEndocrinologyAndInfertility,out_of_scope,out_of_scope,1,rule
+2281, oralAndMaxillofacialSurgery,out_of_scope,out_of_scope,1,rule
+2282, ShoulderAndElbowOrthopedicSurgery,out_of_scope,out_of_scope,1,rule
+2283, Obstetrics?,too_general,too_general,1,rule
+2284,Anxiety,psychiatric_care,service,1,llm
+2285,Arthritis,out_of_scope,out_of_scope,1,rule
+2286,CONTURA LASIK LASER,out_of_scope,out_of_scope,1,rule
+2287,Arthritis Management,out_of_scope,out_of_scope,1,rule
+2288,CBCT,out_of_scope,out_of_scope,1,manual
+2289,CARDIOLOGY & ENT,too_general,too_general,1,rule
+2290,Burns Management,burn_care,service,1,rule
+2291,Broken Tooth repair,out_of_scope,out_of_scope,1,rule
+2292,Bridges,out_of_scope,out_of_scope,1,llm
+2293,Breast and Thoracic Oncology,surgical_oncology,service,1,rule
+2294,Breast Surgeries,out_of_scope,out_of_scope,1,rule
+2295,Breast Oncology and reconstruction,surgical_oncology,service,1,rule
+2296,Breast Cancer,too_general,too_general,1,rule
+2297,Brachial Plexus Surgery,out_of_scope,out_of_scope,1,rule
+2298,Braces,out_of_scope,out_of_scope,1,llm
+2299,Bone marrow Transplant,chemotherapy,service,1,rule
+2300,Bone Tumor Treatment,surgical_oncology,service,1,manual
+2301,Bone Marrow Transplant,chemotherapy,service,1,rule
+2302,Bone Grafting,orthopaedic_trauma_surgery,service,1,llm
+2303,BlastocystTransfer,out_of_scope,out_of_scope,1,llm
+2304,Birthmark Removal,out_of_scope,out_of_scope,1,llm
+2305,Binocular Vision and Orthoptic,out_of_scope,out_of_scope,1,rule
+2306,Binocular Vision & Squint,out_of_scope,out_of_scope,1,rule
+2307,Bariatrics,out_of_scope,out_of_scope,1,rule
+2308,BONE MARROW TRANSPLANT,chemotherapy,service,1,rule
+2309,Ayurvedic Treatments,out_of_scope,out_of_scope,1,rule
+2310,Audiology,out_of_scope,out_of_scope,1,rule
+2311,Audiologists,out_of_scope,out_of_scope,1,rule
+2312,Audiologist,out_of_scope,out_of_scope,1,rule
+2313,Arthroscopy & Sports Medicine,out_of_scope,out_of_scope,1,rule
+2314,Arthroscopic Surgeries,out_of_scope,out_of_scope,1,rule
+2315,Dentistry & Maxillofacial Surgery,out_of_scope,out_of_scope,1,rule
+2316,Dentistry - General Dentistry,out_of_scope,out_of_scope,1,rule
+2317,Dentistry - Oral Surgery,out_of_scope,out_of_scope,1,rule
+2318,Hair Fall Treatment,out_of_scope,out_of_scope,1,rule
+2319,Haematology & Haemato Oncology,chemotherapy,service,1,rule
+2320,HPB & GI Surgery,out_of_scope,out_of_scope,1,rule
+2321,HIPEC and Peritoneal Surface Malignancy (PSM),out_of_scope,out_of_scope,1,rule
+2322,Gynecology,out_of_scope,out_of_scope,1,rule
+2323,Gynecological Cancer,too_general,too_general,1,rule
+2324,Gynaecosmastia,out_of_scope,out_of_scope,1,llm
+2325,Gynaecology & obstetrics,too_general,too_general,1,rule
+2326,Gynaecologic Oncology,surgical_oncology,service,1,rule
+2327,Gynae Oncology,surgical_oncology,service,1,llm
+2328,Gum treatments,out_of_scope,out_of_scope,1,llm
+2329,Gum Depigmentation,out_of_scope,out_of_scope,1,llm
+2330,GlaucomaServices,out_of_scope,out_of_scope,1,rule
+2331,Glaucoma,out_of_scope,out_of_scope,1,rule
+2332,Geriatric dermatology,out_of_scope,out_of_scope,1,rule
+2333,Geriatric Care,out_of_scope,out_of_scope,1,rule
+2334,Genomics,out_of_scope,out_of_scope,1,rule
+2335,Genital Surgeries,out_of_scope,out_of_scope,1,llm
+2336,GeneticTesting,out_of_scope,out_of_scope,1,rule
+2337,Genetic screening,out_of_scope,out_of_scope,1,rule
+2338,General Internal Medicine,too_general,too_general,1,llm
+2339,General / Community Dentistry,out_of_scope,out_of_scope,1,rule
+2340,Gastroscience,out_of_scope,out_of_scope,1,rule
+2341,Gastrointestinal Surgery,out_of_scope,out_of_scope,1,rule
+2342,Gastrointestinal Oncology,out_of_scope,out_of_scope,1,rule
+2343,Gastroenterology & Hepatology,out_of_scope,out_of_scope,1,rule
+2344,Gastroenterology & Hepatobiliary Surgery,out_of_scope,out_of_scope,1,rule
+2345,Gastro Sciences,out_of_scope,out_of_scope,1,rule
+2346,"Haematology, Haemato-Oncology & Bone Marrow Transplant",chemotherapy,service,1,rule
+2347,Hair Transplantation,too_general,too_general,1,rule
+2348,Dentistry - Orthodontic,out_of_scope,out_of_scope,1,rule
+2349,Head & Neck Oncology,surgical_oncology,service,1,rule
+2350,Hyperlipidaemia Management,out_of_scope,out_of_scope,1,llm
+2351,Homeopathic,out_of_scope,out_of_scope,1,rule
+2352,Home Visits,not_a_service,not_a_service,1,llm
+2353,Home Collection,not_a_service,not_a_service,1,llm
+2354,Histopathology & Cytology,out_of_scope,out_of_scope,1,rule
+2355,Hip Replacement Surgery,out_of_scope,out_of_scope,1,rule
+2356,Hip Replacement Specialist,out_of_scope,out_of_scope,1,rule
+2357,Hip & Knee Reconstructive Surgeon,out_of_scope,out_of_scope,1,rule
+2358,Hernia surgery,out_of_scope,out_of_scope,1,rule
+2359,Hepatology and Liver disease management,out_of_scope,out_of_scope,1,rule
+2360,HepatobiliarySurgery,out_of_scope,out_of_scope,1,rule
+2361,Hepato-Pancreato-Biliary,out_of_scope,out_of_scope,1,rule
+2362,Hepato-Biliary-Pancreatic,out_of_scope,out_of_scope,1,rule
+2363,Hematopathology,out_of_scope,out_of_scope,1,rule
+2364,Hematology & Hemato Oncology,chemotherapy,service,1,rule
+2365,Hemato-Oncology,chemotherapy,service,1,rule
+2366,Hemato Oncology & BMT,chemotherapy,service,1,rule
+2367,Hemato Oncology,chemotherapy,service,1,rule
+2368,Heart & Lung Transplant,too_general,too_general,1,rule
+2369,Healthcare Tourism,not_a_service,not_a_service,1,llm
+2370,Health Checkups,too_general,too_general,1,llm
+2371,HeadAndNeckSurgeryOtolaryngology,out_of_scope,out_of_scope,1,rule
+2372,HeadAndNeckOncosurgery,surgical_oncology,service,1,rule
+2373,Head and neck oncology,surgical_oncology,service,1,rule
+2374,Head and Neck Cancer,too_general,too_general,1,rule
+2375,Head Neck Oncologist,surgical_oncology,service,1,llm
+2376,Head And Neck Oncosurgery,surgical_oncology,service,1,rule
+2377,Gas & Acidity,out_of_scope,out_of_scope,1,llm
+2378,GI oncology,surgical_oncology,service,1,rule
+2379,GI SURGERY,out_of_scope,out_of_scope,1,rule
+2380,GI Cancer,too_general,too_general,1,rule
+2381,EggDonation,out_of_scope,out_of_scope,1,llm
+2382,Ear Reconstruction,out_of_scope,out_of_scope,1,rule
+2383,Ear Nose Throat Surgery,out_of_scope,out_of_scope,1,rule
+2384,"ENT, Head & Neck Surgery",out_of_scope,out_of_scope,1,rule
+2385,ENT and Skull Base Surgery,neurosurgery,service,1,rule
+2386,ENT and Head & Neck Surgery,out_of_scope,out_of_scope,1,rule
+2387,ENT / Otorhinolaryngology,out_of_scope,out_of_scope,1,rule
+2388,ENT (Otolaryngology),out_of_scope,out_of_scope,1,rule
+2389,Dry Eyes,out_of_scope,out_of_scope,1,llm
+2390,Dry Eye Clinic,out_of_scope,out_of_scope,1,rule
+2391,Digital Smile Designing,out_of_scope,out_of_scope,1,rule
+2392,Dietics,out_of_scope,out_of_scope,1,llm
+2393,Dietician,out_of_scope,out_of_scope,1,llm
+2394,Dietetics And Nutrition,out_of_scope,out_of_scope,1,rule
+2395,Diagnostic Testing,too_general,too_general,1,llm
+2396,DiabeticEyecare,out_of_scope,out_of_scope,1,rule
+2397,Diabetic Foot Surgery,out_of_scope,out_of_scope,1,rule
+2398,Diabetes Management,out_of_scope,out_of_scope,1,rule
+2399,Diabetes,out_of_scope,out_of_scope,1,rule
+2400,Developmental Paediatrics,out_of_scope,out_of_scope,1,rule
+2401,Dermatosurgery,out_of_scope,out_of_scope,1,rule
+2402,Dermato Surgery,out_of_scope,out_of_scope,1,rule
+2403,Depression,psychiatric_care,service,1,llm
+2404,Dentofacial Orthopedics,out_of_scope,out_of_scope,1,rule
+2405,Dentistry - Prosthodontic,out_of_scope,out_of_scope,1,rule
+2406,Dentistry - Periodontal,out_of_scope,out_of_scope,1,rule
+2407,Dentistry - Pediatric Dentistry,out_of_scope,out_of_scope,1,rule
+2408,Electrophysiology,out_of_scope,out_of_scope,1,rule
+2409,Emergency Trauma Care,trauma_care,service,1,rule
+2410,EndoUrology,out_of_scope,out_of_scope,1,rule
+2411,Feat Scans,out_of_scope,out_of_scope,1,llm
+2412,GI & Uro-Oncology,surgical_oncology,service,1,rule
+2413,GENERAL MEDICINE,too_general,too_general,1,rule
+2414,GASTROENTEROLOGIST,out_of_scope,out_of_scope,1,rule
+2415,Full mouth Dental Implants,out_of_scope,out_of_scope,1,rule
+2416,Full Mouth Rehabilitation,out_of_scope,out_of_scope,1,rule
+2417,Full Mouth Reconstruction,out_of_scope,out_of_scope,1,llm
+2418,Fluoride Application & Sealants,out_of_scope,out_of_scope,1,llm
+2419,Flap Surgery,out_of_scope,out_of_scope,1,rule
+2420,Fixed Prosthodontics,out_of_scope,out_of_scope,1,rule
+2421,Fistula In Ano,out_of_scope,out_of_scope,1,llm
+2422,Fillings,out_of_scope,out_of_scope,1,llm
+2423,Fertility Preservation,out_of_scope,out_of_scope,1,rule
+2424,Family Medicine,too_general,too_general,1,rule
+2425,Endocrine Surgery,out_of_scope,out_of_scope,1,rule
+2426,Faciomaxillary,out_of_scope,out_of_scope,1,llm
+2427,Excessive sweating treatment,out_of_scope,out_of_scope,1,llm
+2428,Esophageal & stomach cancer surgeries,surgical_oncology,service,1,rule
+2429,Erectile Dysfunction & Infertility,out_of_scope,out_of_scope,1,rule
+2430,Erectile Dysfunction,out_of_scope,out_of_scope,1,llm
+2431,EntAndHeadNeckSurgery,out_of_scope,out_of_scope,1,rule
+2432,Ent,out_of_scope,out_of_scope,1,rule
+2433,Endourology,out_of_scope,out_of_scope,1,rule
+2434,Endoscopy & Laproscopy,out_of_scope,out_of_scope,1,rule
+2435,Endoscopy,out_of_scope,out_of_scope,1,rule
+2436,Endometriosis,out_of_scope,out_of_scope,1,llm
+2437,Endodontics and Conservative Dentistry,out_of_scope,out_of_scope,1,rule
+2438,Respiratory Diseases Management,out_of_scope,out_of_scope,1,llm
+2439,Retinal Detachment,eye_emergency,service,1,rule
+2440,Retinal Diseases,out_of_scope,out_of_scope,1,rule
+2441,contactLensAndLowVisionServices,out_of_scope,out_of_scope,1,rule
+2442,congenitalDeformities,out_of_scope,out_of_scope,1,llm
+2443,computerVisionSyndrome,out_of_scope,out_of_scope,1,llm
+2444,computerNavigationJointReplacement,out_of_scope,out_of_scope,1,rule
+2445,computerGuidedImplantSurgery,out_of_scope,out_of_scope,1,rule
+2446,comprehensiveOralHealthcare,out_of_scope,out_of_scope,1,rule
+2447,comprehensiveOphthalmology,out_of_scope,out_of_scope,1,rule
+2448,comprehensiveEyeExaminations,out_of_scope,out_of_scope,1,rule
+2449,comprehensiveEyeExamination,out_of_scope,out_of_scope,1,rule
+2450,complexTrauma,trauma_care,service,1,rule
+2451,completeDentistry,out_of_scope,out_of_scope,1,rule
+2452,complementaryMedicineBowenTechnique,out_of_scope,out_of_scope,1,llm
+2453,communityOralHealthCareProgram,out_of_scope,out_of_scope,1,rule
+2454,communityOncology,too_general,too_general,1,llm
+2455,communityHealth,not_a_service,not_a_service,1,llm
+2456,communityDentistryPublicHealthDentistry,out_of_scope,out_of_scope,1,rule
+2457,communityAndPublicHealth,not_a_service,not_a_service,1,llm
+2458,colorectalSurgeon,out_of_scope,out_of_scope,1,rule
+2459,colorDoppler,ultrasound,service,1,rule
+2460,cochlearImplantEvaluationAndRehabilitation,out_of_scope,out_of_scope,1,rule
+2461,coagulation,out_of_scope,out_of_scope,1,llm
+2462,clinicalpsychology,out_of_scope,out_of_scope,1,rule
+2463,clinicalResearch,not_a_service,not_a_service,1,llm
+2464,clinicalPharmacology,too_general,too_general,1,llm
+2465,clinicalNutritionAndDietitics,out_of_scope,out_of_scope,1,rule
+2466,clinicalMicrobiologyAndSerology,out_of_scope,out_of_scope,1,rule
+2467,clinicalMicrobiology,out_of_scope,out_of_scope,1,rule
+2468,clinicalLaboratoryServicesTranslationalResearch,out_of_scope,out_of_scope,1,rule
+2469,conservatives,not_a_service,not_a_service,1,llm
+2470,contouraVision,out_of_scope,out_of_scope,1,llm
+2471,clinicalHermatology,too_general,too_general,1,fuzzy
+2472,contouraVisionTreatment,out_of_scope,out_of_scope,1,llm
+2473,cvJunctionSurgery,out_of_scope,out_of_scope,1,rule
+2474,ctvs,cardiac_surgery,service,1,rule
+2475,crownsAndBridgesFixing,out_of_scope,out_of_scope,1,llm
+2476,crowns,out_of_scope,out_of_scope,1,llm
+2477,crown&bridges,out_of_scope,out_of_scope,1,llm
+2478,criticalIntensiveCare,icu,service,1,rule
+2479,criticalCareIntensiveCare,icu,service,1,rule
+2480,criticalCareDoctor,icu,service,1,rule
+2481,critical-care,icu,service,1,rule
+2482,craniofacialSurgery,out_of_scope,out_of_scope,1,rule
+2483,craniofacialAndAestheticSurgery,out_of_scope,out_of_scope,1,rule
+2484,counselling,out_of_scope,out_of_scope,1,rule
+2485,cosmetology-Dermatology,out_of_scope,out_of_scope,1,rule
+2486,cosmeticsAndAestheticsDentistry,out_of_scope,out_of_scope,1,rule
+2487,cosmetics,out_of_scope,out_of_scope,1,rule
+2488,cosmeticGynocology,out_of_scope,out_of_scope,1,rule
+2489,cosmeticDentists,out_of_scope,out_of_scope,1,rule
+2490,cosmeticBonding,out_of_scope,out_of_scope,1,rule
+2491,cosmeticAndReconstructiveSurgery,out_of_scope,out_of_scope,1,rule
+2492,cosmeticAndAestheticSurgery,out_of_scope,out_of_scope,1,rule
+2493,cosmeticAestheticDentistry,out_of_scope,out_of_scope,1,rule
+2494,coronaryAngioplasty,cath_lab_angioplasty,service,1,rule
+2495,cornealTransplantation,too_general,too_general,1,rule
+2496,cornealTransplantSurgery,too_general,too_general,1,rule
+2497,cornealCollagenCross-Linking,out_of_scope,out_of_scope,1,rule
+2498,cornealAndScleralDiseases,out_of_scope,out_of_scope,1,rule
+2499,corneaTransplantation,too_general,too_general,1,rule
+2500,clinicalImmunologyRheumatology,out_of_scope,out_of_scope,1,rule
+2501,clinicalHematologyHematoOncology,chemotherapy,service,1,rule
+2502,cancerScreeningCentre,out_of_scope,out_of_scope,1,llm
+2503,cardiologyCare,too_general,too_general,1,rule
+2504,cardiologyAndInterventionalCardiology,cath_lab_angioplasty,service,1,rule
+2505,cardiologyAndElectrophysiology,too_general,too_general,1,rule
+2506,cardiologyAndCriticalCoronaryCare,too_general,too_general,1,rule
+2507,cardioVascularSurgeon,out_of_scope,out_of_scope,1,rule
+2508,cardioVascularAndThoracicSurgery,out_of_scope,out_of_scope,1,rule
+2509,cardioThoracicVascularSurgery,cardiac_surgery,service,1,rule
+2510,cardioOncology,too_general,too_general,1,llm
+2511,cardiacSurgeon,cardiac_surgery,service,1,rule
+2512,cardiacRehabilitationAndPhysiotherapy,too_general,too_general,1,rule
+2513,cardiacPhysiotherapy,too_general,too_general,1,rule
+2514,cardiacInvasiveProcedures,too_general,too_general,1,rule
+2515,cardiacIntensiveCare,icu,service,1,rule
+2516,cardiacElectroPhysiology,too_general,too_general,1,rule
+2517,cardiacElectroPhysiologist,too_general,too_general,1,rule
+2518,cardiacDiagnostics,too_general,too_general,1,rule
+2519,cardiacCatheterisation,cath_lab_angioplasty,service,1,rule
+2520,cardiacAndCardiothoracicSurgery,cardiac_surgery,service,1,rule
+2521,cardiacAnaesthesiology,too_general,too_general,1,rule
+2522,cardiac-surgery,cardiac_surgery,service,1,rule
+2523,cardiac surgeon,cardiac_surgery,service,1,rule
+2524,cardiac,too_general,too_general,1,rule
+2525,carTCellTherapy,chemotherapy,service,1,rule
+2526,carTCell,chemotherapy,service,1,rule
+2527,capsuleEndoscopy,out_of_scope,out_of_scope,1,rule
+2528,cancerVaccination,out_of_scope,out_of_scope,1,rule
+2529,cancerSurgery,surgical_oncology,service,1,rule
+2530,cancerSurgeries,surgical_oncology,service,1,rule
+2531,cardiologyCardiacSurgery,cardiac_surgery,service,1,rule
+2532,cardiologyInterventional,too_general,too_general,1,rule
+2533,clinicalCardiology,too_general,too_general,1,rule
+2534,cardiologyTests,too_general,too_general,1,rule
+2535,clinicalCardiologist,too_general,too_general,1,rule
+2536,clinicalBiochemistryAndTherapeuticDrugMonitoring,out_of_scope,out_of_scope,1,rule
+2537,cleftLipAndPalateSurgery,out_of_scope,out_of_scope,1,rule
+2538,circumcision,out_of_scope,out_of_scope,1,llm
+2539,chronicRenalFailure,out_of_scope,out_of_scope,1,llm
+2540,chronicPain,out_of_scope,out_of_scope,1,rule
+2541,chromotherapyAndMagnetotherapy,out_of_scope,out_of_scope,1,llm
+2542,childrenDentistry,out_of_scope,out_of_scope,1,rule
+2543,childhoodCataracts,cataract_surgery,service,1,rule
+2544,childNutritionist,out_of_scope,out_of_scope,1,rule
+2545,childDentistry,out_of_scope,out_of_scope,1,rule
+2546,childAndAdolescentPsychiatrist,psychiatric_care,service,1,rule
+2547,chestAndAllergy,too_general,too_general,1,rule
+2548,chest medicine,too_general,too_general,1,rule
+2549,chalazion,out_of_scope,out_of_scope,1,llm
+2550,cervicalSpondylosis,out_of_scope,out_of_scope,1,llm
+2551,cataractSurgery,cataract_surgery,service,1,rule
+2552,cataractSurgeon,cataract_surgery,service,1,rule
+2553,cataractAndRefractiveLensSurgery,cataract_surgery,service,1,rule
+2554,cataractAndLensImplantation,cataract_surgery,service,1,rule
+2555,cataract,cataract_surgery,service,1,rule
+2556,castPartialDenture,out_of_scope,out_of_scope,1,rule
+2557,cardiovascularThoracic,too_general,too_general,1,llm
+2558,cardiovascularCareServices,too_general,too_general,1,llm
+2559,cardiothoracicSurgeon,cardiac_surgery,service,1,rule
+2560,cardiothoracicAndCardiovascularSurgery,cardiac_surgery,service,1,rule
+2561,cardiologyThrombolysis,too_general,too_general,1,rule
+2562,cytogenetic,out_of_scope,out_of_scope,1,rule
+2563,d dentistry,out_of_scope,out_of_scope,1,rule
+2564,danceAndMovement,not_a_service,not_a_service,1,llm
+2565,endoscopicAssistedSpineSurgery,too_general,too_general,1,rule
+2566,endodontia,out_of_scope,out_of_scope,1,rule
+2567,endocrinologyAndEndocrineSurgery,out_of_scope,out_of_scope,1,rule
+2568,endocrinologyAndDiabetes,out_of_scope,out_of_scope,1,rule
+2569,endocrinologist,out_of_scope,out_of_scope,1,rule
+2570,endocrineAndDiabetesAndMetabolism,out_of_scope,out_of_scope,1,rule
+2571,emergencymedicine,emergency_24x7,service,1,fuzzy
+2572,emergencyRadiology,too_general,too_general,1,llm
+2573,emergencyMedicineDoctor,emergency_24x7,service,1,rule
+2574,electroconvulsiveTherapy,out_of_scope,out_of_scope,1,llm
+2575,elderlyDentistry,out_of_scope,out_of_scope,1,rule
+2576,elbowJointReplacement,out_of_scope,out_of_scope,1,rule
+2577,ectopicPregnancy,out_of_scope,out_of_scope,1,llm
+2578,echocardiologist,too_general,too_general,1,rule
+2579,earwaxRemoval,out_of_scope,out_of_scope,1,llm
+2580,earReconstructionSurgery,out_of_scope,out_of_scope,1,rule
+2581,earNoseThroatSurgery,out_of_scope,out_of_scope,1,rule
+2582,earNoseThroat,out_of_scope,out_of_scope,1,rule
+2583,ear-nose-throat (ENT) specialist,out_of_scope,out_of_scope,1,rule
+2584,dysphonia,out_of_scope,out_of_scope,1,llm
+2585,dnaSexing,out_of_scope,out_of_scope,1,llm
+2586,divyaang,not_a_service,not_a_service,1,llm
+2587,distractionOsteogenesis,out_of_scope,out_of_scope,1,llm
+2588,discReplacementSurgery,out_of_scope,out_of_scope,1,rule
+2589,digitalEyeStrain,out_of_scope,out_of_scope,1,rule
+2590,dietitianAndDiabetesEducator,out_of_scope,out_of_scope,1,rule
+2591,dietician,out_of_scope,out_of_scope,1,llm
+2592,dieteticsAndWeightLoss,out_of_scope,out_of_scope,1,rule
+2593,endodontist,out_of_scope,out_of_scope,1,rule
+2594,endoscopicGynaecology,out_of_scope,out_of_scope,1,rule
+2595,dental implants,out_of_scope,out_of_scope,1,rule
+2596,endoscopicMinimallyInvasiveNeurosurgery,neurosurgery,service,1,rule
+2597,eyeProsthesis,out_of_scope,out_of_scope,1,rule
+2598,eyeHospital,too_general,too_general,1,rule
+2599,eyeExaminationProcedures,out_of_scope,out_of_scope,1,rule
+2600,eyeCareOphthalmology,out_of_scope,out_of_scope,1,rule
+2601,eyeCare,too_general,too_general,1,rule
+2602,eyeBankServices,out_of_scope,out_of_scope,1,rule
+2603,evaporativeDryEye,out_of_scope,out_of_scope,1,rule
+2604,estheticDentistry,out_of_scope,out_of_scope,1,rule
+2605,esophagoGastricSurgery,out_of_scope,out_of_scope,1,rule
+2606,erectileDysfunction,out_of_scope,out_of_scope,1,llm
+2607,epiretinalMembrane,out_of_scope,out_of_scope,1,rule
+2608,epileptologist,out_of_scope,out_of_scope,1,llm
+2609,epilepsySurgery,out_of_scope,out_of_scope,1,rule
+2610,epilepsyCentre,out_of_scope,out_of_scope,1,llm
+2611,epidemicDisease,not_a_service,not_a_service,1,llm
+2612,environmentalAndOccupationalHealth,not_a_service,not_a_service,1,llm
+2613,entSurgery,out_of_scope,out_of_scope,1,rule
+2614,entSurgeon,out_of_scope,out_of_scope,1,rule
+2615,entOtolaryngologists,out_of_scope,out_of_scope,1,rule
+2616,entHeadAndNeckSurgery,out_of_scope,out_of_scope,1,rule
+2617,engineeringAndMaintenance,not_a_service,not_a_service,1,llm
+2618,endourologicalSurgery,out_of_scope,out_of_scope,1,rule
+2619,endoscopyServices,out_of_scope,out_of_scope,1,rule
+2620,endoscopyAndMedicalGastroenterology,out_of_scope,out_of_scope,1,rule
+2621,endoscopyAndLaparoscopy,too_general,too_general,1,rule
+2622,endoscopicSurgeries,out_of_scope,out_of_scope,1,rule
+2623,endoscopicNeuroSurgery,neurosurgery,service,1,rule
+2624,dietAndNutritionalCounselling,out_of_scope,out_of_scope,1,rule
+2625,diagnosticsRadiology,too_general,too_general,1,fuzzy
+2626,diagnosticsBloodBank,blood_bank,service,1,rule
+2627,diagnostics,out_of_scope,out_of_scope,1,rule
+2628,dentofacial orthopedics,out_of_scope,out_of_scope,1,rule
+2629,dentistryAndOralSurgery,out_of_scope,out_of_scope,1,rule
+2630,dentist,out_of_scope,out_of_scope,1,rule
+2631,dentalXrays,out_of_scope,out_of_scope,1,rule
+2632,dentalX-ray,out_of_scope,out_of_scope,1,rule
+2633,dentalTreatment,out_of_scope,out_of_scope,1,rule
+2634,dentalSurgeon,out_of_scope,out_of_scope,1,rule
+2635,dentalSedation,out_of_scope,out_of_scope,1,rule
+2636,dentalSciences,out_of_scope,out_of_scope,1,rule
+2637,dentalScience,out_of_scope,out_of_scope,1,rule
+2638,dentalRestoration,out_of_scope,out_of_scope,1,rule
+2639,dentalOmfs,out_of_scope,out_of_scope,1,rule
+2640,dentalMaxillofacialRadiology,out_of_scope,out_of_scope,1,rule
+2641,dentalMaxillofacial,out_of_scope,out_of_scope,1,rule
+2642,dentalMaterial,out_of_scope,out_of_scope,1,rule
+2643,dentalLasers,out_of_scope,out_of_scope,1,rule
+2644,dentalLaserTreatment,out_of_scope,out_of_scope,1,rule
+2645,dentalJewellery,out_of_scope,out_of_scope,1,rule
+2646,dentalImaging,out_of_scope,out_of_scope,1,rule
+2647,dentalExams,out_of_scope,out_of_scope,1,rule
+2648,dentalCrown,out_of_scope,out_of_scope,1,rule
+2649,dentalCosmeticAndImplantology,out_of_scope,out_of_scope,1,rule
+2650,dentalCleanings,out_of_scope,out_of_scope,1,rule
+2651,dentalBridges,out_of_scope,out_of_scope,1,rule
+2652,dentalAndOralSurgery,out_of_scope,out_of_scope,1,rule
+2653,dentalAligners,out_of_scope,out_of_scope,1,rule
+2654,dental-specialty-superspecialty,out_of_scope,out_of_scope,1,rule
+2655,dentofacialOrthopaedics,out_of_scope,out_of_scope,1,rule
+2656,dentofacialOrthopedist,out_of_scope,out_of_scope,1,rule
+2657,denture,out_of_scope,out_of_scope,1,rule
+2658,diabeticEyeCare,out_of_scope,out_of_scope,1,rule
+2659,diagnosticTesting,too_general,too_general,1,llm
+2660,diagnosticOtorhinolaryngology,out_of_scope,out_of_scope,1,rule
+2661,diagnosticOphthalmology,out_of_scope,out_of_scope,1,rule
+2662,diagnosticOncology,too_general,too_general,1,llm
+2663,diagnosticNeurology,too_general,too_general,1,llm
+2664,diagnosticEndocrinology,out_of_scope,out_of_scope,1,rule
+2665,diagnosticCardiology,too_general,too_general,1,rule
+2666,diagnosticAndPreventiveDental,out_of_scope,out_of_scope,1,rule
+2667,diagnosticAndAdvancedLaparoscopicSurgery,too_general,too_general,1,rule
+2668,diagnosisAndBiopsy,too_general,too_general,1,llm
+2669,diabeticFootSurgery,out_of_scope,out_of_scope,1,rule
+2670,diabeticFootAndWoundCare,out_of_scope,out_of_scope,1,rule
+2671,diabeticEye,out_of_scope,out_of_scope,1,rule
+2672,departmentOfEndoscopicAnesthesia,too_general,too_general,1,rule
+2673,diabeticCentreOfExcellence,out_of_scope,out_of_scope,1,rule
+2674,diabetesAndObesity,out_of_scope,out_of_scope,1,rule
+2675,diabetesAndMetabolicDisorders,out_of_scope,out_of_scope,1,rule
+2676,developmentalTherapy,out_of_scope,out_of_scope,1,rule
+2677,developmentalSpeechAndLanguageTherapy,out_of_scope,out_of_scope,1,rule
+2678,developmentalDelayTreatment,out_of_scope,out_of_scope,1,rule
+2679,developmentalBehaviorPediatrics,out_of_scope,out_of_scope,1,rule
+2680,dermatology_venereology,out_of_scope,out_of_scope,1,rule
+2681,dermatologyAndVenereology,out_of_scope,out_of_scope,1,rule
+2682,dermatology-cosmetology,out_of_scope,out_of_scope,1,rule
+2683,dermatologist,out_of_scope,out_of_scope,1,rule
+2684,depression,out_of_scope,out_of_scope,1,llm
+2685,cancerStaging,out_of_scope,out_of_scope,1,llm
+2686,cancerScreening,out_of_scope,out_of_scope,1,llm
+2687,Retinal Laser,out_of_scope,out_of_scope,1,rule
+2688,Venerology,out_of_scope,out_of_scope,1,fuzzy
+2689,Veneers & Laminates,out_of_scope,out_of_scope,1,llm
+2690,Vajikarana chikitsa,out_of_scope,out_of_scope,1,llm
+2691,Urology and Andrology,out_of_scope,out_of_scope,1,rule
+2692,Urology Oncology,surgical_oncology,service,1,rule
+2693,Urology & Renal Transplant Surgery,kidney_transplant,service,1,rule
+2694,Urological Cancer Surgery,surgical_oncology,service,1,rule
+2695,Urological Cancer,too_general,too_general,1,rule
+2696,UroSurgery,out_of_scope,out_of_scope,1,rule
+2697,Uro-oncology,surgical_oncology,service,1,rule
+2698,Uro-Oncology,surgical_oncology,service,1,rule
+2699,Uro Surgery,out_of_scope,out_of_scope,1,rule
+2700,Urethral Structure Disease / OIU/Urethroplast,out_of_scope,out_of_scope,1,llm
+2701,UROLOGY,out_of_scope,out_of_scope,1,rule
+2702,Tummy Tuck Surgery,out_of_scope,out_of_scope,1,rule
+2703,Tuberculosis and Respiratory Medicine/Pulmonary Medicine,tb_care,service,1,rule
+2704,Tuberculosis TB and Chest,tb_care,service,1,rule
+2705,Trichology,out_of_scope,out_of_scope,1,rule
+2706,Traumatology,trauma_care,service,1,manual
+2707,Trauma Surgery,trauma_care,service,1,rule
+2708,Trauma Reconstruction,trauma_care,service,1,rule
+2709,Trauma & Orthopaedic,orthopaedic_trauma_surgery,service,1,rule
+2710,Transradial Cardiology,cath_lab_angioplasty,service,1,rule
+2711,Transfusion Medicine,blood_bank,service,1,rule
+2712,Traditional Braces,out_of_scope,out_of_scope,1,llm
+2713,Toxicopathology,out_of_scope,out_of_scope,1,rule
+2714,Tooth extraction,out_of_scope,out_of_scope,1,rule
+2715,Tooth Whitening,out_of_scope,out_of_scope,1,rule
+2716,Venereal disease & sexual problem treatment,out_of_scope,out_of_scope,1,llm
+2717,Verrucous Carcinoma,out_of_scope,out_of_scope,1,llm
+2718,Tongue Tie,out_of_scope,out_of_scope,1,llm
+2719,Visha Chikitsa,out_of_scope,out_of_scope,1,llm
+2720,adultCardiacAnesthesiology,too_general,too_general,1,rule
+2721,adultAndPaediatricOncology,chemotherapy,service,1,rule
+2722,adolescentVaccination,out_of_scope,out_of_scope,1,rule
+2723,adolescentPaediatricianCouncillor,too_general,too_general,1,rule
+2724,adolescentNutritionAndCounseling,out_of_scope,out_of_scope,1,rule
+2725,adolescence,not_a_service,not_a_service,1,llm
+2726,addictionEmergencyMedicine,emergency_24x7,service,1,rule
+2727,acuteRespiratoryFailureArds,ventilator_support,service,1,rule
+2728,acuteRenalFailure,out_of_scope,out_of_scope,1,llm
+2729,acuteLiverFailure,out_of_scope,out_of_scope,1,rule
+2730,acuteChronicKidneyFailureHemodialysis,dialysis,service,1,rule
+2731,acuteCareSurgery,out_of_scope,out_of_scope,1,rule
+2732,acrylicPartialDenture,out_of_scope,out_of_scope,1,rule
+2733,accidentTraumaCare,trauma_care,service,1,rule
+2734,accidentFractureCare,orthopaedic_trauma_surgery,service,1,rule
+2735,accidentEmergencyMedicine,emergency_24x7,service,1,rule
+2736,accidentAndTraumaCare,trauma_care,service,1,rule
+2737,abdominalRadiology,too_general,too_general,1,llm
+2738,Wrinkles Treatment,out_of_scope,out_of_scope,1,llm
+2739,Women’s health and fertility,out_of_scope,out_of_scope,1,rule
+2740,Wisdom tooth extraction,out_of_scope,out_of_scope,1,rule
+2741,Whipple Specimen,out_of_scope,out_of_scope,1,rule
+2742,Weight Management,out_of_scope,out_of_scope,1,llm
+2743,Vitreoretinal,out_of_scope,out_of_scope,1,rule
+2744,Vitreo-Retinal Surgery,out_of_scope,out_of_scope,1,rule
+2745,Vitrectomy,out_of_scope,out_of_scope,1,llm
+2746,Vitiligo Treatment,out_of_scope,out_of_scope,1,llm
+2747,Tooth Coloured FIlling,out_of_scope,out_of_scope,1,rule
+2748,Thumb Recreation,out_of_scope,out_of_scope,1,llm
+2749,cancerRehabilitationCentre,out_of_scope,out_of_scope,1,rule
+2750,Soft tissue sarcoma surgeries,surgical_oncology,service,1,llm
+2751,SmileDesign,out_of_scope,out_of_scope,1,rule
+2752,Smile design,out_of_scope,out_of_scope,1,rule
+2753,Smile correction,out_of_scope,out_of_scope,1,rule
+2754,Smile Design,out_of_scope,out_of_scope,1,rule
+2755,Skin Rejuvenation,out_of_scope,out_of_scope,1,rule
+2756,Shoulder & Elbow OrthopedicSurgery,out_of_scope,out_of_scope,1,rule
+2757,ShalyaTantra,out_of_scope,out_of_scope,1,llm
+2758,Shalya Chikitsa,out_of_scope,out_of_scope,1,llm
+2759,ShalakyaTantra,out_of_scope,out_of_scope,1,llm
+2760,Sexual Medicine,out_of_scope,out_of_scope,1,llm
+2761,SemenAnalysis,out_of_scope,out_of_scope,1,llm
+2762,Scar revision surgery,out_of_scope,out_of_scope,1,rule
+2763,ScalingAndPolishing,out_of_scope,out_of_scope,1,llm
+2764,Scaling & polishing,out_of_scope,out_of_scope,1,llm
+2765,Scaling & Polishing,out_of_scope,out_of_scope,1,llm
+2766,Salakya Chikitsa,out_of_scope,out_of_scope,1,llm
+2767,SQUINT(CrossedEyes),out_of_scope,out_of_scope,1,rule
+2768,SQUINT(Crossed Eyes),out_of_scope,out_of_scope,1,rule
+2769,SNAKE BITE TREATMENT,snakebite_antivenom,service,1,rule
+2770,SKIN,out_of_scope,out_of_scope,1,rule
+2771,Routine Microbiology,out_of_scope,out_of_scope,1,rule
+2772,Robotic Urology,out_of_scope,out_of_scope,1,rule
+2773,Robotic Surgery,out_of_scope,out_of_scope,1,rule
+2774,Robotic Joint Replacement Surgery,out_of_scope,out_of_scope,1,rule
+2775,Rhinoplasty,out_of_scope,out_of_scope,1,rule
+2776,Retinopathy Of Prematurity (ROP),out_of_scope,out_of_scope,1,llm
+2777,Retinology,out_of_scope,out_of_scope,1,llm
+2778,Soft Tissue Grafting,out_of_scope,out_of_scope,1,llm
+2779,Sonography,ultrasound,service,1,rule
+2780,Thoracic Cancer,too_general,too_general,1,rule
+2781,Specialty & cosmetic dentistry,out_of_scope,out_of_scope,1,rule
+2782,TestTubeBaby,out_of_scope,out_of_scope,1,rule
+2783,Teeth Cleaning,out_of_scope,out_of_scope,1,rule
+2784,Tattoo Removal,out_of_scope,out_of_scope,1,llm
+2785,TRAUMA CARE,trauma_care,service,1,rule
+2786,TMJ disorders,out_of_scope,out_of_scope,1,rule
+2787,TMJ disorder,out_of_scope,out_of_scope,1,rule
+2788,TMJ Disorders,out_of_scope,out_of_scope,1,rule
+2789,TESA,out_of_scope,out_of_scope,1,llm
+2790,Swasthavritta,out_of_scope,out_of_scope,1,rule
+2791,Surgical Pathology,out_of_scope,out_of_scope,1,rule
+2792,Surgical Oncologist,surgical_oncology,service,1,rule
+2793,Stricture Urethra,out_of_scope,out_of_scope,1,llm
+2794,Stretch Marks Removal,out_of_scope,out_of_scope,1,llm
+2795,Strabismus,out_of_scope,out_of_scope,1,rule
+2796,Stones,out_of_scope,out_of_scope,1,llm
+2797,Stem Cell Transplantation,too_general,too_general,1,rule
+2798,Stem Cell Transplant,too_general,too_general,1,rule
+2799,Stem Cell Regreneration & Cartilage repair,out_of_scope,out_of_scope,1,llm
+2800,Squint Eye Treatment,out_of_scope,out_of_scope,1,rule
+2801,Squint & Orthoptics,out_of_scope,out_of_scope,1,rule
+2802,Squint,out_of_scope,out_of_scope,1,rule
+2803,SportsMedicinePMR,out_of_scope,out_of_scope,1,rule
+2804,Sports Injury Management,out_of_scope,out_of_scope,1,rule
+2805,Sports Cardiology,too_general,too_general,1,rule
+2806,Spine Surgery,too_general,too_general,1,rule
+2807,Spine & Deformity Connections,too_general,too_general,1,rule
+2808,Speech And Swallowing Therapy,out_of_scope,out_of_scope,1,rule
+2809,adultCongenitalCardiologist,too_general,too_general,1,rule
+2810,adultCriticalCareMedicare,icu,service,1,rule
+2811,advanceLaparoscopicSurgery,too_general,too_general,1,rule
+2812,boneMarrowTransplants,chemotherapy,service,1,rule
+2813,boneAndJoints,out_of_scope,out_of_scope,1,rule
+2814,boneAndJointCentre,out_of_scope,out_of_scope,1,rule
+2815,boneAndJoint,too_general,too_general,1,rule
+2816,bone marrow translant,chemotherapy,service,1,fuzzy
+2817,bone marrow Transplant,chemotherapy,service,1,rule
+2818,bone,out_of_scope,out_of_scope,1,llm
+2819,bloodTransfusionMedicine,blood_bank,service,1,rule
+2820,bloodStorageUnit,blood_bank,service,1,llm
+2821,bloodPressure,out_of_scope,out_of_scope,1,llm
+2822,bloodDiseaseManagement,out_of_scope,out_of_scope,1,llm
+2823,bloodCentre,blood_bank,service,1,rule
+2824,biostatisticsAndDataScience,not_a_service,not_a_service,1,llm
+2825,biostatistics,not_a_service,not_a_service,1,llm
+2826,biofeedback,out_of_scope,out_of_scope,1,llm
+2827,bioChemistryPathologyAndMicrobiology,out_of_scope,out_of_scope,1,rule
+2828,bioChemistry,out_of_scope,out_of_scope,1,fuzzy
+2829,binocularVisionAndOrthoptic,out_of_scope,out_of_scope,1,rule
+2830,billiarySciences,out_of_scope,out_of_scope,1,llm
+2831,benignAndMalignantHematology,too_general,too_general,1,rule
+2832,bariatricSurgeryMetabolic,out_of_scope,out_of_scope,1,rule
+2833,bariatricSurgeryAndMetabolicAssessment,out_of_scope,out_of_scope,1,rule
+2834,balloonAngioplasty,cath_lab_angioplasty,service,1,rule
+2835,ballisticGunShotInjury,out_of_scope,out_of_scope,1,llm
+2836,backAndNeckPain,out_of_scope,out_of_scope,1,rule
+2837,ayurvedic,out_of_scope,out_of_scope,1,rule
+2838,avascularNecrosisOfHip,out_of_scope,out_of_scope,1,rule
+2839,autismTherapy,out_of_scope,out_of_scope,1,rule
+2840,boneMarrowTransplantationUnit,chemotherapy,service,1,rule
+2841,boneMorphogeneticProtein,out_of_scope,out_of_scope,1,rule
+2842,advancedDentistry,out_of_scope,out_of_scope,1,rule
+2843,botoxTherapy,out_of_scope,out_of_scope,1,llm
+2844,cancerRegistryEpidemiology,not_a_service,not_a_service,1,llm
+2845,cancerReconstruction,out_of_scope,out_of_scope,1,llm
+2846,cancerPathology,out_of_scope,out_of_scope,1,rule
+2847,cancerPalliativeMedicine,out_of_scope,out_of_scope,1,rule
+2848,cancerOncology,too_general,too_general,1,llm
+2849,cancerDiagnostics,out_of_scope,out_of_scope,1,rule
+2850,cancerCytogenetics,out_of_scope,out_of_scope,1,rule
+2851,cancer dentistry,out_of_scope,out_of_scope,1,rule
+2852,burnsSurgery,burn_care,service,1,rule
+2853,burnsSpecialist,burn_care,service,1,rule
+2854,burnsManagement,burn_care,service,1,rule
+2855,burnsCenter,burn_care,service,1,rule
+2856,burnUnit,burn_care,service,1,rule
+2857,burnManagement,burn_care,service,1,rule
+2858,breastSurgicalOncology,surgical_oncology,service,1,rule
+2859,breastReduction,out_of_scope,out_of_scope,1,rule
+2860,breastPathology,out_of_scope,out_of_scope,1,rule
+2861,breastOncoSurgery,surgical_oncology,service,1,rule
+2862,breastHealthGynecologyCenter,out_of_scope,out_of_scope,1,rule
+2863,breastHealthClinic,out_of_scope,out_of_scope,1,rule
+2864,breastCareClinic,out_of_scope,out_of_scope,1,rule
+2865,breastCancerClinic,too_general,too_general,1,rule
+2866,brainTumorSurgery,surgical_oncology,service,1,rule
+2867,brainSpineSurgery,too_general,too_general,1,rule
+2868,brainHaemorrhageStroke,stroke_care,service,1,rule
+2869,bracesTreatment,out_of_scope,out_of_scope,1,llm
+2870,bracesAligners,out_of_scope,out_of_scope,1,llm
+2871,attachmentPartialDentures,out_of_scope,out_of_scope,1,rule
+2872,attachment-partial-dentures,out_of_scope,out_of_scope,1,rule
+2873,asthmaAndAllergy,out_of_scope,out_of_scope,1,rule
+2874,assistedFertility,out_of_scope,out_of_scope,1,rule
+2875,analPolypTreatment,out_of_scope,out_of_scope,1,rule
+2876,anaesthesiologist,too_general,too_general,1,rule
+2877,ambulanceServices,out_of_scope,out_of_scope,1,llm
+2878,alternativeSystemOfMedicine,too_general,too_general,1,llm
+2879,alternativeMedicines,out_of_scope,out_of_scope,1,rule
+2880,alternativeMedicineSpecialist,out_of_scope,out_of_scope,1,rule
+2881,alternativeMedicineAndHolisticHealth,out_of_scope,out_of_scope,1,rule
+2882,alphaMaleFertilityClinic,out_of_scope,out_of_scope,1,rule
+2883,allergyTesting,out_of_scope,out_of_scope,1,rule
+2884,allergyImmunologyRheumatology,out_of_scope,out_of_scope,1,rule
+2885,allergyClinic,out_of_scope,out_of_scope,1,rule
+2886,allergyAndAsthmaSpecialist,out_of_scope,out_of_scope,1,rule
+2887,allergyAndAsthma,out_of_scope,out_of_scope,1,rule
+2888,allergist/immunologist,out_of_scope,out_of_scope,1,rule
+2889,allergist,out_of_scope,out_of_scope,1,rule
+2890,allergicDiseases,out_of_scope,out_of_scope,1,rule
+2891,allSpecialities,too_general,too_general,1,llm
+2892,aligners,out_of_scope,out_of_scope,1,llm
+2893,ageRelatedMacularDegeneration,out_of_scope,out_of_scope,1,llm
+2894,aestheticSurgery,out_of_scope,out_of_scope,1,rule
+2895,aestheticDermatology,out_of_scope,out_of_scope,1,rule
+2896,aerospaceMedicine,out_of_scope,out_of_scope,1,llm
+2897,advancedRoboticSurgery,out_of_scope,out_of_scope,1,rule
+2898,advancedPhysiotherapy,out_of_scope,out_of_scope,1,rule
+2899,advancedPathology,out_of_scope,out_of_scope,1,rule
+2900,advancedMaleAndFemaleInfertility,out_of_scope,out_of_scope,1,rule
+2901,advancedLaparoscopicUrology,too_general,too_general,1,rule
+2902,anaplastology,out_of_scope,out_of_scope,1,llm
+2903,andrologist,out_of_scope,out_of_scope,1,rule
+2904,andrologyAnMaleFertility,out_of_scope,out_of_scope,1,rule
+2905,artTherapy,out_of_scope,out_of_scope,1,llm
+2906,asdVsdDeviceClosure,out_of_scope,out_of_scope,1,llm
+2907,articulationTherapy,out_of_scope,out_of_scope,1,llm
+2908,arthroscopyKnee,out_of_scope,out_of_scope,1,rule
+2909,arthroscopyHip,out_of_scope,out_of_scope,1,rule
+2910,arthroscopyAndSportsInjuries,out_of_scope,out_of_scope,1,rule
+2911,arthroscopicRotatorCuffAndSlapTearRepair,out_of_scope,out_of_scope,1,rule
+2912,arthroscopicLigamentReconstruction,out_of_scope,out_of_scope,1,rule
+2913,arthroscopicAndSpineSurgery,too_general,too_general,1,rule
+2914,arthroscopicAndJointReplacementSurgery,out_of_scope,out_of_scope,1,rule
+2915,arthroplasty,out_of_scope,out_of_scope,1,llm
+2916,arthritisTreatment,out_of_scope,out_of_scope,1,rule
+2917,arthritis,out_of_scope,out_of_scope,1,rule
+2918,arrhythmias,out_of_scope,out_of_scope,1,llm
+2919,andrologyAndEmbryology,out_of_scope,out_of_scope,1,rule
+2920,appendicitis,out_of_scope,out_of_scope,1,llm
+2921,anxietyAndDepression,out_of_scope,out_of_scope,1,llm
+2922,anxiety,out_of_scope,out_of_scope,1,llm
+2923,antenatalAndPostnatalCare,institutional_delivery,service,1,rule
+2924,anorectalClinicalService,out_of_scope,out_of_scope,1,rule
+2925,angiogram,out_of_scope,out_of_scope,1,llm
+2926,anesthesiologyAndPainManagement,out_of_scope,out_of_scope,1,rule
+2927,anesthesiologist,too_general,too_general,1,rule
+2928,anesthesia_pain_management,out_of_scope,out_of_scope,1,rule
+2929,andrologyServices,out_of_scope,out_of_scope,1,rule
+2930,andrologyAndUroOncology,surgical_oncology,service,1,rule
+2931,andrologyAndMaleInfertilityCentre,out_of_scope,out_of_scope,1,rule
+2932,"{""dentistry"":""dentistry""}",out_of_scope,out_of_scope,1,rule

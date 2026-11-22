@@ -1,0 +1,13 @@
+stratum,label,measure,measure_label,rate,lo95,hi95,sentences_supported,sentences_tested,pages
+official_about,Facility's own site,supported,Wording found (exact or 90% fuzzy),0.09581459702525078,0.07827579247406834,0.11644276193498661,277,2891,117
+official_about,Facility's own site,token_supported,Most words found (70% of content words),0.3794534763057765,0.34363875910120223,0.4146487011996321,1097,2891,117
+aggregator_about,Aggregator page about it,supported,Wording found (exact or 90% fuzzy),0.04853128991060025,0.02135678391959799,0.07958921694480103,38,783,32
+aggregator_about,Aggregator page about it,token_supported,Most words found (70% of content words),0.15708812260536398,0.10609979101358412,0.21053135712845328,123,783,32
+list_page,Listing page,supported,Wording found (exact or 90% fuzzy),0.014742014742014743,0.0048484848484848485,0.026151930261519303,12,814,33
+list_page,Listing page,token_supported,Most words found (70% of content words),0.14004914004914004,0.09336609336609336,0.190420635454882,114,814,33
+government,Government portal,supported,Wording found (exact or 90% fuzzy),0.011594202898550725,0.002857142857142857,0.023283495399940374,12,1035,42
+government,Government portal,token_supported,Most words found (70% of content words),0.08695652173913043,0.052154883254414405,0.12535447545645295,90,1035,42
+research,Research paper,supported,Wording found (exact or 90% fuzzy),0.008323424494649227,0.002352941176470588,0.0164749947541442,7,841,34
+research,Research paper,token_supported,Most words found (70% of content words),0.1367419738406659,0.09882024200881304,0.17479191438763378,115,841,34
+all,All tested pages,supported,Wording found (exact or 90% fuzzy),0.05436832181018227,0.04414251235729985,0.06525909019887949,346,6364,258
+all,All tested pages,token_supported,Most words found (70% of content words),0.24182903834066624,0.2176574528821158,0.2667625499644786,1539,6364,258

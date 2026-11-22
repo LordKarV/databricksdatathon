@@ -1,0 +1,96 @@
+{
+ "dev": {
+  "n": 61,
+  "n_pos": 22,
+  "features": [
+   "a_T",
+   "a_n_fields_own",
+   "a_prereq",
+   "a_quarantine_share",
+   "k_text_24x7_any",
+   "b_coords_far_50km",
+   "b_merge_bucket",
+   "c_n_urls",
+   "c_share_official",
+   "d_nabh_listed",
+   "e_has_website",
+   "e_web_service",
+   "f_osm_match",
+   "g_type_hospital",
+   "g_n_specialties"
+  ],
+  "ebm_oof_auc": [
+   0.662004662004662,
+   0.5107086663336663,
+   0.8018082441709444
+  ],
+  "scorecard_oof_auc": [
+   0.6864801864801865,
+   0.5392075163398693,
+   0.8262168213513644
+  ],
+  "text_level_alone_auc": [
+   0.6217948717948718,
+   0.4777604166666667,
+   0.7549044117647059
+  ],
+  "ebm_params": {
+   "outer_bags": 50,
+   "min_samples_leaf": 3,
+   "max_bins": 16,
+   "learning_rate": 0.02
+  },
+  "scorecard_lambda": 1.0
+ },
+ "pu_nabh": {
+  "n": 4216,
+  "n_pos": 2206,
+  "n_states": 29,
+  "features": [
+   "a_T",
+   "a_n_fields_own",
+   "a_n_units_own",
+   "a_prereq",
+   "a_negation",
+   "a_quarantine_share",
+   "a_m_specialties",
+   "k_text_24x7_any",
+   "k_text_pmjay",
+   "k_text_blood_bank",
+   "b_coords_far_50km",
+   "b_votes_against",
+   "b_merge_bucket",
+   "b_directory_phone",
+   "c_n_urls",
+   "c_share_official",
+   "c_share_aggregator",
+   "d_nmc_college",
+   "d_erk_blood_centre_on_site",
+   "d_erk_nearest_km",
+   "e_site_alive",
+   "e_web_service",
+   "e_web_service_page",
+   "f_osm_match",
+   "g_type_hospital",
+   "g_public",
+   "g_log_beds",
+   "g_log_doctors",
+   "g_n_specialties",
+   "service"
+  ],
+  "oof_auc_within_service": 0.7546084718452272,
+  "fold_auc": [
+   0.749093242564589,
+   0.7608763046398678,
+   0.7671029476462824,
+   0.757760977963648,
+   0.7546679338103757
+  ],
+  "text_level_alone_auc": 0.6127488618053227,
+  "ebm_params": {
+   "outer_bags": 14,
+   "min_samples_leaf": 10,
+   "max_bins": 32
+  }
+ }
+}

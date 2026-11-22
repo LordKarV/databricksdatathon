@@ -28,6 +28,18 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "describe_confirm-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "describe_danger-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "note_consent-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "change_location_error-light": {
    "violations": [],
    "horizontal_scroll": false
@@ -80,6 +92,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "data_stories-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "start_first_visit-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -93,6 +109,18 @@
    "horizontal_scroll": false
   },
   "search-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "describe_confirm-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "describe_danger-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "note_consent-dark": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -148,6 +176,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "data_stories-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
@@ -177,23 +209,23 @@
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1041,
-    "gzip": 560
+    "raw": 1165,
+    "gzip": 593
    },
    "/app.css": {
-    "raw": 7067,
-    "gzip": 2361
+    "raw": 7742,
+    "gzip": 2534
    },
    "/app.js": {
-    "raw": 49970,
-    "gzip": 15610
+    "raw": 53761,
+    "gzip": 16579
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 18667,
+  "gzip_total": 19842,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

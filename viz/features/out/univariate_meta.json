@@ -1,0 +1,56 @@
+{
+ "dev_pairs": 88,
+ "dev_searched": 61,
+ "dev_confirmed": 22,
+ "dev_location_facilities": 52,
+ "dev_location_no": 12,
+ "pu_nabh_pairs": 4216,
+ "pu_nabh_pos": 2206,
+ "pu_nabh_pos_by_service": {
+  "cardiac_surgery": {
+   "sum": 531,
+   "count": 1054
+  },
+  "dialysis": {
+   "sum": 488,
+   "count": 1054
+  },
+  "emergency_csection": {
+   "sum": 890,
+   "count": 1054
+  },
+  "trauma_emergency": {
+   "sum": 297,
+   "count": 1054
+  }
+ },
+ "pu_lists_pos": 2397,
+ "pu_lists_pos_by_service": {
+  "burn_care": 19,
+  "cardiac_surgery": 543,
+  "dialysis": 501,
+  "emergency_csection": 988,
+  "mri": 0,
+  "nicu": 4,
+  "trauma_emergency": 342
+ },
+ "n_states_nabh": 29,
+ "n_states_all": 34,
+ "evidence_overlap": {
+  "dev_pairs_with_evidence_urls": 60,
+  "evidence_urls": 89,
+  "pairs_hit": {
+   "record_source_domain": 35,
+   "own_website": 26,
+   "nabh_portal": 3,
+   "any_of_these": 43
+  },
+  "note": "A pair is hit when any evidence URL's domain (or registrable domain) is among the record's cited source domains (derived/v1/source_urls), its crawled own-site domain (kb/crawl/targets), or contains 'nabh'. DEV split only."
+ },
+ "bootstrap": {
+  "dev": 2000,
+  "nabh": 1000,
+  "lists": 300
+ },
+ "min_minority": 5
+}
