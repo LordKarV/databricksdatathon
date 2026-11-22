@@ -12,13 +12,13 @@ import math
 from pathlib import Path
 from typing import Annotated, Literal
 
+from facts.engine import Engine
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
-from pydantic import BaseModel, ConfigDict, Field
-
-from facts.engine import Engine
+from inputs import understand
 from itinerary import attach
+from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES
 from verify.check import Checker
 
@@ -40,6 +40,8 @@ SHELL_FILES: dict[str, str] = {
     "offline.js": "text/javascript; charset=utf-8",
     "slip.js": "text/javascript; charset=utf-8",
     "how.js": "text/javascript; charset=utf-8",
+    "input.js": "text/javascript; charset=utf-8",
+    "lexicon.json": "application/json; charset=utf-8",
     "stories.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
@@ -50,7 +52,8 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 
 def _shell(name: str) -> FileResponse:
     # no-cache = revalidate every time; the service worker, not the HTTP cache, owns offline.
-    return FileResponse(STATIC / name, media_type=SHELL_FILES[name], headers={"Cache-Control": "no-cache"})
+    path = understand.LEXICON if name == "lexicon.json" else STATIC / name
+    return FileResponse(path, media_type=SHELL_FILES[name], headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/")
@@ -140,6 +143,33 @@ def verify(req: VerifyRequest) -> JSONResponse:
     if ch is None:
         return JSONResponse({"error": "website check is not set up on this server"}, status_code=503)
     return JSONResponse(ch.check(req.facility_id, req.service_id), headers={"Cache-Control": "no-store"})
+
+
+class ParseRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: str = Field(min_length=1, max_length=understand.MAX_TEXT)
+
+
+@app.post("/api/parse")
+def parse(req: ParseRequest) -> JSONResponse:
+    """Free text -> a suggested service and the words that decided it (#64). The user confirms with one tap."""
+    return JSONResponse(understand.parse_text(req.text), headers={"Cache-Control": "no-store"})
+
+
+NOTE_IMAGE = r"^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$"
+
+
+class NoteRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    image: str = Field(max_length=4_000_000, pattern=NOTE_IMAGE, description="JPEG re-encoded in the browser")
+
+
+@app.post("/api/read-note")
+def read_note(req: NoteRequest) -> JSONResponse:
+    """Referral-note photo -> detected text and a guarded suggestion (#64). The image is not stored or logged."""
+    return JSONResponse(understand.read_note(req.image), headers={"Cache-Control": "no-store"})
 
 
 HOW = HERE / "howto" / "out" / "how.json"  # built by howto/build.py (git-ignored)
