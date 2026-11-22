@@ -15,7 +15,9 @@
 .mp .pin{fill:var(--go);stroke:var(--surface);stroke-width:2.5}.mp .pin.dbt{fill:var(--surface);stroke:var(--warn);stroke-width:3;stroke-dasharray:4 3}
 .mp .pn{fill:var(--on-go);stroke:none;font-size:13px}.mp .pn.dbt{fill:var(--text)}.mp .me{fill:var(--text);stroke:var(--surface);stroke-width:3}.mp .ink{fill:var(--text);stroke:none}.mp .bar{stroke:var(--text);stroke-width:2;fill:none}
 .mp-hit{position:absolute;width:var(--target);height:var(--target);margin:calc(var(--target)/-2) 0 0 calc(var(--target)/-2);border:0;border-radius:50%;background:transparent;cursor:pointer;padding:0}
-.mp-lf{height:280px;width:100%;border:1px solid var(--line);border-radius:8px;overflow:hidden;z-index:0}
+.mp-lf{height:280px;width:100%;border:1px solid var(--line);border-radius:8px;overflow:hidden;z-index:0;position:relative}
+.mp-lf img{max-width:none!important;max-height:none!important}.mp-lf .leaflet-pane,.mp-lf .leaflet-control{z-index:1}.mp-lf .leaflet-top,.mp-lf .leaflet-bottom{z-index:2}
+.mp-you{display:inline-block;width:12px;height:12px;border-radius:50%;background:#1d4ed8;border:2px solid #fff;box-shadow:0 0 0 1px #1d4ed8;vertical-align:middle;margin-right:6px}
 .mp-n{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font:700 14px var(--font);color:#fff;background:#1b7a3a;border:2px solid #fff;box-shadow:0 1px 3px #0006;box-sizing:border-box}
 .mp-n.amb{background:#b45309}.mp-n.dbt{background:#fff;color:#111;border:3px dashed #b45309}
 .mp-dir{list-style:none;padding:0;margin:.75rem 0 0;display:grid;gap:.5rem}.mp-dir a{display:block;min-height:48px;padding:.75rem 1rem;box-sizing:border-box;border:1px solid var(--line-strong);border-radius:8px;color:var(--text);background:var(--raised);font-weight:600;text-decoration:none;overflow-wrap:anywhere}`;
@@ -183,11 +185,13 @@
   function leaflet() {
     if (window.L && window.L.map) return Promise.resolve(window.L);
     lfP = lfP || new Promise((ok_, no) => {
-      document.head.appendChild(Object.assign(document.createElement('link'), {rel: 'stylesheet', href: LF + '.css'}));
-      const s = Object.assign(document.createElement('script'), {src: LF + '.js', async: true});
-      s.onload = () => (window.L && window.L.map ? ok_(window.L) : no(new Error('no L')));
-      s.onerror = () => no(new Error('leaflet load failed'));
-      document.head.appendChild(s);
+      // the stylesheet must be in before the map is drawn: without it tiles and labels pile up on top of each other
+      const css = new Promise((y, n) => document.head.appendChild(Object.assign(document.createElement('link'),
+        {rel: 'stylesheet', href: LF + '.css', onload: y, onerror: n})));
+      const js = new Promise((y, n) => document.head.appendChild(Object.assign(document.createElement('script'),
+        {src: LF + '.js', async: true, onload: y, onerror: n})));
+      Promise.all([css, js]).then(() => (window.L && window.L.map ? ok_(window.L) : no(new Error('no L'))),
+        () => no(new Error('leaflet load failed')));
     }).catch(e => { lfP = null; throw e; });
     return Promise.race([lfP, new Promise((_, no) => setTimeout(() => no(new Error('leaflet timeout')), LF_MS))]);
   }
@@ -205,7 +209,7 @@
     map.fitBounds(L.latLngBounds([here, ...opts.map(q => [q.lat, q.lon])]), {padding: [30, 30]});
     const seen = [];  // a marker on top of an earlier one is left out of the tab order (overlapping targets); the Directions links below carry the same
     L.circleMarker(here, {radius: 9, color: '#fff', weight: 3, fillColor: '#1d4ed8', fillOpacity: 1}).addTo(map)
-      .bindTooltip(mt('here'), {permanent: true, direction: 'top', offset: [0, -8]});
+      .bindTooltip(mt('here'), {direction: 'top', offset: [0, -8]});
     opts.forEach(q => {
       const cls = q.doubt ? 'dbt' : q.likely ? '' : 'amb';
       const icon = L.divIcon({className: '', html: `<span class="mp-n ${cls}">${num(q, 'rank', q.n)}</span>`, iconSize: [28, 28], iconAnchor: [14, 14]});
@@ -216,6 +220,10 @@
         .bindPopup(`<strong>${num(q, 'rank', q.n)}. ${esc(q.name || '')}</strong><br>${facts}<br><a href="${esc(dirUrl(me, q))}" target="_blank" rel="noopener noreferrer">${mh('dir', {n: num(q, 'rank', q.n), name: esc(q.name || '')})}</a>`);
     });
     if (opts[0]) L.polyline([here, [opts[0].lat, opts[0].lon]], {color: '#1d4ed8', weight: 3, dashArray: '6 6'}).addTo(map);
+    div.insertAdjacentHTML('afterend', `<p class="note"><span class="mp-you" aria-hidden="true"></span>${esc(mt('here'))}</p>`);
+    const fit = () => { if (div.isConnected) { map.invalidateSize(); map.fitBounds(L.latLngBounds([here, ...opts.map(q => [q.lat, q.lon])]), {padding: [30, 30]}); } };
+    setTimeout(fit, 250);
+    window.addEventListener('resize', fit);
   }
 
   root.RSMap = {draw};
