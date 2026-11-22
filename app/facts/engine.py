@@ -127,6 +127,9 @@ NEED_PLAIN = {
     "cardiothoracic_surgeon_or_dept": "a heart surgeon",
     "burn_unit_or_plastic_surgery": "a burn unit or plastic surgery",
 }
+# Why the call asks about cost, by the operator the card shows; None leaves the question out.
+COST_REASON = {"private": "private hospital, may charge", "public": None,
+               "unknown": "our data does not say if it is public or private"}
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
 PUBLIC_LABEL = "by public standard, not verified"
@@ -337,8 +340,11 @@ class Engine:
         if self._f("phone_shared", i) >= 3:
             qs.append({"question": "Is this number the hospital itself?",
                        "asked_because": "the same number is listed for other places"})
-        qs.append({"question": "What does it cost? Is PM-JAY accepted?",
-                   "asked_because": "our data does not say if it is public or private"})
+        # The reason matches the card's operator label (#121: "does not say if it is public or private" sat on a card
+        # labelled Government); a government hospital is not asked about cost.
+        why = COST_REASON.get(self._operator(i), COST_REASON["unknown"])
+        if why:
+            qs.append({"question": "What does it cost? Is PM-JAY accepted?", "asked_because": why})
         return qs[:3]
 
     def _flags(self, pr: Pair, i: int) -> list[str]:
