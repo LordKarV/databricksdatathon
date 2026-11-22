@@ -95,6 +95,14 @@ Every policy returns steps `{facility_id, call_first, note}`, at most 3, tried i
 `app_adapter.py` is the thin layer to the shipped app (`app/facts/engine.py`, unchanged). It caches `Engine.plan`
 per (origin rounded to 1e-3 degree, service), since plans do not depend on truth.
 
+**`app_before_101` (diagnostic, opt-in).** The app with the emergency order it had before PR #101 (p x
+exp(-minutes / 45), best first), which the first runs showed losing to `nearest_call_first` for trauma. It uses
+`AppAdapter(old_emergency_rank=True)`: the same engine, with the engine module's `NEAREST_FIRST` emptied only during
+that adapter's calls (`app_adapter.rank_before_101`) and its own plan cache, so `app` is unaffected
+(`tests/test_rank_before_101.py`). Planned care gets the same answers under both. It runs only when named:
+`python -m sim.run --services trauma_emergency --no-sweep --policies app_before_101,app,nearest_call_first`. The
+notebook's "Ranking fix" section reports both versions against `nearest_call_first`.
+
 ## Execution (`execute.py`, the only reader of the truth)
 
 - Call first: no signal is an `outage` and the worker goes anyway. A call costs 5 min. A number that does not reach
