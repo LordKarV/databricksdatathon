@@ -25,6 +25,13 @@ STRINGS = {
                    "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
     "need_named": {"en": "its listing names it, but not whether it is free today",
                    "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+    # Route guard (#140 WS2 2c, app/itinerary.py). hi: None until WS2 2e adds the engine table rows to hi.json.
+    "route_dropped": {"en": "Go straight to {name}; it is nearer than any other place with evidence for every stage.",
+                      "hi": None},
+    "stop_no_line": {"en": "No line in its listing names {need}; ask on the phone.", "hi": None},
+    "stop_1_unlisted": {"en": "The route starts at {name}, which is not in the options list: no listing near here "
+                              "names this service itself, so each stop is chosen on the evidence for its own stage.",
+                        "hi": None},
 }
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius

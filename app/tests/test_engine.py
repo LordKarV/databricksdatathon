@@ -178,7 +178,7 @@ def test_route_rides_along_in_budget(name):
     ms = (time.perf_counter() - t) * 1000
     it = r.json()["itinerary"]
     assert r.status_code == 200 and ms < 500 and in_budget(r), (ms, len(r.content))
-    assert it["pathway"] and (it["plans"] or it["abstain"])
+    assert it["pathway"] and (it["plans"] or it["abstain"] or it["itinerary_note"])
     assert "stub" not in it["meta"]
     opts = r.json()["options"]
     if it["plans"] and opts:  # route stop 1 is the list's first choice, or the route is framed as the fallback (#126)
@@ -222,7 +222,9 @@ def test_far_route_stop_leaves_card_1_and_is_the_fallback(name):
     assert [x["facility_id"] for x in o] == [x["facility_id"] for x in plain] and o[0]["call_first"]
     stop = it["plans"][0]["stops"][0]
     assert stop["facility_id"] != o[0]["facility_id"] and not any(x.get("route_reason") for x in o)
-    assert it["fallback"]["ask"] == ask and it["stop_1_note"] is None
+    # #140 WS2 2c rule 4: the note stays exactly when stop 1 is not on the options list
+    listed = stop["facility_id"] in {x["facility_id"] for x in o}
+    assert it["fallback"]["ask"] == ask and (it["stop_1_note"] is None) == listed
     assert it["fallback"]["text"].startswith("If they cannot treat: ") and stop["name"] in it["fallback"]["text"]
 
 
