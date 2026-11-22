@@ -17,22 +17,21 @@ and re-check the numbers in brackets on the day; the narration reads them off th
 
 ## The beats
 
-One emergency for the whole video: C-section near Lucknow. In Sensors set 26.86, 80.94. Checked on dev 0675784
-(local, 2026-11-22); re-check the bracketed numbers on the deployed app.
+Two places. Lucknow C-section: Sensors 26.86, 80.94. Patna heart surgery: Sensors 25.59, 85.14 (or Change place
+and type 800013). Checked on live v38 and dev on 2026-11-22; re-check the bracketed numbers on the day.
 
 | Script time | Location (Sensors) | Do this | What the screen shows |
 |---|---|---|---|
-| 0:00 the emergency | Lucknow 26.86, 80.94 | Home screen, located | The service tiles and "Call 108". Do not tap yet. |
-| 0:20 data | any | Bottom bar: Data stories | The data stories. Stay on them; the model stories there are from v1. If #198 shipped, How this works shows the chatbot card (Wockhardt, Llama 3.3 70B). |
-| 0:45 the answer | Lucknow | Home, "C-section, emergency" | Card 1 BNK Hospital, Likely, [4] min, "Performs Lower Segment Caesarean Section (LSCS)", and "First: it has evidence of blood transfusion, which Fatima Hospital does not show". |
-| 1:15 the model | Lucknow | Card 1: "Why this place?", scroll slowly | The witnesses; "Likely, evidence score [82] / 100"; each row a quote. |
-| 1:45 the sealed test | Lucknow | Scroll back to the top of the Why page | The dots: 25 of 28 places rated Likely were confirmed; under them "Passed over: City Hospital, 0.3 km. Its listing does not mention an operating theatre; its map point may be wrong". Hold it 5 s. |
-| 2:15 map and clock | Lucknow | Back to the answer, scroll to the map, then Suggested route | Pin 1 BNK; hollow pins 2 and 3 (doubted map points); "first care (stabilised) within 60 min: met, about [4] min". |
-| 2:40 the call loop | Lucknow | Card 1: Call. Cancel the Mac's call dialog, switch tab and back, tap "No answer" | "Call next" with Fatima Hospital's number. |
-| 2:40 Hindi | Lucknow | Header button "हिन्दी" | The same answer in Hindi. Switch back the same way. |
-| 2:40 family card | Lucknow | "Why this place?" > "Make a referral slip" | The slip and "Send on WhatsApp". |
-| optional: offline | Lucknow | Get the answer online, DevTools Network: Offline, reload, ask again | The saved cards first, marked offline. |
-| 3:05 Databricks | n/a | Workspace: the notebook; Catalog `workspace.referral_saathi`; Genie "Referral Saathi planner"; dashboard "Referral Saathi: district planner" | In Genie ask "Where can a patient get dialysis near Jaipur?" |
+| 0:00 the emergency | Lucknow 26.86, 80.94 | Home screen, located | The service tiles and Call 108 / 102. |
+| 0:15 data | any | Bottom bar: Data stories | The data stories (stay on them; the model stories there are from v1). Optional: How this works, the chatbot card. |
+| 0:40 the rescue | Lucknow | Home, "C-section, emergency" | Card 1 BNK Hospital, Likely, [4] min, the LSCS quote, "First: it has evidence of blood transfusion...". Row 3 City Hospital, "Map point may be wrong", [1 to 227] min. Scroll to Suggested route: "first care (stabilised) within 60 min: met". |
+| 1:15 where to go | Lucknow | Scroll to the map | Street map: You, pin 1 BNK, hollow pins 2 and 3; "Directions to 1. BNK Hospital". If the street map has not loaded, the drawn map shows instead. |
+| 1:30 the model | Lucknow | Card 1: "Why this place?", scroll slowly | The witnesses; "Likely, evidence score [82] / 100". |
+| 1:55 the sealed test | Lucknow | Top of the Why page | The dots: 25 of 28 confirmed; "Passed over: City Hospital, 0.3 km. Its listing does not mention an operating theatre; its map point may be wrong". |
+| 2:20 the call | Lucknow | Back; card 1 Call; cancel the Mac dialog; switch tab and back; "No answer" | "Call next" with Fatima Hospital's number. |
+| 2:40 planned care | Patna 25.59, 85.14 | Home, "Heart surgery" | Card 1 Ford Hospital And Research Center, Likely, [3] min, the CABG quote, "Why first: Its own website says so clearly, on 2 or more pages (+20.9); NABH's portal lists a related department for it (+8.6)". Its Why page: "Nothing nearer offers this care". |
+| 3:00 field | Patna or Lucknow | Settings or the first-run chooser: the language list; then header "हिन्दी"; Why > "Make a referral slip" | The language list (Hindi plus eight, each marked machine translation); the Hindi answer; the slip and "Send on WhatsApp". |
+| 3:20 Databricks | n/a | Workspace: the notebook; Catalog `workspace.referral_saathi`; Genie "Referral Saathi planner"; dashboard | In Genie ask "Where can a patient get dialysis near Jaipur?" |
 
 ## Field reports
 
