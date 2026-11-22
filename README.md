@@ -74,15 +74,15 @@ through the service score or through the existence and location gates. "First an
 
 | Source | What it testifies | Pairs it fires on (Likely) | Likely lost: score, gates | First answer changes without it |
 |---|---|---|---|---|
-| NABH accreditation list | the hospital holds NABH accreditation | 2,206 (519) | 0, 17 | C-section 23 of 285; trauma 12 of 300; dialysis 56 of 299; cardiac surgery 62 of 294 |
-| NMC medical colleges | it is a recognised medical college | 330 (79) | 0, 0 | C-section 3 of 285; NICU 10 of 298; trauma 6 of 300; dialysis 1 of 299; MRI 22 of 299; cardiac surgery 13 of 294 |
-| e-RaktKosh blood centres | it runs a blood centre (needed for C-section, trauma, burns and cardiac surgery) | 1,460 (244) | 0, 0 | C-section 4 of 285; trauma 2 of 300; burns 6 of 272; cardiac surgery 19 of 294 |
-| NHSRC LaQshya certification | its labour room or maternity theatre is LaQshya certified | 49 (3) | 0, 0 | C-section 4 of 285 |
-| MoHFW trauma care facilities | it is a listed trauma care facility | 20 (5) | 0, 0 | trauma 2 of 300 |
+| NABH accreditation list | the hospital holds NABH accreditation | 2,206 (519) | 0, 17 | C-section 25 of 284; trauma 15 of 299; dialysis 48 of 297; cardiac surgery 55 of 297 |
+| NMC medical colleges | it is a recognised medical college | 330 (79) | 0, 0 | C-section 8 of 284; NICU 12 of 291; trauma 4 of 299; dialysis 3 of 297; MRI 17 of 297; cardiac surgery 11 of 297 |
+| e-RaktKosh blood centres | it runs a blood centre (needed for C-section, trauma, burns and cardiac surgery) | 1,460 (244) | 0, 0 | C-section 2 of 284; trauma 3 of 299; burns 5 of 274; cardiac surgery 23 of 297 |
+| NHSRC LaQshya certification | its labour room or maternity theatre is LaQshya certified | 49 (3) | 0, 0 | C-section 2 of 284 |
+| MoHFW trauma care facilities | it is a listed trauma care facility | 20 (5) | 0, 0 | trauma 4 of 299 |
 | PMNDP dialysis lists | it is a listed dialysis centre | 1 (0) | 0, 0 | none |
-| OpenStreetMap (HOT export) | a mapped health facility at that place | 124 (27) | 0, 4 | C-section 2 of 285; dialysis 1 of 299; MRI 5 of 299; cardiac surgery 2 of 294 |
-| IPHS 2022 public standard | what a public facility of its level is meant to offer | 1,035 (126) | 0, 0 | C-section 1 of 285; NICU 3 of 298; trauma 4 of 300; dialysis 4 of 299; MRI 8 of 299; cardiac surgery 4 of 294 |
-| all lists and OSM (X and O families) | all of the above except IPHS | 3,798 (781) | 0, 26 | C-section 30 of 285; NICU 10 of 298; trauma 19 of 300; burns 6 of 272; dialysis 57 of 299; MRI 27 of 299; cardiac surgery 86 of 294 |
+| OpenStreetMap (HOT export) | a mapped health facility at that place | 124 (27) | 0, 4 | C-section 1 of 284; dialysis 5 of 297; MRI 9 of 297; cardiac surgery 2 of 297 |
+| IPHS 2022 public standard | what a public facility of its level is meant to offer | 1,035 (126) | 0, 0 | C-section 3 of 284; NICU 1 of 291; trauma 2 of 299; dialysis 1 of 297; MRI 8 of 297; cardiac surgery 2 of 297 |
+| all lists and OSM (X and O families) | all of the above except IPHS | 3,798 (781) | 0, 26 | C-section 36 of 284; NICU 12 of 291; trauma 23 of 299; burns 5 of 274; dialysis 56 of 297; MRI 26 of 297; cardiac surgery 77 of 297 |
 
 The rule for every outside source: it is a cited witness on the Why page, never the ranking.
 
@@ -210,8 +210,8 @@ upstream cleaning steps; see `derived/v1/README.md`.
 - **Faithfulness:** every number and quote the app shows is checked against its stored row by
   `app/tests/test_faithfulness.py` before release.
 - **What the outside lists change** ([`validation/out/source_impact.csv`](validation/out/source_impact.csv)):
-  removing every list and OpenStreetMap row from the frozen scores changes the first answer for 57 of 299 dialysis
-  and 86 of 294 cardiac surgery searches (19% and 29%, over 300 seeded PIN centres; bands held as shipped). On the
+  removing every list and OpenStreetMap row from the frozen scores changes the first answer for 56 of 297 dialysis
+  and 77 of 297 cardiac surgery searches (19% and 26%, over 300 seeded PIN centres; bands held as shipped). On the
   service score, 0 LIKELY pairs fall below the LIKELY threshold. Through the existence and location gates, which
   NABH and OpenStreetMap also feed, removing them would take 26 pairs out of LIKELY, and 22 pairs would fall to the
   Unlikely threshold (`likely_lost`, `likely_lost_gates`, `reach_t_u`). The lists are cited witnesses on a
