@@ -84,7 +84,7 @@ self.addEventListener('fetch', e => {
   }
   if (url.pathname.startsWith('/api/')) return;
   const key = e.request.mode === 'navigate' ? '/' : url.pathname;
-  if (!SHELL.includes(key)) return;
+  if (!SHELL.includes(key) && !key.startsWith('/i18n/')) return;  // other languages: cached once chosen
   e.respondWith(network(e.request).then(res => {
     if (res.status >= 500) return caches.match(key).then(c => c || res);
     if (res.ok && res.type === 'basic') {

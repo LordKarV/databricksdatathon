@@ -139,7 +139,7 @@
     const lines = String(text || '').split('\n').filter(s => s.trim());
     lines.forEach((line, i) => {
       const u = new root.SpeechSynthesisUtterance(line);
-      u.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
+      u.lang = lang && lang !== 'en' ? lang + '-IN' : 'en-IN';  // hi-IN, ta-IN, ... (all ten are -IN)
       if (voice) u.voice = voice;
       u.rate = 0.95;
       if (i === 0 && opts.onstart) u.onstart = opts.onstart;

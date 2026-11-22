@@ -12,7 +12,10 @@ const SERVICES = [  // fixed order, emergencies first (spec 3.1); labels come fr
   get label() { return ts('svc.' + key); }}));
 const N_DANGER = 6;
 const I18N = {};
-const LANGS = ['hi', 'en'];
+// code: [locale, dir]; native names in hi.json "langs"
+const LANG = {hi: ['hi-IN'], en: ['en-IN'], ta: ['ta-IN'], te: ['te-IN'], kn: ['kn-IN'], ml: ['ml-IN'], bn: ['bn-IN'], mr: ['mr-IN'], gu: ['gu-IN'],
+  ur: ['ur-IN', 'rtl']};
+const LANGS = Object.keys(LANG);
 const SIZES = [100, 125, 150];
 
 const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: '', lang: null};
@@ -26,10 +29,11 @@ const $ = sel => document.querySelector(sel);
 const svc = key => SERVICES.find(s => s.key === key);
 function announce(text) { $('#status').textContent = ''; setTimeout(() => { $('#status').textContent = text; }, 50); }
 function timeStr(t) {  // Hindi: 24-hour (Chromium's hi-IN data writes a Latin am/pm)
-  return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN',
+  return new Date(t).toLocaleTimeString(locale(),
     state.lang === 'hi' ? {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'} : {hour: '2-digit', minute: '2-digit'});
 }
-const locale = () => (state.lang === 'hi' ? 'hi-IN' : 'en-IN');
+const locale = () => (LANG[state.lang] || LANG.en)[0];
+const langName = l => I18N.hi.langs[l];
 
 // ---------- strings ----------
 function raw(key) { return (I18N[state.lang] || {})[key] ?? (I18N.en || {})[key] ?? key; }
@@ -40,15 +44,15 @@ function th(key, vars = {}) { return esc(raw(key)).replace(/\{(\w+)\}/g, (m, k) 
 window.ts = ts;
 window.rsEngHi = text => engHi(String(text), curQuery());  // slip.js and journey.js: the same Hindi templates
 window.th = th;
-async function loadStrings() {
-  const get = l => fetch(`/i18n/${l}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
-  [I18N.en, I18N.hi] = await Promise.all([get('en'), get('hi')]);
-}
+const getStrings = l => fetch(`/i18n/${l}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+async function loadStrings() { [I18N.en, I18N.hi] = await Promise.all([getStrings('en'), getStrings('hi')]); }
+async function ensureLang(l) { I18N[l] ||= await getStrings(l); }
+const mtNote = l => (l === 'hi' || l === 'en' ? '' : `<small class="note" lang="${I18N[l] ? l : state.lang || 'en'}">${esc((I18N[l] || {})['lang.mt_note'] || raw('lang.mt_note'))}</small>`);
 function pickLang() {
   const l = load('lang');
-  if (l === 'hi' || l === 'en') return l;
+  if (LANGS.includes(l)) return l;
   const old = (load('voice') || {}).lang;  // UI1 kept a read-aloud language; it becomes the app language once
-  return old === 'hi' || old === 'en' ? old : null;
+  return LANGS.includes(old) ? old : null;
 }
 function phoneLang() { const l = (navigator.language || '').toLowerCase(); return l.startsWith('hi') || l.endsWith('-in') ? 'hi' : 'en'; }
 
@@ -83,7 +87,7 @@ function engHi(text, q, mark = false) {
   return parts.every(p => p != null) ? parts.join('; ') : null;
 }
 function E(path, text, q = curQuery()) {
-  if (state.lang !== 'hi') return F(path, text);
+  if (state.lang !== 'hi') return enSpan(F(path, text));
   const hi = engHi(String(text), q, true);
   const html = hi == null ? '' : esc(hi).replace(/\u0001/g, '<span lang="en">').replace(/\u0002/g, '</span>');
   return hi != null ? `<span data-f="${path}" data-k="template">${html}</span>` : `<span lang="en">${F(path, text)}</span>`;
@@ -278,19 +282,20 @@ function chooserScreen() {
       <circle cx="6" cy="14" r="4" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/><circle cx="22" cy="14" r="4.5" fill="var(--go)"/></svg>
     <h1 tabindex="-1" lang="${order[0]}">${esc(S(order[0])['lang.choose_h'])}</h1><p class="sub" lang="${order[1]}">${esc(S(order[1])['lang.choose_h'])}</p>
     <fieldset><legend class="visually-hidden">${esc(S('hi')['lang.choose_h'])} / ${esc(S('en')['lang.choose_h'])}</legend><div class="choice">
-      ${order.map(l => `<label lang="${l}"><input type="radio" name="first-lang" value="${l}" ${l === pre ? 'checked' : ''}> ${esc(S(l)['lang.name'])}</label>`).join('')}
+      ${order.map(l => `<label lang="${l}"><input type="radio" name="first-lang" value="${l}" ${l === pre ? 'checked' : ''}> <span>${esc(langName(l))}${mtNote(l)}</span></label>`).join('')}
     </div></fieldset>
     <button type="button" class="btn btn-block btn-big btn-ink" id="lang-go" lang="${pre}">${esc(S(pre)['lang.continue'])}</button>
     <p class="note" id="lang-note" lang="${pre}">${esc(S(pre)['lang.later'])}</p></div>`;
 }
 function bindChooser() {
-  document.querySelectorAll('input[name=first-lang]').forEach(r => r.addEventListener('change', () => {
-    const l = r.value;
+  document.querySelectorAll('input[name=first-lang]').forEach(r => r.addEventListener('change', async () => {
+    let l = r.value;
+    await ensureLang(l).catch(() => { l = 'en'; });
     Object.assign($('#lang-go'), {lang: l, textContent: I18N[l]['lang.continue']});
     Object.assign($('#lang-note'), {lang: l, textContent: I18N[l]['lang.later']});
   }));
-  $('#lang-go').addEventListener('click', () => {
-    setLang(document.querySelector('input[name=first-lang]:checked').value, {rerender: false});
+  $('#lang-go').addEventListener('click', async () => {
+    await setLang(document.querySelector('input[name=first-lang]:checked').value, {rerender: false});
     location.hash = state.afterLang || '#/';
     state.afterLang = null;
   });
@@ -1214,7 +1219,7 @@ function ledgerHtml(o, P, q) {
 // WS4 4a: the official-list or OpenStreetMap row a ledger term rests on, with its link, its source and how often our
 // matches to that list were right. A NABH row says which kind of entry it is (an entry-level certificate or a CGHS/ECHS
 // empanelment is not accreditation); in Hindi that kind is the reviewed string and the entry number stays as listed.
-const enSpan = html => (state.lang === 'hi' ? `<span lang="en">${html}</span>` : html);
+const enSpan = html => (state.lang !== 'en' ? `<span lang="en">${html}</span>` : html);
 function citeText(x, path) {
   if (state.lang === 'hi' && x.tier && raw('why.cite.tier.' + x.tier) !== 'why.cite.tier.' + x.tier) {
     return th('why.cite.tier.' + x.tier, {id: enSpan(F(path + '.id', x.id))});
@@ -1394,7 +1399,7 @@ async function bindSlip() {
 }
 
 // ---------- How this works (#45) and Data stories (#53): long English pages built from the data ----------
-function enOnly() { return state.lang === 'hi' ? `<p class="panel" lang="hi">${th('page.english_only')}</p>` : ''; }
+function enOnly() { return state.lang !== 'en' ? `<p class="panel" lang="${state.lang}">${th('page.english_only')}</p>` : ''; }
 function howScreen() { return `<h1 tabindex="-1">${th('nav.how')}</h1>${enOnly()}<div id="how-out"><p>${th('page.loading')}</p></div>`; }
 // One tag per script: a second copy of speech.js loading late would replace RSSpeech with one that has no templates.
 function loadScript(src, name) { return window[name] ? Promise.resolve() : needScripts([src]); }
@@ -1470,7 +1475,7 @@ function settingsScreen() {
   const size = load('size') || 100, theme = load('theme') || 'system';
   return `<h1 tabindex="-1">${th('set.h')}</h1>
     <fieldset class="section"><legend>${th('set.lang_h')}</legend><div class="choice">
-      ${LANGS.map(l => radio('lang', l, esc(I18N[l]['lang.name']), state.lang, `lang="${l}"`)).join('')}</div>
+      ${LANGS.map(l => radio('lang', l, esc(langName(l)) + mtNote(l), state.lang, `lang="${l}"`)).join('')}</div>
       <p class="note">${th('set.lang_note')}</p></fieldset>
     <fieldset class="section"><legend>${th('set.size_h')}</legend><div class="seg">
       ${SIZES.map(v => radio('size', v, `${v}%`, size)).join('')}</div>
@@ -1493,12 +1498,15 @@ function applyPrefs() {
   if (theme === 'light' || theme === 'dark') html.dataset.theme = theme; else delete html.dataset.theme;
 }
 // One tap switches every string, read-aloud, voice input, the slip and the card; focus and scroll stay put.
-function setLang(l, opts = {}) {
+function htmlLang(l) { Object.assign(document.documentElement, {lang: l, dir: LANG[l][1] || 'ltr'}); }
+async function setLang(l, opts = {}) {
   if (!LANGS.includes(l)) return;
+  try { await ensureLang(l); } catch { announce(ts('off.h')); return; }
   state.lang = l;
   save('lang', l);
+  if (l !== 'en') save('lang2', l);  // English's header button
   save('voice', {...(load('voice') || {}), lang: l});  // voice.js and speech read the same language
-  document.documentElement.lang = l;
+  htmlLang(l);
   if (opts.rerender === false) return;
   const y = window.scrollY;
   if (window.speechSynthesis) speechSynthesis.cancel();
@@ -1510,11 +1518,11 @@ function setLang(l, opts = {}) {
 
 // ---------- chrome: top bar and bottom navigation ----------
 function topBar() {
-  const other = state.lang === 'hi' ? 'en' : 'hi';
+  const other = state.lang !== 'en' ? 'en' : load('lang2') || 'hi';
   $('#top').innerHTML = `<a class="brand" href="#/"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 14h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
       <circle cx="6" cy="14" r="4" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/><circle cx="22" cy="14" r="4.5" fill="var(--go)"/></svg>
       <span>${th('app.name')}</span></a>
-    <button type="button" class="btn lang-btn" id="lang-btn" lang="${other}" data-lang="${other}">${esc(I18N[other]['lang.name'])}</button>
+    <button type="button" class="btn lang-btn" id="lang-btn" lang="${other}" data-lang="${other}">${esc(langName(other))}</button>
     <a class="btn icon-btn" href="#/settings" aria-label="${th('nav.settings')}">${icon('sliders')}</a>`;
   $('#lang-btn').addEventListener('click', e => setLang(e.currentTarget.dataset.lang));
   $('#skip').textContent = ts('skip');
@@ -1628,7 +1636,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
   state.lang = pickLang();
-  if (state.lang) { document.documentElement.lang = state.lang; save('lang', state.lang); }
+  if (state.lang) { await ensureLang(state.lang).catch(() => {}); htmlLang(state.lang); save('lang', state.lang); }
   setOnline();
   RSInput.load();
   flushOutcomes();

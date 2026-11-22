@@ -17,7 +17,7 @@ HI = json.loads((STATIC / "i18n" / "hi.json").read_text())
 
 
 def test_same_keys_and_no_empty_value():
-    en, hi = set(EN) - {"engine"}, set(HI) - {"engine"}
+    en, hi = set(EN) - {"engine"}, set(HI) - {"engine", "langs"}  # langs: native names for the chooser
     assert en == hi, f"only in en: {sorted(en - hi)}; only in hi: {sorted(hi - en)}"
     assert not [k for k in en if not str(EN[k]).strip() or not str(HI[k]).strip()]
 
