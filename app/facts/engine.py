@@ -18,6 +18,14 @@ from services import BAND_WORDS, SERVICES, emergency_numbers, haversine_km, trav
 
 from facts.redact import redact_names
 
+# New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
+# The payload carries "en"; the Hindi question is also in static/speech_templates.json for read-aloud.
+STRINGS = {
+    "need_today": {"en": "Is {need} available today for this patient?",
+                   "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
+    "need_named": {"en": "its listing names it, but not whether it is free today",
+                   "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+}
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
 N_OPTIONS = 3
@@ -352,8 +360,8 @@ class Engine:
             words = NEED_WORDS.get(pr.missing[0])
             if words and any(words.search(self.claims[c][1]) for c in self._evidence(pr)):
                 # a quote on the card names it: what is unknown is whether it can take this patient today
-                qs.append({"question": f"Is {need} available today for this patient?",
-                           "asked_because": "its listing names it, but not whether it is free today"})
+                qs.append({"question": STRINGS["need_today"]["en"].format(need=need),
+                           "asked_because": STRINGS["need_named"]["en"]})
             else:
                 qs.append({"question": f"Do you have {need} on site?", "asked_because": "our data does not mention it"})
         if "claims_6plus_of_8_services" in self._f("flags", i) or "copies_far_apart" in self._f("flags", i):
