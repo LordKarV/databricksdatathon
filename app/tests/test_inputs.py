@@ -129,6 +129,31 @@ def test_no_endpoint_configured(monkeypatch):
     assert r["source"] == "model_unavailable"
 
 
+@pytest.mark.parametrize("text", [
+    "pregnant woman bleeding heavily", "she is bleeding a lot", "pregnant lady bleeding since morning",
+    "bleeding during pregnancy, 7 months", "गर्भवती को खून आ रहा है",
+])
+def test_pregnancy_bleeding_is_danger_offline(monkeypatch, text):
+    monkeypatch.delenv("SERVING_ENDPOINT_TEXT", raising=False)
+    r = client.post("/api/parse", json={"text": text}).json()
+    assert r["danger"] is True and r["danger_phrase"] and r["danger_phrase"] in text
+
+
+@pytest.mark.parametrize("text", ["bleeding gums", "my gums are bleeding a little", "nose bleeding",
+                                  "pregnant woman, 8 months, checkup"])
+def test_bleeding_or_pregnancy_alone_is_not_danger(monkeypatch, text):
+    monkeypatch.delenv("SERVING_ENDPOINT_TEXT", raising=False)
+    r = client.post("/api/parse", json={"text": text}).json()
+    assert r["danger"] is False
+
+
+@pytest.mark.parametrize("text", ["delivery operation", "operation se delivery", "c section karna hai"])
+def test_csection_words_offline(monkeypatch, text):
+    monkeypatch.delenv("SERVING_ENDPOINT_TEXT", raising=False)
+    r = client.post("/api/parse", json={"text": text}).json()
+    assert (r["service"], r["source"]) == ("emergency_csection", "lexicon")
+
+
 def test_parse_validates_input():
     assert client.post("/api/parse", json={"text": ""}).status_code == 422
     assert client.post("/api/parse", json={"text": "x" * 501}).status_code == 422
