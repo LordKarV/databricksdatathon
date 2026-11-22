@@ -60,6 +60,7 @@ SHELL_FILES: dict[str, str] = {
     "community.js": "text/javascript; charset=utf-8",
     "translate.js": "text/javascript; charset=utf-8",
     "route.js": "text/javascript; charset=utf-8",
+    "trap.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 

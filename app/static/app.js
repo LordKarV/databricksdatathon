@@ -1400,9 +1400,11 @@ async function bindHow() {
   try {
     const [, r] = await Promise.all([loadScript('/how.js', 'RSHow'), fetch('/api/how', {redirect: 'manual'})]);
     if (!r.ok) throw new Error();
-    $('#main').innerHTML = enOnly() + `<div lang="en">${RSHow.render(await r.json())}</div>
+    const h = await r.json();
+    $('#main').innerHTML = enOnly() + `<div lang="en">${RSHow.render(h)}</div>
       <a class="btn btn-block section" href="#/stories">${th('nav.stories')}</a>`;
     $('#main h1').focus();
+    h.trap && loadScript('/trap.js', 'RSTrap').then(() => RSTrap.show(h.trap, state.lang)).catch(() => {});
   } catch {
     $('#how-out').innerHTML = `<p role="alert">${th('page.failed')}</p>`;
     return;
