@@ -88,3 +88,11 @@ def test_area_at_a_district_centre_names_that_district(district, state):
     _, _, la, lo = next(c for c in app_module._places().districts[district.lower()] if c[1] == state.upper())
     a = client.post("/api/area", json={"service": "nicu", "lat": round(la, 2), "lon": round(lo, 2)})
     assert a.status_code == 200 and a.json()["area"]["district"].lower() == district.lower()
+
+
+def test_a_pin_with_a_guessed_district_never_becomes_the_centre():
+    import pandas as pd
+    from facts.build import centre_flags
+    p = pd.DataFrame({"pin": [1, 2, 3], "state": ["S"] * 3, "district": ["A", "A", "A"],
+                      "district_from": ["", "", "nearest_pin"], "lat": [25.0, 25.2, 25.1], "lon": [85.0, 85.2, 85.1]})
+    assert centre_flags(p) == [1, 0, 0]  # PIN 3 sits on the mean, but the gazetteer does not file it under A

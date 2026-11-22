@@ -24,7 +24,15 @@ DESCRIPTION = (
     "(trauma or 24x7 emergency, dialysis, emergency C-section, ICU, NICU, MRI and more), how strong that "
     "evidence is (dataset claim, text grade, facility website, OpenStreetMap, official lists such as NABH, "
     "LaQshya, NMC and the MoHFW trauma list), and which districts have none. Built on the Virtue Foundation "
-    "records (9,959 facilities, 88% private). Every answer is about evidence, not about care that exists."
+    "records (9,959 facilities, 88% private). Every answer is about evidence, not about care that exists.\n\n"
+    "Capabilities:\n"
+    "- Facilities near a district for a service, model v2 band Likely first, then straight-line km, with the "
+    "cited claim ids and sentences\n"
+    "- Districts with no corroborated dialysis or C-section evidence, with people and need\n"
+    "- Share of claims confirmed by a second source (website, OpenStreetMap, official list), by state or district\n"
+    "- Official list facts (NABH, LaQshya, NMC, MoHFW trauma, e-RaktKosh) with citation links\n"
+    "- Model v2 band counts by service, state and owner\n"
+    "Not here: travel time, phone calls and the emergency order. The Referral Saathi app adds those."
 )
 PATNA = (25.5941, 85.1376)  # Patna city centre, used by the "near Patna" example
 
@@ -108,7 +116,10 @@ TABLES = {
         col("p_exists", "P(facility exists)."),
         col("operator", "public, private or unknown.", ["owner", "ownership"], match=True),
         col("overlays", "Flags beside the band: BORDERLINE, PLACE_UNCLEAR, ON_A_PUBLIC_LIST:list:date."),
-        *[col(c, exclude=True) for c in ("base", "contributions", "as_of", "model_version", "is_24x7", "hours_text")],
+        col("contributions", "JSON array of score parts; each has evidence_ids, the claim ids behind the band. Parse "
+            "with FROM_JSON(contributions, 'array<struct<evidence_ids:array<string>>>') and join claims.claim_id "
+            "for the sentence.", ["claim ids", "evidence", "citations"]),
+        *[col(c, exclude=True) for c in ("base", "as_of", "model_version", "is_24x7", "hours_text")],
     ],
     f"{S}.facility_attributes_v2": [
         col("unique_id", "Facility record id (9,959 records)."),
@@ -201,37 +212,38 @@ TABLES = {
         col("pop", "People (WorldPop 2025)."),
         col("records", "Facility records whose point falls in the district."),
         col("per_m", "Records per million people.", ["records per million", "density"]),
-        *[col(c, exclude=True) for c in ("cx", "cy")],
+        col("cx", "Longitude of the district centre. 'Near <city>' means within 50 km of its district's centre."),
+        col("cy", "Latitude of the district centre. 'Near <city>' means within 50 km of its district's centre."),
     ],
 }
 
 TEXT_INSTRUCTIONS = """## PURPOSE
-- District planners asking where facilities show public evidence of a service and how strong it is.
+- Planners ask where facilities show public evidence of a service and how strong it is.
 - Every row is a claim from the Virtue Foundation records (88% private), not a verified fact.
+- Your km are straight line. Travel time and call-ahead come from the Referral Saathi app, which in an emergency calls the nearest plausible place first; say so for a patient.
 
 ## DISAMBIGUATION
 - "Confirmed", "corroborated" or "second source" means the *_corroborated flags in geo_facility or n_corr in geo_dialysis_district. "Claims" means *_claimed or grades rows.
 - "Trauma" in geo_facility and grades means trauma or 24x7 emergency.
-- "Near X" with no radius: 50 km straight line from the facility point; say so.
-- geo_facility and geo_district states are UPPER CASE (BIHAR); NFHS tables use title case (Bihar).
+- "Near X" with no radius: 50 km straight line from the centre of district X (geo_district cx, cy); say so.
+- geo_facility and geo_district states are UPPER CASE; NFHS tables title case.
 
 ## DATA QUALITY NOTES
-- NABH rows are facility-level (service null): a NABH listing confirms the facility, not a service.
-- citation_url of '#' or 'Not Found' means no usable link.
-- operatorTypeId uses the string 'null' for unknown owner.
+- NABH rows are facility-level (service null): they confirm the facility, not a service.
+- citation_url '#' or 'Not Found' means no usable link.
 
 ## MODEL V2 SCORES
-- "Likely offers", band, score or P_S mean facility_service_scores_v2; get state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p. Never show p for NO_SERVICE_TEXT. lo/hi are the score bin's track record, not an interval around p.
-- Owner means facility_attributes_v2.operator. The score has no demonstrated ranking ability for public facilities: say so when ranking them.
+- "Likely", "can handle", band, score or P_S mean facility_service_scores_v2; state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p or km. Never show p for NO_SERVICE_TEXT. lo/hi are a score bin's track record, not an interval.
+- Owner is facility_attributes_v2.operator. The score cannot rank public facilities: say so.
 
 ## CONSTRAINTS
-- Never rank or recommend facilities on dataset claims alone. Order by evidence level first (official list or confirmed, then grade strong, moderate, weak, tag_only), then distance, and show the level.
+- Never rank facilities on claims alone. Order by evidence level (model band, or official list or confirmed, then grade), then distance, and show the level.
 - Never say a place has "no care" or "no facility". Say "no public evidence in this dataset" and give n.
 
 ## Instructions you must follow when providing summaries
 - Always state n (facilities, claims or districts) and the evidence level behind each number.
-- When naming a facility-service claim, cite claim_ids from grades.cite_evidence, and citation_url for list facts.
-- Give percentages to one decimal with numerator and denominator."""
+- Cite claim_ids for every facility named (grades.cite_evidence or v2 contributions), and citation_url for list facts.
+- Percentages to one decimal, with numerator and denominator."""
 
 GEO = f"{S}.geo_facility"
 EXAMPLES = [
@@ -365,6 +377,85 @@ ORDER BY s.service_id, a.operator""",
      "demonstrated."),
 ]
 
+
+
+def near_sql(service, district, state, km=50, limit=10):
+    """Facilities near a district centre for one v2 service: Likely first, then straight-line km, with the claim
+    ids behind the band and one own sentence. Shared by the example and the brief's benchmark questions."""
+    return f"""WITH c AS (SELECT cy AS lat, cx AS lon FROM {S}.geo_district WHERE dtname = '{district}' AND stname = '{state}'),
+near AS (
+  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, {km_from('c.lat', 'c.lon')} AS km
+  FROM {S}.facility_service_scores_v2 s
+  JOIN {GEO} g ON g.unique_id = s.unique_id
+  CROSS JOIN c
+  WHERE s.service_id = '{service}' AND s.band IN ('LIKELY', 'CALL_FIRST')),
+ev AS (
+  SELECT n.unique_id,
+    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),
+                              x -> x.evidence_ids))) AS claim_id
+  FROM near n WHERE n.km <= {km})
+SELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,
+  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text
+FROM near n
+LEFT JOIN ev e ON e.unique_id = n.unique_id
+LEFT JOIN {S}.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'
+WHERE n.km <= {km}
+GROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km
+ORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km
+LIMIT {limit}"""
+
+
+EXAMPLES += [
+    ("Which facilities near Patna are likely to have an ICU?", near_sql("icu", "Patna", "BIHAR"),
+     "Service near a place: model v2 band (LIKELY, then CALL_FIRST), then straight-line km from the district "
+     "centre in geo_district; cite claim ids from contributions with the claim text. Say the app adds travel "
+     "time and call-ahead."),
+]
+
+# Benchmarks: the 7 test_space.py questions, the 3 from VERIFY.md (verify/verify_genie.py) and the brief's two.
+# Ground-truth SQL is ours, run on the warehouse by `check`; none of these questions is an example above.
+BENCHMARKS = [
+    ("How many districts in Uttar Pradesh have no confirmed dialysis facility, and how many people live in them?",
+     f"SELECT COUNT(*) AS districts, ROUND(SUM(pop) / 1e6, 1) AS pop_millions FROM {S}.geo_dialysis_district "
+     "WHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0"),
+    ("Among states with at least 100 trauma or emergency claims, which has the lowest share confirmed by a second "
+     "source?",
+     f"SELECT stname, COUNT(*) AS n_claims, ROUND(100 * AVG(CASE WHEN trauma_corroborated THEN 1 ELSE 0 END), 1) "
+     f"AS pct_confirmed FROM {GEO} WHERE trauma_claimed GROUP BY stname HAVING COUNT(*) >= 100 "
+     "ORDER BY pct_confirmed LIMIT 1"),
+    ("Cite the claim ids behind the dialysis claim of Ford Hospital And Research Center in Patna.",
+     f"SELECT e.claim_id FROM (SELECT EXPLODE(FROM_JSON(gr.cite_evidence, "
+     "'array<struct<claim_id:string,field:string,text:string>>')) e "
+     f"FROM {S}.grades gr JOIN {GEO} g ON g.unique_id = gr.unique_id "
+     "WHERE gr.service = 'dialysis' AND g.name = 'Ford Hospital And Research Center' AND g.dtname = 'Patna')"),
+    ("How many facilities in Maharashtra hold a LaQshya certificate that is still valid?",
+     f"SELECT COUNT(DISTINCT l.unique_id) AS facilities FROM {S}.facility_list_facts l JOIN {GEO} g "
+     "ON g.unique_id = l.unique_id WHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' "
+     "AND g.stname = 'MAHARASHTRA'"),
+    ("Which Bihar districts have zero facility records?",
+     f"SELECT dtname FROM {S}.geo_district WHERE stname = 'BIHAR' AND records = 0 ORDER BY dtname"),
+    ("Is there dialysis care in Madhubani district of Bihar?",
+     f"SELECT n_claim, n_corr FROM {S}.geo_dialysis_district WHERE nfhs_state = 'Bihar' "
+     "AND nfhs_district = 'Madhubani'"),
+    ("How many facilities in Bihar does model v2 band Likely for dialysis?",
+     f"SELECT COUNT(*) AS facilities FROM {S}.facility_service_scores_v2 s JOIN {GEO} g "
+     "ON g.unique_id = s.unique_id WHERE s.service_id = 'dialysis' AND s.band = 'LIKELY' AND g.stname = 'BIHAR'"),
+    ("Which three states have the most facilities on the e-RaktKosh blood bank list?",
+     f"SELECT g.stname, COUNT(DISTINCT l.unique_id) AS facilities FROM {S}.facility_list_facts l JOIN {GEO} g "
+     "ON g.unique_id = l.unique_id WHERE l.list_slug = 'eraktkosh' GROUP BY g.stname ORDER BY facilities DESC LIMIT 3"),
+    ("In Kerala, how many facility records claim emergency C-section, and how many of those are confirmed by a "
+     "second source?",
+     "SELECT SUM(CASE WHEN csection_claimed THEN 1 ELSE 0 END) AS claimed, "
+     "SUM(CASE WHEN csection_claimed AND csection_corroborated THEN 1 ELSE 0 END) AS confirmed "
+     f"FROM {GEO} WHERE stname = 'KERALA'"),
+    ("Which district in Odisha with no confirmed dialysis facility has the largest population?",
+     f"SELECT nfhs_district, ROUND(pop / 1e6, 2) AS pop_millions, n_claim, n_corr FROM {S}.geo_dialysis_district "
+     "WHERE lower(nfhs_state) = 'odisha' AND n_corr = 0 ORDER BY pop DESC LIMIT 1"),
+    ("Where can a patient get dialysis near Jaipur?", near_sql("dialysis", "Jaipur", "RAJASTHAN")),
+    ("Which hospital near Lucknow can handle an emergency C-section?",
+     near_sql("emergency_csection", "Lucknow", "UTTAR PRADESH")),
+]
+
 SAMPLE_QUESTIONS = [
     "Which districts in Bihar have no corroborated dialysis?",
     "Which NABH-listed facilities near Patna have a nephrology service?",
@@ -406,6 +497,8 @@ def serialized_space():
     examples = sorted([{"id": hid("ex:" + q), "question": [q], "sql": [sql], "usage_guidance": [g]}
                        for q, sql, g in EXAMPLES], key=lambda e: e["id"])
     samples = sorted([{"id": hid("sq:" + q), "question": [q]} for q in SAMPLE_QUESTIONS], key=lambda e: e["id"])
+    bench = sorted([{"id": hid("bm:" + q), "question": [q], "answer": [{"format": "SQL", "content": [sql]}]}
+                    for q, sql in BENCHMARKS], key=lambda e: e["id"])
     return {
         "version": 2,
         "config": {"sample_questions": samples},
@@ -415,6 +508,7 @@ def serialized_space():
             "example_question_sqls": examples,
             "join_specs": join_specs(),
         },
+        "benchmarks": {"questions": bench},
     }
 
 
@@ -443,7 +537,7 @@ def run_sql(sql):
 
 def check():
     ok = True
-    for q, sql, _ in EXAMPLES:
+    for q, sql in [(q, sql) for q, sql, _ in EXAMPLES] + BENCHMARKS:
         try:
             cols, rows = run_sql(sql)
             print(f"ok   {len(rows):5d} rows  {q}\n       {cols}\n       first: {rows[:1]}")
