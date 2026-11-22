@@ -31,7 +31,8 @@ def built(tmp_path_factory):
     g = g[g.service.isin(v1_to_tax) & g.unique_id.isin(fidx)]
     fx = pd.DataFrame({"unique_id": g.unique_id, "service_id": g.service.map(v1_to_tax), "band": "CALL_FIRST",
                        "p": 0.5, "lo": 0.3, "hi": 0.7, "p_location": 0.91, "p_exists": 0.88, "base": 0.0,
-                       "contributions": "[]"})  # logit(0.5) = 0
+                       "contributions": "[]",  # logit(0.5) = 0
+                       "overlays": [["ON_A_PUBLIC_LIST:nabh:2026-11-21"]] * len(g)})
     fx = pd.concat([fx, fx.head(3).assign(service_id="snakebite")])  # a taxonomy service with no app tile
     path = tmp_path_factory.mktemp("v2") / "facility_service_scores.parquet"
     fx.to_parquet(path)
