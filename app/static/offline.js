@@ -116,11 +116,13 @@
   // The district's own PIN point nearest the mean of its PIN points. A plain mean can lie nearer another district's
   // PINs, so the area view named that district (Anakapalli gave Visakhapatnam). Same rule as facts/places.py
   // district_centre: integers on the pack's 0.001 degree grid, longitude scaled by cos(lat), lowest PIN on a tie,
-  // so the centre is the same PIN online and offline.
+  // so the centre is the same PIN online and offline. pins.not_centre, PINs the area view names another district
+  // for after the LGD correction (facts/places.py kept_pins), are left out unless that leaves none.
   function districtCentre(pack, d) {
-    const di = pack.districts.indexOf(d), P = pack.pins, G = 1000, own = [];
-    P.d.forEach((x, i) => { if (x === di) own.push(i); });
-    if (!own.length) return null;
+    const di = pack.districts.indexOf(d), P = pack.pins, G = 1000, out = new Set(P.not_centre || []), all = [];
+    P.d.forEach((x, i) => { if (x === di) all.push(i); });
+    if (!all.length) return null;
+    const kept = all.filter(i => !out.has(P.pin[i])), own = kept.length ? kept : all;
     const qa = own.map(i => Math.round(P.lat[i] * G)), qo = own.map(i => Math.round(P.lon[i] * G));
     const n = own.length, sa = qa.reduce((t, v) => t + v, 0), so = qo.reduce((t, v) => t + v, 0);
     const k = Math.cos(sa / n / G * Math.PI / 180);

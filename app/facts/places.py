@@ -128,6 +128,29 @@ def centre_pin(pts: list[tuple[int, int, int]]) -> int:
     return min(pts, key=lambda x: ((n * x[1] - sa) ** 2 + ((n * x[2] - so) * k) ** 2, x[0]))[0]
 
 
+def centre_pin_kept(pts: list[tuple[int, int, int]], kept: list[bool]) -> tuple[int, bool]:
+    """(centre_pin of the PINs `kept` marks, True), else (centre_pin of all, False) when it marks none."""
+    own = [p for p, k in zip(pts, kept, strict=True) if k]
+    return (centre_pin(own), True) if own else (centre_pin(pts), False)
+
+
+def kept_pins(lat: list[float], lon: list[float], filed: list[tuple[str, str]],
+              where: list[tuple[str, str]]) -> list[bool]:
+    """Per PIN, in PIN table order: True when the PIN lies in the district it is filed under after the LGD correction
+    (`where`, facts/build.py moved_pins), and so does the first PIN on its point (as given: the table's 5 decimals).
+    Only such a PIN can be the centre.
+
+    Engine.area names the district `where` gives the nearest PIN, the first one on a tie, so a moved PIN as the
+    centre named the neighbour (East Godavari's 533296 gave West Godavari), and so did a PIN that stays on the point
+    of a moved one listed first (Lalitpur's 284501 on 284123's). The packs list the PINs this leaves out
+    (pins.not_centre), and offline.js districtCentre skips the same ones.
+    """
+    first: dict[tuple[float, float], tuple[str, str]] = {}
+    for la, lo, w in zip(lat, lon, where, strict=True):
+        first.setdefault((la, lo), tuple(w))
+    return [tuple(w) == tuple(f) == first[(la, lo)] for la, lo, f, w in zip(lat, lon, filed, where, strict=True)]
+
+
 def pin_of(q: str) -> str | None:
     """The six digits of a typed PIN, or None when the text is not a PIN in one of the forms _PIN accepts."""
     m = _PIN.fullmatch(q.strip())
@@ -144,7 +167,9 @@ def load_places(path: Path) -> dict | None:
 
 
 class Places:
-    def __init__(self, pins: dict[str, list], places: dict | None) -> None:
+    def __init__(self, pins: dict[str, list], places: dict | None,
+                 where: list[tuple[str, str]] | None = None) -> None:
+        """`where`: the (district, state) each PIN's point lies in after the LGD correction (Engine.pin_where)."""
         self.pins = pins
         self.pin_at = {p: i for i, p in enumerate(pins["pin"])}
         # facts/build.py marks each district's centre PIN, chosen from the raw gazetteer points on the packs' grid
@@ -156,11 +181,14 @@ class Places:
         for i, (d, s, how) in enumerate(zip(pins["district"], pins["state"], self.district_from, strict=True)):
             if not how:  # a district centre is one of the PINs filed there, as offline.js districtCentre
                 acc.setdefault((norm(d), s), [d, []])[1].append(i)
+        filed = list(zip(pins["district"], pins["state"], strict=True))
+        kept = kept_pins(pins["lat"], pins["lon"], filed, where) if where else [True] * len(filed)
         self.districts: dict[str, list[tuple[str, str, float, float]]] = {}
         for (key, s), (d, idx) in acc.items():
             c = [i for i in idx if marked[i]]
-            i = c[0] if len(c) == 1 else self.pin_at[centre_pin(
-                [(pins["pin"][i], round(pins["lat"][i] * PIN_GRID), round(pins["lon"][i] * PIN_GRID)) for i in idx])]
+            i = c[0] if len(c) == 1 else self.pin_at[centre_pin_kept(
+                [(pins["pin"][i], round(pins["lat"][i] * PIN_GRID), round(pins["lon"][i] * PIN_GRID)) for i in idx],
+                [kept[i] for i in idx])[0]]
             self.districts.setdefault(key, []).append((d, s, pins["lat"][i], pins["lon"][i]))
         self.gaz = places
         self.names: dict[str, list[int]] = {}

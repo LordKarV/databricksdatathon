@@ -54,6 +54,7 @@ from common.eligibility import (  # noqa: E402, RUF100
 from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))  # facts.redact: the same name redaction as the live answer (#86)
+from facts.build import moved_pins, not_centre, pin_table  # noqa: E402, RUF100
 from facts.redact import redact_names  # noqa: E402, RUF100
 
 HERE = Path(__file__).resolve().parent
@@ -132,6 +133,15 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     pins = pins.dropna(subset=["state", "lat", "lon"])
     pins["district"] = pins.district.fillna("")
     return fac.reset_index(drop=True), svc.reset_index(drop=True), pins.reset_index(drop=True)
+
+
+def centre_skip() -> frozenset[int]:
+    """facts/build.py not_centre on the same gazetteer: PINs the area view names another district for (LGD correction).
+
+    offline.js districtCentre skips them as facts/places.py does online, so both pick the same centre PIN and the
+    area view there names the district. Only for that choice: the pack keeps each PIN's own district.
+    """
+    return frozenset(not_centre(pin_table(DERIVED), moved_pins()))
 
 
 def type_fit(svc: pd.DataFrame, fac: pd.DataFrame) -> pd.DataFrame:
@@ -223,7 +233,9 @@ def delta(values: np.ndarray) -> list[int]:
     return np.diff(v, prepend=0).tolist()
 
 
-def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataFrame, built: str) -> dict:
+def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataFrame, built: str,
+                skip: frozenset[int] = frozenset()) -> dict:
+    """`skip`: centre_skip(), the PINs that are never a district centre."""
     sp = pins[pins.state == state].sort_values("pin").reset_index(drop=True)
     fac_ll = fac.set_index("unique_id")[["loc_lat", "loc_lon"]]
     per_service: dict[str, list[tuple[int, ...]]] = {}
@@ -282,6 +294,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
             "lat": delta(np.round(sp.lat * PIN_SCALE)),
             "lon": delta(np.round(sp.lon * PIN_SCALE)),
             "d": [didx[d] for d in sp.district],
+            "not_centre": [int(x) for x in sp.pin if int(x) in skip],
         },
         "districts": districts,
         "index": index,
@@ -366,8 +379,9 @@ def main() -> int:
     built = args.built or "unknown"
     out.mkdir(parents=True, exist_ok=True)
     rows, index = [], {}
+    skip = centre_skip()
     for st in states:
-        pack = build_state(st, pins, fac, svc, built)
+        pack = build_state(st, pins, fac, svc, built, skip)
         self_check(pack, int((pins.state == st).sum()))
         raw, gz = encode(pack)
         name = slug(st)
