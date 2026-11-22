@@ -177,7 +177,7 @@
  "test.h": "Sealed test record",
  "test.line": "Likely: {k} of {n} confirmed ({pct}%, interval {lo} to {hi}%) on a test set sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities ({pub} public test pairs with a verdict).",
  "test.hashes": "Opening log and commitment hashes",
- "test.opened": "opened {when} UTC.",
+ "test.opened": "opened {when}.",
  "test.results": "Results",
  "field.h": "Health worker reports",
  "tie.caption": "Order among tied options",
@@ -470,5 +470,6 @@
  "test.model_version": "Model version",
  "test.pred_hash": "Test predictions hash",
  "test.label_hash": "Test labels hash",
- "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India."
+ "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India.",
+ "route.direct": "Going straight there takes about {n} min."
 }

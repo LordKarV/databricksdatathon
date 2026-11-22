@@ -1018,6 +1018,7 @@ def test_hindi_screens_equal_their_rows(name, payload, base_url, browser):
         errs += check_screen(f"hi/{screen}", payload, got, report)
         errs += raw_key_errs(f"hi/{screen}", payload, text)
         errs += [f"hi/{screen}: English on screen: {e!r}" for e in english_leaks(text)]
+        errs += [f"hi/{screen}: Latin am/pm in a Hindi time: {m!r}" for m in re.findall(r"\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)\b", text)]
     templ = sum(it["kind"] == "template" for _, got, _ in screens for it in got["items"])
     print(f"{name} (hi): {report}, {templ} engine templates in Hindi")
     assert report["values_checked"] > 0
@@ -1070,7 +1071,7 @@ def test_number_wording_flags_bracketed_ranges_and_certain_chances():
 # The vs_direct probabilities stay in the payload for the record; the page shows the plain sentence (#86).
 # #140 WS2 2c adds stops[k].note and vs_direct.direct_minutes for ui2 (WS1) to render; until then they are not shown.
 ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings", "direct_p_objective",
-                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care", "note", "direct_minutes"}
+                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care"}  # note, direct_minutes: shown (#152)
 
 
 def route_leaves(obj: Any, path: str) -> list[str]:

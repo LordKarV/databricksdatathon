@@ -177,7 +177,7 @@
  "test.h": "सीलबंद जाँच का नतीजा",
  "test.line": "संभावना ज़्यादा: {n} में से {k} पक्की निकलीं ({pct}%, दायरा {lo} से {hi}%), उस जाँच सेट पर जो मॉडल तय होने से पहले सील किया गया; एजेंट ने लेबल किया, किसी इंसान ने नहीं जाँचा। सरकारी अस्पतालों की रैंकिंग में इस्तेमाल नहीं ({pub} सरकारी जोड़ियाँ जिनका फ़ैसला है)।",
  "test.hashes": "खोलने का लॉग और हैश",
- "test.opened": "{when} UTC पर खोला गया।",
+ "test.opened": "{when} पर खोला गया।",
  "test.results": "नतीजे",
  "field.h": "स्वास्थ्य कार्यकर्ताओं की रिपोर्ट",
  "tie.caption": "बराबर विकल्पों का क्रम",
@@ -471,6 +471,7 @@
  "test.pred_hash": "जाँच के अनुमानों का हैश",
  "test.label_hash": "जाँच के लेबल का हैश",
  "place.coords_outside": "ये अक्षांश-देशांतर भारत से बाहर हैं। भारत का पिन कोड, ज़िला या कस्बे का नाम लिखें।",
+ "route.direct": "सीधे वहाँ जाने में लगभग {n} मिनट लगते हैं।",
  "engine": {
   "_about": "Exact English engine text, or a template with {slots}, to Hindi. {label} stands for query.service_label (English on the left, Hindi on the right); other slots copy the payload's own words. A reason joined with '; ' is translated clause by clause. Text not here is shown in English with lang=en.",
   "listing evidence not strong enough to rate it Likely": "लिस्टिंग में इतना सबूत नहीं कि संभावना ज़्यादा कहें",
