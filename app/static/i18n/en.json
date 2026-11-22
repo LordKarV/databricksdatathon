@@ -177,7 +177,7 @@
   "test.h": "Sealed test record",
   "test.line": "Likely: {k} of {n} confirmed ({pct}%, interval {lo} to {hi}%) on a test set sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities ({pub} public test pairs with a verdict).",
   "test.hashes": "Opening log and commitment hashes",
-  "test.opened": "opened {when} UTC.",
+  "test.opened": "opened {when}.",
   "test.results": "Results",
   "field.h": "Health worker reports",
   "tie.caption": "Order among tied options",
@@ -502,6 +502,7 @@
   "ans.why_first.nearest": "Why first: the nearest place that could treat this. {name} is rated Likely but {n} min farther: call here first, then {name}.",
   "ans.why_first.rows": "Why first: {rows}.",
   "ans.why_first.rule": "Why first: {rule}",
+  "route.direct": "Without stopping: about {n} min.",
   "ans.doubt.line": "Map point may be wrong. Its address says {address}.",
   "ans.doubt.alt": "From that area it is {low} to {high} min.",
   "ans.doubt.ask": "Ask the way when you call."

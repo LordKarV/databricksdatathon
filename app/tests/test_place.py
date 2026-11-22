@@ -233,6 +233,8 @@ def test_guessed_district_pin_resolves_without_claiming_its_district():
     [d] = p.lookup("Samastipur")
     assert (d["lat"], d["lon"]) == (25.86, 85.78)
     assert "district_from" not in p.lookup("848125")[0]
+    # typed as India Post prints it, the label still shows the six digits, never the typed text
+    assert [m["label"] for m in p.lookup("PIN 848 101")] == ["PIN 848101, Bihar"]
 
 
 @needs_data
