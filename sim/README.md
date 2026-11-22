@@ -89,6 +89,8 @@ true_lon`. `sim.run` writes each to `sim/out/truth/<scenario>_<seed>.parquet`, w
   events. The old rule applied the audit's 20 of 34 wrong, measured on the raw coordinates, to points the cleaning
   had already replaced. The 6/8 cell is thin, and the cleaning's own hand check found 12 of 12 `city_points_elsewhere`
   conflicts wrong (cleaning/geo_identity/handcheck_location.csv), so 0.75 may be low for those 195 disputed points.
+- **S3 sensitivity (lead, #112):** S3 is the pessimistic scenario, so it counts unclear as wrong (6/8 = 0.75). The
+  alternative is the audit's own decided-only count, 3 of 5 = 0.60 for `S3_LOC_WRONG["low_or_disputed"]`.
 - **Caveat on S2 and S3 (#92 review):** they come from the DEV labels the v2 model's calibration step was fitted on,
   and S3 penalises other-facility sentences the engine already drops. Both favour the app by construction. S0 is
   the scenario where the app can lose.
@@ -108,6 +110,20 @@ Every policy returns steps `{facility_id, call_first, note}`, at most 3, tried i
 
 `app_adapter.py` is the thin layer to the shipped app (`app/facts/engine.py`, unchanged). It caches `Engine.plan`
 per (origin rounded to 1e-3 degree, service), since plans do not depend on truth.
+
+**Ranking fix found by the simulation (#92, #101).** The first runs showed the app's emergency order, evidence
+discounted by travel time (p x exp(-minutes / 45), best first), treating fewer simulated trauma patients in the
+window than `nearest_call_first` in every scenario: a farther, better documented hospital came first, and a wasted
+trip costs more than a "no" on the phone. PR #101 changed emergencies to the nearest plausible place first
+(`NEAREST_FIRST` in `app/facts/engine.py`); planned care keeps the old order.
+
+**`app_before_101` (diagnostic, opt-in)** keeps the old emergency order measurable. It uses
+`AppAdapter(old_emergency_rank=True)`: the same engine, with the engine module's `NEAREST_FIRST` emptied only during
+that adapter's calls (`app_adapter.rank_before_101`) and its own plan cache, so `app` is unaffected
+(`tests/test_rank_before_101.py`). Planned care gets the same answers under both, so dialysis is the control. It
+runs only when named: `python -m sim.run --no-sweep --policies app_before_101,app,nearest_call_first`. The
+notebook's "Ranking fix" section reports both versions against `nearest_call_first`, trauma and dialysis, every
+scenario.
 
 ## Execution (`execute.py`, the only reader of the truth)
 
