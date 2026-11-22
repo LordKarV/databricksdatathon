@@ -28,7 +28,7 @@ asking where the evidence of care is thin.
 
 The submission is three things:
 
-- **Video demo:** the app on a phone, start to finish. Video: VIDEO_LINK (placeholder, added after recording, #12).
+- **Video demo:** the app on a phone, start to finish.
 - **This repository**, with the code for every step from audit to app.
 - **The notebook**, with all our code and its outputs:
   [`submission/bharosa.ipynb`](submission/bharosa.ipynb). It is readable on GitHub as is, and runs
