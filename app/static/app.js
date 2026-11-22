@@ -852,8 +852,11 @@ function planScreen() {
   let body;
   if (p.abstain) {
     const oo = p.abstain.outside_option;
-    body = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>
-      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
+    // With a window-miss panel above as well, the "none confirmed" notice goes under the card, so Call stays on
+    // screen on a 320x568 phone (the window line stays the answer's first line).
+    const notice = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>`, low = !!windowHtml(p);
+    body = `${low ? '' : notice}
+      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${low ? notice : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
       ${oo && !windowHtml(p) ? `<article class="panel section"><h3 lang="en">${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="note"><strong>${E('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${E('abstain.outside_option.text', oo.text)}</p>

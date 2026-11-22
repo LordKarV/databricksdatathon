@@ -32,6 +32,7 @@ AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practi
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 GAYA = {"latitude": 24.79, "longitude": 85.0, "accuracy": 40}  # C-section: option 1 outside the 60-min window
 MOHANIA = {"latitude": 25.15, "longitude": 83.68, "accuracy": 40}
+BAHRAICH = {"latitude": 27.57, "longitude": 81.6, "accuracy": 40}
 BIHAR_UP_BORDER = {"latitude": 26.50, "longitude": 84.25, "accuracy": 40}  # west of Gopalganj, near Kushinagar
 VIEWPORT = {"width": 360, "height": 780}
 
@@ -425,7 +426,8 @@ def fold_checks(browser) -> dict:
         for lang in ("en", "hi"):
             # Gaya and Mohania C-section: option 1 is outside the window, so the window-miss panel sits above the card
             for service, geo, tag in (("trauma_emergency", SITAMARHI, ""), ("dialysis", SITAMARHI, ""),
-                                      ("emergency_csection", GAYA, "gaya_"), ("emergency_csection", MOHANIA, "mohania_")):
+                                      ("emergency_csection", GAYA, "gaya_"), ("emergency_csection", MOHANIA, "mohania_"),
+                                      ("burn_care", BAHRAICH, "bahraich_")):  # abstains, and misses the window
                 ctx = browser.new_context(viewport={"width": w, "height": h}, geolocation=geo,
                                           permissions=["geolocation"], is_mobile=True, device_scale_factor=1)
                 page = ctx.new_page()
