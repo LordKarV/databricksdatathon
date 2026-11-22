@@ -44,14 +44,15 @@ def model(monkeypatch):
         answer = REPLY
         calls: ClassVar[list] = []
 
-    def fake(endpoint, body):
+    def fake(endpoint, body, http_timeout_s):
         M.calls.append((endpoint, body))
+        M.http_timeouts.append(http_timeout_s)
         if isinstance(M.answer, Exception):
             raise M.answer
         a = M.answer(body["messages"][-1]["content"]) if callable(M.answer) else M.answer
         return {"choices": [{"message": {"content": json.dumps({"hindi": a}, ensure_ascii=False)}}]}
 
-    M.calls = []
+    M.calls, M.http_timeouts = [], []
     monkeypatch.setattr(u, "_invoke", fake)
     return M
 
@@ -68,6 +69,22 @@ def test_protect_masks_names_numbers_terms_and_the_facility():
     assert t.protect("Offers Mother Teresa Ward")[1] == ["Mother Teresa Ward"]  # the verb is translated
     assert t.protect("sunrise kidney care runs a clinic in gaya", ("Sunrise Kidney Care", "Gaya"))[1] == [
         "sunrise kidney care", "gaya"]
+
+
+def test_facility_names_are_protected_before_clinical_terms():
+    # Review of #109: "Burns Hospital" came back as "जलने की चोट Hospital", a wrong facility name.
+    assert t.protect("Patients are referred to Burns Hospital for grafts")[1] == ["Burns Hospital"]
+    assert t.protect("Emergency Hospital Ranchi has 20 beds")[1] == ["Emergency Hospital Ranchi", "20", "बेड"]
+    assert t.protect("Trauma Centre run by the state, with trauma care")[1] == ["Trauma Centre", "ट्रॉमा"]
+    assert t.protect("Dialysis at Sunrise Medical College and Lifeline Nursing Home")[1] == [
+        "डायलिसिस", "Sunrise Medical College", "Lifeline Nursing Home"]
+
+
+def test_restored_pieces_say_where_they_came_from():
+    parts = t.restore_parts(REPLY, SPANS, QUOTE)
+    assert "".join(p["text"] for p in parts) == GOOD
+    assert [p["text"] for p in parts if p["kind"] == "part"] == ["Apollo Hospital", "1.5 Tesla", "MRI", "20", "ICU"]
+    assert [p["text"] for p in parts if p["kind"] == "term"] == ["बेड", "24 घंटे"]
 
 
 def test_clinical_terms_restore_to_one_fixed_hindi_rendering():
@@ -113,7 +130,8 @@ def test_guard_fails_english_mixed_or_overlong_output():
 # ---------- the endpoint ----------
 def test_translation_is_returned_for_a_known_claim(model):
     r = client.post("/api/translate", json={"claim_id": "c1:equi:0"})
-    assert r.status_code == 200 and r.json() == {"available": True, "hindi": GOOD}
+    assert r.status_code == 200 and r.json()["available"] is True and r.json()["hindi"] == GOOD
+    assert r.json()["parts"] == t.restore_parts(REPLY, SPANS, QUOTE)
     body = model.calls[0][1]
     assert body["temperature"] == 0 and body["messages"][-1]["content"] == MASKED  # the server's own text, masked
 
@@ -148,7 +166,7 @@ def test_the_facility_name_and_city_are_protected(model, monkeypatch):
     model.answer = "⟦1⟧ ⟦2⟧ शहर का एकमात्र किडनी केंद्र है"
     r = client.post("/api/translate", json={"claim_id": "c1:capa:2"}).json()
     assert model.calls[0][1]["messages"][-1]["content"] == "⟦1⟧ is the only kidney centre in ⟦2⟧ town"
-    assert r == {"available": True, "hindi": "Sunrise Kidney Care Gaya शहर का एकमात्र किडनी केंद्र है"}
+    assert r["hindi"] == "Sunrise Kidney Care Gaya शहर का एकमात्र किडनी केंद्र है"
 
 
 LONG = "; ".join(f"Ward {i} offers dialysis, surgery and care for children and older patients every day" for i in
@@ -170,20 +188,38 @@ def test_a_quote_too_long_for_the_budget_makes_no_call(model, monkeypatch):
 
 
 def test_no_endpoint_or_timeout_is_unavailable(model, monkeypatch):
-    model.answer = TimeoutError("slow")
+    model.answer = TimeoutError("slow")  # the HTTP timeout firing inside the SDK
     r = client.post("/api/translate", json={"claim_id": "c1:equi:0"}).json()
-    assert r["available"] is False and "hindi" not in r
+    assert r["available"] is False and r["reason"] == "timeout" and r["message"]  # the page offers a retry
     monkeypatch.delenv("SERVING_ENDPOINT_TEXT")
     r = client.post("/api/translate", json={"claim_id": "c1:equi:0"}).json()
     assert r == {"available": False, "reason": "unavailable", "message": "Translation not available right now."}
 
 
-def test_rate_limit(model, monkeypatch):
+def test_rate_limit_is_per_user_with_a_larger_shared_bucket(model, monkeypatch):
     monkeypatch.setattr(t, "RATE_N", 2)
-    monkeypatch.setattr(FakeEngine, "claims", {f"c{i}:capa:0": ["capability", QUOTE, False, "x"] for i in range(3)})
+    monkeypatch.setattr(t, "RATE_SHARED_N", 3)
+    monkeypatch.setattr(FakeEngine, "claims", {f"c{i}:capa:0": ["capability", QUOTE, False, "x"] for i in range(9)})
     monkeypatch.setattr(FakeEngine, "fid", {})
-    codes = [client.post("/api/translate", json={"claim_id": f"c{i}:capa:0"}).status_code for i in range(3)]
-    assert codes == [200, 200, 429] and len(model.calls) == 2
+
+    def post(i, user=None):
+        h = {"x-forwarded-user": user} if user else {}
+        return client.post("/api/translate", json={"claim_id": f"c{i}:capa:0"}, headers=h)
+
+    assert [post(i, "asha-1").status_code for i in range(3)] == [200, 200, 429]
+    assert post(3, "asha-2").status_code == 200  # another user has their own limit
+    r = [post(i) for i in range(4, 8)]
+    assert [x.status_code for x in r] == [200, 200, 200, 429] and r[-1].json()["message"]
+
+
+def test_translation_never_uses_the_parse_pool_and_every_call_has_an_http_timeout(model, monkeypatch):
+    class Busy:  # /api/parse's pool, saturated by a slow endpoint
+        def submit(self, *a, **k):
+            raise AssertionError("translation must not queue behind /api/parse")
+
+    monkeypatch.setattr(u, "_pool", Busy())
+    assert client.post("/api/translate", json={"claim_id": "c1:equi:0"}).json()["available"] is True
+    assert model.http_timeouts == [t.TIMEOUT_S - u.HTTP_MARGIN_S]
 
 
 def test_no_logging_of_the_text(model, caplog, capsys):

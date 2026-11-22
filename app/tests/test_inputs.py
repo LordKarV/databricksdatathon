@@ -33,7 +33,8 @@ def model(monkeypatch):
         answer: dict | Exception
         calls: list
 
-    def fake(endpoint, body):
+    def fake(endpoint, body, http_timeout_s):
+        assert http_timeout_s < u.TEXT_TIMEOUT_S if endpoint == "text-ep" else http_timeout_s < u.VISION_TIMEOUT_S
         M.calls.append((endpoint, body))
         if isinstance(M.answer, Exception):
             raise M.answer

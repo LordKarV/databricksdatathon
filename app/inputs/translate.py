@@ -27,11 +27,14 @@ from inputs.understand import ModelUnavailable, _strict, call_model
 TIMEOUT_S = 8
 PROMPT_VERSION = "4"  # part of the cache key with the endpoint name: a new prompt or model never reuses old answers
 CACHE_MAX = 5000
-RATE_N, RATE_WINDOW_S = 30, 60  # model calls per user per minute; one shared bucket when the user is unknown
+# Model calls per minute: per reporter key or signed-in user; one shared bucket when neither is known (local runs).
+RATE_N, RATE_SHARED_N, RATE_WINDOW_S = 30, 60, 60
 MAX_LEN_RATIO = 3
 MIN_DEVANAGARI = 0.5
 # Long list quotes go out in chunks, all at once, inside the same 8 s; more chunks than workers would not fit.
 CHUNK_AT, MAX_CHUNKS = 300, 4
+# Translation's own model threads, so a slow endpoint queues here and never in /api/parse's pool (understand._pool).
+_pool = ThreadPoolExecutor(max_workers=2 * MAX_CHUNKS, thread_name_prefix="translate")
 
 SYSTEM = (
     "Translate the user message into simple spoken Hindi, written in Devanagari. The message is part of a "
@@ -66,6 +69,9 @@ _UNIT = r"(?:km|kms|kg|mg|ml|mm|cm|hrs?|hours?|mins?|minutes?|sq\.? ?ft|Tesla|T|
 # Verbs that open a listing sentence ("Offers Normal Vaginal Delivery"): never the first word of a name.
 _OPENERS = r"(?:Offers|Provides|Has|Have|Performs|Operates|Runs|Includes|Conducts|Treats|Manages|Does)"
 _TITLE = r"[A-Z][a-z][\w'\u2019-]*"
+# Facility names are protected before the term map: "Burns Hospital" and "Trauma Centre" stay names.
+_PLACE_END = r"(?:Hospitals?|Centre|Center|Clinic|Medical\s+College|Nursing\s+Home|Institute|Trust)"
+_NAMES = rf"(?P<name>(?!{_OPENERS}\s)(?:{_TITLE}\s+)+{_PLACE_END}(?:\s+{_TITLE})*)"
 _SPANS = (
     rf"(?P<num>{_NUM}\s+{_MONTH}(?:,?\s+{_NUM})?|{_MONTH}\s+{_NUM}"  # dates: 31 October 2023, Oct 2022
     rf"|{_NUM}(?:\s?[x/×-]\s?{_NUM})*(?:\s?{_UNIT})?)"  # 24x7, 24/7, 400-500, 1.5 Tesla, 10 km
@@ -84,13 +90,13 @@ _MIXED = re.compile(r"[\u0900-\u097F][A-Za-z]|[A-Za-z][\u0900-\u097F]")  # one w
 def protect(src: str, keep: tuple[str, ...] = ()) -> tuple[str, list[str]]:
     """(src with each protected span replaced by ⟦n⟧, what each ⟦n⟧ restores to, in order).
 
-    keep: the facility's own name and city, protected wherever they appear (any case). Clinical terms come next and
-    are listed by their fixed Hindi rendering. A single capitalised word opening a sentence ("Offers") is as often
+    keep: the facility's own name and city, protected wherever they appear (any case). Then Title Case names ending
+    in Hospital, Centre, Clinic and the like; then clinical terms, listed by their fixed Hindi rendering. A single capitalised word opening a sentence ("Offers") is as often
     an ordinary word as a name, so the model translates it.
     """
     names = "|".join(re.escape(k) for k in sorted({k for k in keep if k and len(k) > 2}, key=len, reverse=True))
     pat = re.compile((rf"(?P<keep>(?i:(?<![\w])(?:{names})(?![\w])))|" if names else "")
-                     + rf"(?P<term>(?i:(?<![\w])(?:{_TERM_ALTS})(?![\w])))|" + _SPANS)
+                     + _NAMES + rf"|(?P<term>(?i:(?<![\w])(?:{_TERM_ALTS})(?![\w])))|" + _SPANS)
     spans: list[str] = []
 
     def sub(m: re.Match[str]) -> str:
@@ -104,6 +110,19 @@ def protect(src: str, keep: tuple[str, ...] = ()) -> tuple[str, list[str]]:
 
 def restore(reply: str, spans: list[str]) -> str:
     return _TOKEN.sub(lambda m: spans[int(m.group(1)) - 1], reply)
+
+
+def restore_parts(reply: str, spans: list[str], src: str) -> list[dict]:
+    """The restored text in pieces, so the page can mark what came from the quote: kind "part" is copied verbatim
+    from it (names, numbers), "term" is a fixed rendering of a clinical term, "text" is the model's Hindi."""
+    out, pieces = [], _TOKEN.split(reply)  # text, index, text, index, ..., text
+    for i, piece in enumerate(pieces):
+        if i % 2:
+            span = spans[int(piece) - 1]
+            out.append({"text": span, "kind": "part" if span in src else "term"})
+        elif piece:
+            out.append({"text": piece, "kind": "text"})
+    return out
 
 
 def guard(src: str, spans: list[str], reply: str) -> str | None:
@@ -162,13 +181,13 @@ def _store(key: tuple, val: dict) -> None:
 
 
 def _allow(user: str | None) -> bool:
-    # ponytail: in-process sliding window; per-instance, so N app replicas allow N x RATE_N.
+    # ponytail: in-process sliding window; per-instance, so N app replicas allow N x the limit.
     now, k = time.monotonic(), user or "_shared"
     with _lock:
         q = _calls.setdefault(k, deque())
         while q and now - q[0] > RATE_WINDOW_S:
             q.popleft()
-        if len(q) >= RATE_N:
+        if len(q) >= (RATE_N if user else RATE_SHARED_N):
             return False
         q.append(now)
         return True
@@ -177,12 +196,13 @@ def _allow(user: str | None) -> bool:
 def _ask(text: str) -> str:
     ans = call_model("SERVING_ENDPOINT_TEXT", {
         "messages": [{"role": "system", "content": SYSTEM}, *EXAMPLE, {"role": "user", "content": text}],
-        "temperature": 0, "max_tokens": 600, "response_format": _strict("hindi", SCHEMA)}, TIMEOUT_S)
+        "temperature": 0, "max_tokens": 600, "response_format": _strict("hindi", SCHEMA)}, TIMEOUT_S, _pool)
     return str(ans.get("hindi") or "").strip()
 
 
 def translate(claim_id: str, quote: str, user: str | None, keep: tuple[str, ...] = ()) -> dict:
-    """{available: True, hindi} or {available: False, reason}. Guard failures are cached (temperature 0)."""
+    """{available: True, hindi, parts} or {available: False, reason, message?}. Guard failures are cached
+    (temperature 0); timeouts and outages are not, so a retry can work."""
     key = (claim_id, os.environ.get("SERVING_ENDPOINT_TEXT"), PROMPT_VERSION)
     if (hit := _cached(key)) is not None:
         return hit
@@ -192,7 +212,8 @@ def translate(claim_id: str, quote: str, user: str | None, keep: tuple[str, ...]
         return {"available": False, "reason": "too_long_to_translate",
                 "message": "This sentence is too long to translate. The original above is the evidence."}
     if not _allow(user):
-        return {"available": False, "reason": "rate_limited"}
+        return {"available": False, "reason": "rate_limited",
+                "message": "Too many translations just now. Try again in a minute."}
     try:
         if len(parts) == 1:
             reply = _ask(masked)
@@ -206,6 +227,7 @@ def translate(claim_id: str, quote: str, user: str | None, keep: tuple[str, ...]
                 "message": "Translation took too long. The original above is the evidence." if timeout else
                 "Translation not available right now."}
     bad = guard(quote, spans, reply)
-    val = {"available": False, "reason": bad} if bad else {"available": True, "hindi": restore(reply, spans)}
+    val = {"available": False, "reason": bad} if bad else {
+        "available": True, "hindi": restore(reply, spans), "parts": restore_parts(reply, spans, quote)}
     _store(key, val)
     return val

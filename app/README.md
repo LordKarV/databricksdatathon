@@ -329,8 +329,10 @@ a "हिंदी में पढ़ें" button (`static/translate.js`, loa
   with a placeholder (`⟦1⟧`, `⟦2⟧`, ...) and puts the span back after the reply. Protected: digit runs with
   adjacent units or months (`5,000`, `24x7`, `1.5 Tesla`, `31 October 2023`), Title Case runs of 2+ words
   (`Sheikh Bhikhari Medical College`), acronyms (`CABG`, `T2*`), capitalised words not opening a sentence, and the
-  facility's own name and city. The model (`SERVING_ENDPOINT_TEXT` through the `/api/parse` client, temperature 0,
-  one worked example, 8 s) is told to copy each placeholder. The guard shows the result only when every
+  facility's own name and city. The facility's name and city, then Title Case names ending in Hospital, Centre,
+  Clinic, Medical College, Nursing Home, Institute or Trust ("Burns Hospital", "Trauma Centre") are matched before
+  the clinical terms below. The model (`SERVING_ENDPOINT_TEXT` through `understand.call_model`, temperature 0, one
+  worked example, 8 s) is told to copy each placeholder. The guard shows the result only when every
   placeholder comes back exactly once, no digit is added, the rest is mostly Devanagari, no word mixes scripts, and
   it is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
 - Clinical terms come back in fixed Hindi, not the model's choice: `inputs/medical_terms.json` maps each term
@@ -339,15 +341,24 @@ a "हिंदी में पढ़ें" button (`static/translate.js`, loa
   masked like names (case-insensitive, whole words, longest first) and restored to that rendering.
 - A masked quote over 300 characters goes out in sentence or list-item chunks, at most 4, side by side within the
   same 8 s; more chunks than that is "too long to translate", with no model call.
-- In-memory LRU cache (5,000) by claim id, endpoint and prompt version; 30 model calls per user per minute (the
-  reporter key, or one shared bucket without it), per app instance. Quote and translation are never logged.
-- Offline, without the endpoint or on any failure the button reads "अनुवाद अभी उपलब्ध नहीं / Translation not
+- Translation has its own 8-thread pool, so a slow endpoint never queues `/api/parse` or `/api/read-note`. Every
+  model call (parse, note and translation) has an HTTP timeout 1 s under its budget, with the SDK's retries capped
+  at the same time, so a hung request frees its thread.
+- The reply carries `parts`: pieces copied from the quote (names, numbers) and fixed term renderings are shown with
+  the quote's `data-f` path (`data-k="part"` / `"term"`), and `test_faithfulness.py` taps translate and checks every
+  number shown is one of the quote's.
+- In-memory LRU cache (5,000) by claim id, endpoint and prompt version. Rate limit per app instance: 30 model calls
+  a minute per reporter key, else per signed-in user (`X-Forwarded-User`, kept in memory only), else 60 a minute in
+  one shared bucket. Quote and translation are never logged.
+- After a timeout or the rate limit the button stays tappable and the server's message is shown (neither is
+  cached). Offline, without the endpoint or after a guard failure it reads "अनुवाद अभी उपलब्ध नहीं / Translation not
   available right now".
 - Live check (Llama 3.3 70B, 20 real quotes, all 7 services): 19 of 20 passed; the other had one word in two
   scripts ("सocio-आर्थिक") and was rejected. The first, guard-only version passed 9 of 20. The guard still cannot
   catch a reordered sentence: "teaching hospital ... Hazaribagh with ICU, NICU and PICU" came back listing
   Hazaribagh among the units. The label and the original above are the safeguard.
-- Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim).
+- Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim),
+  `tests/test_faithfulness.py::test_translated_quote_shows_only_the_quotes_numbers`.
 
 ## Voice: Hindi and English, speech to text and read aloud
 

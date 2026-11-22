@@ -198,7 +198,10 @@ def translate_quote(req: TranslateRequest, request: Request) -> JSONResponse:
     prefix = req.claim_id.split(":")[0]
     i = next((j for u, j in eng.fid.items() if u.startswith(prefix)), None)
     keep = () if i is None else (eng.fac["name"][i] or "", eng.fac["city"][i] or "")
-    out = translate.translate(req.claim_id, c[1], reporter_key(request.headers), keep)
+    # Rate limit per reporter key, else per signed-in user (in memory only), else one shared bucket.
+    h = request.headers
+    user = reporter_key(h) or (h.get("x-forwarded-user") or h.get("x-forwarded-email") or "").strip().lower() or None
+    out = translate.translate(req.claim_id, c[1], user, keep)
     return JSONResponse(out, status_code=429 if out.get("reason") == "rate_limited" else 200,
                         headers={"Cache-Control": "no-store"})
 
