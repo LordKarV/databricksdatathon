@@ -79,6 +79,7 @@ class Pair:
     qty: str | None
     n_own: int
     model: list | None
+    listings: int = 1  # duplicate listings of this site merged into it (#78); the score is the best member's
 
 
 class Engine:
@@ -106,7 +107,8 @@ class Engine:
               and self.claims[c][3] != "other_facility"][:3]
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
             band, p, lo, hi = pr.model
-            return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))}], ev
+            return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
+                                     *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
         if pr.status == "verified_false" or pr.grade in UNLIKELY_GRADES:
             band = "unlikely"
@@ -123,7 +125,14 @@ class Engine:
         if gold:
             contrib.append({"label": "checked against a second source: " +
                             ("confirmed" if pr.status == "verified_true" else "contradicted"), "points": gold})
-        return band, pr.score, pr.lo, pr.hi, contrib, ev
+        return band, pr.score, pr.lo, pr.hi, contrib + self._listings(pr), ev
+
+    @staticmethod
+    def _listings(pr: Pair) -> list[dict]:
+        """A site listed more than once is scored by its best evidenced listing; say so, with no points of its own."""
+        if pr.listings <= 1:
+            return []
+        return [{"label": f"best evidenced record of {pr.listings} duplicate listings", "points": 0}]
 
     # ---------- helpers ----------
     def _f(self, k: str, i: int):

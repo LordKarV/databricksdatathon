@@ -4,36 +4,36 @@
   "slug": "maharashtra",
   "built": "2026-11-21",
   "pins": 1647,
-  "facilities": 771,
-  "evidence_rows": 1308,
+  "facilities": 767,
+  "evidence_rows": 1305,
   "quotes": 1734,
-  "lists": 3451,
-  "raw_bytes": 318822,
-  "gzip_bytes": 90552
+  "lists": 3460,
+  "raw_bytes": 320187,
+  "gzip_bytes": 90595
  },
  {
   "state": "UTTAR PRADESH",
   "slug": "uttar_pradesh",
   "built": "2026-11-21",
   "pins": 1677,
-  "facilities": 641,
-  "evidence_rows": 1117,
-  "quotes": 1515,
-  "lists": 3006,
-  "raw_bytes": 278915,
-  "gzip_bytes": 78771
+  "facilities": 639,
+  "evidence_rows": 1114,
+  "quotes": 1508,
+  "lists": 3025,
+  "raw_bytes": 280062,
+  "gzip_bytes": 78836
  },
  {
   "state": "TAMIL NADU",
   "slug": "tamil_nadu",
   "built": "2026-11-21",
   "pins": 2054,
-  "facilities": 496,
-  "evidence_rows": 863,
-  "quotes": 1181,
-  "lists": 2710,
-  "raw_bytes": 260713,
-  "gzip_bytes": 70398
+  "facilities": 492,
+  "evidence_rows": 858,
+  "quotes": 1175,
+  "lists": 2720,
+  "raw_bytes": 260874,
+  "gzip_bytes": 70238
  },
  {
   "state": "KARNATAKA",
@@ -44,8 +44,8 @@
   "evidence_rows": 656,
   "quotes": 894,
   "lists": 2029,
-  "raw_bytes": 188574,
-  "gzip_bytes": 54223
+  "raw_bytes": 189358,
+  "gzip_bytes": 54273
  },
  {
   "state": "GUJARAT",
@@ -53,59 +53,59 @@
   "built": "2026-11-21",
   "pins": 1036,
   "facilities": 419,
-  "evidence_rows": 662,
-  "quotes": 927,
-  "lists": 1867,
-  "raw_bytes": 171967,
-  "gzip_bytes": 50413
+  "evidence_rows": 663,
+  "quotes": 928,
+  "lists": 1865,
+  "raw_bytes": 172857,
+  "gzip_bytes": 50445
  },
  {
   "state": "RAJASTHAN",
   "slug": "rajasthan",
   "built": "2026-11-21",
   "pins": 1024,
-  "facilities": 385,
-  "evidence_rows": 621,
-  "quotes": 846,
-  "lists": 1687,
-  "raw_bytes": 159146,
-  "gzip_bytes": 46116
+  "facilities": 387,
+  "evidence_rows": 623,
+  "quotes": 850,
+  "lists": 1689,
+  "raw_bytes": 160418,
+  "gzip_bytes": 46362
  },
  {
   "state": "KERALA",
   "slug": "kerala",
   "built": "2026-11-21",
   "pins": 1439,
-  "facilities": 268,
-  "evidence_rows": 496,
-  "quotes": 714,
-  "lists": 1880,
-  "raw_bytes": 165872,
-  "gzip_bytes": 45721
+  "facilities": 266,
+  "evidence_rows": 489,
+  "quotes": 709,
+  "lists": 1888,
+  "raw_bytes": 166001,
+  "gzip_bytes": 45700
  },
  {
   "state": "WEST BENGAL",
   "slug": "west_bengal",
   "built": "2026-11-21",
   "pins": 1139,
-  "facilities": 250,
-  "evidence_rows": 496,
-  "quotes": 666,
-  "lists": 1744,
-  "raw_bytes": 144471,
-  "gzip_bytes": 42269
+  "facilities": 249,
+  "evidence_rows": 495,
+  "quotes": 665,
+  "lists": 1746,
+  "raw_bytes": 144905,
+  "gzip_bytes": 42214
  },
  {
   "state": "MADHYA PRADESH",
   "slug": "madhya_pradesh",
   "built": "2026-11-21",
   "pins": 792,
-  "facilities": 357,
-  "evidence_rows": 574,
-  "quotes": 781,
-  "lists": 1461,
-  "raw_bytes": 139622,
-  "gzip_bytes": 41578
+  "facilities": 356,
+  "evidence_rows": 573,
+  "quotes": 782,
+  "lists": 1462,
+  "raw_bytes": 140366,
+  "gzip_bytes": 41613
  },
  {
   "state": "ANDHRA PRADESH",
@@ -115,32 +115,32 @@
   "facilities": 269,
   "evidence_rows": 435,
   "quotes": 610,
-  "lists": 1290,
-  "raw_bytes": 139923,
-  "gzip_bytes": 39391
+  "lists": 1285,
+  "raw_bytes": 140366,
+  "gzip_bytes": 39376
  },
  {
   "state": "TELANGANA",
   "slug": "telangana",
   "built": "2026-11-21",
   "pins": 706,
-  "facilities": 286,
-  "evidence_rows": 474,
-  "quotes": 628,
+  "facilities": 285,
+  "evidence_rows": 472,
+  "quotes": 627,
   "lists": 1167,
-  "raw_bytes": 114344,
-  "gzip_bytes": 35333
+  "raw_bytes": 114806,
+  "gzip_bytes": 35340
  },
  {
   "state": "HARYANA",
   "slug": "haryana",
   "built": "2026-11-21",
   "pins": 328,
-  "facilities": 348,
-  "evidence_rows": 579,
-  "quotes": 800,
+  "facilities": 346,
+  "evidence_rows": 578,
+  "quotes": 798,
   "lists": 920,
-  "raw_bytes": 107371,
+  "raw_bytes": 107863,
   "gzip_bytes": 33546
  },
  {
@@ -151,9 +151,9 @@
   "facilities": 276,
   "evidence_rows": 466,
   "quotes": 666,
-  "lists": 1199,
-  "raw_bytes": 106421,
-  "gzip_bytes": 32716
+  "lists": 1198,
+  "raw_bytes": 106962,
+  "gzip_bytes": 32721
  },
  {
   "state": "BIHAR",
@@ -164,8 +164,8 @@
   "evidence_rows": 386,
   "quotes": 546,
   "lists": 1100,
-  "raw_bytes": 107818,
-  "gzip_bytes": 31946
+  "raw_bytes": 108266,
+  "gzip_bytes": 31972
  },
  {
   "state": "ODISHA",
@@ -176,8 +176,8 @@
   "evidence_rows": 264,
   "quotes": 375,
   "lists": 734,
-  "raw_bytes": 87625,
-  "gzip_bytes": 25425
+  "raw_bytes": 88051,
+  "gzip_bytes": 25498
  },
  {
   "state": "JHARKHAND",
@@ -188,32 +188,32 @@
   "evidence_rows": 261,
   "quotes": 362,
   "lists": 566,
-  "raw_bytes": 61098,
-  "gzip_bytes": 19782
+  "raw_bytes": 61394,
+  "gzip_bytes": 19798
  },
  {
   "state": "CHHATTISGARH",
   "slug": "chhattisgarh",
   "built": "2026-11-21",
   "pins": 283,
-  "facilities": 151,
-  "evidence_rows": 234,
-  "quotes": 339,
-  "lists": 473,
-  "raw_bytes": 54021,
-  "gzip_bytes": 17864
+  "facilities": 152,
+  "evidence_rows": 235,
+  "quotes": 341,
+  "lists": 474,
+  "raw_bytes": 54626,
+  "gzip_bytes": 17958
  },
  {
   "state": "ASSAM",
   "slug": "assam",
   "built": "2026-11-21",
   "pins": 580,
-  "facilities": 86,
-  "evidence_rows": 170,
-  "quotes": 241,
-  "lists": 450,
-  "raw_bytes": 54348,
-  "gzip_bytes": 16352
+  "facilities": 85,
+  "evidence_rows": 167,
+  "quotes": 238,
+  "lists": 448,
+  "raw_bytes": 54088,
+  "gzip_bytes": 16291
  },
  {
   "state": "DELHI",
@@ -224,8 +224,8 @@
   "evidence_rows": 252,
   "quotes": 365,
   "lists": 448,
-  "raw_bytes": 47791,
-  "gzip_bytes": 16212
+  "raw_bytes": 48134,
+  "gzip_bytes": 16228
  },
  {
   "state": "HIMACHAL PRADESH",
@@ -236,8 +236,8 @@
   "evidence_rows": 171,
   "quotes": 241,
   "lists": 432,
-  "raw_bytes": 48571,
-  "gzip_bytes": 15397
+  "raw_bytes": 48793,
+  "gzip_bytes": 15405
  },
  {
   "state": "UTTARAKHAND",
@@ -247,9 +247,9 @@
   "facilities": 93,
   "evidence_rows": 169,
   "quotes": 245,
-  "lists": 350,
-  "raw_bytes": 40869,
-  "gzip_bytes": 13365
+  "lists": 349,
+  "raw_bytes": 41049,
+  "gzip_bytes": 13368
  },
  {
   "state": "JAMMU AND KASHMIR",
@@ -260,8 +260,8 @@
   "evidence_rows": 85,
   "quotes": 113,
   "lists": 211,
-  "raw_bytes": 23110,
-  "gzip_bytes": 7940
+  "raw_bytes": 23212,
+  "gzip_bytes": 7953
  },
  {
   "state": "MEGHALAYA",
@@ -270,10 +270,10 @@
   "pins": 70,
   "facilities": 51,
   "evidence_rows": 87,
-  "quotes": 125,
-  "lists": 95,
-  "raw_bytes": 17729,
-  "gzip_bytes": 6642
+  "quotes": 124,
+  "lists": 97,
+  "raw_bytes": 17790,
+  "gzip_bytes": 6677
  },
  {
   "state": "PUDUCHERRY",
@@ -284,8 +284,8 @@
   "evidence_rows": 79,
   "quotes": 119,
   "lists": 51,
-  "raw_bytes": 15815,
-  "gzip_bytes": 6116
+  "raw_bytes": 15939,
+  "gzip_bytes": 6129
  },
  {
   "state": "ANDAMAN AND NICOBAR ISLANDS",
@@ -295,21 +295,21 @@
   "facilities": 50,
   "evidence_rows": 78,
   "quotes": 112,
-  "lists": 54,
-  "raw_bytes": 14168,
-  "gzip_bytes": 5587
+  "lists": 56,
+  "raw_bytes": 14341,
+  "gzip_bytes": 5618
  },
  {
   "state": "ARUNACHAL PRADESH",
   "slug": "arunachal_pradesh",
   "built": "2026-11-21",
   "pins": 51,
-  "facilities": 40,
-  "evidence_rows": 65,
-  "quotes": 88,
-  "lists": 64,
-  "raw_bytes": 12913,
-  "gzip_bytes": 5149
+  "facilities": 41,
+  "evidence_rows": 66,
+  "quotes": 89,
+  "lists": 66,
+  "raw_bytes": 13492,
+  "gzip_bytes": 5324
  },
  {
   "state": "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
@@ -320,20 +320,20 @@
   "evidence_rows": 48,
   "quotes": 69,
   "lists": 22,
-  "raw_bytes": 10153,
-  "gzip_bytes": 4327
+  "raw_bytes": 10241,
+  "gzip_bytes": 4338
  },
  {
   "state": "MANIPUR",
   "slug": "manipur",
   "built": "2026-11-21",
   "pins": 56,
-  "facilities": 28,
-  "evidence_rows": 48,
-  "quotes": 63,
-  "lists": 71,
-  "raw_bytes": 10117,
-  "gzip_bytes": 4289
+  "facilities": 27,
+  "evidence_rows": 45,
+  "quotes": 61,
+  "lists": 63,
+  "raw_bytes": 9830,
+  "gzip_bytes": 4129
  },
  {
   "state": "LADAKH",
@@ -344,8 +344,8 @@
   "evidence_rows": 56,
   "quotes": 74,
   "lists": 35,
-  "raw_bytes": 9851,
-  "gzip_bytes": 4098
+  "raw_bytes": 9937,
+  "gzip_bytes": 4108
  },
  {
   "state": "CHANDIGARH",
@@ -356,8 +356,8 @@
   "evidence_rows": 53,
   "quotes": 78,
   "lists": 66,
-  "raw_bytes": 9575,
-  "gzip_bytes": 3915
+  "raw_bytes": 9649,
+  "gzip_bytes": 3922
  },
  {
   "state": "GOA",
@@ -368,8 +368,8 @@
   "evidence_rows": 39,
   "quotes": 63,
   "lists": 51,
-  "raw_bytes": 10077,
-  "gzip_bytes": 3911
+  "raw_bytes": 10127,
+  "gzip_bytes": 3918
  },
  {
   "state": "TRIPURA",
@@ -378,46 +378,46 @@
   "pins": 80,
   "facilities": 29,
   "evidence_rows": 42,
-  "quotes": 47,
-  "lists": 37,
-  "raw_bytes": 9567,
-  "gzip_bytes": 3888
+  "quotes": 46,
+  "lists": 39,
+  "raw_bytes": 9604,
+  "gzip_bytes": 3893
  },
  {
   "state": "LAKSHADWEEP",
   "slug": "lakshadweep",
   "built": "2026-11-21",
   "pins": 9,
-  "facilities": 31,
+  "facilities": 30,
   "evidence_rows": 55,
   "quotes": 85,
   "lists": 29,
-  "raw_bytes": 9504,
-  "gzip_bytes": 3876
+  "raw_bytes": 9530,
+  "gzip_bytes": 3892
  },
  {
   "state": "NAGALAND",
   "slug": "nagaland",
   "built": "2026-11-21",
   "pins": 46,
-  "facilities": 25,
-  "evidence_rows": 49,
+  "facilities": 24,
+  "evidence_rows": 48,
   "quotes": 68,
-  "lists": 41,
-  "raw_bytes": 9166,
-  "gzip_bytes": 3796
+  "lists": 43,
+  "raw_bytes": 9151,
+  "gzip_bytes": 3780
  },
  {
   "state": "MIZORAM",
   "slug": "mizoram",
   "built": "2026-11-21",
   "pins": 44,
-  "facilities": 24,
-  "evidence_rows": 35,
-  "quotes": 42,
-  "lists": 30,
-  "raw_bytes": 7376,
-  "gzip_bytes": 3212
+  "facilities": 25,
+  "evidence_rows": 36,
+  "quotes": 43,
+  "lists": 31,
+  "raw_bytes": 7520,
+  "gzip_bytes": 3278
  },
  {
   "state": "SIKKIM",
@@ -428,7 +428,7 @@
   "evidence_rows": 32,
   "quotes": 50,
   "lists": 18,
-  "raw_bytes": 6966,
-  "gzip_bytes": 3040
+  "raw_bytes": 7060,
+  "gzip_bytes": 3065
  }
 ]

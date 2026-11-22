@@ -29,7 +29,7 @@ def _planner():
     if str(ROOT) not in sys.path:
         sys.path.append(str(ROOT))  # planner/ and geo/ live at the repo root
     try:
-        from planner import service  # noqa: PLC0415
+        from planner import service
     except ImportError:
         return None
     return service
@@ -46,13 +46,18 @@ def _quotes(eng: Engine, ids: list[str]) -> list[dict]:
     return out
 
 
+def place(*parts: object) -> str:
+    """Town and district for a stop; skips NaN, None and blanks from the planner export (#78)."""
+    words = [x.strip() for x in parts if isinstance(x, str) and x.strip()]
+    return ", ".join(dict.fromkeys(x.title() if x.isupper() else x for x in words))
+
+
 def _stop(eng: Engine, s: dict, question: str | None) -> dict:
     i = eng.fid.get(s["facility_id"])
     fb = s.get("fallback_if_turned_away")
     return {
         "facility_id": s["facility_id"], "name": s["name"],
-        "place": ", ".join(dict.fromkeys(x.title() if x.isupper() else x
-                                         for x in (s.get("town"), s.get("district")) if x)),
+        "place": place(s.get("town"), s.get("district")),
         "purpose": s["purpose"], "purpose_word": PURPOSE.get(s["purpose"], s["purpose"]),
         "eta_low": s["eta_low"], "eta_high": s["eta_high"], "dwell_minutes": s["dwell_minutes"],
         "p": s["p"], "weakest_capability": str(s["weakest_capability"]).replace("_", " "),
