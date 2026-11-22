@@ -349,6 +349,13 @@ function changeScreen() {
     ${state.gpsDenied ? gpsBtn : ''}
     <a class="btn btn-block section" href="#/">${th('nav.cancel')}</a>`;
 }
+// The six digits of a typed PIN ("848 125", "848-125", "PIN 848125", "pin: 848125", "848125."), else null.
+// Same rule as pin_of() in facts/places.py, so a PIN that resolves online also resolves from a saved pack.
+function pinOf(v) {
+  const m = String(v || '').trim().match(/^(?:(?:pin|\u092a\u093f\u0928)(?:\s*code|\s*\u0915\u094b\u0921)?\s*[:#.-]?\s*)?([0-9](?:[0-9\s-]*[0-9])?)[.,;:!]*$/i);
+  const d = m ? m[1].replace(/[\s-]/g, '') : '';
+  return d.length === 6 ? d : null;
+}
 function usePlace(hit, source) {
   state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
   save('loc', state.loc); state.msg = ''; location.hash = '#/';
@@ -385,7 +392,8 @@ async function packHit(v) {
     await needScripts(['/pack.js', '/offline.js']);
     const pack = await window.RSOffline.loadPack();
     if (!pack) return {pack: null};
-    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const pin = pinOf(v);
+    if (pin) return {pack, hit: window.RSOffline.resolvePin(pack, pin), source: 'pin'};
     const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
       .replace(/ (district|dist|zila|zilla|jila)$/, '');
     for (const p of pack.packs || [pack]) {
@@ -407,12 +415,12 @@ function bindChange() {
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
       usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    if (m) { placeErr(ts('place.coords_outside')); return; }  // coordinates, but not in India (#134)
+    if (m && !pinOf(v)) { placeErr(ts('place.coords_outside')); return; }  // coordinates, not in India (#134); "848 125" is a PIN
     if (!v) { placeErr(ts('place.empty')); return; }
     const online = await serverPlace(v);
     if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
     if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
-    if (online) { placeErr(ts(/^\d{6}$/.test(v) ? 'place.pin_missing' : 'place.name_missing', {v})); return; }
+    if (online) { placeErr(pinOf(v) ? ts('place.pin_missing', {v: pinOf(v)}) : ts('place.name_missing', {v})); return; }
     const {pack, hit, source} = await packHit(v);
     if (hit) { usePlace(hit, source); return; }
     const why = ts(navigator.onLine ? 'place.no_answer' : 'place.no_net');
