@@ -20,10 +20,10 @@
    "delivery me dikkat", "delivery mein problem", "delivery ke baad khoon", "bleeding after delivery"
   ],
   "nicu": [
-   "नवजात", "नवजात शिशु", "नया बच्चा कमजोर", "बच्चा कमजोर", "कमजोर बच्चा", "बच्चा कमज़ोर", "कम वजन का बच्चा",
+   "नवजात", "नवजात शिशु", "नया बच्चा कमजोर", "कमजोर पैदा हुआ", "कम वजन का बच्चा",
    "कम वज़न", "समय से पहले पैदा", "अधूरे महीने", "सातवें महीने में पैदा", "बच्चे को पीलिया", "पीलिया वाला बच्चा",
    "शीशे की मशीन", "मशीन में रखना", "बच्चा दूध नहीं पी रहा", "एन आई सी यू",
-   "navjaat", "navjat", "naya bachcha", "bachcha kamzor", "bacha kamjor", "kamzor bachcha", "kam vajan",
+   "navjaat", "navjat", "naya bachcha", "kamzor paida", "kam vajan",
    "kam wajan", "weight kam hai bachche ka", "baby ko piliya", "bachche ko peeliya", "samay se pehle",
    "adhure mahine", "sheeshe ki machine", "doodh nahi pee raha"
   ],
@@ -35,7 +35,7 @@
    "chhat se gira", "ped se gira", "takkar", "bike se gira", "fracher", "trauma"
   ],
   "burn_care": [
-   "जल गए", "झुलस", "झुलस गया", "आग से जला", "आग लग गई", "आग लगी", "गरम पानी गिरा", "गर्म पानी गिर", "गरम तेल",
+   "जल गए", "झुलस", "झुलस गया", "आग से जला", "आग लग गई", "आग लगी", "गरम पानी गिरा", "गर्म पानी गिर", "गरम तेल", "जलने की चोट",
    "तेजाब", "तेज़ाब", "एसिड", "करंट लगा", "करंट लग गया", "सिलेंडर फटा", "बर्न",
    "jal gaye", "jhulas", "jhulsa", "aag lag gayi", "aag lagi", "garam pani gira", "garam pani gir", "garam tel", "tezab",
    "acid attack", "current lag gaya", "karant laga", "cylinder phata", "cylinder fat gaya"
@@ -45,7 +45,7 @@
    "mri scan", "em aar aai"
   ],
   "cardiac_surgery": [
-   "दिल का आपरेशन", "हार्ट सर्जरी", "हार्ट का ऑपरेशन", "बाईपास", "बायपास", "वाल्व बदलना", "दिल में छेद",
+   "दिल का आपरेशन", "दिल की सर्जरी", "हार्ट सर्जरी", "हार्ट का ऑपरेशन", "बाईपास", "बायपास", "वाल्व बदलना", "दिल में छेद",
    "ओपन हार्ट",
    "heart ka operation", "baipas", "valve badalna", "dil mein chhed", "dil me ched"
   ]
