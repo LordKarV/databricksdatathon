@@ -351,12 +351,12 @@
     "gzip": 587
    },
    "/app.css": {
-    "raw": 29092,
-    "gzip": 7106
+    "raw": 29081,
+    "gzip": 7137
    },
    "/app.js": {
-    "raw": 111089,
-    "gzip": 34399
+    "raw": 105336,
+    "gzip": 32806
    },
    "/input.js": {
     "raw": 15543,
@@ -367,8 +367,8 @@
     "gzip": 136
    },
    "/i18n/en.json": {
-    "raw": 29705,
-    "gzip": 9712
+    "raw": 29789,
+    "gzip": 9727
    },
    "/fonts/barlow-500.woff2": {
     "raw": 8524,
@@ -379,12 +379,12 @@
     "gzip": 8651
    }
   },
-  "gzip_total": 74553,
+  "gzip_total": 73006,
   "budget_gzip": 75000,
   "budget_requests": 8
  },
  "hindi_extra": {
-  "/i18n/hi.json": 23538,
+  "/i18n/hi.json": 23555,
   "/fonts/hind-500-deva.woff2": 35665,
   "/fonts/hind-600-deva.woff2": 35013
  },
@@ -393,43 +393,92 @@
    "ok": true,
    "top": 576,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
   },
   "call_dialysis_en_360x640": {
    "ok": true,
    "top": 576,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
   },
   "call_pusa_trauma_emergency_en_360x640": {
    "ok": true,
    "top": 576,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_gaya_emergency_csection_en_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_mohania_emergency_csection_en_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_bahraich_burn_care_en_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
   },
   "call_trauma_emergency_hi_360x640": {
    "ok": true,
    "top": 538,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
   },
   "call_dialysis_hi_360x640": {
    "ok": true,
    "top": 576,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
   },
   "call_pusa_trauma_emergency_hi_360x640": {
    "ok": true,
    "top": 538,
    "bottom": 632,
-   "viewport": 640
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_gaya_emergency_csection_hi_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_mohania_emergency_csection_hi_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
+  },
+  "call_bahraich_burn_care_hi_360x640": {
+   "ok": true,
+   "top": 576,
+   "bottom": 632,
+   "viewport": 640,
+   "fixed": false
   },
   "call_trauma_emergency_en_320x568": {
    "ok": true,
    "top": 490,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
   },
   "why_ledger_open_en_320": {
    "ok": true,
@@ -439,19 +488,43 @@
    "ok": true,
    "top": 504,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
   },
   "call_pusa_trauma_emergency_en_320x568": {
    "ok": true,
    "top": 490,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
+  },
+  "call_gaya_emergency_csection_en_320x568": {
+   "ok": true,
+   "top": 504,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": false
+  },
+  "call_mohania_emergency_csection_en_320x568": {
+   "ok": true,
+   "top": 504,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": false
+  },
+  "call_bahraich_burn_care_en_320x568": {
+   "ok": true,
+   "top": 504,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": false
   },
   "call_trauma_emergency_hi_320x568": {
    "ok": true,
    "top": 466,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
   },
   "why_ledger_open_hi_320": {
    "ok": true,
@@ -461,13 +534,36 @@
    "ok": true,
    "top": 466,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
   },
   "call_pusa_trauma_emergency_hi_320x568": {
    "ok": true,
    "top": 466,
    "bottom": 560,
-   "viewport": 568
+   "viewport": 568,
+   "fixed": false
+  },
+  "call_gaya_emergency_csection_hi_320x568": {
+   "ok": true,
+   "top": 504,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": true
+  },
+  "call_mohania_emergency_csection_hi_320x568": {
+   "ok": true,
+   "top": 504,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": true
+  },
+  "call_bahraich_burn_care_hi_320x568": {
+   "ok": true,
+   "top": 466,
+   "bottom": 560,
+   "viewport": 568,
+   "fixed": false
   }
  }
 }

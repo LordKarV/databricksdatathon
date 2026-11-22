@@ -24,6 +24,21 @@ pipeline in `run_all.sh` order, writes `derived/v1` to `/Volumes/workspace/refer
 20 tables passing (17 equal to the manifest, 3 CSV copies by rows). The page check that fetches live websites is
 not run; its stored result is reused.
 
+### Release runs (2026-11-22, ran on Databricks serverless)
+
+All three notebooks ran end to end on Databricks Free Edition serverless on 2026-11-22, as one-off notebook runs
+(`databricks jobs submit`) from a workspace copy of the tracked files on the release branch:
+
+| notebook | run id | result |
+| --- | --- | --- |
+| `referral_saathi.ipynb` | 796897435272535 | SUCCESS, 67 cells, 0 error cells |
+| `02_simulation.ipynb` | 418325743233710 | SUCCESS, 12 cells, 0 error cells |
+| `00_rebuild_derived.ipynb` | 245706239328385 | SUCCESS, 31 pipeline steps ok, 20 of 20 tables pass against `derived/v1/MANIFEST.json` |
+
+The committed notebooks are the local runs (`build_notebook.py`, `build_sim_notebook.py`), not the Databricks
+exports: a job run exports as an HTML view, not as `.ipynb`, and the rebuild notebook's output prints a workspace
+path that holds a user name.
+
 Steps that cannot run inside Free Edition were run offline: the website crawl, web labelling and external
 downloads. The notebook loads their committed summaries (`kb/`, `derived/v1/`) and says so where it does.
 
