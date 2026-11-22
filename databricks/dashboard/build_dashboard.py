@@ -174,7 +174,8 @@ ORDER BY pmndp_centres DESC
 """)
 
 ds("ds_funnel", "Evidence ladder (one row per record and service)", """
-SELECT g.stname AS state, upper(g.dtname) AS district, p.service,
+SELECT g.stname AS state, upper(g.dtname) AS district, -- v1 named trauma trauma_emergency; v2 calls it trauma_care, so one service filter covers both datasets
+       CASE p.service WHEN 'trauma_emergency' THEN 'trauma_care' ELSE p.service END AS service,
        CAST(p.mentioned AS INT) AS mentioned,
        CAST(p.mentioned AND p.fields2 AS INT) AS in_2plus_fields,
        CAST(p.mentioned AND p.fields2 AND p.prereq AS INT) AS own_checks,
@@ -214,100 +215,6 @@ JOIN facility_location l ON l.unique_id = f.unique_id
 ORDER BY state, district, facility, f.list_name
 """)
 
-PLAN_SETS = "('Bihar', 'Uttar Pradesh', 'Maharashtra')"
-ds("ds_plans", "Planner sample journeys (one row per origin and pathway)", f"""
-SELECT state, pathway, origin_id, best_type, first_name, first_eta, def_name, def_eta,
-       def_low, def_high, p_objective,
-       CASE WHEN def_eta <= 60 THEN 1 ELSE 0 END AS definitive_within_60,
-       CASE WHEN first_eta <= 60 THEN 1 ELSE 0 END AS first_care_within_60
-FROM planner_plans
-WHERE origin_set IN {PLAN_SETS}
-""")
-
-ds("ds_plans_window", "Definitive care within 60 minutes, by pathway", f"""
-WITH t AS (
-  SELECT state, pathway, SUM(CASE WHEN def_eta <= 60 THEN 1 ELSE 0 END) AS k, COUNT(*) AS n
-  FROM planner_plans
-  WHERE origin_set IN {PLAN_SETS}
-  GROUP BY state, pathway)
-SELECT state, pathway, k, n, k / n AS rate,
-       {wilson('k', 'n', 'lo')} AS lo,
-       {wilson('k', 'n', 'hi')} AS hi
-FROM t
-ORDER BY state, rate DESC
-""")
-
-ds("ds_plans_concentration", "Most-chosen definitive facility per pathway", f"""
-WITH c AS (
-  SELECT state, pathway, def_name, COUNT(*) AS origins,
-         SUM(COUNT(*)) OVER (PARTITION BY state, pathway) AS planned
-  FROM planner_plans
-  WHERE origin_set IN {PLAN_SETS} AND def_name IS NOT NULL
-  GROUP BY state, pathway, def_name),
-r AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY state, pathway ORDER BY origins DESC, def_name) AS rk FROM c)
-SELECT state, pathway, def_name AS top_facility, origins, planned, origins / planned AS share
-FROM r WHERE rk = 1
-ORDER BY state, share DESC
-""")
-
-RESULTS = "source_file = 'model/review/stats/results.json'"
-AUROC_RE = "'^pair_level_test[.]primary_target_(all|searched)[.]auroc[.]([A-Za-z0-9_]+)[.](.+)$'"
-ECE_RE = "'^pair_level_test[.]calibration_primary_(all|searched)[.](ece_raw|ece_ipw)(.*)$'"
-ds("ds_test_metrics", "Published sealed-test results (quoted from results.json, not recomputed)", f"""
-WITH a AS (
-  SELECT regexp_extract(path, {AUROC_RE}, 1) AS view, regexp_extract(path, {AUROC_RE}, 2) AS sys,
-         regexp_extract(path, {AUROC_RE}, 3) AS stat, value_num
-  FROM model_test_metrics WHERE {RESULTS} AND path RLIKE {AUROC_RE}),
-e AS (
-  SELECT regexp_extract(path, {ECE_RE}, 1) AS view, regexp_extract(path, {ECE_RE}, 2) AS kind,
-         regexp_extract(path, {ECE_RE}, 3) AS stat, value_num
-  FROM model_test_metrics WHERE {RESULTS} AND path RLIKE {ECE_RE}),
-auroc AS (
-  SELECT 'AUROC' AS metric, view, sys,
-         max(CASE WHEN stat = 'raw' THEN value_num END) AS value,
-         max(CASE WHEN stat = 'raw_boot.ci95[0]' THEN value_num END) AS lo,
-         max(CASE WHEN stat = 'raw_boot.ci95[1]' THEN value_num END) AS hi,
-         max(CASE WHEN stat = 'ipw' THEN value_num END) AS ipw_value
-  FROM a WHERE sys IN ('WL_shipped', 'B4_prior_only', 'B3_llm_judge', 'B0_any_mention', 'B1_keyword_count', 'B2_rule_grade')
-  GROUP BY view, sys),
-ece AS (
-  SELECT 'ECE (lower is better)' AS metric, view, 'WL_shipped' AS sys,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '' THEN value_num END) AS value,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '_boot.ci95[0]' THEN value_num END) AS lo,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '_boot.ci95[1]' THEN value_num END) AS hi,
-         max(CASE WHEN kind = 'ece_ipw' AND stat = '' THEN value_num END) AS ipw_value
-  FROM e GROUP BY view)
-SELECT metric,
-       CASE view WHEN 'all' THEN 'All 71 test pairs' ELSE '39 searched pairs' END AS test_view,
-       CASE sys WHEN 'WL_shipped' THEN 'Fitted ledger (shipped)'
-                WHEN 'B4_prior_only' THEN 'Same scorecard, expert priors'
-                WHEN 'B3_llm_judge' THEN 'LLM judge'
-                WHEN 'B0_any_mention' THEN 'Any mention'
-                WHEN 'B1_keyword_count' THEN 'Keyword count'
-                WHEN 'B2_rule_grade' THEN 'Rule grade' END AS system,
-       value, lo, hi, ipw_value
-FROM (SELECT * FROM auroc UNION ALL SELECT * FROM ece)
-ORDER BY metric, test_view, value DESC
-""")
-
-ds("ds_test_labels", "What the sealed-test labels were", f"""
-WITH m AS (SELECT path, value_num AS v FROM model_test_metrics WHERE {RESULTS}),
-p AS (
-  SELECT max(CASE WHEN path = 'inputs.test_label_counts.confirmed' THEN v END) AS confirmed,
-         max(CASE WHEN path = 'inputs.test_label_counts.contradicted' THEN v END) AS contradicted,
-         max(CASE WHEN path = 'inputs.test_label_counts.no_info' THEN v END) AS no_info,
-         max(CASE WHEN path = 'inputs.test_never_searched' THEN v END) AS never_searched,
-         max(CASE WHEN path = 'pair_level_test.primary_target_all.n' THEN v END) AS n
-  FROM m)
-SELECT ord, label, CAST(pairs AS INT) AS pairs, CAST(n AS INT) AS of_pairs, pairs / n AS share
-FROM p LATERAL VIEW stack(4,
-  1, 'Confirmed', confirmed,
-  2, 'Contradicted', contradicted,
-  3, 'No public information, searched', no_info - never_searched,
-  4, 'No public information, never searched', never_searched) s AS ord, label, pairs
-ORDER BY ord
-""")
-
 # Checks quoted in DASHBOARD_SPEC.md, run against the dataset SQL itself.
 CHECKS = [
     ("ds_facility national: records, high conf, names other, directory phones (spec 9959, 7762, 1232, 292)",
@@ -330,14 +237,6 @@ CHECKS = [
      "SELECT COUNT(*), SUM(CASE WHEN unique_id IN (SELECT unique_id FROM record_trust WHERE trust_level = "
      "'exclude_review') THEN 1 ELSE 0 END), SUM(CASE WHEN band = 'No service text' AND p_s IS NOT NULL THEN 1 "
      "ELSE 0 END), COUNT(DISTINCT operator) FROM ({ds_pairs})"),
-    ("ds_plans_window Bihar major trauma (spec 15 of 150)",
-     "SELECT k, n, round(rate, 3), round(lo, 3), round(hi, 3) FROM ({ds_plans_window}) WHERE state = 'BIHAR' AND pathway = 'major_trauma'"),
-    ("ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar)",
-     "SELECT pathway, top_facility, origins, planned FROM ({ds_plans_concentration}) WHERE state = 'BIHAR' AND pathway IN ('obstetric_emergency', 'major_trauma')"),
-    ("ds_test_metrics shipped vs priors, all 71 (storybook 0.776 [0.680, 0.862] vs 0.789; ECE IPW 0.197)",
-     "SELECT metric, system, value, lo, hi, ipw_value FROM ({ds_test_metrics}) WHERE test_view = 'All 71 test pairs' AND system IN ('Fitted ledger (shipped)', 'Same scorecard, expert priors')"),
-    ("ds_test_labels (storybook 17, 1, 21, 32 of 71)",
-     "SELECT label, pairs, of_pairs FROM ({ds_test_labels})"),
     ("ds_dialysis_district coverage: NFHS districts reached and LGD rows",
      "SELECT COUNT(DISTINCT state, nfhs_district), COUNT(*) FROM ({ds_dialysis_district})"),
     ("filter values: states in ds_facility, districts in ds_facility",
@@ -734,60 +633,6 @@ def page4():
 
 
 def page5():
-    window_spec = {
-        "transform": [{"calculate": "format(datum.k, ',') + ' of ' + format(datum.n, ',')"
-                                    " + (datum.n < 30 ? ', small sample' : '')", "as": "lbl"}],
-        "encoding": {"y": {"field": "pathway", "type": "nominal", "sort": {"field": "rate", "order": "descending"},
-                           "title": None},
-                     "yOffset": {"field": "state"}},
-        "layer": [
-            {"mark": {"type": "bar", "opacity": 0.85},
-             "encoding": {"x": {"field": "rate", "type": "quantitative", "scale": {"domain": [0, 1]},
-                                "axis": {"format": "%"}, "title": "Origins reaching definitive care within 60 min"},
-                          "color": {"field": "state", "type": "nominal", "scale": {"range": [BLUE, ORANGE, GREEN]},
-                                    "legend": {"orient": "bottom", "title": None}},
-                          "tooltip": [{"field": "state"}, {"field": "pathway"}, {"field": "lbl", "title": "k of n"},
-                                      {"field": "lo", "format": ".1%", "title": "95% low"},
-                                      {"field": "hi", "format": ".1%", "title": "95% high"}]}},
-            {"mark": {"type": "rule", "color": INK}, "encoding": {"x": {"field": "lo"}, "x2": {"field": "hi"}}},
-            {"mark": {"type": "text", "align": "left", "dx": 4, "color": INK, "fontSize": 10},
-             "encoding": {"x": {"field": "hi"}, "text": {"field": "lbl"}}},
-        ]}
-    return page("journeys", "5. Referral journeys (sample)", header(
-        "p5", "Referral journeys: planner sample, stub probabilities",
-        "Only 150 sampled PIN origins per state in Bihar, Uttar Pradesh and Maharashtra; other states show no "
-        "sample. Probabilities come from the derived/v1 stub (planner/data_v1.py), not the fitted model. Free-flow "
-        "travel, no dispatch delay. The PIN sample is not weighted by population. Abstaining origins stay in the "
-        "denominator of 5.1.") + [
-        vega("p5_window", "ds_plans_window", [(c, f"`{c}`") for c in ("state", "pathway", "k", "n", "rate", "lo", "hi")],
-             True, window_spec, "5.1 Definitive care within 60 minutes, by pathway, 95% Wilson interval",
-             "Bihar major trauma: 15 of 150 (10%).", pos(0, 3, 6, 8)),
-        {"widget": {"name": "p5_plantype",
-                    "queries": query("ds_plans", [("pathway", "`pathway`"), ("best_type", "`best_type`"),
-                                                  ("count(origin_id)", "COUNT(`origin_id`)")], False),
-                    "spec": {"version": 3, "widgetType": "bar",
-                             "encodings": {"x": {"fieldName": "pathway", "displayName": "Pathway",
-                                                 "scale": {"type": "categorical"}},
-                                           "y": {"fieldName": "count(origin_id)", "displayName": "Origins",
-                                                 "scale": {"type": "quantitative"}},
-                                           "color": {"fieldName": "best_type", "displayName": "Best plan",
-                                                     "scale": {"type": "categorical", "mappings": [
-                                                         {"value": "abstain", "color": UNVERIFIED}]}}},
-                             "mark": {"layout": "stack-100"},
-                             "frame": frame("5.2 Best plan type by pathway",
-                                            "Share of sampled origins; abstain = no plan met the evidence bar.")}},
-         "position": pos(6, 3, 6, 8)},
-        table("p5_concentration", "ds_plans_concentration",
-              [("state", "State", None), ("pathway", "Pathway", None), ("top_facility", "Most-chosen definitive facility", None),
-               ("origins", "Origins sent there", None), ("planned", "Origins with a plan (n)", None),
-               ("share", "Share", PCT)],
-              "5.3 Share of origins sent to the most-chosen definitive facility",
-              "Abstaining origins are excluded here. Bihar: obstetric emergency 81 of 131 to Sub Divisional Hospital "
-              "Pusa; major trauma 79 of 134 to Rajeshwar Hospital.", pos(0, 11, 12, 6)),
-    ])
-
-
-def page6():
     site_spec = {
         "transform": WILSON_VL,
         "encoding": {"y": {"field": "operator", "type": "nominal", "sort": ["Public", "Private", "Not stated"],
@@ -810,11 +655,10 @@ def page6():
         ]}
     site_fields = [("operator", "`operator`"), ("settlement", "`settlement`"), ("k", "SUM(`own_site`)"),
                    ("n", "COUNT(`unique_id`)")]
-    return page("trust_scores", "6. How far to trust the scores", header(
+    return page("trust_scores", "5. How far to trust the scores", header(
         "p6", "How far to trust the scores",
         SHARED_CAVEAT + " Bands are model v2 (derived/v2, A_platt) over 36 services and 9,947 eligible records. "
-        + PUBLIC_CAVEAT + " Tables 6.2 and 6.3 are the earlier v1 sealed test, quoted from "
-        "model/review/stats/results.json, not recomputed; they do not evaluate v2.") + [
+        + PUBLIC_CAVEAT + " The sealed v2 TEST is in the notebook (referral_saathi.ipynb).") + [
         {"widget": {"name": "p6_bands",
                     "queries": query("ds_pairs", [("band", "`band`"), ("count(unique_id)", "COUNT(`unique_id`)")], False),
                     "spec": {"version": 3, "widgetType": "bar",
@@ -831,7 +675,7 @@ def page6():
                                                          {"value": "No service text", "color": UNVERIFIED},
                                                          {"value": "Unlikely", "color": UNLIKELY}]}},
                                            "label": {"show": True}},
-                             "frame": frame("6.1 Model v2 bands for the service",
+                             "frame": frame("5.1 Model v2 bands for the service",
                                             "No service text: the record has no sentence about the service as its "
                                             "own unit, so P_S rests on context only. Unlikely means little or "
                                             "contaminated evidence, not that the service is absent. National, 36 "
@@ -839,28 +683,9 @@ def page6():
                                             "94,217 Unlikely.")}},
          "position": pos(0, 3, 6, 7)},
         vega("p6_website", "ds_facility", site_fields, False, site_spec,
-             "6.4 Records with a crawlable own website, by operator and settlement class",
+             "5.2 Records with a crawlable own website, by operator and settlement class",
              "k of n with 95% Wilson intervals. Confirmation mostly means having a website (80.3% with a site, 2.5% "
              "without), so public and rural records are under-confirmed, not under-served.", pos(6, 3, 6, 7)),
-        table("p6_metrics", "ds_test_metrics",
-              [("metric", "Metric", None), ("test_view", "Test view", None), ("system", "System", None),
-               ("value", "Value", NUM2), ("lo", "95% low", NUM2), ("hi", "95% high", NUM2),
-               ("ipw_value", "Reweighted (IPW)", NUM2)],
-              "6.2 Published sealed-test results",
-              "AUROC with bootstrap 95% interval; ECE for the shipped ledger. 71 pairs, 17 confirmed and 1 "
-              "contradicted. Shipped ledger IPW ECE 0.197 (0.143 to 0.292). The fitted ledger does not beat the same "
-              "scorecard with expert priors.",
-              pos(0, 10, 12, 7)),
-        table("p6_labels", "ds_test_labels",
-              [("label", "Label", None), ("pairs", "Pairs", None), ("of_pairs", "Of", None), ("share", "Share", PCT)],
-              "6.3 What the labels were",
-              "\"Never searched\" is inferred from no_info with no URLs; one 200-search budget ran out.",
-              pos(0, 17, 6, 5)),
-        text("p6_labels_note", [
-            "### Why this matters\n", "\n",
-            "53 of 71 test labels say no public information and 32 of those were never searched. How "
-            "\"no information\" is treated and how the sample is weighted move AUROC by up to 0.16, more than "
-            "any model change (0.013). Kappa is 0.38 on 30 double-labelled pairs.\n"], pos(6, 17, 6, 5)),
     ])
 
 
@@ -876,8 +701,7 @@ def multi_filter(name, title, field, datasets, widget_type, default=None, p=None
 
 
 STATE_DS = ["ds_facility", "ds_district", "ds_dialysis_district", "ds_csection_district", "ds_dialysis_burden",
-            "ds_pmndp", "ds_funnel", "ds_pairs", "ds_list_facts", "ds_plans", "ds_plans_window",
-            "ds_plans_concentration"]
+            "ds_pmndp", "ds_funnel", "ds_pairs", "ds_list_facts"]
 DISTRICT_DS = ["ds_facility", "ds_district", "ds_dialysis_district", "ds_csection_district", "ds_dialysis_burden",
                "ds_funnel", "ds_pairs", "ds_list_facts"]
 SERVICE_DS = ["ds_funnel", "ds_pairs"]
@@ -897,7 +721,7 @@ def build():
     dashboard = {
         "datasets": [{"name": d["name"], "displayName": d["displayName"],
                       "queryLines": [line + "\n" for line in d["sql"].splitlines()]} for d in DATASETS.values()],
-        "pages": [page1(), page2(), page3(), page4(), page5(), page6(), filters_page()],
+        "pages": [page1(), page2(), page3(), page4(), page5(), filters_page()],
         "uiSettings": {"theme": {
             "canvasBackgroundColor": {"light": "#fcfcfb", "dark": "#1b1b1a"},
             "widgetBackgroundColor": {"light": "#ffffff", "dark": "#242423"},

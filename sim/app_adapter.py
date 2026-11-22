@@ -126,7 +126,7 @@ class AppAdapter:
             pool, _ = self.engine._ranked(service, round(lat, ROUND), round(lon, ROUND))
         e = self.engine
         return [{"facility_id": e.fac["id"][pr.fi], "p": e.rank_p(pr, e.score(e.fac["id"][pr.fi], service)[1]),
-                 "minutes": m, "band": band} for _, m, pr, _, band in pool]
+                 "minutes": m, "band": band} for _, m, pr, _, band, _ in pool]
 
     # ---------- offline: the state pack ----------
     def pack(self, state: str) -> dict | None:
