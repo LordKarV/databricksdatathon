@@ -348,7 +348,7 @@ Say these the same way everywhere:
   the unverified patterns study (`viz/patterns/PATTERNS.md`) says a website answers for 29.8% of public
   hospitals (94 of 315, discovery split). Different denominators; use 18%.
 - Cross-state far pins: 128 (chart), 129 (verifier), 67 of 1,407 (REPORT.md method). Say "about 130".
-- Records with a far pin: 1,367 of 9,869 (story) vs 1,373 of 9,875 (verifier); both 13.9%.
+- Records with a far pin: 1,367 of 9,869 (story) vs 1,373 of 9,875 (verifier); both 13.9%. The story's figure stands: the 6 extra records have coordinates outside India, get no distance in cleaning and are excluded.
 - Top shared phone number (trust story 4, on the bench): 432 records here, 431 in REPORT.md; its "37
   states" are spellings of 16 distinct states (verifier).
 - LLM judge at confidence 1: 208 yes answers (209 answers in all had confidence 1).

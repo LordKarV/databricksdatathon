@@ -73,7 +73,7 @@
         "model_card",
         "dashboard"
       ],
-      "caveat": "The two 1,367s are a coincidence (far pins vs 'located elsewhere' records). The verifier counts 1,373 of 9,875 far pins on cleaned postcode centres (still 13.9%) and 129 cross-state pins where the chart says 128 (REPORT.md's other method gives 67 of 1,407): say 'about 130'. A far pin is sometimes right and the postcode wrong (coordinates right 14 of 40 in REPORT.md's hand check). The map draws points and arrows only, no boundaries.",
+      "caveat": "The two 1,367s are a coincidence (far pins vs 'located elsewhere' records). The verifier counts 1,373 of 9,875 far pins on cleaned postcode centres (still 13.9%) and 129 cross-state pins where the chart says 128 (REPORT.md's other method gives 67 of 1,407): say 'about 130'. The story's 1,367 of 9,869 stands: the 6 extra records have coordinates outside India, get no distance in cleaning and are excluded. A far pin is sometimes right and the postcode wrong (coordinates right 14 of 40 in REPORT.md's hand check). The map draws points and arrows only, no boundaries.",
       "verification": "viz/trust/verify/v_s2.py run 2026-11-21: 723/1,367 and 821/8,165 reproduced exactly; far-pin count 1,373 vs 1,367 (different row filter)."
     },
     {
