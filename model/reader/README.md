@@ -236,9 +236,25 @@ than the rules' and the paired bootstrap interval of the difference excludes zer
 that line for both heads. If it is not met, say so and keep the rules. Given how the eval set was
 built, a win on `offers` is unlikely; `about_this` is the head to watch.
 
+## The other two backbones on a Databricks A10G (2026-11-22)
+
+Run: `model/reader/configs/gpu_remaining.yaml` on Databricks AI Runtime (serverless, one NVIDIA A10G, 23 GB,
+CUDA 13.2, torch 2.15). Same settings as the minilm-l12 run (3 epochs, batch 128, max length 192, seed 7).
+Files: `out_gpu/metrics_gpu_remaining.json`, `out_gpu/run_log.txt`, `out_gpu/nvidia_smi.txt`,
+`out_gpu/pip_freeze.txt`, and `eval/results_{bge-small,me5-small}.json`. Total 1,464 s for both.
+
+| Backbone | Train s | Best val loss | about_this F1 vs rules (95% CI) | offers F1 vs rules (95% CI) | ECE about_this / offers |
+|---|---|---|---|---|---|
+| bge-small | 409 | 0.248 | 0.597 vs 0.547, +0.050 (-0.065 to 0.170) | 0.452 vs 0.864, -0.412 (-0.551 to -0.285) | 0.168 / 0.154 |
+| me5-small | 460 | 0.250 | 0.519 vs 0.547, -0.028 (-0.140 to 0.091) | 0.333 vs 0.864, -0.531 (-0.665 to -0.392) | 0.224 / 0.178 |
+
+F1 is on label 0 over the same 564 hand labels, at threshold 0.5. bge-small has the lowest validation loss
+of the three and is `chosen` in the metrics file. On a GPU each backbone trained in about 7 minutes, against
+7,588 s for minilm-l12 on the Mac. No backbone beats the rules on `offers`, and none is detectably better on
+`about_this`, so the reader stays a documented negative result: the shipped model (derived/v2) does not use it.
+
 ## Not done
 
-- The other two backbones (they failed on the full run; cause unknown).
 - A human check of the 40 agent labels, and any check of the 604 disagreements the other way.
 - No random-sample eval set, so the comparison on hand labels is biased toward the rules.
 - No evaluation of the token attributions.

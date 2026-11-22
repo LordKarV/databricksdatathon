@@ -70,6 +70,37 @@ A table that is new in v2 needs one manifest entry (`file: "{derived}/<name>.par
 description), then `$L --only <name> --derived derived/v2`. If a v2 file is missing, that table fails and the
 others still load.
 
+## What a clean checkout can rebuild (checked 2026-11-22)
+
+Of the 61 tables in `tables.yaml`, 41 rebuild from files committed to this repo, and 20 need inputs that are
+not published. The schema holds 62 tables: the 62nd, call_outcomes, is the app's outcome log, created by
+`app_plumbing/call_outcomes.sql`, not loaded from a file. To check one table,
+look its source up with `git ls-files`.
+
+- From committed files (41):
+  - derived/v1 (16): data_point_scores, facility_trust, source_domains, source_classes, source_urls,
+    source_page_checks, evidence_rules, facility_location, record_trust, facility_groups, pin_gazetteer,
+    place_gazetteer, claims, specialties, grades, grades_v1.
+  - derived/v2 (5): facility_service_scores_v2, facility_attributes_v2, witnesses_v2, claim_atoms_v2,
+    facility_features_v2.
+  - kb (8): service_coverage, specialty_map, specialty_evidence_weights, and the builders services,
+    care_pathways, pathway_stages, pathway_rules and pathway_capabilities (from kb/taxonomy and kb/pathways).
+  - dashboard (12): geo_state_density, geo_state_access, geo_district, geo_dialysis_district,
+    geo_csection_district, geo_settlement, dialysis_burden_district, claims_funnel_pairs, facility_hours,
+    planner_plans, and the builders pmndp_state and model_test_metrics.
+- Need inputs that are not published (20):
+  - Web crawl and open-data outputs (13): claim_service_matches, web_site_identity, web_page_identity,
+    web_services, web_service_summary, web_hours, web_facts, web_facility_details, open_data_matches,
+    open_data_facts, facility_details, vf_facts, crawl_sites. Their parquet files under kb/*/out, kb/opendata
+    and kb/crawl are gitignored.
+  - v1 prototype and geography caches (6): pair_scores, pair_features, facility_scores (model/proto, superseded),
+    geo_facility, geo_facility_site (viz/geography caches) and nfhs_lgd_crosswalk (data/external).
+  - Official list facts (1): facility_list_facts is built from the matched lists in data/external (NABH,
+    LaQshya, NMC, MoHFW trauma, e-RaktKosh, PMNDP Goa), which stay out of the repo under their terms.
+
+The Genie space reads geo_facility, web_service_summary and facility_list_facts, and the dashboard reads
+geo_facility and geo_facility_site, so a fresh workspace cannot rebuild either without those inputs.
+
 ## Choices worth knowing
 
 - Names follow DASHBOARD_SPEC where it names a table (`facility_location`, `pair_scores`, `geo_facility`,
