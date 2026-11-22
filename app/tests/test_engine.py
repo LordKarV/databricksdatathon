@@ -254,3 +254,10 @@ def test_toll_free_numbers_are_dialable():
 
     assert e164("1800 313 1714") == "18003131714"  # shown as a call link, not "no phone number in our data"
     assert e164("98765 43210") == "+919876543210" and e164("12345") is None
+
+
+def test_every_planner_route_type_has_words() -> None:
+    """A route heading never shows a raw planner key such as 'three_sites' (#113 review)."""
+    import itinerary
+    for key in ("direct", "one_stop", "two_stop", "single_site", "two_sites", "three_sites"):
+        assert key in itinerary.TYPE and "_" not in itinerary.TYPE[key]
