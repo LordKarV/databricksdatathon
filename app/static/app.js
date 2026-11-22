@@ -954,6 +954,43 @@ async function bindPlan() {
   render();
 }
 
+// The model's witness ledger (derived/v2): one row per named term, in points (10 per unit of log-odds), summing to the
+// total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
+// see for this listing add nothing and share one muted line.
+const signed = n => (n > 0 ? '+' : '') + n.toFixed(1);
+function ledgerHtml(o, P, L) {
+  const total = o.contributions.reduce((a, c) => a + c.points, 0);
+  const rows = o.contributions.map((c, j) => {
+    const C = `${P}.contributions.${j}`;
+    const label = F(C + '.label', c.label);
+    const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
+    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
+      <td class="num">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+  }).join('');
+  const unseen = o.not_observed || [];
+  return `<table class="ledger"><caption>Points for "offers ${L}"</caption>
+      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', signed(total), 'sum')} &rarr;
+        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
+    </table>
+    ${unseen.length ? `<p class="small muted">Counts neither for nor against:
+      ${unseen.map((x, j) => F(`${P}.not_observed.${j}.label`, x.label)).join('; ')}.</p>` : ''}`;
+}
+// How sure for NO SERVICE TEXT (derived/v2/README): no line describes the service as its own unit, so it is never
+// Likely, but its score still comes from the ledger's other rows. The two rows that add most are named, so this line
+// and the ledger agree. Trauma's quotes are general emergency lines (noTextCaptionHtml), the reason it is a first stop.
+function noTextSureHtml(o, P, L, q) {
+  const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
+    .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
+    .map(([c, j]) => `${F(`${P}.contributions.${j}.label`, c.label)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+  const still = q.service === 'trauma_emergency' && o.evidence.length
+    ? 'It is still plausible for first care: its listing has general emergency lines (quoted above), and the model scores it'
+    : 'It is still plausible: the model scores it';
+  return `${F(P + '.band_word', o.band_word)}: no line in its listing describes ${L} as its own service, so it is not
+    rated Likely. ${still} ${F(P + '.p', o.p.toFixed(2), 'num')} from the rest of its record (How we decided,
+    below)${top.length ? `. Largest rows: ${top.join('; ')}` : ''}. Call to ask.`;
+}
 function whyScreen(rank) {
   const p = state.plan;
   const o = p && !p.error && p.options.find(x => x.rank === rank);
@@ -961,9 +998,7 @@ function whyScreen(rank) {
   const P = `options.${p.options.indexOf(o)}`;
   const label = p.query.service_label.en;
   const L = F('query.service_label.en', label);
-  const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const width = o.p_hi - o.p_lo;
-  const sign = n => (n > 0 ? '+' : '');
   const phone = o.phone && o.phone.e164
     ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${F(P + '.phone.display', o.phone.display)}</a>`
     : '<p class="card">No dialable number in our data for this listing.</p>';
@@ -984,8 +1019,8 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
-    ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
+    <h2>How sure</h2><p id="how-sure">${o.model_band === 'NO_SERVICE_TEXT'
+    ? noTextSureHtml(o, P, L, p.query)
     : `${F(P + '.band_word', o.band_word)}, ${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}. ${similarHtml(o, P).replace(/^./, c => c.toUpperCase())}.`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
@@ -998,13 +1033,7 @@ function whyScreen(rank) {
     <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
 
     <h2 id="how">How we decided</h2>
-    <table><caption>Points for "offers ${L}"</caption>
-      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
-      <tbody>${o.contributions.map((c, j) => `<tr><td>${F(`${P}.contributions.${j}.label`, c.label)}</td>
-        <td class="num">${F(`${P}.contributions.${j}.points`, sign(c.points) + c.points, 'num')}</td></tr>`).join('')}</tbody>
-      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', sign(total) + total, 'sum')} &rarr;
-        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
-    </table>
+    ${ledgerHtml(o, P, L)}
     <p class="small muted">Model ${F('meta.model_hash', p.meta.model_hash)}. Facility id ${F(P + '.facility_id', o.facility_id)}.</p>
 
     <h2 id="call" tabindex="-1">Call ahead</h2>

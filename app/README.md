@@ -73,7 +73,8 @@ Response:
     "p_e": 0.97, "p_l": 0.95,   // MODEL: P(facility exists), P(map point is right); Compare depth (S10)
     "evidence": [{"claim_id", "field", "quote", "source_url",
                   "flags": [{"code", "text", "weak", "place", "km"}]}],   // #86: warnings shown next to the quote
-    "contributions": [{"label", "points"}],
+    "contributions": [{"label", "points"}],   // derived/v2 rows add "label_hi", "family", "quotes": [{"claim_id", "field", "quote"}]
+    "not_observed": [{"family", "label", "label_hi"}],   // families the model cannot see here: 0 points, one muted line
     "flags": ["plain-English warning", ...],
     "call_ahead": [{"question", "asked_because"}],
     "call_first": true,
@@ -216,7 +217,11 @@ now a test fixture only).
   - p, lo and hi are `data_point_scores` score / score_lo / score_hi. The contributions split that stored score
     in log-odds x 10 (evidence rule, then sources, then the second-source check), so the total maps back to p.
   - When `derived/v2/facility_service_scores.parquet` exists, `build.py` exports its band / p / lo / hi and
-    `score()` uses them; nothing else changes.
+    `score()` uses them. The contributions are then the model's own ledger: base plus each non-zero term, with
+    plain English and Hindi words from `facts/ledger_terms.py`, in tenths of a point on the same 10-per-logit scale,
+    rounded by largest remainder so they sum to 10 x logit(p) to the tenth. A term's quotes are the claims it cites
+    that are also app claims (v1 claim id, same sentence); specialty items, list ids and website pages are not
+    quoted.
 - **Evidence:** verbatim `claims.text` with claim ids, at most 3. Sentences with a non-offer cue or attributed
   to another facility are left out; the latter are shown as "Ignored: ..." flags.
 - **Flags and checks:** flags come from `record_trust.trust_reasons` (already plain English) and the grade's

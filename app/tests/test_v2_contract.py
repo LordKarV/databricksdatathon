@@ -1,7 +1,7 @@
 """The app against the derived/v2 contract (#63), with a small generated scores file until #11 publishes.
 
-Contract: derived/v2/facility_service_scores.parquet has unique_id, service_id (kb/taxonomy ids), band, p, lo, hi
-(and more columns the engine reads later). Skips when derived/v1 is not present.
+Contract: derived/v2/facility_service_scores.parquet has unique_id, service_id (kb/taxonomy ids), band, p, lo, hi,
+base and contributions (the ledger the Why page shows; logit(p) = base + sum(points) / (20 / ln 2)). Skips when derived/v1 is not present.
 """
 import sys
 from pathlib import Path
@@ -30,14 +30,15 @@ def built(tmp_path_factory):
     v1_to_tax = {v: k for k, v in build.TAXONOMY_TO_V1.items()}
     g = g[g.service.isin(v1_to_tax) & g.unique_id.isin(fidx)]
     fx = pd.DataFrame({"unique_id": g.unique_id, "service_id": g.service.map(v1_to_tax), "band": "CALL_FIRST",
-                       "p": 0.5, "lo": 0.3, "hi": 0.7, "p_location": 0.91, "p_exists": 0.88})
+                       "p": 0.5, "lo": 0.3, "hi": 0.7, "p_location": 0.91, "p_exists": 0.88, "base": 0.0,
+                       "contributions": "[]"})  # logit(0.5) = 0
     fx = pd.concat([fx, fx.head(3).assign(service_id="snakebite")])  # a taxonomy service with no app tile
     path = tmp_path_factory.mktemp("v2") / "facility_service_scores.parquet"
     fx.to_parquet(path)
     old = build.V2
     build.V2 = path
     try:
-        out, _ = build.pairs(fidx)
+        out, _, _ = build.pairs(fidx)
     finally:
         build.V2 = old
     return out
