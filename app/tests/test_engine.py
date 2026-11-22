@@ -16,7 +16,7 @@ APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
 import app as app_module  # noqa: E402
 import itinerary  # noqa: E402
-from facts.engine import Engine  # noqa: E402
+from facts.engine import NEED_PLAIN, Engine  # noqa: E402
 from facts.redact import redact_names  # noqa: E402, RUF100
 from services import SERVICES  # noqa: E402
 
@@ -516,6 +516,42 @@ def test_call_ahead_never_says_not_mentioned_next_to_a_quote_naming_it():
     pusa = ENGINE.plan("dialysis", 25.6, 85.95, 40, "gps")["options"]
     assert any(c["asked_because"] == "its listing names it, but not whether it is free today"
                for o in pusa for c in o["call_ahead"])
+
+
+# Thirty cities across the states, for sampled why-not checks.
+CITIES = [(28.61, 77.21), (19.076, 72.8777), (17.385, 78.4867), (12.97, 77.59), (13.08, 80.27), (22.57, 88.36),
+          (23.02, 72.57), (18.52, 73.86), (26.91, 75.79), (26.85, 80.95), (25.59, 85.14), (21.15, 79.09),
+          (23.26, 77.41), (22.72, 75.86), (30.73, 76.78), (26.14, 91.74), (20.3, 85.82), (9.93, 76.27),
+          (8.52, 76.94), (11.0, 76.96), (15.85, 74.5), (25.32, 82.97), (27.18, 78.01), (24.79, 85.0),
+          (23.18, 79.95), (21.25, 81.63), (23.34, 85.31), (31.1, 77.17), (32.73, 74.86), (16.51, 80.63)]
+
+
+def quotes_naming_the_gap(svc: str, w: dict) -> list[str]:
+    """The quotes on this why-not facility's card that name the prerequisite its "does not mention" clause names."""
+    from facts.engine import NEED_WORDS
+
+    pr = ENGINE.index[svc][ENGINE.fid[w["facility_id"]]]
+    quotes = [ENGINE.claims[c][1] for c in ENGINE._evidence(pr)]
+    words = [NEED_WORDS.get(b["value"]) for b in w["basis"] if b["code"] == "missing"]
+    return [q for q in quotes for rx in words if rx and rx.search(q)]
+
+
+def test_why_not_never_says_not_mentioned_when_its_own_quote_names_it():
+    """#140: Osmania was "does not mention anaesthesia" next to "...under spinal anesthesia", and Kasturba "does not
+    mention a burn unit" next to "Has Kasturba Hospital Burn Ward". A gap its own quote names is not a gap."""
+    for svc, la, lo, name, need in [("emergency_csection", 17.385, 78.4867, "Osmania General Hospital", "anaesthesia"),
+                                    ("burn_care", 19.076, 72.8777, "Kasturba Hospital", "a burn unit")]:
+        p = client.post("/api/plan", json={"service": svc, "lat": la, "lon": lo, "source": "place"}).json()
+        w = next(x for x in p["why_not"] if x["name"] == name)
+        assert f"not mention {need}" not in w["reason"], w
+        assert not quotes_naming_the_gap(svc, w), w
+    for svc in SERVICES:
+        for la, lo in CITIES:
+            for w in ENGINE.plan(svc, la, lo, None, "place")["why_not"]:
+                bad = quotes_naming_the_gap(svc, w)
+                assert not bad, (svc, la, lo, w["name"], w["reason"], bad)
+                for b in w["basis"]:  # the basis is the gap the sentence names
+                    assert b["code"] != "missing" or f"not mention {NEED_PLAIN[b['value']]}" in w["reason"], w
 
 
 def test_likely_options_show_the_values_the_band_rule_tested() -> None:

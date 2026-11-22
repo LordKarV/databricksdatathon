@@ -383,6 +383,11 @@ class Engine:
               and self.claims[c][3] != "other_facility"]
         return sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
 
+    def _quote_names(self, pr: Pair, need: str) -> bool:
+        """A quote on this pair's card names the prerequisite (#121, #140), so its listing does mention it."""
+        words = NEED_WORDS.get(need)
+        return bool(words) and any(words.search(self.claims[c][1]) for c in self._evidence(pr))
+
     def _n_weak(self, cid: str) -> int:
         return sum(QUOTE_FLAGS[c][1] for c, _ in self.claim_flags.get(cid, []) if c in QUOTE_FLAGS)
 
@@ -487,8 +492,7 @@ class Engine:
             qs.append({"question": q, "asked_because": "listing not rated Likely"})
         if pr.missing:
             need = pr.missing[0].replace("_or_", " or ").replace("_", " ")
-            words = NEED_WORDS.get(pr.missing[0])
-            if words and any(words.search(self.claims[c][1]) for c in self._evidence(pr)):
+            if self._quote_names(pr, pr.missing[0]):
                 # a quote on the card names it: what is unknown is whether it can take this patient today
                 qs.append({"question": STRINGS["need_today"]["en"].format(need=need),
                            "asked_because": STRINGS["need_named"]["en"]})
@@ -768,8 +772,10 @@ class Engine:
         elif minutes > top[1]:
             out.append(("farther", "It is farther away than the first choice",
                         {"field": "minutes_vs_first", "value": minutes - top[1]}))
-        gaps = [m for m in pr.missing if m not in top_pr.missing]
-        if gaps:  # a prerequisite the first choice's listing mentions and this one's does not
+        # A prerequisite the first choice's listing mentions and this one's does not; one a quote on its own card
+        # names is no gap (#140: "does not mention anaesthesia" next to "...under spinal anesthesia")
+        gaps = [m for m in pr.missing if m not in top_pr.missing and not self._quote_names(pr, m)]
+        if gaps:
             need = NEED_PLAIN.get(gaps[0], gaps[0].replace("_or_", " or ").replace("_", " "))
             out.append(("missing", f"Its listing does not mention {need}", {"field": "missing", "value": gaps[0]}))
         if pr.rule in WHY_NOT and band != "unlikely":
