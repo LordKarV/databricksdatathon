@@ -610,7 +610,7 @@ function windowBelowHtml(p) {
   if (!w || !w.first_outside || !p.options.length) return '';
   // On a narrow phone the sticky bar's 102 sub-line is clipped from view, so it is said here once, under the card.
   return `<p class="panel window-public">${po ? `${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
-    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>${has102(p.query.service) ? `<p class="note">${th('sos.102_sub')}</p>` : ''}`;
+    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>${has102(p.query.service) ? `<p class="note">${th('sos.102_sub')}</p> ` : ''}`;
 }
 function whyNotHtml(p) {
   const rows = p.why_not || [];
