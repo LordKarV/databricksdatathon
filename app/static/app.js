@@ -6,11 +6,11 @@ const SERVICES = [
   // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
   {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
   {key: 'nicu', hi: '\u0928\u0935\u091c\u093e\u0924 ICU', en: 'Newborn ICU (NICU)', profile: 'urgent'},
-  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f / \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
-  {key: 'burn_care', hi: '\u091c\u0932\u0928\u093e', en: 'Burns', profile: 'emergency'},
+  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f \u092f\u093e \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
+  {key: 'burn_care', hi: '\u091c\u0932\u0928\u0947 \u0915\u0940 \u091a\u094b\u091f', en: 'Burns', profile: 'emergency'},
   {key: 'dialysis', hi: '\u0921\u093e\u092f\u0932\u093f\u0938\u093f\u0938', en: 'Dialysis', profile: 'scheduled'},
   {key: 'mri', hi: 'MRI \u0938\u094d\u0915\u0948\u0928', en: 'MRI scan (planned)', profile: 'planned'},
-  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u093e \u0911\u092a\u0930\u0947\u0936\u0928', en: 'Heart surgery (planned)', profile: 'planned'},
+  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u0940 \u0938\u0930\u094d\u091c\u0930\u0940', en: 'Heart surgery (planned)', profile: 'planned'},
   {key: 'other', hi: '\u0915\u0941\u091b \u0914\u0930 / \u092a\u0924\u093e \u0928\u0939\u0940\u0902', en: 'Other / not sure', profile: null},
 ];
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
@@ -370,7 +370,7 @@ function fieldHtml(o, P) {
   if (!f || !(f.lines.length || f.notes.length)) return '';
   const both = (x, Q) => `<p class="small">${F(Q + '.en', x.en)}<br><span lang="hi">${F(Q + '.hi', x.hi)}</span></p>`;
   return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="small"><strong>Field reports
-    <span lang="hi">(\u092b\u093c\u0940\u0932\u094d\u0921 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
+    <span lang="hi">(\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
     ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
     ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
 }
@@ -796,7 +796,7 @@ function bindWhy() {
     $('#reason-step').innerHTML = '';
     if (b.dataset.outcome === 'Said no' && o && window.RSCommunity) {
       RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, 'Said no', at, reason ? {reason} : {}), announce);
-      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092e\u0928\u093e \u0915\u093f\u092f\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
+      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092b\u093c\u094b\u0928 \u092a\u0930 \u0928\u093e \u0915\u0939\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
       return;
     }
     const sent = o && queueOutcome(o, b.dataset.outcome, at);
@@ -859,7 +859,7 @@ function slipScreen(rank) {
       <button type="button" id="slip-card">Send to family <span lang="hi">(\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u094b \u092d\u0947\u091c\u0947\u0902)</span></button>
     </div>
     <p class="small no-print">The family card is a file that opens on any phone without a login: places, phones and
-      what to bring, no patient details. <span lang="hi">\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948: \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901, \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
+      what to bring, no patient details. <span lang="hi">\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948\u0964 \u0907\u0938\u092e\u0947\u0902 \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0928\u0902\u092c\u0930 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901 \u0932\u093f\u0916\u093e \u0939\u0948; \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
 }
 function loadSlipJs() {
   if (window.RSSlip) return Promise.resolve();
@@ -900,7 +900,7 @@ async function bindSlip() {
       const r = await RSSlip.shareJourney(p, lang, {rank});
       announce(msg(r === 'downloaded' ? 'cardSaved' : r === 'shared' ? 'cardShared' : 'cardCancelled'));
     } catch {
-      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
+      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
     }
   });
 }

@@ -167,7 +167,7 @@ def test_templates():
     hindi_side = [t for k, v in hi.items() if k != "questions" for t in template_strings(v)]
     hindi_side += [q for _, q in hi["questions"]]
     assert not [t for t in hindi_side if ENGLISH_BAND.search(t)]
-    assert hi["band"] == {"likely": "संभावना है", "not_verified": "पहले फोन करके पूछें", "unlikely": "संभावना कम"}
+    assert hi["band"] == {"likely": "संभावना ज़्यादा", "not_verified": "पक्का नहीं, पहले फ़ोन करके पूछें", "unlikely": "संभावना कम"}
 
 
 def test_danger_and_route():
