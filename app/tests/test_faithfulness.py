@@ -334,14 +334,6 @@ def engine_hi(text: str, payload: dict) -> str | None:
     return None if None in parts else "; ".join(parts)
 
 
-def dur_ok(shown: str, minutes: float) -> bool:
-    """Minutes shown as 'N min', 'N h' or 'N day(s)' (Hindi: मिनट, घंटे, दिन), rounded to that unit."""
-    m = re.fullmatch(r"(\d+) (min|h|days?|\u092e\u093f\u0928\u091f|\u0918\u0902\u091f\u0947|\u0926\u093f\u0928)", shown.strip())
-    unit = {"min": 1, "h": 60, "day": 1440, "days": 1440, "\u092e\u093f\u0928\u091f": 1, "\u0918\u0902\u091f\u0947": 60,
-            "\u0926\u093f\u0928": 1440}[m[2]] if m else 0
-    return bool(m) and abs(int(m[1]) * unit - minutes) <= unit / 2
-
-
 def check_item(payload: dict, it: dict) -> str | None:
     """None if the shown value is faithful, else a message."""
     path, kind, shown = it["path"], it["kind"], it["text"]
@@ -378,12 +370,10 @@ def check_item(payload: dict, it: dict) -> str | None:
     elif kind == "method":
         ok = shown in WORDS["travel.road" if stored == "osrm" else "travel.rough"]
     elif kind == "dur":  # minutes shown as 'N min', 'N h' or 'N day(s)' (Hindi: मिनट, घंटे, दिन), rounded to that unit
-        ok = dur_ok(shown, stored)
-    elif kind == "leg":  # UI-MAP-1: minutes driven to a route stop since leaving the one before, as 'dur'
-        head, _, k = path.rpartition(".")
-        stops, k = resolve(payload, head), int(k)
-        gone = stops[k - 1]["eta_low"] + (stops[k - 1]["dwell_minutes"] or 0) if k else 0
-        ok = dur_ok(shown, stored["eta_low"] - gone)
+        m = re.fullmatch(r"(\d+) (min|h|days?|\u092e\u093f\u0928\u091f|\u0918\u0902\u091f\u0947|\u0926\u093f\u0928)", shown.strip())
+        unit = {"min": 1, "h": 60, "day": 1440, "days": 1440, "\u092e\u093f\u0928\u091f": 1, "\u0918\u0902\u091f\u0947": 60,
+                "\u0926\u093f\u0928": 1440}[m[2]] if m else 0
+        ok = bool(m) and abs(int(m[1]) * unit - stored) <= unit / 2
     elif kind == "delta":  # minutes against the first choice: 'N min closer', 'N min farther', 'about the same time'
         m = re.fullmatch(r"(\d+) (?:min|\u092e\u093f\u0928\u091f) (closer|farther|\u092a\u093e\u0938|\u0926\u0942\u0930)", shown.strip())
         ok = (stored == 0 and shown.strip() in WORDS["delta.same"]) or (
@@ -1296,6 +1286,7 @@ def route_expected(it: dict) -> set[str]:
 
 
 ROUTED = [(n, p) for n, p in PAYLOADS if p.get("itinerary")]
+ROUTE_SCORE = re.compile(r"itinerary\.plans\.\d+\.(?:stops\.\d+\.(?:p|weakest_capability_p|fallback\.p)|totals\.p_(?:first_care|treated))")
 
 
 @pytest.mark.skipif(not ROUTED, reason="no payload with a route (planner/out or app/facts/out not built)")
@@ -1319,13 +1310,18 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
     # #140 3e: the route says "score", never "chance"; its totals name their assumption; windows count from departure
     assert not re.search(r"\bchance\b", route_text, re.IGNORECASE), f"{name}: 'chance' on the route"
     if any(p["totals"].get("minutes_to_definitive") is not None for p in payload["itinerary"]["plans"]):
-        assert "Score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
+        assert "Evidence score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
     if any(p["window_checks"] for p in payload["itinerary"]["plans"]):
         assert "counted from when the patient leaves" in route_text
     shown = {it["path"] for it in got["items"]}
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"
     assert not check_screen("route", payload, got, {"values_checked": 0})
+    # UI-SCORE-1 (#193 review): every route score reads "N / 100" like the cards, checked as round(100 * p)
+    scores = [it for it in got["items"] if ROUTE_SCORE.fullmatch(it["path"])]
+    assert scores or not any(ROUTE_SCORE.fullmatch(x) for x in route_expected(payload["itinerary"])), f"{name}: no route score"
+    bad = [it for it in scores if it["kind"] != "pct100" or not re.fullmatch(r"\d+ / 100", it["text"])]
+    assert not bad, f"{name}: route scores not out of 100: {bad[:5]}"
 
 
 # ---------- field reports: every count and "days ago" on a field line equals the reports fed in ----------

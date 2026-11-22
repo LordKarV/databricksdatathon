@@ -1,5 +1,5 @@
-// UI-MAP-1 (#140): a journey map and a stage graph under the answer. A classic script sharing app.js globals (state, F,
-// N, E, th, ts, esc, $); app.js loads it with one call after the answer has painted, so it is not part of the
+// UI-MAP-1 (#140): a journey map under the answer. A classic script sharing app.js globals (state, ts,
+// esc, $); app.js loads it with one call after the answer has painted, so it is not part of the
 // first-paint bytes (75 KB budget). Inline SVG from fields the plan already carries: no tiles, no package, no network,
 // so the offline answer (offline.js) gets the same map from the saved pack.
 // Numbers from the payload carry data-f marks (tspan in the SVG) like the rest of the page; fixed drawing labels (ring
@@ -14,20 +14,17 @@
 .mp text{font:600 12px var(--font);fill:var(--text);paint-order:stroke;stroke:var(--raised);stroke-width:4px;stroke-linejoin:round}.mp .rl{font-size:11px;fill:var(--muted)}
 .mp .pin{fill:var(--go);stroke:var(--surface);stroke-width:2.5}.mp .pin.dbt{fill:var(--surface);stroke:var(--warn);stroke-width:3;stroke-dasharray:4 3}
 .mp .pn{fill:var(--on-go);stroke:none;font-size:13px}.mp .pn.dbt{fill:var(--text)}.mp .me{fill:var(--text);stroke:var(--surface);stroke-width:3}.mp .ink{fill:var(--text);stroke:none}.mp .bar{stroke:var(--text);stroke-width:2;fill:none}
-.mp-hit{position:absolute;width:var(--target);height:var(--target);margin:calc(var(--target)/-2) 0 0 calc(var(--target)/-2);border:0;border-radius:50%;background:transparent;cursor:pointer;padding:0}
-.mp-g{list-style:none;padding:0;margin:.5rem 0 0}.mp-g li{margin:0 0 .6rem}.mp-t{display:block;position:relative;height:12px;margin-top:4px;background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden}
-.mp-t i{position:absolute;top:0;bottom:0}.mp-t .d{background:var(--go)}.mp-t .r{background:var(--go-tint);top:3px;bottom:3px}.mp-t .s{background:var(--warn)}`;
+.mp-hit{position:absolute;width:var(--target);height:var(--target);margin:calc(var(--target)/-2) 0 0 calc(var(--target)/-2);border:0;border-radius:50%;background:transparent;cursor:pointer;padding:0}`;
 
   // The map's own words, en and hi, kept here (not in i18n/*.json) so they cost nothing on the critical path.
   const L = {
-    en: {"h": "Map", "note": "Straight lines, not roads; times are the road estimates on the cards. Tap a number to go to that option.", "note_off": "Straight lines, not roads, from the data saved on this phone. Tap a number to go to that option.", "leg": "{min} min, {km} km", "leg_km": "{km} km", "you": "You", "n": "N", "dirs": "north,north-east,east,south-east,south,south-west,west,north-west", "alt": "Map, {n} options: {list}.", "alt_one": "{n} is {min} min {dir}", "alt_one_km": "{n} is {km} km {dir}", "alt_doubt": "(map point may be wrong)", "go": "Go to option {n}", "drive": "drive {n}", "graph_h": "Route, stop by stop", "arrive": "arrive {low} to {high} min from the start", "stay": "stay {d}"},
-    hi: {"h": "नक्शा", "note": "सीधी रेखाएँ, सड़क नहीं; समय कार्ड पर दिए सड़क के अनुमान हैं। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "note_off": "सीधी रेखाएँ, सड़क नहीं, इस फ़ोन में सेव डेटा से। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "leg": "{min} मिनट, {km} किमी", "leg_km": "{km} किमी", "you": "आप", "n": "उ", "dirs": "उत्तर,उत्तर-पूर्व,पूर्व,दक्षिण-पूर्व,दक्षिण,दक्षिण-पश्चिम,पश्चिम,उत्तर-पश्चिम", "alt": "नक्शा, {n} विकल्प: {list}।", "alt_one": "{n}: {min} मिनट, {dir} में", "alt_one_km": "{n}: {km} किमी, {dir} में", "alt_doubt": "(नक्शे की जगह गलत हो सकती है)", "go": "विकल्प {n} पर जाएँ", "drive": "गाड़ी से {n}", "graph_h": "रास्ता, पड़ाव दर पड़ाव", "arrive": "शुरू से {low} से {high} मिनट में पहुँचें", "stay": "{d} रुकें"},
+    en: {"h": "Map", "note": "Straight lines, not roads; times are the road estimates on the cards. Tap a number to go to that option.", "note_off": "Straight lines, not roads, from the data saved on this phone. Tap a number to go to that option.", "leg": "{min} min, {km} km", "leg_km": "{km} km", "you": "You", "n": "N", "dirs": "north,north-east,east,south-east,south,south-west,west,north-west", "alt": "Map, {n} options: {list}.", "alt_one": "{n} is {min} min {dir}", "alt_one_km": "{n} is {km} km {dir}", "alt_doubt": "(map point may be wrong)", "go": "Go to option {n}"},
+    hi: {"h": "नक्शा", "note": "सीधी रेखाएँ, सड़क नहीं; समय कार्ड पर दिए सड़क के अनुमान हैं। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "note_off": "सीधी रेखाएँ, सड़क नहीं, इस फ़ोन में सेव डेटा से। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "leg": "{min} मिनट, {km} किमी", "leg_km": "{km} किमी", "you": "आप", "n": "उ", "dirs": "उत्तर,उत्तर-पूर्व,पूर्व,दक्षिण-पूर्व,दक्षिण,दक्षिण-पश्चिम,पश्चिम,उत्तर-पश्चिम", "alt": "नक्शा, {n} विकल्प: {list}।", "alt_one": "{n}: {min} मिनट, {dir} में", "alt_one_km": "{n}: {km} किमी, {dir} में", "alt_doubt": "(नक्शे की जगह गलत हो सकती है)", "go": "विकल्प {n} पर जाएँ"},
   };
   const word = k => (L[state.lang === 'hi' ? 'hi' : 'en'][k] ?? L.en[k]);
   const fill = (s, v) => s.replace(/\{(\w+)\}/g, (m, x) => (x in v ? String(v[x]) : m));
   const mt = (k, v = {}) => fill(word(k), v), mh = (k, v = {}) => fill(esc(word(k)), v);
   const tsp = (path, text, kind = 'num') => `<tspan data-f="${path}" data-k="${kind}">${esc(text)}</tspan>`;
-  const dur = m => (m < 120 ? ts('dur.min', {n: m}) : m >= 1440 ? ts(Math.round(m / 1440) === 1 ? 'dur.day' : 'dur.days', {n: Math.round(m / 1440)}) : ts('dur.h', {n: Math.round(m / 60)}));
   const ok = x => typeof x === 'number' && isFinite(x);
 
   // Each option as {n, lat, lon, doubt, min, km, P (payload path, online only), el (its card)}.
@@ -144,28 +141,6 @@
     return `<div class="mp-box">${svg}${hits}</div>`;
   }
 
-  // Stop-by-stop graph of the suggested route: one row per stop, drive and stay as bars on a shared minute scale.
-  // The text carries the arrival window (eta_low to eta_high, cumulative from the start) and the stay; the drive is
-  // the gap since leaving the stop before (kind 'leg'). No route: nothing.
-  function graphHtml(p) {
-    const it = p.itinerary, r = it && !it.abstain && it.plans && it.plans[0];
-    if (!r || !r.stops || !r.stops.length) return '';
-    const P = 'itinerary.plans.0', st = r.stops;
-    const leave = k => (k ? st[k - 1].eta_low + (st[k - 1].dwell_minutes || 0) : 0);
-    const span = 1.05 * Math.max(...st.map(x => Math.max(x.eta_high, x.eta_low + (x.dwell_minutes || 0))), 1);
-    const pc = m => (100 * m / span).toFixed(2) + '%';
-    const rows = st.map((x, k) => {
-      const S = `${P}.stops.${k}`, a = leave(k), drive = x.eta_low - a;
-      const bar = (c, from, to) => (to > from ? `<i class="${c}" style="left:${pc(from)};width:${pc(to - from)}"></i>` : '');
-      return `<li><b lang="en">${F(S + '.name', x.name)}</b>: ${E(S + '.purpose_word', x.purpose_word)}${th('punct.stop')}
-        ${mh('arrive', {low: N(S + '.eta_low', x.eta_low), high: N(S + '.eta_high', x.eta_high)})}${
-        drive > 0 ? ', ' + mh('drive', {n: F(S, dur(drive), 'leg')}) : ''}${
-        x.dwell_minutes ? ', ' + mh('stay', {d: F(S + '.dwell_minutes', dur(x.dwell_minutes), 'dur')}) : ''}${th('punct.stop')}
-        <span class="mp-t" aria-hidden="true">${bar('r', x.eta_low, x.eta_high)}${bar('d', a, x.eta_low)}${bar('s', x.eta_low, x.eta_low + (x.dwell_minutes || 0))}</span></li>`;
-    }).join('');
-    return `<h3>${mh('graph_h')}</h3><ol class="mp-g">${rows}</ol>`;
-  }
-
   function go(n, pts) {
     const q = pts.opts.find(x => x.n === n), el = q && q.el();
     if (!el) return;
@@ -186,7 +161,7 @@
     if (!at) return;
     if (!document.getElementById('mp-css')) document.head.appendChild(Object.assign(document.createElement('style'), {id: 'mp-css', textContent: CSS}));
     at.insertAdjacentHTML('afterend', `<section class="section mp" aria-labelledby="h-map"><h2 id="h-map">${mh('h')}</h2>
-      ${mapSvg(p, pts)}<p class="note">${mh(p.offline ? 'note_off' : 'note')}</p>${p.offline ? '' : graphHtml(p)}</section>`);
+      ${mapSvg(p, pts)}<p class="note">${mh(p.offline ? 'note_off' : 'note')}</p></section>`);
     main.querySelectorAll('.mp-hit').forEach(b => b.addEventListener('click', () => go(+b.dataset.mp, pts)));
   }
 
