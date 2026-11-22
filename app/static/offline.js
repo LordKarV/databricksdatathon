@@ -18,12 +18,14 @@
   function daysAgo(t) { return Math.max(0, Math.floor((Date.now() - t) / DAY)); }
   function dateStr(t) { return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'}); }
 
-  // Indian numbers in the pack are 10 digits (mobile or STD code + number); anything else gets no tel: link.
+  // Indian numbers in the pack are 10 digits (mobile or STD code + number) or toll-free 1800; anything else gets no
+  // tel: link.
   function telHref(raw) {
     const d = String(raw || '').replace(/[\s\-().]/g, '');
     if (/^[1-9]\d{9}$/.test(d)) return 'tel:+91' + d;
     if (/^0[1-9]\d{9}$/.test(d)) return 'tel:+91' + d.slice(1);
     if (/^\+91[1-9]\d{9}$/.test(d)) return 'tel:' + d;
+    if (/^1800\d{6,8}$/.test(d)) return 'tel:' + d;  // toll-free, dialled as is in India
     return null;
   }
 

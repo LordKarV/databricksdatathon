@@ -229,7 +229,7 @@ def facts(c: dict[str, float]) -> dict:
         "handchecked": fact(int((rules.handcheck_true + rules.handcheck_false).sum()), f"{V1}/evidence_rules.parquet",
                             "hand-checked cases behind the rules"),
         "radius_km": fact(engine.RADIUS_KM, eng_src, "RADIUS_KM"),
-        "scale_emergency": fact(engine.TIME_SCALE["emergency"], eng_src, "TIME_SCALE emergency"),
+        "tie_min": fact(engine.TIE_MIN, eng_src, "TIE_MIN: emergency order, nearest plausible first"),
         "scale_planned": fact(engine.TIME_SCALE["planned"], eng_src, "TIME_SCALE planned"),
         "n_options": fact(engine.N_OPTIONS, eng_src, "N_OPTIONS"),
         "pathways": fact(len(names), "kb/pathways/care_pathways.json", "pathways"),

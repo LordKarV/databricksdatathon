@@ -10,10 +10,13 @@ instead of guessing, and it keeps working offline on a cheap phone.
 **Not the nearest, and not an unreachable "best".** Sending everyone to the closest listing ignores whether it
 really offers the care; sending everyone to the best hospital ignores whether the patient can get there in time.
 Referral Saathi weighs evidence, travel time and the care's time window, and when the right hospital is too far it
-plans a stop to stabilise first. For example, after a road accident near Pusa, Bihar, going straight to a trauma
-hospital takes about 80 minutes and misses the 60-minute window, so the app sends the patient first to a hospital
-about 34 minutes away, with the number to call and the question to ask. *These numbers come from the route planner
-on model v2 (the hospital direct is Ganpati Hospital, Vaishali; the first stop is Miracare Hospital).*
+plans a stop to stabilise first. For example, after a road accident near Pusa, Bihar, the definitive trauma hospital
+is about 80 minutes away and misses the 60-minute window. So the app says: call the sub-divisional hospital 19
+minutes away first, and if they say no, call the confirmed private hospital 34 minutes away next. A simulated
+referral world showed that in an emergency the nearest plausible place first, with a call ahead, gets more patients
+to care in time than sending them farther for better evidence (simulated, not a field result). *These numbers come
+from the app and route planner on model v2: list 1 is Sub Divisional Hospital Pusa (not verified), list 2 Miracare
+Hospital (Likely), and the route continues to Ganpati Hospital, Vaishali.*
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 

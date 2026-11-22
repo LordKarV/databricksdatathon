@@ -77,18 +77,23 @@
         ${n('app_not_verified')} "Not verified: call to confirm", ${n('app_no_service_text')} "No service text: call
         to ask" (the listing has no sentence about the service), and ${n('app_unlikely')} Unlikely
         ${src('app_likely')}.</li>
-      <li><strong>Order.</strong> Options are ordered by the model's chance, discounted by travel time. The discount
-        is steeper in an emergency (${n('scale_emergency')} minute scale) than for planned care
-        (${n('scale_planned')} minutes). A listing with no sentence about the service counts as at most
-        ${d('likely_p', 2)}, so a hospital cannot come first on its size or level alone. We search ${n('radius_km')} km and
-        show up to ${n('n_options')} options ${src('radius_km')}. The order does not yet count the time lost if the
-        first place turns the patient away.</li>
+      <li><strong>Order.</strong> In an emergency the nearest place that plausibly offers the care comes first: call
+        it, and if they say no, call the next. A place we judge Unlikely, or with no sentence of its own about the
+        service, is never listed. The model's chance only breaks ties within ${n('tie_min')} minutes
+        ${src('tie_min')}. A simulated referral world showed that ordering by the chance discounted by travel time
+        sent patients farther and lost time when the first place said no; this rule fixed that (simulated, not a
+        field result). For planned care, options are ordered by the model's chance, discounted by travel time
+        (${n('scale_planned')} minute scale), because a longer trip to a likelier place pays when there is time. A
+        listing with no sentence about the service counts as at most ${d('likely_p', 2)}, so a hospital cannot come
+        first on its size or level alone. We search ${n('radius_km')} km and show up to ${n('n_options')} options
+        ${src('radius_km')}.</li>
       <li><strong>Saying no.</strong> When nothing is Likely, the app says so, lists places to call, and names the
         nearest hospital the public standard says should offer the service.</li>
       <li><strong>Several stops.</strong> ${n('pathways')} care pathways are written down for time-critical cases
         (${F('facts.pathway_names.value', f.pathway_names.value)}) ${src('pathways')}. For these the app adds a
-        suggested route. The route planner still uses placeholder chances built from the listings, not the model,
-        and the route says so.</li>
+        suggested route. The route planner uses the model's chance for each service the model scores; for support
+        equipment it does not score (operating theatre, ECG, laboratory), it uses the facility's own sentences
+        that name it, with fixed assumed chances.</li>
     </ul>
 
     <h2>How good it is</h2>

@@ -118,6 +118,8 @@ def e164(raw: str) -> str | None:
         return "+91" + d[1:]
     if re.fullmatch(r"\+91[1-9]\d{9}", d):
         return d
+    if re.fullmatch(r"1800\d{6,8}", d):  # Indian toll-free: no E.164 form, but dialled as is from any phone in India
+        return d
     return None
 
 
