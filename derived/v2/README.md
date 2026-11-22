@@ -5,9 +5,6 @@ A_platt: the candidate A prior scorecard with one Platt step, a 0.5020, c 1.4983
 (witnesses, claim_atoms, facility_features, facility_attributes, reader_scores) are model inputs built by
 `model/v2/assemble/build.py`. The app reads only `facility_service_scores.parquet`.
 
-`model_card_test.json` is the frozen model's result on the sealed gold v3 TEST (issue #66), written by
-`model/gold/v3/test_eval/evaluate.py`. It is separate because `model_card.json` is hashed into model_version.
-
 Contract check: `.venv-viz/bin/python validation/contracts_v2.py` (selftest: add `--selftest`).
 
 Dataset limitations that go with the model card (no_info rates, public ranking, phones, locations, hours) are in

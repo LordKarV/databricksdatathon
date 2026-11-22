@@ -1,18 +1,19 @@
 """Score the frozen model v2 predictions against the opened gold v3 TEST labels (issue #51), once.
 
-    .venv-app/bin/python model/gold/v3/test_eval/evaluate.py      # writes test_eval/results.json and prints it
+    .venv-app/bin/python model/gold/v3/test_eval/evaluate.py      # writes test_eval/results.json and extras.json
 
 Headline (as for DEV, PR #76): decided pairs only (confirmed = 1, contradicted = 0); no_info is not evidence of
 absence. Sensitivity (MODEL_SPEC 3.2): a searched no_info counts as 0. Intervals: 2,000 bootstrap resamples of
 pairs (percentile 95%); Wilson 95% for proportions. Agent-labelled, not human-checked.
 
-Added for #66 (new keys only; the keys above are unchanged and keep their own random stream):
+Added for #66, written to extras.json (results.json stays byte-identical, frozen-model rule #140; the additions
+use their own random stream so results.json does not move):
 - calibration_by_score_bin: model_card's bins (width 0.2) on the frozen TEST p, next to model_card's DEV row.
 - location_head / existence_head: P_L and P_E from derived/v2/facility_service_scores.parquet at the frozen
   model_version (not in test_predictions.parquet), against the labels' location_ok and exists.
 - conformal: model_card's top-k rule rebuilt on TEST (service, state) pseudo-queries.
 - e2e_top1_benchmark: copied from top1_benchmark.json (run top1_benchmark.py first; it needs app/facts/out).
-Then writes derived/v2/model_card_test.json, the compact summary for the app, How page, notebook and README.
+- model_card_test: the compact summary for the app, How page, notebook and README.
 """
 from __future__ import annotations
 
@@ -32,7 +33,6 @@ MODEL_VERSION = "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69
 CARD = ROOT / "derived/v2/model_card.json"
 SCORES = ROOT / "derived/v2/facility_service_scores.parquet"
 TOP1 = HERE / "top1_benchmark.json"
-CARD_TEST = ROOT / "derived/v2/model_card_test.json"
 BINS = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0 + 1e-12]  # model/v2/final/export.py, model_card calibration_by_score_bin
 rng = np.random.default_rng(20261122)
 rng2 = np.random.default_rng(20261123)  # #66 additions: a separate stream so the original keys do not move
@@ -195,7 +195,7 @@ def conformal(d: pd.DataFrame, card: dict) -> dict:
 
 
 def summary(res: dict, card: dict) -> dict:
-    """Compact derived/v2/model_card_test.json: each metric with its interval, plus limitations."""
+    """Compact model_card_test summary (extras.json): each metric with its interval, plus limitations."""
     h, s = res["headline_decided"], res["sensitivity_no_info_as_0"]
     seal = dict(line.split()[::-1] for line in (HERE.parent / "test_labels.sha256").read_text().splitlines())
 
@@ -206,7 +206,7 @@ def summary(res: dict, card: dict) -> dict:
     top = res.get("e2e_top1_benchmark")
     out = {
         "about": "Frozen model v2 on the sealed gold v3 TEST, opened once (model/gold/v3/OPENING_LOG.md). "
-                 "Read-only summary of model/gold/v3/test_eval/results.json; model_card.json is unchanged.",
+                 "Read-only summary of model/gold/v3/test_eval/results.json and extras.json; model_card.json is unchanged.",
         "model_version": res["model_version"], "test_predictions_sha256": FROZEN,
         "labels_sha256_full": seal["test_labels.full.canonical"],
         "labels_sha256_verdicts": seal["test_labels.verdicts.canonical"],
@@ -260,13 +260,14 @@ def summary(res: dict, card: dict) -> dict:
     informative = sum(c["n_informative"] for k, c in res["conformal"].items() if k != "why")
     out["notes"] = [
         "Agent-labelled, not human-checked: no person has read the cited URLs.",
-        f"{no_info} of {n_all} TEST pairs ({no_info / n_all:.0%}) are no_info; the headline uses the {h['n']} decided "
-        "pairs, so intervals are wide.",
+        (f"{no_info} of {n_all} TEST pairs ({no_info / n_all:.0%}) are no_info; the headline uses the {h['n']} "
+         "decided pairs, so intervals are wide."),
         "TEST was opened once; nothing was refitted or retuned on it. model_card.json (DEV) is unchanged.",
-        "P_L and P_E come from derived/v2/facility_service_scores.parquet at the frozen model_version, not from the "
-        "frozen predictions file.",
-        f"Location: {lc.get('no', 0)} 'no' and {lc.get('unclear', 0)} 'unclear' of {sum(lc.values())}; existence: "
-        f"{ec.get('no', 0)} 'no' and {ec.get('unclear', 0)} 'unclear'. AUROC on yes/no rows needs both classes.",
+        ("P_L and P_E come from derived/v2/facility_service_scores.parquet at the frozen model_version, not from "
+         "the frozen predictions file."),
+        (f"Location: {lc.get('no', 0)} 'no' and {lc.get('unclear', 0)} 'unclear' of {sum(lc.values())}; "
+         f"existence: {ec.get('no', 0)} 'no' and {ec.get('unclear', 0)} 'unclear'. AUROC on yes/no rows needs both "
+         "classes."),
         "ECE intervals are percentile bootstrap; ECE is biased upward in small samples.",
         f"Conformal: {informative} informative TEST pseudo-queries (more than k pairs and able to miss); "
         "the TEST coverage does not test the top-k claim." if not informative else
@@ -307,20 +308,22 @@ def main() -> None:
                                 for k, g in d.groupby(d.operator.fillna("unknown"))},
         "by_service_decided": {k: {"n": len(g), "confirmed": int(g.y.sum())} for k, g in dec.groupby("service_id")},
     }
-    # #66 additions (rng2 only)
+    (HERE / "results.json").write_text(json.dumps(res, indent=1) + "\n")
+    print(json.dumps(res, indent=1))
+    # #66 additions (rng2 only), kept out of results.json
     card = json.loads(CARD.read_text())
     assert card["model_version"] == res["model_version"] == MODEL_VERSION
-    res["ece5_decided_ci95"] = boot(ece, dec.p.to_numpy(float), dec.y.to_numpy(int), rng2)
-    res["calibration_by_score_bin"] = calibration_by_bin(d, card)
-    res["location_head"], res["existence_head"] = heads(lab)
-    res["conformal"] = conformal(d, card)
+    ext = {"about": "#66 additions to results.json (same TEST opening, same frozen model). results.json is unchanged."}
+    ext["ece5_decided_ci95"] = boot(ece, dec.p.to_numpy(float), dec.y.to_numpy(int), rng2)
+    ext["calibration_by_score_bin"] = calibration_by_bin(d, card)
+    ext["location_head"], ext["existence_head"] = heads(lab)
+    ext["conformal"] = conformal(d, card)
     if TOP1.is_file():
         top = json.loads(TOP1.read_text())
-        res["e2e_top1_benchmark"] = {k: ({kk: vv for kk, vv in v.items() if kk != "per_query"}
+        ext["e2e_top1_benchmark"] = {k: ({kk: vv for kk, vv in v.items() if kk != "per_query"}
                                          if isinstance(v, dict) else v) for k, v in top.items()}
-    (HERE / "results.json").write_text(json.dumps(res, indent=1) + "\n")
-    CARD_TEST.write_text(json.dumps(summary(res, card), indent=1) + "\n")
-    print(json.dumps(res, indent=1))
+    ext["model_card_test"] = summary(res | {k: v for k, v in ext.items() if k != "about"}, card)
+    (HERE / "extras.json").write_text(json.dumps(ext, indent=1) + "\n")
 
 
 if __name__ == "__main__":

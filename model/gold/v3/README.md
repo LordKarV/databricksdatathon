@@ -16,7 +16,7 @@ Custodian: tm-AA2026. The custodian does not work on #11's model fit.
 | `test_labels.sha256` | SHA-256 of the TEST labels file | when TEST is labelled |
 | `test_labels.json` | TEST labels, published after the one opening | yes |
 | `OPENING_LOG.md` | the one opening of TEST | written by `seal.py open` |
-| `test_eval/` | the TEST evaluation of frozen model v2 (`evaluate.py`, `results.json`; `top1_benchmark.py/.json`) | yes |
+| `test_eval/` | the TEST evaluation of frozen model v2 (`evaluate.py`, `results.json`, `extras.json`; `top1_benchmark.py/.json`) | yes |
 
 ## Sample
 
@@ -139,8 +139,9 @@ Labellers see the name, place and website, never the dataset's claims or the str
 
 Frozen model v2 (model_version `eed29abe...`, test_predictions sha256 `1b85f4c8...6e3ff4`) against the 150 sealed
 labels. Code: `test_eval/evaluate.py` and `test_eval/top1_benchmark.py` (run first; it needs `app/facts/out`);
-every number below is in `test_eval/results.json`, and the compact summary for the app, How page and notebook is
-`derived/v2/model_card_test.json` (#66). Agent-labelled, not human-checked. Intervals: 95% pair bootstrap (AUROC,
+the original numbers are in `test_eval/results.json` (unchanged), the #66 additions below are in
+`test_eval/extras.json`, and the compact summary for the app, How page and notebook is its `model_card_test` key.
+Agent-labelled, not human-checked. Intervals: 95% pair bootstrap (AUROC,
 log loss, ECE) or Wilson (proportions).
 
 - **Verdicts:** 47 confirmed, 13 contradicted, 90 no_info (60%). Public facilities: 64% no_info, private 57%.
