@@ -2,12 +2,14 @@
 
 Every number on the page comes from here, and every entry names the repo file it came from:
 - counts are computed from derived/v1, the facts export and kb/pathways;
+- the model section is computed from derived/v2/model_card.json; the earlier prototype's tables are history only;
 - tables and lists are copied verbatim (only backticks and bold markers stripped) from REPORT.md,
   model/MODEL_SPEC.md and research/DATASETS.md, found by their heading; a missing heading or table fails the build;
+- drift check (validation H6): the REPORT.md cells the page shows for findings 1 and 2, the far-from-PIN Flagged row
+  and the NFHS Fixed row are parsed and compared with counts computed from derived/v1; a mismatch fails the build;
 - ranking constants are read from app/facts/engine.py, so the page cannot drift from the code.
 Run from the repo root after app/facts/build.py:
     .venv-app/bin/python app/howto/build.py
-When #11 lands, point EVAL at its results file and rerun; the page refreshes without code changes.
 """
 from __future__ import annotations
 
@@ -16,20 +18,41 @@ import json
 import re
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "app"
 OUT = Path(__file__).resolve().parent / "out"
 V1 = "derived/v1"
+V2CARD = "derived/v2/model_card.json"
 REPORT, SPEC, DATASETS = "REPORT.md", "model/MODEL_SPEC.md", "research/DATASETS.md"
-EVAL = SPEC  # #11 replaces this with its v2 results file
+EVAL = SPEC  # the earlier prototype's evaluation, shown on the page as history only
 REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
 FAR_KM = 50  # the report's threshold for "far from its own PIN"; shown on the page as a fact
+FAR2_KM = 100  # the report's second threshold
 HOURS = re.compile(r"\b24 ?(?:x|/|\*|hrs?|hours) ?7?\b|round the clock|\bopen(?:s)? (?:from|daily|on|till)|"
                    r"\b\d{1,2}(?::\d{2})? ?(?:am|pm)\b|opening hours|timings?\b", re.I)
+# Rows of the v2 selection table the page shows; the selected model is listed first. how.js describes SELECTED.
+SELECTED = "A_platt"
+V2_ROWS = {"A_platt": "expert scorecard plus one calibration step", "A": "expert scorecard, nothing fitted",
+           "base_rate": "the same chance for every pair"}
+# (table, first cell starts with, column, pattern, count keys): the numbers a REPORT.md cell shows, group by group.
+DRIFT = [
+    ("findings", "Records hold text about another facility", "Verified count / denominator",
+     r"^([\d,]+) / ([\d,]+) records have a sentence that names another facility \(([\d.]+)%\); in ([\d,]+) of them",
+     ("other_facility", "records", "other_facility_pct", "other_facility_direct")),
+    ("findings", "Listing coordinates", "Verified count / denominator",
+     r"^([\d,]+) / ([\d,]+) more than (\d+) km from their own PIN \(([\d,]+) more than (\d+) km\); "
+     r"([\d,]+) of the ([\d,]+) stay in the same state",
+     ("coords_far", "coords_known", "far_km", "coords_far2", "far2_km", "coords_same_state", "coords_far")),
+    ("flagged", "Coordinates more than 50 km from PIN", "Count after cleaning", r"^([\d,]+) of ([\d,]+) conflict",
+     ("coords_far", "coords_known")),
+    ("fixed", "District and NFHS join", "After", r"^([\d,]+) districts; ([\d,]+) NFHS joins", ("districts", "nfhs")),
+]
 
 
 def clean(cell: str) -> str:
@@ -82,13 +105,83 @@ def fact(value, source: str, how: str, of=None) -> dict:
     return d
 
 
-def facts() -> dict:
-    loc = pd.read_parquet(ROOT / V1 / "facility_location.parquet", columns=["unique_id", "state_final",
-                                                                            "raw_coords_to_pin_km"])
+# ---------- counts from derived/v1 (shown on the page and compared with REPORT.md) ----------
+def nearest_state(lat: np.ndarray, lon: np.ndarray, gaz: pd.DataFrame) -> np.ndarray:
+    """State of the PIN centre nearest to each point (haversine)."""
+    la1, lo1 = np.radians(lat)[:, None], np.radians(lon)[:, None]
+    la2, lo2 = np.radians(gaz.lat.to_numpy())[None, :], np.radians(gaz.lon.to_numpy())[None, :]
+    h = np.sin((la2 - la1) / 2) ** 2 + np.cos(la1) * np.cos(la2) * np.sin((lo2 - lo1) / 2) ** 2
+    return gaz.state.to_numpy()[h.argmin(axis=1)]
+
+
+def location_counts(loc: pd.DataFrame) -> dict[str, int]:
+    """Far-from-PIN counts. 'Same state': the PIN centre nearest the listed point is in the state of the record's own
+    PIN, both from the cleaned PIN gazetteer that raw_coords_to_pin_km is measured to."""
+    gaz = pd.read_parquet(ROOT / V1 / "pin_gazetteer.parquet", columns=["pin", "state", "lat", "lon"]).dropna()
     d = loc.raw_coords_to_pin_km
-    grades = pd.read_parquet(ROOT / V1 / "grades.parquet", columns=["unique_id"])
-    dps = pd.read_parquet(ROOT / V1 / "data_point_scores.parquet", columns=["dp_type", "status"])
-    svc = dps[dps.dp_type == "service_claim"]
+    far = loc[d > FAR_KM]
+    own = far.pin.map(gaz.set_index("pin").state)
+    if own.isna().any():
+        raise SystemExit(f"{int(own.isna().sum())} far records have a PIN missing from pin_gazetteer")
+    near = nearest_state(far.raw_lat.to_numpy(), far.raw_lon.to_numpy(), gaz)
+    return {"coords_known": int(d.notna().sum()), "coords_far": len(far), "coords_far2": int((d > FAR2_KM).sum()),
+            "coords_same_state": int((near == own.to_numpy()).sum()),
+            "districts": int(loc.district.fillna("").str.len().gt(0).sum()),
+            "nfhs": int(loc.nfhs_district_name.fillna("").str.len().gt(0).sum())}
+
+
+def other_facility_counts(claims: pd.DataFrame, n_records: int) -> dict[str, float]:
+    """'Names another facility' = at least one claim sentence with attribution other_facility (the cleaning's own
+    attribution; equal to facility_trust.n_sentences_other_facility > 0). 'Direct' = such a sentence written as if
+    about the record itself, which cleaning quarantines as evidence."""
+    other = claims[claims.attribution == "other_facility"]
+    n = other.unique_id.nunique()
+    return {"other_facility": n, "other_facility_direct": other[other.context == "direct"].unique_id.nunique(),
+            "other_facility_pct": round(100 * n / n_records, 1)}
+
+
+def counts() -> dict[str, float]:
+    loc = pd.read_parquet(ROOT / V1 / "facility_location.parquet", columns=[
+        "pin", "raw_lat", "raw_lon", "raw_coords_to_pin_km", "district", "nfhs_district_name"])
+    claims = pd.read_parquet(ROOT / V1 / "claims.parquet", columns=["unique_id", "attribution", "context"])
+    return {"records": len(loc), "far_km": FAR_KM, "far2_km": FAR2_KM, **location_counts(loc),
+            **other_facility_counts(claims, len(loc))}
+
+
+def drift_check(tables: dict, c: dict[str, float]) -> int:
+    """Fail when a number REPORT.md shows on the page differs from derived/v1. Returns how many numbers were checked."""
+    n = 0
+    for key, first, col, pattern, keys in DRIFT:
+        t = tables[key]
+        row = next((r for r in t["rows"] if r[0].startswith(first)), None)
+        if row is None:
+            raise SystemExit(f"{REPORT} / {t['heading']}: no row starting {first!r}")
+        m = re.search(pattern, row[t["columns"].index(col)])
+        if m is None:
+            raise SystemExit(f"{REPORT} / {t['heading']} / {first!r}: the cell no longer matches {pattern!r}")
+        for shown, k in zip(m.groups(), keys, strict=True):
+            if float(shown.replace(",", "")) != c[k]:
+                raise SystemExit(f"{REPORT} / {t['heading']} / {first!r}: shows {shown} for {k}, derived/v1 gives "
+                                 f"{c[k]:,}. Update REPORT.md and rebuild.")
+            n += 1
+    return n
+
+
+# ---------- the app's labels today ----------
+def app_bands(eng) -> Counter:
+    """Pairs the app serves, by the label it shows: likely, not_verified, no_service_text, unlikely."""
+    out: Counter = Counter()
+    for svc, rows in eng.pairs.items():
+        for p in rows:
+            if p.model is None:
+                raise SystemExit(f"{svc}: a pair without a derived/v2 score; the page's Labels copy describes v2 bands")
+            band = eng.score(eng.fac["id"][p.fi], svc)[0]
+            out["no_service_text" if eng.model_band(p) == "NO_SERVICE_TEXT" else band] += 1
+    return out
+
+
+def facts(c: dict[str, float]) -> dict:
+    loc = pd.read_parquet(ROOT / V1 / "facility_location.parquet", columns=["unique_id", "state_final"])
     claims = pd.read_parquet(ROOT / V1 / "claims.parquet", columns=["unique_id", "text"])
     hours = claims[claims.text.str.contains(HOURS, na=False)].unique_id.nunique()
     rules = pd.read_parquet(ROOT / V1 / "evidence_rules.parquet")
@@ -100,31 +193,106 @@ def facts() -> dict:
     eng = engine.Engine.load()
     if eng is None:
         raise SystemExit("run app/facts/build.py first")
+    if "capability_p=" in (APP / "itinerary.py").read_text():  # the planner runs on stub chances until it gets one
+        raise SystemExit("app/itinerary.py now passes model scores to the planner: update 'Several stops' in how.js")
     app_pairs = sum(len(v) for v in eng.pairs.values())
-    likely = sum(p.status == "verified_true" for v in eng.pairs.values() for p in v)
+    bands = app_bands(eng)
+    if sum(bands.values()) != app_pairs:
+        raise SystemExit(f"band counts {dict(bands)} do not add up to {app_pairs} pairs")
     bihar = int((loc.state_final.str.upper() == "BIHAR").sum())
+    floc, claims_src, eng_src = f"{V1}/facility_location.parquet", f"{V1}/claims.parquet", "app/facts/engine.py"
     return {
-        "records": fact(len(loc), f"{V1}/facility_location.parquet", "rows"),
+        "records": fact(len(loc), floc, "rows"),
         "far_km": fact(FAR_KM, REPORT, "threshold used in the report's location findings"),
-        "coords_far": fact(int((d > FAR_KM).sum()), f"{V1}/facility_location.parquet",
-                           f"raw_coords_to_pin_km > {FAR_KM}", of=int(d.notna().sum())),
-        "pairs_graded": fact(len(grades), f"{V1}/grades.parquet", "facility-service pairs graded"),
-        "pairs_verified_true": fact(int((svc.status == "verified_true").sum()), f"{V1}/data_point_scores.parquet",
-                                    "service_claim rows with status verified_true"),
+        "far2_km": fact(FAR2_KM, REPORT, "second threshold used in the report's location findings"),
+        "coords_far": fact(c["coords_far"], floc, f"raw_coords_to_pin_km > {FAR_KM}", of=c["coords_known"]),
+        "coords_far2": fact(c["coords_far2"], floc, f"raw_coords_to_pin_km > {FAR2_KM}", of=c["coords_known"]),
+        "coords_same_state": fact(c["coords_same_state"], f"{V1}/pin_gazetteer.parquet",
+                                  "far records whose nearest PIN centre is in their own PIN's state",
+                                  of=c["coords_far"]),
+        "other_facility": fact(c["other_facility"], claims_src,
+                               "records with a sentence whose attribution is other_facility", of=len(loc)),
+        "other_facility_direct": fact(c["other_facility_direct"], claims_src,
+                                      "of those, records with such a sentence in direct context",
+                                      of=c["other_facility"]),
         "app_pairs": fact(app_pairs, "app/facts/build.py", "pairs for the app's services"),
-        "app_likely": fact(likely, "app/facts/engine.py", "pairs the interim rule bands Likely"),
+        "app_likely": fact(bands["likely"], eng_src, "pairs the app labels Likely (derived/v2 band LIKELY)"),
+        "app_not_verified": fact(bands["not_verified"], eng_src, "pairs labelled Not verified (band CALL_FIRST)"),
+        "app_no_service_text": fact(bands["no_service_text"], eng_src,
+                                    "pairs labelled No service text (band NO_SERVICE_TEXT)"),
+        "app_unlikely": fact(bands["unlikely"], eng_src, "pairs labelled Unlikely (band UNLIKELY)"),
         "evidence_rules": fact(len(rules), f"{V1}/evidence_rules.parquet", "rules"),
         "handchecked": fact(int((rules.handcheck_true + rules.handcheck_false).sum()), f"{V1}/evidence_rules.parquet",
                             "hand-checked cases behind the rules"),
-        "radius_km": fact(engine.RADIUS_KM, "app/facts/engine.py", "RADIUS_KM"),
-        "tie_min": fact(engine.TIE_MIN, "app/facts/engine.py", "TIE_MIN: emergency order, nearest plausible first"),
-        "scale_planned": fact(engine.TIME_SCALE["planned"], "app/facts/engine.py", "TIME_SCALE planned"),
-        "n_options": fact(engine.N_OPTIONS, "app/facts/engine.py", "N_OPTIONS"),
+        "radius_km": fact(engine.RADIUS_KM, eng_src, "RADIUS_KM"),
+        "tie_min": fact(engine.TIE_MIN, eng_src, "TIE_MIN: emergency order, nearest plausible first"),
+        "scale_planned": fact(engine.TIME_SCALE["planned"], eng_src, "TIME_SCALE planned"),
+        "n_options": fact(engine.N_OPTIONS, eng_src, "N_OPTIONS"),
         "pathways": fact(len(names), "kb/pathways/care_pathways.json", "pathways"),
         "pathway_names": fact(", ".join(str(n) for n in names), "kb/pathways/care_pathways.json", "names"),
-        "bihar_records": fact(bihar, f"{V1}/facility_location.parquet", "state_final = Bihar", of=len(loc)),
-        "hours_records": fact(int(hours), f"{V1}/claims.parquet",
+        "bihar_records": fact(bihar, floc, "state_final = Bihar", of=len(loc)),
+        "hours_records": fact(int(hours), claims_src,
                               "records with any sentence about opening hours or 24/7", of=len(loc)),
+    }
+
+
+# ---------- the model (derived/v2/model_card.json) ----------
+def load_card() -> dict:
+    card = json.loads((ROOT / V2CARD).read_text())
+    prov = card["label_provenance"]
+    # The page says these in words; stop the build if the card stops saying them.
+    if "not human-checked" not in prov["wording"] or "never opened" not in prov["test_exclusion"]["note"]:
+        raise SystemExit(f"{V2CARD}: label wording or TEST status changed; update 'How good it is' in how.js")
+    if "T >= 2" not in card["band_thresholds"]["rule"]:
+        raise SystemExit(f"{V2CARD}: the LIKELY rule changed; update the Labels bullet in how.js")
+    if card["selected"] != SELECTED:
+        raise SystemExit(f"{V2CARD}: selected model is {card['selected']!r}; update V2_ROWS and 'How good it is'")
+    return card
+
+
+def ci(v: list[float]) -> str:
+    return f"{v[0]:.3f} [{v[1]:.3f} to {v[2]:.3f}]"
+
+
+def v2_eval(card: dict) -> dict:
+    """The selection table: the selected model, the unfitted scorecard and the base rate, with 95% intervals."""
+    t, sel = card["selection_headline"]["table"], card["selected"]
+    order = [sel, *(k for k in V2_ROWS if k != sel)]
+    return {"source": V2CARD, "heading": "selection_headline.table",
+            "columns": ["Model", "DEV pairs (confirmed)", "Log loss, lower is better [95% interval]",
+                        "AUROC [95% interval]", "Calibration error, ECE [95% interval]"],
+            "rows": [[f"{k}: {V2_ROWS[k]}" + (" (selected)" if k == sel else ""),
+                      f"{t[k]['n']} ({t[k]['n_pos']})", ci(t[k]["log_loss"]), ci(t[k]["auroc"]), ci(t[k]["ece"])]
+                     for k in order]}
+
+
+def v2_facts(card: dict) -> dict:
+    lk, band = card["thresholds"]["likely"], card["band_thresholds"]["likely"]
+    em, pl = card["conformal"]["emergency"], card["conformal"]["planned"]
+    pub = card["public_vs_private"]["public"]
+    v1_note = next((c for c in card["caveats"] if c.startswith("v1 numbers")), None)
+    if v1_note is None:
+        raise SystemExit(f"{V2CARD}: caveat about v1 numbers not found")
+    src = V2CARD
+    return {
+        "v2_model": fact(card["selected"], src, "selected"),
+        "v2_meaning": fact(card["selected_meaning"], src, "selected_meaning"),
+        "likely_p": fact(band["p"], src, "band_thresholds.likely.p (t_L)"),
+        "likely_p_location": fact(band["p_location"], src, "band_thresholds.likely.p_location"),
+        "likely_p_exists": fact(band["p_exists"], src, "band_thresholds.likely.p_exists"),
+        "likely_dev": fact(lk["k_correct"], src, "thresholds.likely: LIKELY DEV pairs confirmed", of=lk["n"]),
+        "likely_dev_lo": fact(lk["wilson95"][0], src, "thresholds.likely.wilson95 low"),
+        "likely_dev_hi": fact(lk["wilson95"][1], src, "thresholds.likely.wilson95 high"),
+        "conf_em_k": fact(em["k"], src, "conformal.emergency.k"),
+        "conf_em": fact(em["coverage_k"], src, "conformal.emergency.coverage_k", of=em["n_queries"]),
+        "conf_em_random": fact(em["random_order_coverage"], src, "conformal.emergency.random_order_coverage"),
+        "conf_pl_k": fact(pl["k"], src, "conformal.planned.k"),
+        "conf_pl": fact(pl["coverage_k"], src, "conformal.planned.coverage_k", of=pl["n_queries"]),
+        "conf_pl_random": fact(pl["random_order_coverage"], src, "conformal.planned.random_order_coverage"),
+        "conformal_note": fact(card["conformal_note"], src, "conformal_note"),
+        "public_pairs": fact(pub["n"], src, "public_vs_private.public.n"),
+        "public_contradicted": fact(pub["contradicted"], src, "public_vs_private.public.contradicted"),
+        "v1_note": fact(v1_note, src, "caveats"),
     }
 
 
@@ -138,16 +306,19 @@ def source_classes() -> dict:
 
 
 def main() -> None:
+    card = load_card()
+    c = counts()
     how = {
         "built_at": time.strftime("%Y-%m-%d", time.gmtime()),
         "repo_url": REPO_URL,
-        "facts": facts(),
+        "facts": facts(c) | v2_facts(card),
         "tables": {
             "findings": table(REPORT, "1.1 The 5 findings",
                               ["Finding", "Verified count / denominator", "What goes wrong for a patient"]),
             "fixed": table(REPORT, "Fixed"),
             "flagged": table(REPORT, "Flagged"),
             "cannot": table(REPORT, "Cannot be handled by cleaning"),
+            "v2_eval": v2_eval(card),
             "labels": table(EVAL, "4.1 What the labels are"),
             "auroc": table(EVAL, "4.2 Pair-level discrimination",
                            ["system", "all 71 test", "searched only (39, 17 pos)"]),
@@ -159,12 +330,14 @@ def main() -> None:
         "lists": {"did_not_work": bullets(EVAL, "4.11 Claims that did not survive review")},
     }
     t = how["tables"]
+    n_checked = drift_check(t, c)
     for k, n in {"n_fixed": "fixed", "n_flagged": "flagged", "n_cannot": "cannot"}.items():
         how["facts"][k] = fact(len(t[n]["rows"]), t[n]["source"], f"rows in the '{t[n]['heading']}' table")
     OUT.mkdir(exist_ok=True)
     (OUT / "how.json").write_text(json.dumps(how, indent=1, ensure_ascii=False))
     size = (OUT / "how.json").stat().st_size
-    print(f"how.json: {len(how['facts'])} facts, {len(how['tables'])} tables, {size / 1000:.1f} KB")
+    print(f"how.json: {len(how['facts'])} facts, {len(how['tables'])} tables, {size / 1000:.1f} KB; "
+          f"drift check: {n_checked} REPORT.md numbers match derived/v1")
 
 
 if __name__ == "__main__":

@@ -40,6 +40,7 @@ matplotlib) is for development only and is not in `app/requirements.txt`. To reg
 
 ## Still to fill
 
-- **Section 6** (the fitted model and its final evaluation): the lead fills it after #11. Until then it shows
-  the current measured evaluation from `model/MODEL_SPEC.md`.
-- **Section 8** (data stories): lists the stories once `viz/` lands (#53).
+- **Section 7b:** the simulation table (`sim/out/metrics.parquet`, #92) and the real-data policy table
+  (`validation/out/policy_compare.csv`, #93) show as pending until those land.
+- **Section 10** reads the voice latency measured on the deployed app from `measured_on_databricks.json` (the lead's
+  smoke test, posted on #2), since no other file in the repository records it.

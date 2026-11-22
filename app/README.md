@@ -420,8 +420,8 @@ people. Every report is a fixed choice, and every number it adds is shown with i
     become a note for the last 7 days.
   - The effect is one additive term, `logit(posterior) - logit(p)`, so the ledger still sums to the score.
   - Reports alone never take a score below 0.20 (they flag "call first" instead; SAFETY 9). Without listing
-    text they never lift it to 0.70 or above.
-  - Reports can lower a band, never raise it. A Likely pair whose adjusted p falls below 0.70 becomes Not
+    text they never lift it to the Likely line (t_L = 0.3686, the model card's) or above.
+  - Reports can lower a band, never raise it. A Likely pair whose adjusted p falls below t_L (0.3686) becomes Not
     verified, with the reason "Health-worker reports disagree with the listing: call first" (English and Hindi).
     Every other band stays as the model set it, even when the reports are positive; the field line still shows
     them. There is still no public "Unlikely" from reports alone.

@@ -50,6 +50,7 @@ This notebook is the code and the reasoning behind the app, in plain words first
 5. The knowledge base
 6. The model and an honest evaluation
 7. `recommend(service, location)` with its WHY and HOW, on 3 real queries, including a multi-stop plan
+   - 7b. What we compared against: not the nearest, not the unreachable best
 8. Data stories
 9. Limits
 10. How to open the app
@@ -61,6 +62,12 @@ charts and a few quoted facility sentences as examples. No table of the provided
 
 md("""
 ## 0. Setup
+
+**To rebuild the team dataset on Databricks first:** run `submission/00_rebuild_derived.ipynb`. It reads the
+Marketplace tables on Free Edition serverless, runs the repository's rules-only cleaning, claims and source-scoring
+pipeline, writes `derived/v1` to a Unity Catalog volume and checks every table against `derived/v1/MANIFEST.json`.
+The cell below prints the result of its last Free Edition run. This notebook then reads `derived/v1` and the frozen
+model v2 export in `derived/v2`.
 
 **On Databricks Free Edition:** clone the repository as a Git folder and open this notebook from `submission/`.
 It reads the provided dataset from the Marketplace catalog through Spark. If you installed the listing under
@@ -75,9 +82,11 @@ Each section that uses one says so.
 """)
 
 code('''
+import hashlib
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -101,11 +110,14 @@ plt.rcParams.update({"figure.dpi": 100, "figure.figsize": (7, 3.2), "axes.spines
 V1 = ROOT / "derived" / "v1"
 REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
 print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name)
+rebuilt = re.search(r"On Free Edition serverless it gave [^.]+\\.", (ROOT / "submission/README.md").read_text())
+print("00_rebuild_derived.ipynb:", " ".join(rebuilt.group(0).split()) if rebuilt else "no Free Edition run recorded")
 ''')
 
 md("""
-The app reads small exports built from `derived/v1`, using only the standard library at run time. If they are
-missing (a fresh clone), the next cell builds them. The order matters: the planner first, then the facts, whose
+The app reads small exports built from `derived/v1` and `derived/v2`, using only the standard library at run time.
+The next cell rebuilds them every time (a few seconds each), so an export left over from an older checkout can never
+be read by mistake; a failed build stops the notebook. The order matters: the planner first, then the facts, whose
 export copies the sentences the planner cites, then the "How this works" page data.
 """)
 
@@ -113,12 +125,11 @@ code('''
 BUILDS = [("planner/out/planner_v2.json.gz", "planner/export_v2.py"),
           ("app/facts/out/facts.json.gz", "app/facts/build.py"),
           ("app/howto/out/how.json", "app/howto/build.py")]
-for out, script in BUILDS:
-    if (ROOT / out).is_file():
-        print(f"ok      {out}")
-    else:
-        r = subprocess.run([sys.executable, script], cwd=ROOT, capture_output=True, text=True, check=False)
-        print(f"built   {out}: {r.stdout.strip().splitlines()[-1] if r.stdout.strip() else r.stderr[-300:]}")
+for out, script in BUILDS:  # always rebuild: a stale export once broke a Databricks run
+    r = subprocess.run([sys.executable, script], cwd=ROOT, capture_output=True, text=True, check=False)
+    if r.returncode != 0:
+        raise RuntimeError(f"{script} failed: {r.stderr[-800:]}")
+    print(f"built   {out}: {r.stdout.strip().splitlines()[-1] if r.stdout.strip() else 'ok'}")
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -170,8 +181,11 @@ code('''
 from howto import build as how
 
 
+PHONE = r"(?:\\+91[ -]?|\\b)[6-9]\\d{4}[ -]?\\d{5}\\b"  # Indian mobile numbers: never printed in this public notebook
+
+
 def show_table(t, cols=None, max_chars=140):
-    df = pd.DataFrame(t["rows"], columns=t["columns"])
+    df = pd.DataFrame(t["rows"], columns=t["columns"]).replace(PHONE, "[a phone number]", regex=True)
     if cols:
         df = df[cols]
     with pd.option_context("display.max_colwidth", max_chars):
@@ -207,6 +221,11 @@ Cleaning does three different things, and the app treats them differently:
 - **Fixed:** repaired in `derived/v1`.
 - **Flagged:** kept, but shown to the user as a warning on the card.
 - **Cannot be fixed by cleaning:** the answer is a phone call before travelling, and the app says so.
+
+The fixed list below is the base everything else stands on: exact and residual duplicates, map points that were
+impossible or outside India, and points moved to where the facility really is. What is left is mostly claims that
+nobody can verify from the web, and the phone and opening-hours facts that no listing carries. That is why the
+app says "call first", and section 6 measures how much of it remains.
 """)
 
 code('''
@@ -214,6 +233,11 @@ fixed, flagged, cannot = (how.table("REPORT.md", h) for h in ("Fixed", "Flagged"
 print(f"fixed: {len(fixed['rows'])} problems | flagged: {len(flagged['rows'])} | cannot be fixed by cleaning: "
       f"{len(cannot['rows'])}")
 show_table(cannot)
+test_eval = ROOT / "model/gold/v3/test_eval/results.json"
+if test_eval.is_file():
+    v = json.loads(test_eval.read_text())["verdicts"]
+    print(f"What remains after cleaning: in the sealed TEST a web check found no decisive answer for {v['no_info']} of "
+          f"{sum(v.values())} facility-service pairs ({v['no_info'] / sum(v.values()):.0%}).")
 ''')
 
 code('''
@@ -316,25 +340,260 @@ plt.show()
 md("""
 ## 6. The model and an honest evaluation
 
-> **To be completed by the team lead after #11** (the fitted model). This section will load the fitted scores
-> (`derived/v2/facility_service_scores.parquet`) and print the final evaluation.
+In plain words: for every facility and service the model adds up points, like a credit scorecard, and turns the
+sum into a chance. It has three small scorecards, each a glass box:
+- **offers:** does the facility really offer the service? This is the score the app shows (P_S).
+- **location:** is the facility at the place the map says (P_L)?
+- **exists:** is it a real, working facility (P_E)?
 
-Until then, the app uses an interim, conservative rule. It says "Likely" only when a second source confirmed the
-service; everything else is "Not verified: call first". Below is the current measured evaluation of the
-prototype model, including the baselines and an LLM judge, copied from `model/MODEL_SPEC.md`.
+Each row of points comes from a named family of witnesses, for example the listing's own sentences about the
+service, text that names another facility, a public list such as NABH or e-RaktKosh, the facility's own website,
+or the public standard (IPHS) for a government hospital of that level. The rows on a card add up exactly to its
+score; nothing is hidden.
+
+**Fairness coding.** When a source cannot see a facility at all (no website of its own, a list that does not cover
+its type, not a public hospital), its family is coded *not observable* and adds 0 points. A missing website never
+counts against a small or public facility.
+
+The weights are expert settings derived from audit rates, written down before the labels were read. The shipped
+version, **A_platt**, adds one calibration step fitted on the DEV labels: every point is multiplied by the same
+factor and one constant is added, so the card stays additive. The cells below read the frozen model card,
+`derived/v2/model_card.json`.
 """)
 
 code('''
-show_table(how.table("model/MODEL_SPEC.md", "4.2 Pair-level discrimination",
-                     ["system", "all 71 test", "searched only (39, 17 pos)"]))
+card = json.loads((ROOT / "derived/v2/model_card.json").read_text())
+FAMILY = {"base": "base rate for the service", "T": "the listing's own text about the service",
+          "C": "text that names another facility", "C_prior": "record breadth and operator (contamination prior)",
+          "N": "non-offer cue (referral, camp, plan, negation)", "S": "scope (eye, dental, IVF or lab facility)",
+          "P": "prerequisites (ICU, theatre, blood bank)", "X": "public and registry lists",
+          "W": "the facility's own website", "O": "open data (OpenStreetMap, Wikidata)",
+          "D": "dataset details (same text as T)", "K": "public standard (IPHS) for the facility's level",
+          "R": "reader slot (weight 0, never fires)", "context": "facility level and type"}
+platt = card["service_head"]["platt"]
+print("model_version", card["model_version"])
+print(f"offers head: {card['selected']} = {card['service_head']['base_scorecard']}, plus one Platt step "
+      f"(a {platt['a']:.4f}, c {platt['c']:.4f}; fitted on {platt['fitted_on']})")
+print("  what p means:", card["selected_meaning"])
+print("location head:", card["location_head"]["shipped"])
+print("exists head:", card["existence_head"])
+print("labels:", card["label_provenance"]["wording"])
+for c in card["caveats"]:
+    print(" -", c)
+fam = pd.DataFrame(card["per_family_points"])
+fam.insert(1, "witness family", fam.family.map(FAMILY))
+display(fam.rename(columns={"count": "terms", "min": "lowest points", "max": "highest points"}).set_index("family"))
 ''')
 
+md("""
+**How the shipped model was chosen.** The order of candidates and the rule were fixed before any were fitted:
+- **A**, the expert prior scorecard;
+- **A_platt**, A with one calibration step;
+- **B**, a fitted monotone logistic scorecard, and **B_platt**;
+- **C**, an explainable boosting machine (an additive glass-box model, interactions off).
+
+The least-fitted candidate ships unless a more-fitted one lowers the out-of-fold log loss by at least one paired
+cluster standard error. The headline labels are web checks with a decisive answer: confirmed against contradicted.
+The base rate (a constant) is shown as a reference. Further C variants were run as ablations outside the
+pre-set order and were not used for selection (`model/v2/final/SELECT.md`).
+""")
+
 code('''
-did_not = how.bullets("model/MODEL_SPEC.md", "4.11 Claims that did not survive review")
-print("What did not work (from the statistical review):\\n")
-for x in did_not["items"][:5]:
-    print(" -", x[:230] + ("..." if len(x) > 230 else ""))
-print(f"\\n... {len(did_not['items'])} in all, in {did_not['source']}")
+def ci(v, d=3):
+    return f"{v[0]:.{d}f} [{v[1]:.{d}f}, {v[2]:.{d}f}]"
+
+
+sel, lp = card["selection_headline"], card["label_provenance"]
+print("Rule:", card["selection_rule"])
+print(re.search(r"Intervals: [^.]+\\.", (ROOT / "model/v2/final/SELECT.md").read_text()).group(0))
+print(f"Headline labels: {lp['headline']['n']} decided DEV pairs, {lp['headline']['pos']} confirmed and "
+      f"{lp['headline']['neg']} contradicted ({lp['wording']}). TEST pairs are excluded from every training row.")
+CANDIDATES = ["A", "A_platt", "B", "B_platt", "C", "base_rate"]
+display(pd.DataFrame([{"candidate": k, "out-of-fold log loss": ci(m["log_loss"]), "AUROC": ci(m["auroc"]),
+                       "Brier": ci(m["brier"]), "ECE": ci(m["ece"])}
+                      for k, m in sel["table"].items() if k in CANDIDATES]).set_index("candidate"))
+for s in sel["selection"]["steps"]:
+    print(f"{s['candidate']} against {s['incumbent']}: log loss {s['diff']:+.3f} (SE {s['se']:.3f}, "
+          f"95% {s['ci95'][0]:+.3f} to {s['ci95'][1]:+.3f}): {'replaces' if s['replaces'] else 'does not replace'}")
+sens = card["selection_sensitivity"]
+print(f"Selected: {sel['selection']['selected']}. With 'searched and found nothing' counted as not offered "
+      f"({sens['table']['A']['n']} pairs) the rule selects {sens['selection']['selected']} too.")
+''')
+
+md("""
+**Calibration, bands and how many to call.** A score should come true about as often as it says. The table puts
+the DEV pairs into score bins and compares the mean score with the share that was confirmed. The app shows
+words, not raw scores: LIKELY, CALL FIRST, NO SERVICE TEXT or UNLIKELY, from thresholds chosen on DEV. Conformal
+top-k says how many options to list so that a confirmed facility is among them most of the time.
+""")
+
+code('''
+cal = pd.DataFrame(card["calibration_by_score_bin"])
+cal["confirmed share"] = cal.k_confirmed / cal.n_decided
+cal["95% interval"] = cal.wilson95.map(lambda w: f"{w[0]:.2f} to {w[1]:.2f}")
+cal["score bin"] = cal.apply(lambda r: f"{r.p_min:.1f} to {r.p_max:.1f}", axis=1)
+display(cal.set_index("score bin")[["n_decided", "k_confirmed", "k_contradicted", "mean_p", "confirmed share",
+                                    "95% interval"]].round(3))
+print("note:", card["calibration_note"])
+fig, ax = plt.subplots(figsize=(4.2, 3.4))
+err = [cal["confirmed share"] - cal.wilson95.map(min), cal.wilson95.map(max) - cal["confirmed share"]]
+ax.errorbar(cal.mean_p, cal["confirmed share"], yerr=err, fmt="o", color="#4c72b0", capsize=3)
+ax.plot([0, 1], [0, 1], ls="--", color="#999999")
+ax.set_xlabel("mean score in the bin")
+ax.set_ylabel("share confirmed")
+ax.set_title("Calibration on DEV (out of fold)")
+plt.tight_layout()
+plt.show()
+
+th, bt = card["thresholds"], card["band_thresholds"]
+lk, ul = th["likely"], th["unlikely"]
+print(f"LIKELY needs p >= {bt['likely']['p']:.4f}, location >= {bt['likely']['p_location']} and exists >= "
+      f"{bt['likely']['p_exists']}. On DEV: {lk['k_correct']} of {lk['n']} LIKELY pairs confirmed "
+      f"(95% {lk['wilson95'][0]:.3f} to {lk['wilson95'][1]:.3f}).")
+print(f"UNLIKELY needs p <= {bt['unlikely']['p']:.2f}{' (fallback value)' if th['t_U_fallback'] else ''}. On DEV: "
+      f"{ul['k_correct']} of {ul['n']} UNLIKELY pairs contradicted (95% {ul['wilson95'][0]:.3f} to {ul['wilson95'][1]:.3f}).")
+print("rule:", bt["rule"])
+bands = card["bands_all_pairs"]
+print("all pairs by band:", ", ".join(f"{k} {v:,}" for k, v in bands.items()), f"(of {sum(bands.values()):,})")
+for urgency, c in card["conformal"].items():
+    print(f"conformal top-k, {urgency} ({', '.join(c['services'])}): list k = {c['k']}; a confirmed facility is "
+          f"among them in {c['coverage_k']} of {c['n_queries']} DEV queries (95% from {c['coverage_wilson95'][0]:.2f}); "
+          f"a random order of the same lists reaches {c['random_order_coverage']:.2f}")
+print("note:", card["conformal_note"])
+''')
+
+md("""
+**Public and private facilities.** Public facilities are few in the labels and nearly all confirmed, so we cannot
+measure how well the score ranks them. The sentence below is the wording agreed on #79, with the numbers read
+from the model card.
+""")
+
+code('''
+pvp = card["public_vs_private"]
+pub = pvp["public"]
+print(f"On {pub['n']} labelled public pairs ({pub['contradicted']} contradicted) we could not show that the score "
+      "ranks public facilities better than chance; the sample is too small to tell.")
+print()
+for op in ("public", "private"):
+    m = pvp[op]["metrics"][card["selected"]]
+    print(f"{op:8} {pvp[op]['n']:>4} pairs ({pvp[op]['confirmed']} confirmed, {pvp[op]['contradicted']} contradicted): "
+          f"AUROC {ci(m['auroc'], 2)}, log loss {ci(m['log_loss'], 2)}")
+''')
+
+md("""
+**One worked example.** The full ledger of one real pair, Sadar Hospital Gopalganj (a district hospital in Bihar;
+its record name is printed below) for dialysis, read from `derived/v2/facility_service_scores.parquet`. Each row is
+a witness with its points; the base and the rows add up to the score, which is checked below. `lo` and `hi` are the track record of the score bin
+(the share confirmed among DEV pairs in the same bin), not an interval around p.
+""")
+
+code('''
+scores = pd.read_parquet(ROOT / "derived/v2/facility_service_scores.parquet")
+names = pd.read_parquet(V1 / "facility_location.parquet", columns=["unique_id", "name", "district"])
+rec = names[names.name.str.contains("Sadar Hospital", na=False) & names.district.str.upper().eq("GOPALGANJ")]
+assert len(rec) == 1, "the worked example should name exactly one record"
+row = scores[scores.unique_id.eq(rec.unique_id.iloc[0]) & scores.service_id.eq("dialysis")].iloc[0]
+PTS = card["per_term_weights"][0]["shipped_points"] / card["per_term_weights"][0]["shipped_logit"]  # points per logit
+ledger = pd.DataFrame(json.loads(row.contributions))
+ledger.insert(1, "witness family", ledger.family.map(FAMILY))
+ledger["evidence"] = ledger.evidence_ids.map(len)
+base_pts = row.base * PTS
+total = base_pts + ledger.points.sum()
+p_from_ledger = 1 / (1 + math.exp(-total / PTS))
+print(f"{rec.name.iloc[0]} ({rec.district.iloc[0].title()}), dialysis: {row.band} {list(row.overlays)}, "
+      f"operator {row.operator}")
+with pd.option_context("display.max_colwidth", 70):
+    display(ledger[["label", "witness family", "card_phrase", "evidence", "points"]].round(1))
+print(f"base {base_pts:+.1f} + rows {ledger.points.sum():+.1f} = {total:+.1f} points; "
+      f"p = 1 / (1 + exp(-points / {PTS:.2f})) = {p_from_ledger:.4f}; stored p = {row.p:.4f}")
+assert abs(p_from_ledger - row.p) < 1e-9
+print(f"location P_L {row.p_location:.3f}, exists P_E {row.p_exists:.3f}; score-bin track record {row.lo:.2f} to {row.hi:.2f}")
+''')
+
+md("""
+**The frozen TEST.** Before any TEST label was read, the model was frozen: its version is a hash of the
+parameters, thresholds and code, and its predictions for the sealed TEST pairs were committed with their SHA-256.
+The TEST labels are web checks by agents, like DEV, so they are agent-labelled, not human-checked. TEST was opened
+once, after the freeze; the cell checks both hashes and reads `model/gold/v3/test_eval/results.json`. The headline
+metric is confirmed against contradicted.
+
+Cleaning (section 3) already fixed duplicates, impossible or out-of-country map points and misplaced points. What
+the model is left with is mostly claims that nobody can settle from the web (the "no decisive answer" share below)
+and the phone and opening-hours facts that no listing carries. That is why the app's default is "call first".
+""")
+
+code('''
+pred = ROOT / "model/v2/test_predictions.parquet"
+sealed_sha = (ROOT / "model/v2/test_predictions.sha256").read_text().split()[0]
+tp = pd.read_parquet(pred, columns=["pair_id", "model_version"])
+print("model_version (model_card.json):", card["model_version"])
+print(f"TEST predictions: {len(tp)} pairs, sha256 {sealed_sha}")
+print("bytes match the committed sha256:", hashlib.sha256(pred.read_bytes()).hexdigest() == sealed_sha,
+      "| written by this model_version:", set(tp.model_version) == {card["model_version"]})
+TEST_EVAL = ROOT / "model/gold/v3/test_eval/results.json"
+if not TEST_EVAL.is_file():
+    print("TEST is sealed and not yet opened.")
+else:
+    te = json.loads(TEST_EVAL.read_text())
+    assert te["model_version"] == card["model_version"] and te["test_predictions_sha256"] == sealed_sha
+    print(f"Opened once, against these predictions (model/gold/v3/OPENING_LOG.md). {te['about']}")
+    v = te["verdicts"]
+    n_all = sum(v.values())
+    print(f"Verdicts: {v['confirmed']} confirmed, {v['contradicted']} contradicted, and {v['no_info']} of {n_all} "
+          f"({v['no_info'] / n_all:.0%}) with no decisive answer on the web.")
+
+    def test_row(name, m):
+        lk = m["LIKELY_confirmed"]
+        return {"TEST pairs": name, "n": m["n"], "confirmed": m["confirmed"], "contradicted": m["contradicted"],
+                "AUROC": f"{m['auroc']:.3f} [{m['auroc_ci95'][0]:.3f}, {m['auroc_ci95'][1]:.3f}]",
+                "log loss": f"{m['log_loss']:.3f} [{m['log_loss_ci95'][0]:.3f}, {m['log_loss_ci95'][1]:.3f}]",
+                "base-rate log loss": m["base_rate_log_loss"], "Brier": m["brier"], "ECE": m["ece5"],
+                "LIKELY confirmed": f"{lk['k']} of {lk['n']}" + (f" ({lk['rate']:.3f} [{lk['ci95'][0]:.3f}, "
+                                                                f"{lk['ci95'][1]:.3f}])" if lk["n"] else "")}
+
+    ops, meth = te["by_operator_decided"], te["by_method_decided"]
+    display(pd.DataFrame([test_row("headline: all decided", te["headline_decided"]),
+                          *(test_row(f"{op} (decided)", ops[op]) for op in ("public", "private")),
+                          *(test_row(f"labelled by {k} (decided)", m) for k, m in meth.items()),
+                          test_row("sensitivity: no decisive answer = not offered", te["sensitivity_no_info_as_0"])])
+            .set_index("TEST pairs"))
+    pub = ops["public"]
+    print(f"Public facilities: {pub['n']} decided pairs, AUROC interval {pub['auroc_ci95'][0]:.3f} to "
+          f"{pub['auroc_ci95'][1]:.3f}: " + ("ranking shown." if pub["auroc_ci95"][0] > 0.5 else
+                                          "it includes 0.5, so ranking public facilities is not shown."))
+''')
+
+md("""
+**A negative result: the reader.** We fine-tuned a small transformer to read each sentence and say whether it is
+about this facility and whether it offers the service. We trained MiniLM on the lead's Mac, and bge-small and
+multilingual-e5 on a Databricks GPU. On the hand-labelled sentences none beats the rules where it
+would have to (the F1 on the class that matters, label 0, with the paired bootstrap interval of the difference
+above zero), and on "offers" every reader is far worse. So the model keeps the rules and the reader slot has
+weight 0.
+""")
+
+code('''
+RD = ROOT / "model/reader"
+mac = json.loads((RD / "out/metrics_full.json").read_text())
+gpu = json.loads((RD / "out_gpu/metrics_gpu_remaining.json").read_text())
+gpu_name = re.search(r"NVIDIA [A-Z0-9]+", (RD / "out_gpu/nvidia_smi.txt").read_text()).group(0)
+rules = mac["rules_on_hand_labels"]
+out = [{"system": "rules (the bar)", "where": "-", "about_this F1": rules["about_this"]["class_0"]["f1"],
+        "about_this minus rules": "-", "offers F1": rules["offers"]["class_0"]["f1"], "offers minus rules": "-"}]
+for run, where in ((mac, f"{mac['hardware']['cpu']}, MPS"), (gpu, f"Databricks, {gpu_name}")):
+    for name, r in run["runs"].items():
+        row = {"system": name, "where": where}
+        for head in ("about_this", "offers"):
+            v = r["hand_labels"][head]
+            d = v["reader_vs_rules"]["class_0"]
+            row[f"{head} F1"] = v["reader"]["class_0"]["f1"]
+            row[f"{head} minus rules"] = (f"{d['f1_reader_minus_rules']:+.3f} [{d['ci95'][0]:+.3f}, {d['ci95'][1]:+.3f}]"
+                                          + (" beats" if d["ci95"][0] > 0 else ""))
+        out.append(row)
+print(f"F1 on label 0 (about another facility / not an offer), {mac['eval_rows']} hand-labelled sentences; "
+      "bracket = 95% paired bootstrap interval of reader minus rules")
+display(pd.DataFrame(out).set_index("system"))
+print("model card:", next(c for c in card["caveats"] if "reader" in c))
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -353,7 +612,7 @@ For each option it prints:
 """)
 
 code('''
-from facts.engine import RULE_PLAIN, Engine
+from facts.engine import Engine
 from itinerary import attach
 
 ENGINE = Engine.load()
@@ -373,7 +632,8 @@ def show(plan: dict, n: int = 3) -> None:
     for o in plan["options"][:n]:
         t = o["travel"]
         print(f"\\n{o['rank']}. {o['name']} ({o['district']}, {o['state']})")
-        print(f"   {o['band_word'].upper()}: score {o['p']:.2f} (range {o['p_lo']:.2f} to {o['p_hi']:.2f}); "
+        rng = "similar scores confirmed" if o["range_kind"] == "similar_scores" else "range"
+        print(f"   {o['band_word'].upper()}: score {o['p']:.2f} ({rng} {o['p_lo']:.2f} to {o['p_hi']:.2f}); "
               f"{t['km']:.0f} km, about {t['low']}-{t['high']} min ({t['label']})")
         for e in o["evidence"][:2]:
             print(f'   WHY  "{e["quote"]}"  [{e["claim_id"]}]')
@@ -391,8 +651,7 @@ def show(plan: dict, n: int = 3) -> None:
                   f"chance {s['p']:.2f}, {s['n_evidence']} evidence lines")
         if r["vs_direct"]:
             v = r["vs_direct"]
-            print(f"   vs going straight to {v['direct_name']} ({v['direct_minutes']} min): chance of care in time "
-                  f"{v['direct_p_objective']:.2f} direct against {v['plan_p_objective']:.2f} with this route")
+            print("  ", v["text"])
 ''')
 
 code('''
@@ -405,6 +664,70 @@ show(recommend("emergency_csection", 19.88, 75.34))   # Aurangabad district, Mah
 
 code('''
 show(recommend("trauma_emergency", 25.15, 83.68))     # NH-19 near Mohania, Bihar: a multi-stop plan
+''')
+
+# ---------------------------------------------------------------------------------------------------------------------
+md("""
+## 7b. What we compared against: not the nearest, not the unreachable best
+
+The organizers clarified the impact criterion (#86): a tool that always sends people to the closest place is not
+impactful, because it ignores everything else, and one that sends them to the best place on paper is not actionable
+if they cannot reach it. So we compare the app with both, in two ways:
+- **A simulated referral world** (`sim/`, #92). Each simulated world decides in secret which listings are true,
+  simulated patients go through each referral policy (call, travel, turned away, try the next), and we count who
+  reaches care within the time window. Several truth scenarios are always shown together, because one drawn from the
+  model's own score would favour the app by construction. Everything from it is labelled SIMULATED.
+- **Real data at the demo places** (`validation/policy_compare.py`, #93): the facility each policy picks first, its
+  travel time against the service's window, and the published DEV label where one exists.
+""")
+
+code('''
+SIM_FILES = [ROOT / "sim/out/metrics.parquet", Path("/Volumes/workspace/referral_saathi/uploads/sim/metrics.parquet")]
+sim_file = next((p for p in SIM_FILES if p.is_file()), None)
+if sim_file is None:
+    print("SIMULATED results: pending. The simulation (#92) is not in this version of the repository yet.")
+    print("When sim/out/metrics.parquet exists, this cell shows, for dialysis (planned) and trauma (emergency) in")
+    print("Bihar and Uttar Pradesh, the share of simulated patients treated within the time window under each policy")
+    print("(the app, the app offline, nearest, nearest + call first, best on paper), with seed-bootstrap intervals,")
+    print("for scenarios S0-high and S0-low (base-rate bounds, read together), S1, S2 and S3. All of it SIMULATED.")
+else:
+    m = pd.read_parquet(sim_file)
+    m = m[m.state.eq("ALL")] if "state" in m else m
+    m = m.assign(v=[f"{r.treated_in_window:.2f} [{r.treated_in_window_lo:.2f}, {r.treated_in_window_hi:.2f}]"
+                    for r in m.itertuples()])
+    print(f"SIMULATED ({sim_file.name}): share treated within the time window, seed-bootstrap interval. "
+          "S0-high and S0-low are base-rate bounds: read them together, never one alone.")
+    display(m.pivot_table(index=["service", "policy"], columns="scenario", values="v", aggfunc="first"))
+''')
+
+md("""
+**A method finding from the simulation (#92).** In an early run the app got fewer simulated trauma patients to care
+within the window than the simple rule "nearest place that lists the service, call first". It held in every
+scenario, including the one where the model's own scores are the truth. The cause is the ranking, not the model: it
+traded extra travel for a higher score, while a phone call settles the question in a few minutes, so for an
+emergency a nearer place that plausibly offers the service, called first, is worth more. For dialysis, a planned
+service with a longer window, the score paid off. The decision on #92: for emergency services only, rank by the
+expected chance of care within the window when calls go out nearest plausible place first (UNLIKELY pairs and
+pairs with no quoted sentence excluded; the score as a filter and tie-break). Planned services keep the current
+rule. The model itself (scores, bands and the frozen TEST predictions) does not change. The size of the gap depends
+on the assumed call and turn-away constants, so it is reported as a simulated method finding, not as field evidence.
+""")
+
+code('''
+pc = ROOT / "validation/out/policy_compare.csv"
+if not pc.is_file():
+    print("REAL DATA policy comparison: pending (run validation/policy_compare.py, #93; its CSV is not committed yet).")
+    print("It will show, per policy (app, nearest, best on paper) at the demo places: answers, median travel minutes,")
+    print("how many first picks are inside the service's time window, how many are LIKELY, and the published DEV")
+    print("labels (confirmed or contradicted) where they exist. Real data, not simulated.")
+else:
+    d = pd.read_csv(pc)
+    d = d[d.facility.notna() & d.facility.ne("")]
+    print("REAL DATA at the demo places, not simulated; gold = published DEV labels only, so coverage is small")
+    display(d.groupby("policy").agg(answers=("service", "size"), median_minutes=("minutes", "median"),
+                                    in_window=("in_window", "sum"), likely=("band", lambda b: int((b == "LIKELY").sum())),
+                                    gold_confirmed=("gold", lambda g: int((g == "confirmed").sum())),
+                                    gold_contradicted=("gold", lambda g: int((g == "contradicted").sum()))))
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -427,9 +750,10 @@ md("## 9. Limits")
 code('''
 h = json.loads((ROOT / "app/howto/out/how.json").read_text())["facts"]
 print(f"- Thin rural coverage: {h['bihar_records']['value']:,} of {h['bihar_records']['of']:,} records are in Bihar.")
-print(f"- Only {h['app_likely']['value']} of {h['app_pairs']['value']:,} facility-service pairs the app serves are "
-      "confirmed by a second source; everything else is 'call first'.")
-print("- Labels come from public web pages, not from phone calls or visits.")
+bands = card["bands_all_pairs"]
+print(f"- Model v2 bands {bands['LIKELY']:,} of {sum(bands.values()):,} facility-service pairs Likely; everything else "
+      "asks for a call first or says no.")
+print(f"- Labels are web checks ({card['label_provenance']['wording']}), not phone calls or visits.")
 print(f"- Opening hours: {h['hours_records']['value']:,} of {h['hours_records']['of']:,} records mention hours at all; "
       "nothing says whether a bed or a slot is free today.")
 print("- Travel times are rough estimates (straight line times a road factor), shown as ranges.")
@@ -437,48 +761,92 @@ print("- Travel times are rough estimates (straight line times a road factor), s
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("""
-## 9b. Learning from phone calls (reviewed, never automatic)
+## 9b. Field reports
 
-When a health worker taps "Said yes", "Said no" or "No answer" after calling, the app writes one row to
-`workspace.referral_saathi.call_outcomes`. A row holds the facility, the service, the answer, the call questions,
-the model version, the district and the time. It never holds patient data.
+Health workers already know which hospitals took their patients. The app lets them say so with fixed choices only,
+no star ratings and no free text: after a call ("Said yes", or "Said no" with an optional reason) and after a
+referral ("Accepted" or "Turned away", with a reason and the wait). Each report is one row in `call_outcomes`, keyed
+by a one-way hash of the signed-in user, never the user, the patient or a phone number.
 
-The cell below reads those rows and shows how they *would* move the weight of each evidence family. It uses a
-Beta update: the family's mean score today counts as 10 earlier calls, and each answered call adds one more. Nothing
-is retrained from here; a person reviews the table first.
+Reports enter the score as **one more row of the ledger**, "Field reports", so the card still adds up to the score
+it shows (`app/community/field.py`, `field_adjust`):
+- **A Beta update.** The model's score counts as N0 earlier reports. N0 is an assumption, not a measurement.
+- **Weights.** An accepted visit counts in full and a phone "yes" at half weight, because a receptionist's yes is not
+  a confirmation. A "does not offer" reason counts in full after a visit and at half weight on the phone. Older
+  reports fade, and each reporter counts once.
+- **A minimum number of distinct reporters** before anything moves, so one person cannot change a public verdict
+  about a real hospital.
+- **Temporary reasons** (no bed, doctor away, machine down, asked to pay, closed) never lower the score. They show
+  only as a dated note about availability.
+- **Never raise a band.** Reports can take a Likely pair below the Likely line, which turns it into "Not verified:
+  call first". Every other band stays as the model set it, even when the reports are good.
+- **The disagree rule.** When the reports against outweigh the reports for, the card says "Reports disagree with the
+  listing: call first". Reports alone never make a public "Unlikely", and without listing text they never lift a
+  pair to Likely.
+
+The cell prints these settings from the code and runs `field_adjust` on a synthetic example: invented reporters
+about an unnamed facility, not real reports.
 """)
 
 code('''
-from collections import defaultdict
+from datetime import UTC, datetime, timedelta
 
-OUTCOMES_TABLE = "workspace.referral_saathi.call_outcomes"
-PRIOR_CALLS = 10
-rows = []
-if ON_DATABRICKS:
-    try:
-        q = f"SELECT facility_id, service_id, outcome, count(*) AS n FROM {OUTCOMES_TABLE} GROUP BY ALL"
-        rows = [tuple(r) for r in spark.sql(q).collect()]  # noqa: F821 (spark is predefined on Databricks)
-    except Exception as e:  # table missing in this workspace
-        print("call_outcomes is not readable here:", type(e).__name__)
-if not rows:
-    print("No call outcomes recorded in this environment yet; the table below fills in as calls are recorded.")
+from community import field
+from facts.engine import _logit
+from outcomes import REASONS_TEMPORARY
 
-fam = defaultdict(lambda: {"yes": 0, "no": 0, "no_answer": 0, "score_sum": 0.0, "pairs": 0})
-for rule_rows in ENGINE.pairs.values():
-    for p in rule_rows:
-        fam[p.rule]["score_sum"] += p.score
-        fam[p.rule]["pairs"] += 1
-for fid, sid, outcome, n in rows:
-    i = ENGINE.fid.get(fid)
-    p = ENGINE.index.get(sid, {}).get(i) if i is not None else None
-    if p is not None:
-        fam[p.rule][outcome] += int(n)
-print(f"{'evidence family':52} {'pairs':>6} {'yes':>4} {'no':>4} {'mean now':>9} {'would be':>9}")
-for rule, f in sorted(fam.items(), key=lambda kv: -kv[1]["pairs"]):
-    mean = f["score_sum"] / f["pairs"]
-    new = (mean * PRIOR_CALLS + f["yes"]) / (PRIOR_CALLS + f["yes"] + f["no"])
-    label = RULE_PLAIN.get(rule, rule)[:52]
-    print(f"{label:52} {f['pairs']:>6,} {f['yes']:>4} {f['no']:>4} {mean:>9.2f} {new:>9.2f}")
+print(f"N0 = {field.N0:g} (assumption) | phone yes weight {field.PHONE_WEIGHT:g} | at least {field.MIN_REPORTERS} "
+      f"distinct reporters | half-life {field.HALF_LIFE_DAYS:g} days over {field.WINDOW_DAYS} days | notes for "
+      f"{field.NOTE_DAYS} days | temporary reasons: {', '.join(REASONS_TEMPORARY)}")
+print(f"Likely line used by the rebanding rule {field.T_LIKELY:.2f}; reports alone never go below {field.T_UNLIKELY:.2f}")
+
+NOW = datetime(2026, 11, 21, 12, tzinfo=UTC)  # SYNTHETIC: a fixed clock, so the example output never changes
+
+
+def report(who, days_ago, kind, outcome, reason=None):
+    return {"reporter_key": who, "created_at": NOW - timedelta(days=days_ago), "kind": kind, "outcome": outcome,
+            "reason": reason}
+
+
+SYNTHETIC = [  # (case, model p, model band, listing has text, reports): all invented
+    ("one reporter says not offered", 0.85, "LIKELY", True, [report("r1", 2, "visit", "turned_away", "service_not_here")]),
+    ("two not offered, one phone yes", 0.85, "LIKELY", True,
+     [report("r1", 2, "visit", "turned_away", "service_not_here"), report("r2", 5, "visit", "turned_away", "equipment_absent"),
+      report("r3", 1, "call", "yes")]),
+    ("four turned away: not offered", 0.85, "LIKELY", True,
+     [report(f"r{i}", i, "visit", "turned_away", "service_not_here") for i in (1, 2, 3, 4)]),
+    ("two temporary reasons", 0.85, "LIKELY", True,
+     [report("r1", 1, "visit", "turned_away", "no_bed"), report("r2", 3, "call", "no", "doctor_absent")]),
+    ("three accepted, no listing text", 0.65, "NO_SERVICE_TEXT", False,
+     [report(f"r{i}", i, "visit", "accepted") for i in (1, 2, 3)]),
+]
+print("\\nSYNTHETIC example (invented reports, unnamed facility):")
+for case, p0, band, has_text, reps in SYNTHETIC:
+    r = field.field_adjust(p0, reps, NOW, has_text=has_text, likely=band == "LIKELY")
+    assert abs(_logit(p0) + r["term"] - _logit(r["p"])) < 1e-9  # the ledger row keeps the card additive
+    after = "CALL_FIRST (Not verified)" if r["rebanded"] else band
+    print(f"\\n- {case}: {r['n_reporters']} reporter(s) counted; p {p0:.2f} -> {r['p']:.3f} "
+          f"(Field reports row {r['term']:+.3f} logit); band {band} -> {after}")
+    for line in r["lines"] + r["notes"]:
+        print("    ", line["en"])
+''')
+
+md("""
+**Area pulse.** Coordinators and district planners see counts per district and service, never single reports.
+Small cells are hidden (k-anonymity), a facility or reason cell needs more reporters than a district cell, and a
+shown total never lets a hidden cell be recovered by subtraction. The rules below are read from
+`app/community/pulse.py`, and the known limit from `app/README.md`.
+""")
+
+code('''
+from community import pulse
+
+app_readme = (ROOT / "app/README.md").read_text()
+print(f"district x service cell: at least {pulse.MIN_REPORTERS} distinct reporters and {pulse.MIN_REPORTS} reports")
+print(f"facility or reason cell: at least {pulse.DETAIL_REPORTERS} distinct reporters and {pulse.DETAIL_REPORTS} reports")
+print(f"one window: the last {pulse.WINDOW_DAYS} days in whole weeks; every answer says: {pulse.HIDDEN_NOTE['en']}")
+limit = re.search(r"Known limit \\(COMMUNITY_CHECK\\.md 2E\\): (.+?)\\n  - ", app_readme, re.S).group(1)
+print("\\nKnown limit (2E):", " ".join(limit.split()))
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -488,13 +856,46 @@ md("""
 The app runs as a Databricks App, `referral-saathi`, in the team's workspace. Judges get access as workspace
 users. It is built for a phone:
 - **Start:** tap a service; the app uses GPS, or a PIN code, village or district.
+- **Voice:** speak in Hindi or English. Speech is turned into text on the app server (Whisper), in the language the
+  user chose, never guessed; the audio is decoded in memory and never stored or logged. The text goes into the text
+  box, where it can be fixed, and the app reads its answers aloud.
 - **Results:** whom to call first, with the evidence on each card; "Why this?" opens the full WHY and HOW.
-- **Offline:** after one online visit, the state's facility data is saved and answers keep working without
-  internet.
+- **Offline, across state borders:** after one online visit the phone saves its own state's facility data and the
+  data of every neighbouring state with a facility within the search radius, so answers keep working without
+  internet, including when the nearest facility is across the border.
+- **Family journey card:** "Send to family" makes one self-contained page with the emergency numbers first, then the
+  stops in order with phone, address and map links, what to bring and what to ask. It opens on any phone without a
+  login and makes no network requests. It holds no patient data and no scores.
 - **"How this works":** in the header, this notebook's story in plain words.
 
-To run it locally: `.venv-app/bin/python -m uvicorn app:app` from `app/` (see `app/README.md`).
+To run it locally: `.venv-app/bin/python -m uvicorn app:app` from `app/` (see `app/README.md`). The numbers below
+are read from the code, `app/README.md`, `app/voice/VOICE_CHECK.md` and `submission/measured_on_databricks.json`.
 """)
+
+code('''
+from facts.engine import RADIUS_KM
+from voice.transcribe import MODEL as WHISPER_MODEL
+
+dep = json.loads((ROOT / "submission/measured_on_databricks.json").read_text())
+v = dep["voice"]
+check = (ROOT / "app/voice/VOICE_CHECK.md").read_text()
+clip_s = [float(re.search(rf"^\\| {c['clip']} \\([^)]*\\) \\| {c['lang']} \\| ([\\d.]+) \\|", check, re.M).group(1))
+          for c in v["clips"]]
+right = [c for c in v["clips"] if c["parsed"] == c["expected"]]
+print(f"Voice: faster-whisper '{WHISPER_MODEL}' on the app server, language forced to the user's choice, audio never "
+      "stored.")
+print(f"  measured on the deployed app ({v['machine']}): {v['latency_s'][0]} to {v['latency_s'][1]} s per request for "
+      f"clips of {min(clip_s)} to {max(clip_s)} s; {len(right)} of {len(v['clips'])} test clips parsed to the right "
+      f"service ({', '.join(c['clip'] + ' ' + c['lang'] + ' -> ' + c['parsed'] for c in right)})")
+print(f"  source: {dep['source']}")
+border = re.search(r"Of the ([\\d,]+) PIN centroids within (\\d+) km of a state border.*?for ([\\d.]+)% of \\(PIN, "
+                   r"service\\) pairs \\(([\\d,]+) of ([\\d,]+)", app_readme, re.S)
+n_pins, km, pct, k, n = border.groups()
+assert abs(100 * int(k.replace(",", "")) / int(n.replace(",", "")) - float(pct)) < 0.05
+print(f"Offline packs: the phone saves every state pack with a facility within {RADIUS_KM} km of the fix. Of "
+      f"{n_pins} PIN centroids within {km} km of a state border, the nearest facility offering the service is in "
+      f"another state for {pct}% of (PIN, service) pairs ({k} of {n}; app/README.md).")
+''')
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("""

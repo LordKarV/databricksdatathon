@@ -1,0 +1,13 @@
+{
+  "source": "lead's live smoke test of the deployed referral-saathi Databricks App (dev ce068ae), posted on issue #2",
+  "voice": {
+    "endpoint": "/api/transcribe",
+    "machine": "Databricks App, 2 vCPU, model warm",
+    "latency_s": [2.1, 3.0],
+    "clips": [
+      {"clip": "H2", "lang": "hi", "expected": "emergency_csection", "parsed": "emergency_csection"},
+      {"clip": "E1", "lang": "en", "expected": "dialysis", "parsed": "dialysis"},
+      {"clip": "H7", "lang": "hi", "expected": "trauma_emergency", "parsed": "trauma_emergency"}
+    ]
+  }
+}
