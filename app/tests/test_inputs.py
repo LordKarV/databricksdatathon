@@ -238,7 +238,8 @@ def test_free_text_trigger_needs_whole_word_of_three():
 def test_note_model_failure(model):
     model.answer = RuntimeError("timeout")
     r = client.post("/api/read-note", json={"image": PNG}).json()
-    assert r == {"ok": False, "note": "the model call failed (RuntimeError)"}
+    assert r.items() >= {"ok": False, "note": "the model call failed (RuntimeError)"}.items()  # old fields kept (BE-T1)
+    assert r["code"] == "note_model_unavailable"
 
 
 @pytest.mark.parametrize("image", ["http://example.com/a.jpg", "data:image/svg+xml;base64,AAAA",

@@ -71,4 +71,7 @@ def test_no_quote_pair_never_ranks_above_a_quoted_one(monkeypatch):
     monkeypatch.setattr(Engine, "score", drop_first)
     after = [o["facility_id"] for o in ENGINE.plan(s, la, lo, 40, "gps")["options"]]
     assert before[0] not in after
-    assert after[: len(before) - 1] == before[1:]
+    # #140 2b: a facility whose town disagrees with its map point is never emergency option 1 (Sharda, here)
+    rest, far = before[1:], ENGINE.fac.get("town_far") or [None] * len(ENGINE.fid)
+    k = next((j for j, f in enumerate(rest) if not far[ENGINE.fid[f]]), 0)
+    assert after[: len(rest)] == [rest[k], *rest[:k], *rest[k + 1:]]

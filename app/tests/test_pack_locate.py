@@ -60,7 +60,8 @@ def test_partial_build_never_answers_another_state(packs):
     for lat, lon, slug, state in [(19.07, 72.88, "maharashtra", "MAHARASHTRA"), (28.61, 77.21, "delhi", "DELHI")]:
         r = locate(lat, lon)
         assert r.status_code == 404
-        assert r.json() == {"error": "no pack for this state", "slug": slug, "state": state}
+        assert r.json().items() >= {"error": "no pack for this state", "slug": slug, "state": state}.items()
+        assert r.json()["code"] == "pack_no_state" and state in r.json()["message"]["en"]
 
 
 def test_nothing_built(tmp_path, monkeypatch):

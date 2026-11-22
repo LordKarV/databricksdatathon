@@ -68,7 +68,8 @@ def test_text_that_is_not_exactly_six_digits_is_not_a_pin(q):
 def test_district_beats_post_office_of_the_same_name_and_state(places):
     [m] = places.lookup("  bahraich DISTRICT ")
     assert m["kind"] == "district" and m["label"] == "Bahraich district centre, Uttar Pradesh"
-    assert (m["lat"], m["lon"]) == (27.6, 81.55)  # mean of its PIN centroids, as offline.js districtCentre
+    # its own PIN nearest the mean of its PIN points; two PINs tie, so the lower PIN (as offline.js districtCentre)
+    assert (m["lat"], m["lon"]) == (27.5, 81.5)
 
 
 def test_post_office_names_the_nearest_pin_district(places):
@@ -90,6 +91,109 @@ def test_nonsense_finds_nothing(places, q):
 def test_without_places_file_pins_and_districts_still_work():
     p = Places(PINS, None)
     assert p.lookup("Bahraich")[0]["kind"] == "district" and p.lookup("Pusa") == []
+
+
+# ---------- old names and near spellings (matrix cluster spelling_variant_not_found) ----------
+VARIANT_GAZ = {"v": 1, "kinds": ["city", "office"], "states": ["HARYANA", "MAHARASHTRA", "UTTAR PRADESH"],
+               "name": ["mumbai", "gurgaon", "saharanpur", "saharanpir", "sitapur"], "s": [1, 0, 2, 2, 2],
+               "k": [0, 0, 0, 1, 0], "lat": [19.07, 28.46, 29.96, 29.9, 27.57],
+               "lon": [72.87, 77.03, 77.55, 77.5, 80.68]}
+
+
+@pytest.fixture
+def variants() -> Places:
+    return Places(PINS, VARIANT_GAZ)
+
+
+def test_exact_names_are_not_touched_by_the_fallbacks(variants):
+    matches, matched_as = variants.resolve("Bahraich")
+    assert matched_as is None and all("matched_as" not in m for m in matches)
+    assert variants.resolve("848125")[1] is None and variants.resolve("999999") == ([], None)
+
+
+@pytest.mark.parametrize("q, name", [("Bombay", "Mumbai"), ("Gurugram", "Gurgaon")])  # either name finds the other
+def test_an_official_rename_finds_the_name_in_our_tables(variants, q, name):
+    [m], matched_as = variants.resolve(q)
+    assert matched_as == {"query": q.lower(), "name": name, "how": "rename"} == m["matched_as"]
+    assert m["label"] == f"{name} town, {m['state']}"
+
+
+def test_a_near_spelling_finds_the_one_close_name(variants):
+    [m], matched_as = variants.resolve("Baharaich")
+    assert m["label"] == "Bahraich district centre, Uttar Pradesh"
+    # "query" is the name as norm() read it: /api/place never echoes the typed text itself
+    assert matched_as == {"query": "baharaich", "name": "Bahraich", "how": "spelling"}
+    assert variants.resolve("Baharaich, Bihar") == ([], None)  # the state filter still applies
+
+
+def test_a_near_miss_between_two_real_places_offers_both_never_one(variants):
+    # 'saharanpar' is one letter from Saharanpur and from Saharanpir (0.9 each): both are offered, neither picked
+    matches, matched_as = variants.resolve("Saharanpar")
+    assert matched_as is None
+    assert sorted(m["matched_as"]["name"] for m in matches) == ["Saharanpir", "Saharanpur"]
+    assert {m["matched_as"]["how"] for m in matches} == {"spelling"}
+
+
+@pytest.mark.parametrize("q", ["Sitapor zz", "Ptna", "Xitapur", "Bmbay", "xqzv plonk"])
+def test_far_short_or_other_first_letter_spellings_find_nothing(variants, q):
+    assert variants.resolve(q) == ([], None)
+
+
+# Simla is also a post office in Assam; Bijapur is a district of Chhattisgarh and the old name of Vijayapura
+OLD_NAME_PINS = {"pin": [494444, 494445], "lat": [18.8, 18.9], "lon": [80.8, 80.9], "district": ["BIJAPUR"] * 2,
+                 "state": ["CHHATTISGARH"] * 2}
+OLD_NAME_GAZ = {"v": 1, "kinds": ["city", "office"],
+                "states": ["ANDHRA PRADESH", "ASSAM", "HIMACHAL PRADESH", "KARNATAKA", "ODISHA"],
+                "name": ["simla", "shimla", "vijayapura", "visakhapatnam", "bijapur"], "s": [1, 2, 3, 0, 4],
+                "k": [1, 0, 0, 0, 1], "lat": [26.3, 31.1, 16.83, 17.69, 19.9], "lon": [91.0, 77.17, 75.71, 83.22, 83.2]}
+
+
+@pytest.fixture
+def old_names() -> Places:
+    return Places(OLD_NAME_PINS, OLD_NAME_GAZ)
+
+
+def test_an_old_name_that_is_also_a_place_offers_the_renamed_place_first_and_keeps_its_own(old_names):
+    matches, matched_as = old_names.resolve("Simla")
+    assert [m["label"] for m in matches] == ["Shimla town, Himachal Pradesh", "Simla post office area, Bijapur, Assam"]
+    assert matches[0]["matched_as"] == {"query": "simla", "name": "Shimla", "how": "rename"}
+    assert "matched_as" not in matches[1] and matched_as is None
+    # the new name never pulls in places that only carry the old one
+    assert [m["label"] for m in old_names.resolve("Shimla")[0]] == ["Shimla town, Himachal Pradesh"]
+
+
+def test_vizag_is_visakhapatnam(old_names):
+    [m], matched_as = old_names.resolve("Vizag")
+    assert m["label"] == "Visakhapatnam town, Andhra Pradesh"
+    assert matched_as == {"query": "vizag", "name": "Visakhapatnam", "how": "rename"}
+
+
+def test_bijapur_is_never_sent_to_vijayapura(old_names):
+    # Bijapur is today's name of a Chhattisgarh district: exact matches only, every state that has one, never one
+    matches, matched_as = old_names.resolve("Bijapur")
+    assert [m["label"] for m in matches] == ["Bijapur district centre, Chhattisgarh",
+                                             "Bijapur post office area, Bijapur, Odisha"]
+    assert matched_as is None and all("matched_as" not in m for m in matches)
+    assert all(m["state"] != "Karnataka" for m in matches)
+
+
+@needs_data
+@pytest.mark.parametrize("q, name, how", [("Bombay", "Mumbai", "rename"), ("Alleppey", "Alappuzha", "rename"),
+                                          ("Baharaich", "Bahraich", "spelling"), ("Calcutta", "Kolkata", "rename")])
+def test_api_says_which_name_it_shows(q, name, how):
+    r = client.post("/api/place", json={"q": q})
+    assert r.status_code == 200 and r.json()["matched_as"] == {"query": q.lower(), "name": name, "how": how}
+    assert q not in r.text
+    assert "matched_as" not in client.post("/api/place", json={"q": name}).json()
+
+
+@needs_data
+def test_api_bijapur_is_the_chhattisgarh_district_and_simla_offers_shimla():
+    b = client.post("/api/place", json={"q": "Bijapur"}).json()["matches"]
+    assert b[0]["label"] == "Bijapur district centre, Chhattisgarh" and len(b) > 1
+    assert not any("Vijayapura" in m["label"] for m in b)
+    s = client.post("/api/place", json={"q": "Simla"}).json()["matches"]
+    assert s[0]["label"] == "Shimla town, Himachal Pradesh" and s[0]["matched_as"]["how"] == "rename" and len(s) > 1
 
 
 # ---------- PINs the gazetteer files under no district (matrix cluster pin_missing_from_facts) ----------
@@ -129,6 +233,8 @@ def test_guessed_district_pin_resolves_without_claiming_its_district():
     [d] = p.lookup("Samastipur")
     assert (d["lat"], d["lon"]) == (25.86, 85.78)
     assert "district_from" not in p.lookup("848125")[0]
+    # typed as India Post prints it, the label still shows the six digits, never the typed text
+    assert [m["label"] for m in p.lookup("PIN 848 101")] == ["PIN 848101, Bihar"]
 
 
 @needs_data
@@ -156,7 +262,8 @@ def test_api_resolves_names_and_pins_without_a_pack(q, kind, label):
 @needs_data
 def test_api_nonsense_is_404_with_no_matches():
     r = client.post("/api/place", json={"q": "xqzv plonk"})
-    assert r.status_code == 404 and r.json() == {"error": "place not found", "matches": []}
+    assert r.status_code == 404 and r.json().items() >= {"error": "place not found", "matches": []}.items()
+    assert r.json()["code"] == "place_not_found"
 
 
 def test_api_rejects_bad_bodies_without_echoing_them():

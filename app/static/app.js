@@ -25,7 +25,10 @@ function esc(s) {
 const $ = sel => document.querySelector(sel);
 const svc = key => SERVICES.find(s => s.key === key);
 function announce(text) { $('#status').textContent = ''; setTimeout(() => { $('#status').textContent = text; }, 50); }
-function timeStr(t) { return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN', {hour: '2-digit', minute: '2-digit'}); }
+function timeStr(t) {  // Hindi: 24-hour (Chromium's hi-IN data writes a Latin am/pm)
+  return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN',
+    state.lang === 'hi' ? {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'} : {hour: '2-digit', minute: '2-digit'});
+}
 const locale = () => (state.lang === 'hi' ? 'hi-IN' : 'en-IN');
 
 // ---------- strings ----------
@@ -53,7 +56,7 @@ function phoneLang() { return (navigator.language || '').toLowerCase().startsWit
 // the reviewed template from hi.json "engine" is shown, marked data-k="template" with the payload path; a sentence
 // joined with "; " is translated clause by clause; text with no template stays English, marked lang="en".
 const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-function engHi(text, q) {
+function engHi(text, q, mark = false) {
   const map = (I18N.hi || {}).engine || {};
   const one = part => {
     if (map[part] != null) return map[part];
@@ -66,7 +69,10 @@ function engHi(text, q) {
       const m = part.match(new RegExp('^' + pat + '$'));
       if (!m) continue;
       const vals = {label: q ? q.service_label.hi : ''};
-      names.forEach((n, i) => { vals[n] = n === 'need' && (map._needs || {})[m[i + 1]] || m[i + 1]; });
+      names.forEach((n, i) => {
+        const hi = n === 'need' && (map._needs || {})[m[i + 1]];
+        vals[n] = hi || (mark && /[A-Za-z]/.test(m[i + 1]) ? '\u0001' + m[i + 1] + '\u0002' : m[i + 1]);
+      });
       return v.replace(/\{(\w+)\}/g, (_, n) => vals[n] ?? '');
     }
     return null;
@@ -78,8 +84,9 @@ function engHi(text, q) {
 }
 function E(path, text, q = curQuery()) {
   if (state.lang !== 'hi') return F(path, text);
-  const hi = engHi(String(text), q);
-  return hi != null ? `<span data-f="${path}" data-k="template">${esc(hi)}</span>` : `<span lang="en">${F(path, text)}</span>`;
+  const hi = engHi(String(text), q, true);
+  const html = hi == null ? '' : esc(hi).replace(/\u0001/g, '<span lang="en">').replace(/\u0002/g, '</span>');
+  return hi != null ? `<span data-f="${path}" data-k="template">${html}</span>` : `<span lang="en">${F(path, text)}</span>`;
 }
 const curQuery = () => (state.plan && state.plan.query) || (state.area && state.area.query) || null;
 
@@ -490,11 +497,12 @@ function trackBar(tr) {
 // copies from model/gold/v3/test_eval/results.json.
 function testRecordHtml(tr) {
   if (!tr) return '';
-  const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
+  const num = k => ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k);
+  const M = k => (num(k) ? F('meta.test_record.' + k, tr[k], 'num') : `<span lang="en">${F('meta.test_record.' + k, tr[k])}</span>`);
   return `<div class="test-record"><p class="note"><strong>${th('test.h')}</strong>: ${th('test.line', {k: M('k'), n: M('n'),
     pct: M('pct'), lo: M('lo_pct'), hi: M('hi_pct'), pub: M('public_n')})}</p>
     <details class="note"><summary>${th('test.hashes')}</summary>
-      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: M('opened')})}
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: `<span lang="en">${F('meta.test_record.opened', tr.opened)} UTC</span>`})}
       ${th('test.results')}: ${M('source')}.</p>
       <p>${th('test.model_version')} <code>${M('model_version')}</code><br>${th('test.pred_hash')}
         <code>${M('predictions_sha256')}</code><br>${th('test.label_hash')} <code>${M('labels_sha256')}</code></p>
@@ -548,8 +556,9 @@ function changeHtml(p) {
   if (!c) return '';
   const d = deltaHtml('what_would_change.minutes_vs_first', c.minutes_vs_first);
   const line = c.kind === 'confirm_nearer'
-    ? th('whynot.confirm_nearer', {name: F('what_would_change.name', c.name), label: labelF(p.query), d})
-    : th('whynot.first_says_no', {first: F('what_would_change.first_name', c.first_name), name: F('what_would_change.name', c.name), d});
+    ? th('whynot.confirm_nearer', {name: `<span lang="en">${F('what_would_change.name', c.name)}</span>`, label: labelF(p.query), d})
+    : th('whynot.first_says_no', {first: `<span lang="en">${F('what_would_change.first_name', c.first_name)}</span>`,
+      name: `<span lang="en">${F('what_would_change.name', c.name)}</span>`, d});
   return `<p><strong>${th('whynot.change_h')}</strong> ${line}</p>`;
 }
 // The answer's first line when option 1 misses the service's time window (#86, lead's decision on the issue): say so,
@@ -561,7 +570,7 @@ function windowHtml(p) {
   return `<section class="panel window-miss" aria-label="${th('window.label')}">
     <p><strong>${th('window.miss', {min: N('options.0.travel.minutes', p.options[0].travel.minutes), win: N('time_window.window_min', w.window_min)})}</strong></p>
     <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
-    ${po ? `<p>${th('window.public', {name: `<strong>${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+    ${po ? `<p>${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
       ${travelHtml(po.travel, 'public_option.travel')}.</p>` : `<p>${th('window.no_public')}</p>`}
   </section>`;
 }
@@ -654,14 +663,15 @@ function stopHtml(r, g, P) {
       ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
       <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
         ${evidenceHtml(s, S)}</details>
-      ${s.fallback ? `<p class="note">${th('route.fallback', {name: F(S + '.fallback.name', s.fallback.name),
+      ${s.fallback ? `<p class="note">${th('route.fallback', {name: `<span lang="en">${F(S + '.fallback.name', s.fallback.name)}</span>`,
         eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: N(S + '.fallback.p', s.fallback.p.toFixed(2))})}</p>` : ''}
+      ${s.note ? `<p class="note">${E(S + '.note', s.note)}</p>` : ''}
       ${s.flags.map((f, j) => `<p class="note">${E(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
   }).join('');
   const phone = ph ? `<a href="tel:${esc(ph)}">${th('route.call', {phone: F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)})}</a>`
     : s0.phone && s0.phone.display ? th('route.phone', {phone: F(S0 + '.phone.display', s0.phone.display)}) : th('route.no_phone');
   return `<li><p class="stop-name"><strong lang="en">${F(S0 + '.name', s0.name)}</strong></p>
-    <p class="note">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
+    <p class="note">${s0.place ? `<span lang="en">${F(S0 + '.place', s0.place)}</span>. ` : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
       ${phone}</p>
     <ul>${stages}</ul></li>`;
 }
@@ -674,7 +684,8 @@ function routePlanHtml(r, P) {
       treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p>` : ''}
     ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
     ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
-      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
+      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}
+    ${v && v.direct_minutes != null ? `<p class="note">${th('route.direct', {n: N(P + '.vs_direct.direct_minutes', v.direct_minutes)})}</p>` : ''}`;
 }
 function checkHtml(c, C, full) {
   return `<p class="window${c.met ? '' : ' miss'}">${icon(c.met ? 'ok' : 'warn')}<span>${th(full ? 'route.check' : 'route.check_short', {
@@ -713,7 +724,8 @@ function routeHtml(p) {
   if (!it) return p.itinerary_note ? `<p class="panel note">${E('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2 id="h-route">${th('route.h')}</h2>
     <p class="note">${th('route.intro', {name: E('itinerary.pathway_name', it.pathway_name)})}</p>
-    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
+    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}
+    ${it.itinerary_note ? `<p class="note">${E('itinerary.itinerary_note', it.itinerary_note)}</p>` : ''}`;
   if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
   if (!it.plans.length) return '';
   const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
@@ -727,7 +739,8 @@ function routeHtml(p) {
   const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
   return `<section class="section" aria-labelledby="h-route">${head}
     <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
-      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}${legend}
+      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}
+      ${r.vs_direct && r.vs_direct.text ? `<p class="vs-direct-main">${E(P + '.vs_direct.text', r.vs_direct.text)}</p>` : ''}${legend}
       <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
 }
 
@@ -747,6 +760,40 @@ function sureHtml(o, P) {
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
   return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
+// WS1 1b, the receipt: the first listing sentence, cut at 60 characters (kind 'part': the shown text is a piece of
+// the stored quote), in English as written, with its source page. A NO SERVICE TEXT option says its lines are general.
+const RECEIPT_CUT = 60;
+function receiptHtml(p, o, P) {
+  const e = o.evidence[0];
+  if (!e) return '';
+  const Q = `${P}.evidence.0`;
+  const cut = e.quote.length > RECEIPT_CUT ? e.quote.slice(0, RECEIPT_CUT).trimEnd() : e.quote;
+  const lead = o.model_band === 'NO_SERVICE_TEXT'
+    ? th(p.query.service === 'trauma_emergency' ? 'quote.caption_trauma' : 'quote.caption', {label: labelF(p.query)})
+    : th('ans.receipt.from');
+  return `<p class="receipt">${lead}: <span lang="en">"${F(Q + '.quote', cut, 'part')}${cut.length < e.quote.length ? '...' : ''}"</span>${
+    claimHtml(Q + '.claim_id', e.claim_id)}${e.source_url
+    ? ` <a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('ans.receipt.source')}</a>` : ''}</p>`;
+}
+// WS1 1b, why this one first, in one line: nearest-first emergencies name the Likely option they put second and how
+// much farther it is; planned care names the two ledger rows that add most; otherwise the engine's rank rule.
+function whyFirstHtml(p, o, P) {
+  const two = p.options[1], rule = p.rank_rule || {};
+  if (rule.code === 'nearest_plausible' && two && two.band === 'likely' && o.band !== 'likely') {
+    const k = (p.why_not || []).findIndex(w => w.facility_id === two.facility_id && w.minutes_vs_first > 0);
+    if (k >= 0) {
+      const W = `why_not.${k}`, name = `<span lang="en">${F(W + '.name', p.why_not[k].name)}</span>`;
+      return `<p class="why-first">${th('ans.why_first.nearest', {name, n: N(W + '.minutes_vs_first', p.why_not[k].minutes_vs_first)})}</p>`;
+    }
+  }
+  if (p.profile === 'planned' || p.profile === 'scheduled') {
+    const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
+      .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
+      .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+    if (top.length) return `<p class="why-first">${th('ans.why_first.rows', {rows: top.join('; ')})}</p>`;
+  }
+  return rule.text ? `<p class="why-first">${th('ans.why_first.rule', {rule: E('rank_rule.text', rule.text)})}</p>` : '';
+}
 function answerPanel(p, o, i) {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
   const fb = p.itinerary && p.itinerary.fallback;  // the route only if card 1 cannot treat (#126)
@@ -760,6 +807,8 @@ function answerPanel(p, o, i) {
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
     ${sureHtml(o, P)}
+    ${receiptHtml(p, o, P)}
+    ${i === 0 ? whyFirstHtml(p, o, P) : ''}
     ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
@@ -926,6 +975,7 @@ function areaHtml(a) {
   return `<h2>${th('area.plan_h', {label: L})}</h2>
     <p>${F('area.area.district', a.area.district)}, ${F('area.area.state', a.area.state)}. ${th('area.n_pins', {n: N('area.summary.n_pins', S.n_pins)})}</p>
     <p><strong>${th('area.without', {k: N('area.summary.n_without_option', S.n_without_option), n: N('area.summary.n_pins', S.n_pins), w: W})}</strong></p>
+    ${briefHtml(a, W)}
     <div class="table-scroll" tabindex="0" role="region" aria-label="${th('area.access_caption_short')}"><table class="ledger"><caption>${th('area.access_caption', {label: L, w: W})}</caption><tbody>
       <tr><th scope="row">${th('area.row_now')}</th><td class="num">${n('summary.access_now')}</td></tr>
       <tr><th scope="row">${th('area.row_confirmed')}</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
@@ -944,6 +994,54 @@ function areaHtml(a) {
     <div class="pair section"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">${th('area.csv')}</a>
       <button type="button" class="btn" id="area-print">${th('area.print')}</button></div>
     ${a.meta && a.meta.stub ? `<p class="note">${th('area.stub')}</p>` : ''}`;
+}
+// WS4 4b: the district brief. People and listings per million against India's; for birth care the NFHS-5 rates, a
+// district survey estimate and not facility data; the government lists for this care; the one call that would change
+// the most, or why there is none; and where each number comes from. Every number is a payload value.
+function briefHtml(a, W) {
+  const nd = a.area.need, gov = a.area.gov_list || [], h = a.headline, D = 'area.area.need';
+  const svcKey = a.query.service, lines = [], src = [];
+  const en = html => `<span lang="en">${html}</span>`;  // names and source credits are English in both languages
+  if (nd) {
+    lines.push(th('area.need.people', {people: N(D + '.population', nd.population.toLocaleString('en-IN')),
+      district: F(D + '.lgd_district', nd.lgd_district)}));
+    lines.push(th('area.need.listings', {n: N(D + '.listings', nd.listings),
+      per_m: N(D + '.listings_per_million', nd.listings_per_million), india: N(D + '.india_per_million', nd.india_per_million)}));
+    src.push(en(F(D + '.source.people', nd.source.people)), en(F(D + '.source.listings', nd.source.listings)));
+    if (has102(svcKey) && nd.csection_pct != null) {
+      const parts = [th('area.need.cs', {cs: N(D + '.csection_pct', nd.csection_pct)})];
+      const pub = nd.public_csection_pct, priv = nd.private_csection_pct;  // NFHS-5 suppresses small samples: null
+      const pv = {pub: N(D + '.public_csection_pct', pub), priv: N(D + '.private_csection_pct', priv)};
+      if (pub != null || priv != null) parts.push(th(priv == null ? 'area.need.cs_public' : pub == null ? 'area.need.cs_private' : 'area.need.cs_split', pv));
+      if (nd.institutional_pct != null) parts.push(th('area.need.inst', {inst: N(D + '.institutional_pct', nd.institutional_pct)}));
+      lines.push(`${th('area.need.nfhs', {district: F(D + '.nfhs_district', nd.nfhs_district)})} ${parts.join(' ')}`);
+      src.push(en(F(D + '.source.nfhs', nd.source.nfhs)));
+    }
+  }
+  const govLines = gov.map((g, j) => {
+    const G = `area.area.gov_list.${j}`;
+    if (g.list === 'pmndp') {
+      return th('area.gov.pmndp', {centres: N(G + '.centres', g.centres), working: N(G + '.districts_working', g.districts_working),
+        total: N(G + '.districts_total', g.districts_total), state: F('area.area.state', a.area.state)});
+    }
+    const status = g.status && g.status !== 'Certified' ? ` (${F(G + '.status', g.status)})` : '';
+    return th(g.expired ? 'area.gov.laqshya_expired' : 'area.gov.laqshya', {name: en(F(G + '.name', g.name)),
+      date: F(G + '.valid_to', g.valid_to)}) + status;
+  });
+  [...new Set(gov.map(g => g.source))].forEach(x => src.push(en(F(`area.area.gov_list.${gov.findIndex(g => g.source === x)}.source`, x))));
+  const govHtml = govLines.length ? `<ul>${govLines.map(x => `<li>${x}</li>`).join('')}</ul>`
+    : svcKey === 'emergency_csection' ? `<p>${th('area.gov.none')}</p>` : '';
+  const head = !h ? '' : h.kind === 'if_confirms' && a.ten_calls.length
+    ? th('area.need.headline', {name: en(F('area.ten_calls.0.name', a.ten_calls[0].name)), k: N('area.headline.k', h.k),
+      n: N('area.headline.n', h.n), now: N('area.headline.now', h.now), w: N('area.headline.window_min', h.window_min)})
+    : th(h.kind === 'all_covered' ? 'area.need.headline_all' : 'area.need.headline_none',
+      {n: N('area.headline.n', h.n), w: N('area.headline.window_min', h.window_min)});
+  if (!lines.length && !govHtml && !head) return '';
+  return `<section id="area-brief" class="section" aria-labelledby="h-brief"><h2 id="h-brief">${th('area.need.h')}</h2>
+    ${lines.map(x => `<p>${x}</p>`).join('')}
+    ${govHtml ? `<h3>${th('area.gov.h')}</h3>${govHtml}` : ''}
+    ${head ? `<p><strong>${head}</strong></p>` : ''}
+    ${src.length ? `<p class="note">${th('area.need.sources', {list: src.join('; ')})}</p>` : ''}</section>`;
 }
 function areaScreen() {
   const s = svc(state.service);
@@ -1064,7 +1162,7 @@ function whyScreen(rank) {
         : `<p class="panel">${th('why.no_dial')}</p>`}
       <div class="pair">${RSInput.speakHtml()}</div><p id="speak-note" class="note" aria-live="polite"></p>
       <ol class="script">
-        <li>${th('script.is_this', {name: `<span lang="en">${F(P + '.name', o.name)}</span>`, town: F(P + '.town', o.town)})}</li>
+        <li>${th('script.is_this', {name: `<span lang="en">${F(P + '.name', o.name)}</span>`, town: `<span lang="en">${F(P + '.town', o.town)}</span>`})}</li>
         <li>${th('script.need', {label: labelF(p.query)})}</li>
         ${o.call_ahead.map((c, j) => `<li>${E(`${P}.call_ahead.${j}.question`, c.question)}
           <span class="because">${th('why.ask_because', {why: E(`${P}.call_ahead.${j}.asked_because`, c.asked_because)})}</span></li>`).join('')}
@@ -1091,6 +1189,7 @@ function whyScreen(rank) {
       <div><dt>${th('why.where')}</dt><dd>${E(P + '.where_check', o.where_check)}</dd></div>
       ${o.website ? `<div><dt>${th('why.website')}</dt><dd>${F(`${P}.website.text.${state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'}`,
         o.website.text[state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'])}</dd></div>` : ''}
+      ${listsHtml(o, P)}
       ${o.flags.map((f, j) => `<div><dt>${th('why.warn')}</dt><dd class="warn">${icon('warn')}<span>${E(`${P}.flags.${j}`, f)}</span></dd></div>`).join('')}
       </dl></section>
 
@@ -1117,9 +1216,11 @@ function ledgerHtml(o, P, q) {
     const C = `${P}.contributions.${j}`;
     const label = rowLabel(c, C);
     const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
-    // the row's quotes go full width under it, so a 320 px screen never scrolls sideways
-    return `<tr${quotes ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
-      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}`;
+    const cites = (c.cites || []).map((x, k) => citeHtml(x, `${C}.cites.${k}`)).join('');
+    // the row's quotes and list entries go full width under it, so a 320 px screen never scrolls sideways
+    return `<tr${quotes || cites ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
+      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}
+      ${cites ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.cite.summary', {n: F(C + '.cites', c.cites.length, 'count')})}</summary>${cites}</details></td></tr>` : ''}`;
   }).join('');
   const unseen = o.not_observed || [];
   return `<table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(q)})}</caption>
@@ -1129,6 +1230,28 @@ function ledgerHtml(o, P, q) {
         ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
     </table>
     ${unseen.length ? `<p class="note">${th('why.not_observed', {list: unseen.map((x, j) => rowLabel(x, `${P}.not_observed.${j}`)).join('; ')})}</p>` : ''}`;
+}
+// WS4 4a: the official-list or OpenStreetMap row a ledger term rests on, with its link, its source and how often our
+// matches to that list were right. A NABH row says which kind of entry it is (an entry-level certificate or a CGHS/ECHS
+// empanelment is not accreditation); in Hindi that kind is the reviewed string and the entry number stays as listed.
+const enSpan = html => (state.lang === 'hi' ? `<span lang="en">${html}</span>` : html);
+function citeText(x, path) {
+  if (state.lang === 'hi' && x.tier && raw('why.cite.tier.' + x.tier) !== 'why.cite.tier.' + x.tier) {
+    return th('why.cite.tier.' + x.tier, {id: enSpan(F(path + '.id', x.id))});
+  }
+  return enSpan(F(path + '.text', x.text));
+}
+function citeHtml(x, path) {
+  const prec = x.precision_k != null && x.precision_n
+    ? ' ' + th('why.cite.precision', {k: N(path + '.precision_k', x.precision_k), n: N(path + '.precision_n', x.precision_n)}) : '';
+  return `<p class="cite">${citeText(x, path)}${th('punct.stop')}
+    ${x.url ? `<a href="${esc(x.url)}" rel="noopener noreferrer">${th('why.cite.link')}</a>` : ''}
+    <span class="note">${th('why.cite.from', {source: enSpan(F(path + '.source', x.source))})}${prec}</span></p>`;
+}
+function listsHtml(o, P) {
+  const lists = o.public_lists || [];
+  return lists.length ? `<div><dt>${th('why.cite.lists')}</dt><dd>${lists.map((x, j) => (x.text
+    ? citeText(x, `${P}.public_lists.${j}`) : enSpan(F(`${P}.public_lists.${j}.name`, x.name)))).join('; ')}</dd></div>` : '';
 }
 // How sure for NO SERVICE TEXT (derived/v2/README): never Likely, but its score still comes from the ledger's other
 // rows; the two that add most are named, so this line and the ledger agree.

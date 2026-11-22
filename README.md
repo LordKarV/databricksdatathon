@@ -14,11 +14,12 @@ plans a stop to stabilise first. For example, after a road accident in Gaya, Bih
 AIIMS Patna takes about 92 minutes and misses the 60-minute window. So the app says: call Dr. A Barkat
 Multispeciality Hospital, half a kilometre away and rated Likely ("Provides 24/7 trauma and emergency care"), for
 first care, then go on to AIIMS Patna. A simulated referral world showed that in an emergency the nearest plausible
-place first, with a call ahead, gets more patients to care in time than sending them farther for better evidence
-(simulated, not a field result). *These numbers come from the app and route planner on model v2 (`/api/plan`,
-trauma, at that point; the route's own sentence is "Going straight to All India Institute of Medical Sciences Patna
-takes 92 min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first
-care in about 1 min.").*
+place first, with a call ahead, gets more patients to care in time than sending them farther for better evidence,
+and the app stays within 1 to 2 points of the nearest listing plus a call ahead (simulated, not a field result).
+*These numbers come from the route planner on model v2, as printed in section 7 of
+[`submission/referral_saathi.ipynb`](submission/referral_saathi.ipynb) (trauma, at that point; the route's own
+sentence is "Going straight to All India Institute of Medical Sciences Patna takes 92 min and misses the 60-minute
+window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about 1 min.").*
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 
@@ -50,8 +51,10 @@ tells the same story as the notebook, in plain words.
 - **AI/BI dashboard** "Referral Saathi: district planner": five pages for district planners, built and tested by
   `databricks/dashboard/build_dashboard.py` (`databricks/dashboard/DASHBOARD.md`).
 - **Genie agent** "Referral Saathi planner": the planners' questions in plain English over the same tables, with
-  instructions, 13 example queries and a 12-question benchmark. Benchmark accuracy: 10 of 12 on the live space
-  (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
+  instructions, 13 example queries and a 12-question benchmark. Native benchmark, 12 questions: 9 of 12, then
+  10 of 12 on the live space (two runs,
+  [`databricks/genie/benchmark_results.json`](databricks/genie/benchmark_results.json)); two of the 12 share an
+  example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
   hospital near Lucknow can handle an emergency C-section?" with claim ids.
 - **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
   `submission/00_rebuild_derived.ipynb`. Run ids: RUN_IDS (placeholder, filled at release step R6, listed in
@@ -63,8 +66,23 @@ tells the same story as the notebook, in plain words.
 
 ## Data we brought in
 
-DATA_SOURCES_TABLE (placeholder: one row per outside source, with what it testifies, the facilities matched and its
-effect on the answers, read from `validation/out/source_impact.csv` when the WS5 PR lands).
+One row per outside source, read from [`validation/out/source_impact.csv`](validation/out/source_impact.csv)
+(`validation/source_impact.py`, a counterfactual on the frozen v2 points, never a refit). Pairs are facility-service
+pairs over the app's seven services. "Likely lost" counts Likely pairs that would leave Likely without the source,
+through the service score or through the existence and location gates. "First answer changes" counts searches, over
+300 seeded PIN centres per service, whose first option changes without it.
+
+| Source | What it testifies | Pairs it fires on (Likely) | Likely lost: score, gates | First answer changes without it |
+|---|---|---|---|---|
+| NABH accreditation list | the hospital holds NABH accreditation | 2,206 (519) | 0, 17 | C-section 23 of 285; trauma 12 of 300; dialysis 56 of 299; cardiac surgery 62 of 294 |
+| NMC medical colleges | it is a recognised medical college | 330 (79) | 0, 0 | C-section 3 of 285; NICU 10 of 298; trauma 6 of 300; dialysis 1 of 299; MRI 22 of 299; cardiac surgery 13 of 294 |
+| e-RaktKosh blood centres | it runs a blood centre (needed for C-section, trauma, burns and cardiac surgery) | 1,460 (244) | 0, 0 | C-section 4 of 285; trauma 2 of 300; burns 6 of 272; cardiac surgery 19 of 294 |
+| NHSRC LaQshya certification | its labour room or maternity theatre is LaQshya certified | 49 (3) | 0, 0 | C-section 4 of 285 |
+| MoHFW trauma care facilities | it is a listed trauma care facility | 20 (5) | 0, 0 | trauma 2 of 300 |
+| PMNDP dialysis lists | it is a listed dialysis centre | 1 (0) | 0, 0 | none |
+| OpenStreetMap (HOT export) | a mapped health facility at that place | 124 (27) | 0, 4 | C-section 2 of 285; dialysis 1 of 299; MRI 5 of 299; cardiac surgery 2 of 294 |
+| IPHS 2022 public standard | what a public facility of its level is meant to offer | 1,035 (126) | 0, 0 | C-section 1 of 285; NICU 3 of 298; trauma 4 of 300; dialysis 4 of 299; MRI 8 of 299; cardiac surgery 4 of 294 |
+| all lists and OSM (X and O families) | all of the above except IPHS | 3,798 (781) | 0, 26 | C-section 30 of 285; NICU 10 of 298; trauma 19 of 300; burns 6 of 272; dialysis 57 of 299; MRI 27 of 299; cardiac surgery 86 of 294 |
 
 The rule for every outside source: it is a cited witness on the Why page, never the ranking.
 
@@ -167,8 +185,8 @@ upstream cleaning steps; see `derived/v1/README.md`.
   ask" or "Unlikely". Every option still says to call first, and when nothing is Likely the app says so.
 - **Exists and location are not tested.** No TEST label says a facility does not exist or is in the wrong place
   (114 yes and 36 unclear for each). Counting "unclear after a search" as a negative, the DEV rule, the existence
-  score gets AUROC 0.617 [0.484, 0.749], close to chance
-  ([`independence.json`](model/gold/v3/test_eval/independence.json), `existence_head`).
+  score gets AUROC 0.617 [0.481, 0.743], an interval that includes chance
+  ([`extras.json`](model/gold/v3/test_eval/extras.json), `existence_head.y_E_rule`).
 - **Two routes to Unlikely** ([`independence.json`](model/gold/v3/test_eval/independence.json),
   `unlikely_by_route`): a low score (p <= 0.2) was right, that is contradicted, on 9 of 9 labelled pairs (DEV 7,
   TEST 2). The c2 rule (text names another facility and no unit of its own) with a higher score was right on 3 of

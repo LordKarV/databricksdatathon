@@ -182,6 +182,9 @@ body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
 .readout .sub { color: var(--muted); font-size: var(--s16); }
 .sure { display: flex; flex-wrap: wrap; gap: var(--sp1) var(--sp2); align-items: center; margin: var(--sp2) 0; padding: var(--sp2) var(--sp3); border-radius: var(--r1); font-weight: 600; }
 .sure-nv { background: var(--warn-tint); }
+/* WS1 1b: the receipt (the listing's own words) and why this one is first, between "how sure" and Call */
+.receipt, .why-first { font-size: var(--s16); margin: var(--sp2) 0; }
+.receipt a { display: inline-flex; align-items: center; min-height: var(--target); font-weight: 600; }
 .sure-ok { background: var(--go-tint); }
 .sure-no { background: var(--raised); }
 .band { display: inline-flex; align-items: center; gap: var(--sp1); font-weight: 600; }
@@ -227,6 +230,8 @@ body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
 .window { display: flex; gap: var(--sp2); align-items: flex-start; margin-top: var(--sp3); font-weight: 600; }
 .window svg { color: var(--go-text); margin-top: .1em; }
 .window.miss svg { color: var(--hazard-text); }
+/* the golden-hour sentence (1c): why stop first, in the planner's own words */
+.vs-direct-main { margin-top: var(--sp2); font-size: var(--s16); }
 .route-details { margin-top: var(--sp3); border-top: 1px solid var(--line); }
 .stops-full { padding-left: var(--sp5); }
 .stops-full a[href^="tel:"] { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
@@ -362,3 +367,4 @@ body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
   .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
   .slip a { color: #000; text-decoration: none; }
 }
+.cite .note { display: block; }
