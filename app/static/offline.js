@@ -133,15 +133,20 @@
   }
 
   // ---------- satellite fix while offline (spec 3.2.3 step 2) ----------
-  function watchSatellite(onFix) {
-    if (!('geolocation' in navigator)) return () => {};
+  // onFail (optional) runs once if the watch errors (denied, unavailable, or the 120 s timeout), so the caller
+  // can drop its "getting GPS" prompt. With no geolocation at all there is no watch: returns null.
+  function watchSatellite(onFix, onFail) {
+    if (!('geolocation' in navigator)) return null;
     const id = navigator.geolocation.watchPosition(p => {
       if (p.coords.accuracy <= ACCEPT_M) {
         navigator.geolocation.clearWatch(id);
         onFix({lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
           source: 'gps', t: Date.now(), label: null});
       }
-    }, () => {}, {enableHighAccuracy: true, maximumAge: 0, timeout: 120000});
+    }, () => {
+      navigator.geolocation.clearWatch(id);
+      if (onFail) onFail();
+    }, {enableHighAccuracy: true, maximumAge: 0, timeout: 120000});
     return () => navigator.geolocation.clearWatch(id);
   }
   function fixIsFresh(loc) { return !!loc && (loc.source !== 'gps' || Date.now() - loc.t < FRESH_FIX_MS); }
