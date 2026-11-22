@@ -497,6 +497,12 @@ def check_gap(area: dict, shown: set[str]) -> list[str]:
             if r["public"]["label"] != PUBLIC_LABEL:
                 errs.append(f"area.pins.{k}.public.label is {r['public']['label']!r}")
     s = area["summary"]
+    pn = g.get("public_nearest")
+    if pn and not g.get("public_standard") and (s["n_without_option"] > 0 or s["no_public_evidence"] > 0):
+        errs += [f"area.gap.public_nearest.{f} not shown" for f in ("name", "label", "km")
+                 if f"area.gap.public_nearest.{f}" not in shown]
+        if pn["label"] != PUBLIC_LABEL:
+            errs.append(f"area.gap.public_nearest.label is {pn['label']!r}")
     if s["n_without_option"] > 0 or s["no_public_evidence"] > 0:
         for k, h in enumerate(g.get("public_standard") or []):
             errs += [f"area.gap.public_standard.{k}.{f} not shown" for f in ("name", "label")
