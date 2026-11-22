@@ -227,16 +227,6 @@
    "violations": [],
    "horizontal_scroll": false,
    "district_select": "#/"
-  },
-  "offline_border_dialysis-light": {
-   "violations": [],
-   "horizontal_scroll": false,
-   "saved_packs": [
-    "bihar",
-    "uttar_pradesh"
-   ],
-   "options": 3,
-   "other_state_cards": 1
   }
  },
  "critical_path": {
@@ -251,15 +241,15 @@
     "gzip": 2577
    },
    "/app.js": {
-    "raw": 60717,
-    "gzip": 18758
+    "raw": 60701,
+    "gzip": 18754
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 22064,
+  "gzip_total": 22060,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
