@@ -546,6 +546,44 @@ def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
     assert not any((x.get("route_reason") or "").startswith("Nearer") for x in patna)
 
 
+# #140 2b, #117: location integrity. A map point in doubt keeps its order but widens travel.high to cover the
+# facility's PIN centre; a facility whose listed town is far from its map point is never emergency option 1.
+def test_location_doubt_widens_travel_to_the_pin_centre():
+    from facts.engine import LOC_DOUBT
+
+    o = _post("trauma_emergency", 25.6, 85.95)["options"][0]  # Pusa
+    t = o["travel"]
+    assert o["location_doubt"] is True and t["high"] >= 41
+    assert set(t["alt"]) == {"minutes", "low", "high", "from"} and t["alt"]["from"] == "pin_centre"
+    assert t["high"] >= t["alt"]["high"]
+    for p in plans().values():
+        for x in p["options"]:
+            i = ENGINE.fid[x["facility_id"]]
+            assert x["location_doubt"] == (ENGINE.fac["loc_rule"][i] in LOC_DOUBT or bool(ENGINE.fac["town_far"][i]))
+            assert x["location_doubt"] or "alt" not in x["travel"]
+
+
+@pytest.mark.skipif(ENGINE is None or not any(ENGINE.fac.get("town_far") or []), reason="no town check in the export")
+def test_town_far_from_its_map_point_is_never_emergency_option_1():
+    from facts.engine import STRINGS
+
+    sharda = "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b"  # address Greater Noida, map point in Chandauli
+    assert ENGINE.fac["town_far"][ENGINE.fid[sharda]]
+    p = _post("trauma_emergency", 25.04, 83.61)  # Bhabua
+    assert p["options"][0]["facility_id"] != sharda
+    shown = next((x for x in p["options"] if x["facility_id"] == sharda), None)
+    assert shown is None or STRINGS["town_far"]["en"] in shown["flags"]
+    a = client.post("/api/area", json={"service": "trauma_emergency", "lat": 25.04, "lon": 83.61}).json()
+    assert a["area"]["district"].startswith("Kaimur") and sharda not in {c["facility_id"] for c in a["ten_calls"]}
+    far = ENGINE.fac["town_far"]
+    for j in random.Random(140).sample(range(len(ENGINE.pins["pin"])), 60):
+        la, lo = round(ENGINE.pins["lat"][j], 2), round(ENGINE.pins["lon"][j], 2)
+        for s in ("emergency_csection", "trauma_emergency", "burn_care"):
+            o = ENGINE.plan(s, la, lo, None, "gps")["options"]
+            if o and far[ENGINE.fid[o[0]["facility_id"]]]:  # only when no other option is left
+                assert all(far[ENGINE.fid[x["facility_id"]]] for x in o), (s, la, lo)
+
+
 LGD_PARQUET = APP.parent / "data" / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
 
 
