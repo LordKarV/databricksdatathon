@@ -16,6 +16,7 @@ from pathlib import Path
 
 from services import BAND_WORDS, SERVICES, emergency_numbers, haversine_km, travel
 
+from facts.ledger_terms import nabh_text
 from facts.redact import redact_names
 
 # New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
@@ -210,6 +211,7 @@ class Pair:
     listings: int = 1  # duplicate listings of this site merged into it (#78); the score is the best member's
     ledger: list | None = None  # derived/v2 terms: [[term, tenths of a point, [claim ids]], ...], base first
     not_observed: str = ""  # families derived/v2 cannot see for this pair, e.g. "WO" (facts/ledger_terms.py)
+    lists: list | None = None  # derived/v2 ON_A_PUBLIC_LIST overlays: [[list, date], ...] (WS4 4a)
 
 
 class Engine:
@@ -231,6 +233,8 @@ class Engine:
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         words = facts.get("ledger", {})  # older exports: no ledger, one "model score" row
         self.terms, self.not_observed = words.get("terms", {}), words.get("not_observed", {})
+        self.cites, self.list_names = words.get("cites", {}), words.get("lists", {})
+        self.fac.setdefault("nabh", [None] * len(self.fac["id"]))
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
         # The score a pair gets once a second source confirms it (the gold override): used for "what would change".
@@ -282,12 +286,32 @@ class Engine:
         """The model's named terms on the app's scale (10 points per logit unit), base first. The build spreads the
         rounding so the points sum to round(10 x logit(p), 1). A row's quotes are the app claims its term cites."""
         rows = []
-        for term, tenths, cids in pr.ledger:
+        for term, tenths, cids, *rest in pr.ledger:
             family, en, hi = self.terms[term]
             rows.append({"label": en, "label_hi": hi, "family": family, "points": tenths / 10,
                          "quotes": [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1]}
-                                    for c in cids if c in self.claims]})
+                                    for c in cids if c in self.claims],
+                         "cites": [self._cite(c) for c in (rest[0] if rest else []) if c in self.cites]})
         return rows
+
+    def _cite(self, cid: str) -> dict:
+        """One official-list or OpenStreetMap row a ledger term rests on (facts/build.py cites()), with its link."""
+        text, url, source, fetched, tier, k, n = self.cites[cid]
+        return {"id": cid, "text": text, "url": url, "source": source, "fetched_date": fetched, "tier": tier,
+                "precision_k": k, "precision_n": n}
+
+    def _public_lists(self, pr: Pair, i: int) -> list[dict]:
+        """The official lists derived/v2 found this facility on, for one "Official lists" line. A NABH entry says
+        which kind it is (facts/ledger_terms.py NABH_TIER): a CGHS/ECHS empanelment is not accreditation."""
+        out = []
+        for key, date in pr.lists or []:
+            row = {"list": key, "name": self.list_names.get(key, key), "fetched_date": date}
+            nabh = self._f("nabh", i)
+            if key == "nabh" and nabh:
+                tier, acc, url = nabh
+                row |= {"tier": tier, "id": acc, "url": url, "text": nabh_text(tier, acc)}
+            out.append(row)
+        return out
 
     def _not_observed(self, pr: Pair) -> list[dict]:
         """Families the model cannot see for this pair: they add no points, so they are named, not scored."""
@@ -500,6 +524,7 @@ class Engine:
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
             "not_observed": self._not_observed(pr),
+            "public_lists": self._public_lists(pr, i),
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
             "track_record": self._track(p, rule),

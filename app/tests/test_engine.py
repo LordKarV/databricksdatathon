@@ -473,3 +473,43 @@ def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
     assert not any("best option" in (x.get("route_reason") or "") for x in o[1:])
     patna = _post("trauma_emergency", 25.6, 85.14)["options"]  # the former first is farther: no "Nearer" line
     assert not any((x.get("route_reason") or "").startswith("Nearer") for x in patna)
+
+
+def test_every_list_and_osm_row_cites_its_source():
+    """WS4 4a: every official-list (X) or OpenStreetMap (O) ledger row with points carries at least one cite with a
+    link, over every served pair; points are unchanged (the ledger test above still sums them to p)."""
+    missing = []
+    for s, rows in ENGINE.pairs.items():
+        for pr in rows:
+            for c in ENGINE._ledger(pr):
+                if c["family"] in ("X", "O") and c["points"] and not any(ct["url"] for ct in c["cites"]):
+                    missing.append((ENGINE.fac["id"][pr.fi], s, c["label"]))
+    assert not missing, missing[:5]
+
+
+def test_nabh_cites_say_which_kind_of_entry():
+    """Gaya dialysis option 1 (Arsh) is a CGHS/ECHS empanelment on NABH's portal, not accreditation; Patna dialysis
+    option 1 (Satyavrat) holds an entry-level certificate. The "Official lists" entry says the same."""
+    cases = [((24.79, 85.0), "Arsh", "CGHS/ECHS empanelment listed on NABH's portal; not accreditation"),
+             ((25.6, 85.14), "Satyavrat", "NABH entry-level certificate PESHCO-2023-7525")]
+    for (la, lo), name, want in cases:
+        o = ENGINE.plan("dialysis", la, lo, 40, "gps")["options"][0]
+        assert name in o["name"]
+        texts = [ct["text"] for c in o["contributions"] for ct in c.get("cites", [])]
+        assert texts and all(want in t for t in texts if "NABH" in t), texts
+        assert not any("full accreditation" in t for t in texts)
+        nabh = [x for x in o["public_lists"] if x["list"] == "nabh"]
+        assert nabh and want in nabh[0]["text"] and nabh[0]["url"]
+
+
+def test_restricted_lists_are_only_shown_per_facility():
+    """The cite table holds only rows a served pair's ledger cites (never a whole NABH, NMC or MoHFW list), and an
+    option shows only the cites of its own ledger rows."""
+    cited = {c for rows in ENGINE.pairs.values() for pr in rows for row in pr.ledger or [] for c in row[3]}
+    assert set(ENGINE.cites) == cited
+    assert sum("NABH" in (v[2] or "") for v in ENGINE.cites.values()) < 1000  # the NABH list has about 21,600 entries
+    p = ENGINE.plan("dialysis", 24.79, 85.0, 40, "gps")
+    for o in p["options"]:
+        pr = ENGINE.index["dialysis"][ENGINE.fid[o["facility_id"]]]
+        own = {c for row in pr.ledger for c in row[3]}
+        assert {ct["id"] for c in o["contributions"] for ct in c.get("cites", [])} <= own
