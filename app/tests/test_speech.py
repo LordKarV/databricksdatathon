@@ -167,7 +167,7 @@ def test_templates():
     hindi_side = [t for k, v in hi.items() if k != "questions" for t in template_strings(v)]
     hindi_side += [q for _, q in hi["questions"]]
     assert not [t for t in hindi_side if ENGLISH_BAND.search(t)]
-    assert hi["band"] == {"likely": "संभावना है", "not_verified": "पहले फोन करके पूछें", "unlikely": "संभावना कम"}
+    assert hi["band"] == {"likely": "संभावना ज़्यादा", "not_verified": "पक्का नहीं, पहले फ़ोन करके पूछें", "unlikely": "संभावना कम"}
 
 
 def test_danger_and_route():
@@ -184,3 +184,30 @@ def test_danger_and_route():
         s = p["itinerary"]["plans"][0]["stops"]
         hi = SPOKEN[(n, "hi")]["text"]
         assert f"पहले {s[0]['name']} पर" in hi and f"फिर {s[1]['name']} पर" in hi, hi
+
+
+def _need_phrase(key: str) -> str:
+    """The {need} words engine._call_ahead puts in "Do you have {need} on site?" for one missing prerequisite."""
+    return key.replace("_or_", " or ").replace("_", " ")
+
+
+def test_every_engine_need_has_a_hindi_term():
+    """#121 bug 8: spoken Hindi used to say "dialysis unit or machine". Every prerequisite the engine can ask
+    about has a Hindi term, with no Latin words apart from the CT and MRI loanwords the glossary keeps."""
+    from facts.engine import NEED_PLAIN
+    needs = TEMPLATES["hi"]["needs"]
+    assert {_need_phrase(k) for k in NEED_PLAIN} <= set(needs)
+    for en_need, hi_need in needs.items():
+        assert re.search(r"[ऀ-ॿ]", hi_need), en_need
+        assert set(re.findall(r"[A-Za-z]+", hi_need)) <= {"CT", "MRI"}, hi_need
+
+
+def test_hindi_call_ahead_speaks_the_glossary_term():
+    q = "Do you have dialysis unit or machine on site?"
+    plan = recommend_stub("dialysis", 26.6, 85.48, 40, "gps")
+    plan["options"][0]["call_ahead"] = [{"question": q, "asked_because": "our data does not mention it"}]
+    hi, en = build([{"plan": plan, "lang": "hi", "opts": {"only": 0}}, {"plan": plan, "lang": "en", "opts": {"only": 0}}])
+    assert "क्या आपके यहाँ डायलिसिस मशीन है?" in hi["text"]
+    assert "dialysis unit" not in hi["text"] and q in en["text"]
+    check_spoken(plan, hi, "hi")
+    assert {"path": "options.0.call_ahead.0.question", "value": q, "kind": "template"} in hi["fields"]

@@ -294,7 +294,8 @@ show_table(cannot)
 test_eval = ROOT / "model/gold/v3/test_eval/results.json"
 if test_eval.is_file():
     v = json.loads(test_eval.read_text())["verdicts"]
-    print(f"What remains after cleaning: in the sealed TEST a web check found no decisive answer for {v['no_info']} of "
+    print(f"What remains after cleaning: in the held-out TEST set (opened once, after the model was frozen; "
+          f"model/gold/v3/OPENING_LOG.md) a web check found no decisive answer for {v['no_info']} of "
           f"{sum(v.values())} facility-service pairs ({v['no_info'] / sum(v.values()):.0%}).")
 ''')
 
@@ -740,22 +741,29 @@ if they cannot reach it. So we compare the app with both, in two ways:
 """)
 
 code('''
-SIM_FILES = [ROOT / "sim/out/metrics.parquet", Path("/Volumes/workspace/referral_saathi/uploads/sim/metrics.parquet")]
-sim_file = next((p for p in SIM_FILES if p.is_file()), None)
-if sim_file is None:
-    print("SIMULATED results: pending. The simulation (#92) is not in this version of the repository yet.")
-    print("When sim/out/metrics.parquet exists, this cell shows, for dialysis (planned) and trauma (emergency) in")
-    print("Bihar and Uttar Pradesh, the share of simulated patients treated within the time window under each policy")
-    print("(the app, the app offline, nearest, nearest + call first, best on paper), with seed-bootstrap intervals,")
-    print("for scenarios S0-high and S0-low (base-rate bounds, read together), S1, S2 and S3. All of it SIMULATED.")
-else:
-    m = pd.read_parquet(sim_file)
-    m = m[m.state.eq("ALL")] if "state" in m else m
-    m = m.assign(v=[f"{r.treated_in_window:.2f} [{r.treated_in_window_lo:.2f}, {r.treated_in_window_hi:.2f}]"
-                    for r in m.itertuples()])
-    print(f"SIMULATED ({sim_file.name}): share treated within the time window, seed-bootstrap interval. "
-          "S0-high and S0-low are base-rate bounds: read them together, never one alone.")
-    display(m.pivot_table(index=["service", "policy"], columns="scenario", values="v", aggfunc="first"))
+# The committed aggregate of the appendix run (submission/02_simulation.ipynb), so this cell needs no simulation
+# output folder. Its header gives the seeds, cases and commit.
+SIM_TABLE = ROOT / "submission/sim_results.csv"
+sim = pd.read_csv(SIM_TABLE, comment="#")
+assert sim.label.eq("SIMULATED").all() and sim.n_seeds.nunique() == 1
+sim = sim.assign(v=[f"{r.treated_in_window:.2f} [{r.treated_in_window_lo:.2f}, {r.treated_in_window_hi:.2f}]"
+                    for r in sim.itertuples()])
+print(f"SIMULATED, not field results ({SIM_TABLE.relative_to(ROOT)}, run in submission/02_simulation.ipynb): "
+      f"{sim.n_seeds.iloc[0]} seeds, {sim.n_cases.iloc[0]:,} simulated patients per policy, scenario and service,")
+print("Bihar and Uttar Pradesh. Share treated within the time window (60 min trauma, 120 min dialysis), 90% "
+      "seed-bootstrap interval.")
+print("S0-high and S0-low are base-rate bounds: read them together, never one alone. app_before_101 is the "
+      "emergency order before #101.")
+rows = pd.MultiIndex.from_frame(sim[["service", "policy"]].drop_duplicates())
+display(sim.pivot_table(index=["service", "policy"], columns="scenario", values="v", aggfunc="first")  # noqa: F821
+        .reindex(rows))
+gap = sim[sim.service.eq("trauma_emergency") & sim.policy.isin(["app_before_101", "app"])]
+gap = gap.assign(pts=[f"{100 * r.minus_ncf:+.1f} [{100 * r.minus_ncf_lo:+.1f}, {100 * r.minus_ncf_hi:+.1f}]"
+                      for r in gap.itertuples()])
+print("SIMULATED. Trauma, app minus nearest + call first, in points (paired by seed, 90% interval), before and "
+      "after #101:")
+display(gap.pivot_table(index="policy", columns="scenario", values="pts", aggfunc="first")  # noqa: F821
+        .reindex(["app_before_101", "app"]))
 ''')
 
 md("""
@@ -764,11 +772,18 @@ within the window than the simple rule "nearest place that lists the service, ca
 scenario, including the one where the model's own scores are the truth. The cause is the ranking, not the model: it
 traded extra travel for a higher score, while a phone call settles the question in a few minutes, so for an
 emergency a nearer place that plausibly offers the service, called first, is worth more. For dialysis, a planned
-service with a longer window, the score paid off. The decision on #92: for emergency services only, rank by the
-expected chance of care within the window when calls go out nearest plausible place first (UNLIKELY pairs and
-pairs with no quoted sentence excluded; the score as a filter and tie-break). Planned services keep the current
-rule. The model itself (scores, bands and the frozen TEST predictions) does not change. The size of the gap depends
-on the assumed call and turn-away constants, so it is reported as a simulated method finding, not as field evidence.
+service with a longer window, the score paid off. The change (#92, #101): for emergency services only, the engine
+orders the options with `nearest_plausible` (`app/facts/engine.py`), nearest plausible place first. The score only
+chooses among the places within 5 minutes (`TIE_MIN`) of the nearest one left, and while that place is inside the
+time window, a place outside it never joins the tie. Unlikely pairs and pairs with no quoted sentence are not in
+this order. Planned services keep the old order (the score discounted by travel time). The model itself (scores,
+bands and the frozen TEST predictions) does not change.
+
+**Result after #101 (SIMULATED, `submission/sim_results.csv`, printed above).** For trauma, the gap to "nearest +
+call first" shrank from 3 to 8 points to 1 to 2 points: the app is ahead in S1 (+1.0 points) and still slightly
+behind in S0-high, S0-low, S2 and S3 (-1.0 to -1.7 points). Dialysis, whose order did not change, is the same
+before and after. The size of the gap depends on the assumed call and turn-away constants, so it is reported as a
+simulated method finding, not as field evidence.
 """)
 
 code('''
@@ -803,19 +818,76 @@ else:
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
-md("## 9. Limits")
+md("""
+## 9. Limits
+
+The dataset the app uses is much cleaner than the one we were given: the first cell below shows what the cleaning
+fixed. What remains is mostly service claims nobody can verify from the web, plus phone and hours facts no listing
+carries. That is why the app says "call first". Every number is read from the named file.
+""")
+
+code('''
+geo = json.loads((ROOT / "cleaning/geo_identity/summary.json").read_text())
+far = geo["coords_gt50km_from_pin_before(audit)_after(repaired)"]
+busy = geo["busy_pins_gt25km_from_facility_median_before_after"]
+print("What the cleaning fixed (cleaning/geo_identity/summary.json, before -> after):")
+for label, (a, b) in [("duplicate records", geo["rows_before_after_dedup"]),
+                      ("map points outside India", geo["coords_outside_india_before_used_after"]),
+                      ("records with a resolved state", geo["stated_state_resolved_before_after"])]:
+    print(f"  {label:58} {a:>6,} -> {b:,}")
+print(f"  {'listing points > 50 km from their PIN (repaired PIN centres)':58} {far[0][0]:>6,} -> {far[1][0]:,}"
+      f"  (of {far[0][1]:,} -> {far[1][1]:,} measurable)")
+print(f"  {'busy PIN centres > 25 km from their facilities median':58} {busy[0]:>6,} -> {busy[1]:,}  (of {busy[2]:,})")
+''')
 
 code('''
 h = json.loads((ROOT / "app/howto/out/how.json").read_text())["facts"]
+test = json.loads((ROOT / "model/gold/v3/test_eval/results.json").read_text())
+dev = json.loads((ROOT / "model/gold/v3/dev_labels.json").read_text())["report"]
+v, ni = test["verdicts"], test["no_info_by_operator"]
+pub, prv = test["by_operator_decided"]["public"], test["by_operator_decided"]["private"]
+nst = test["headline_decided"]["NO_SERVICE_TEXT_confirmed"]
+trust = geo["trust"]
+n_rec = geo["rows_before_after_dedup"][1]
+lc = geo["loc_conf"]
+src = geo["loc_src"]
+cap = next(r for r in how.table("REPORT.md", "Service claim evidence")["rows"] if r[0] == "claims-09")[2]
+cap = cap.split(";")[0]
+assert cap.startswith("Capacity missing"), cap
+ci = lambda x: f"[{x[0]:.3f}, {x[1]:.3f}]"  # noqa: E731
+n_test = sum(v.values())
+print("What remains (gold v3: model/gold/v3/test_eval/results.json and dev_labels.json):")
+print(f"- Service claims are mostly unverifiable: {v['no_info']} of {n_test} TEST pairs "
+      f"({v['no_info'] / n_test:.0%}) are no_info; public {ni['public']['rate']:.0%}, private "
+      f"{ni['private']['rate']:.0%}. DEV: {dev['verdicts']['no_info']} of {dev['pairs']} ({dev['no_info_rate']:.0%}).")
+print(f"- Public facilities, ranking not shown: TEST AUROC {pub['auroc']:.3f} {ci(pub['auroc_ci95'])} on "
+      f"{pub['n']} decided public pairs; the interval includes 0.5, as on DEV. "
+      f"Private: {prv['auroc']:.3f} {ci(prv['auroc_ci95'])}.")
+print(f"- Listings omit services: {nst['k']} of {nst['n']} decided TEST pairs with no sentence of their own about "
+      "the service (NO_SERVICE_TEXT) were confirmed on the web.")
+print(f"- Phones are unverified: {trust['records_with_display_phone']:,} of {n_rec:,} records "
+      f"({trust['records_with_display_phone'] / n_rec:.0%}) list a number; none has been checked to reach the "
+      "facility.")
+print(f"- Locations: {lc['low'] + lc['disputed']:,} map points are low-confidence ({lc['low']:,}) or disputed "
+      f"({lc['disputed']:,}); {src['postcode_centre']:,} sit at a postcode centre and {src['address_city_centre']:,} "
+      "at a city centre.")
+print(f"- No checked opening hours, 24x7 status or live capacity: the provided table has no hours field; "
+      f"{h['hours_records']['value']:,} of {h['hours_records']['of']:,} records say anything about hours, only in "
+      "free text, and OpenStreetMap adds 134 opening_hours facts (kb/opendata/OPENDATA.md); none is checked. Bed "
+      f"capacity: {cap.lower()} raw records (REPORT.md claims-09). Nothing says whether a bed or a slot is free today.")
+print("- Gold labels are agent-made from public web pages, not phone calls or visits. A human spot-check sheet of 25 "
+      "pairs is in PR #105; the check is not yet done.")
 print(f"- Thin rural coverage: {h['bihar_records']['value']:,} of {h['bihar_records']['of']:,} records are in Bihar.")
 bands = card["bands_all_pairs"]
 print(f"- Model v2 bands {bands['LIKELY']:,} of {sum(bands.values()):,} facility-service pairs Likely; everything else "
       "asks for a call first or says no.")
-print(f"- Labels are web checks ({card['label_provenance']['wording']}), not phone calls or visits.")
-print(f"- Opening hours: {h['hours_records']['value']:,} of {h['hours_records']['of']:,} records mention hours at all; "
-      "nothing says whether a bed or a slot is free today.")
 print("- Travel times are rough estimates (straight line times a road factor), shown as ranges.")
 ''')
+
+md("""
+**Paths forward.** The app's call-outcome reports (#65, section 9b) are the path for phones, hours and
+turn-aways. An official public-facility source, such as state health department lists, is future work.
+""")
 
 # ---------------------------------------------------------------------------------------------------------------------
 md("""

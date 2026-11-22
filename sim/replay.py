@@ -98,7 +98,7 @@ def payload(sim_out: Path, run: str, n: int) -> dict:
 
 
 def _coord(x: float) -> float | None:
-    """A true point, or None when the facility has no findable point (S3 without an alternative)."""
+    """A true point, or None when the facility has no findable point."""
     return None if pd.isna(x) else round(float(x), 4)
 
 

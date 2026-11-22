@@ -18,12 +18,14 @@
   function daysAgo(t) { return Math.max(0, Math.floor((Date.now() - t) / DAY)); }
   function dateStr(t) { return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'}); }
 
-  // Indian numbers in the pack are 10 digits (mobile or STD code + number); anything else gets no tel: link.
+  // Indian numbers in the pack are 10 digits (mobile or STD code + number) or toll-free 1800; anything else gets no
+  // tel: link.
   function telHref(raw) {
     const d = String(raw || '').replace(/[\s\-().]/g, '');
     if (/^[1-9]\d{9}$/.test(d)) return 'tel:+91' + d;
     if (/^0[1-9]\d{9}$/.test(d)) return 'tel:+91' + d.slice(1);
     if (/^\+91[1-9]\d{9}$/.test(d)) return 'tel:' + d;
+    if (/^1800\d{6,8}$/.test(d)) return 'tel:' + d;  // toll-free, dialled as is in India
     return null;
   }
 
@@ -178,8 +180,8 @@
       ? '<span class="band band-likely"><span aria-hidden="true">&#10004;</span> LIKELY</span>'
       : '<span class="band band-not_verified"><span aria-hidden="true">?</span> NOT VERIFIED: call to confirm</span>';
     const tel = telHref(x.tel);
-    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote>"${esc(q.text)}"
-        ${q.claim_id ? `<span class="tag">${esc(q.claim_id)}</span>` : ''}</blockquote>`).join('')
+    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote${q.claim_id ? ` data-claim="${esc(q.claim_id)}"` : ''}>"${esc(q.text)}"</blockquote>`)
+      .join('')
       : `<p class="small">Our data has no own sentence about ${esc(label)} for this listing.</p>`;
     const sms = 'sms:?body=' + encodeURIComponent(`${label}: ${x.name}. ${x.km_straight} km straight line. ` +
       `${tel ? 'Phone ' + tel.slice(4) + '. ' : ''}Call before going. Emergency 108.`);

@@ -23,6 +23,12 @@ Reports can lower a band, never raise it: a Likely pair whose adjusted p falls b
 ("Health-worker reports disagree with the listing: call first"). Every other band stays as the model set it, even
 when reports are positive. The plan is then rebuilt from the adjusted scores (apply_field), so the order, the
 abstention and every sentence built from p agree with the card.
+
+Tie-break (#86, lead's rule): after the term, the leading options of a non-emergency plan that tie (same band, shown
+p within 0.05, travel within 10 min; engine.tied_prefix) are ordered by `net`, the same recency-weighted counts the
+term used (accepted + phone yes at half weight - "does not offer"; temporary reasons never count), from options
+with at least MIN_REPORTERS reporters; others count 0. Nothing else moves. The emergency order is untouched. The why
+page shows it as the row "Tie broken by: health-worker reports" (payload `tie_break`); cards add nothing.
 """
 from __future__ import annotations
 
@@ -51,15 +57,16 @@ NOTE_DAYS = 7
 T_LIKELY, T_UNLIKELY = 0.3686, 0.20
 TTL_S = 60
 TERM_LABEL = "Field reports"
+TIE_LABEL = "Tie broken by: health-worker reports"
 MAX_ROWS = 50_000  # ponytail: 90 days of keyed reports nationally is far below this; aggregate further if not
 
-SIM = {"en": "Simulated for the demo: ", "hi": "\u0921\u0947\u092e\u094b \u0915\u0947 \u0932\u093f\u090f \u0928\u0915\u0932\u0940: "}
+SIM = {"en": "Simulated for the demo: ", "hi": "\u0921\u0947\u092e\u094b \u0915\u0947 \u0932\u093f\u090f \u0928\u0915\u0932\u0940 \u0906\u0901\u0915\u0921\u093c\u0947: "}
 REASON = {
     "service_not_here": {"en": "the service is not here", "hi": "\u092f\u0939 \u0938\u0947\u0935\u093e \u092f\u0939\u093e\u0901 \u0928\u0939\u0940\u0902 \u0939\u0948"},
     "equipment_absent": {"en": "the equipment is not here", "hi": "\u0909\u092a\u0915\u0930\u0923 \u092f\u0939\u093e\u0901 \u0928\u0939\u0940\u0902 \u0939\u0948"},
     "referred_elsewhere_for_this_service": {"en": "they send this service elsewhere",
                                             "hi": "\u0935\u0947 \u092f\u0939 \u0938\u0947\u0935\u093e \u0915\u0939\u0940\u0902 \u0914\u0930 \u092d\u0947\u091c\u0924\u0947 \u0939\u0948\u0902"},
-    "no_bed": {"en": "no bed", "hi": "\u092c\u093f\u0938\u094d\u0924\u0930 \u0916\u093e\u0932\u0940 \u0928\u0939\u0940\u0902"},
+    "no_bed": {"en": "no bed", "hi": "\u092c\u0947\u0921 \u0916\u093e\u0932\u0940 \u0928\u0939\u0940\u0902"},
     "doctor_absent": {"en": "doctor not present", "hi": "\u0921\u0949\u0915\u094d\u091f\u0930 \u092e\u094c\u091c\u0942\u0926 \u0928\u0939\u0940\u0902"},
     "machine_down": {"en": "machine not working", "hi": "\u092e\u0936\u0940\u0928 \u0916\u0930\u093e\u092c"},
     "asked_to_pay": {"en": "asked to pay", "hi": "\u092a\u0948\u0938\u0947 \u092e\u093e\u0901\u0917\u0947"},
@@ -67,13 +74,13 @@ REASON = {
     "visit_none": {"en": "turned away, no reason given", "hi": "\u0932\u094c\u091f\u093e \u0926\u093f\u092f\u093e, \u0915\u093e\u0930\u0923 \u0928\u0939\u0940\u0902 \u092c\u0924\u093e\u092f\u093e"},
 }
 REBANDED = {"en": "Health-worker reports disagree with the listing: call first",
-            "hi": "\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0938\u0942\u091a\u0940 \u0938\u0947 \u092e\u0947\u0932 \u0928\u0939\u0940\u0902 \u0916\u093e\u0924\u0940\u0902: \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0947\u0902\u0964"}
+            "hi": "\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0938\u0947 \u092e\u0947\u0932 \u0928\u0939\u0940\u0902 \u0916\u093e\u0924\u0940\u0902: \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0915\u0947 \u092a\u0942\u091b\u0947\u0902\u0964"}
 DISAGREE = {"en": "Reports disagree with the listing: call first.",
-            "hi": "\u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0914\u0930 \u0938\u0942\u091a\u0940 \u092e\u0947\u0902 \u092e\u0947\u0932 \u0928\u0939\u0940\u0902: \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0947\u0902\u0964"}
+            "hi": "\u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0914\u0930 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u092e\u0947\u0932 \u0928\u0939\u0940\u0902: \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0915\u0947 \u092a\u0942\u091b\u0947\u0902\u0964"}
 ONE_REPORTER = {"en": "One health worker's report does not change the score; it needs reports from at least 2.",
-                "hi": "\u090f\u0915 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0938\u0947 \u0938\u094d\u0915\u094b\u0930 \u0928\u0939\u0940\u0902 \u092c\u0926\u0932\u0924\u093e; \u0915\u092e \u0938\u0947 \u0915\u092e 2 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u091a\u093e\u0939\u093f\u090f\u0964"}
+                "hi": "\u090f\u0915 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0938\u0947 \u0938\u094d\u0915\u094b\u0930 \u0928\u0939\u0940\u0902 \u092c\u0926\u0932\u0924\u093e; \u0915\u092e \u0938\u0947 \u0915\u092e 2 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u091a\u093e\u0939\u093f\u090f\u0964"}
 NO_TEXT_CAP = {"en": "The listing has no sentence about this service, so reports alone cannot make it Likely.",
-               "hi": "\u0938\u0942\u091a\u0940 \u092e\u0947\u0902 \u0907\u0938 \u0938\u0947\u0935\u093e \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0915\u094b\u0908 \u0935\u093e\u0915\u094d\u092f \u0928\u0939\u0940\u0902 \u0939\u0948, \u0907\u0938\u0932\u093f\u090f \u0915\u0947\u0935\u0932 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0938\u0947 \u092f\u0939 Likely \u0928\u0939\u0940\u0902 \u0939\u094b\u0917\u093e\u0964"}
+               "hi": "\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0907\u0938 \u0938\u0947\u0935\u093e \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902 \u0932\u093f\u0916\u093e \u0939\u0948, \u0907\u0938\u0932\u093f\u090f \u0938\u093f\u0930\u094d\u092b\u093c \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0938\u0947 \u092f\u0939 Likely (\u0938\u0902\u092d\u093e\u0935\u0928\u093e \u091c\u093c\u094d\u092f\u093e\u0926\u093e) \u0928\u0939\u0940\u0902 \u0939\u094b\u0917\u093e\u0964"}
 
 
 def _age_days(at: datetime, now: datetime) -> float:
@@ -133,7 +140,7 @@ def _summary_line(latest: list[tuple[dict, tuple]], now: datetime) -> dict[str, 
     who_hi = "1 \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e" if n == 1 else f"{n} \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902"
     return {"en": f"Reports from {who_en} in the last {WINDOW_DAYS} days: {', '.join(en)}; latest {ago['en']}.",
             "hi": f"\u092a\u093f\u091b\u0932\u0947 {WINDOW_DAYS} \u0926\u093f\u0928\u094b\u0902 \u092e\u0947\u0902 {who_hi} \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f: {', '.join(hi)}; "
-                  f"\u0938\u092c\u0938\u0947 \u0928\u0908 {ago['hi']}\u0964"}
+                  f"\u0938\u092c\u0938\u0947 \u0928\u0908 \u0930\u093f\u092a\u094b\u0930\u094d\u091f: {ago['hi']}\u0964"}
 
 
 def _notes(reports: list[dict], now: datetime) -> list[dict[str, str]]:
@@ -148,17 +155,18 @@ def _notes(reports: list[dict], now: datetime) -> list[dict[str, str]]:
         n, ago = len(ages), _ago(min(ages.values()))
         out.append({"en": f"{n} report{'s' if n > 1 else ''} of {REASON[key]['en']} in the last {NOTE_DAYS} days; "
                           f"latest {ago['en']}. This is about availability, not whether the service exists.",
-                    "hi": f"\u092a\u093f\u091b\u0932\u0947 {NOTE_DAYS} \u0926\u093f\u0928\u094b\u0902 \u092e\u0947\u0902 {n} \u0930\u093f\u092a\u094b\u0930\u094d\u091f: {REASON[key]['hi']}; \u0938\u092c\u0938\u0947 \u0928\u0908 {ago['hi']}\u0964 "
-                          "\u092f\u0939 \u0909\u092a\u0932\u092c\u094d\u0927\u0924\u093e \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0939\u0948, \u0938\u0947\u0935\u093e \u0939\u094b\u0928\u0947 \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902\u0964"})
+                    "hi": f"\u092a\u093f\u091b\u0932\u0947 {NOTE_DAYS} \u0926\u093f\u0928\u094b\u0902 \u092e\u0947\u0902 {n} \u0930\u093f\u092a\u094b\u0930\u094d\u091f: {REASON[key]['hi']}; \u0938\u092c\u0938\u0947 \u0928\u0908 \u0930\u093f\u092a\u094b\u0930\u094d\u091f: {ago['hi']}\u0964 "
+                          "\u092f\u0939 \u0909\u0938 \u0938\u092e\u092f \u0915\u0940 \u092c\u093e\u0924 \u0939\u0948; \u0907\u0938\u0938\u0947 \u092f\u0939 \u092a\u0924\u093e \u0928\u0939\u0940\u0902 \u091a\u0932\u0924\u093e \u0915\u093f \u0905\u0938\u094d\u092a\u0924\u093e\u0932 \u092e\u0947\u0902 \u092f\u0939 \u0938\u0947\u0935\u093e \u0939\u0948 \u092f\u093e \u0928\u0939\u0940\u0902\u0964"})
     return out
 
 
 def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_text: bool = True,
                  likely: bool = False) -> dict[str, Any]:
-    """{p, term, lines, notes, disagree, rebanded, n_reporters, simulated} for one facility and service. Pure.
+    """{p, term, lines, notes, disagree, rebanded, n_reporters, simulated, net} for one facility and service. Pure.
 
     `term` is in logit units: _logit(p_model) + term == _logit(p). Reports without a reporter key are ignored.
     `likely`: the model banded this pair Likely; `rebanded` says the reports took it below the Likely line.
+    `net`: the recency-weighted s - f the term used, or None below MIN_REPORTERS; only the tie-break reads it.
     """
     keyed = [r for r in reports if r.get("reporter_key") and _age_days(r["created_at"], now) <= WINDOW_DAYS]
     simulated = any(r.get("simulated") for r in keyed)
@@ -168,7 +176,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
         k = r["reporter_key"]
         if sig and (k not in latest or r["created_at"] > latest[k][0]["created_at"]):
             latest[k] = (r, sig)
-    p, lines, disagree = p_model, [], False
+    p, lines, disagree, net = p_model, [], False, None
     if latest:
         lines.append(_summary_line(list(latest.values()), now))
     if len(latest) == 1:
@@ -180,6 +188,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
             s, f = s + w * w_yes, f + w * w_no
         p = (N0 * p_model + s) / (N0 + s + f)
         disagree = f > s
+        net = round(s - f, 2)  # the tie-break value: accepted + phone yes at half weight - "does not offer"
         p = max(p, min(p_model, T_UNLIKELY))  # reports alone never make a public "Unlikely"
         if not has_text and p > max(p_model, T_LIKELY - 0.01):
             p = max(p_model, T_LIKELY - 0.01)
@@ -190,7 +199,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
         lines.append(REBANDED if rebanded else DISAGREE)
     return {"p": p, "term": _logit(p) - _logit(p_model), "lines": [_prefix(x, simulated) for x in lines],
             "notes": [_prefix(x, simulated) for x in _notes(keyed, now)], "disagree": disagree,
-            "rebanded": rebanded, "n_reporters": len(latest), "simulated": simulated}
+            "rebanded": rebanded, "n_reporters": len(latest), "simulated": simulated, "net": net}
 
 
 def _sigmoid(z: float) -> float:
@@ -208,7 +217,8 @@ def rescore(scored: tuple, reports: Iterable[dict], now: datetime) -> tuple[tupl
     if not (adj["lines"] or adj["notes"]):
         return scored, None
     info = {"p_model": round(p, 2), **{k: adj[k] for k in
-                                       ("term", "lines", "notes", "disagree", "rebanded", "n_reporters", "simulated")}}
+                                       ("term", "lines", "notes", "disagree", "rebanded", "n_reporters", "simulated",
+                                        "net")}}
     t = adj["term"]
     if t:
         # The interval moves by the same logit shift. ponytail: not the beta posterior's own interval.
@@ -251,10 +261,32 @@ def apply_field(plan_payload: dict, aggregates: dict, now: datetime, eng: Any = 
     if not found:
         return plan_payload
     loc = plan_payload["location"]
+    # The route's first stop keeps its lead (itinerary.lead_with_route, #121): it is listed first, so it stays first.
+    lead = {o["facility_id"]: o["route_reason"] for o in plan_payload["options"] if o.get("route_reason")}
+    # The tie-break reads the same reports as the term: an option counts only with MIN_REPORTERS (net not None).
     fresh = eng.plan(service, loc["lat"], loc["lon"], loc["accuracy_m"], loc["source"],
-                     {fid: scored for fid, (scored, _) in found.items()})
-    return {**plan_payload, "abstain": fresh["abstain"], "why_not": fresh["why_not"],
-            "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
+                     {fid: scored for fid, (scored, _) in found.items()},
+                     {fid: info["net"] for fid, (_, info) in found.items() if info["net"] is not None}, lead or None)
+    # Every block built from the option order comes from the rebuilt plan (a reorder changes "if the first says no").
+    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "first_is_nearest",
+                                                    "time_window", "rank_rule", "public_option")},
+           "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
+    if fresh.get("tie_break"):
+        out["tie_break"] = _tie_row(fresh["tie_break"], fresh["options"], found)
+    return out
+
+
+def _tie_row(tie: dict, options: list[dict], found: dict) -> dict:
+    """The why page's row "Tie broken by: health-worker reports": the rule and each tied option's value."""
+    rank = {o["facility_id"]: o["rank"] for o in options}
+    infos = [(found.get(fid) or (None, {}))[1] for fid in tie["facility_ids"]]
+    simulated = any(i.get("simulated") for i in infos)
+    return {"label": TIE_LABEL + (" (simulated for the demo)" if simulated else ""), "simulated": simulated,
+            "moved": tie["moved"], "p_within": tie["p_within"], "minutes_within": tie["minutes_within"],
+            "min_reporters": MIN_REPORTERS,
+            "options": [{"facility_id": fid, "rank": rank[fid], "net": i.get("net"),
+                         "n_reporters": i.get("n_reporters", 0)} for fid, i in zip(tie["facility_ids"], infos,
+                                                                                   strict=True)]}
 
 
 # ---------- reading: one aggregate query a minute ----------
@@ -322,8 +354,8 @@ def aggregates(now: datetime | None = None, wait: bool = True) -> dict[tuple[str
 
 
 NOT_READ = {"en": "Logged field reports were not read for this answer; the scores come from the listings only.",
-            "hi": "\u0907\u0938 \u091c\u0935\u093e\u092c \u0915\u0947 \u0932\u093f\u090f \u0926\u0930\u094d\u091c \u092b\u093c\u0940\u0932\u094d\u0921 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0928\u0939\u0940\u0902 \u092a\u0922\u093c\u0940 \u0917\u0908\u0902; "
-                  "\u0938\u094d\u0915\u094b\u0930 \u0938\u093f\u0930\u094d\u092b\u093c \u0938\u0942\u091a\u0940 \u0938\u0947 \u0939\u0948\u0902\u0964"}
+            "hi": "\u0907\u0938 \u091c\u0935\u093e\u092c \u0915\u0947 \u0932\u093f\u090f \u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f \u0928\u0939\u0940\u0902 \u092a\u0922\u093c\u0940 \u091c\u093e \u0938\u0915\u0940\u0902; "
+                  "\u0938\u094d\u0915\u094b\u0930 \u0938\u093f\u0930\u094d\u092b\u093c \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0938\u0947 \u0939\u0948\u0902\u0964"}
 
 
 def status() -> dict[str, Any]:
@@ -342,6 +374,9 @@ DEMO = (
     ("dialysis", 2, "sim-d", "visit", "turned_away", "no_bed", 1),
     ("dialysis", 2, "sim-e", "visit", "turned_away", "no_bed", 3),
     ("dialysis", 2, "sim-a", "visit", "accepted", None, 25),
+    # Option 3 is tied with 1 and 2 at the README point; two reporters let the tie-break order it (#86).
+    ("dialysis", 3, "sim-f", "visit", "accepted", None, 6),
+    ("dialysis", 3, "sim-g", "visit", "accepted", None, 9),
     ("emergency_csection", 1, "sim-b", "call", "yes", None, 2),
 )
 

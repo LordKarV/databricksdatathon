@@ -133,8 +133,9 @@ def note_consent(page: Page) -> None:
 
 def change_error(page: Page) -> None:
     go(page, "#/change")
-    page.get_by_label("PIN, village, town, district, or 'lat, lon'").fill("843317")
+    page.get_by_label("PIN, district, town or post office, or 'lat, lon'").fill("xqzv plonk")
     page.get_by_role("button", name="Use this place").click()
+    page.locator("#place-err").get_by_text("No PIN, district").wait_for()  # the server's answer, not an empty alert
 
 
 def plan_for(service_label: str) -> Callable[[Page], None]:
@@ -162,6 +163,16 @@ def website_check(page: Page) -> None:
     page.route("**/api/verify", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
     page.get_by_role("button", name="Check website now").click()
     page.locator("#verify-out blockquote").wait_for()
+
+
+def translated_quote(page: Page) -> None:
+    """Why page after "हिंदी में पढ़ें" on the first quote, with a recorded translation (the model is not called)."""
+    import json
+    why(page)
+    body = json.dumps({"available": True, "hindi": "डायलिसिस यूनिट में मशीनें हैं"}, ensure_ascii=False)
+    page.route("**/api/translate", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.get_by_role("button", name="हिंदी में पढ़ें").first.click()
+    page.locator(".tr-text").first.wait_for()
 
 
 def call_ahead(page: Page) -> None:
@@ -222,7 +233,7 @@ def offline_old_fix(ctx, page: Page) -> dict:
 def offline_pin_picker(ctx, page: Page) -> dict:
     online_plan_then_offline(ctx, page)
     go(page, "#/change")
-    page.get_by_label("PIN, village, town, district, or 'lat, lon'").fill("843302")
+    page.get_by_label("PIN, district, town or post office, or 'lat, lon'").fill("843302")
     page.get_by_role("button", name="Use this place").click()
     page.get_by_text("PIN 843302").wait_for()
     return {"district_select": page.evaluate("location.hash")}
@@ -290,6 +301,7 @@ def route_all_open(page: Page) -> None:
     plan_for("Accident")(page)
     page.get_by_text("Suggested route").first.wait_for()
     page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+    page.wait_for_timeout(900)  # the route strip draws itself over 700 ms
 
 
 def how_page(page: Page) -> None:
@@ -361,6 +373,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "abstention_csection": plan_for("Emergency C-section"),
     "why_and_how": why,
     "website_check": website_check,
+    "translated_quote": translated_quote,
     "call_ahead_trauma": call_ahead,
     "slip_english": slip_for("en"),
     "slip_hindi": slip_for("hi"),

@@ -32,12 +32,12 @@ SERVICES: dict[str, ServiceInfo] = {
     },
     "trauma_emergency": {
         "label_en": "accident and injury care",
-        "label_hi": "\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f / \u091a\u094b\u091f",
+        "label_hi": "\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f \u092f\u093e \u091a\u094b\u091f",
         "profile": "emergency",
     },
     "burn_care": {
         "label_en": "burn care",
-        "label_hi": "\u091c\u0932\u0928\u093e",
+        "label_hi": "\u091c\u0932\u0928\u0947 \u0915\u0940 \u091a\u094b\u091f",
         "profile": "emergency",
     },
     "dialysis": {
@@ -52,7 +52,7 @@ SERVICES: dict[str, ServiceInfo] = {
     },
     "cardiac_surgery": {
         "label_en": "heart surgery",
-        "label_hi": "\u0926\u093f\u0932 \u0915\u093e \u0911\u092a\u0930\u0947\u0936\u0928",
+        "label_hi": "\u0926\u093f\u0932 \u0915\u0940 \u0938\u0930\u094d\u091c\u0930\u0940",
         "profile": "planned",
     },
 }

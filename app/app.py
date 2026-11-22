@@ -1,8 +1,6 @@
-"""Referral Saathi app skeleton (issue #5).
+"""Referral Saathi app: FastAPI serving one HTML page, a service worker and the JSON API.
 
-FastAPI serving one plain HTML page, a service worker and stub JSON. No model and no
-Databricks reads yet: /api/recommend returns placeholder data in the shape the lead will
-fill from the model (see stub_data.py and README.md).
+Answers come from model v2 through facts/engine.py (built by facts/build.py); see README.md.
 """
 from __future__ import annotations
 
@@ -18,23 +16,25 @@ from community import field
 from community import pulse as area_pulse
 from community.reporter import reporter_key
 from facts.engine import RADIUS_KM, Engine
+from facts.places import Places, load_places
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
-from inputs import understand
+from inputs import translate, understand
 from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES, haversine_km
 from verify.check import Checker
 from voice import transcribe as voice
 
-LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
+LocationSource = Literal["gps", "last_fix", "pin", "district", "place", "manual"]
 Depth = Literal["quick", "compare", "area"]
 
 HERE = Path(__file__).resolve().parent
 STATIC = HERE / "static"
 PACKS = HERE / "packs" / "out"  # built by packs/build_packs.py (git-ignored)
+PLACES = HERE / "facts" / "out" / "places.json.gz"  # town and post office names, built by facts/build.py
 
 # Only these files are served from the root. An allowlist keeps the shell small and
 # avoids exposing anything else in the folder.
@@ -56,6 +56,7 @@ SHELL_FILES: dict[str, str] = {
     "pulse.js": "text/javascript; charset=utf-8",
     "journey.js": "text/javascript; charset=utf-8",
     "community.js": "text/javascript; charset=utf-8",
+    "translate.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -179,6 +180,32 @@ class ParseRequest(BaseModel):
 def parse(req: ParseRequest) -> JSONResponse:
     """Free text -> a suggested service and the words that decided it (#64). The user confirms with one tap."""
     return JSONResponse(understand.parse_text(req.text), headers={"Cache-Control": "no-store"})
+
+
+class TranslateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")  # a claim id only: the page never sends text to translate
+
+    claim_id: str = Field(min_length=1, max_length=64, pattern=r"^[\w:.-]+$")
+
+
+@app.post("/api/translate")
+def translate_quote(req: TranslateRequest, request: Request) -> JSONResponse:
+    """Hindi machine translation of one facility quote, looked up here by claim id (SAFETY.md 14). Not logged."""
+    eng = _need_engine()
+    c = eng.claims.get(req.claim_id)  # route stop quotes use the same claim ids
+    if c is None:
+        raise HTTPException(404, "unknown claim id")
+    # A claim id starts with the first 8 characters of its facility's id: its name and city stay untranslated.
+    # ponytail: linear scan of ~10k ids per request, an index if it ever shows up in a profile.
+    prefix = req.claim_id.split(":")[0]
+    i = next((j for u, j in eng.fid.items() if u.startswith(prefix)), None)
+    keep = () if i is None else (eng.fac["name"][i] or "", eng.fac["city"][i] or "")
+    # Rate limit per reporter key, else per signed-in user (in memory only), else one shared bucket.
+    h = request.headers
+    user = reporter_key(h) or (h.get("x-forwarded-user") or h.get("x-forwarded-email") or "").strip().lower() or None
+    out = translate.translate(req.claim_id, c[1], user, keep)
+    return JSONResponse(out, status_code=429 if out.get("reason") == "rate_limited" else 200,
+                        headers={"Cache-Control": "no-store"})
 
 
 NOTE_IMAGE = r"^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$"
@@ -384,6 +411,29 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
         return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
     return JSONResponse({"slug": slug, "state": state,
                          "packs": [{"slug": slug, "state": state}] + _near_packs(idx, slug, lat, lon)})
+
+
+class PlaceRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    q: str = Field(min_length=1, max_length=80)
+
+
+@functools.lru_cache(maxsize=1)
+def _places() -> Places:
+    return Places(_need_engine().pins, load_places(PLACES))
+
+
+@app.post("/api/place")
+def place(req: PlaceRequest) -> JSONResponse:
+    """A typed PIN, district, town or post office name to a point (#121 bug 5), from facts and places.json.gz only.
+
+    The text travels in the body and is never logged. 404 with no matches, so the page can say what to type.
+    """
+    matches = _places().lookup(req.q)
+    if not matches:
+        return JSONResponse({"error": "place not found", "matches": []}, 404)
+    return JSONResponse({"matches": matches})
 
 
 def _near_packs(idx: dict, home: str, lat: float, lon: float) -> list[dict]:

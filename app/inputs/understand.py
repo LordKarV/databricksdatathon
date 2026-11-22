@@ -218,38 +218,48 @@ def lexicon_hits(text: str, fuzzy: bool = True) -> dict[str, str]:
 
 
 # ---------- serving endpoints ----------
-Invoker = Callable[[str, dict[str, Any]], dict[str, Any]]
+Invoker = Callable[[str, dict[str, Any], float], dict[str, Any]]
+HTTP_MARGIN_S = 1  # the HTTP call gives up this much before the caller's budget, so its thread is freed
 
 
-def _sdk_invoke(endpoint: str, body: dict[str, Any]) -> dict[str, Any]:
+def _sdk_invoke(endpoint: str, body: dict[str, Any], http_timeout_s: float) -> dict[str, Any]:
     """POST to a serving endpoint with the app's own credentials (Databricks SDK, pre-installed on Apps).
 
-    Imported here, not at the top, so the app and its tests run where the SDK is not installed.
+    Imported here, not at the top, so the app and its tests run where the SDK is not installed. The SDK default
+    is a 60 s timeout retried for up to 300 s; a slow endpoint would hold a pool thread long after the caller gave
+    up, so both limits are the caller's budget.
     """
     from databricks.sdk import WorkspaceClient
+    from databricks.sdk.config import Config
 
-    return WorkspaceClient().api_client.do("POST", f"/serving-endpoints/{endpoint}/invocations", body=body)
+    t = max(1, int(http_timeout_s))
+    cfg = Config(http_timeout_seconds=t, retry_timeout_seconds=t)
+    return WorkspaceClient(config=cfg).api_client.do("POST", f"/serving-endpoints/{endpoint}/invocations", body=body)
 
 
 _invoke: Invoker = _sdk_invoke  # tests replace this
-_pool = ThreadPoolExecutor(max_workers=4)
+_pool = ThreadPoolExecutor(max_workers=4)  # /api/parse and /api/read-note; translation has its own
 
 
 class ModelUnavailable(Exception):
     """No endpoint configured, the call failed or timed out, or the reply was not the expected JSON."""
 
 
-def call_model(env: str, body: dict[str, Any], timeout_s: float) -> dict[str, Any]:
+def call_model(env: str, body: dict[str, Any], timeout_s: float,
+               pool: ThreadPoolExecutor | None = None) -> dict[str, Any]:
     endpoint = os.environ.get(env)
     if not endpoint:
         raise ModelUnavailable(f"{env} is not set on this server")
     try:
-        resp = _pool.submit(_invoke, endpoint, body).result(timeout=timeout_s)
+        fut = (pool or _pool).submit(_invoke, endpoint, body, timeout_s - HTTP_MARGIN_S)
+        resp = fut.result(timeout=timeout_s)
         content = resp["choices"][0]["message"]["content"]
         ans = json.loads(content) if isinstance(content, str) else content
     except FutureTimeout as e:
         raise ModelUnavailable("the model took too long") from e
     except Exception as e:  # any SDK, HTTP or parse error falls back to the tiles
+        if "timeout" in type(e).__name__.lower():  # the HTTP timeout (requests or the SDK's retry loop)
+            raise ModelUnavailable("the model took too long") from e
         raise ModelUnavailable(f"the model call failed ({type(e).__name__})") from e
     if not isinstance(ans, dict):
         raise ModelUnavailable("the model reply was not a JSON object")

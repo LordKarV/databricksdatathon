@@ -58,6 +58,24 @@ MID = {k: v["mid"] for k, v in KNOBS.items()}
 SMOOTH = 2  # pseudo-count pulling a small DEV cell towards its pooled rate
 RISKS = re.compile(r"location|collision|elsewhere")  # model/gold/v3/build_sample_v3.py "suspect" rule
 FAR_KM = 50
+# S3 map points (#103): P(the map point is wrong) by what the cleaning did to it (derived/v1/facility_location).
+# Unclear verdicts count as wrong, as in the lead's 6/30 (#103).
+S3_LOC_WRONG = {
+    # loc_src is not listing_coordinates: the cleaning replaced the listed point (1,171 records, each > 25 km from its
+    # raw point). validation/location/judgments/moved_30.csv (checks.json moved_sample_30): right 24, wrong 1,
+    # unclear 5 of 30.
+    "moved": 6 / 30,
+    # listing coordinates kept, loc_conf low or disputed (580 records). audit/geo/hand_check_verdicts.csv rows of this
+    # class: coords_ok no 3, unclear 3, yes 2 of 8 (3 of 5 decided, the audit's own convention).
+    "low_or_disputed": 6 / 8,
+    # every other point (loc_conf high or medium, listing coordinates kept): the S2 rate, the listed point is right.
+    "other": 0.0,
+}
+# Assumption: a wrong point's truth lies this far from the listed point, on a random bearing (never the rejected raw
+# point). The moved check measured no distance (its wrong rows confuse two towns); any value above execute.py's
+# NOT_THERE_KM (2 km) gives the same events, the value only shows on the replay map.
+S3_WRONG_KM = 25.0
+KM_PER_DEG = 111.2
 TRUTH_COLS = ["unique_id", "service", "exists", "offers", "phone_ok", "open_now_p", "accept_p", "true_lat",
               "true_lon"]
 
@@ -80,22 +98,22 @@ def window_min(service: str) -> int:
 
 @lru_cache(maxsize=1)
 def facilities() -> pd.DataFrame:
-    """One row per facility scored by derived/v2 (the app's eligible set): listed point, alternative point, state,
-    operator, whether a phone is listed, its location rule, and whether the map point is far from its PIN."""
+    """One row per facility scored by derived/v2 (the app's eligible set): listed point, state, operator, whether a
+    phone is listed, its location class (S3_LOC_WRONG keys), and whether the map point is far from its PIN."""
     ids = pd.read_parquet(V2 / "facility_service_scores.parquet", columns=["unique_id"]).drop_duplicates()
     loc = pd.read_parquet(V1 / "facility_location.parquet", columns=[
-        "unique_id", "state_final", "loc_lat", "loc_lon", "alt_lat", "alt_lon", "raw_coords_to_pin_km"])
+        "unique_id", "state_final", "loc_lat", "loc_lon", "loc_src", "loc_conf", "raw_coords_to_pin_km"])
     ph = pd.read_parquet(V1 / "record_trust.parquet", columns=["unique_id", "display_phones"])
-    ft = pd.read_parquet(V1 / "facility_trust.parquet", columns=["unique_id", "location_reason_codes"])
     op = pd.read_parquet(V2 / "facility_attributes.parquet", columns=["unique_id", "operator"])
     f = ids.merge(loc, on="unique_id", how="left").merge(ph, on="unique_id", how="left")
-    f = f.merge(ft, on="unique_id", how="left").merge(op, on="unique_id", how="left")
+    f = f.merge(op, on="unique_id", how="left")
     f["has_phone"] = [x is not None and len(x) > 0 for x in f.display_phones]
-    f["loc_rule"] = f.location_reason_codes.fillna("").str.extract(r"(LOC_[A-Z_]+)", expand=False).fillna("LOC_HIGH")
+    moved = f.loc_src.notna() & f.loc_src.ne("listing_coordinates")
+    f["loc_class"] = np.select([moved, f.loc_conf.isin(["low", "disputed"])], ["moved", "low_or_disputed"], "other")
     f["far"] = f.raw_coords_to_pin_km.fillna(0) > FAR_KM
     f["operator"] = f.operator.fillna("unknown")
     f = f.rename(columns={"state_final": "state", "loc_lat": "lat", "loc_lon": "lon"})
-    return f[["unique_id", "state", "lat", "lon", "alt_lat", "alt_lon", "operator", "has_phone", "loc_rule", "far"]]
+    return f[["unique_id", "state", "lat", "lon", "operator", "has_phone", "loc_class", "far"]]
 
 
 @cache
@@ -171,7 +189,7 @@ def s0_rates(bound: str = "high") -> pd.Series:
 
 @lru_cache(maxsize=1)
 def audit_q() -> dict[str, float]:
-    """q_ev per evidence rule from derived/v1/evidence_rules: LOC_* = P(map point right), EXISTS_DEFAULT."""
+    """q_ev per evidence rule from derived/v1/evidence_rules (EXISTS_DEFAULT is read here)."""
     e = pd.read_parquet(V1 / "evidence_rules.parquet", columns=["rule", "q_ev"])
     return dict(zip(e.rule, e.q_ev, strict=True))
 
@@ -190,7 +208,7 @@ def truth_table(scenario: str, seed: int, knobs: dict | None = None) -> pd.DataF
     out = []
     for i, service in enumerate(SERVICES):
         d = _pairs(service)
-        u = np.random.default_rng([seed, i]).random((4, len(d)))  # offers, exists, phone, map; shared by scenarios
+        u = np.random.default_rng([seed, i]).random((5, len(d)))  # offers, exists, phone, map, bearing
         gid = SERVICES[service]["v2"]
         if scenario.startswith("S0"):
             r0 = s0_rates(scenario.removeprefix("S0-"))
@@ -204,10 +222,11 @@ def truth_table(scenario: str, seed: int, knobs: dict | None = None) -> pd.DataF
             offers &= ~d.grade.eq("attributed_elsewhere").to_numpy()
         p_exist = d.p_exists.fillna(q["EXISTS_DEFAULT"]).to_numpy() if scenario == "S1" else q["EXISTS_DEFAULT"]
         lat, lon = d.lat.to_numpy(float), d.lon.to_numpy(float)
-        if scenario == "S3":  # map point wrong at the audit's rate for its rule; the truth is the alternative point
-            wrong = u[3] >= d.loc_rule.map(q).fillna(q["LOC_HIGH"]).to_numpy()
-            lat = np.where(wrong, d.alt_lat.to_numpy(float), lat)  # NaN when there is no alternative: not findable
-            lon = np.where(wrong, d.alt_lon.to_numpy(float), lon)
+        if scenario == "S3":  # map point wrong at S3_LOC_WRONG for its class; the truth is S3_WRONG_KM away
+            km = np.where(u[3] < d.loc_class.map(S3_LOC_WRONG).to_numpy(float), S3_WRONG_KM, 0.0)
+            bearing = 2 * np.pi * u[4]
+            lat, lon = (lat + km * np.cos(bearing) / KM_PER_DEG,
+                        lon + km * np.sin(bearing) / (KM_PER_DEG * np.cos(np.radians(lat))))
         out.append(pd.DataFrame({
             "unique_id": d.unique_id, "service": service, "exists": u[1] < p_exist, "offers": offers,
             "phone_ok": d.has_phone.to_numpy() & (u[2] < k["phone_ok"]), "open_now_p": float(k["open_now_p"]),

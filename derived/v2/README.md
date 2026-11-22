@@ -10,6 +10,9 @@ A_platt: the candidate A prior scorecard with one Platt step, a 0.5020, c 1.4983
 
 Contract check: `.venv-viz/bin/python validation/contracts_v2.py` (selftest: add `--selftest`).
 
+Dataset limitations that go with the model card (no_info rates, public ranking, phones, locations, hours) are in
+`model_card_limitations.md`, kept out of the JSON so the frozen model_version does not change.
+
 ## facility_service_scores.parquet
 
 358,092 rows, one per (unique_id, service_id): 9,947 facilities x 36 services. The 12 `exclude_review` records in

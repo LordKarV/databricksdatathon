@@ -1,7 +1,7 @@
 """The app against the derived/v2 contract (#63), with a small generated scores file until #11 publishes.
 
-Contract: derived/v2/facility_service_scores.parquet has unique_id, service_id (kb/taxonomy ids), band, p, lo, hi
-(and more columns the engine reads later). Skips when derived/v1 is not present.
+Contract: derived/v2/facility_service_scores.parquet has unique_id, service_id (kb/taxonomy ids), band, p, lo, hi,
+base and contributions (the ledger the Why page shows; logit(p) = base + sum(points) / (20 / ln 2)). Skips when derived/v1 is not present.
 """
 import sys
 from pathlib import Path
@@ -30,14 +30,15 @@ def built(tmp_path_factory):
     v1_to_tax = {v: k for k, v in build.TAXONOMY_TO_V1.items()}
     g = g[g.service.isin(v1_to_tax) & g.unique_id.isin(fidx)]
     fx = pd.DataFrame({"unique_id": g.unique_id, "service_id": g.service.map(v1_to_tax), "band": "CALL_FIRST",
-                       "p": 0.5, "lo": 0.3, "hi": 0.7})
+                       "p": 0.5, "lo": 0.3, "hi": 0.7, "p_location": 0.91, "p_exists": 0.88, "base": 0.0,
+                       "contributions": "[]"})  # logit(0.5) = 0
     fx = pd.concat([fx, fx.head(3).assign(service_id="snakebite")])  # a taxonomy service with no app tile
     path = tmp_path_factory.mktemp("v2") / "facility_service_scores.parquet"
     fx.to_parquet(path)
     old = build.V2
     build.V2 = path
     try:
-        out, _ = build.pairs(fidx)
+        out, _, _ = build.pairs(fidx)
     finally:
         build.V2 = old
     return out
@@ -84,6 +85,23 @@ def test_engine_track_record_three_outcomes_or_none():
 def test_v2_bands_map_to_the_app_bands(built):
     bands = {r[14][0] for rows in built.values() for r in rows if r[14]}
     assert bands == {"not_verified"} and all(r[14][4] == "CALL_FIRST" for rows in built.values() for r in rows)
+
+
+def test_model_p_location_and_p_exists_ride_with_each_pair(built):
+    # #121: the card's location and existence numbers are the model's P_L and P_E, not derived/v1 facility trust
+    assert all(r[14][5:7] == [0.91, 0.88] for rows in built.values() for r in rows)
+
+
+def test_band_rule_violations_counts_likely_pairs_below_the_card(tmp_path):
+    card = tmp_path / "model_card.json"
+    card.write_text('{"band_thresholds": {"likely": {"p": 0.3686, "p_location": 0.7, "p_exists": 0.7}}}')
+    m = pd.DataFrame({"m_band": ["LIKELY", "LIKELY", "LIKELY", "LIKELY", "CALL_FIRST"],
+                      "m_p": [0.8, 0.8, 0.3, 0.8, 0.1], "m_pl": [0.9, 0.34, 0.9, 0.9, 0.1],
+                      "m_pe": [0.9, 0.9, 0.9, 0.69, 0.1]})
+    assert build.band_rule_violations(m, card) == 3  # P_L 0.34, p below t_L, P_E 0.69; CALL_FIRST is not checked
+    with pytest.raises(SystemExit):
+        build.check_band_rule(m, card)
+    build.check_band_rule(m.iloc[[0, 4]], card)  # passes
 
 
 def test_unscored_pairs_are_dropped_and_low_coverage_fails():

@@ -54,7 +54,8 @@ alone:
 - **S2, "from our hand checks":** offer rates by service and by evidence stratum (strong, weak, suspect, not
   mentioned), from the web-checked DEV pairs. It does not use the model's scores.
 - **S3, "the data is as bad as the audit says":** S2, plus sentences attributed to another facility are false,
-  and map points are wrong at the audit's rate for their location rule (the true point is the alternative one).
+  and map points are wrong at the rate measured on the cleaned data (#103): 6 of 30 points the cleaning moved,
+  6 of 8 kept points marked low or disputed in the geo audit, none of the rest (the true point is 25 km away).
 
 S2 and S3 come from the same DEV labels the model's calibration step was fitted on, so they favour the app by
 construction; S0 does not.
@@ -66,6 +67,9 @@ construction; S0 does not.
 - **nearest_call_first:** the same, phoning each one first like the app, so we can tell the value of the ranking
   from the value of calling ahead;
 - **best_on_paper:** the 3 highest-scored listings in the state, ignoring distance.
+
+One more policy, **app_before_101**, appears only in the "Ranking fix" section near the end: the app with the
+emergency order it had before the simulation's first results.
 
 Method, assumptions and honesty rules: [`sim/README.md`](../sim/README.md). Issue #92.
 """)
@@ -203,6 +207,62 @@ with pd.option_context("display.width", 250, "display.max_columns", 20):
 print("\\nVerdict at the middle assumptions, and the swept levels where it changes (SIMULATED):")
 with pd.option_context("display.width", 250, "display.max_colwidth", 120):
     print(sweep_verdicts(res["sensitivity"]).to_string(index=False))
+''')
+
+md("""
+## Ranking fix found by the simulation
+
+**Simulated, not field results.** The first runs of this simulation caught a flaw in how the app ordered emergency
+options. For trauma it ranked by evidence discounted by travel time, p x exp(-minutes / 45), so a better documented
+hospital farther away could come first. In every scenario that order treated fewer simulated patients within the
+60-minute window than calling the nearest listings in turn (nearest_call_first): a "no" on the phone costs a few
+minutes, a wasted trip costs the window. PR #101 changed the emergency order to the nearest place that plausibly
+offers the care first (p only chooses among places within 5 minutes of the nearest one left, and never across the
+window), with "call first, and if they say no, call the next". Planned care such as dialysis keeps the old order:
+with a longer window, extra travel to a place with stronger evidence pays off, and its answers are unchanged.
+
+The cell reruns the same simulated patients with three policies: **app_before_101** (the same engine with the
+emergency order switched back, for that policy only), **app** (as shipped) and nearest_call_first, in every
+scenario, including S3 with the map-point rates recalibrated on the cleaned data (#112). Each app version minus
+nearest_call_first, in points of patients treated within the window, with the runner's 90% seed-bootstrap
+interval. Trauma is the emergency the change is about. Dialysis is the control: its order did not change, so its
+before and after columns must match. The "verdict after" column shows where the app still trails the nearest
+listings called ahead.
+""")
+
+code('''
+from sim.run import compare, verdict
+
+# Run size: at most 20 seeds x 200 cases per state and service, 2 services, 3 policies, no sweep. About 1 minute
+# on a laptop, a few minutes on serverless. The same seeds give the same simulated patients as the run above.
+RANK_SEEDS, RANK_CASES = min(SEEDS, 20), min(CASES, 200)
+RANK_SERVICES = ["trauma_emergency", "dialysis"]  # dialysis: control
+rank = simulate(SCENARIOS, list(range(RANK_SEEDS)), RANK_CASES, STATES, RANK_SERVICES, OUT / "rank_fix",
+                n_boot=500, sweep=False, run_id="rank_fix", verbose=False,
+                policies=["app_before_101", "app", "nearest_call_first"])
+
+
+def cell(r: pd.Series) -> str:
+    return f"{100 * r['diff']:+.1f} [{100 * r.diff_lo:+.1f}, {100 * r.diff_hi:+.1f}]"
+
+
+keys = ["service", "scenario"]
+before = compare(rank["outcomes"], "app_before_101", "nearest_call_first").set_index(keys)
+after = compare(rank["outcomes"], "app", "nearest_call_first").set_index(keys)
+fix = pd.DataFrame({
+    "before #101 (app_before_101)": before.apply(cell, axis=1),
+    "after #101 (app)": after.apply(cell, axis=1),
+    "verdict after": after.apply(lambda r: verdict(r.diff_lo, r.diff_hi), axis=1),
+})
+fix["label"] = "SIMULATED"
+fix = fix.reindex(pd.MultiIndex.from_product([RANK_SERVICES, SCENARIOS], names=keys))
+print(f"SIMULATED, not field results. {STATES}, {RANK_SEEDS} seeds x {RANK_CASES} cases per state and service, "
+      f"{rank['seconds']:.0f} s.")
+print("App minus nearest_call_first, treated in window (points; 60 min trauma, 120 min dialysis), "
+      "90% seed-bootstrap interval.")
+print("Dialysis is the control (order unchanged). S0-high and S0-low are simulated base-rate bounds: read together.")
+with pd.option_context("display.width", 250, "display.max_columns", 20):
+    print(fix.to_string())
 ''')
 
 md("""

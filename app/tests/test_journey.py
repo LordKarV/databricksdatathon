@@ -143,7 +143,7 @@ def test_phones_and_map_points_come_from_the_payload():
 def test_required_content_and_route_order():
     for name, lang, plan, card in cards():
         page, text = card["html"], card["text"]
-        for needed in (plan["as_of"], "Aadhaar", "PMJAY", "JSSK", 'id="read"', 'id="big"', "@media print",
+        for needed in (plan["as_of"], "Aadhaar", "Ayushman", "MCP", 'id="read"', 'id="big"', "@media print",
                        'aria-live="polite"', f'lang="{lang}"'):
             assert needed in page, (name, lang, needed)
         if lang == "en":

@@ -1,7 +1,9 @@
-# Referral Saathi app skeleton
+# Referral Saathi app
 
-FastAPI serving one plain HTML page, a service worker and stub JSON (issue #5). No model and no Databricks reads
-yet: every answer is invented sample data, labelled "(sample)" and `meta.stub = true`.
+FastAPI serving one plain HTML page and a service worker. Answers come from model v2 (`derived/v2`), built into
+`app/facts/out` at deploy time by `facts/build.py` and served by `facts/engine.py` (`meta.stub = false`). On
+Databricks the app also calls the serving endpoints (free text, note photo) and the SQL warehouse (call outcomes).
+The original stub contract (issue #5) survives only as a test fixture in `stub_data.py`.
 
 ## Run locally
 
@@ -19,7 +21,7 @@ Open http://127.0.0.1:8000/. Chrome DevTools > Sensors can fake a GPS point.
 | --- | --- |
 | `app.py` | FastAPI: `/`, shell files (allowlist), `/api/ping`, `POST /api/plan`, dev alias `GET /api/recommend` |
 | `main.py` | Entry point: uvicorn on `DATABRICKS_APP_PORT` (default 8000), access log off |
-| `stub_data.py` | Placeholder responses in the proposed contract shape; the lead replaces `recommend_stub` |
+| `stub_data.py` | The issue #5 stub contract, kept as a test fixture; real answers come from `facts/engine.py` |
 | `app.yaml` | Databricks Apps command: `python main.py` |
 | `static/index.html`, `app.js`, `app.css` | One page, hash routes, no framework |
 | `static/sw.js` | Network first; cached shell on network error or status >= 500; API never cached |
@@ -38,10 +40,18 @@ results (Quick depth), abstention (S3x), why / how / call-ahead (S4, S5, S6 on o
 ```
 
 `service` is one of `emergency_csection, nicu, trauma_emergency, burn_care, dialysis, mri, cardiac_surgery`;
-`source` is `gps | last_fix | pin | district | manual`; `depth` is `quick | compare | area`. The point goes in the
+`source` is `gps | last_fix | pin | district | place | manual`; `depth` is `quick | compare | area`. The point goes in the
 body because query strings can land in proxy logs we do not control. The server rounds lat/lon to 0.01 degree
 before use. Unknown keys, unknown fields and points outside India return 422.
 `GET /api/recommend?<same fields>` is a dev alias for curl checks; the page never calls it.
+
+`POST /api/place` with `{"q": "Bahraich"}` turns a typed place into a point for Change location (#121 bug 5): a
+6-digit PIN or a district from the PIN table in `facts.json.gz` (district centre = mean of its PIN centroids, the
+same rule as offline), or a town or post office name from `facts/out/places.json.gz` (`derived/v1`
+`place_gazetteer`, written by `facts/build.py`). No external geocoder. `"Name, State"` narrows to one state. It
+returns `{"matches": [{"lat", "lon", "label", "kind": "pin | district | town | post_office", "state"}]}`, at most
+six, one per state (town, else district centre, else post office), or 404 with `"matches": []`. Offline the page
+falls back to the saved pack (PINs and districts of saved states) and says so when nothing is saved.
 
 Response:
 
@@ -63,7 +73,8 @@ Response:
     "p_e": 0.97, "p_l": 0.95,   // MODEL: P(facility exists), P(map point is right); Compare depth (S10)
     "evidence": [{"claim_id", "field", "quote", "source_url",
                   "flags": [{"code", "text", "weak", "place", "km"}]}],   // #86: warnings shown next to the quote
-    "contributions": [{"label", "points"}],
+    "contributions": [{"label", "points"}],   // derived/v2 rows add "label_hi", "family", "quotes": [{"claim_id", "field", "quote"}]
+    "not_observed": [{"family", "label", "label_hi"}],   // families the model cannot see here: 0 points, one muted line
     "flags": ["plain-English warning", ...],
     "call_ahead": [{"question", "asked_because"}],
     "call_first": true,
@@ -76,16 +87,16 @@ Response:
                "reason_code", "reason", "basis": [{"code", "field", "value"}]}],          // #86
   "what_would_change": null | {"kind": "confirm_nearer | first_says_no", "facility_id", "name",
                                "first_name", "minutes_vs_first"},
+  "first_is_nearest": true,                                                             // #121
   "time_window": {"window_min", "first_outside"},
   "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
-  "meta": {"stub": true, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
+  "meta": {"stub": false, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
 }
 ```
 
-### `POST /api/area` (Area depth, S11/S12; stub until #11)
+### `POST /api/area` (Area depth, S11/S12)
 
-Body `{service, lat, lon}` (0.01 deg). Every number below is MODEL-supplied (area_metrics and ten-call lists, tier 3);
-the stub returns invented sample values.
+Body `{service, lat, lon}` (0.01 deg). Every number below comes from model v2 through `facts/engine.py` `area()`.
 
 ```
 {
@@ -110,6 +121,12 @@ the stub returns invented sample values.
 The page reads only these fields. `travel` is one row of `geo/travel.py` (#7, PR #13) passed through unchanged;
 the stub calls `geo.travel.estimate` (measured factor and percentile range, no OSRM call) and falls back to
 straight-line x 1.35 only if `geo/` is not importable.
+
+`area.district` is the district the nearest PIN point lies in (#121, validation C4). `facts/build.py` takes it
+from the LGD office join in `data/external/lgd_district_polygons/pin_lgd_district.parquet` and writes
+`app/facts/out/pin_districts.json` (outside `facts.json` and its hash). That file is git-ignored local data, not
+part of `derived/v1`: **a fresh clone, or a rebuild without it, falls back to the old answer**, the district each
+PIN is filed under. Then (25.6, 85.95) reads Darbhanga instead of Begusarai, and the build log says so.
 
 ## Not done here
 
@@ -200,7 +217,11 @@ now a test fixture only).
   - p, lo and hi are `data_point_scores` score / score_lo / score_hi. The contributions split that stored score
     in log-odds x 10 (evidence rule, then sources, then the second-source check), so the total maps back to p.
   - When `derived/v2/facility_service_scores.parquet` exists, `build.py` exports its band / p / lo / hi and
-    `score()` uses them; nothing else changes.
+    `score()` uses them. The contributions are then the model's own ledger: base plus each non-zero term, with
+    plain English and Hindi words from `facts/ledger_terms.py`, in tenths of a point on the same 10-per-logit scale,
+    rounded by largest remainder so they sum to 10 x logit(p) to the tenth. A term's quotes are the claims it cites
+    that are also app claims (v1 claim id, same sentence); specialty items, list ids and website pages are not
+    quoted.
 - **Evidence:** verbatim `claims.text` with claim ids, at most 3. Sentences with a non-offer cue or attributed
   to another facility are left out; the latter are shown as "Ignored: ..." flags.
 - **Flags and checks:** flags come from `record_trust.trust_reasons` (already plain English) and the grade's
@@ -258,8 +279,15 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
             vs_direct: {text, what_would_change|null, direct_p_objective, plan_p_objective,
                         direct_p_first_care, plan_p_first_care}|null}],
    stop_1_note: text|null,   (why route 1's first stop is not the options list's first choice)
+   fallback: {ask, text}|absent,   (emergency, route stop 1 not option 1 and not led: see below)
    meta: {origin_state, terrain, plans_considered}}
   ```
+- **One answer above the fold (#121, #126).** In an emergency whose route starts elsewhere than option 1,
+  `itinerary.lead_with_route` rebuilds the options with the route's first stop as option 1 when that stop
+  is within the time window or no farther than option 1. The card says why (`route_reason`), the former
+  first says what it lacks, and `stop_1_note` is dropped. Otherwise a far hospital never displaces a near
+  first call. Option 1 keeps "Call first" with `fallback.ask`, `fallback.text` frames the route ("If they
+  cannot treat: ..."), and the route card moves below the options.
 - **Results screen.** A "Suggested route" card shows route 1 as numbered stops. Stages at the same hospital
   (dialysis: assessment, fistula, sessions) nest under it. The other routes sit in expandable sections.
 - **Slip.** The slip and the WhatsApp text list route 1's stops, with phone and arrival range.
@@ -312,6 +340,52 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   The calls use the Databricks SDK pre-installed on Apps. Without the env vars, the lexicon and danger paths still
   work and the model paths say "not available".
 - **Tests.** `app/tests/test_inputs.py` mocks the endpoints.
+
+## Hindi translation of facility quotes (`POST /api/translate`)
+
+Quotes stay verbatim, mostly in English. Each evidence quote on the option cards, the why page and route stops gets
+a "हिंदी में पढ़ें" button (`static/translate.js`, loaded only on screens with quotes). Rules from SAFETY.md 14:
+
+- Quotes only. Instructions, numbers, bands and the call-ahead text stay template-based.
+- The original stays on top. The translation is added under it with the label "मशीन अनुवाद। मूल अंग्रेज़ी ऊपर है
+  और वही सबूत है।" / "Machine translation. The original English above is the evidence.", in an `aria-live`
+  region, with read aloud (label first) through `speech.js`.
+- The body is `{claim_id}` only (extra fields are a 422). The server reads the quote from the engine's claims, which
+  also hold the planner's route quotes; an unknown id is a 404.
+- Names, numbers and terms never reach the model as words. `inputs/translate.py` replaces each protected span
+  with a placeholder (`⟦1⟧`, `⟦2⟧`, ...) and puts the span back after the reply. Protected: digit runs with
+  adjacent units or months (`5,000`, `24x7`, `1.5 Tesla`, `31 October 2023`), Title Case runs of 2+ words
+  (`Sheikh Bhikhari Medical College`), acronyms (`CABG`, `T2*`), capitalised words not opening a sentence, and the
+  facility's own name and city. The facility's name and city, then Title Case names ending in Hospital, Centre,
+  Clinic, Medical College, Nursing Home, Institute or Trust ("Burns Hospital", "Trauma Centre") are matched before
+  the clinical terms below. The model (`SERVING_ENDPOINT_TEXT` through `understand.call_model`, temperature 0, one
+  worked example, 8 s) is told to copy each placeholder. The guard shows the result only when every
+  placeholder comes back exactly once, no digit is added, the rest is mostly Devanagari, no word mixes scripts, and
+  it is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
+- Clinical terms come back in fixed Hindi, not the model's choice: `inputs/medical_terms.json` maps each term
+  (caesarean section, burn-trained, dialysis, 24x7, cath lab, beds, ...) to one Devanagari rendering that follows
+  `kb/taxonomy/HINDI_GLOSSARY.md` and the service labels (from PR #104); acronyms stay in Latin script. Terms are
+  masked like names (case-insensitive, whole words, longest first) and restored to that rendering.
+- A masked quote over 300 characters goes out in sentence or list-item chunks, at most 4, side by side within the
+  same 8 s; more chunks than that is "too long to translate", with no model call.
+- Translation has its own 8-thread pool, so a slow endpoint never queues `/api/parse` or `/api/read-note`. Every
+  model call (parse, note and translation) has an HTTP timeout 1 s under its budget, with the SDK's retries capped
+  at the same time, so a hung request frees its thread.
+- The reply carries `parts`: pieces copied from the quote (names, numbers) and fixed term renderings are shown with
+  the quote's `data-f` path (`data-k="part"` / `"term"`), and `test_faithfulness.py` taps translate and checks every
+  number shown is one of the quote's.
+- In-memory LRU cache (5,000) by claim id, endpoint and prompt version. Rate limit per app instance: 30 model calls
+  a minute per reporter key, else per signed-in user (`X-Forwarded-User`, kept in memory only), else 60 a minute in
+  one shared bucket. Quote and translation are never logged.
+- After a timeout or the rate limit the button stays tappable and the server's message is shown (neither is
+  cached). Offline, without the endpoint or after a guard failure it reads "अनुवाद अभी उपलब्ध नहीं / Translation not
+  available right now".
+- Live check (Llama 3.3 70B, 20 real quotes, all 7 services): 19 of 20 passed; the other had one word in two
+  scripts ("सocio-आर्थिक") and was rejected. The first, guard-only version passed 9 of 20. The guard still cannot
+  catch a reordered sentence: "teaching hospital ... Hazaribagh with ICU, NICU and PICU" came back listing
+  Hazaribagh among the units. The label and the original above are the safeguard.
+- Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim),
+  `tests/test_faithfulness.py::test_translated_quote_shows_only_the_quotes_numbers`.
 
 ## Voice: Hindi and English, speech to text and read aloud
 
@@ -428,6 +502,16 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   - The plan is rebuilt from the adjusted scores (`Engine.plan(..., scores)`): the ranking, why_first_text,
     why_not, the abstention, say_to_family, the call-ahead questions, the family card and its read-aloud all use
     the adjusted p and band. p_lo and p_hi move by the same logit shift, not by the posterior's own interval.
+- **Tie-break from health-worker reports** (#86; `engine.tied_prefix`, `field._tie_row`).
+  - Only after the Field reports term, only for profiles outside `NEAREST_FIRST` (urgent NICU, scheduled
+    dialysis, planned MRI and heart surgery; never the emergency order).
+  - Tied: the leading options (at most 3) are in the same band, their shown p differ by at most 0.05 and their
+    travel by at most 10 min, for every pair. Only those are reordered; nothing else moves.
+  - Value per option: `field.net`, the term's own recency-weighted counts (accepted + phone yes at half weight -
+    "does not offer"; temporary reasons never count), from the same cached aggregates. Fewer than 2 reporters
+    count 0. Equal values keep the evidence-and-time order.
+  - Shown only on the why page of the tied options, as the row "Tie broken by: health-worker reports" (with
+    "(simulated for the demo)" for demo reports), payload `tie_break`. Cards keep only the field line.
 - **Never waits on the warehouse.** `/api/plan` and `/api/recommend` call
   `field.apply_field(plan, field.aggregates(wait=False), now, eng)`. One `GROUP BY` query is cached for 60 s and
   refreshed in a background thread, because a stopped warehouse can take 30 s to answer. The first answer after
@@ -490,6 +574,8 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   `basis` names the field behind each clause. The tests check it against the engine and the payload.
   - `what_would_change`: the nearer Not verified listing that a "yes" on the phone would move to first place. It is
     re-ranked with the confirmed-pair score. Otherwise: "if option 1 cannot take the patient, call option 2".
+  - `first_is_nearest`: no listing in reach is nearer than option 1. The section then says "The first choice is
+    already the nearest listing that offers it", so the rows below read as farther places, not nearer ones.
   - `time_window.first_outside`: when option 1 misses the window (60 min for emergencies), the answer's first line
     says so ("The best-evidenced option is about 104 min away; that misses the 60-min window for this care"). It
     shows 108 (and 102 for mothers and newborns) and `public_option`: the nearest hospital the public standard

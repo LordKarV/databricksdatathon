@@ -1,21 +1,106 @@
 // Referral Saathi skeleton (issue #5). Plain JS, no framework, hash routes:
 //   #/ home (S1)  #/gps (S1a)  #/change (S1b)  #/plan (S3 / S3x)  #/why/<rank> (S4 + S5 + S6)
 'use strict';
+// New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
+// {label} is the service label (data-f). The screen shows 'en' until that setting lands.
+const STR121 = {
+  first_is_nearest: {en: 'The first choice is already the nearest listing that offers {label}.',
+    hi: '\u092a\u0939\u0932\u093e \u0935\u093f\u0915\u0932\u094d\u092a \u092a\u0939\u0932\u0947 \u0938\u0947 \u0939\u0940 {label} \u0935\u093e\u0932\u0940 \u0938\u092c\u0938\u0947 \u092a\u093e\u0938 \u0915\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0939\u0948\u0964'},
+  rows_farther: {en: 'The places below are farther away.', hi: '\u0928\u0940\u091a\u0947 \u0926\u0940 \u0917\u0908 \u091c\u0917\u0939\u0947\u0902 \u0907\u0938\u0938\u0947 \u0926\u0942\u0930 \u0939\u0948\u0902\u0964'},
+};
+
+// Change location strings (#121 bug 5): one map per language, so they move into the strings files of the coming
+// app-wide language setting. The screen shows 'en' until then. The Hindi is a draft for native review (#10).
+const PLACE_STRINGS = {
+  en: {
+    label: "PIN, district, town or post office, or 'lat, lon'",
+    help: 'With internet: any PIN, district, town or post office name in India. Add the state if many places share ' +
+      'the name, for example Rampur, Bihar. Without internet: a PIN or district of a state saved on this phone. ' +
+      'Coordinates always work, for example 26.59, 85.48.',
+    gpsBlocked: 'GPS is blocked for this site. Type a PIN, district, town or post office instead.',
+    gpsBlockedHint: 'GPS is blocked for this site. Type where the patient is: a PIN, district, town or post office ' +
+      'name. Coordinates work too.',
+    typePlace: 'Type a place',
+    tryGps: 'Try GPS again',
+    typedPlace: 'typed place',
+    choose: n => `${n} places have this name. Choose one:`,
+    empty: 'Type a PIN, a district, town or post office name, or coordinates as "lat, lon".',
+    pinMissing: v => `PIN ${v} is not in our PIN list. Check the number, or type the district or town name.`,
+    nameMissing: v => `No PIN, district, town or post office called "${v}" in our data. Check the spelling, try ` +
+      'the district name, or type coordinates as "lat, lon".',
+    noNet: 'No internet',
+    noAnswer: 'The place search is not answering',
+    notSaved: (why, v, st) => `${why}, and "${v}" is not in the data saved on this phone (${st}). Without ` +
+      'internet, type a PIN or district of a saved state, or coordinates as "lat, lon", for example 26.59, 85.48.',
+    nothingSaved: why => `${why}, and no place data is saved on this phone yet. Type coordinates as "lat, lon", ` +
+      'for example 26.59, 85.48, or use GPS. After one answer with internet, PINs and districts of that state ' +
+      'work offline.',
+  },
+  hi: {
+    label: "पिन कोड, ज़िला, कस्बा या डाकघर, या 'lat, lon'",
+    help: 'इंटरनेट के साथ: भारत का कोई भी पिन कोड, ज़िला, कस्बा या डाकघर का नाम। अगर कई जगहों का एक ही नाम है ' +
+      'तो राज्य भी लिखें, जैसे Rampur, Bihar। इंटरनेट के बिना: इस फ़ोन पर सेव किए गए राज्य का पिन कोड या ज़िला। ' +
+      'अक्षांश-देशांतर हमेशा काम करते हैं, जैसे 26.59, 85.48।',
+    gpsBlocked: 'इस साइट के लिए GPS बंद है। इसकी जगह पिन कोड, ज़िला, कस्बा या डाकघर लिखें।',
+    gpsBlockedHint: 'इस साइट के लिए GPS बंद है। मरीज़ कहाँ है, लिखें: पिन कोड, ज़िला, कस्बा या डाकघर का नाम। ' +
+      'अक्षांश-देशांतर भी चलते हैं।',
+    typePlace: 'जगह लिखें',
+    tryGps: 'GPS फिर से आज़माएँ',
+    typedPlace: 'लिखी गई जगह',
+    choose: n => `${n} जगहों का यही नाम है। एक चुनें:`,
+    empty: 'पिन कोड, ज़िला, कस्बा या डाकघर का नाम, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    pinMissing: v => `पिन कोड ${v} हमारी सूची में नहीं है। नंबर जाँचें, या ज़िले या कस्बे का नाम लिखें।`,
+    nameMissing: v => `"${v}" नाम का कोई पिन कोड, ज़िला, कस्बा या डाकघर हमारे डेटा में नहीं है। वर्तनी जाँचें, ` +
+      'ज़िले का नाम लिखें, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    noNet: 'इंटरनेट नहीं है',
+    noAnswer: 'जगह की खोज जवाब नहीं दे रही',
+    notSaved: (why, v, st) => `${why}, और "${v}" इस फ़ोन पर सेव डेटा (${st}) में नहीं है। इंटरनेट के बिना, सेव ` +
+      'किए गए राज्य का पिन कोड या ज़िला लिखें, या अक्षांश-देशांतर "lat, lon", जैसे 26.59, 85.48।',
+    nothingSaved: why => `${why}, और इस फ़ोन पर अभी जगह का कोई डेटा सेव नहीं है। अक्षांश-देशांतर "lat, lon" ` +
+      'लिखें, जैसे 26.59, 85.48, या GPS चलाएँ। इंटरनेट के साथ एक जवाब के बाद उस राज्य के पिन कोड और ज़िले ' +
+      'बिना इंटरनेट भी चलेंगे।',
+  },
+};
+const PT = PLACE_STRINGS.en;
 
 const SERVICES = [
   // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
   {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
   {key: 'nicu', hi: '\u0928\u0935\u091c\u093e\u0924 ICU', en: 'Newborn ICU (NICU)', profile: 'urgent'},
-  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f / \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
-  {key: 'burn_care', hi: '\u091c\u0932\u0928\u093e', en: 'Burns', profile: 'emergency'},
+  {key: 'trauma_emergency', hi: '\u090f\u0915\u094d\u0938\u0940\u0921\u0947\u0902\u091f \u092f\u093e \u091a\u094b\u091f', en: 'Accident / injury', profile: 'emergency'},
+  {key: 'burn_care', hi: '\u091c\u0932\u0928\u0947 \u0915\u0940 \u091a\u094b\u091f', en: 'Burns', profile: 'emergency'},
   {key: 'dialysis', hi: '\u0921\u093e\u092f\u0932\u093f\u0938\u093f\u0938', en: 'Dialysis', profile: 'scheduled'},
   {key: 'mri', hi: 'MRI \u0938\u094d\u0915\u0948\u0928', en: 'MRI scan (planned)', profile: 'planned'},
-  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u093e \u0911\u092a\u0930\u0947\u0936\u0928', en: 'Heart surgery (planned)', profile: 'planned'},
+  {key: 'cardiac_surgery', hi: '\u0926\u093f\u0932 \u0915\u0940 \u0938\u0930\u094d\u091c\u0930\u0940', en: 'Heart surgery (planned)', profile: 'planned'},
   {key: 'other', hi: '\u0915\u0941\u091b \u0914\u0930 / \u092a\u0924\u093e \u0928\u0939\u0940\u0902', en: 'Other / not sure', profile: null},
 ];
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
   'Labour with bleeding or baby stuck', 'Chest pain', 'Burn on face or large area'];
 const BAND_ICON = {likely: '\u2714', not_verified: '?', unlikely: '\u2716'};
+// A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
+// Hindi per kb/taxonomy/HINDI_GLOSSARY.md; shown once the app-wide language setting lands.
+const NO_OPTION = {
+  en: {title: 'Search again to see this option',
+    body: 'Options stay only while this page is open. A reloaded page or a shared link does not carry them.',
+    button: 'Search again'},
+  hi: {title: '\u092f\u0939 \u0935\u093f\u0915\u0932\u094d\u092a \u0926\u0947\u0916\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f \u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902',
+    body: '\u0935\u093f\u0915\u0932\u094d\u092a \u0938\u093f\u0930\u094d\u092b\u093c \u0924\u092c \u0924\u0915 \u0930\u0939\u0924\u0947 \u0939\u0948\u0902 \u091c\u092c \u0924\u0915 \u092f\u0939 \u092a\u0947\u091c \u0916\u0941\u0932\u093e \u0939\u0948\u0964 \u092a\u0947\u091c \u0926\u094b\u092c\u093e\u0930\u093e \u0916\u094b\u0932\u0928\u0947 \u092f\u093e \u0936\u0947\u092f\u0930 \u0915\u093f\u090f \u0917\u090f \u0932\u093f\u0902\u0915 \u092e\u0947\u0902 \u0935\u0947 \u0928\u0939\u0940\u0902 \u0906\u0924\u0947\u0964',
+    button: '\u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902'},
+};
+// Number wording (#121), en and hi, ready for the app-wide language setting; these screens show 'en' today.
+// Hindi uses kb/taxonomy/HINDI_GLOSSARY.md terms (listing, confirmed).
+const NUM_TEXT = {
+  offers: {en: 'Offers', hi: '\u0938\u0947\u0935\u093e'},
+  score: {en: 'score', hi: '\u0938\u094d\u0915\u094b\u0930'},
+  similar: {en: 'similar listings confirmed', hi: '\u092e\u093f\u0932\u0924\u0940-\u091c\u0941\u0932\u0924\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u091c\u094b \u092a\u0915\u094d\u0915\u0940 \u0928\u093f\u0915\u0932\u0940\u0902'},
+  to: {en: 'to', hi: '\u0938\u0947'},
+  range: {en: 'range', hi: '\u0926\u093e\u092f\u0930\u093e'},
+  chance_any: {en: 'Chance at least one of these {k} checks out', hi: '\u0907\u0928 {k} \u092e\u0947\u0902 \u0938\u0947 \u0915\u092e \u0938\u0947 \u0915\u092e \u090f\u0915 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
+  chance_one: {en: 'Chance this listing checks out', hi: '\u0907\u0938 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
+  over99: {en: 'over 99%', hi: '99% \u0938\u0947 \u091c\u093c\u094d\u092f\u093e\u0926\u093e'},
+  under1: {en: 'under 1%', hi: '1% \u0938\u0947 \u0915\u092e'},
+};
+const NT = k => NUM_TEXT[k].en;
 
 const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: ''};
 
@@ -49,7 +134,7 @@ function renderBar() {
 function locLine(loc) {
   if (!loc) return 'No location yet.';
   const src = {gps: `GPS ${loc.accuracy_m ?? '?'} m`, last_fix: 'last GPS fix', manual: 'typed coordinates',
-    pin: 'PIN centre', district: 'district centre'}[loc.source] || loc.source;
+    pin: 'PIN centre', district: 'district centre', place: PT.typedPlace}[loc.source] || loc.source;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
@@ -57,10 +142,13 @@ function getGps(onDone) {
   navigator.geolocation.getCurrentPosition(p => {
     state.loc = {lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
       source: 'gps', t: Date.now(), label: null};
-    save('loc', state.loc);
+    save('loc', state.loc); state.gpsDenied = false;
     onDone(null);
-  }, e => onDone(e.code === 1 ? 'Location blocked for this site. Type a PIN or place instead.'
-    : 'Could not get GPS. Stand outside, or choose a place instead.'),
+  }, e => {
+    if (e.code === 1) state.gpsDenied = true;
+    onDone(e.code === 1 ? PT.gpsBlocked
+      : 'Could not get GPS. Stand outside, or choose a place instead.');
+  },
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
 
@@ -138,7 +226,11 @@ function home() {
     ? `<div class="where"><p><span aria-hidden="true">&#128205;</span> ${locLine(state.loc)}</p>
         <div class="row"><a class="btn" href="#/change">Change location</a>
         <button type="button" id="regps">Update GPS</button></div></div>`
-    : `<button type="button" class="btn btn-primary btn-block" id="gps">
+    : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
+      ? `<p class="small place-hint">${PT.gpsBlocked}</p>
+         <a class="btn btn-primary btn-block" href="#/change">${PT.typePlace}</a>
+         <button type="button" class="btn btn-block" id="gps"><span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>`
+      : `<button type="button" class="btn btn-primary btn-block" id="gps">
         <span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>
        <a class="btn btn-block" href="#/change">Choose a place instead</a>`;
   const boxes = DANGER_SIGNS.map((d, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
@@ -193,45 +285,104 @@ function gpsScreen() {
     <a class="btn btn-block" href="#/">Back</a>`;
 }
 function bindGps() {
-  getGps(err => { state.msg = err || ''; if (!err) announce('Location found.'); location.hash = '#/'; });
+  getGps(err => {
+    state.msg = err || '';
+    if (!err) announce('Location found.');
+    // GPS blocked: go straight to typing the place, which then comes first (#121 bug 5).
+    location.hash = state.gpsDenied && !state.loc ? '#/change' : '#/';
+  });
 }
 
+// Typed place (#121 bug 5): online the server resolves PINs, districts, towns and post offices (/api/place);
+// offline only the saved pack can, so PINs and districts of a saved state. Coordinates always work.
+const PLACE_SOURCE = {pin: 'pin', district: 'district', town: 'place', post_office: 'place'};
 function changeScreen() {
+  const gpsBtn = `<button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> ${
+    state.gpsDenied ? PT.tryGps : 'Back to my GPS location'}</button>`;
   return `<h1 tabindex="-1">Change location</h1>
-    <button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> Back to my GPS location</button>
+    ${state.gpsDenied ? `<p class="card place-hint">${PT.gpsBlockedHint}</p>` : gpsBtn}
     <form id="place-form" novalidate>
-      <label for="place">PIN, village, town, district, or 'lat, lon'</label>
-      <input id="place" type="text" inputmode="text" autocomplete="off" aria-describedby="place-help place-err">
-      <p id="place-help" class="small muted">PIN works from the data saved on this phone. Or type coordinates, for example 26.59, 85.48.</p>
+      <label for="place">${PT.label}</label>
+      <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
+      <p id="place-help" class="small muted">${PT.help}</p>
       <p id="place-err" role="alert"></p>
+      <div id="place-choices"></div>
       <button type="submit" class="btn btn-primary btn-block">Use this place</button>
     </form>
     <div id="district-pick"></div>
+    ${state.gpsDenied ? gpsBtn : ''}
     <a class="btn btn-block" href="#/">Cancel</a>`;
+}
+function usePlace(hit, source) {
+  state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
+  save('loc', state.loc); state.msg = ''; location.hash = '#/';
+}
+function placeErr(text) {
+  $('#place-err').textContent = text;
+  $('#place').setAttribute('aria-invalid', 'true');
+  $('#place').focus();
+}
+// {matches} from the server ([] when it knows no such place), or null when it cannot answer (offline, signed out).
+async function serverPlace(q) {
+  if (!navigator.onLine) return null;
+  try {
+    const r = await fetch('/api/place', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({q}), redirect: 'manual'});
+    const j = r.ok || r.status === 404 ? await r.json() : null;
+    return j && Array.isArray(j.matches) ? j : null;
+  } catch { return null; }
+}
+function placeChoices(matches) {
+  $('#place-choices').innerHTML = `<div role="group" aria-labelledby="place-choices-h" class="place-choices">
+    <p id="place-choices-h">${PT.choose(matches.length)}</p>
+    ${matches.map((m, i) => `<button type="button" class="btn btn-block" data-place="${i}">${esc(m.label)}</button>`).join('')}
+    </div>`;
+  $('#place-choices').querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
+    const m = matches[+b.dataset.place];
+    usePlace(m, PLACE_SOURCE[m.kind] || 'place');
+  }));
+  $('#place-choices [data-place]').focus();
+}
+// Offline: a PIN, or a district name, from every saved pack.
+async function packHit(v) {
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    if (!pack) return {pack: null};
+    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
+      .replace(/ (district|dist|zila|zilla|jila)$/, '');
+    for (const p of pack.packs || [pack]) {
+      const d = p.districts.find(x => x && key(x) === key(v));
+      if (d) return {pack, hit: window.RSOffline.districtCentre(p, d), source: 'district'};
+    }
+    return {pack, hit: null};
+  } catch { return {pack: null}; }
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
   districtPicker();
-  $('#place-form').addEventListener('submit', e => {
+  $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = $('#place').value.trim();
+    $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
     const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
-      state.loc = {lat: +m[1], lon: +m[2], accuracy_m: null, source: 'manual', t: Date.now(), label: null};
-      save('loc', state.loc); state.msg = ''; location.hash = '#/'; return;
+      usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    if (/^\d{6}$/.test(v)) {
-      packPlace(p => p.pin(v)).then(ok => {
-        if (ok) return;
-        $('#place-err').textContent = 'PIN not found in the data saved on this phone. Type coordinates as "lat, lon".';
-        $('#place').setAttribute('aria-invalid', 'true');
-        $('#place').focus();
-      });
+    if (!v) { placeErr(PT.empty); return; }
+    const online = await serverPlace(v);
+    if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
+    if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
+    if (online) {
+      placeErr(/^\d{6}$/.test(v) ? PT.pinMissing(v) : PT.nameMissing(v));
       return;
     }
-    $('#place-err').textContent = 'Type a 6-digit PIN, or coordinates in India as "lat, lon", for example 26.59, 85.48.';
-    $('#place').setAttribute('aria-invalid', 'true');
-    $('#place').focus();
+    const {pack, hit, source} = await packHit(v);
+    if (hit) { usePlace(hit, source); return; }
+    const why = navigator.onLine ? PT.noAnswer : PT.noNet;
+    const saved = load('pack');
+    placeErr(pack ? PT.notSaved(why, v, saved ? saved.state : '') : PT.nothingSaved(why));
   });
 }
 
@@ -265,6 +416,16 @@ async function districtPicker() {
 // kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+// Model v2's p_lo / p_hi are the score bin's observed confirmed rate (derived/v2 field_descriptions), not an interval
+// around p, so they are shown apart from p as a percent, never in brackets next to it (#121). Interim scores keep a range.
+function similarHtml(o, P) {
+  const pc = x => String(Math.round(100 * x));
+  return o.range_kind === 'similar_scores'
+    ? `${NT('similar')}: ${F(P + '.p_lo', pc(o.p_lo), 'pct')} ${NT('to')} ${F(P + '.p_hi', pc(o.p_hi), 'pct')}%`
+    : `${NT('range')} ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} ${NT('to')} ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}`;
+}
+// A chance shown as a whole percent, capped: never "100%" or "1.00" from a product of model chances (#121).
+const capPct = x => (x > 0.99 ? NT('over99') : x < 0.01 ? NT('under1') : `${Math.round(100 * x)}%`);
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return 'Listings like this: not checked yet';
@@ -278,6 +439,23 @@ function trackHtml(tr, P) {
     `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
     `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
+// Sealed TEST record of the Likely band (#86, #66): every number and hash from meta.test_record, which app/facts/build.py
+// copies from model/gold/v3/test_eval/results.json. Hindi gloss is a draft until native-speaker review (#10).
+function testRecordHtml(tr) {
+  if (!tr) return '';
+  const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
+  return `<div class="test-record"><p class="small"><strong>Sealed test record</strong>
+    <span lang="hi">(\u0938\u0940\u0932\u092c\u0902\u0926 \u091c\u093e\u0901\u091a \u0915\u093e \u0928\u0924\u0940\u091c\u093e)</span>:
+    Likely: ${M('k')} of ${M('n')} confirmed (${M('pct')}%, interval ${M('lo_pct')} to ${M('hi_pct')}%) on a test set
+    sealed before the model was frozen; agent-labelled, not human-checked. Not shown to rank public facilities
+    (${M('public_n')} public test pairs with a verdict).</p>
+    <details class="small"><summary>Opening log and commitment hashes</summary>
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, opened ${M('opened')} UTC.
+      Results: ${M('source')}.</p>
+      <p>Model version <code>${M('model_version')}</code><br>Test predictions hash
+        <code>${M('predictions_sha256')}</code><br>Test labels hash <code>${M('labels_sha256')}</code></p>
+    </details></div>`;
+}
 function travelHtml(t, P) {
   return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
     `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
@@ -285,10 +463,27 @@ function travelHtml(t, P) {
 function bandHtml(o, P) {
   // derived/v2 sub-bands of "Not verified": the listing describes the service but nothing confirms it (CALL FIRST),
   // or the listing has no sentence about the service at all (NO SERVICE TEXT; its p is not shown as a chance)
-  const word = o.model_band === 'NO_SERVICE_TEXT' ? 'NO SERVICE TEXT: call to ask' :
-    o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  const path = o.model_band === 'NO_SERVICE_TEXT' ? `${P}.model_band` : `${P}.band`;
-  return `<span class="band band-${o.band}" data-f="${path}" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+  if (o.model_band === 'NO_SERVICE_TEXT') return noTextBandHtml(o, P, state.plan.query);
+  const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
+  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+}
+// NO SERVICE TEXT names the service (#118): "NO SERVICE TEXT" next to general emergency quotes read as a contradiction
+// on camera. The fixed words are the band (data-k band), the service label is the payload's own (query.service_label).
+const SL = 'query.service_label';
+function noTextBandHtml(o, P, q) {
+  return `<span class="band band-${o.band}"><span aria-hidden="true">${BAND_ICON[o.band]}</span>
+    <span><span data-f="${P}.model_band" data-k="band">No line about</span> ${F(SL + '.en', q.service_label.en)}: call to ask</span></span>
+    <span class="small" lang="hi">(${F(SL + '.hi', q.service_label.hi)} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902 \u0932\u093f\u0916\u093e, \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0915\u0947 \u092a\u0942\u091b\u0947\u0902)</span>`;
+}
+// Caption above the quotes of a NO SERVICE TEXT option: they are the listing's general lines, not about the service.
+// Trauma's are general emergency lines (v1 cites emergency sentences for it); other services get the plain form.
+function noTextCaptionHtml(o, q) {
+  if (o.model_band !== 'NO_SERVICE_TEXT' || !o.evidence.length) return '';
+  const en = F(SL + '.en', q.service_label.en), hi = F(SL + '.hi', q.service_label.hi);
+  const line = q.service === 'trauma_emergency'
+    ? `General emergency lines, not about ${en} <span lang="hi">(\u0907\u092e\u0930\u091c\u0947\u0902\u0938\u0940 \u0915\u0940 \u0906\u092e \u092c\u093e\u0924\u0947\u0902, ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902)</span>`
+    : `Lines from the listing, none about ${en} on its own <span lang="hi">(\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0940 \u092c\u093e\u0924\u0947\u0902, \u0907\u0928\u092e\u0947\u0902 ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0905\u0932\u0917 \u0938\u0947 \u0915\u0941\u091b \u0928\u0939\u0940\u0902)</span>`;
+  return `<p class="small quote-caption">${line}</p>`;
 }
 // Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
 function quoteFlagsHtml(e, P) {
@@ -298,9 +493,12 @@ function quoteFlagsHtml(e, P) {
       `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
   }).join('');
 }
+// A quote's claim id stays in the page (marked, for the evidence ledger and the faithfulness test) but is not printed:
+// "61731339:proc:3" means nothing to a family (#121).
+function claimHtml(path, id) { return `<span hidden>${F(path, id)}</span>`; }
 function quoteHtml(e, P) {
   return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>${quoteFlagsHtml(e, P)}`;
+    `${claimHtml(P + '.claim_id', e.claim_id)}${quoteFlagsHtml(e, P)}`;
 }
 // "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
 // engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
@@ -344,20 +542,29 @@ function whyNotHtml(p) {
     return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
       ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
   }).join('');
+  // #121: when option 1 is already the nearest, say so; the rows are then farther places, not nearer alternatives.
+  const [pre, post] = STR121.first_is_nearest.en.split('{label}');
+  const nearest = p.first_is_nearest && p.options.length
+    ? `<p class="why-not-nearest">${pre}${F('query.service_label.en', p.query.service_label.en)}${post}${
+      rows.length ? ' ' + STR121.rows_farther.en : ''}</p>` : '';
   return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
-    ${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    ${nearest}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
     <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {
   const P = `options.${i}`;
+  const fb = state.plan.itinerary && state.plan.itinerary.fallback;  // route only if card 1 cannot treat (#126)
   const q = o.evidence[0];
   return `<article class="card" aria-labelledby="opt-${o.rank}">
     ${o.call_first ? '<p class="call-first">Call first</p>' : ''}
     <p>${F(P + '.rank', o.rank, 'num')}. ${bandHtml(o, P)}</p>
     <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
+    ${o.route_reason ? `<p class="small">${F(P + '.route_reason', o.route_reason)}</p>` : ''}
+    ${i === 0 && fb ? `<p class="small"><strong>${F('itinerary.fallback.ask', fb.ask)}</strong></p>
+      <p class="small">${F('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
-    ${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
+    ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
@@ -370,9 +577,25 @@ function fieldHtml(o, P) {
   if (!f || !(f.lines.length || f.notes.length)) return '';
   const both = (x, Q) => `<p class="small">${F(Q + '.en', x.en)}<br><span lang="hi">${F(Q + '.hi', x.hi)}</span></p>`;
   return `<div class="field-reports${f.disagree ? ' disagree' : ''}"><p class="small"><strong>Field reports
-    <span lang="hi">(\u092b\u093c\u0940\u0932\u094d\u0921 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
+    <span lang="hi">(\u0938\u094d\u0935\u093e\u0938\u094d\u0925\u094d\u092f \u0915\u093e\u0930\u094d\u092f\u0915\u0930\u094d\u0924\u093e\u0913\u0902 \u0915\u0940 \u0930\u093f\u092a\u094b\u0930\u094d\u091f)</span></strong></p>
     ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
     ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
+}
+// Tie-break from health-worker reports (#86): one named row on the why page of each tied option; cards add nothing.
+function tieHtml(p, o) {
+  const t = p.tie_break, T = 'tie_break';
+  if (!t || !t.options.some(x => x.facility_id === o.facility_id)) return '';
+  const each = t.options.map((x, j) => {
+    const i = p.options.findIndex(y => y.facility_id === x.facility_id), Q = `${T}.options.${j}`;
+    return `${F(`options.${i}.rank`, p.options[i].rank, 'num')}. ${F(`options.${i}.name`, p.options[i].name)}: ` +
+      (x.net === null ? `fewer than ${F(T + '.min_reporters', t.min_reporters, 'num')} health workers, not counted`
+        : `${F(Q + '.net', x.net.toFixed(2), 'num')} from ${F(Q + '.n_reporters', x.n_reporters, 'num')} health workers`);
+  }).join('; ');
+  return `<table class="tie-break"><caption>Order among tied options</caption><tbody><tr>
+    <th scope="row">${F(T + '.label', t.label)}</th><td>After field reports these are in the same band, with chances
+    within ${F(T + '.p_within', t.p_within.toFixed(2), 'num')} and travel within ${F(T + '.minutes_within', t.minutes_within, 'num')} min,
+    so reports set their order: accepted, plus phone yes at half weight, minus "does not offer"; recent reports count
+    more. ${each}.</td></tr></tbody></table>`;
 }
 const RECENT = () => (load('recent') || []).filter(r => r && !r.reported && Date.now() - r.at < 7 * 864e5);
 // Lead's rule on #42: when the nearest verified option is far and nearer ones are not verified, say so up front.
@@ -419,7 +642,7 @@ function stopHtml(r, g, P) {
       ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
       <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
         ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-          <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
+          ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
           ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
           : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
       </details>
@@ -431,22 +654,69 @@ function stopHtml(r, g, P) {
   return `<li><p class="stop-name"><strong>${F(S0 + '.name', s0.name)}</strong></p>
     <p class="small">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}Arrive about
       ${F(S0 + '.eta_low', s0.eta_low, 'num')}-${F(S0 + '.eta_high', s0.eta_high, 'num')} min from the start.
-      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>` : 'No phone number in our data.'}</p>
+      ${ph ? `<a href="tel:${esc(ph)}">Call ${F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)}</a>`
+        : s0.phone && s0.phone.display ? `Phone: ${F(S0 + '.phone.display', s0.phone.display)}` : 'No phone number in our data.'}</p>
     <ul>${stages}</ul></li>`;
+}
+// Route strip (design/ui/DESIGN.md): the plan against the clock, drawn only when the plan has a time window.
+// One lane per stop group; each arrival is a capsule from eta_low to eta_high (the range, not a guessed minute);
+// the window is a rule at the first check's limit with the time past it hatched. Every number carries data-f.
+// The SVG has no viewBox: x is a percentage of the axis, y is px, so strokes and dashes never stretch.
+const STRIP_LANE = 72, STRIP_Y0 = 80, STRIP_DRAW_MS = 700;
+function stripHtml(r, P) {
+  const c = r.window_checks[0];
+  if (!c) return '';
+  const C = `${P}.window_checks.0`;
+  const lanes = stopGroups(r.stops).map(g => ({s: r.stops[g.ks[0]], S: `${P}.stops.${g.ks[0]}`}));
+  const span = 1.08 * Math.max(c.limit_minutes, ...lanes.map(l => l.s.eta_high));
+  const x = m => +(100 * m / span).toFixed(2);
+  const y = k => STRIP_Y0 + k * STRIP_LANE;
+  let at = 0;  // the line only moves forward in time, even if a later stop's range starts earlier
+  const xs = lanes.map(l => (at = Math.max(at, x(l.s.eta_low))));
+  // Segments in drawing order: along lane k-1 to the next arrival, then down to lane k. Lengths are estimated
+  // for a 300 px axis so the whole line takes STRIP_DRAW_MS.
+  const segs = [[0, y(0), xs[0], y(0)]];
+  xs.slice(1).forEach((xk, k) => segs.push([xs[k], y(k), xk, y(k)], [xk, y(k), xk, y(k + 1)]));
+  const len = segs.map(([x1, y1, x2, y2]) => Math.abs(x2 - x1) * 3 + Math.abs(y2 - y1) + 1);
+  const total = len.reduce((a, b) => a + b, 0);
+  let t = 0;
+  const line = segs.map(([x1, y1, x2, y2], i) => {
+    const ms = Math.round(STRIP_DRAW_MS * len[i] / total), style = `animation-duration:${ms}ms;animation-delay:${t}ms`;
+    t += ms;
+    return `<line class="strip-path" x1="${x1}%" y1="${y1}" x2="${x2}%" y2="${y2}" pathLength="1" style="${style}"/>`;
+  }).join('');
+  const wx = x(c.limit_minutes);
+  const win = wx < 60 ? `left:calc(${wx}% + 6px)` : `right:calc(${(100 - wx).toFixed(2)}% + 6px)`;
+  const marks = lanes.map((l, k) => {
+    // the label sits above its lane, on the far side of the drop that arrives there
+    const pos = xs[k] <= 55 ? `left:calc(${xs[k]}% + 18px)` : `right:calc(${(100 - xs[k]).toFixed(2)}% + 18px);text-align:right`;
+    const delay = `animation-delay:${STRIP_DRAW_MS * len.slice(0, 2 * k + 1).reduce((a, b) => a + b, 0) / total | 0}ms`;
+    return `<span class="strip-stop" aria-hidden="true" style="left:${xs[k]}%;top:${y(k)}px;${delay}">${k + 1}</span>
+      <span class="strip-lab" style="${pos};top:${y(k) - 52}px"><b>${F(l.S + '.eta_low', l.s.eta_low, 'num')}-${F(l.S + '.eta_high', l.s.eta_high, 'num')} min</b>
+      ${F(l.S + '.purpose_word', l.s.purpose_word)}</span>`;
+  }).join('');
+  return `<div class="strip" role="img" aria-label="The route drawn against the clock. The stops and times are listed below."
+      style="height:${y(lanes.length - 1) + 48}px">
+    <div class="strip-late" style="left:${wx}%"></div>
+    <span class="strip-win" style="${win}">Window ${F(C + '.limit_minutes', c.limit_minutes, 'num')} min</span>
+    <svg aria-hidden="true">${lanes.map((l, k) => `<line class="strip-eta" x1="${x(l.s.eta_low)}%" x2="${x(l.s.eta_high)}%"
+      y1="${y(k)}" y2="${y(k)}"/>`).join('')}${line}</svg>
+    <span class="strip-origin" style="left:0;top:${y(0)}px"></span>${marks}
+    <div class="strip-axis"><span>Start</span><span>minutes from the start</span></div></div>`;
 }
 function routePlanHtml(r, P) {
   const t = r.totals, v = r.vs_direct;
-  return `<p>${F(P + '.type_word', r.type_word)}.</p>
+  return `<p>${F(P + '.type_word', r.type_word)}.</p>${stripHtml(r, P)}
     <ol class="stops">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>Definitive care in about ${F(P + '.totals.minutes_to_definitive', t.minutes_to_definitive, 'num')} min
       (${F(P + '.totals.low', t.low, 'num')}-${F(P + '.totals.high', t.high, 'num')}).
       Chance of first care in time: ${F(P + '.totals.p_first_care', t.p_first_care.toFixed(2), 'num')}.
       Chance of being treated: ${F(P + '.totals.p_treated', t.p_treated.toFixed(2), 'num')}.</p>` : ''}
-    ${r.window_checks.map((c, j) => `<p class="small">${F(`${P}.window_checks.${j}.check`, c.check)} within
+    ${r.window_checks.map((c, j) => `<p class="small check-${c.met ? 'met' : 'miss'}">${F(`${P}.window_checks.${j}.check`, c.check)} within
       ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
       <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
       (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small">${F(P + '.vs_direct.text', v.text)}
+    ${v ? `<p class="small vs-direct">${F(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
 }
 function routeHtml(p) {
@@ -484,17 +754,19 @@ function planScreen() {
   if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
   if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
   let body;
+  // When the route is only the fallback (#126), it goes below the options, not above the fold.
+  const fb = p.itinerary && p.itinerary.fallback, route = fb ? '' : routeHtml(p), after = fb ? routeHtml(p) : '';
   if (p.abstain) {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
-      ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
-      ${whyNotHtml(p)}
+      ${route}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${whyNotHtml(p)}${after}
       ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
+    body = route + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p) + after;
   }
   state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
   return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;
@@ -503,11 +775,11 @@ function planScreen() {
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
   ['Band', (o, P) => bandHtml(o, P)],
-  ['Offers (range)', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
+  [NT('offers'), (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}; ${similarHtml(o, P)}`],
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
   ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
-  ['Quote', (o, P) => o.evidence.length ? quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
+  ['Quote', (o, P) => o.evidence.length ? noTextCaptionHtml(o, state.plan.query) + quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
   ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
   ['Phone', (o, P) => !o.phone || !o.phone.e164 ? 'no number in our data'
     : o.phone.shared_listings > 1 ? `shared by ${F(P + '.phone.shared_listings', o.phone.shared_listings, 'num')} listings` : 'number on file, not shared'],
@@ -526,9 +798,10 @@ function compareHtml(p) {
   const P = i => `options.${i}`;
   const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
   const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', then ');
+  const which = opts.length > 1 ? NT('chance_any').replace('{k}', F('options', opts.length, 'count')) : NT('chance_one');
   const head = `<p>${state.patientHere ? 'Patient is at this location.' : 'Patient is elsewhere: distances are from this location.'}</p>
     <p>Plan: ${names}.</p>
-    <p>Chance at least one listing checks out: ${F('options', atLeast.toFixed(2), 'atleast')} (assumes they fail independently).</p>`;
+    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} (assumes they fail independently).</p>` : ''}`;
   const table = `<div class="compare-table"><table><caption>${F('query.service_label.en', p.query.service_label.en)}: options side by side</caption>
     <thead><tr><th scope="col">Row</th>${opts.map((o, i) => `<th scope="col">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
     <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${esc(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
@@ -555,7 +828,7 @@ function gapHtml(a) {
       PIN areas has a confirmed option within ${W} min.</p>` : ''}
     ${emergencyNumbers(a)}
     <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
-      ${G('district_confirmed')} of them rated Likely.</p>
+      ${G('district_confirmed')} of them rated Likely. The PIN areas below also count listings in other districts.</p>
     <ul class="gap">
       <li><strong>Covered:</strong> ${G('covered')} PIN areas have a Likely option within ${W} min.</li>
       <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
@@ -602,9 +875,8 @@ function areaHtml(a) {
     return r.first
       ? `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td>${F(R + '.first.name', r.first.name)}</td>
           <td>${r.backup ? F(R + '.backup.name', r.backup.name) : 'none'}</td>
-          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td>
-          <td>${F(R + '.call_first', r.call_first)}</td></tr>`
-      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
+          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td></tr>`
+      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="3"><span aria-hidden="true">&#9888;</span>
           No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
           ${r.nearest_km != null ? `nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km` : 'none with its own sentence in our data'}${r.public ? `.<br>Public hospital:
           ${F(R + '.public.name', r.public.name)} (${F(R + '.public.label', r.public.label)}),
@@ -625,21 +897,23 @@ function areaHtml(a) {
       ${F('area.summary.n_pins', S.n_pins, 'num')} PIN areas.</p>
     <p><strong>${F('area.summary.n_without_option', S.n_without_option, 'num')} of ${F('area.summary.n_pins', S.n_pins, 'num')}
       PIN areas: no option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min.</strong></p>
-    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the area</caption><tbody>
-      <tr><th scope="row">Access now</th><td class="num">${n('summary.access_now')}</td></tr>
+    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the sampled PIN areas,
+      counting listings in any district within ${F('area.area.window_min', a.area.window_min, 'num')} min</caption><tbody>
+      <tr><th scope="row">Access now: a Likely listing in reach</th><td class="num">${n('summary.access_now')}</td></tr>
       <tr><th scope="row">If calls confirm the listings</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
       <tr><th scope="row">Calls could close</th><td class="num">${n('summary.calls_could_close')}</td></tr>
       <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
     </tbody></table>
     <p>${F('area.caveat', a.caveat)}</p>
     ${gapHtml(a)}
-    <table><caption>Plan per PIN area</caption>
-      <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
-      <tbody>${rows}</tbody></table>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Plan per PIN area"><table><caption>Plan per PIN area</caption>
+      <thead><tr><th scope="col">PIN</th><th scope="col">First choice: call first</th><th scope="col">Backup</th><th scope="col">Minutes</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
     <h2 id="ten-calls">Calls that close the most of the gap</h2>
-    <table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
+    ${calls ? `<div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
       <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
-      <tbody>${calls}</tbody></table>
+      <tbody>${calls}</tbody></table></div>`
+      : '<p>No call would close a gap here: every sampled PIN area either has a Likely listing in reach already or has no listing with its own sentence about this care within the time window.</p>'}
     <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
       <button type="button" id="area-print">Print chart</button></div>
     ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;
@@ -698,16 +972,62 @@ async function bindPlan() {
   render();
 }
 
+// The option a #/why or #/slip link names, or null. An offline plan has no options list, so this never throws.
+function planOption(rank) {
+  const p = state.plan;
+  return p && !p.error && Array.isArray(p.options) ? p.options.find(x => x.rank === rank) || null : null;
+}
+function noOptionHtml() {
+  const t = NO_OPTION.en;
+  const back = svc(state.service) && state.loc ? '#/plan' : '#/';  // the saved answer, or the service tiles
+  return `<h1 tabindex="-1">${esc(t.title)}</h1><p>${esc(t.body)}</p>
+    <a class="btn btn-block" href="${back}">${esc(t.button)}</a>`;
+}
+// The model's witness ledger (derived/v2): one row per named term, in points (10 per unit of log-odds), summing to the
+// total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
+// see for this listing add nothing and share one muted line.
+const signed = n => (n > 0 ? '+' : '') + n.toFixed(1);
+function ledgerHtml(o, P, L) {
+  const total = o.contributions.reduce((a, c) => a + c.points, 0);
+  const rows = o.contributions.map((c, j) => {
+    const C = `${P}.contributions.${j}`;
+    const label = F(C + '.label', c.label);
+    const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
+    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
+      <td class="num">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+  }).join('');
+  const unseen = o.not_observed || [];
+  return `<table class="ledger"><caption>Points for "offers ${L}"</caption>
+      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', signed(total), 'sum')} &rarr;
+        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
+    </table>
+    ${unseen.length ? `<p class="small muted">Counts neither for nor against:
+      ${unseen.map((x, j) => F(`${P}.not_observed.${j}.label`, x.label)).join('; ')}.</p>` : ''}`;
+}
+// How sure for NO SERVICE TEXT (derived/v2/README): no line describes the service as its own unit, so it is never
+// Likely, but its score still comes from the ledger's other rows. The two rows that add most are named, so this line
+// and the ledger agree. Trauma's quotes are general emergency lines (noTextCaptionHtml), the reason it is a first stop.
+function noTextSureHtml(o, P, L, q) {
+  const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
+    .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
+    .map(([c, j]) => `${F(`${P}.contributions.${j}.label`, c.label)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+  const still = q.service === 'trauma_emergency' && o.evidence.length
+    ? 'It is still plausible for first care: its listing has general emergency lines (quoted above), and the model scores it'
+    : 'It is still plausible: the model scores it';
+  return `${F(P + '.band_word', o.band_word)}: no line in its listing describes ${L} as its own service, so it is not
+    rated Likely. ${still} ${F(P + '.p', o.p.toFixed(2), 'num')} from the rest of its record (How we decided,
+    below)${top.length ? `. Largest rows: ${top.join('; ')}` : ''}. Call to ask.`;
+}
 function whyScreen(rank) {
   const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
-  if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const o = planOption(rank);
+  if (!o) return noOptionHtml();
   const P = `options.${p.options.indexOf(o)}`;
   const label = p.query.service_label.en;
   const L = F('query.service_label.en', label);
-  const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const width = o.p_hi - o.p_lo;
-  const sign = n => (n > 0 ? '+' : '');
   const phone = o.phone && o.phone.e164
     ? `<a class="btn btn-primary btn-block" href="tel:${esc(o.phone.e164)}"><span aria-hidden="true">&#9742;</span> Call ${F(P + '.phone.display', o.phone.display)}</a>`
     : '<p class="card">No dialable number in our data for this listing.</p>';
@@ -718,7 +1038,7 @@ function whyScreen(rank) {
     <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
     <h2>From its own listing</h2>
-    ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
+    ${noTextCaptionHtml(o, p.query)}${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
       : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
     <h2>Check the website now</h2>
@@ -728,26 +1048,21 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
-    ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
-    : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
-      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
+    <h2>How sure</h2><p id="how-sure">${o.model_band === 'NO_SERVICE_TEXT'
+    ? noTextSureHtml(o, P, L, p.query)
+    : `${F(P + '.band_word', o.band_word)}, ${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}. ${similarHtml(o, P).replace(/^./, c => c.toUpperCase())}.`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
+    ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
     ${fieldHtml(o, P)}
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
+    ${tieHtml(p, o)}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
       (${F(P + '.travel.label', o.travel.label)}).</p>
     <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">Directions in Google Maps</a>
     <a class="btn btn-block" href="#/slip/${o.rank}">Make referral slip</a>
 
     <h2 id="how">How we decided</h2>
-    <table><caption>Points for "offers ${L}"</caption>
-      <thead><tr><th scope="col">What we weighed</th><th scope="col" class="num">Points</th></tr></thead>
-      <tbody>${o.contributions.map((c, j) => `<tr><td>${F(`${P}.contributions.${j}.label`, c.label)}</td>
-        <td class="num">${F(`${P}.contributions.${j}.points`, sign(c.points) + c.points, 'num')}</td></tr>`).join('')}</tbody>
-      <tfoot><tr><th scope="row">Total</th><td class="num">${F(P + '.contributions', sign(total) + total, 'sum')} &rarr;
-        ${F(P + '.p', o.p.toFixed(2), 'num')}</td></tr></tfoot>
-    </table>
+    ${ledgerHtml(o, P, L)}
     <p class="small muted">Model ${F('meta.model_hash', p.meta.model_hash)}. Facility id ${F(P + '.facility_id', o.facility_id)}.</p>
 
     <h2 id="call" tabindex="-1">Call ahead</h2>
@@ -806,7 +1121,7 @@ async function runVerify(o) {
 }
 function bindWhy() {
   const rank = parseInt(location.hash.split('/')[2], 10);
-  const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
+  const o = planOption(rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   loadScript('/community.js', 'RSCommunity').catch(() => {});  // the reason step; without it a "no" goes alone
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
@@ -816,7 +1131,7 @@ function bindWhy() {
     $('#reason-step').innerHTML = '';
     if (b.dataset.outcome === 'Said no' && o && window.RSCommunity) {
       RSCommunity.askReason($('#reason-step'), reason => queueOutcome(o, 'Said no', at, reason ? {reason} : {}), announce);
-      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092e\u0928\u093e \u0915\u093f\u092f\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
+      announce('Noted: Said no. Choose a reason or skip. \u0926\u0930\u094d\u091c \u0939\u0941\u0906: \u092b\u093c\u094b\u0928 \u092a\u0930 \u0928\u093e \u0915\u0939\u093e\u0964 \u0915\u093e\u0930\u0923 \u091a\u0941\u0928\u0947\u0902 \u092f\u093e \u091b\u094b\u0921\u093c\u0947\u0902\u0964');
       return;
     }
     const sent = o && queueOutcome(o, b.dataset.outcome, at);
@@ -859,9 +1174,8 @@ window.addEventListener('online', flushOutcomes);
 
 // ---------- referral slip (S8, #24): slip.js loads only on this route ----------
 function slipScreen(rank) {
-  const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
-  if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const o = planOption(rank);
+  if (!o) return noOptionHtml();
   const lang = state.slipLang || 'en';
   return `<a class="btn no-print" href="#/why/${rank}">&larr; Why this</a>
     <h1 tabindex="-1" class="no-print">Referral slip</h1>
@@ -879,7 +1193,7 @@ function slipScreen(rank) {
       <button type="button" id="slip-card">Send to family <span lang="hi">(\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u094b \u092d\u0947\u091c\u0947\u0902)</span></button>
     </div>
     <p class="small no-print">The family card is a file that opens on any phone without a login: places, phones and
-      what to bring, no patient details. <span lang="hi">\u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948: \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901, \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
+      what to bring, no patient details. <span lang="hi">\u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u090f\u0915 \u092b\u093c\u093e\u0907\u0932 \u0939\u0948 \u091c\u094b \u0915\u093f\u0938\u0940 \u092d\u0940 \u092b\u093c\u094b\u0928 \u092a\u0930 \u092c\u093f\u0928\u093e \u0932\u0949\u0917\u093f\u0928 \u0915\u0947 \u0916\u0941\u0932\u0924\u0940 \u0939\u0948\u0964 \u0907\u0938\u092e\u0947\u0902 \u091c\u0917\u0939, \u092b\u093c\u094b\u0928 \u0928\u0902\u092c\u0930 \u0914\u0930 \u0938\u093e\u0925 \u0915\u094d\u092f\u093e \u0932\u0947 \u091c\u093e\u090f\u0901 \u0932\u093f\u0916\u093e \u0939\u0948; \u092e\u0930\u0940\u091c\u093c \u0915\u0940 \u0915\u094b\u0908 \u091c\u093e\u0928\u0915\u093e\u0930\u0940 \u0928\u0939\u0940\u0902\u0964</span></p>`;
 }
 function loadSlipJs() {
   if (window.RSSlip) return Promise.resolve();
@@ -894,7 +1208,7 @@ function loadSlipJs() {
 async function bindSlip() {
   const rank = parseInt(location.hash.split('/')[2], 10);
   const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
+  const o = planOption(rank);
   if (!o) return;
   try { await loadSlipJs(); } catch { $('#slip-out').innerHTML = '<p role="alert">Could not load the slip. Check the connection.</p>'; return; }
   const backup = p.options.find(x => x.rank !== rank) || null;
@@ -920,7 +1234,7 @@ async function bindSlip() {
       const r = await RSSlip.shareJourney(p, lang, {rank});
       announce(msg(r === 'downloaded' ? 'cardSaved' : r === 'shared' ? 'cardShared' : 'cardCancelled'));
     } catch {
-      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
+      announce(msg('cardFailed') || 'Could not make the family card. Use the WhatsApp or SMS slip. \u092f\u093e\u0924\u094d\u0930\u093e \u0915\u093e\u0930\u094d\u0921 \u0928\u0939\u0940\u0902 \u092c\u0928 \u0938\u0915\u093e\u0964');
     }
   });
 }
@@ -1026,6 +1340,7 @@ function render() {
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
   bind();
   if ($('#speak')) RSInput.bindSpeak(state.speak);
+  if (state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
 }
 window.addEventListener('hashchange', () => {
   window.RSCommunity?.sendPending();  // a "no" left without a reason is sent as it is
@@ -1050,6 +1365,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const perm = await navigator.permissions?.query({name: 'geolocation'});
     if (perm && perm.state === 'granted' && (location.hash || '#/') === '#/') getGps(err => { if (!err) render(); });
+    // Blocked GPS puts typing the place first; unblocking it in site settings puts GPS back (#121 bug 5).
+    const onPerm = () => {
+      state.gpsDenied = perm.state === 'denied';
+      if (['', '#/', '#/change'].includes(location.hash)) render();
+    };
+    if (perm && perm.state === 'denied') onPerm();
+    if (perm) perm.onchange = onPerm;
   } catch { /* Permissions API missing: the GPS button stays */ }
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
 });

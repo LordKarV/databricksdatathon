@@ -4,6 +4,9 @@
   order. Without data, the offline state pack the phone saved (app/packs, read the way app/static/pack.js reads it).
   Field reports are OFF.
 - app_offline: the state pack only, as if the phone never had data.
+- app_before_101 (diagnostic, not in the minimum run): the app with the emergency order it had before PR #101,
+  p x exp(-minutes / 45) best first, kept so the notebook can show what that change did. It reads
+  ctx["app_before_101"], an AppAdapter(old_emergency_rank=True); planned care is ranked the same as by app.
 - app_plus_reports (future work, not in the minimum run): the same answers re-ranked with a Beta update from earlier
   field reports (sim/reports.py). Each facility-service starts at Beta(p k, (1 - p) k), k = Assumptions.report_k.
 
@@ -52,6 +55,18 @@ class AppOfflinePolicy:
         return offline_steps(case, ctx["app"])
 
 
+class AppBefore101Policy:
+    name = "app_before_101"
+
+    def choose(self, case: Case, ctx: dict[str, Any]) -> list[Step]:
+        return AppPolicy().choose(case, {"app": ctx["app_before_101"]})
+
+
+def context(app: AppAdapter) -> dict[str, Any]:
+    """The app policies' ctx: the shipped app, and the same engine under the order before PR #101."""
+    return {"app": app, "app_before_101": AppAdapter(app.engine, old_emergency_rank=True)}
+
+
 class AppPlusReportsPolicy:
     """Future work (owner's decision on #92): kept so the hook exists, left out of the minimum run.
 
@@ -77,3 +92,4 @@ class AppPlusReportsPolicy:
 
 POLICIES: dict[str, Any] = {"app": AppPolicy(), "app_offline": AppOfflinePolicy()}
 FUTURE: dict[str, Any] = {"app_plus_reports": AppPlusReportsPolicy()}
+DIAGNOSTIC: dict[str, Any] = {"app_before_101": AppBefore101Policy()}  # opt-in: simulate(policies=[...])

@@ -2,9 +2,12 @@
 
 The app reads only that file at start-up (standard library, no pandas), the same pattern as the packs and the
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
-counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
-derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
+counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
+common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
+When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi / p_location / p_exists are
+exported next to each pair and engine.score() uses them, with the model's own ledger: its named terms in points, which
+sum to the score (ledger() below; the plain words are in ledger_terms.py). The cards show the model's own P_L and P_E,
+not the derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -36,6 +39,11 @@ from common.eligibility import (  # noqa: E402, RUF100
     same_site_groups,
     to_sites,
 )
+from common.names import display_name  # noqa: E402, RUF100
+from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
+
+sys.path.insert(0, str(ROOT / "app"))
+from facts.ledger_terms import NOT_OBSERVED, TERMS  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -65,6 +73,12 @@ MAX_EVIDENCE = 3
 # facility is not public or its level is unknown). Per service, so a district hospital is never named for cardiac
 # surgery. AYUSH and dental colleges match "medical college" in the level rule but offer none of these services.
 FEATURES = ROOT / "derived" / "v2" / "facility_features.parquet"
+WITNESSES = ROOT / "derived" / "v2" / "witnesses.parquet"
+# derived/v2 ledger (README there): logit(p) = base + sum(points) / PDO. The app keeps its own scale, APP_SCALE points
+# per logit unit (engine._pts, the field-report row), and ships tenths of a point.
+PDO = 20 / math.log(2)
+APP_SCALE = 10
+CLAIM_ID = re.compile(r"[0-9a-f]{8}:[a-z]{4}:\d+")  # a derived/v1 claim id; v2 also cites lists, pages, record:name
 NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturopath|yoga|dental", re.I)
 
 
@@ -115,6 +129,8 @@ def e164(raw: str) -> str | None:
     if re.fullmatch(r"0[1-9]\d{9}", d):
         return "+91" + d[1:]
     if re.fullmatch(r"\+91[1-9]\d{9}", d):
+        return d
+    if re.fullmatch(r"1800\d{6,8}", d):  # Indian toll-free: no E.164 form, but dialled as is from any phone in India
         return d
     return None
 
@@ -211,7 +227,76 @@ def v2_only(m: pd.DataFrame) -> pd.DataFrame:
     return m[m.m_band.notna()]
 
 
-def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
+def band_rule_violations(m: pd.DataFrame, card_path: Path | None = None) -> int:
+    """LIKELY pairs whose exported p, P_L or P_E is below the model card's band_thresholds.likely (#121). The T >= 2
+    term is not in the export, so it is not rechecked here."""
+    card_path = card_path or MODEL_CARD
+    if not card_path.is_file():
+        return 0
+    t = json.loads(card_path.read_text())["band_thresholds"]["likely"]
+    lk = m[m.m_band.str.upper() == "LIKELY"]
+    return int(((lk.m_p < t["p"]) | (lk.m_pl < t["p_location"]) | (lk.m_pe < t["p_exists"])).sum())
+
+
+def check_band_rule(m: pd.DataFrame, card_path: Path | None = None) -> None:
+    """Fail when a served LIKELY pair breaks the rule the How page states. The model is frozen, so a failure is a
+    model or export issue to report, never something to re-band here."""
+    n = band_rule_violations(m, card_path)
+    if n:
+        raise SystemExit(f"{n} derived/v2 LIKELY pairs break band_thresholds.likely in model_card.json: report it to "
+                         "the model owner; do not re-band in the app")
+
+
+def v2_terms(terms: pd.Series) -> tuple[set[str], dict[str, str]]:
+    """(evidence ids that are app claims, family of each term label) over the served pairs' contributions.
+
+    An id is an app claim when it is a derived/v1 claim and v2's witness quote for it is that claim's text or a clause
+    of it (40 of about 30,600 are clauses), so the page never shows another sentence under the id. Specialty items
+    (":spec:") are not v1 claims and are left out, as are list, website and standard ids.
+    """
+    parsed = [json.loads(c) for c in terms]
+    ids = {e for ts in parsed for t in ts for e in t["evidence_ids"] if CLAIM_ID.fullmatch(e)}
+    family = {t["label"]: t["family"] for ts in parsed for t in ts}
+    text = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "text"])
+    text = text[text.claim_id.isin(ids)]
+    w = pd.read_parquet(WITNESSES, columns=["evidence_id", "quote"], filters=[("observability", "==", "present")])
+    quote = w[w.evidence_id.isin(ids)].drop_duplicates("evidence_id").set_index("evidence_id").quote
+    same = {c for c, t in zip(text.claim_id, text.text, strict=True) if isinstance(quote.get(c), str) and quote[c] in t}
+    print(f"facts.ledger_claims: {len(same)} of {len(ids)} cited claim ids are app claims")
+    return same, family
+
+
+def ledger(base: float, terms_json: str, p: float, same: set[str]) -> list[list]:
+    """[[term, tenths of an app point, [app claim ids]], ...] for one pair: base first, terms with 0 points left out.
+
+    Each row is APP_SCALE x its logit contribution. Rounding to tenths is spread by largest remainder, so the rows sum
+    exactly to round(10 x APP_SCALE x logit(p)) and the total maps back to p within 0.0013.
+    """
+    terms = [t for t in json.loads(terms_json) if t["points"]]
+    unnamed = {t["label"] for t in terms} - TERMS.keys()
+    if unnamed:
+        raise SystemExit(f"derived/v2 terms without plain words in app/facts/ledger_terms.py: {sorted(unnamed)}")
+    exact = [10 * APP_SCALE * x for x in (base, *(t["points"] / PDO for t in terms))]
+    if abs(sum(exact) / (10 * APP_SCALE) - math.log(p / (1 - p))) > 1e-6:
+        raise SystemExit(f"derived/v2 ledger does not sum to logit(p) = logit({p}): {terms_json[:200]}")
+    tenths = [math.floor(x) for x in exact]
+    for k in sorted(range(len(exact)), key=lambda k: tenths[k] - exact[k])[: round(sum(exact)) - sum(tenths)]:
+        tenths[k] += 1
+    ids = [[], *([e for e in t["evidence_ids"] if e in same][:MAX_EVIDENCE] for t in terms)]
+    return [[n, x, i] for n, x, i in zip(("base", *(t["label"] for t in terms)), tenths, ids, strict=True)]
+
+
+def not_observed(m: pd.DataFrame) -> list[str]:
+    """Per pair, the NOT_OBSERVED families derived/v2 cannot see (facility_features obs_<family>), e.g. "WO"."""
+    fams = list(NOT_OBSERVED)
+    ff = pd.read_parquet(FEATURES, columns=["unique_id", "service", *(f"obs_{f}" for f in fams)])
+    ff["service"] = ff.service.map(TAXONOMY_TO_V1)
+    ff = ff.dropna(subset=["service"]).set_index(["unique_id", "service"])
+    obs = ff.reindex(pd.MultiIndex.from_arrays([m.unique_id, m.service]))
+    return ["".join(f for f in fams if row[f"obs_{f}"] == "not_observable") for _, row in obs.iterrows()]
+
+
+def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, list]]:
     dps = pd.read_parquet(V1 / "data_point_scores.parquet", columns=[
         "dp_type", "unique_id", "service", "score", "score_lo", "score_hi", "status", "rule", "q_ev", "score_model"])
     dps = dps[dps.dp_type == "service_claim"].drop(columns="dp_type")
@@ -230,17 +315,26 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
              for u, s, e in zip(m.unique_id, m.service, m.cite_evidence, strict=True)}
     m, counts = to_sites(m, sites)
     report("facts.duplicates", counts)
+    m = type_fit(m)
     if V2.is_file():
-        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
+        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
+                                          "p_exists", "base", "contributions"])
         v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
         v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         bad = set(v2.band.str.upper()) - set(V2_BAND)
         if bad:
             raise SystemExit(f"derived/v2 has bands the app does not map: {sorted(bad)}")
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
-                                                                  "band": "m_band"}), on=["unique_id", "service"],
-                    how="left")
+                                                                  "band": "m_band", "p_location": "m_pl",
+                                                                  "p_exists": "m_pe", "base": "m_base",
+                                                                  "contributions": "m_terms"}),
+                    on=["unique_id", "service"], how="left")
         m = v2_only(m)
+        check_band_rule(m)
+        m["not_observed"] = not_observed(m)
+        same, family = v2_terms(m.m_terms)
+    else:
+        same, family = set(), {}
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
@@ -248,13 +342,33 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
         cited.update(ev)
         missing = [c[4:] for c in pre_cols if isinstance(getattr(r, c), (bool,)) and getattr(r, c) is False]
         risks = [c[5:] for c in risk_cols if getattr(r, c) is True] + (["scope"] if r.scope_conflict else [])
-        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper()]
+        # P_L and P_E are the model's own (derived/v2 p_location, p_exists): the values its LIKELY rule tested.
+        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper(), round(float(r.m_pl), 3),
+                  round(float(r.m_pe), 3)]
                  if "m_band" in m.columns and isinstance(r.m_band, str) else None)
+        led = ledger(r.m_base, r.m_terms, r.m_p, same) if model else None
+        cited.update(c for *_, ids in led or [] for c in ids)
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
             round(r.score_hi, 4), round(r.q_ev, 4), round(r.score_model, 4), ev, missing, risks,
-            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings)])
-    return out, cited
+            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings),
+            led, r.not_observed if model else ""])
+    used = {"base": "base", **family}
+    words = {"terms": {k: [used[k], *TERMS[k]] for k in sorted(used)},
+             "not_observed": {k: list(v) for k, v in NOT_OBSERVED.items()}}
+    return out, cited, words
+
+
+def type_fit(m: pd.DataFrame) -> pd.DataFrame:
+    """Drop pairs whose facility type cannot offer the service (#117 B, common/typefit.py, the planner's rule too):
+    a dental, eye or AYUSH place is never an option. Read from the shown site's own name and type field."""
+    loc = pd.read_parquet(V1 / "facility_location.parquet", columns=["unique_id", "name"])
+    at = pd.read_parquet(ATTRS, columns=["unique_id", "facilityTypeId"]) if ATTRS.is_file() else loc[["unique_id"]]
+    f = loc[loc.unique_id.isin(set(m.unique_id))].merge(at, on="unique_id", how="left")
+    kinds = kinds_by_id(f.unique_id, f.name, f.facilityTypeId if "facilityTypeId" in f else [None] * len(f))
+    keep, counts = fit_mask(m.unique_id, m.service.map(V1_TO_APP), kinds)
+    report("facts.type_fit_left_out", counts)
+    return m[keep]
 
 
 def planner_cited() -> set[str]:
@@ -322,6 +436,51 @@ def likely_threshold(path: Path | None = None) -> float | None:
     return json.loads(path.read_text()).get("band_thresholds", {}).get("likely", {}).get("p")
 
 
+GOLD_V3 = ROOT / "model" / "gold" / "v3"
+TEST_RESULTS = GOLD_V3 / "test_eval" / "results.json"
+OPENING_LOG = GOLD_V3 / "OPENING_LOG.md"
+TEST_LABELS_SHA = GOLD_V3 / "test_labels.sha256"
+
+
+def opening_log(path: Path = OPENING_LOG) -> dict[str, str]:
+    """The single 'opened' row of OPENING_LOG.md: its date and the two committed hashes. Fails on zero or two rows."""
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in path.read_text().splitlines()
+            if ln.startswith("| opened ")]
+    if len(rows) != 1:
+        raise SystemExit(f"{path}: expected exactly one 'opened' row, found {len(rows)}")
+    return {"opened": rows[0][1], "predictions_sha256": rows[0][3], "labels_sha256": rows[0][4]}
+
+
+def sealed_test_record(card_path: Path | None = None, results_path: Path = TEST_RESULTS) -> dict | None:
+    """The sealed gold v3 TEST record of the LIKELY band (#86, #66), from model/gold/v3/test_eval/results.json.
+
+    None when the file is absent or the app does not serve the model the record is about (interim scores, or a
+    model_version other than the one the TEST was run against). Fails when the opening log, the label commitment and
+    the results disagree, or when the public-facility caveat the page shows stops being true.
+    """
+    card_path = card_path or MODEL_CARD
+    if not (results_path.is_file() and card_path.is_file() and V2.is_file()):
+        return None
+    res, card = json.loads(results_path.read_text()), json.loads(card_path.read_text())
+    if res["model_version"] != card.get("model_version"):
+        return None
+    log = opening_log()
+    labels_full = next(ln.split()[0] for ln in TEST_LABELS_SHA.read_text().splitlines()
+                       if ln.endswith(".full.canonical"))
+    if log["predictions_sha256"] != res["test_predictions_sha256"] or log["labels_sha256"] != labels_full:
+        raise SystemExit(f"{OPENING_LOG}: hashes differ from {results_path.name} or {TEST_LABELS_SHA.name}")
+    lk, pub = res["headline_decided"]["LIKELY_confirmed"], res["by_operator_decided"]["public"]
+    if pub["auroc_ci95"][0] > 0.5:
+        raise SystemExit(f"{results_path}: public AUROC interval excludes 0.5; update the public caveat in app.js")
+    rel = lambda p: str(p.relative_to(ROOT))  # noqa: E731
+    return {"split": "test", "k": lk["k"], "n": lk["n"], "pct": round(100 * lk["rate"]),
+            "lo_pct": round(100 * lk["ci95"][0]), "hi_pct": round(100 * lk["ci95"][1]),
+            "public_n": pub["n"], "model_version": res["model_version"],
+            "predictions_sha256": res["test_predictions_sha256"], "labels_sha256": labels_full,
+            "opened": log["opened"], "source": rel(results_path), "log": rel(OPENING_LOG),
+            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/dev/{rel(OPENING_LOG)}"}
+
+
 def rules() -> dict[str, dict]:
     e = pd.read_parquet(V1 / "evidence_rules.parquet")
     return {r.rule: {"n": int(r.handcheck_true + r.handcheck_false + r.dev_true + r.dev_false),
@@ -335,6 +494,58 @@ def pins() -> dict[str, list]:
     p = p.dropna(subset=["lat", "lon", "district"])
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
             "district": list(p.district), "state": list(p.state)}
+
+
+# validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
+# The LGD join (external/lgd_district_polygons/join_test.py) puts every India Post office in its LGD district polygon;
+# the file is git-ignored data, so without it the area view keeps each PIN's own district.
+LGD_REL = Path("data") / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
+# DATA_ROOT first (a worktree or the Databricks volume holds the git-ignored data there), then the repo.
+LGD_PINS = next((r / LGD_REL for r in (DATA_ROOT, ROOT) if (r / LGD_REL).is_file()), ROOT / LGD_REL)
+NEAR_DEG = 0.01  # an office this close (lat + lon degrees, about 1 km) stands for the PIN point's own polygon
+
+
+def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
+    """{pin: [district, state]} where a PIN's point lies in another district than the gazetteer files it under: the
+    LGD district of an office within NEAR_DEG of the point, in the gazetteer's spelling (the district most offices
+    of that LGD polygon carry). Only disagreements are kept; a point with no office that close keeps its own."""
+    if not LGD_PINS.is_file():
+        return {}
+    o = pd.read_parquet(LGD_PINS, columns=["pincode", "district", "statename", "latitude", "longitude", "dist_lgd"])
+    o = o.assign(lat=pd.to_numeric(o.latitude, errors="coerce"), lon=pd.to_numeric(o.longitude, errors="coerce"))
+    o = o.dropna(subset=["district", "statename", "lat", "lon", "dist_lgd"])
+    o = o[o.dist_lgd > 0]
+    name = o.groupby("dist_lgd")[["district", "statename"]].agg(lambda c: c.mode()[0])
+    pt = pd.DataFrame({"pincode": p["pin"], "plat": p["lat"], "plon": p["lon"], "own": list(zip(p["district"], p["state"], strict=True))})
+    m = o.merge(pt, on="pincode")
+    m = m.assign(d=(m.lat - m.plat).abs() + (m.lon - m.plon).abs())
+    m = m[m.d <= NEAR_DEG].sort_values("d").drop_duplicates("pincode")
+    out = {}
+    for pin, code, own in zip(m.pincode, m.dist_lgd, m.own, strict=True):
+        where = tuple(name.loc[code])
+        if where != own:
+            out[str(pin)] = list(where)
+    return out
+
+
+PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
+
+
+def places() -> dict:
+    """Town and post office names from place_gazetteer for the typed-place lookup (#121 bug 5), kept out of facts.
+
+    Districts and PINs come from the PIN table already in facts.json.gz. One row per state and name; a town beats a
+    post office of the same name. 0.001 degree (about 100 m) is finer than the plan's 0.01 degree rounding.
+    """
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "kind"])
+    g = g[g.kind.isin(PLACE_KINDS)].dropna(subset=["name", "lat", "lon", "state"])
+    g = g.assign(rank=g.kind.map(PLACE_KINDS.index)).sort_values(["state", "name", "rank"])
+    g = g.drop_duplicates(["state", "name"])
+    states = sorted(g.state.unique())
+    s_idx = {s: i for i, s in enumerate(states)}
+    return {"v": 1, "kinds": list(PLACE_KINDS), "states": states, "name": list(g.name),
+            "s": [s_idx[x] for x in g.state], "k": [int(x) for x in g["rank"]],
+            "lat": col(g.lat, 3), "lon": col(g.lon, 3)}
 
 
 def scores_source() -> str:
@@ -351,7 +562,7 @@ def main() -> None:
     out = ap.parse_args().out
     t0 = time.time()
     f, fidx = facilities()
-    pr, cited = pairs(fidx)
+    pr, cited, ledger_words = pairs(fidx)
     claim_rows, claim_fl = claims(cited | planner_cited())
     manifest = json.loads((V1 / "MANIFEST.json").read_text())
     facts = {
@@ -362,7 +573,8 @@ def main() -> None:
         "rules": rules(),
         "track_bins": track_bins(),
         "likely_threshold": likely_threshold(),
-        "fac": {"id": list(f.unique_id), "name": list(f.name), "city": col(f.address_city),
+        "test_record": sealed_test_record(),
+        "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
                 "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
@@ -375,6 +587,7 @@ def main() -> None:
                 "public_standard": list(f.public_standard), "public_level": list(f.public_level),
                 "operator": list(f.operator)},
         "pairs": pr,
+        "ledger": ledger_words,  # plain words for the pairs' ledger rows: {"terms": {term: [family, en, hi]}, ...}
         "claims": claim_rows,
         "claim_flags": claim_fl,
         "pins": pins(),
@@ -388,9 +601,17 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (out / "facts.sha").write_text(facts_hash + "\n")
+    # Outside facts.json and its hash: the file comes from git-ignored data, so a derived/v1 rebuild still matches.
+    moved = pin_districts(facts["pins"])
+    (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
+    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
+          if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
+    pl = places()
+    (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
-    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
+    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs, "
+          f"{len(pl['name'])} places (places.json.gz); "
           f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
           f"{time.time() - t0:.1f} s; sha {facts_hash}")
 

@@ -441,3 +441,100 @@ def test_band_lines_match_the_model_card():
         pytest.skip("model card not present")
     bt = json.loads(card.read_text())["band_thresholds"]
     assert abs(field.T_LIKELY - bt["likely"]["p"]) < 1e-3 and abs(field.T_UNLIKELY - bt["unlikely"]["p"]) < 1e-9
+
+
+# ---------- tie-break from health-worker reports (#86) ----------
+def test_tie_value_counts_accepted_and_half_phone_yes_never_temporary_reasons():
+    base = [rep("k1", "accepted", days=0), rep("k2", "yes", kind="call", days=0)]
+    assert field_adjust(0.5, base, NOW)["net"] == 1.5
+    temporary = [rep(f"t{i}", "turned_away", reason=r, days=0) for i, r in enumerate(outcomes.REASONS_TEMPORARY)]
+    assert field_adjust(0.5, base + temporary, NOW)["net"] == 1.5
+    against = [rep("k3", "turned_away", reason="service_not_here", days=0),
+               rep("k4", "no", kind="call", reason="equipment_absent", days=0)]
+    assert field_adjust(0.5, base + against, NOW)["net"] == 0.0  # 1.5 - 1 (visit) - 0.5 (phone)
+    assert field_adjust(0.5, [rep("k1", "accepted", days=30), rep("k2", "accepted", days=30)], NOW)["net"] == 1.0
+    assert field_adjust(0.5, base[:1], NOW)["net"] is None  # one reporter: no value
+
+
+def test_tied_prefix_needs_same_band_and_both_limits_for_every_pair():
+    from facts.engine import tied_prefix
+    assert tied_prefix([(0.9, 60, "likely"), (0.86, 69, "likely"), (0.84, 61, "likely")]) == 2  # 0.9 - 0.84 > 0.05
+    assert tied_prefix([(0.9, 60, "likely"), (0.9, 71, "likely")]) == 0
+    assert tied_prefix([(0.9, 60, "likely"), (0.9, 60, "not_verified")]) == 0
+    assert tied_prefix([(0.9, 60, "likely"), (0.85, 70, "likely"), (0.9, 62, "likely")]) == 3
+
+
+def demo_plan(eng, service):
+    return eng.plan(service, *field.DEMO_POINT, None, "gps")
+
+
+def keyed(fid, keys, service="dialysis"):
+    return {(fid, service): [{**rep(k, "accepted", days=2), "facility_id": fid, "service_id": service}
+                             for k in keys]}
+
+
+@needs_data
+def test_tied_options_reorder_only_with_two_or_more_reporters():
+    eng = app_module._engine()
+    before = demo_plan(eng, "dialysis")
+    ids = [o["facility_id"] for o in before["options"]]
+    assert len(ids) == 3 and len({o["band"] for o in before["options"]}) == 1
+    one = apply_field(before, keyed(ids[2], ["k1", "k1"]), NOW, eng)
+    assert [o["facility_id"] for o in one["options"]] == ids and "tie_break" not in one
+    agg = keyed(ids[2], ["k1", "k2"])
+    two = apply_field(before, agg, NOW, eng)
+    # The field term alone leaves it third; the tie-break puts it first.
+    third = field.rescore(eng.score(ids[2], "dialysis"), agg[(ids[2], "dialysis")], NOW)[0]
+    assert [o["facility_id"] for o in eng.plan("dialysis", *field.DEMO_POINT, None, "gps",
+                                               {ids[2]: third})["options"]] == ids
+    assert [o["facility_id"] for o in two["options"]] == [ids[2], ids[0], ids[1]]
+    tb = two["tie_break"]
+    assert tb["label"] == field.TIE_LABEL and not tb["simulated"] and tb["moved"]
+    assert [x["facility_id"] for x in tb["options"]] == [ids[2], ids[0], ids[1]]
+    assert [x["n_reporters"] for x in tb["options"]] == [2, 0, 0] and tb["options"][1]["net"] is None
+
+
+@needs_data
+def test_untied_options_never_move():
+    eng = app_module._engine()
+    before = demo_plan(eng, "mri")  # option 2 is more than 10 min farther than option 1: no tie
+    ids = [o["facility_id"] for o in before["options"]]
+    after = eng.plan("mri", *field.DEMO_POINT, None, "gps", None, {ids[1]: 9.0, ids[2]: 9.0})
+    assert [o["facility_id"] for o in after["options"]] == ids and "tie_break" not in after
+    assert after["why_not"] == before["why_not"]
+
+
+@needs_data
+@pytest.mark.parametrize("service", ["emergency_csection", "trauma_emergency", "burn_care", "nicu"])
+def test_emergencies_and_nicu_never_move(service):
+    """Emergency and urgent (NICU) orders never move on report counts (#116: TIE_BREAK_PROFILES)."""
+    eng = app_module._engine()
+    before = demo_plan(eng, service)
+    ids = [o["facility_id"] for o in before["options"]]
+    after = eng.plan(service, *field.DEMO_POINT, None, "gps", None, {f: 9.0 * (k + 1) for k, f in enumerate(ids)})
+    assert [o["facility_id"] for o in after["options"]] == ids and "tie_break" not in after
+    agg = {}
+    for f in ids[1:]:
+        agg.update(keyed(f, ["k1", "k2", "k3"], service))
+    out = apply_field(before, agg, NOW, eng)
+    term_only = eng.plan(service, *field.DEMO_POINT, None, "gps",
+                         {f: field.rescore(eng.score(f, service), agg[(f, service)], NOW)[0] for f in ids[1:]})
+    assert "tie_break" not in out
+    assert [o["facility_id"] for o in out["options"]] == [o["facility_id"] for o in term_only["options"]]
+
+
+@needs_data
+def test_simulated_demo_reports_break_the_tie_and_stay_labelled(monkeypatch):
+    field._cache.clear()
+    monkeypatch.setenv("COMMUNITY_DEMO", "1")
+    monkeypatch.delenv("DATABRICKS_WAREHOUSE_ID", raising=False)
+    monkeypatch.setattr(outcomes, "_sql", lambda b: None)
+    eng, now = app_module._engine(), datetime.now(UTC)
+    before = demo_plan(eng, "dialysis")
+    out = apply_field(before, field.aggregates(now), now, eng)
+    tb = out["tie_break"]
+    assert tb["simulated"] and tb["moved"] and tb["label"] == field.TIE_LABEL + " (simulated for the demo)"
+    assert out["options"][1]["facility_id"] == before["options"][2]["facility_id"]
+    for o in out["options"]:
+        assert all(x["en"].startswith("Simulated for the demo: ") for x in o["field"]["lines"] + o["field"]["notes"])
+    field._cache.clear()
