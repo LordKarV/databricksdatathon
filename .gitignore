@@ -17,3 +17,5 @@ build/
 viz/*/data/_cache/
 viz/*/data/*.gz
 geo/data/
+model/v2/labels/out/pu_labels.parquet
+validation/location/judgments/matches_lists.csv

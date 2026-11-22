@@ -54,7 +54,8 @@ alone:
 - **S2, "from our hand checks":** offer rates by service and by evidence stratum (strong, weak, suspect, not
   mentioned), from the web-checked DEV pairs. It does not use the model's scores.
 - **S3, "the data is as bad as the audit says":** S2, plus sentences attributed to another facility are false,
-  and map points are wrong at the audit's rate for their location rule (the true point is the alternative one).
+  and map points are wrong at the rate measured on the cleaned data (#103): 6 of 30 points the cleaning moved,
+  6 of 8 kept points marked low or disputed in the geo audit, none of the rest (the true point is 25 km away).
 
 S2 and S3 come from the same DEV labels the model's calibration step was fitted on, so they favour the app by
 construction; S0 does not.

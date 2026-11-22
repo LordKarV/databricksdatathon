@@ -7,8 +7,8 @@ data-k="<kind>". This test then checks:
 
 - each marked value equals its source field: text verbatim; numbers within the precision shown (so "24 km" for
   24.6 fails); totals equal the sum of their parts; band words follow the fixed mapping;
-- no unmarked digit is on screen, apart from fixed template text (108, 102, 112, 24x7, "in 10 listings") and
-  device-side text (location, clock times, call outcomes) marked data-device;
+- no unmarked digit is on screen, apart from fixed template text (108, 102, 112, 24x7, Hindi "24 hours",
+  "in 10 listings") and device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
 - read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
@@ -51,7 +51,8 @@ from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
               "NO_SERVICE_TEXT": "NO SERVICE TEXT: call to ask"}  # derived/v2 sub-band, shown from options.N.model_band
-STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\bin 10 listings\b"]
+STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
+                  r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
     "Access now": "area.summary.access_now",

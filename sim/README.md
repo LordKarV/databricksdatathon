@@ -67,7 +67,7 @@ true_lon`. `sim.run` writes each to `sim/out/truth/<scenario>_<seed>.parquet`, w
 | S0-low | the same, with no_info counted as not offered | 0.984 | listed |
 | S1 "model is right" | Bernoulli(v2 p) | Bernoulli(v2 p_exists) | listed |
 | S2 "from labels" | DEV rate by service x stratum (strong / weak / suspect / no_mention, the gold v3 rule) | 0.984 | listed |
-| S3 "data as bad as the audit" | S2, and attributed_elsewhere claims are false | 0.984 | wrong at 1 - q_ev of its LOC rule; truth = alt point |
+| S3 "claims as bad as the audit" | S2, and attributed_elsewhere claims are false | 0.984 | wrong at its class rate (below); truth 25 km away |
 
 - **Why S0 is two bounds (lead, #92):** no_info means the labeller found nothing, which is not evidence either way,
   and the cells are thin (about 15 decided DEV pairs per service). `world.truth_table("S0", ...)` is S0-high.
@@ -75,6 +75,20 @@ true_lon`. `sim.run` writes each to `sim/out/truth/<scenario>_<seed>.parquet`, w
   the service).
 - Uniforms are drawn once per seed and shared by the scenarios and knob levels, so scenarios differ only by their
   rates.
+- **S3 map points (#103)** follow the cleaned data, not the raw coordinates the geo audit judged. Rates in
+  `world.S3_LOC_WRONG`; unclear verdicts count as wrong:
+
+  | Class (derived/v1 facility_location) | Points (v2-scored) | P(wrong) | Source |
+  | --- | --- | --- | --- |
+  | moved: `loc_src` is not `listing_coordinates` | 1,168 | 6/30 = 0.20 | validation/location/judgments/moved_30.csv: right 24, wrong 1, unclear 5 |
+  | listing point kept, `loc_conf` low or disputed | 579 | 6/8 = 0.75 | audit/geo/hand_check_verdicts.csv rows of this class: no 3, unclear 3, yes 2 (3 of 5 decided) |
+  | every other point | 8,200 | 0 (as S2) | the listed point is right |
+
+  A wrong point's truth is 25 km from the listed point on a random bearing (`S3_WRONG_KM`, an assumption: the
+  moved check measured no distance), never the rejected raw point. Any distance above `NOT_THERE_KM` gives the same
+  events. The old rule applied the audit's 20 of 34 wrong, measured on the raw coordinates, to points the cleaning
+  had already replaced. The 6/8 cell is thin, and the cleaning's own hand check found 12 of 12 `city_points_elsewhere`
+  conflicts wrong (cleaning/geo_identity/handcheck_location.csv), so 0.75 may be low for those 195 disputed points.
 - **Caveat on S2 and S3 (#92 review):** they come from the DEV labels the v2 model's calibration step was fitted on,
   and S3 penalises other-facility sentences the engine already drops. Both favour the app by construction. S0 is
   the scenario where the app can lose.
@@ -145,6 +159,8 @@ Every value below is assumed, not measured, unless the basis says otherwise.
 | `CALL_MIN` | 5 | `execute.py` | assumption |
 | `TURN_AWAY_MIN` | 15 | `execute.py` | planner/core.py's figure |
 | `NOT_THERE_KM` | 2 | `execute.py` | assumption |
+| `S3_LOC_WRONG` | moved 0.20, low or disputed 0.75, other 0 | `world.py` | data: validation moved_30, audit/geo hand check (#103) |
+| `S3_WRONG_KM` | 25 | `world.py` | assumption: distance of a wrong S3 point's truth |
 | `GIVE_UP_MIN` | emergency 240, planned 480 | `execute.py` | assumption |
 | `report_k` and report weights | 4; phone yes/no 0.5, arrival 1, closed or refused 0.25 | `assumptions.py` | assumption (future work) |
 

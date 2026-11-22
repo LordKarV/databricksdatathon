@@ -1,11 +1,12 @@
 """sim/world.py: cases, truth per scenario, and the honesty rules (#92). Reads derived/ and the DEV labels only."""
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 import pytest
 
-from sim import world
+from sim import execute, world
 
 SIM = Path(world.__file__).resolve().parent
 
@@ -33,7 +34,7 @@ def test_truth_is_seeded_and_has_the_interface_columns(scenario):
 
 
 def _with_strata(t, service):
-    d = world._pairs(service)[["unique_id", "stratum", "operator", "grade", "p", "loc_rule", "lat"]]
+    d = world._pairs(service)[["unique_id", "stratum", "operator", "grade", "p", "loc_class", "lat", "lon"]]
     return t[t.service == service].merge(d, on="unique_id")
 
 
@@ -79,12 +80,34 @@ def test_s0_bounds():
 
 
 def test_s3_breaks_attribution_and_moves_map_points():
+    """S3 (#103): only moved and low or disputed points are wrong, each at its class rate, and a wrong point's truth
+    is S3_WRONG_KM from the listed point (findable by no patient), never NaN."""
     t = _with_strata(world.truth_table("S3", 2), "trauma_emergency")
     assert not t[t.grade == "attributed_elsewhere"].offers.any()
-    moved = t[(t.true_lat != t.lat) | t.true_lat.isna()]
-    assert len(moved) > 0 and set(moved.loc_rule) != {"LOC_HIGH"}
+    t = t[t.lat.notna()]
+    km = np.hypot((t.true_lat - t.lat) * world.KM_PER_DEG,
+                  (t.true_lon - t.lon) * world.KM_PER_DEG * np.cos(np.radians(t.lat)))
+    wrong = km > 1e-6
+    assert t.true_lat.notna().all() and np.allclose(km[wrong], world.S3_WRONG_KM)
+    assert world.S3_WRONG_KM > execute.NOT_THERE_KM
+    for cls, rate in world.S3_LOC_WRONG.items():
+        g = wrong[t.loc_class == cls]
+        assert len(g) and abs(g.mean() - rate) < 4 * (rate * (1 - rate) / len(g)) ** 0.5 + 0.01, cls
+    assert not wrong[t.loc_class == "other"].any()
     s2 = _with_strata(world.truth_table("S2", 2), "trauma_emergency")
     assert (s2.true_lat == s2.lat).all()
+
+
+def test_s3_location_rates_match_their_sources():
+    """The S3_LOC_WRONG counts reproduce from the files the comments cite (unclear counted as wrong)."""
+    f = world.facilities().set_index("unique_id").loc_class
+    m = pd.read_csv(world.ROOT / "validation" / "location" / "judgments" / "moved_30.csv")
+    assert (m.unique_id.map(f) == "moved").all()
+    assert m.verdict.ne("right").sum() / len(m) == world.S3_LOC_WRONG["moved"]
+    a = pd.read_csv(world.ROOT / "audit" / "geo" / "hand_check_verdicts.csv")
+    a = a[a.unique_id.map(f) == "low_or_disputed"]
+    assert a.coords_ok.ne("yes").sum() / len(a) == world.S3_LOC_WRONG["low_or_disputed"]
+    assert (world.facilities().loc_class == "moved").sum() == 1168  # of 1,171 in derived/v1; 3 not v2-scored
 
 
 def test_listing_holds_no_truth():
