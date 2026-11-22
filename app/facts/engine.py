@@ -213,7 +213,7 @@ class Engine:
         ev = sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
             band, p, lo, hi, *_ = pr.model
-            return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
+            return band, p, lo, hi, [{"label": "Model score", "points": _pts(_logit(p))},
                                      *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
         # A second-source check outranks the text grade: it is the stronger evidence (#85: two confirmed pairs were
