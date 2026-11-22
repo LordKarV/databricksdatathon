@@ -3,6 +3,14 @@
 // suggestion ends at a confirm card: one tap to accept, one to change. Danger words and the lexicon run in the
 // browser first, so they also work offline. Voice: /voice.js (speech to text) and /speech.js (read aloud), loaded
 // when a screen needs them.
+
+// Read-aloud language label (#121 bug 8): the toggle changes the spoken language only, so the label says so. One map
+// per language, so it moves into the strings files of the coming app-wide language setting; the screen shows 'en'
+// until then. The Hindi is a draft for native review (#10).
+const SAY_STRINGS = {
+  en: {label: 'Read aloud in (speech only, the screen stays in English):'},
+  hi: {label: 'किस भाषा में पढ़कर सुनाएँ (सिर्फ़ आवाज़, स्क्रीन अंग्रेज़ी में ही रहेगी):'},
+};
 const RSInput = (() => {
   let lex = null;
 
@@ -252,7 +260,8 @@ const RSInput = (() => {
     if (!canSpeak()) return '';
     const l = voiceLang(), t = (v, label) => `<button type="button" data-say-lang="${v}" aria-pressed="${l === v}"
       class="${l === v ? 'btn-primary' : ''}">${label}</button>`;
-    return `<div class="row" role="group" aria-label="Read aloud in">${t('hi', '<span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span>&nbsp;Hindi')}
+    return `<p id="say-lang-h" class="small say-lang-label">${esc(SAY_STRINGS.en.label)}</p>
+      <div class="row" role="group" aria-labelledby="say-lang-h">${t('hi', '<span lang="hi">\u0939\u093f\u0928\u094d\u0926\u0940</span>&nbsp;Hindi')}
       ${t('en', 'English')}</div>
       <button type="button" id="speak" class="btn-block" aria-pressed="false"><span aria-hidden="true">&#128266;</span
       > Read aloud</button><p id="speak-note" class="small muted" aria-live="polite"></p>`;

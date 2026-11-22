@@ -53,6 +53,27 @@ Reviewed 2026-11-22 (see review/HINDI_REVIEW_2026-11-22.md). This is a desk revi
 | Simulated (demo data) | डेमो के लिए नकली आँकड़े | Same prefix on the pulse and the field lines. |
 | Hindi (language name) | हिन्दी | The form already on every language button. |
 
+## Call-ahead needs (read aloud)
+
+Draft terms for "Do you have {need} on site?" (#121 bug 8), in `speech_templates.json` `hi.needs`; desk draft,
+not yet field-reviewed. They go into "क्या आपके यहाँ {need} है?", so each is singular or a facility noun.
+
+| Engine need | Hindi term |
+|---|---|
+| emergency 24x7 | चौबीसों घंटे खुली इमरजेंसी (words, not digits: the voice reads "24x7" badly) |
+| ct / mri scanner | CT स्कैन मशीन / MRI स्कैन मशीन (Latin letters as on the MRI tile) |
+| dialysis unit or machine | डायलिसिस मशीन |
+| nephrology | किडनी का डॉक्टर |
+| paeds or neonatology | बच्चों का डॉक्टर |
+| anaesthesia | बेहोशी का डॉक्टर |
+| obstetrics | डिलीवरी की सुविधा |
+| surgery or ortho | सर्जन या हड्डी का डॉक्टर |
+| operating theatre | ऑपरेशन थिएटर |
+| incubator warmer ventilator | इनक्यूबेटर, वार्मर या वेंटिलेटर |
+| cathlab or heart lung | कैथ लैब या हार्ट-लंग मशीन |
+| cardiothoracic surgeon or dept | दिल का सर्जन |
+| burn unit or plastic surgery | जलने की चोट का वार्ड या प्लास्टिक सर्जन |
+
 ## Spelling rules
 
 - Nukta on फ़ and ज़ (फ़ोन, मुफ़्त, ज़िला, ज़्यादा, मरीज़). No nukta on क, ख, ग (खराब, गलत), as in common print.
