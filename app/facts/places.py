@@ -99,7 +99,7 @@ class Places:
             p, how = self.pins, self.district_from[i]
             if how:  # the gazetteer files no district here: the label names only the state, the district is a guess
                 return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
-                         "label": f"PIN {q}, {title(p['state'][i])}", "district": title(p["district"][i]),
+                         "label": f"PIN {pin}, {title(p['state'][i])}", "district": title(p["district"][i]),
                          "district_from": how}]
             return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
                      "label": f"PIN {pin}, {title(p['district'][i])}, {title(p['state'][i])}"}]
