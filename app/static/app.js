@@ -603,8 +603,8 @@ function windowHtml(p) {
     <div class="sos-inline">${sosCompact(has102(p.query.service))}</div>
   </section>`;
 }
-const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.108')}</b></a>${with102
-  ? `<a href="tel:102">${icon('phone')}<b>${th('sos.102')}</b></a>` : ''}`;
+const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.108_short')}</b></a>${with102
+  ? `<a href="tel:102">${icon('phone')}<b>${th('sos.102_short')}</b></a>` : ''}`;
 function windowBelowHtml(p) {
   const w = p.time_window, po = p.public_option;
   if (!w || !w.first_outside || !p.options.length) return '';
@@ -890,7 +890,7 @@ function planScreen() {
   if (!s || !state.loc) return home();
   const p = state.plan;
   if (p && p.offline) return offlineScreen(s);
-  const head = `<h1 tabindex="-1">${esc(s.label)}</h1><p class="note" data-device>${locLine(state.loc)}</p>`;
+  const head = `<h1 tabindex="-1">${esc(s.label)}</h1><p class="note loc-line" data-device>${locLine(state.loc)}</p>`;
   if (!p) return head + `<p class="section">${th('ans.finding')}</p>`;
   if (p.error) return head + `<p class="panel section" role="alert">${esc(p.error)}</p><a class="btn btn-block" href="#/">${th('nav.back')}</a>`;
   const depth = state.depth || 'quick';
