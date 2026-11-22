@@ -104,6 +104,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "call_bar_320-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "how_this_works-light": {
    "violations": [],
    "horizontal_scroll": false
@@ -252,6 +256,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "call_bar_320-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "how_this_works-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -351,12 +359,12 @@
     "gzip": 587
    },
    "/app.css": {
-    "raw": 29081,
-    "gzip": 7137
+    "raw": 29233,
+    "gzip": 7197
    },
    "/app.js": {
-    "raw": 105336,
-    "gzip": 32806
+    "raw": 106040,
+    "gzip": 33076
    },
    "/input.js": {
     "raw": 15543,
@@ -379,12 +387,12 @@
     "gzip": 8651
    }
   },
-  "gzip_total": 73006,
+  "gzip_total": 73336,
   "budget_gzip": 75000,
   "budget_requests": 8
  },
  "hindi_extra": {
-  "/i18n/hi.json": 23555,
+  "/i18n/hi.json": 23602,
   "/fonts/hind-500-deva.woff2": 35665,
   "/fonts/hind-600-deva.woff2": 35013
  },
