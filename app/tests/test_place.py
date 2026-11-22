@@ -12,6 +12,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
@@ -67,7 +68,8 @@ def test_text_that_is_not_exactly_six_digits_is_not_a_pin(q):
 def test_district_beats_post_office_of_the_same_name_and_state(places):
     [m] = places.lookup("  bahraich DISTRICT ")
     assert m["kind"] == "district" and m["label"] == "Bahraich district centre, Uttar Pradesh"
-    assert (m["lat"], m["lon"]) == (27.6, 81.55)  # mean of its PIN centroids, as offline.js districtCentre
+    # its own PIN nearest the mean of its PIN points; two PINs tie, so the lower PIN (as offline.js districtCentre)
+    assert (m["lat"], m["lon"]) == (27.5, 81.5)
 
 
 def test_post_office_names_the_nearest_pin_district(places):
@@ -147,6 +149,53 @@ def test_api_says_which_name_it_shows(q, name, how):
     assert "matched_as" not in client.post("/api/place", json={"q": name}).json()
 
 
+# ---------- PINs the gazetteer files under no district (matrix cluster pin_missing_from_facts) ----------
+
+def test_fill_districts_takes_the_nearest_pin_of_the_same_state_and_never_invents_one():
+    from facts.build import fill_districts
+    g = pd.DataFrame({
+        "pin": [1, 2, 3, 4, 5, 6],
+        "state": ["HARYANA", "HARYANA", "DELHI", "HARYANA", "GOA", "HARYANA"],
+        "district": ["FARIDABAD", "GURGAON", "SOUTH", None, None, None],
+        "districts": [["FARIDABAD"], ["GURGAON"], ["SOUTH"], [], None, ["PALWAL"]],
+        "lat": [28.40, 28.46, 28.39, 28.39, 15.5, 28.1], "lon": [77.30, 77.03, 77.25, 77.26, 73.8, 77.3]})
+    f = fill_districts(g).set_index("pin")
+    # PIN 4 is nearer the Delhi PIN, but only a Haryana district may be given to a Haryana PIN
+    assert (f.loc[4, "district"], f.loc[4, "district_from"]) == ("FARIDABAD", "nearest_pin")
+    assert pd.isna(f.loc[5, "district"])  # no Goa PIN has a district: it stays out rather than get a made-up one
+    assert (f.loc[6, "district"], f.loc[6, "district_from"]) == ("PALWAL", "gazetteer_list")
+    assert list(f.loc[[1, 2, 3], "district_from"]) == ["", "", ""]
+
+
+def test_fill_districts_scales_longitude_by_cos_lat():
+    from facts.build import fill_districts
+    # at 60 degrees 1 degree of longitude is half a degree of latitude: B (0.8 deg east) is nearer than A (0.5 north)
+    g = pd.DataFrame({"pin": [1, 2, 3], "state": ["S"] * 3, "district": ["A", "B", None], "districts": [None] * 3,
+                      "lat": [60.5, 60.0, 60.0], "lon": [10.0, 10.8, 10.0]})
+    assert fill_districts(g).district.iloc[2] == "B"
+
+
+def test_guessed_district_pin_resolves_without_claiming_its_district():
+    pins = {k: v + extra for (k, v), extra in zip(PINS.items(), ([848101], [25.9], [85.7], ["SAMASTIPUR"], ["BIHAR"]),
+                                                   strict=True)}
+    pins["district_from"] = ["", "", "", "nearest_pin"]
+    p = Places(pins, None)
+    [m] = p.lookup("848101")
+    assert m["label"] == "PIN 848101, Bihar" and (m["district"], m["district_from"]) == ("Samastipur", "nearest_pin")
+    # the district centre stays the mean of the PINs filed there, as the offline pack computes it
+    [d] = p.lookup("Samastipur")
+    assert (d["lat"], d["lon"]) == (25.86, 85.78)
+    assert "district_from" not in p.lookup("848125")[0]
+
+
+@needs_data
+def test_api_pin_with_no_gazetteer_district_resolves():
+    r = client.post("/api/place", json={"q": "121999"})
+    assert r.status_code == 200
+    [m] = r.json()["matches"]
+    assert m["label"] == "PIN 121999, Haryana" and m["district_from"] == "nearest_pin" and m["state"] == "Haryana"
+
+
 @needs_data
 @pytest.mark.parametrize("q, kind, label", [
     ("Bahraich", "district", "Bahraich district centre, Uttar Pradesh"),
@@ -164,7 +213,8 @@ def test_api_resolves_names_and_pins_without_a_pack(q, kind, label):
 @needs_data
 def test_api_nonsense_is_404_with_no_matches():
     r = client.post("/api/place", json={"q": "xqzv plonk"})
-    assert r.status_code == 404 and r.json() == {"error": "place not found", "matches": []}
+    assert r.status_code == 404 and r.json().items() >= {"error": "place not found", "matches": []}.items()
+    assert r.json()["code"] == "place_not_found"
 
 
 def test_api_rejects_bad_bodies_without_echoing_them():
@@ -224,6 +274,7 @@ LABEL = "PIN, district, town or post office, or 'lat, lon'"
 def _change(browser, base_url, **ctx_args):
     ctx = browser.new_context(service_workers="block", **ctx_args)
     page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"en\"')")  # UI2 asks for a language on first launch
     page.goto(base_url + "/#/change")
     page.get_by_label(LABEL).wait_for()
     return ctx, page
@@ -309,6 +360,7 @@ def test_offline_without_pack_says_what_is_needed(browser, base_url):
 def test_gps_denied_puts_typing_first(browser, base_url):
     ctx = browser.new_context(service_workers="block")  # no geolocation permission granted
     page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"en\"')")  # UI2 asks for a language on first launch
     try:
         page.add_init_script("""navigator.geolocation.getCurrentPosition = (ok, fail) =>
           setTimeout(() => fail({code: 1, message: 'denied'}), 10);""")
@@ -324,7 +376,7 @@ def test_gps_denied_puts_typing_first(browser, base_url):
         # Back on home with no location: 'Type a place' is the first action, GPS the retry.
         page.get_by_role("link", name="Cancel").click()
         page.get_by_role("link", name="Type a place").wait_for()
-        first = page.locator("#main .btn").first
+        first = page.locator("#main section[aria-labelledby=h-where] .btn").first  # UI2: the 108 row sits above it
         assert first.inner_text().strip() == "Type a place"
         page.get_by_role("button", name="Use my location (GPS)").wait_for()
     finally:

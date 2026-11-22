@@ -26,21 +26,28 @@ to the score. Location is checked separately: a place we cannot pin down is neve
 **1:20 how we chose it.** "Agents read the web and labelled facility and service pairs; no person checked those
 labels, and we say so. Before fitting, we fixed the rule: ship the simplest model unless a fitted one wins
 clearly out of fold. The expert scorecard with one calibration step won. Out of fold on 221 pairs it ranks with
-AUROC 0.80, is calibrated to within 4 points, and 102 of 120 pairs it calls Likely were confirmed."
-[derived/v2/model_card.json]
+AUROC 0.80 and is calibrated to within 4 points. We set the Likely line on those pairs, so the real check comes
+next." [derived/v2/model_card.json]
 
 **1:45 the test we could not tune to.** "Then we froze the model, published its hash, and only then opened a
-sealed test set: AUROC 0.82, Likely confirmed on 25 of 28 decided pairs. Ninety of the 150 could not be decided
-from the web at all, which is why every card says call first. On public hospitals we cannot show the score ranks
-them, and the card says that too." [model/gold/v3/test_eval/results.json]
+sealed test set. Of the pairs it called Likely and the web could decide, 25 of 28 were confirmed; the score
+also ranks well within a list, AUROC 0.82. Where a facility's own website states the service, the model and the
+web check read the same page: 21 of 21 confirmed. Where it does not, the score ranks above chance but weakly,
+AUROC 0.70. Ninety of the 150 could not be decided from the web at all, which is why every card says call first.
+On public hospitals we cannot show the score ranks them, and the card says that too."
+[model/gold/v3/test_eval/results.json, model/gold/v3/test_eval/independence.json]
 
 **2:10 what failed.** "We trained three transformer readers, two on a Databricks GPU. On 'does this sentence
-offer the service', our rules beat all three, so the glass box shipped." [model/reader/README.md]
+offer the service', our rules beat all three, and on 'is it about this facility' none showed a gain, so the glass
+box shipped." [model/reader/out/metrics_full.json, model/reader/out_gpu/metrics_gpu_remaining.json]
 
 **2:25 a score is not a referral.** Pusa accident. "In a simulation where the truth is known, our first ranking
 lost to 'nearest place, call first' for trauma: a 'no' on the phone costs five minutes, a wasted trip costs the
-golden hour. So in emergencies the app now calls the nearest plausible place first, which narrowed the gap to
-about a point in our simulation." [sim/README.md] Show the route: "[route sentence from the screen]."
+golden hour. So in emergencies the app now calls the nearest plausible place first. In our simulation it is now
+within one to two points of nearest place plus a call, and ahead only when we assume the model is right, because
+it offers only places whose own listing it can quote. In an emergency the score filters and explains; the call
+decides. The multi-stop route is not part of the simulation." [submission/sim_results.csv, sim/README.md] Show the
+route: "[route sentence from the screen]."
 
 **2:55 the loop back into the data.** "Health workers log what happened, from fixed choices. Reports from at
 least two different workers become one more named row in the same ledger; they can lower a score, never raise

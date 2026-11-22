@@ -2,8 +2,8 @@
 
 The options rest on `_ranked`'s citation rule (#85): a pair with no usable quote is not offered at all, so it cannot
 rank above a quoted one. Route stops come from the planner; a stop with no quote of its own is one whose capability is
-implied by another strongly evidenced capability of the same facility (planner/implied.py), and that facility has its
-own quote for the service asked. Skips when app/facts/out is not built.
+implied by another strongly evidenced capability of the same facility (planner/implied.py); it then shows the
+facility's own quote for the service asked, or says to ask on the phone (#140). Skips when app/facts/out is not built.
 """
 from __future__ import annotations
 
@@ -42,16 +42,19 @@ def test_every_demo_option_cites_its_own_quote(demo):
             assert o["evidence"], (place, s, o["name"])
 
 
-def test_route_stop_without_a_quote_rests_on_its_own_evidence(demo):
+def test_route_stop_without_a_quote_says_to_ask(demo):
+    # #140 WS2 2c: a stop's quotes name its stage, else the engine's quotes for the service asked stand in; a stop
+    # with neither has none of its own for the service and says to ask on the phone.
     for place, s, p in demo:
         for r in (p.get("itinerary") or {}).get("plans", []):
             for st in r["stops"]:
                 if st["evidence"]:
+                    assert st["note"] is None, (place, s, st["name"])
                     continue
-                fid = st["facility_id"]
+                pr = ENGINE.index[s].get(ENGINE.fid[st["facility_id"]])
                 assert st["n_evidence"] == 0, (place, s, st["name"])  # not a quote the server lacks
-                assert ENGINE.score(fid, s)[5], (place, s, st["name"])  # own quote for the service asked
-                assert ENGINE._f("url", ENGINE.fid[fid]), (place, s, st["name"])
+                assert not (pr and ENGINE._evidence(pr)), (place, s, st["name"])  # else it would be quoted
+                assert st["note"].startswith("No line in its listing names "), (place, s, st["name"])
 
 
 def test_no_quote_pair_never_ranks_above_a_quoted_one(monkeypatch):
@@ -68,4 +71,7 @@ def test_no_quote_pair_never_ranks_above_a_quoted_one(monkeypatch):
     monkeypatch.setattr(Engine, "score", drop_first)
     after = [o["facility_id"] for o in ENGINE.plan(s, la, lo, 40, "gps")["options"]]
     assert before[0] not in after
-    assert after[: len(before) - 1] == before[1:]
+    # #140 2b: a facility whose town disagrees with its map point is never emergency option 1 (Sharda, here)
+    rest, far = before[1:], ENGINE.fac.get("town_far") or [None] * len(ENGINE.fid)
+    k = next((j for j, f in enumerate(rest) if not far[ENGINE.fid[f]]), 0)
+    assert after[: len(rest)] == [rest[k], *rest[:k], *rest[k + 1:]]

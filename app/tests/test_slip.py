@@ -68,10 +68,11 @@ def test_sms_length_and_links_encoded():
             assert unquote(wa["url"][len("https://wa.me/?text="):]) == wa["text"]
 
 
-def test_hindi_is_marked_draft():
+def test_hindi_slip_is_hindi_only():
+    """UI2: the glossary is reviewed and one language is on screen, so the Hindi slip carries no English draft line."""
     r = run()
-    assert "(Hindi draft, not reviewed)" in r["hi"]["html"]
-    assert "(Hindi draft, not reviewed)" in r["hi"]["whatsapp"]["text"]
+    assert "(Hindi draft" not in r["hi"]["html"]
+    assert "(Hindi draft" not in r["hi"]["whatsapp"]["text"]
     assert 'lang="hi"' in r["hi"]["html"] and "\u092a\u0930\u094d\u091a\u0940" in r["hi"]["html"]
     assert "(Hindi draft" not in r["en"]["html"]
 

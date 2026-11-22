@@ -42,9 +42,9 @@ KEYBOARD_HINT = "Use your keyboard's mic to speak."
 class Rejected(Exception):
     """A request the endpoint answers with an error status and a message the page can show as is."""
 
-    def __init__(self, status: int, message: str) -> None:
+    def __init__(self, status: int, message: str, code: str) -> None:
         super().__init__(message)
-        self.status, self.message = status, message
+        self.status, self.message, self.code = status, message, code  # code: a key of errors.MESSAGES
 
 
 _lock = threading.Lock()
@@ -88,8 +88,8 @@ def _model() -> Any:
     if _state["status"] == "ready":
         return _state["model"]
     if _state["status"] == "failed":
-        raise Rejected(503, f"Voice input is not working on this server now. {KEYBOARD_HINT}")
-    raise Rejected(503, "Voice input is getting ready. Try again in a minute, or type.")
+        raise Rejected(503, f"Voice input is not working on this server now. {KEYBOARD_HINT}", "voice_failed")
+    raise Rejected(503, "Voice input is getting ready. Try again in a minute, or type.", "voice_loading")
 
 
 def _decode(raw: bytes) -> Any:
@@ -102,14 +102,14 @@ def _decode(raw: bytes) -> Any:
 def _audio_bytes(data_url: str) -> bytes:
     m = DATA_URL.match(data_url)
     if not m:
-        raise Rejected(415, "Send the recording as webm, ogg, mp4 or wav audio.")
+        raise Rejected(415, "Send the recording as webm, ogg, mp4 or wav audio.", "voice_bad_type")
     b64 = data_url[m.end():]
     if len(b64) > (MAX_BYTES + 2) // 3 * 4:
-        raise Rejected(413, "The recording is too big. Speak for up to 15 seconds.")
+        raise Rejected(413, "The recording is too big. Speak for up to 15 seconds.", "voice_too_big")
     try:
         return base64.b64decode(b64, validate=True)
     except (binascii.Error, ValueError):
-        raise Rejected(415, "The recording could not be read. Try again.") from None
+        raise Rejected(415, "The recording could not be read. Try again.", "voice_unreadable") from None
 
 
 def transcribe(data_url: str, lang: str) -> dict[str, Any]:
@@ -119,10 +119,10 @@ def transcribe(data_url: str, lang: str) -> dict[str, Any]:
     try:
         audio = _decode(raw)
     except Exception:  # bad container or codec; the bytes are not logged
-        raise Rejected(415, "The recording could not be read. Try again.") from None
+        raise Rejected(415, "The recording could not be read. Try again.", "voice_unreadable") from None
     seconds = len(audio) / SAMPLE_RATE
     if seconds > MAX_SECONDS:
-        raise Rejected(413, "The recording is too long. Speak for up to 15 seconds.")
+        raise Rejected(413, "The recording is too long. Speak for up to 15 seconds.", "voice_too_long")
     # temperature 0 only: the default fallback re-decodes at higher temperatures when the text repeats, which took
     # a 14 s Hindi clip from 3.5 s to 23 s and turned it into mixed-script garbage.
     # No vad_filter: on 4 s of pink noise it changed nothing (both empty) and cost about 200 MB more peak RSS.

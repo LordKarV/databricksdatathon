@@ -9,8 +9,9 @@ import json
 import math
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
+import errors
 import outcomes
 from community import field
 from community import pulse as area_pulse
@@ -25,6 +26,7 @@ from inputs import translate, understand
 from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES, haversine_km
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from verify.check import Checker
 from voice import transcribe as voice
 
@@ -65,10 +67,35 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 
 
 @app.exception_handler(RequestValidationError)
-async def _invalid(_: Request, exc: RequestValidationError) -> JSONResponse:
+async def _invalid(request: Request, exc: RequestValidationError) -> JSONResponse:
     # Field, rule and message only: the rejected value is never echoed (a NaN could not even be serialised, #85).
+    # `code` and `message` sit beside `detail` (BE-T1): a phone fix outside India or too rough gets its own code.
+    errs = exc.errors()
     return JSONResponse({"detail": [{"loc": list(e.get("loc", ())), "type": e.get("type"), "msg": e.get("msg")}
-                                    for e in exc.errors()]}, 422)
+                                    for e in errs], **errors.payload(errors.validation_code(request.url.path, errs))},
+                        422)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def _http_error(_: Request, exc: StarletteHTTPException) -> Response:
+    # FastAPI's default body, plus `code` and `message` for a coded error or a plain 404.
+    if exc.status_code in (204, 304):
+        return Response(status_code=exc.status_code, headers=exc.headers)
+    code = getattr(exc, "code", None) or ("not_found" if exc.status_code == 404 else None)
+    return JSONResponse({"detail": exc.detail, **(errors.payload(code) if code else {})}, exc.status_code,
+                        headers=exc.headers)
+
+
+@app.exception_handler(Exception)
+async def _crash(_: Request, exc: Exception) -> JSONResponse:
+    # Was Starlette's text/plain "Internal Server Error"; the same words now sit in `detail`. Nothing is echoed.
+    return JSONResponse({"detail": "Internal Server Error", **errors.payload("internal")}, 500)
+
+
+def _err(code: str, status: int, text: str, **extra: Any) -> JSONResponse:
+    """An {error: text} response (kept as it was) with `code` and `message` beside it."""
+    return JSONResponse({**extra, "error": text, **errors.payload(code, **{k: str(v) for k, v in extra.items()})},
+                        status)
 
 
 def _shell(name: str) -> FileResponse:
@@ -106,13 +133,13 @@ def _engine() -> Engine | None:
 def _need_engine() -> Engine:
     e = _engine()
     if e is None:
-        raise HTTPException(503, "facility data is not built on this server (run app/facts/build.py)")
+        raise errors.Coded("facts_not_built", 503, "facility data is not built on this server (run app/facts/build.py)")
     return e
 
 
 def _plan(req: PlanRequest) -> dict:
     if req.service not in SERVICES:
-        raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
+        raise errors.Coded("unknown_service", 422, f"unknown service; expected one of {sorted(SERVICES)}")
     # Round to 0.01 deg (~1.1 km) before anything else touches the point (spec section 8).
     acc = None if req.accuracy_m is None else round(req.accuracy_m)
     eng = _need_engine()
@@ -143,7 +170,7 @@ class AreaRequest(BaseModel):
 def area(req: AreaRequest) -> dict:
     """Standing referral plan for the area around a point (S11) and the ten calls (S12), from real rows."""
     if req.service not in SERVICES:
-        raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
+        raise errors.Coded("unknown_service", 422, f"unknown service; expected one of {sorted(SERVICES)}")
     return _need_engine().area(req.service, round(req.lat, 2), round(req.lon, 2))
 
 
@@ -163,10 +190,10 @@ def _checker() -> Checker | None:
 def verify(req: VerifyRequest) -> JSONResponse:
     """Live check of the facility's official website for the service (#37). Never changes the band."""
     if req.service_id not in SERVICES:
-        raise HTTPException(422, f"unknown service; expected one of {sorted(SERVICES)}")
+        raise errors.Coded("unknown_service", 422, f"unknown service; expected one of {sorted(SERVICES)}")
     ch = _checker()
     if ch is None:
-        return JSONResponse({"error": "website check is not set up on this server"}, status_code=503)
+        return _err("verify_not_set_up", 503, "website check is not set up on this server")
     return JSONResponse(ch.check(req.facility_id, req.service_id), headers={"Cache-Control": "no-store"})
 
 
@@ -194,7 +221,7 @@ def translate_quote(req: TranslateRequest, request: Request) -> JSONResponse:
     eng = _need_engine()
     c = eng.claims.get(req.claim_id)  # route stop quotes use the same claim ids
     if c is None:
-        raise HTTPException(404, "unknown claim id")
+        raise errors.Coded("translate_unknown_claim", 404, "unknown claim id")
     # A claim id starts with the first 8 characters of its facility's id: its name and city stay untranslated.
     # ponytail: linear scan of ~10k ids per request, an index if it ever shows up in a profile.
     prefix = req.claim_id.split(":")[0]
@@ -220,7 +247,11 @@ class NoteRequest(BaseModel):
 @app.post("/api/read-note")
 def read_note(req: NoteRequest) -> JSONResponse:
     """Referral-note photo -> detected text and a guarded suggestion (#64). The image is not stored or logged."""
-    return JSONResponse(understand.read_note(req.image), headers={"Cache-Control": "no-store"})
+    out = understand.read_note(req.image)
+    if out.get("ok") is False and "guard" not in out:  # the model gave no usable reading; `note` stays as it was
+        out |= errors.payload("note_no_service" if out.get("note") == understand.NOTE_NO_SERVICE
+                              else "note_model_unavailable")
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
 
 
 class TranscribeRequest(BaseModel):
@@ -237,7 +268,7 @@ def transcribe(req: TranscribeRequest) -> JSONResponse:
     try:
         return JSONResponse(voice.transcribe(req.audio, req.lang), headers=no_store)
     except voice.Rejected as e:
-        return JSONResponse({"error": e.message}, status_code=e.status, headers=no_store)
+        return JSONResponse({"error": e.message, **errors.payload(e.code)}, status_code=e.status, headers=no_store)
 
 
 class OutcomeRequest(BaseModel):
@@ -265,11 +296,11 @@ def outcome(req: OutcomeRequest, request: Request) -> JSONResponse:
         out = outcomes.record(eng, req.outcome_id, req.facility_id, req.service_id, req.outcome, req.said_at_ms,
                               req.lat, req.lon, req.kind, req.reason, req.wait_bucket, reporter_key(request.headers))
     except ValueError as e:
-        raise HTTPException(422, str(e)) from e
+        raise errors.Coded(getattr(e, "code", "request_invalid"), 422, str(e)) from e
     except outcomes.RateLimited as e:
-        return JSONResponse({"ok": False, "error": str(e)}, status_code=429)
+        return _err("outcome_rate_limited", 429, str(e), ok=False)
     except outcomes.OutcomeError as e:
-        return JSONResponse({"ok": False, "error": str(e)}, status_code=503)
+        return _err(e.code, 503, str(e), ok=False)
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
 
 
@@ -279,7 +310,7 @@ def outcomes_summary() -> JSONResponse:
     try:
         out = outcomes.summary(_need_engine())
     except outcomes.OutcomeError as e:
-        return JSONResponse({"error": str(e)}, status_code=503)
+        return _err(e.code, 503, str(e))
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
 
 
@@ -292,9 +323,9 @@ def pulse(district: Annotated[str | None, Query(max_length=60)] = None,
     try:
         out = area_pulse.pulse(_need_engine(), district, service, lat, lon)
     except ValueError as e:
-        raise HTTPException(422, str(e)) from e
+        raise errors.Coded(getattr(e, "code", "request_invalid"), 422, str(e)) from e
     except outcomes.OutcomeError as e:
-        return JSONResponse({"error": str(e)}, status_code=503)
+        return _err(e.code, 503, str(e))
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
 
 
@@ -305,8 +336,7 @@ HOW = HERE / "howto" / "out" / "how.json"  # built by howto/build.py (git-ignore
 def how() -> Response:
     """Data for the 'How this works' page (#45): every number with the repo file it comes from."""
     if not HOW.is_file():
-        return JSONResponse({"error": "page data is not built on this server (run app/howto/build.py)"},
-                            status_code=503)
+        return _err("how_not_built", 503, "page data is not built on this server (run app/howto/build.py)")
     return FileResponse(HOW, media_type="application/json", headers={"Cache-Control": "no-cache"})
 
 
@@ -322,8 +352,7 @@ def _stories_doc() -> dict | None:
 def stories() -> Response:
     """Data for the 'Data stories' page (#53): text copied from viz/gallery.json, charts by name."""
     if not (STORIES / "stories.json").is_file():
-        return JSONResponse({"error": "page data is not built on this server (run app/stories/build.py)"},
-                            status_code=503)
+        return _err("stories_not_built", 503, "page data is not built on this server (run app/stories/build.py)")
     return FileResponse(STORIES / "stories.json", media_type="application/json", headers={"Cache-Control": "no-cache"})
 
 
@@ -354,7 +383,9 @@ def _pack_index() -> dict | None:
 def pack_version() -> JSONResponse:
     idx = _pack_index()
     if idx is None:
-        return JSONResponse({"error": "no packs built"}, 404, headers={"Cache-Control": "no-cache"})
+        r = _err("packs_not_built", 404, "no packs built")
+        r.headers["Cache-Control"] = "no-cache"
+        return r
     # The facility points (index.json "pts") are for /api/pack/locate only; the phone never needs them.
     packs = {k: {f: v for f, v in m.items() if f != "pts"} for k, m in idx["packs"].items()}
     return JSONResponse({**idx, "packs": packs}, headers={"Cache-Control": "no-cache"})
@@ -400,7 +431,7 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
     """
     path = PACKS / "pin_index.json"
     if not path.is_file():
-        return JSONResponse({"error": "no packs built"}, 404)
+        return _err("packs_not_built", 404, "no packs built")
     states, sidx, lats, lons = _pin_index(path, path.stat().st_mtime)
     lat, lon = round(req.lat, 2), round(req.lon, 2)
     k = math.cos(math.radians(lat))
@@ -408,7 +439,7 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
     slug, state = states[sidx[i]]
     idx = _pack_index() or {"packs": {}}
     if slug not in idx["packs"]:
-        return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
+        return _err("pack_no_state", 404, "no pack for this state", slug=slug, state=state)
     return JSONResponse({"slug": slug, "state": state,
                          "packs": [{"slug": slug, "state": state}] + _near_packs(idx, slug, lat, lon)})
 
@@ -432,7 +463,7 @@ def place(req: PlaceRequest) -> JSONResponse:
     """
     matches, matched_as = _places().resolve(req.q)
     if not matches:
-        return JSONResponse({"error": "place not found", "matches": []}, 404)
+        return JSONResponse({"error": "place not found", "matches": [], **errors.payload("place_not_found")}, 404)
     # matched_as (additive): the name shown when the typed one is an old name or a near spelling of it
     return JSONResponse({"matches": matches, **({"matched_as": matched_as} if matched_as else {})})
 
@@ -458,6 +489,29 @@ def static_file(name: str) -> FileResponse:
     if name not in SHELL_FILES:
         raise HTTPException(404)
     return _shell(name)
+
+
+# UI2 (design/ui2/SPEC.md): the strings files and the self-hosted fonts. Fixed allowlists, so no client string reaches
+# the filesystem path. Fonts never change under a name, so they may be cached for a year; strings revalidate.
+STRING_FILES = {"en.json", "hi.json"}
+FONT_FILES = {"barlow-500.woff2", "barlow-600.woff2", "barlow-condensed-600.woff2", "plex-mono-500-digits.woff2",
+              "hind-500-deva.woff2", "hind-600-deva.woff2"}
+
+
+@app.get("/i18n/{name}")
+def strings_file(name: str) -> FileResponse:
+    if name not in STRING_FILES:
+        raise HTTPException(404)
+    return FileResponse(STATIC / "i18n" / name, media_type="application/json; charset=utf-8",
+                        headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/fonts/{name}")
+def font_file(name: str) -> FileResponse:
+    if name not in FONT_FILES:
+        raise HTTPException(404)
+    return FileResponse(STATIC / "fonts" / name, media_type="font/woff2",
+                        headers={"Cache-Control": "public, max-age=31536000, immutable"})
 
 
 _engine()  # load the facts at start-up, not on the first request

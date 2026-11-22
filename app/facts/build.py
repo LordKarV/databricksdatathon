@@ -43,7 +43,8 @@ from common.names import display_name  # noqa: E402, RUF100
 from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))
-from facts.ledger_terms import NOT_OBSERVED, TERMS  # noqa: E402
+from facts.ledger_terms import LIST_NAMES, NOT_OBSERVED, TERMS, nabh_text  # noqa: E402
+from facts.places import PIN_GRID, centre_pin  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -78,12 +79,26 @@ WITNESSES = ROOT / "derived" / "v2" / "witnesses.parquet"
 # per logit unit (engine._pts, the field-report row), and ships tenths of a point.
 PDO = 20 / math.log(2)
 APP_SCALE = 10
+# Families whose ledger rows cite an outside row (WS4 4a, #140): official lists (X) and OpenStreetMap (O). Each cited
+# evidence id is exported once, with its witnesses.parquet row; only ids a served pair cites, so a restricted list
+# (NABH, NMC, MoHFW trauma) is never exported whole, only the rows of the facilities it matched.
+CITE_FAMILIES = {"X", "O"}
 CLAIM_ID = re.compile(r"[0-9a-f]{8}:[a-z]{4}:\d+")  # a derived/v1 claim id; v2 also cites lists, pages, record:name
 NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturopath|yoga|dental", re.I)
 
 
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
 FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
+# Town vs map point (#140 2b, #117): the listed town (address_city, found in place_gazetteer within the record's state)
+# more than TOWN_FAR_KM from the map point flags "town and map point disagree"; such a facility is never emergency
+# option 1. Only gazetteer cities are used: post-office names repeat across a state (a "Chinchwad" office near
+# Kolhapur flagged Chinchwad, Pune). A town not found, or spread wider than TOWN_SPREAD_KM, is not judged.
+TOWN_FAR_KM = 100
+TOWN_SPREAD_KM = 25
+# Hand-checked location disputes (#117, #140): flagged whatever the gazetteer rule finds.
+LOC_DISPUTED = {
+    "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b": "Sharda Hospital: address Greater Noida, map point in Chandauli",
+}
 SITE_CLASSES = {"official", "official_like"}  # a cited URL of these classes is the listed website (kb/crawl targets)
 # BE-001 (#136): a site the crawl could not read is "unchecked", which says nothing against the facility; only positive
 # evidence against the site makes it "unreliable". Neither is ever cited as a source.
@@ -139,6 +154,21 @@ def e164(raw: str) -> str | None:
     return None
 
 
+def town_far(f: pd.DataFrame) -> list[bool]:
+    """Per record: its listed town is more than TOWN_FAR_KM from its map point, or it is in LOC_DISPUTED."""
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "spread_km", "kind"])
+    g = g[(g.kind == "city") & (g.spread_km <= TOWN_SPREAD_KM)].dropna(subset=["lat", "lon"])
+    towns: dict[tuple[str, str], list[tuple[float, float]]] = {}
+    for st, n, la, lo in zip(g.state, g.name, g.lat, g.lon, strict=True):
+        towns.setdefault((st, n), []).append((la, lo))
+    out = []
+    for u, city, st, la, lo in zip(f.unique_id, f.address_city, f.state_final, f.loc_lat, f.loc_lon, strict=True):
+        key = (str(st).upper(), " ".join(str(city).lower().split()))
+        pts = towns.get(key) if isinstance(city, str) and pd.notna(la) and pd.notna(lo) else None
+        out.append(u in LOC_DISPUTED or bool(pts) and min(haversine(la, lo, a, b) for a, b in pts) > TOWN_FAR_KM)
+    return out
+
+
 def col(series: pd.Series, nd: int | None = None) -> list:
     if nd is not None:
         return [None if pd.isna(x) else round(float(x), nd) for x in series]
@@ -169,6 +199,9 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["phone_shared"] = [shared.get(p, 0) if p else 0 for p in phones]
     f["loc_rule"] = f.location_reason_codes.fillna("").str.split("|").map(
         lambda codes: next((c for c in codes if c.startswith("LOC_")), ""))
+    f["town_far"] = town_far(f)
+    print(f"facts.town_far: {int(f.town_far.sum())} records whose listed town is more than {TOWN_FAR_KM} km from "
+          f"the map point ({len(LOC_DISPUTED)} hand-checked)")
 
     urls = pd.read_parquet(V1 / "source_urls.parquet",
                            columns=["unique_id", "url", "source_class", "domain_reliability", "url_kind"])
@@ -191,6 +224,7 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["public_standard"] = public_standard(f.unique_id, f.name)
     f["public_level"] = public_levels(f.unique_id)
     f["operator"] = operators(f.unique_id)
+    f["nabh"] = nabh_entries(f.unique_id)
     return f, {u: i for i, u in enumerate(f.unique_id)}
 
 
@@ -256,6 +290,17 @@ def site_check(f: pd.DataFrame) -> dict:
             "n_cited_site": int((f.site_flag.notna() & f.url_site).sum())}
 
 
+def nabh_entries(ids: pd.Series) -> list[list | None]:
+    """[tier, acc_no, certificate url] from derived/v2 facility_attributes, or None: NABH on "Official lists"."""
+    if not ATTRS.is_file():
+        return [None] * len(ids)
+    a = pd.read_parquet(ATTRS, columns=["unique_id", "nabh_tier", "nabh_acc_no", "nabh_cert_url"])
+    a = a.dropna(subset=["nabh_acc_no"]).drop_duplicates("unique_id").set_index("unique_id")
+    return [None if u not in a.index else
+            [a.nabh_tier[u] if isinstance(a.nabh_tier[u], str) else None, a.nabh_acc_no[u],
+             a.nabh_cert_url[u] if isinstance(a.nabh_cert_url[u], str) else None] for u in ids]
+
+
 def v2_only(m: pd.DataFrame) -> pd.DataFrame:
     """Keep only pairs v2 scored, so one screen never mixes two scoring systems (#84 review). Prints the coverage per
     app service and fails below MIN_V2_COVERAGE: a bad join would otherwise drop most options without a sound."""
@@ -289,8 +334,9 @@ def check_band_rule(m: pd.DataFrame, card_path: Path | None = None) -> None:
                          "the model owner; do not re-band in the app")
 
 
-def v2_terms(terms: pd.Series) -> tuple[set[str], dict[str, str]]:
-    """(evidence ids that are app claims, family of each term label) over the served pairs' contributions.
+def v2_terms(terms: pd.Series) -> tuple[set[str], dict[str, str], set[str]]:
+    """(evidence ids that are app claims, family of each term label, X and O evidence ids) over the served pairs'
+    contributions.
 
     An id is an app claim when it is a derived/v1 claim and v2's witness quote for it is that claim's text or a clause
     of it (40 of about 30,600 are clauses), so the page never shows another sentence under the id. Specialty items
@@ -305,11 +351,14 @@ def v2_terms(terms: pd.Series) -> tuple[set[str], dict[str, str]]:
     quote = w[w.evidence_id.isin(ids)].drop_duplicates("evidence_id").set_index("evidence_id").quote
     same = {c for c, t in zip(text.claim_id, text.text, strict=True) if isinstance(quote.get(c), str) and quote[c] in t}
     print(f"facts.ledger_claims: {len(same)} of {len(ids)} cited claim ids are app claims")
-    return same, family
+    outside = {e for ts in parsed for t in ts if t["family"] in CITE_FAMILIES and t["points"]
+               for e in t["evidence_ids"]}
+    return same, family, outside
 
 
-def ledger(base: float, terms_json: str, p: float, same: set[str]) -> list[list]:
-    """[[term, tenths of an app point, [app claim ids]], ...] for one pair: base first, terms with 0 points left out.
+def ledger(base: float, terms_json: str, p: float, same: set[str], cited: dict | None = None) -> list[list]:
+    """[[term, tenths of an app point, [app claim ids], [cite ids]], ...] for one pair: base first, terms with 0 points
+    left out. Cite ids are the term's evidence ids found in `cited` (cites() below: X and O rows).
 
     Each row is APP_SCALE x its logit contribution. Rounding to tenths is spread by largest remainder, so the rows sum
     exactly to round(10 x APP_SCALE x logit(p)) and the total maps back to p within 0.0013.
@@ -325,7 +374,53 @@ def ledger(base: float, terms_json: str, p: float, same: set[str]) -> list[list]
     for k in sorted(range(len(exact)), key=lambda k: tenths[k] - exact[k])[: round(sum(exact)) - sum(tenths)]:
         tenths[k] += 1
     ids = [[], *([e for e in t["evidence_ids"] if e in same][:MAX_EVIDENCE] for t in terms)]
-    return [[n, x, i] for n, x, i in zip(("base", *(t["label"] for t in terms)), tenths, ids, strict=True)]
+    cites = [[], *([e for e in t["evidence_ids"] if e in (cited or {})][:MAX_EVIDENCE] for t in terms)]
+    return [[n, x, i, c] for n, x, i, c in zip(("base", *(t["label"] for t in terms)), tenths, ids, cites, strict=True)]
+
+
+def cites(ids: set[str]) -> dict[str, list]:
+    """{evidence id: [text, url, source, fetched_date, nabh tier, precision k, precision n]} for X and O ids.
+
+    The text is the list entry's own name and what the list says ("DH Dausa: Maternity OT certificate valid to ..."),
+    or for NABH the kind of entry by nabh_tier: full accreditation, entry-level certificate, or a CGHS/ECHS
+    empanelment that NABH's portal also lists, which is not accreditation. Points do not change.
+    """
+    if not ids:
+        return {}
+    w = pd.read_parquet(WITNESSES, columns=["family", "evidence_id", "evidence_url", "value_text", "quote", "source",
+                                            "source_key", "fetched_date", "precision_k", "precision_n"],
+                        filters=[("observability", "==", "present"), ("family", "in", sorted(CITE_FAMILIES))])
+    w = w[w.evidence_id.isin(ids)].drop_duplicates("evidence_id")
+    tier = {}
+    if ATTRS.is_file():
+        a = pd.read_parquet(ATTRS, columns=["nabh_acc_no", "nabh_tier"]).dropna().drop_duplicates("nabh_acc_no")
+        tier = dict(zip(a.nabh_acc_no, a.nabh_tier, strict=True))
+    out = {}
+    w = w.astype(object).where(w.notna(), None)  # pd.NA has no truth value
+    for r in w.itertuples(index=False):
+        t = tier.get(r.evidence_id) if r.source_key == "nabh" else None
+        if r.source_key == "nabh":
+            text = nabh_text(t, r.evidence_id)
+        elif r.quote and r.quote not in (r.value_text or ""):
+            text = f"{r.quote}: {r.value_text}"
+        else:
+            text = r.value_text
+        k, n = (None if x is None else int(x) for x in (r.precision_k, r.precision_n))
+        out[r.evidence_id] = [text, r.evidence_url, r.source, r.fetched_date, t, k, n]
+    print(f"facts.cites: {len(out)} of {len(ids)} cited list and OpenStreetMap ids have a witness row; NABH tiers "
+          f"{dict(Counter(v[4] for v in out.values() if v[2] and 'NABH' in v[2]))}")
+    return out
+
+
+def public_lists(overlays: object) -> list[list[str]]:
+    """[[list, date], ...] from derived/v2 overlays ON_A_PUBLIC_LIST:<list>:<date>; the Why page's "Official lists"."""
+    out = []
+    for o in as_list(overlays):
+        tag, _, rest = o.partition(":")
+        key, _, date = rest.partition(":")
+        if tag == "ON_A_PUBLIC_LIST" and key in LIST_NAMES:
+            out.append([key, date or None])
+    return out
 
 
 def not_observed(m: pd.DataFrame) -> list[str]:
@@ -360,7 +455,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, li
     m = type_fit(m)
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
-                                          "p_exists", "base", "contributions"])
+                                          "p_exists", "base", "contributions", "overlays"])
         v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
         v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         bad = set(v2.band.str.upper()) - set(V2_BAND)
@@ -369,14 +464,16 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, li
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
                                                                   "band": "m_band", "p_location": "m_pl",
                                                                   "p_exists": "m_pe", "base": "m_base",
-                                                                  "contributions": "m_terms"}),
+                                                                  "contributions": "m_terms",
+                                                                  "overlays": "m_lists"}),
                     on=["unique_id", "service"], how="left")
         m = v2_only(m)
         check_band_rule(m)
         m["not_observed"] = not_observed(m)
-        same, family = v2_terms(m.m_terms)
+        same, family, outside = v2_terms(m.m_terms)
+        cited_rows = cites(outside)
     else:
-        same, family = set(), {}
+        same, family, cited_rows = set(), {}, {}
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
@@ -388,16 +485,17 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, li
         model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper(), round(float(r.m_pl), 3),
                   round(float(r.m_pe), 3)]
                  if "m_band" in m.columns and isinstance(r.m_band, str) else None)
-        led = ledger(r.m_base, r.m_terms, r.m_p, same) if model else None
-        cited.update(c for *_, ids in led or [] for c in ids)
+        led = ledger(r.m_base, r.m_terms, r.m_p, same, cited_rows) if model else None
+        cited.update(c for _, _, ids, _ in led or [] for c in ids)
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
             round(r.score_hi, 4), round(r.q_ev, 4), round(r.score_model, 4), ev, missing, risks,
             r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings),
-            led, r.not_observed if model else ""])
+            led, r.not_observed if model else "", public_lists(r.m_lists) if model else []])
     used = {"base": "base", **family}
     words = {"terms": {k: [used[k], *TERMS[k]] for k in sorted(used)},
-             "not_observed": {k: list(v) for k, v in NOT_OBSERVED.items()}}
+             "not_observed": {k: list(v) for k, v in NOT_OBSERVED.items()},
+             "cites": cited_rows, "lists": LIST_NAMES}
     return out, cited, words
 
 
@@ -520,7 +618,7 @@ def sealed_test_record(card_path: Path | None = None, results_path: Path = TEST_
             "public_n": pub["n"], "model_version": res["model_version"],
             "predictions_sha256": res["test_predictions_sha256"], "labels_sha256": labels_full,
             "opened": log["opened"], "source": rel(results_path), "log": rel(OPENING_LOG),
-            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/dev/{rel(OPENING_LOG)}"}
+            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/main/{rel(OPENING_LOG)}"}
 
 
 def rules() -> dict[str, dict]:
@@ -531,11 +629,45 @@ def rules() -> dict[str, dict]:
                      "citation": r.citation} for r in e.itertuples(index=False)}
 
 
+def fill_districts(p: pd.DataFrame) -> pd.DataFrame:
+    """Give a district to gazetteer PINs that have a point and a state but none (229 on #134: online they were
+    'not in our PIN list' while the offline packs had them). First the row's own `districts` list, else the
+    district of the nearest PIN of the SAME state that has one (equirectangular, cos(lat) scaled). A PIN whose
+    state has no PIN with a district stays out; no district name is made up. `district_from` says which:
+    "" (filed in the gazetteer), "gazetteer_list" or "nearest_pin"."""
+    p = p.assign(district_from="")
+    own = p.district.isna() & p.districts.map(lambda x: x is not None and len(x) > 0)
+    p.loc[own, "district"] = p.loc[own, "districts"].map(lambda x: x[0])
+    p.loc[own, "district_from"] = "gazetteer_list"
+    for st, miss in p[p.district.isna()].groupby("state").groups.items():
+        known = p[(p.state == st) & p.district.notna()]
+        if known.empty:
+            continue
+        la, lo = p.loc[miss, "lat"].to_numpy()[:, None], p.loc[miss, "lon"].to_numpy()[:, None]
+        d2 = (known.lat.to_numpy() - la) ** 2 + ((known.lon.to_numpy() - lo) * np.cos(np.radians(la))) ** 2
+        p.loc[miss, "district"] = known.district.to_numpy()[d2.argmin(axis=1)]
+        p.loc[miss, "district_from"] = "nearest_pin"
+    return p
+
+
+def centre_flags(p: pd.DataFrame) -> list[int]:
+    """1 for the PIN that is its district's centre (facts/places.py centre_pin), else 0.
+
+    Chosen here from the raw gazetteer points rounded as packs/build_packs.py rounds them, the integers offline.js
+    districtCentre reads, so a district centre is the same PIN online and offline. Only PINs the gazetteer files under
+    the district count (fill_districts' guesses never become a centre)."""
+    q = p[p.district_from == ""] if "district_from" in p else p
+    q = q.assign(qa=np.round(q.lat * PIN_GRID).astype(int), qo=np.round(q.lon * PIN_GRID).astype(int))
+    centres = {centre_pin(list(zip(g.pin, g.qa, g.qo, strict=True))) for _, g in q.groupby(["state", "district"])}
+    return [int(x in centres) for x in p.pin]
+
+
 def pins() -> dict[str, list]:
-    p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "lat", "lon"])
-    p = p.dropna(subset=["lat", "lon", "district"])
+    p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "districts", "lat", "lon"])
+    p = fill_districts(p.dropna(subset=["lat", "lon", "state"])).dropna(subset=["district"])
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
-            "district": list(p.district), "state": list(p.state)}
+            "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from),
+            "centre": centre_flags(p)}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
@@ -568,6 +700,57 @@ def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
         if where != own:
             out[str(pin)] = list(where)
     return out
+
+
+GOV = Path(__file__).resolve().parent / "gov"  # small committed inputs, written by gov/build_gov.py (WS4 4b, #140)
+GEO = ROOT / "viz" / "geography" / "data"  # committed district tables of the data stories (viz/geography)
+
+
+def moved_pins() -> dict[str, list[str]]:
+    """pin_districts() as committed in gov/pin_district_moved.csv, so a clean checkout gets the LGD district too."""
+    m = pd.read_csv(GOV / "pin_district_moved.csv", dtype=str)
+    return {p: [d, s] for p, d, s in zip(m.pin, m.district, m.state, strict=True)}
+
+
+def _num(x: object, nd: int) -> float | None:
+    return None if pd.isna(x) else round(float(x), nd)
+
+
+def district_brief() -> dict:
+    """The Area page's district brief (WS4 4b): need, by LGD district, from the committed viz/geography tables, and
+    the government lists. WorldPop people and listings per million (s1), NFHS-5 caesarean and institutional birth
+    rates (s3, by the NFHS-5 district s1 maps it to), LaQshya Maternity OT certificates and PMNDP state counts (gov/).
+    Keys: "STATE|DISTRICT" in India Post spelling -> dist_lgd; dist_lgd -> rows."""
+    lgd = pd.read_csv(GOV / "district_lgd.csv")
+    s1 = pd.read_csv(GEO / "s1_district.csv")
+    s3 = pd.read_csv(GEO / "s3_district.csv").set_index(["nfhs_state", "nfhs_district"])
+    s1_numbers = json.loads((GEO / "s1_numbers.json").read_text())
+    pub, priv = (f"births_in_a_{k}_fac_that_were_delivered_by_csection_5y_pct" for k in ("public", "private"))
+    need = {}
+    for r in s1.itertuples(index=False):
+        n = s3.loc[(r.nfhs_state, r.nfhs_district)] if (r.nfhs_state, r.nfhs_district) in s3.index else None
+        nf = [None] * 5 if n is None else [
+            r.nfhs_district, _num(n.births_delivered_by_csection_5y_pct, 1),
+            _num(n[pub], 1) if n[f"{pub}_flag"] == "ok" else None,
+            _num(n[priv], 1) if n[f"{priv}_flag"] == "ok" else None, _num(n.institutional_birth_5y_pct, 1)]
+        need[str(r.dist_lgd)] = [r.dtname, round(r.pop), int(r.records), _num(r.per_m, 2), *nf]
+    key = {f"{st}|{d}".upper(): str(c) for d, st, c in zip(lgd.district, lgd.state, lgd.dist_lgd, strict=True)}
+    # LaQshya rows -> the LGD district viz/geography/s3_csection.py matched them to (within their NFHS-5 state)
+    code = {(st, d): str(c) for c, d, st in zip(s1.dist_lgd, s1.dtname, s1.nfhs_state, strict=True)}
+    lq = pd.read_csv(GOV / "laqshya.csv").dropna(subset=["lgd_district"])
+    laqshya: dict[str, list] = {}
+    for r in lq.itertuples(index=False):
+        c = code.get((r.nfhs_state, r.lgd_district))
+        if c:
+            laqshya.setdefault(c, []).append([r.name, r.department, r.certified, r.valid_to, r.status])
+    pm = pd.read_csv(GOV / "pmndp_state.csv")
+    pmndp = {k: [int(a), int(b), int(t), d] for k, a, b, t, d in zip(
+        pm.state_key, pm.functional_centres, pm.functional_districts, pm.total_districts, pm.fetched, strict=True)}
+    n_lq = sum(map(len, laqshya.values()))
+    print(f"district brief: {len(need)} LGD districts, {len(key)} India Post district names, "
+          f"{n_lq} LaQshya certificates in {len(laqshya)} districts, {len(pmndp)} PMNDP states")
+    return {"key": key, "need": need, "india_per_million": round(s1_numbers["national_per_m"], 1),
+            "laqshya": laqshya, "pmndp": pmndp}
 
 
 PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
@@ -620,7 +803,7 @@ def main() -> None:
         "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
-                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
+                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5), "town_far": [bool(x) for x in f.town_far],
                 "p_e": col(f.existence_score, 3), "p_l": col(f.location_score, 3), "loc_rule": list(f.loc_rule),
                 "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw), "phone_shared": list(f.phone_shared),
                 "flags": [as_list(x) for x in f.trust_flags],
@@ -630,12 +813,13 @@ def main() -> None:
                 "url_site": [bool(x) for x in f.url_site], "site_flag": col(f.site_flag),
                 "site_status": col(f.site_status),
                 "public_standard": list(f.public_standard), "public_level": list(f.public_level),
-                "operator": list(f.operator)},
+                "operator": list(f.operator), "nabh": list(f.nabh)},
         "pairs": pr,
         "ledger": ledger_words,  # plain words for the pairs' ledger rows: {"terms": {term: [family, en, hi]}, ...}
         "claims": claim_rows,
         "claim_flags": claim_fl,
         "pins": pins(),
+        "district_brief": district_brief(),
     }
     # The hash covers the data only (not built_at or where it was read from), so it changes only when the data does
     # and a rebuild of derived/v1 that matches the repo gives the same hash (#86 step 3).
@@ -646,11 +830,14 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (out / "facts.sha").write_text(facts_hash + "\n")
-    # Outside facts.json and its hash: the file comes from git-ignored data, so a derived/v1 rebuild still matches.
-    moved = pin_districts(facts["pins"])
+    # Outside facts.json and its hash, as before the LGD map was committed (gov/pin_district_moved.csv).
+    moved = moved_pins()
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
-    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
-          if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
+    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in "
+          "(app/facts/gov/pin_district_moved.csv)")
+    guessed = Counter(s for s, how in zip(facts["pins"]["state"], facts["pins"]["district_from"], strict=True) if how)
+    print(f"pins: {sum(guessed.values())} PINs with no district in the gazetteer kept, district from the nearest PIN "
+          f"of the same state ({', '.join(f'{s.title()} {n}' for s, n in guessed.most_common())})")
     pl = places()
     (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")

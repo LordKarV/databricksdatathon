@@ -151,7 +151,7 @@ def test_required_content_and_route_order():
             assert disclaimer in page and disclaimer in text
             assert "Call before you go" in page
         else:
-            assert "(Hindi draft, not reviewed)" in page and "यात्रा" in page
+            assert "(Hindi draft" not in page and "यात्रा" in page  # UI2: one language, no English draft line
         route = (plan.get("itinerary") or {}).get("plans")
         names = [s["name"] for s in route[0]["stops"]] if route else []
         if len(dict.fromkeys(names)) > 1:

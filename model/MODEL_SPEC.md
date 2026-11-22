@@ -1,5 +1,9 @@
 # Witness Ledger: final model spec with measured results
 
+> **v1 history.** This spec and its numbers describe the v1 prototype (hash de82eeee...), which the app no longer
+> uses. The shipped model is v2: [`derived/v2/model_card.json`](../derived/v2/model_card.json) and
+> [`derived/v2/README.md`](../derived/v2/README.md); its sealed TEST is in [`gold/v3/test_eval/`](gold/v3/test_eval/).
+
 Status (2026-11-21). The evidence, fusion and decision prototypes are built and were run on all 10,088
 records. A statistical review and an explainability review then recomputed their numbers. This spec is
 the build contract for the weekend and the judges' reference. It covers what the model does, what it

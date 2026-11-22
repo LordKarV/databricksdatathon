@@ -16,7 +16,10 @@
   function meta() { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
   function setMeta(m) { try { localStorage.setItem(KEY, JSON.stringify(m)); } catch { /* private mode */ } }
   function daysAgo(t) { return Math.max(0, Math.floor((Date.now() - t) / DAY)); }
-  function dateStr(t) { return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'}); }
+  function dateStr(t) {  // the app language (rs.lang), not the phone's
+    const hi = typeof state !== 'undefined' && state.lang === 'hi';
+    return new Date(t).toLocaleDateString(hi ? 'hi-IN' : 'en-IN', {day: 'numeric', month: 'short'});
+  }
 
   // Indian numbers in the pack are 10 digits (mobile or STD code + number) or toll-free 1800; anything else gets no
   // tel: link.
@@ -110,11 +113,21 @@
     }
     return null;
   }
+  // The district's own PIN point nearest the mean of its PIN points. A plain mean can lie nearer another district's
+  // PINs, so the area view named that district (Anakapalli gave Visakhapatnam). Same rule as facts/places.py
+  // district_centre: integers on the pack's 0.001 degree grid, longitude scaled by cos(lat), lowest PIN on a tie,
+  // so the centre is the same PIN online and offline.
   function districtCentre(pack, d) {
-    const di = pack.districts.indexOf(d);
-    let n = 0, la = 0, lo = 0;
-    pack.pins.d.forEach((x, i) => { if (x === di) { n++; la += pack.pins.lat[i]; lo += pack.pins.lon[i]; } });
-    return n ? {lat: la / n, lon: lo / n, label: `${titleCase(d)} district centre`} : null;
+    const di = pack.districts.indexOf(d), P = pack.pins, G = 1000, own = [];
+    P.d.forEach((x, i) => { if (x === di) own.push(i); });
+    if (!own.length) return null;
+    const qa = own.map(i => Math.round(P.lat[i] * G)), qo = own.map(i => Math.round(P.lon[i] * G));
+    const n = own.length, sa = qa.reduce((t, v) => t + v, 0), so = qo.reduce((t, v) => t + v, 0);
+    const k = Math.cos(sa / n / G * Math.PI / 180);
+    const d2 = j => (n * qa[j] - sa) ** 2 + ((n * qo[j] - so) * k) ** 2;
+    let b = 0;
+    for (let j = 1; j < n; j++) if (d2(j) < d2(b) || (d2(j) === d2(b) && P.pin[own[j]] < P.pin[own[b]])) b = j;
+    return {lat: P.lat[own[b]], lon: P.lon[own[b]], label: `${titleCase(d)} district centre`};
   }
 
   // ---------- satellite fix while offline (spec 3.2.3 step 2) ----------
@@ -139,6 +152,7 @@
 
   function render(o, ctx) {
     // ctx: {serviceLabel, locLine (already escaped HTML), show102, fresh, hasPack, gettingGps, reason}
+    const t = (k, v) => root.th(k, v);
     const m = meta();
     // The oldest saved pack sets the age warning; build dates are listed per state when they differ.
     const savedAt = m ? Math.min(m.saved_at, ...Object.values(m.packs || {}).map(x => x.saved_at)) : null;
@@ -147,53 +161,44 @@
     const built = builts.length > 1 ? o.packs.map(x => `${x.built} (${titleCase(x.state)})`).join(', ')
       : o && o.built || m && m.built || '?';
     const ageClass = age == null ? '' : age > 90 ? 'stale-red' : age > 30 ? 'stale-amber' : '';
-    const dates = m ? `<p class="${ageClass}">Facility data built ${esc(built)}.
-      Saved to this phone ${dateStr(savedAt)} (${age === 0 ? 'today' : age + (age === 1 ? ' day' : ' days') + ' ago'}).
-      ${age > 90 ? '<strong>Phone numbers may have changed.</strong>' : ''}</p>` : '';
-    const calls = `<div class="row"><a class="btn" href="tel:108"><span aria-hidden="true">&#9742;</span> Call 108</a>
-      ${ctx.show102 ? '<a class="btn" href="tel:102"><span aria-hidden="true">&#9742;</span> Call 102</a>' : ''}</div>`;
-    const head = `<h1 tabindex="-1">No internet: ${esc(ctx.serviceLabel)}</h1>
-      <p>${esc(ctx.reason)}</p>${dates}${calls}`;
-    const gps = ctx.gettingGps ? `<p role="status">Getting GPS from satellites. Stand outside. Up to 2 minutes.</p>` : '';
-    const choose = '<a class="btn btn-block" href="#/change">Choose place instead</a>';
-    if (!m || !ctx.hasPack) {
-      return head + `<p class="card">No saved facility data on this phone yet. It saves after one online answer.
-        Call 108 in an emergency.</p>${choose}`;
-    }
+    const dates = m ? `<p class="note ${ageClass}">${t('off.built', {built: esc(built), saved: dateStr(savedAt),
+      age: age === 0 ? t('off.today') : t(age === 1 ? 'off.day_ago' : 'off.days_ago', {n: age})})}
+      ${age > 90 ? `<strong>${t('off.phones_changed')}</strong>` : ''}</p>` : '';
+    const head = `<h1 tabindex="-1">${esc(ctx.serviceLabel)}</h1>${dates}`;
+    const gps = ctx.gettingGps ? `<p role="status">${t('gps.wait')}</p>` : '';
+    const choose = `<a class="btn btn-block section" href="#/change">${t('home.choose_place')}</a>`;
+    if (!m || !ctx.hasPack) return head + `<p class="panel">${t('off.no_pack')}</p>${choose}`;
     if (!ctx.fresh || !o) {
-      return head + gps + `<p>Using GPS from ${ctx.locLine} (older than 6 hours).</p>
-        <button type="button" class="btn btn-primary btn-block" id="patient-here">Patient is here</button>${choose}`;
+      return head + gps + `<p>${t('off.old_fix', {loc: ctx.locLine})}</p>
+        <button type="button" class="btn btn-ink btn-block" id="patient-here">${t('off.patient_here')}</button>${choose}`;
     }
-    const prov = String(o.band_note || '').startsWith('placeholder')
-      ? '<p class="small muted">Labels are provisional: the model has not published its scores yet.</p>' : '';
+    const prov = String(o.band_note || '').startsWith('placeholder') ? `<p class="note">${t('off.provisional')}</p>` : '';
     const cards = o.options.length ? o.options.map((x, i) => card(x, i + 1, ctx.serviceLabel, o.state)).join('')
-      : `<p class="card">No facility in the saved data lists ${esc(ctx.serviceLabel)} near here.</p>`;
-    return head + gps + `<p class="small">${ctx.locLine}. Plan made for PIN ${esc(o.pin)} centre
-        (${esc(titleCase(o.district))}), ${esc(o.km_to_pin)} km from you.</p>
-      <h2>Call before you go</h2>${prov}${cards}
-      <p class="small muted">Needs internet: note scan, map, road times, places outside
-        ${esc([...new Set((o.packs || [o]).map(x => titleCase(x.state)))].join(', '))}.</p>${choose}`;
+      : `<p class="panel">${t('off.none_near', {label: esc(ctx.serviceLabel)})}</p>`;
+    return head + gps + `<p class="note">${t('off.pin_line', {loc: ctx.locLine, pin: esc(o.pin), district: esc(titleCase(o.district)), km: esc(o.km_to_pin)})}</p>
+      <h2 class="section">${t('off.call_before')}</h2>${prov}${cards}
+      <p class="note section">${t('off.needs_net', {states: esc([...new Set((o.packs || [o]).map(x => titleCase(x.state)))].join(', '))})}</p>${choose}`;
   }
 
   function card(x, n, label, userState) {
-    const band = x.likely
-      ? '<span class="band band-likely"><span aria-hidden="true">&#10004;</span> LIKELY</span>'
-      : '<span class="band band-not_verified"><span aria-hidden="true">?</span> NOT VERIFIED: call to confirm</span>';
+    const t = (k, v) => root.th(k, v);
+    const b = x.likely ? 'likely' : 'not_verified';
+    const band = `<span class="band band-${b}">${t('band.' + b)}</span>`;
     const tel = telHref(x.tel);
-    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote${q.claim_id ? ` data-claim="${esc(q.claim_id)}"` : ''}>"${esc(q.text)}"</blockquote>`)
-      .join('')
-      : `<p class="small">Our data has no own sentence about ${esc(label)} for this listing.</p>`;
-    const sms = 'sms:?body=' + encodeURIComponent(`${label}: ${x.name}. ${x.km_straight} km straight line. ` +
-      `${tel ? 'Phone ' + tel.slice(4) + '. ' : ''}Call before going. Emergency 108.`);
-    return `<article class="card" aria-labelledby="off-${n}"><p>${n}. ${band}</p>
-      <h3 id="off-${n}">${esc(x.name)}</h3>
-      <p>${x.state && userState && x.state !== userState ? `In ${esc(titleCase(x.state))}, ` : ''}${esc(x.km_straight)} km in a straight line (road is longer).${x.loc_low ? ' Map point may be wrong.' : ''}</p>
-      ${x.listings > 1 ? `<p class="small muted">Listed ${esc(x.listings)} times in the data; shown once, with the best evidenced listing's score.</p>` : ''}
+    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote${q.claim_id ? ` data-claim="${esc(q.claim_id)}"` : ''}><p lang="en">"${esc(q.text)}"</p></blockquote>`).join('')
+      : `<p class="note">${t('why.no_quote', {label: esc(label)})}</p>`;
+    const sms = 'sms:?body=' + encodeURIComponent(root.ts('off.sms', {label, name: x.name, km: x.km_straight,
+      phone: tel ? root.ts('off.sms_phone', {phone: tel.slice(4)}) : ''}));
+    const where = x.state && userState && x.state !== userState ? t('off.in_state', {state: esc(titleCase(x.state))}) + ' ' : '';
+    return `<article class="card answer${x.likely ? ' likely' : ''} section" aria-labelledby="off-${n}"><p class="kicker">${n}. ${band}</p>
+      <h3 id="off-${n}" class="name" lang="en">${esc(x.name)}</h3>
+      <p>${where}${t('off.straight', {km: esc(x.km_straight)})}${x.loc_low ? ' ' + t('off.map_wrong') : ''}</p>
+      ${x.listings > 1 ? `<p class="note">${t('off.listed', {n: esc(x.listings)})}</p>` : ''}
       ${quotes}
-      ${tel ? `<a class="btn btn-primary btn-block" href="${esc(tel)}"><span aria-hidden="true">&#9742;</span>
-        Call ${esc(x.name)}</a>${x.tel_dir ? '<p class="small">May be a directory number, not the hospital.</p>' : ''}`
-        : '<p class="small">No dialable number saved for this listing.</p>'}
-      <a class="btn btn-block" href="${esc(sms)}">Send by SMS <span class="visually-hidden">${esc(x.name)}</span></a>
+      ${tel ? `<a class="btn btn-go btn-block btn-big" href="${esc(tel)}">${root.rsIcon('phone')} ${t('ans.call')}
+        <span class="visually-hidden"> ${esc(x.name)}</span></a>${x.tel_dir ? `<p class="note">${t('off.directory')}</p>` : ''}`
+        : `<p class="note">${t('ans.no_phone')}</p>`}
+      <a class="btn btn-block" href="${esc(sms)}">${t('off.send_sms')} <span class="visually-hidden">${esc(x.name)}</span></a>
     </article>`;
   }
 

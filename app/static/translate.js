@@ -1,12 +1,12 @@
 // On-demand Hindi machine translation of facility quotes (SAFETY.md 14). Hook: RSTranslate.bind(root).
-// Each evidence quote (an element marked data-f="...evidence.N.quote") gets a "हिंदी में पढ़ें" button. The page sends
+// In Hindi mode each evidence quote (an element marked data-f="...evidence.N.quote") gets a "हिन्दी में पढ़ें" button. The page sends
 // only the claim id from the plan; the server looks the quote up, translates it and guards names and numbers. The
 // original quote is never changed: the translation is added under it, labelled as a machine translation.
 'use strict';
 (function (root) {
   const LABEL_HI = 'मशीन अनुवाद। मूल अंग्रेज़ी ऊपर है और वही सबूत है।';
   const LABEL_EN = 'Machine translation. The original English above is the evidence.';
-  const NA = '<span lang="hi">अनुवाद अभी उपलब्ध नहीं</span> / Translation not available right now';
+  const NA = 'अनुवाद अभी उपलब्ध नहीं';  // the button is shown only on Hindi screens (app.js render)
   const QUOTE = /^(.+\.evidence\.\d+)\.quote$/;
   const escHtml = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
 
@@ -40,7 +40,7 @@
   // Read aloud through speech.js, label first; with no Hindi voice, speech.js reads the English original instead.
   async function say(hindi, original, note) {
     try { await loadScript('/speech.js', 'RSSpeech'); await RSSpeech.load(); } catch { /* handled below */ }
-    if (!root.RSSpeech) { note.textContent = 'Read aloud is not available now.'; return; }
+    if (!root.RSSpeech) { note.textContent = 'अभी पढ़कर सुनाना उपलब्ध नहीं है।'; return; }
     const r = RSSpeech.speak(LABEL_HI + '\n' + hindi, 'hi', {fallback: LABEL_EN + '\n' + original});
     note.textContent = r.message || '';
   }
@@ -53,18 +53,18 @@
     if (!j || !j.available) {
       if (j && RETRY.has(j.reason)) {
         btn.disabled = false;  // try again
-        out.innerHTML = `<p class="small">${escHtml(j.message || 'Translation not available right now.')}</p>`;
+        out.innerHTML = `<p class="small" lang="en">${escHtml(j.message || 'Translation not available right now.')}</p>`;
       } else {
         unavailable(btn);
-        if (j && j.message) out.innerHTML = `<p class="small">${escHtml(j.message)}</p>`;
+        if (j && j.message) out.innerHTML = `<p class="small" lang="en">${escHtml(j.message)}</p>`;
       }
       return;
     }
     const hindi = j.hindi;
     btn.remove();  // not .hidden: the button rule in app.css sets display
-    out.innerHTML = `<p class="small muted"><span lang="hi">${LABEL_HI}</span> ${LABEL_EN}</p>
+    out.innerHTML = `<p class="small muted">${LABEL_HI}</p>
       <p lang="hi" class="tr-text">${j.parts ? partsHtml(j.parts, path) : escHtml(hindi)}</p>
-      <button type="button" class="tr-say"><span lang="hi">सुनें</span> / Read aloud</button>
+      <button type="button" class="btn tr-say">सुनें</button>
       <p class="small muted tr-note"></p>`;
     out.querySelector('.tr-say').addEventListener('click', () => say(hindi, original, out.querySelector('.tr-note')));
   }
@@ -80,7 +80,7 @@
       if (!box || !id || box.querySelector('.tr')) return;
       const wrap = document.createElement('div');
       wrap.className = 'tr';
-      wrap.innerHTML = '<button type="button" class="tr-btn"><span lang="hi">हिंदी में पढ़ें</span></button><div class="tr-out" aria-live="polite"></div>';
+      wrap.innerHTML = '<button type="button" class="btn tr-btn" lang="hi">हिन्दी में पढ़ें</button><div class="tr-out" aria-live="polite"></div>';
       box.appendChild(wrap);
       const btn = wrap.querySelector('.tr-btn');
       if (!navigator.onLine) { unavailable(btn); return; }
