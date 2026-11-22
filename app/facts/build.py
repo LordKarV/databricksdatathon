@@ -85,6 +85,9 @@ NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturo
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
 FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
 SITE_CLASSES = {"official", "official_like"}  # a cited URL of these classes is the listed website (kb/crawl targets)
+# BE-001 (#136): a site the crawl could not read is "unchecked", which says nothing against the facility; only positive
+# evidence against the site makes it "unreliable". Neither is ever cited as a source.
+SITE_STATUS = {"no_usable_page": "unchecked", "no_identity": "unreliable", "other_org": "unreliable"}
 
 
 def _places() -> dict[str, list[tuple[float, float]]]:
@@ -182,6 +185,7 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["url_kind"] = f.unique_id.map(best.url_kind)
     f["url_site"] = f.unique_id.map(best.source_class).isin(SITE_CLASSES)
     f["site_flag"] = site_flags(f.unique_id, f.trust_flags)
+    f["site_status"] = f.site_flag.map(SITE_STATUS)
     f["url_place"] = [wiki_place(u, la, lo) if k != "about" else None
                       for u, k, la, lo in zip(f.url, f.url_kind, f.loc_lat, f.loc_lon, strict=True)]
     f["public_standard"] = public_standard(f.unique_id, f.name)
@@ -224,12 +228,13 @@ def _web_state(ids: pd.Series) -> pd.Series:
 
 
 def site_flags(ids: pd.Series, trust_flags: pd.Series) -> list[str | None]:
-    """Why the listed website is unreliable (#117 A), from existing crawl outputs; None when no reason is known.
+    """Why the listed website is not cited (#117 A), from existing crawl outputs; None when no reason is known.
 
     other_org: record_trust flag website_may_belong_to_other_org. no_usable_page: derived/v2 web_state "dead", i.e.
     no kb/crawl target of the record ended ok or ok_thin (dead, parked, spam, a redirect elsewhere, or blocked).
     no_identity: the site is live but no page names the facility, or it is a for-sale page (e_identity_conf 0).
     Display only: the frozen model reads the same crawl through its W-family terms and is not changed.
+    SITE_STATUS maps each reason to its label: no_usable_page is unchecked, the other two are unreliable (BE-001).
     """
     other = [any(x == "website_may_belong_to_other_org" for x in as_list(t)) for t in trust_flags]
     if not (ATTRS.is_file() and FEATURES.is_file()):
@@ -241,11 +246,12 @@ def site_flags(ids: pd.Series, trust_flags: pd.Series) -> list[str | None]:
 
 
 def site_check(f: pd.DataFrame) -> dict:
-    """Counts for the How page: facilities with a crawled website, and how many are flagged, by reason."""
+    """Counts for the How page: facilities with a crawled website, and how many are flagged, by status and reason."""
     if not ATTRS.is_file():
         return {}
-    flags = f.site_flag.dropna()
-    return {"n_with_site": int(_web_state(f.unique_id).isin(["alive", "dead"]).sum()), "n_unreliable": len(flags),
+    flags, status = f.site_flag.dropna(), f.site_status.dropna()
+    return {"n_with_site": int(_web_state(f.unique_id).isin(["alive", "dead"]).sum()), "n_flagged": len(flags),
+            "n_unchecked": int((status == "unchecked").sum()), "n_unreliable": int((status == "unreliable").sum()),
             "by_reason": {k: int(v) for k, v in flags.value_counts().items()},
             "n_cited_site": int((f.site_flag.notna() & f.url_site).sum())}
 
@@ -620,6 +626,7 @@ def main() -> None:
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
                 "url_kind": col(f.url_kind), "url_place": list(f.url_place),
                 "url_site": [bool(x) for x in f.url_site], "site_flag": col(f.site_flag),
+                "site_status": col(f.site_status),
                 "public_standard": list(f.public_standard), "public_level": list(f.public_level),
                 "operator": list(f.operator)},
         "pairs": pr,

@@ -557,7 +557,8 @@ function card(o, label, i) {
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
-    ${o.website ? `<p class="small">${F(P + '.website.label.en', o.website.label.en)}</p>` : ''}
+    ${o.website ? `<p class="small">${F(P + '.website.label.en', o.website.label.en)}${o.website.reason_line
+      ? `<br>${F(P + '.website.reason_line.en', o.website.reason_line.en)}` : ''}</p>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>

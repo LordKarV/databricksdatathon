@@ -46,11 +46,12 @@ RANK_RULE = {
 WINDOW = {"emergency": 60, "urgent": 60, "scheduled": 120, "planned": 240}
 OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
-# Listed website flagged unreliable by the crawl (#117 A, facts/build.py site_flags), en and hi like STRINGS above.
+# Listed website the crawl could not check or flags unreliable (#117 A, BE-001; facts/build.py site_flags and
+# SITE_STATUS), en and hi like STRINGS above. "unchecked" is neutral and has no reason line; "unreliable" names its
+# reason (no_identity, other_org) in one short line. Neither site is ever cited as a source.
 SITE_STRINGS = {
-    "label": {"en": "Listed website unreliable", "hi": "लिस्टिंग में दी गई वेबसाइट भरोसे लायक नहीं"},
-    "no_usable_page": {"en": "our crawl found no usable page on it (dead, parked, spam, moved elsewhere or blocked)",
-                       "hi": "हमारी जाँच में इस पर काम का कोई पेज नहीं मिला (बंद, बिकाऊ, स्पैम, कहीं और जाती है या रोकी गई)"},
+    "unchecked": {"en": "Listed website could not be checked", "hi": "लिस्टिंग की वेबसाइट जाँची नहीं जा सकी"},
+    "unreliable": {"en": "Listed website unreliable", "hi": "लिस्टिंग में दी गई वेबसाइट भरोसे लायक नहीं"},
     "no_identity": {"en": "it opens, but no page on it names this facility",
                     "hi": "वेबसाइट खुलती है, पर किसी पेज पर इस अस्पताल का नाम नहीं है"},
     "other_org": {"en": "it may belong to another organisation", "hi": "यह किसी दूसरी संस्था की वेबसाइट हो सकती है"},
@@ -219,7 +220,7 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place", "url_site", "site_flag"):  # older exports: no source or site checks
+        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status"):  # older exports: no source or site checks
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
         self.site_check = facts.get("site_check") or {}
         self.sha = sha
@@ -432,23 +433,29 @@ class Engine:
 
     def cited_url(self, i: int) -> str:
         """The source page a quote links to; "" when that page is the listed website and the crawl flags it (#117 A)."""
-        if self._f("site_flag", i) and self._f("url_site", i):
+        if self._f("site_status", i) and self._f("url_site", i):
             return ""
         return self._f("url", i) or ""
 
     def website(self, i: int) -> dict | None:
-        """{reason, label, text} in en and hi when the listed website is unreliable (#117 A); None otherwise."""
-        code = self._f("site_flag", i)
-        if not code:
+        """{site_status, reason, label, reason_line, text} in en and hi when the listed website is not cited (#117 A,
+        BE-001); None otherwise. reason_line is None for "unchecked", which states no reason against the site."""
+        status, code = self._f("site_status", i), self._f("site_flag", i)
+        if not status:
             return None
-        s = SITE_STRINGS
-        return {"reason": code, "label": dict(s["label"]),
-                "text": {k: f"{s['label'][k]}: {s[code][k]}. {s['not_cited'][k]}" for k in ("en", "hi")}}
+        s, stop = SITE_STRINGS, {"en": ".", "hi": "।"}
+        label = dict(s[status])
+        if status == "unchecked":
+            return {"site_status": status, "reason": code, "label": label, "reason_line": None,
+                    "text": {k: f"{label[k]}{stop[k]} {s['not_cited'][k]}" for k in stop}}
+        line = {"en": s[code]["en"][:1].upper() + s[code]["en"][1:] + stop["en"], "hi": s[code]["hi"] + stop["hi"]}
+        return {"site_status": status, "reason": code, "label": label, "reason_line": line,
+                "text": {k: f"{label[k]}: {s[code][k]}{stop[k]} {s['not_cited'][k]}" for k in stop}}
 
     def _is_real(self, i: int) -> list[str]:
         out = []
-        if self._f("site_flag", i):  # an unreliable site is no sign that the facility is real (#117 A)
-            out.append(SITE_STRINGS["label"]["en"])
+        if status := self._f("site_status", i):  # an unchecked or unreliable site is no sign it is real (#117 A)
+            out.append(SITE_STRINGS[status]["en"])
         elif self._f("website_own", i):
             out.append("own website")
         if self._f("phone_e164", i):
