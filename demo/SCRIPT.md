@@ -33,7 +33,7 @@ witness: the hospital's own sentence, whether that sentence is really about it, 
 lists we joined. The rows add up to a probability; location is scored separately. Barkat: [96] out of 100."
 [derived/v2/README.md]
 
-**1:25 the proof.** The dots at the top. "We fixed the rule before fitting, and the transparent model beat fitted
+**1:25 the proof.** The dots at the top. "We fixed the rule before fitting, and the transparent model matched or beat fitted
 models and three transformers trained on a Databricks GPU. Then we froze it and opened a sealed test: 25 of 28
 places it called Likely were confirmed, AUROC 0.82." [model/gold/v3/test_eval/results.json,
 model/reader/out/metrics_full.json]
