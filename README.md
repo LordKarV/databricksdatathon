@@ -21,7 +21,7 @@ and the app stays within 1 to 2 points of the nearest listing plus a call ahead 
 sentence is "Going straight to All India Institute of Medical Sciences Patna takes 92 min and misses the 60-minute
 window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about 1 min.").*
 
-![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
+![Trauma answer on a 360 px phone screen](app/checks/screens/answer_trauma-light.png)
 
 It is for ASHAs and other front-line health workers deciding where to send a patient, and for district planners
 asking where the evidence of care is thin.
