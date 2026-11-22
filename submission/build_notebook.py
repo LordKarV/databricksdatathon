@@ -316,12 +316,34 @@ plt.show()
 md("""
 ## 6. The model and an honest evaluation
 
-> **To be completed by the team lead after #11** (the fitted model). This section will load the fitted scores
-> (`derived/v2/facility_service_scores.parquet`) and print the final evaluation.
+The app's chances come from the fitted model in `derived/v2/facility_service_scores.parquet`. The model selected
+was A_platt: an expert-set scorecard with one calibration step. The numbers below are read from
+`derived/v2/model_card.json` by `app/howto/build.py`, the same functions that feed the app's "How this works"
+page. They are on DEV pairs, grouped five-fold, out of fold. The labels were made by an agent from public web
+pages, not checked by a person, and the sealed TEST set has not been opened yet.
+""")
 
-Until then, the app uses an interim, conservative rule. It says "Likely" only when a second source confirmed the
-service; everything else is "Not verified: call first". Below is the current measured evaluation of the
-prototype model, including the baselines and an LLM judge, copied from `model/MODEL_SPEC.md`.
+code('''
+card = how.load_card()
+show_table(how.v2_eval(card))
+v2 = how.v2_facts(card)
+v, of = {k: x["value"] for k, x in v2.items()}, {k: x.get("of") for k, x in v2.items()}
+print(f"What the chance means: {v['v2_meaning']}\\n")
+print(f"LIKELY: p at least {v['likely_p']:.2f}, location and existence each at least {v['likely_p_location']}, and a "
+      f"sentence about the service as its own unit. On DEV, {v['likely_dev']} of {of['likely_dev']} LIKELY pairs "
+      f"were confirmed ({v['likely_dev_lo']:.3f} to {v['likely_dev_hi']:.3f}).")
+print(f"First options: a confirmed place was among the first {v['conf_em_k']} in {v['conf_em']} of {of['conf_em']} "
+      f"emergency groups and among the first {v['conf_pl_k']} in {v['conf_pl']} of {of['conf_pl']} planned-care "
+      f"groups; a random order scores {v['conf_em_random']:.2f} and {v['conf_pl_random']:.2f}. {v['conformal_note']}")
+print(f"Public facilities: on {v['public_pairs']} labelled public pairs ({v['public_contradicted']} contradicted) we "
+      "could not show that the score ranks public facilities better than chance; the sample is too small to tell.")
+''')
+
+md("""
+### History: the earlier prototype, on its own test set
+
+Before the fitted model, a prototype scorecard was evaluated on its own labelled test pairs, against baselines and
+an LLM judge (`model/MODEL_SPEC.md`). Its numbers are history and are not comparable with the DEV numbers above.
 """)
 
 code('''
@@ -331,7 +353,7 @@ show_table(how.table("model/MODEL_SPEC.md", "4.2 Pair-level discrimination",
 
 code('''
 did_not = how.bullets("model/MODEL_SPEC.md", "4.11 Claims that did not survive review")
-print("What did not work (from the statistical review):\\n")
+print("What did not work in the prototype (from the statistical review):\\n")
 for x in did_not["items"][:5]:
     print(" -", x[:230] + ("..." if len(x) > 230 else ""))
 print(f"\\n... {len(did_not['items'])} in all, in {did_not['source']}")
@@ -427,8 +449,8 @@ md("## 9. Limits")
 code('''
 h = json.loads((ROOT / "app/howto/out/how.json").read_text())["facts"]
 print(f"- Thin rural coverage: {h['bihar_records']['value']:,} of {h['bihar_records']['of']:,} records are in Bihar.")
-print(f"- Only {h['app_likely']['value']} of {h['app_pairs']['value']:,} facility-service pairs the app serves are "
-      "confirmed by a second source; everything else is 'call first'.")
+print(f"- {h['app_likely']['value']:,} of {h['app_pairs']['value']:,} facility-service pairs the app serves are rated "
+      "Likely. Likely is a model rating checked on web-labelled DEV pairs, not a phone-confirmed fact.")
 print("- Labels come from public web pages, not from phone calls or visits.")
 print(f"- Opening hours: {h['hours_records']['value']:,} of {h['hours_records']['of']:,} records mention hours at all; "
       "nothing says whether a bed or a slot is free today.")

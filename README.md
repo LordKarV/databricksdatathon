@@ -78,20 +78,24 @@ upstream cleaning steps; see `derived/v1/README.md`.
 ## Results, honestly
 
 - **The data problem** (`REPORT.md`, hand-checked):
-  - about 14% of records carry a sentence about another facility;
-  - 1,367 of 9,869 map points are more than 50 km from their own PIN code.
-- **What the app can confirm today:** 45 of the 8,012 facility-service pairs it serves are confirmed by a second
-  source and shown as "Likely". Every other option says "Not verified: call to confirm", and when nothing is
-  confirmed the app says so.
-- **Ranking quality** on 71 held-out pairs (`model/MODEL_SPEC.md` section 4.2): the prototype scored AUROC 0.776
-  [0.680, 0.862], against 0.585 for an LLM judge (llama-3.3-70b) and 0.560 for "any mention". An unfitted expert
-  prior did as well (0.789). We report this rather than claim the fitted model beats it.
-- **What did not work** is listed in `model/MODEL_SPEC.md` section 4.11 and on the app's "How this works" page.
+  - 2,489 of 9,959 records (25.0%) carry a sentence that names another facility; in 1,232 it is written as if
+    about the record itself, and cleaning quarantines it as evidence;
+  - 1,367 of 9,869 map points are more than 50 km from their own PIN code (1,101 more than 100 km).
+- **The model** (`derived/v2/model_card.json`): A_platt, an expert-set scorecard with one calibration step. On
+  221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720, 0.867], log loss 0.427
+  [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made from public web pages,
+  not human-checked; the sealed TEST set has not been opened yet.
+- **Likely:** 102 of 120 DEV pairs labelled Likely were confirmed [0.775, 0.903]. Of the 7,980 facility-service
+  pairs the app serves, 4,507 are Likely; the rest say "call to confirm", "no service text: call to ask" or
+  "Unlikely".
+- **Top two:** a confirmed place was among the first 2 options in 27 of 27 emergency and 19 of 20 planned-care
+  DEV groups, but a random order does nearly as well (0.97), so this says little about live queries.
+- **Public facilities:** on 31 labelled public pairs (3 contradicted) we could not show that the score ranks public
+  facilities better than chance; the sample is too small to tell.
+- **What did not work** in the earlier prototype is listed in `model/MODEL_SPEC.md` section 4.11 and on the app's
+  "How this works" page, as history. Its numbers are not comparable with the DEV numbers above.
 - **Faithfulness:** every number and quote the app shows is checked against its stored row by
   `app/tests/test_faithfulness.py` before release.
-
-The fitted model (#11) will replace the interim scores. This section and the notebook's section 6 will be updated
-then.
 
 ## Limits
 

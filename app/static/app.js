@@ -538,11 +538,11 @@ function gapHtml(a) {
   const L = F('area.query.service_label.en', a.query.service_label.en);
   return `<h3>Data gap or care gap?</h3>
     <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
-      ${G('district_confirmed')} of them confirmed by a second source.</p>
+      ${G('district_confirmed')} of them rated Likely.</p>
     <ul class="gap">
-      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a confirmed option within ${W} min.</li>
+      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a Likely option within ${W} min.</li>
       <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
-        say they offer it, none confirmed. A phone call can settle it.</li>
+        say they offer it, none rated Likely. A phone call can settle it.</li>
       <li><strong>Care gap, too far:</strong> ${G('far')} PIN areas: every listing that claims it is more than ${W} min away.</li>
       <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
         We cannot tell whether care exists there.</li>
