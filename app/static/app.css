@@ -227,6 +227,8 @@ body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
 .window { display: flex; gap: var(--sp2); align-items: flex-start; margin-top: var(--sp3); font-weight: 600; }
 .window svg { color: var(--go-text); margin-top: .1em; }
 .window.miss svg { color: var(--hazard-text); }
+/* the golden-hour sentence (1c): why stop first, in the planner's own words */
+.vs-direct-main { margin-top: var(--sp2); font-size: var(--s16); }
 .route-details { margin-top: var(--sp3); border-top: 1px solid var(--line); }
 .stops-full { padding-left: var(--sp5); }
 .stops-full a[href^="tel:"] { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }

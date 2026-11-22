@@ -754,6 +754,13 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        # WS1 1c: the golden-hour sentence sits under the route strip, outside Route details, when the route has one
+        it0 = payload.get("itinerary") or {}
+        vd = None if it0.get("abstain") else (((it0.get("plans") or [{}])[0].get("vs_direct") or {}).get("text"))
+        main_vd = page.evaluate("""() => [...document.querySelectorAll('#main [data-f="itinerary.plans.0.vs_direct.text"]')]
+          .filter(e => !e.closest('details')).length""")
+        if bool(vd) != (main_vd == 1):
+            errs.append(f"plan: golden-hour sentence shown {main_vd} times outside Route details, vs_direct.text={bool(vd)}")
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []
