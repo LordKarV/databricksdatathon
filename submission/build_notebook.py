@@ -294,7 +294,8 @@ show_table(cannot)
 test_eval = ROOT / "model/gold/v3/test_eval/results.json"
 if test_eval.is_file():
     v = json.loads(test_eval.read_text())["verdicts"]
-    print(f"What remains after cleaning: in the sealed TEST a web check found no decisive answer for {v['no_info']} of "
+    print(f"What remains after cleaning: in the held-out TEST set (opened once, after the model was frozen; "
+          f"model/gold/v3/OPENING_LOG.md) a web check found no decisive answer for {v['no_info']} of "
           f"{sum(v.values())} facility-service pairs ({v['no_info'] / sum(v.values()):.0%}).")
 ''')
 
@@ -740,22 +741,29 @@ if they cannot reach it. So we compare the app with both, in two ways:
 """)
 
 code('''
-SIM_FILES = [ROOT / "sim/out/metrics.parquet", Path("/Volumes/workspace/referral_saathi/uploads/sim/metrics.parquet")]
-sim_file = next((p for p in SIM_FILES if p.is_file()), None)
-if sim_file is None:
-    print("SIMULATED results: pending. The simulation (#92) is not in this version of the repository yet.")
-    print("When sim/out/metrics.parquet exists, this cell shows, for dialysis (planned) and trauma (emergency) in")
-    print("Bihar and Uttar Pradesh, the share of simulated patients treated within the time window under each policy")
-    print("(the app, the app offline, nearest, nearest + call first, best on paper), with seed-bootstrap intervals,")
-    print("for scenarios S0-high and S0-low (base-rate bounds, read together), S1, S2 and S3. All of it SIMULATED.")
-else:
-    m = pd.read_parquet(sim_file)
-    m = m[m.state.eq("ALL")] if "state" in m else m
-    m = m.assign(v=[f"{r.treated_in_window:.2f} [{r.treated_in_window_lo:.2f}, {r.treated_in_window_hi:.2f}]"
-                    for r in m.itertuples()])
-    print(f"SIMULATED ({sim_file.name}): share treated within the time window, seed-bootstrap interval. "
-          "S0-high and S0-low are base-rate bounds: read them together, never one alone.")
-    display(m.pivot_table(index=["service", "policy"], columns="scenario", values="v", aggfunc="first"))
+# The committed aggregate of the appendix run (submission/02_simulation.ipynb), so this cell needs no simulation
+# output folder. Its header gives the seeds, cases and commit.
+SIM_TABLE = ROOT / "submission/sim_results.csv"
+sim = pd.read_csv(SIM_TABLE, comment="#")
+assert sim.label.eq("SIMULATED").all() and sim.n_seeds.nunique() == 1
+sim = sim.assign(v=[f"{r.treated_in_window:.2f} [{r.treated_in_window_lo:.2f}, {r.treated_in_window_hi:.2f}]"
+                    for r in sim.itertuples()])
+print(f"SIMULATED, not field results ({SIM_TABLE.relative_to(ROOT)}, run in submission/02_simulation.ipynb): "
+      f"{sim.n_seeds.iloc[0]} seeds, {sim.n_cases.iloc[0]:,} simulated patients per policy, scenario and service,")
+print("Bihar and Uttar Pradesh. Share treated within the time window (60 min trauma, 120 min dialysis), 90% "
+      "seed-bootstrap interval.")
+print("S0-high and S0-low are base-rate bounds: read them together, never one alone. app_before_101 is the "
+      "emergency order before #101.")
+rows = pd.MultiIndex.from_frame(sim[["service", "policy"]].drop_duplicates())
+display(sim.pivot_table(index=["service", "policy"], columns="scenario", values="v", aggfunc="first")  # noqa: F821
+        .reindex(rows))
+gap = sim[sim.service.eq("trauma_emergency") & sim.policy.isin(["app_before_101", "app"])]
+gap = gap.assign(pts=[f"{100 * r.minus_ncf:+.1f} [{100 * r.minus_ncf_lo:+.1f}, {100 * r.minus_ncf_hi:+.1f}]"
+                      for r in gap.itertuples()])
+print("SIMULATED. Trauma, app minus nearest + call first, in points (paired by seed, 90% interval), before and "
+      "after #101:")
+display(gap.pivot_table(index="policy", columns="scenario", values="pts", aggfunc="first")  # noqa: F821
+        .reindex(["app_before_101", "app"]))
 ''')
 
 md("""
@@ -764,11 +772,18 @@ within the window than the simple rule "nearest place that lists the service, ca
 scenario, including the one where the model's own scores are the truth. The cause is the ranking, not the model: it
 traded extra travel for a higher score, while a phone call settles the question in a few minutes, so for an
 emergency a nearer place that plausibly offers the service, called first, is worth more. For dialysis, a planned
-service with a longer window, the score paid off. The decision on #92: for emergency services only, rank by the
-expected chance of care within the window when calls go out nearest plausible place first (UNLIKELY pairs and
-pairs with no quoted sentence excluded; the score as a filter and tie-break). Planned services keep the current
-rule. The model itself (scores, bands and the frozen TEST predictions) does not change. The size of the gap depends
-on the assumed call and turn-away constants, so it is reported as a simulated method finding, not as field evidence.
+service with a longer window, the score paid off. The change (#92, #101): for emergency services only, the engine
+orders the options with `nearest_plausible` (`app/facts/engine.py`), nearest plausible place first. The score only
+chooses among the places within 5 minutes (`TIE_MIN`) of the nearest one left, and while that place is inside the
+time window, a place outside it never joins the tie. Unlikely pairs and pairs with no quoted sentence are not in
+this order. Planned services keep the old order (the score discounted by travel time). The model itself (scores,
+bands and the frozen TEST predictions) does not change.
+
+**Result after #101 (SIMULATED, `submission/sim_results.csv`, printed above).** For trauma, the gap to "nearest +
+call first" shrank from 3 to 8 points to 1 to 2 points: the app is ahead in S1 (+1.0 points) and still slightly
+behind in S0-high, S0-low, S2 and S3 (-1.0 to -1.7 points). Dialysis, whose order did not change, is the same
+before and after. The size of the gap depends on the assumed call and turn-away constants, so it is reported as a
+simulated method finding, not as field evidence.
 """)
 
 code('''
@@ -860,8 +875,8 @@ print(f"- No checked opening hours, 24x7 status or live capacity: the provided t
       f"{h['hours_records']['value']:,} of {h['hours_records']['of']:,} records say anything about hours, only in "
       "free text, and OpenStreetMap adds 134 opening_hours facts (kb/opendata/OPENDATA.md); none is checked. Bed "
       f"capacity: {cap.lower()} raw records (REPORT.md claims-09). Nothing says whether a bed or a slot is free today.")
-print("- Gold labels are agent-made from public web pages, not phone calls or visits. A human spot-check of 25 pairs "
-      "is set up (PR #105, model/gold/v3/human_check/) and not yet done.")
+print("- Gold labels are agent-made from public web pages, not phone calls or visits. A human spot-check sheet of 25 "
+      "pairs is in PR #105; the check is not yet done.")
 print(f"- Thin rural coverage: {h['bihar_records']['value']:,} of {h['bihar_records']['of']:,} records are in Bihar.")
 bands = card["bands_all_pairs"]
 print(f"- Model v2 bands {bands['LIKELY']:,} of {sum(bands.values()):,} facility-service pairs Likely; everything else "
