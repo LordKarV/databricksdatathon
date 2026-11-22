@@ -290,6 +290,7 @@ def route_all_open(page: Page) -> None:
     plan_for("Accident")(page)
     page.get_by_text("Suggested route").first.wait_for()
     page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+    page.wait_for_timeout(900)  # the route strip draws itself over 700 ms
 
 
 def how_page(page: Page) -> None:

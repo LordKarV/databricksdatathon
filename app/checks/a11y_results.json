@@ -108,6 +108,22 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "reason_step-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "visit_report-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "pulse_panel-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "journey_card-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "start_first_visit-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -204,6 +220,22 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "reason_step-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "visit_report-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "pulse_panel-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "journey_card-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
@@ -227,29 +259,39 @@
    "violations": [],
    "horizontal_scroll": false,
    "district_select": "#/"
+  },
+  "offline_border_dialysis-light": {
+   "violations": [],
+   "horizontal_scroll": false,
+   "saved_packs": [
+    "bihar",
+    "uttar_pradesh"
+   ],
+   "options": 3,
+   "other_state_cards": 1
   }
  },
  "critical_path": {
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1165,
-    "gzip": 593
+    "raw": 1592,
+    "gzip": 796
    },
    "/app.css": {
-    "raw": 7916,
-    "gzip": 2577
+    "raw": 18540,
+    "gzip": 5481
    },
    "/app.js": {
-    "raw": 60701,
-    "gzip": 18754
+    "raw": 69124,
+    "gzip": 21609
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 22060,
+  "gzip_total": 28022,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
