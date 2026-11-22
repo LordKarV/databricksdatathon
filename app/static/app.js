@@ -758,6 +758,15 @@ function sureHtml(o, P) {
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
   return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
+// WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
+// when the engine has it, the time from the PIN centre (travel.alt), so the worker asks the way on the call.
+// A no-op on payloads without the field.
+function doubtHtml(o, P) {
+  if (!o.location_doubt) return '';
+  const alt = o.travel && o.travel.alt;
+  return `<p class="doubt">${icon('warn')}<span>${th('ans.doubt.line', {address: `<span lang="en">${F(P + '.address', o.address || o.town)}</span>`})}${
+    alt ? ' ' + th('ans.doubt.alt', {low: N(P + '.travel.alt.low', alt.low), high: N(P + '.travel.alt.high', alt.high)}) : ''} ${th('ans.doubt.ask')}</span></p>`;
+}
 // WS1 1b, the receipt: the first listing sentence, cut at 60 characters (kind 'part': the shown text is a piece of
 // the stored quote), in English as written, with its source page. A NO SERVICE TEXT option says its lines are general.
 const RECEIPT_CUT = 60;
@@ -804,6 +813,7 @@ function answerPanel(p, o, i) {
     ${i === 0 && fb ? `<p class="note"><strong>${E('itinerary.fallback.ask', fb.ask)}</strong> ${E('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
+    ${doubtHtml(o, P)}
     ${sureHtml(o, P)}
     ${receiptHtml(p, o, P)}
     ${i === 0 ? whyFirstHtml(p, o, P) : ''}
