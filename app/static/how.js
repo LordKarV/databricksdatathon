@@ -66,11 +66,14 @@
         ${n('app_pairs')} facility-service pairs the app serves today ${src('app_likely')}. Across all
         ${n('pairs_graded')} graded pairs ${src('pairs_graded')}, ${n('pairs_verified_true')} were confirmed that way
         ${src('pairs_verified_true')}. Everything else is "Not verified: call first".</li>
-      <li><strong>Order.</strong> Options are ordered by how sure we are, discounted by travel time. The discount is
-        steeper in an emergency (${n('scale_emergency')} minute scale) than for planned care
-        (${n('scale_planned')} minutes). We search ${n('radius_km')} km and show up to ${n('n_options')} options
-        ${src('radius_km')}. Ranking by expected time to care, including the chance of being turned away, arrives
-        with the fitted model.</li>
+      <li><strong>Order.</strong> In an emergency the nearest place that plausibly offers the care comes first: call
+        it, and if they say no, call the next. A place we judge unlikely, or with no sentence of its own about the
+        service, is never listed. The evidence only breaks ties within ${n('tie_min')} minutes ${src('tie_min')}.
+        A simulated referral world showed that ordering by evidence discounted by time sent patients farther and
+        lost time when the first place said no; this rule fixed that (simulated, not a field result). For planned
+        care, options are ordered by how sure we are, discounted by travel time (${n('scale_planned')} minute
+        scale), because a longer trip to a likelier place pays when there is time. We search ${n('radius_km')} km
+        and show up to ${n('n_options')} options ${src('radius_km')}.</li>
       <li><strong>Saying no.</strong> When nothing is confirmed, the app says so, lists places to call, and names the
         nearest hospital the public standard says should offer the service.</li>
       <li><strong>Several stops.</strong> ${n('pathways')} care pathways are written down for time-critical cases

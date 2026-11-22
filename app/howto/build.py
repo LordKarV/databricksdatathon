@@ -117,7 +117,7 @@ def facts() -> dict:
         "handchecked": fact(int((rules.handcheck_true + rules.handcheck_false).sum()), f"{V1}/evidence_rules.parquet",
                             "hand-checked cases behind the rules"),
         "radius_km": fact(engine.RADIUS_KM, "app/facts/engine.py", "RADIUS_KM"),
-        "scale_emergency": fact(engine.TIME_SCALE["emergency"], "app/facts/engine.py", "TIME_SCALE emergency"),
+        "tie_min": fact(engine.TIE_MIN, "app/facts/engine.py", "TIE_MIN: emergency order, nearest plausible first"),
         "scale_planned": fact(engine.TIME_SCALE["planned"], "app/facts/engine.py", "TIME_SCALE planned"),
         "n_options": fact(engine.N_OPTIONS, "app/facts/engine.py", "N_OPTIONS"),
         "pathways": fact(len(names), "kb/pathways/care_pathways.json", "pathways"),

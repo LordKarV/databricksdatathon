@@ -206,3 +206,44 @@ def test_cards_use_the_route_terrain():
     if plain["terrain"] is None:
         pytest.skip("geo/ travel constants not available")
     assert hill["terrain"] == "hill" and plain["terrain"] == "plain" and hill["high"] >= plain["high"]
+
+
+# ---------- emergency order: nearest plausible first (#92) ----------
+def test_emergency_order_is_nearest_plausible_first():
+    from facts.engine import NEAREST_FIRST, RANK_RULE, TIE_MIN
+
+    for service in [s for s, v in SERVICES.items() if v["profile"] in NEAREST_FIRST]:
+        for la, lo in [(26.6, 85.48), (25.6, 85.1), (19.9, 83.17), (27.57, 81.6), (26.75, 94.2)]:
+            p = ENGINE.plan(service, la, lo, 40, "gps")
+            mins = [o["travel"]["minutes"] for o in p["options"]]
+            pool, _ = ENGINE._ranked(service, la, lo)
+            # Every option before the last is no farther (to TIE_MIN) than every pool row it was chosen over; the
+            # last slot may be a confirmed listing pulled in so it is never hidden.
+            for k in range(len(mins) - 1):
+                assert mins[k] <= mins[k + 1] + TIE_MIN
+            if p["options"]:
+                assert p["options"][0]["why_first_text"] == RANK_RULE["nearest_plausible"]
+                assert p["rank_rule"]["code"] == "nearest_plausible" and 0 <= p["rank_rule"]["expected_in_window"] <= 1
+                assert mins[0] <= min(r[1] for r in pool) + TIE_MIN
+
+
+def test_planned_care_keeps_evidence_and_time():
+    p = ENGINE.plan("dialysis", 25.6, 85.1, 40, "gps")
+    assert p["rank_rule"]["code"] == "evidence_and_time" and p["rank_rule"]["expected_in_window"] is None
+
+
+def test_expected_in_window_counts_calls_in_order():
+    from facts.engine import expected_in_window
+
+    assert expected_in_window([(0.5, 20), (0.5, 20)], 60, 5) == 0.75
+    assert expected_in_window([(0.5, 20), (0.5, 58)], 60, 5) == 0.5  # the second is past the window after 2 calls
+    assert expected_in_window([], 60) == 0.0
+
+
+def test_nearest_plausible_ties_have_no_bucket_edge():
+    from facts.engine import nearest_plausible
+
+    rows = [(0.38, 102, "a"), (0.79, 102, "b"), (0.95, 103, "c"), (0.9, 130, "d"), (0.2, 20, "e")]
+    assert [r[2] for r in nearest_plausible(rows)] == ["e", "c", "b", "a", "d"]
+    # a tie never pulls the first choice out of the window
+    assert [r[2] for r in nearest_plausible([(0.7, 60, "in"), (0.9, 63, "out")], 60)] == ["in", "out"]
