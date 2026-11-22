@@ -91,3 +91,34 @@ def test_offline_notice_follows_a_language_switch(base_url):  # noqa: F811
             assert page.evaluate("() => ts('off.no_net')") in page.inner_text(".offline-note")
         finally:
             b.close()
+
+
+def test_a_reply_dropped_while_still_waiting_asks_again(base_url):  # noqa: F811
+    """The place changes under an in-flight request: its reply is dropped, and the screen asks again for the new
+    place instead of showing "Finding..." forever."""
+    held, asked = [], []
+
+    def plan(r):
+        asked.append(json.loads(r.request.post_data)["lat"])
+        if len(asked) == 1:
+            held.append(r)
+        else:
+            r.fulfill(status=200, content_type="application/json", body=named("NEW-PLACE"))
+    with pw.sync_playwright() as p:
+        b = p.chromium.launch()
+        page = b.new_context(viewport={"width": 360, "height": 780}, service_workers="block").new_page()
+        try:
+            page.route("**/api/plan", plan)
+            page.add_init_script(LOC)
+            page.goto(base_url + "/#/")
+            page.locator("[data-svc=trauma_emergency]").first.click()
+            for _ in range(50):
+                if held:
+                    break
+                page.wait_for_timeout(100)
+            page.evaluate("() => { state.loc = {...state.loc, lat: 25.6, lon: 85.1}; }")
+            held[0].fulfill(status=200, content_type="application/json", body=named("OLD-PLACE"))
+            page.wait_for_selector("text=NEW-PLACE", timeout=5000)
+        finally:
+            b.close()
+    assert len(asked) == 2

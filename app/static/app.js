@@ -1044,7 +1044,7 @@ async function badLocation(r) {
   location.hash = '#/change';
   return true;
 }
-let planReq = null;  // the /api/plan request in flight: a reply that is no longer for this screen is dropped (#140 B1)
+let planReq = null;  // #140 B1
 async function bindPlan() {
   $('#retry')?.addEventListener('click', () => { state.plan = null; render(); });
   if (state.plan && state.plan.offline) {
@@ -1070,7 +1070,8 @@ async function bindPlan() {
   // A reply for a screen that is gone (Back, Change place, another service) is dropped, not drawn over it.
   const live = () => planReq === req && location.hash === '#/plan' && !state.plan && !!state.loc
     && [state.service, state.loc.lat, state.loc.lon, state.loc.source].join('|') === key;
-  const done = () => { if (planReq === req) planReq = null; };
+  // A dropped reply while still waiting on this screen (the place changed under it) asks again, never "Finding..." forever
+  const done = () => { if (planReq === req) { planReq = null; if (location.hash === '#/plan' && !state.plan) setTimeout(render); } };
   // Offline per spec 3.2.3: navigator.onLine false, a failed /api call, or one slower than 8 s.
   if (!navigator.onLine) { if (await offlinePlan('off.no_net', live)) render(); done(); return; }
   // Rounded to 0.01 deg on the phone too; the point goes in the body, never the URL.
@@ -1322,7 +1323,7 @@ function queueOutcome(o, said, at, extra = {}) {
     said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100, ...extra});
   return true;
 }
-// ponytail: when storage is blocked or full the queue lives in memory, so it is sent this session but lost on reload
+// ponytail: storage blocked or full: the queue lives in memory (lost on reload)
 let memQ = null;
 function outQ() { return memQ || load('outq') || []; }
 function setOutQ(q) { memQ = save('outq', q) ? null : q; }
