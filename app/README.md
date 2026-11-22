@@ -313,6 +313,30 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   work and the model paths say "not available".
 - **Tests.** `app/tests/test_inputs.py` mocks the endpoints.
 
+## Hindi translation of facility quotes (`POST /api/translate`)
+
+Quotes stay verbatim, mostly in English. Each evidence quote on the option cards, the why page and route stops gets
+a "हिंदी में पढ़ें" button (`static/translate.js`, loaded only on screens with quotes). Rules from SAFETY.md 14:
+
+- Quotes only. Instructions, numbers, bands and the call-ahead text stay template-based.
+- The original stays on top. The translation is added under it with the label "मशीन अनुवाद। मूल अंग्रेज़ी ऊपर है
+  और वही सबूत है।" / "Machine translation. The original English above is the evidence.", in an `aria-live`
+  region, with read aloud (label first) through `speech.js`.
+- The body is `{claim_id}` only (extra fields are a 422). The server reads the quote from the engine's claims, which
+  also hold the planner's route quotes; an unknown id is a 404.
+- `inputs/translate.py` calls `SERVING_ENDPOINT_TEXT` with the `/api/parse` client, temperature 0, one worked
+  example, 8 s timeout. The guard shows a translation only when every digit run (grouping commas ignored) and
+  every capitalised word or acronym is unchanged (a capitalised word opening a sentence counts only before
+  another capitalised word), no digit run is added, the rest is mostly Devanagari, no word mixes scripts, and it
+  is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
+- In-memory LRU cache (5,000) by claim id, endpoint and prompt version; 30 model calls per user per minute (the
+  reporter key, or one shared bucket without it), per app instance. Quote and translation are never logged.
+- Offline, without the endpoint or on any failure the button reads "अनुवाद अभी उपलब्ध नहीं / Translation not
+  available right now".
+- Live check (Llama 3.3 70B, 10 real quotes over 7 services): 5 passed the guard. Rejections were Title Case
+  terms or names transliterated (4) and one word in two scripts. A long specialty-list quote timed out once at 8 s.
+- Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim).
+
 ## Voice: Hindi and English, speech to text and read aloud
 
 The user picks Hindi or English (default from the phone's language). The choice is stored on the phone in

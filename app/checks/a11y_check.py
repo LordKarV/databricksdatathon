@@ -164,6 +164,16 @@ def website_check(page: Page) -> None:
     page.locator("#verify-out blockquote").wait_for()
 
 
+def translated_quote(page: Page) -> None:
+    """Why page after "हिंदी में पढ़ें" on the first quote, with a recorded translation (the model is not called)."""
+    import json
+    why(page)
+    body = json.dumps({"available": True, "hindi": "डायलिसिस यूनिट में मशीनें हैं"}, ensure_ascii=False)
+    page.route("**/api/translate", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.get_by_role("button", name="हिंदी में पढ़ें").first.click()
+    page.locator(".tr-text").first.wait_for()
+
+
 def call_ahead(page: Page) -> None:
     plan_for("Accident")(page)
     page.get_by_role("link", name="Call ahead").first.click()
@@ -361,6 +371,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "abstention_csection": plan_for("Emergency C-section"),
     "why_and_how": why,
     "website_check": website_check,
+    "translated_quote": translated_quote,
     "call_ahead_trauma": call_ahead,
     "slip_english": slip_for("en"),
     "slip_hindi": slip_for("hi"),

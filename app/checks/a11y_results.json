@@ -72,6 +72,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "translated_quote-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "call_ahead_trauma-light": {
    "violations": [],
    "horizontal_scroll": false
@@ -105,6 +109,22 @@
    "horizontal_scroll": false
   },
   "data_stories-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "reason_step-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "visit_report-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "pulse_panel-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "journey_card-light": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -168,6 +188,10 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "translated_quote-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "call_ahead_trauma-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -201,6 +225,22 @@
    "horizontal_scroll": false
   },
   "data_stories-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "reason_step-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "visit_report-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "pulse_panel-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "journey_card-dark": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -243,23 +283,23 @@
   "requests": 4,
   "files": {
    "/": {
-    "raw": 1165,
-    "gzip": 593
+    "raw": 1317,
+    "gzip": 665
    },
    "/app.css": {
-    "raw": 7916,
-    "gzip": 2577
+    "raw": 8496,
+    "gzip": 2750
    },
    "/app.js": {
-    "raw": 60717,
-    "gzip": 18758
+    "raw": 65650,
+    "gzip": 20228
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 22064,
+  "gzip_total": 23779,
   "budget_gzip": 50000,
   "budget_requests": 5
  }

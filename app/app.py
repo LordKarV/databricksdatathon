@@ -22,7 +22,7 @@ from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
-from inputs import understand
+from inputs import translate, understand
 from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES, haversine_km
@@ -56,6 +56,7 @@ SHELL_FILES: dict[str, str] = {
     "pulse.js": "text/javascript; charset=utf-8",
     "journey.js": "text/javascript; charset=utf-8",
     "community.js": "text/javascript; charset=utf-8",
+    "translate.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -179,6 +180,23 @@ class ParseRequest(BaseModel):
 def parse(req: ParseRequest) -> JSONResponse:
     """Free text -> a suggested service and the words that decided it (#64). The user confirms with one tap."""
     return JSONResponse(understand.parse_text(req.text), headers={"Cache-Control": "no-store"})
+
+
+class TranslateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")  # a claim id only: the page never sends text to translate
+
+    claim_id: str = Field(min_length=1, max_length=64, pattern=r"^[\w:.-]+$")
+
+
+@app.post("/api/translate")
+def translate_quote(req: TranslateRequest, request: Request) -> JSONResponse:
+    """Hindi machine translation of one facility quote, looked up here by claim id (SAFETY.md 14). Not logged."""
+    c = _need_engine().claims.get(req.claim_id)  # route stop quotes use the same claim ids
+    if c is None:
+        raise HTTPException(404, "unknown claim id")
+    out = translate.translate(req.claim_id, c[1], reporter_key(request.headers))
+    return JSONResponse(out, status_code=429 if out.get("reason") == "rate_limited" else 200,
+                        headers={"Cache-Control": "no-store"})
 
 
 NOTE_IMAGE = r"^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$"
