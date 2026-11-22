@@ -429,6 +429,16 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   - The plan is rebuilt from the adjusted scores (`Engine.plan(..., scores)`): the ranking, why_first_text,
     why_not, the abstention, say_to_family, the call-ahead questions, the family card and its read-aloud all use
     the adjusted p and band. p_lo and p_hi move by the same logit shift, not by the posterior's own interval.
+- **Tie-break from health-worker reports** (#86; `engine.tied_prefix`, `field._tie_row`).
+  - Only after the Field reports term, only for profiles outside `NEAREST_FIRST` (urgent NICU, scheduled
+    dialysis, planned MRI and heart surgery; never the emergency order).
+  - Tied: the leading options (at most 3) are in the same band, their shown p differ by at most 0.05 and their
+    travel by at most 10 min, for every pair. Only those are reordered; nothing else moves.
+  - Value per option: `field.net`, the term's own recency-weighted counts (accepted + phone yes at half weight -
+    "does not offer"; temporary reasons never count), from the same cached aggregates. Fewer than 2 reporters
+    count 0. Equal values keep the evidence-and-time order.
+  - Shown only on the why page of the tied options, as the row "Tie broken by: health-worker reports" (with
+    "(simulated for the demo)" for demo reports), payload `tie_break`. Cards keep only the field line.
 - **Never waits on the warehouse.** `/api/plan` and `/api/recommend` call
   `field.apply_field(plan, field.aggregates(wait=False), now, eng)`. One `GROUP BY` query is cached for 60 s and
   refreshed in a background thread, because a stopped warehouse can take 30 s to answer. The first answer after

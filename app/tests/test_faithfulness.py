@@ -120,6 +120,14 @@ def load_payloads() -> list[tuple[str, dict]]:
         plan = attach(eng.plan("dialysis", 26.6, 85.48, 40, "gps"), eng)
         plan = {**field.apply_field(plan, field_aggregates(plan), FIELD_NOW), "field_reports": {"read": True, "note": None}}
         out.append(("real-sitamarhi_dialysis-field", plan))
+        # Tie-break (#86): the COMMUNITY_DEMO reports break the tie at the README point; the why page row is checked.
+        agg: dict = {}
+        for r in field.simulated_reports(eng, FIELD_NOW):
+            agg.setdefault((r["facility_id"], r["service_id"]), []).append(r)
+        plan = attach(eng.plan("dialysis", *field.DEMO_POINT, 40, "gps"), eng)
+        plan = {**field.apply_field(plan, agg, FIELD_NOW), "field_reports": {"read": True, "note": None}}
+        assert plan.get("tie_break"), "demo reports no longer break a tie at the README point"
+        out.append(("real-sitamarhi_dialysis-tie", plan))
     for svc in sorted(SERVICES):
         for name, (lat, lon) in {"sitamarhi": (26.6, 85.48), "pune": (18.52, 73.86)}.items():
             plan = recommend_stub(svc, lat, lon, 40, "gps")
@@ -551,6 +559,26 @@ def test_sealed_test_record_equals_the_results_file():
         assert how == want
 
 
+def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
+    """Tie-break (#86): a tied option's why page has the named row, with the rule and every tied option's value
+    marked; an option outside the tie (or a plan without one) has no such row."""
+    tb = payload.get("tie_break")
+    named = [r for r in rows if (r["label"] or "").startswith("Tie broken by: health-worker reports")]
+    if not tb or o["facility_id"] not in {x["facility_id"] for x in tb["options"]}:
+        return ["tie row shown outside a tie"] if named else []
+    if len(named) != 1 or named[0]["label"].strip() != tb["label"]:
+        return [f"tie row missing or mislabelled: {[r['label'] for r in named]}"]
+    if tb["simulated"] and "simulated for the demo" not in tb["label"]:
+        return ["simulated tie-break not labelled"]
+    need = {"tie_break.p_within", "tie_break.minutes_within"} | {
+        f"tie_break.options.{j}.{k}" for j, x in enumerate(tb["options"]) if x["net"] is not None
+        for k in ("net", "n_reporters")}
+    ranks = {f"options.{i}.rank" for i, y in enumerate(payload["options"])
+             if y["facility_id"] in {x["facility_id"] for x in tb["options"]}}
+    missing = sorted((need | ranks) - set(named[0]["paths"]))
+    return [f"tie row does not show {missing}"] if missing else []
+
+
 # ---------- the test ----------
 @pytest.mark.parametrize("name, payload", PAYLOADS, ids=[n for n, _ in PAYLOADS])
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
@@ -609,6 +637,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
+            errs += [f"why/{o['rank']}: {e}" for e in check_tie_row(payload, o, got["rows"])]
             tr = payload.get("meta", {}).get("test_record")
             if tr and o["band"] == "likely":  # the sealed TEST record sits next to every Likely band (#86)
                 errs += [f"why/{o['rank']}: meta.test_record.{k} not shown" for k in TEST_RECORD_SHOWN

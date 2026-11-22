@@ -23,6 +23,12 @@ Reports can lower a band, never raise it: a Likely pair whose adjusted p falls b
 ("Health-worker reports disagree with the listing: call first"). Every other band stays as the model set it, even
 when reports are positive. The plan is then rebuilt from the adjusted scores (apply_field), so the order, the
 abstention and every sentence built from p agree with the card.
+
+Tie-break (#86, lead's rule): after the term, the leading options of a non-emergency plan that tie (same band, shown
+p within 0.05, travel within 10 min; engine.tied_prefix) are ordered by `net`, the same recency-weighted counts the
+term used (accepted + phone yes at half weight - "does not offer"; temporary reasons never count), from options
+with at least MIN_REPORTERS reporters; others count 0. Nothing else moves. The emergency order is untouched. The why
+page shows it as the row "Tie broken by: health-worker reports" (payload `tie_break`); cards add nothing.
 """
 from __future__ import annotations
 
@@ -51,6 +57,7 @@ NOTE_DAYS = 7
 T_LIKELY, T_UNLIKELY = 0.3686, 0.20
 TTL_S = 60
 TERM_LABEL = "Field reports"
+TIE_LABEL = "Tie broken by: health-worker reports"
 MAX_ROWS = 50_000  # ponytail: 90 days of keyed reports nationally is far below this; aggregate further if not
 
 SIM = {"en": "Simulated for the demo: ", "hi": "\u0921\u0947\u092e\u094b \u0915\u0947 \u0932\u093f\u090f \u0928\u0915\u0932\u0940 \u0906\u0901\u0915\u0921\u093c\u0947: "}
@@ -155,10 +162,11 @@ def _notes(reports: list[dict], now: datetime) -> list[dict[str, str]]:
 
 def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_text: bool = True,
                  likely: bool = False) -> dict[str, Any]:
-    """{p, term, lines, notes, disagree, rebanded, n_reporters, simulated} for one facility and service. Pure.
+    """{p, term, lines, notes, disagree, rebanded, n_reporters, simulated, net} for one facility and service. Pure.
 
     `term` is in logit units: _logit(p_model) + term == _logit(p). Reports without a reporter key are ignored.
     `likely`: the model banded this pair Likely; `rebanded` says the reports took it below the Likely line.
+    `net`: the recency-weighted s - f the term used, or None below MIN_REPORTERS; only the tie-break reads it.
     """
     keyed = [r for r in reports if r.get("reporter_key") and _age_days(r["created_at"], now) <= WINDOW_DAYS]
     simulated = any(r.get("simulated") for r in keyed)
@@ -168,7 +176,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
         k = r["reporter_key"]
         if sig and (k not in latest or r["created_at"] > latest[k][0]["created_at"]):
             latest[k] = (r, sig)
-    p, lines, disagree = p_model, [], False
+    p, lines, disagree, net = p_model, [], False, None
     if latest:
         lines.append(_summary_line(list(latest.values()), now))
     if len(latest) == 1:
@@ -180,6 +188,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
             s, f = s + w * w_yes, f + w * w_no
         p = (N0 * p_model + s) / (N0 + s + f)
         disagree = f > s
+        net = round(s - f, 2)  # the tie-break value: accepted + phone yes at half weight - "does not offer"
         p = max(p, min(p_model, T_UNLIKELY))  # reports alone never make a public "Unlikely"
         if not has_text and p > max(p_model, T_LIKELY - 0.01):
             p = max(p_model, T_LIKELY - 0.01)
@@ -190,7 +199,7 @@ def field_adjust(p_model: float, reports: Iterable[dict], now: datetime, has_tex
         lines.append(REBANDED if rebanded else DISAGREE)
     return {"p": p, "term": _logit(p) - _logit(p_model), "lines": [_prefix(x, simulated) for x in lines],
             "notes": [_prefix(x, simulated) for x in _notes(keyed, now)], "disagree": disagree,
-            "rebanded": rebanded, "n_reporters": len(latest), "simulated": simulated}
+            "rebanded": rebanded, "n_reporters": len(latest), "simulated": simulated, "net": net}
 
 
 def _sigmoid(z: float) -> float:
@@ -208,7 +217,8 @@ def rescore(scored: tuple, reports: Iterable[dict], now: datetime) -> tuple[tupl
     if not (adj["lines"] or adj["notes"]):
         return scored, None
     info = {"p_model": round(p, 2), **{k: adj[k] for k in
-                                       ("term", "lines", "notes", "disagree", "rebanded", "n_reporters", "simulated")}}
+                                       ("term", "lines", "notes", "disagree", "rebanded", "n_reporters", "simulated",
+                                        "net")}}
     t = adj["term"]
     if t:
         # The interval moves by the same logit shift. ponytail: not the beta posterior's own interval.
@@ -251,10 +261,30 @@ def apply_field(plan_payload: dict, aggregates: dict, now: datetime, eng: Any = 
     if not found:
         return plan_payload
     loc = plan_payload["location"]
+    # The tie-break reads the same reports as the term: an option counts only with MIN_REPORTERS (net not None).
     fresh = eng.plan(service, loc["lat"], loc["lon"], loc["accuracy_m"], loc["source"],
-                     {fid: scored for fid, (scored, _) in found.items()})
-    return {**plan_payload, "abstain": fresh["abstain"], "why_not": fresh["why_not"],
-            "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
+                     {fid: scored for fid, (scored, _) in found.items()},
+                     {fid: info["net"] for fid, (_, info) in found.items() if info["net"] is not None})
+    # Every block built from the option order comes from the rebuilt plan (a reorder changes "if the first says no").
+    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "time_window",
+                                                    "rank_rule", "public_option")},
+           "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
+    if fresh.get("tie_break"):
+        out["tie_break"] = _tie_row(fresh["tie_break"], fresh["options"], found)
+    return out
+
+
+def _tie_row(tie: dict, options: list[dict], found: dict) -> dict:
+    """The why page's row "Tie broken by: health-worker reports": the rule and each tied option's value."""
+    rank = {o["facility_id"]: o["rank"] for o in options}
+    infos = [(found.get(fid) or (None, {}))[1] for fid in tie["facility_ids"]]
+    simulated = any(i.get("simulated") for i in infos)
+    return {"label": TIE_LABEL + (" (simulated for the demo)" if simulated else ""), "simulated": simulated,
+            "moved": tie["moved"], "p_within": tie["p_within"], "minutes_within": tie["minutes_within"],
+            "min_reporters": MIN_REPORTERS,
+            "options": [{"facility_id": fid, "rank": rank[fid], "net": i.get("net"),
+                         "n_reporters": i.get("n_reporters", 0)} for fid, i in zip(tie["facility_ids"], infos,
+                                                                                   strict=True)]}
 
 
 # ---------- reading: one aggregate query a minute ----------
@@ -342,6 +372,9 @@ DEMO = (
     ("dialysis", 2, "sim-d", "visit", "turned_away", "no_bed", 1),
     ("dialysis", 2, "sim-e", "visit", "turned_away", "no_bed", 3),
     ("dialysis", 2, "sim-a", "visit", "accepted", None, 25),
+    # Option 3 is tied with 1 and 2 at the README point; two reporters let the tie-break order it (#86).
+    ("dialysis", 3, "sim-f", "visit", "accepted", None, 6),
+    ("dialysis", 3, "sim-g", "visit", "accepted", None, 9),
     ("emergency_csection", 1, "sim-b", "call", "yes", None, 2),
 )
 
