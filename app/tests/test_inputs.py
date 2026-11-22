@@ -172,7 +172,41 @@ def test_note_red_flag_sets_danger(model):
     model.answer = note("G2P1, 38 wk, breech, LSCS advised", "emergency_csection", "LSCS advised",
                         ["labour with breech"])
     r = client.post("/api/read-note", json={"image": PNG}).json()
-    assert r["sure"] and r["danger"] and r["danger_phrase"] == "labour with breech"
+    assert r["sure"] and r["danger"] and r["danger_phrase"] is None  # routes to 108; not in the text: not quoted
+
+
+def test_note_red_flag_quoted_only_when_read(model):
+    model.answer = note("Pt in labour with breech, LSCS advised", "emergency_csection", "LSCS advised",
+                        ["labour with breech"])
+    r = client.post("/api/read-note", json={"image": PNG}).json()
+    assert r["danger"] and r["danger_phrase"] == "labour with breech"
+
+
+def test_note_guard_failure_quotes_nothing(model):
+    # #85 H4: a reply whose quote the guard cannot accept never reaches the page as "the note says" / "You wrote"
+    model.answer = note("Pt needs MRI brain", "mri", "patient will die in one hour", ["patient will die in one hour"])
+    r = client.post("/api/read-note", json={"image": PNG}).json()
+    assert r["guard"] == "not_verbatim" and r["phrase"] is None and r["danger_phrase"] is None and r["danger"]
+
+
+@pytest.mark.parametrize("text,svc", [("Please refer जल्दी", "burn_care"), ("Mortality risk high", "trauma_emergency")])
+def test_note_terms_are_whole_words(text, svc):
+    from inputs import understand as u
+    assert svc not in u.note_services(text)
+
+
+@pytest.mark.parametrize("text,svc", [("Pt with 40% burns", "burn_care"), ("हाथ जल गया", "burn_care"),
+                                      ("RTA, # femur", "trauma_emergency")])
+def test_note_terms_still_match(text, svc):
+    from inputs import understand as u
+    assert svc in u.note_services(text)
+
+
+def test_free_text_trigger_needs_whole_word_of_three():
+    from inputs import understand as u
+    assert not u.verbatim_word("a", "a heart operation")
+    assert not u.verbatim_word("dial", "dialysis needed")
+    assert u.verbatim_word("heart operation", "needs a Heart Operation.")
 
 
 def test_note_model_failure(model):

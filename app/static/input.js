@@ -59,13 +59,13 @@ const RSInput = (() => {
   function confirmHtml(r, unsure) {
     const parts = [];
     if (r.danger) {
-      parts.push(`<p class="card" role="alert"><strong>Call 108 now.</strong> You wrote "${esc(r.danger_phrase)}".
+      parts.push(`<p class="card" role="alert"><strong>Call 108 now.</strong> ${r.from_note ? 'Possible danger sign in the note: please check.' : `You wrote "${esc(r.danger_phrase)}".`}
         ${r.note === 'planned_dropped' ? ' For chest pain now, call 108. Heart operation and MRI are planned services.' : ''}</p>`);
     }
     if (r.service && svc(r.service)) {
       parts.push(`<div class="card">${unsure ? '<p><strong>We are not sure.</strong> Check this, or pick a tile.</p>' : ''}
         <p>Looking for: a hospital that can do <strong>${esc(svc(r.service).en)}</strong></p>
-        <p class="small">Because ${r.from_note ? 'the note says' : 'you wrote'}: "${esc(r.phrase)}"</p>
+        ${r.phrase ? `<p class="small">Because ${r.from_note ? 'the note says' : 'you wrote'}: "${esc(r.phrase)}"</p>` : ''}
         <button type="button" class="btn btn-primary btn-block" data-confirm="${esc(r.service)}">Yes, that is right</button>
         <a class="btn btn-block" href="#/">Change service</a></div>`);
     } else if (r.candidates && r.candidates.length) {
@@ -175,9 +175,13 @@ const RSInput = (() => {
         announce('Could not read the note.');
         return;
       }
-      setDanger(r.danger_phrase);
+      if (r.danger) {  // from a photo: a possible sign to check, never a quote of what the note "says"
+        state.dangerText = 'possible danger sign in the note';
+        renderBar();
+        announce('Possible danger sign in the note. Please check. Call 108 now.');
+      }
       const shown = {...r, from_note: true, candidates: [], note: null};
-      out.innerHTML = confirmHtml(shown, !r.sure) + (r.detected_text ? `<details><summary>What the model read</summary>
+      out.innerHTML = confirmHtml(shown, !r.sure) + (r.detected_text ? `<details><summary>What we read from the photo</summary>
         <p class="small" style="white-space: pre-wrap">${esc(r.detected_text)}</p></details>` : '');
       bindConfirm(out);
       announce(r.service ? `Suggested: ${svc(r.service).en}. Confirm or change.` : 'No service found. Pick a tile.');

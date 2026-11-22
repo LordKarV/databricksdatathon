@@ -284,9 +284,52 @@ function bandHtml(o, P) {
   const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
   return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
 }
+// Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
+function quoteFlagsHtml(e, P) {
+  return (e.flags || []).map((f, j) => {
+    const Q = `${P}.flags.${j}`;
+    return `<span class="audit${f.weak ? ' audit-weak' : ''}"><span aria-hidden="true">&#9888;</span> ${F(Q + '.text', f.text)}` +
+      `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
+  }).join('');
+}
 function quoteHtml(e, P) {
   return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>`;
+    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>${quoteFlagsHtml(e, P)}`;
+}
+// "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
+// engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
+function deltaHtml(path, v) {
+  return F(path, v === 0 ? 'about the same time' : `${Math.abs(v)} min ${v < 0 ? 'closer' : 'farther'}`, 'delta');
+}
+function changeHtml(p) {
+  const c = p.what_would_change;
+  if (!c) return '';
+  const L = F('query.service_label.en', p.query.service_label.en);
+  const d = deltaHtml('what_would_change.minutes_vs_first', c.minutes_vs_first);
+  const line = c.kind === 'confirm_nearer'
+    ? `If ${F('what_would_change.name', c.name)} confirms on the phone that it offers ${L}, it becomes the first choice (${d}).`
+    : `If ${F('what_would_change.first_name', c.first_name)} cannot take the patient, call ${F('what_would_change.name', c.name)} next (${d}).`;
+  return `<p><strong>What would change this answer:</strong> ${line}</p>`;
+}
+function windowHtml(p) {
+  const w = p.time_window;
+  if (!w || !w.first_outside || !p.options.length) return '';
+  return `<p><strong>The first choice is about ${F('options.0.travel.minutes', p.options[0].travel.minutes, 'num')} min away,
+    beyond the ${F('time_window.window_min', w.window_min, 'num')}-min window for this care.</strong>
+    ${isEmergency() ? 'Call 108 now for transport and first aid on the way.' : 'Ask the doctor whether that delay is safe.'}</p>`;
+}
+function whyNotHtml(p) {
+  const rows = p.why_not || [];
+  if (!rows.length && !p.what_would_change && !windowHtml(p)) return '';
+  const items = rows.map((w, k) => {
+    const W = `why_not.${k}`;
+    const where = w.minutes_vs_first != null ? ` (${deltaHtml(W + '.minutes_vs_first', w.minutes_vs_first)})` : '';
+    return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
+      ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
+  }).join('');
+  return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
+    ${windowHtml(p)}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {
   const P = `options.${i}`;
@@ -383,7 +426,7 @@ function routePlanHtml(r, P) {
 }
 function routeHtml(p) {
   const it = p.itinerary;
-  if (!it) return '';
+  if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2>Suggested route</h2>
     <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
       estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
@@ -416,14 +459,12 @@ function planScreen() {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
       ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${whyNotHtml(p)}
       ${oo ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
-      ${p.why_not.map((w, k) => `<p><strong>${F(`why_not.${k}.name`, w.name)}</strong>,
-        ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
-      <p class="small muted">This describes our data, not the facility.</p></details>` : '');
+    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
   }
   state.speak = {en: planSpeech(p)};
   return head + toggle + RSInput.speakHtml() + body + foot;
@@ -482,6 +523,26 @@ function compareHtml(p) {
 }
 
 // ---------- Area depth (S11 standing plan, S12 ten calls); data from POST /api/area ----------
+// Data gap vs care gap (#86): "no listing claims it" means we cannot tell; "claimed but not confirmed / far" is care.
+function gapHtml(a) {
+  const g = a.gap;
+  if (!g) return '';
+  const G = k => F('area.gap.' + k, g[k], 'num');
+  const W = F('area.area.window_min', a.area.window_min, 'num');
+  const L = F('area.query.service_label.en', a.query.service_label.en);
+  return `<h3>Data gap or care gap?</h3>
+    <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
+      ${G('district_confirmed')} of them confirmed by a second source.</p>
+    <ul class="gap">
+      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a confirmed option within ${W} min.</li>
+      <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
+        say they offer it, none confirmed. A phone call can settle it.</li>
+      <li><strong>Care gap, too far:</strong> ${G('far')} PIN areas: every listing that claims it is more than ${W} min away.</li>
+      <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
+        We cannot tell whether care exists there.</li>
+    </ul>
+    <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>`;
+}
 function areaHtml(a) {
   if (!a || a.loading) return '<p>Loading the area plan...</p>';
   if (a.error) return `<p class="card" role="alert">${esc(a.error)}</p>`;
@@ -520,6 +581,7 @@ function areaHtml(a) {
       <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
     </tbody></table>
     <p>${F('area.caveat', a.caveat)}</p>
+    ${gapHtml(a)}
     <table><caption>Plan per PIN area</caption>
       <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
       <tbody>${rows}</tbody></table>
