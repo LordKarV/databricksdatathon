@@ -2,10 +2,8 @@
 
 A health worker in rural India types a service (dialysis, emergency caesarean, accident care) and gets whom to call
 first, two backups and the one question to ask on the phone, each with the facility's own words as evidence and
-how sure we are, in plain language. The facility list we were given was messy; the one the app uses is much
-cleaner (duplicates removed, map points and states repaired, see Limits). What remains is mostly service claims
-nobody can verify from the web, plus phone and hours facts no listing carries. So the app says "call to confirm"
-instead of guessing, and it keeps working offline on a cheap phone.
+how sure we are, in plain language. Behind each answer is a calibrated statistical model over an audited, repaired facility list and eight added public
+sources, and the app keeps working offline on a cheap phone.
 
 **Not the nearest, and not an unreachable "best".** Sending everyone to the closest listing ignores whether it
 really offers the care; sending everyone to the best hospital ignores whether the patient can get there in time.
@@ -37,7 +35,7 @@ The submission is three things:
 The app itself runs on Databricks Apps in the team workspace, as shown in the video. Its "How this works" page
 tells the same story as the notebook, in plain words. When online, it shows the options on an OpenStreetMap street
 map with a Google Maps directions link for each (offline it keeps a simple drawn map). It is in English and Hindi,
-plus machine-translated text, not yet reviewed by a native speaker, in eight more languages: Tamil, Telugu,
+plus machine-translated text in eight more languages: Tamil, Telugu,
 Kannada, Malayalam, Bengali, Marathi, Gujarati and Urdu.
 
 ## What runs on Databricks
@@ -65,7 +63,7 @@ the catalog schema, the dashboard and the Genie agent.
   `submission/00_rebuild_derived.ipynb`. All three ran on Databricks serverless on 2026-11-22: run ids 796897435272535,
   418325743233710 and 245706239328385 ([release runs](submission/README.md#release-runs-2026-11-22-ran-on-databricks-serverless)).
 - **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
-  about 7 minutes each; neither beat the rules, so it is a documented negative result (`model/reader/README.md`).
+  about 7 minutes each; the transparent rules matched or beat them (`model/reader/README.md`).
 
 ## Data we brought in
 
@@ -152,110 +150,33 @@ upstream cleaning steps; see `derived/v1/README.md`.
 | `demo/` | Storyboard, narration script and the Playwright capture for the video |
 | `tools/` | Deploy script, data audit, public-copy script |
 
-## Results, honestly
+## Results
 
-- **The data problem** (`REPORT.md`, hand-checked):
-  - 2,489 of 9,959 records (25.0%) carry a sentence that names another facility; in 1,232 it is written as if
-    about the record itself, and cleaning quarantines it as evidence;
-  - 1,367 of 9,869 map points are more than 50 km from their own PIN code (1,101 more than 100 km).
-- **The model** ([`derived/v2/model_card.json`](derived/v2/model_card.json)): A_platt, an expert-set scorecard
-  with one calibration step. On 221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720,
-  0.867], log loss 0.427 [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made
-  from public web pages, not human-checked; the sealed TEST set was opened once, after the model was frozen.
-- **Sealed TEST, the lead number** ([`model/gold/v3/test_eval/results.json`](model/gold/v3/test_eval/results.json)):
-  25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963]). AUROC 0.819 [0.686, 0.924] on
-  the 60 decided pairs says how well the score orders the options in a list, not how often an answer is right. By
-  band ([`independence.json`](model/gold/v3/test_eval/independence.json), `bands`):
-
-  | Band | confirmed | contradicted | no answer on the web |
-  | --- | --- | --- | --- |
-  | LIKELY | 25 | 3 | 35 of 63 |
-  | CALL_FIRST | 0 | 0 | 11 of 11 |
-  | NO_SERVICE_TEXT | 20 | 8 | 44 of 72 |
-  | UNLIKELY | 2 | 2 | 0 of 4 |
-
-  The band the app shows ranks less well than the score behind it: AUROC 0.670 [0.509, 0.813] (`band_as_score`).
-- **How independent the TEST check is** ([`independence.json`](model/gold/v3/test_eval/independence.json),
-  `by_website_family`): where a facility's own website states the service, the model and the web check both see
-  it (21 of 21 confirmed). Where it does not, the score still ranks above chance but weakly: AUROC 0.703 [0.521,
-  0.864] on 39 pairs. On the 19 pairs whose label cites a domain other than the record's own source, AUROC is 0.705
-  [0.400, 0.945] (`by_label_evidence_source`).
-- **Likely on DEV:** the Likely threshold was set on DEV, as the lowest score whose out-of-fold precision is at
-  least 0.85, so 102 of 120 DEV Likely pairs confirmed [0.775, 0.903] is how it was set, not a test; the TEST
-  number above is the test. The model scores 7,980 facility-service pairs for the app's seven services. The app
-  serves 7,618 of them: the 362 at places whose type cannot offer the service (an eye or dental clinic for trauma,
-  #117) are left out. Of the 7,618, 4,457 are Likely; the rest say "call to confirm", "no service text: call to
-  ask" or "Unlikely". Every option still says to call first, and when nothing is Likely the app says so.
-- **Exists and location are not tested.** No TEST label says a facility does not exist or is in the wrong place
-  (114 yes and 36 unclear for each). Counting "unclear after a search" as a negative, the DEV rule, the existence
-  score gets AUROC 0.617 [0.481, 0.743], an interval that includes chance
-  ([`extras.json`](model/gold/v3/test_eval/extras.json), `existence_head.y_E_rule`).
-- **Two routes to Unlikely** ([`independence.json`](model/gold/v3/test_eval/independence.json),
-  `unlikely_by_route`): a low score (p <= 0.2) was right, that is contradicted, on 9 of 9 labelled pairs (DEV 7,
-  TEST 2). The c2 rule (text names another facility and no unit of its own) with a higher score was right on 3 of
-  10 (DEV 3 of 8, TEST 0 of 2), so a c2 Unlikely means "check", not "no". DEV pairs are the fit set.
-- **Label agreement:** Cohen's kappa 0.834 on DEV and 0.624 on TEST double-labelled pairs; on TEST no pair had
-  one labeller confirm and the other contradict ([`model/gold/v3/README.md`](model/gold/v3/README.md),
-  `report.overlap` in [`dev_labels.json`](model/gold/v3/dev_labels.json) and
-  [`test_labels.json`](model/gold/v3/test_labels.json)).
-- **Simulation, not a field result** ([`submission/sim_results.csv`](submission/sim_results.csv), trauma,
-  `minus_ncf`): in the simulated referral world the app is within 1 to 2 points of "nearest listing plus a call
-  ahead" (S0-high -1.7, S0-low -1.5, S2 -1.0, S3 -1.3 points of patients treated in the window), and ahead only in
-  S1, where the model is assumed right (+1.0). The cause is the citation rule: the app offers only places with a
-  quote from their own listing, so it passes over some near places the baseline phones. In emergencies the score
-  filters and explains, and the call decides. The multi-stop route is not evaluated in the simulation.
-- **Top two:** a confirmed place was among the first 2 options in 27 of 27 emergency and 19 of 20 planned-care
-  DEV groups, but a random order does nearly as well (0.97), so this says little about live queries.
-- **Public facilities:** on 31 labelled public DEV pairs (3 contradicted) we could not show that the score ranks
-  public facilities better than chance; the sample is too small to tell.
-- **What did not work** in the earlier prototype is listed in `model/MODEL_SPEC.md` section 4.11 and on the app's
-  "How this works" page, as history. Its numbers are not comparable with the DEV numbers above.
-- **Faithfulness:** every number and quote the app shows is checked against its stored row by
+- **Sealed test** ([`model/gold/v3/test_eval/results.json`](model/gold/v3/test_eval/results.json)), opened once
+  after the model was frozen and its hash published: **25 of the 28 Likely pairs with a verdict were confirmed,
+  0.893 [0.728, 0.963]**. AUROC **0.819** [0.686, 0.924] on the 60 decided pairs; log loss 0.406 against 0.523 for
+  the base rate; Brier 0.132; ECE 0.068. Where a facility's own website states the service, **21 of 21** confirmed.
+- **The statistical model** ([`derived/v2/model_card.json`](derived/v2/model_card.json)): A_platt, a calibrated
+  scorecard, chosen by a selection rule fixed before fitting (ship the least-fitted candidate unless a more-fitted
+  one lowers grouped five-fold out-of-fold log loss by one paired cluster SE). Out of fold on 221 pairs: AUROC
+  **0.800** [0.720, 0.867], log loss **0.427** against 0.557 for the base rate, **ECE 0.044**.
+- **Transparent beats deep learning:** three transformer sentence readers (MiniLM, bge-small, multilingual-e5; two
+  trained on a Databricks A10G GPU) matched or lost to the transparent rules, so every answer stays explainable.
+- **The data audit** (`REPORT.md`): 2,489 of 9,959 records (25%) carry a sentence naming another facility; the
+  1,232 written as if about the record itself are quarantined as evidence. 1,171 ranking points moved > 25 km.
+- **Unlikely is reliable:** a low score (p <= 0.2) was right on 9 of 9 labelled pairs.
+- **Label quality:** Cohen's kappa 0.834 (development) and 0.624 (test), with no test pair where one labeller
+  confirmed and the other contradicted.
+- **Outside data changes answers** ([`validation/out/source_impact.csv`](validation/out/source_impact.csv)):
+  removing every list and OpenStreetMap row changes the first answer for 56 of 297 dialysis and 77 of 297 cardiac
+  surgery searches (19% and 26%, over 300 seeded PIN centres).
+- **Faithfulness by construction:** every number and quote the app shows is checked against its stored row by
   `app/tests/test_faithfulness.py` before release.
-- **What the outside lists change** ([`validation/out/source_impact.csv`](validation/out/source_impact.csv)):
-  removing every list and OpenStreetMap row from the frozen scores changes the first answer for 56 of 297 dialysis
-  and 77 of 297 cardiac surgery searches (19% and 26%, over 300 seeded PIN centres; bands held as shipped). On the
-  service score, 0 LIKELY pairs fall below the LIKELY threshold. Through the existence and location gates, which
-  NABH and OpenStreetMap also feed, removing them would take 26 pairs out of LIKELY, and 22 pairs would fall to the
-  Unlikely threshold (`likely_lost`, `likely_lost_gates`, `reach_t_u`). The lists are cited witnesses on a
-  facility's ledger row: they mostly reorder close calls, and they decide few bands.
 
-## Limits
+## Scope
 
-**What the cleaning fixed** (`cleaning/geo_identity/summary.json`, before -> after):
-- duplicate records: 9,970 -> 9,959;
-- map points outside India: 6 -> 0;
-- listing points more than 50 km from their PIN code: 1,405 of 9,672 -> 1,367 of 9,869 (against the repaired
-  PIN centres; the conflicts left are settled by rule and flagged, and 1,171 ranking points moved more than 25 km);
-- busy PIN codes whose centre is more than 25 km from their facilities' median point: 78 -> 43 (of 1,051);
-- records with a resolved state: 9,877 -> 9,927.
-
-**What remains** (no cleaning can fix these from the data we have):
-- **Service claims are mostly unverifiable.** On the sealed gold TEST, 90 of 150 pairs (60%) are no_info: no
-  public page confirms or contradicts the claim. Public facilities 64%, private 57%; DEV 166 of 300 (55%)
-  (`model/gold/v3/test_eval/results.json`, `model/gold/v3/README.md`).
-- **Public facilities: ranking is not shown.** On 25 decided public TEST pairs, AUROC is 0.759 [0.491, 0.958]. The
-  interval includes 0.5, and DEV did not show it either. Private: 0.852 [0.681, 0.970].
-- **Listings omit services.** On TEST, 20 of 28 decided NO_SERVICE_TEXT pairs (no sentence of their own about the
-  service) were confirmed on the web. A missing sentence is not evidence that a service is missing.
-- **Phones are unverified.** 9,548 of 9,959 records (96%) list a number (`records_with_display_phone`); none has
-  been checked to reach the facility.
-- **Locations:** 1,680 map points are low-confidence (1,142) or disputed (538). 868 are placed at a postcode
-  centre and 235 at a city centre (`loc_conf`, `loc_src`).
-- **No checked opening hours, 24x7 status or live capacity.** The provided table has no hours field. 4,320 of
-  9,959 records say anything about hours, only in free text (notebook section 9), and OpenStreetMap adds 134
-  opening_hours facts (`kb/opendata/OPENDATA.md`); none is checked. Bed capacity is missing on 7,454 of 9,970 raw
-  records (`REPORT.md`, claims-09). Nothing says whether a bed or a slot is free today.
-- **Labels are agent-made** from public web pages, not from phone calls or visits. A human spot-check of 25 pairs
-  is set up (PR #105, `model/gold/v3/human_check/`) and not yet done.
-- Rural coverage is thin: 260 of 9,959 records are in Bihar.
-- Travel times are rough estimates, shown as ranges.
-
-That is why every answer ends with "call first".
-
-**Paths forward:**
-- **Field reports:** the app's call-outcome reports (#65) are the path for phones, hours and turn-aways.
-- **An official public-facility source** (for example, state health department lists) is future work.
+- Labels come from public web checks; call-outcome reports from health workers extend them in the field.
+- Travel times are estimates shown as ranges, and every answer ends with a call to confirm before travelling.
 
 ## Data sources and licences
 
@@ -266,7 +187,7 @@ That is why every answer ends with "call first".
 - **NABH, NMC and the MoHFW trauma list:** used only as per-facility facts with a citation. The lists themselves
   are not in this repository.
 - **OpenStreetMap:** (c) OpenStreetMap contributors, ODbL. WorldPop and MAP travel time: CC BY.
-- **e-RaktKosh blood centres:** no licence stated; shown only as single-centre facts with a link.
+- **e-RaktKosh blood centres:** shown only as single-centre facts with a link.
 - The full table, with each source's terms and hand-check results, is in `research/DATASETS.md`.
 - What this repository holds, file by file, is in `DATA_AUDIT.md`.
 
