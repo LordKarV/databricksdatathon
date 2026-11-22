@@ -78,6 +78,7 @@ Response:
                "reason_code", "reason", "basis": [{"code", "field", "value"}]}],          // #86
   "what_would_change": null | {"kind": "confirm_nearer | first_says_no", "facility_id", "name",
                                "first_name", "minutes_vs_first"},
+  "first_is_nearest": true,                                                             // #121
   "time_window": {"window_min", "first_outside"},
   "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
   "meta": {"stub": false, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
@@ -501,6 +502,8 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   `basis` names the field behind each clause. The tests check it against the engine and the payload.
   - `what_would_change`: the nearer Not verified listing that a "yes" on the phone would move to first place. It is
     re-ranked with the confirmed-pair score. Otherwise: "if option 1 cannot take the patient, call option 2".
+  - `first_is_nearest`: no listing in reach is nearer than option 1. The section then says "The first choice is
+    already the nearest listing that offers it", so the rows below read as farther places, not nearer ones.
   - `time_window.first_outside`: when option 1 misses the window (60 min for emergencies), the answer's first line
     says so ("The best-evidenced option is about 104 min away; that misses the 60-min window for this care"). It
     shows 108 (and 102 for mothers and newborns) and `public_option`: the nearest hospital the public standard

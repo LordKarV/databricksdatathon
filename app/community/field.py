@@ -266,8 +266,8 @@ def apply_field(plan_payload: dict, aggregates: dict, now: datetime, eng: Any = 
                      {fid: scored for fid, (scored, _) in found.items()},
                      {fid: info["net"] for fid, (_, info) in found.items() if info["net"] is not None})
     # Every block built from the option order comes from the rebuilt plan (a reorder changes "if the first says no").
-    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "time_window",
-                                                    "rank_rule", "public_option")},
+    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "first_is_nearest",
+                                                    "time_window", "rank_rule", "public_option")},
            "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
     if fresh.get("tie_break"):
         out["tie_break"] = _tie_row(fresh["tie_break"], fresh["options"], found)

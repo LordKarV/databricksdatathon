@@ -494,6 +494,9 @@ class Engine:
             "location": {"lat": lat, "lon": lon, "accuracy_m": accuracy_m, "source": source, "rounded_to_deg": 0.01},
             "as_of": self.meta["as_of"], "profile": info["profile"], "emergency_numbers": emergency_numbers(service),
             "abstain": abstain, "options": options, "why_not": why_not, "what_would_change": change,
+            # No listing in reach that names the service is nearer than option 1 (#121: the section then says so
+            # instead of reading as a list of nearer alternatives).
+            "first_is_nearest": bool(chosen) and all(r[1] >= chosen[0][1] for r in pool + unlikely),
             # The first choice beyond the urgency window (60 min for emergencies) is the answer's first line, with
             # 108/102 and the nearest hospital the public standard expects to offer the care (#86, lead's decision).
             "time_window": {"window_min": window, "first_outside": first_outside},

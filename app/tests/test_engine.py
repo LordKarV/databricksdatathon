@@ -261,3 +261,16 @@ def test_every_planner_route_type_has_words() -> None:
     import itinerary
     for key in ("direct", "one_stop", "two_stop", "single_site", "two_sites", "three_sites"):
         assert key in itinerary.TYPE and "_" not in itinerary.TYPE[key]
+
+
+def test_first_is_nearest_when_no_listing_is_nearer():
+    """#121: "Why not the nearest?" listed only farther places when option 1 was already the nearest. The payload
+    says so (first_is_nearest), and never while a nearer listing is shown under "why not"."""
+    sitamarhi = ("dialysis", 26.5951, 85.4808)  # Prasad Hospital first; the rest are 1 to 4 min farther
+    mohania_cs = ("emergency_csection", 25.15, 83.68)  # two why-not listings are nearer than option 1
+    seen = {}
+    for q in [sitamarhi, mohania_cs, *QUERIES.values()]:
+        p = ENGINE.plan(*q, 40, "gps")
+        assert p["first_is_nearest"] == all(w["minutes_vs_first"] >= 0 for w in p["why_not"]), (q, p["why_not"])
+        seen[q] = p["first_is_nearest"]
+    assert seen[sitamarhi] is True and seen[mohania_cs] is False
