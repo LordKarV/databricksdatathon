@@ -33,7 +33,7 @@ bin, not an interval around P_S. Operator in `ds_facility` and `ds_pairs` comes 
 State and district still come from `geo_facility` (LGD polygon of the cleaned point): `facility_attributes_v2`
 has no district, and `facility_location.district` uses postcode district names that differ from the LGD names
 on 689 of 9,959 records, which would break the shared district filter. The phones column was removed from
-3.2 (#82). Pages 3 and 6 state that the score has no demonstrated ranking ability for public facilities.
+3.2 (#82). Pages 3 and 5 state that the score has no demonstrated ranking ability for public facilities.
 The service filter now lists v2 taxonomy ids for `ds_pairs` (trauma_care, emergency_24x7) beside the v1 ids
 of `ds_funnel` (trauma_emergency); dialysis, emergency_csection, nicu, mri, cardiac_surgery and burn_care
 match in both.

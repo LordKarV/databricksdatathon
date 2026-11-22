@@ -17,7 +17,7 @@ can be re-run; their raw output goes to `build/databricks_staging/independent_*.
 Fixes made during this check: none were needed. No workspace object was changed. The only new files are
 the four scripts in `databricks/verify/`, this file, and the JSON outputs in `build/databricks_staging/`.
 
-## Re-run on 2026-11-22 (plan 6e)
+## Re-run on 2026-11-22 (plan 6e; raw output not committed)
 
 The four read-only scripts were re-run unchanged, after the dashboard dropped its v1 pages (#143), the Genie
 space gained benchmarks (#155) and the six v1 tables were commented SUPERSEDED (#148). Run from a checkout
@@ -37,7 +37,8 @@ Notes from this run:
   `build_dashboard.py test` counts the same SQL with `SELECT COUNT(*)` and gets 358,092 rows, SUCCEEDED.
 - Genie's Odisha answer restates the question as "districts in Bihar" in its first line, then answers for
   Odisha. That is a wording slip; the numbers are right.
-- The Genie benchmark accuracy, 10 of 12 on the live space, is in databricks/genie/GENIE.md.
+- Genie native benchmark, 12 questions: 9 of 12, then 10 of 12 on the live space (two runs,
+  `databricks/genie/benchmark_results.json`; details in databricks/genie/GENIE.md).
 - Rendering of the dashboard pages and the Genie Benchmark tab is still unchecked in a browser.
 
 The sections below are the first run, on 2026-11-21.
@@ -151,7 +152,8 @@ Script: `databricks/verify/verify_app.py`.
 - The app does not have `POST /api/outcome` yet (no reference to it or to call_outcomes in `app/`). A write
   to call_outcomes as the SP has not been run.
 - No LLM call from the app to either serving endpoint has been run.
-- Genie: a 12-question benchmark is attached (10 of 12 on 2026-11-22, GENIE.md); a wording pass so answers
+- Genie: a 12-question native benchmark is attached (9 of 12, then 10 of 12 on the live space; two runs on
+  2026-11-22, `databricks/genie/benchmark_results.json`); a wording pass so answers
   say "no public evidence in this dataset" and avoid column names is still open.
 - 245 NABH facts lack a usable citation URL; the dashboard and Genie should show them as missing links.
 - Column comments: 43 of 57 tables have none.

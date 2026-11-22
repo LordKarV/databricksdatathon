@@ -21,14 +21,14 @@ Native Genie benchmark (`genie genie-create-eval-run`, Chat mode: Genie's SQL re
 Per question, from the second run (`benchmark_results.json` has both runs, with Genie's SQL):
 
 - The brief's two:
-  - "Where can a patient get dialysis near Jaipur?" was correct in both runs: 10 facilities within 50 km of the Jaipur district centre, Likely first, with claim ids (Deep Hospital and Research Centre, Jhotwara, 2.6 km, claim 4a89be71:proc:13).
+  - "Where can a patient get dialysis near Jaipur?" was correct in both runs: the first 10 facilities within 50 km of the Jaipur district centre (the query returns at most 10), Likely first, with claim ids (Deep Hospital and Research Centre, Jhotwara, 2.6 km, claim 4a89be71:proc:13).
   - "Which hospital near Lucknow can handle an emergency C-section?" was correct in both runs: BNK Hospital (4.0 km, Likely, claims d93e5058:equi:0, d93e5058:proc:2), then Fatima Hospital (4.4 km, Likely, claims 8b1f6969:proc:2, 8b1f6969:proc:7).
   - Asked again through the Conversation API, both answers name the claim ids for every facility they list.
 - Wrong in both runs: "Which three states have the most facilities on the e-RaktKosh blood bank list?". Genie counts list rows, not distinct facilities (in run 1 it also added `service = 'blood_bank'`).
 - Needs review in both runs: "How many districts in Uttar Pradesh ...". Genie returns 54 districts and 149.54 M people, against our 149.5 (it rounds to two decimals). The numbers are right.
-- Wrong in run 1 only: "How many facilities in Bihar does model v2 band Likely for dialysis?". Genie split the 36 by owner (27 private, 4 public, 5 unknown), copying example 12. With unchanged data, the same question went from wrong to right between runs, so one run is not a stable measure.
+- Wrong in run 1 only: "How many facilities in Bihar does model v2 band Likely for dialysis?". Genie split the 36 by owner, copying example 12. With unchanged data, the same question went from wrong to right between runs, so one run is not a stable measure.
 
-Limits: 12 questions is below the 30 the Genie optimisation guide asks for before tuning on the score. Two of the 12 (Jaipur, Lucknow) share their SQL shape with example 13 (ICU near Patna), so they test that Genie adapts the example to a new place and service, not open generalisation. Nobody has opened the Benchmark tab in a browser; the screenshot is still to take.
+Limits: 12 questions is below the 30 the Genie optimisation guide asks for before tuning on the score. Two of the 12 (Jaipur, Lucknow) share their SQL shape with example 13 (ICU near Patna), so they test that Genie adapts the example to a new place and service, not open generalisation. Both brief questions use `near_sql()`, which ends in `LIMIT 10`, so 10 is the cap, not the count; yet Genie's Conversation-API answers say "There are 10 facilities" (Jaipur) and "There are 10 hospitals" (Lucknow) (`brief_questions_conversation_api`). The instructions should tell it to say when a list is capped; that needs a redeploy of the space. Nobody has opened the Benchmark tab in a browser; the screenshot is still to take.
 
 Description shown in Genie:
 
