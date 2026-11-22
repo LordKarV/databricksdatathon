@@ -132,7 +132,9 @@ table { border-collapse: collapse; width: 100%; }
 [data-mic].recording { background: var(--hazard); border-color: var(--hazard); color: var(--on-hazard); }
 
 /* ---------- 108 bar: red only ever means "phone the ambulance" ---------- */
-.sos { position: sticky; top: var(--bar-h); z-index: 9; display: flex; flex-wrap: wrap; background: var(--hazard); }
+/* #bar108 is the sticky box: .sos inside it fills a wrapper of its own height, so sticky there never stuck (#140 B3) */
+#bar108 { position: sticky; top: var(--bar-h); z-index: 9; }
+.sos { display: flex; flex-wrap: wrap; background: var(--hazard); }
 .sos a, .sos-inline a { flex: 1 1 10rem; display: flex; align-items: center; gap: var(--sp2); min-height: var(--target);
   padding: var(--sp2) var(--sp4); color: var(--on-hazard); font-weight: 600; font-size: var(--s18); line-height: 1.25; text-decoration: none; }
 .sos a + a { border-left: 1px solid rgba(255, 255, 255, .45); }
@@ -259,7 +261,7 @@ body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
 .vs-direct-main { margin-top: var(--sp2); font-size: var(--s16); }
 .route-details { margin-top: var(--sp3); border-top: 1px solid var(--line); }
 .stops-full { padding-left: var(--sp5); }
-.stops-full a[href^="tel:"] { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.stops-full a[href^="tel:"] { display: inline-flex; align-items: center; min-height: var(--target); font-weight: 600; }
 .stops-full ul { padding-left: var(--sp4); }
 .quotes { padding-left: var(--sp4); }
 

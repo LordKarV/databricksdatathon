@@ -21,6 +21,7 @@ and re-check the numbers in brackets on the day; the narration reads them off th
 |---|---|---|---|
 | 0:20 data | any | Bottom bar: Data stories | The data stories. Stay on them; the model stories there are from v1. |
 | 0:50 the model | Gaya 24.79, 85.0 | Home, "Accident or injury", then "Why this place?" on card 1 | Dr. A Barkat Multispeciality Hospital, Likely. The Why page lists the witnesses; the rows add up to the score. |
+| 1:45 the sealed test | any | Bottom bar: How this works, scroll to the v2 evaluation table | The sealed TEST numbers the narration reads (AUROC with its interval). Hold it about 5 s. |
 | 2:25 the route | Gaya 24.79, 85.0 | Back to the answer, scroll to the route | "Going straight to All India Institute of Medical Sciences Patna takes [92] min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about [1] min." |
 | optional: location doubt | Pusa 25.6, 85.95 | Home, "Accident or injury" | Card 1 Miracare Hospital (Likely, 34 min). Card 2 Sub Divisional Hospital Pusa, 19 min, flagged: its map point is not in Pusa, so the route does not use it. |
 | 2:55 the call loop | Gaya 24.79, 85.0 | Card 1: Call. Cancel the Mac's call dialog, switch to another tab and back, tap "No answer" | "Call next" with option 2's number; the Call bar no longer offers option 1. |
@@ -32,17 +33,16 @@ and re-check the numbers in brackets on the day; the narration reads them off th
 | optional: area brief | any | Bottom bar: Area, pick a district | The district brief: NFHS-5, LaQshya and access figures. |
 | 3:25 Databricks | n/a | Workspace: the notebook; Catalog `workspace.referral_saathi`; Genie "Referral Saathi planner"; dashboard "Referral Saathi: district planner" | In Genie ask "Where can a patient get dialysis near Jaipur?" |
 
-## Field reports: decide before recording
+## Field reports
 
 The live app has no real field reports yet, so the area pulse says "No counts to show". The script's 2:55 line
-("The reports on screen today are simulated and labelled so") needs the labelled simulated reports turned on.
-Either change that line to "No real reports exist yet, and the app says so", or turn them on for the recording:
-add `- name: COMMUNITY_DEMO` / `value: "1"` to the env in `tools/deploy/deploy.sh` and redeploy. Every simulated
-sentence starts with a SIMULATED label.
+says so ("No real reports exist yet, and the app says so"); the release runs without `COMMUNITY_DEMO`.
 
 ## Avoid on camera
 
 - Typing "Pusa" lands on the Samastipur post office, not the doubt case. Use the Sensors point 25.6, 85.95.
 - Gaya C-section has no place within the 60-minute window (option 1 is 98 min away). It is an honest "no good
   answer" example, not a hero shot.
-- In Genie, check the Lucknow C-section answer before using it; the Jaipur dialysis question is the safe one.
+- In Genie, use the Jaipur dialysis question; the Lucknow C-section answer has not been checked.
+- Dehradun trauma: Himalayan Hospital ranks above AIIMS Rishikesh, because AIIMS's listing has no 24x7 evidence.
+  It is honest, but it needs explaining; leave it out.

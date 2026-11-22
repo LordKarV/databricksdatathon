@@ -63,28 +63,35 @@ self.addEventListener('activate', e => e.waitUntil(
     .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== OLD_PACKS).map(k => caches.delete(k))))
     .then(() => self.clients.claim())));
 
+// A hanging network (weak 2G: no answer, no refusal) would hold the page on the network for a minute or more.
+// After NET_MS the cached copy answers; with nothing cached, the network is still awaited.
+const NET_MS = 4000;
+function network(req) {
+  return Promise.race([fetch(req), new Promise((_, no) => setTimeout(() => no(new Error('network timeout')), NET_MS))]);
+}
+
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
   if (url.pathname.startsWith('/api/pack/') && url.pathname !== '/api/pack/version') {
     // Offline: answer from the stored pack. Online: the network, untouched (no write-through).
     const slug = url.pathname.split('/').pop();
-    e.respondWith(fetch(e.request).catch(() => getPack(slug).catch(() => null)
-      .then(rec => rec ? packResponse(rec)
-        : new Response('{"error":"pack not saved"}', {status: 504, headers: {'Content-Type': 'application/json'}}))));
+    e.respondWith(network(e.request).catch(() => getPack(slug).catch(() => null)
+      .then(rec => rec ? packResponse(rec) : fetch(e.request).catch(() =>
+        new Response('{"error":"pack not saved"}', {status: 504, headers: {'Content-Type': 'application/json'}})))));
     return;
   }
   if (url.pathname.startsWith('/api/')) return;
   const key = e.request.mode === 'navigate' ? '/' : url.pathname;
   if (!SHELL.includes(key)) return;
-  e.respondWith(fetch(e.request).then(res => {
+  e.respondWith(network(e.request).then(res => {
     if (res.status >= 500) return caches.match(key).then(c => c || res);
     if (res.ok && res.type === 'basic') {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(key, copy));
     }
     return res;
-  }).catch(() => caches.match(key)));
+  }).catch(() => caches.match(key).then(c => c || fetch(e.request))));
 });
 
 // Loader stub: the page posts {type: 'cache-pack' | 'drop-pack', slug}; the reply goes back on the message port, or

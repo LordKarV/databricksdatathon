@@ -54,8 +54,7 @@ tells the same story as the notebook, in plain words.
   instructions, 13 example queries and a 12-question benchmark. Native benchmark, 12 questions: 9 of 12, then
   10 of 12 on the live space (two runs,
   [`databricks/genie/benchmark_results.json`](databricks/genie/benchmark_results.json)); two of the 12 share an
-  example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
-  hospital near Lucknow can handle an emergency C-section?" with claim ids.
+  example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" with claim ids.
 - **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
   `submission/00_rebuild_derived.ipynb`. All three ran on Databricks serverless on 2026-11-22: run ids 796897435272535,
   418325743233710 and 245706239328385 ([release runs](submission/README.md#release-runs-2026-11-22-ran-on-databricks-serverless)).

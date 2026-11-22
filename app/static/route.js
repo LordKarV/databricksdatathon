@@ -100,7 +100,8 @@ function routeHtml(p) {
     ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}
     ${it.itinerary_note ? `<p class="note">${E('itinerary.itinerary_note', it.itinerary_note)}</p>` : ''}`;
   if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
-  if (!it.plans.length) return '';
+  // every route dropped (#183): the note ("Go straight to ...") is still the advice, so it still shows (#140)
+  if (!it.plans.length) return it.itinerary_note || it.stop_1_note ? `<section class="section" aria-labelledby="h-route">${head}</section>` : '';
   const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
   const compact = stopGroups(r.stops).map(g => {
     const s = r.stops[g.ks[0]], S = `${P}.stops.${g.ks[0]}`;

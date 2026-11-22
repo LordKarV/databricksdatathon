@@ -54,7 +54,7 @@ Multispeciality Hospital gives first care in about 1 min.]"
 
 **2:55 the loop back into the data.** "Health workers log what happened, from fixed choices. Reports from at
 least two different workers become one more named row in the same ledger; they can lower a score, never raise
-it. A receptionist's 'yes' counts half. The reports on screen today are simulated and labelled so." [field.py]
+it. A receptionist's 'yes' counts half. No real reports exist yet, and the app says so." [field.py]
 Show the Hindi switch, voice, the family card and offline: "the same answer, for people who read Hindi, share by
 WhatsApp, or lose signal."
 

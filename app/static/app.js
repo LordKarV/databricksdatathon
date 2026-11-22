@@ -18,7 +18,7 @@ const SIZES = [100, 125, 150];
 const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: '', lang: null};
 
 function load(k) { try { return JSON.parse(localStorage.getItem('rs.' + k)); } catch { return null; } }
-function save(k, v) { try { localStorage.setItem('rs.' + k, JSON.stringify(v)); } catch { /* private mode */ } }
+function save(k, v) { try { localStorage.setItem('rs.' + k, JSON.stringify(v)); return true; } catch { return false; } }  // false: private mode or full
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 }
@@ -220,9 +220,14 @@ async function loadArea() {
   render();
 }
 function stopWatch() { if (state.stopWatch) { state.stopWatch(); state.stopWatch = null; } }
-async function offlinePlan(reason) {
+const OFFLINE_PACK_MS = 6000;  // a hanging network (weak 2G): the saved answer after 6 s, not "Finding..." forever
+async function offlinePlan(reason, live = () => true) {  // reason: a strings key, shown in the language at render time
   let pack = null;
-  try { await needScripts(['/pack.js', '/offline.js']); pack = await window.RSOffline.loadPack(); } catch { /* not cached */ }
+  try {
+    pack = await Promise.race([needScripts(['/pack.js', '/offline.js']).then(() => window.RSOffline.loadPack()),
+      new Promise((_, no) => setTimeout(() => no(new Error('pack timeout')), OFFLINE_PACK_MS))]);
+  } catch { /* not cached, or the network hangs */ }
+  if (!live()) return false;
   const R = window.RSOffline;
   const p = {offline: true, reason, pack, confirmed: false, answer: null};
   if (pack && R.fixIsFresh(state.loc)) p.answer = R.answer(pack, state.loc, state.service);
@@ -239,16 +244,19 @@ async function offlinePlan(reason) {
   }
   state.plan = p;
   announce(ts('off.h') + '. ' + (p.answer ? ts('off.n_saved', {n: p.answer.options.length}) : ts('off.showing')));
+  return true;
 }
 function offlineScreen(s) {
   const p = state.plan, R = window.RSOffline;
   if (!R) {
-    return `<h1 tabindex="-1">${th('off.h')}</h1>${offNotice(p.reason)}<p class="panel">${th('off.nothing')}</p>
+    return `<h1 tabindex="-1">${th('off.h')}</h1>${offNotice(ts(p.reason))}<p class="panel">${th('off.nothing')}</p>
       <a class="btn btn-hazard btn-block" href="tel:108">${icon('phone')} ${th('sos.108')}</a>`;
   }
-  return offNotice(p.reason) + R.render(p.answer, {serviceLabel: s.label, locLine: locLine(state.loc), reason: p.reason,
-    show102: has102(s.key), gettingGps: !!state.stopWatch,
-    fresh: p.confirmed || R.fixIsFresh(state.loc), hasPack: !!p.pack});
+  const fresh = p.confirmed || R.fixIsFresh(state.loc);
+  const body = R.render(p.answer, {serviceLabel: s.label, locLine: locLine(state.loc), reason: ts(p.reason),
+    show102: has102(s.key), gettingGps: !!state.stopWatch, fresh, hasPack: !!p.pack});
+  // #140 DA-1: saved cards to call come first; the notice and Retry follow (the heading's dates say it is saved)
+  return fresh && p.answer && p.answer.options.length ? body + offNotice(ts(p.reason)) : offNotice(ts(p.reason)) + body;
 }
 function offNotice(reason) {
   return `<div class="offline-note" role="status">${icon('wifiOff')}<div><b>${th('off.h')}</b><p>${esc(reason)}</p>
@@ -1028,6 +1036,7 @@ async function badLocation(r) {
   location.hash = '#/change';
   return true;
 }
+let planReq = null;  // the /api/plan request in flight: a reply that is no longer for this screen is dropped (#140 B1)
 async function bindPlan() {
   $('#retry')?.addEventListener('click', () => { state.plan = null; render(); });
   if (state.plan && state.plan.offline) {
@@ -1046,9 +1055,16 @@ async function bindPlan() {
     state.patientHere = r.value === 'yes'; render();
   }));
   if (!state.service || !state.loc || state.plan) return;
+  const l = state.loc, key = [state.service, l.lat, l.lon, l.source].join('|');
+  if (planReq && planReq.key === key) return;  // a re-render while it loads does not ask twice
+  const req = planReq = {key};
+  // Live: still the newest request, still on the answer screen, same service and place, nothing shown yet.
+  // A reply for a screen that is gone (Back, Change place, another service) is dropped, not drawn over it.
+  const live = () => planReq === req && location.hash === '#/plan' && !state.plan && !!state.loc
+    && [state.service, state.loc.lat, state.loc.lon, state.loc.source].join('|') === key;
+  const done = () => { if (planReq === req) planReq = null; };
   // Offline per spec 3.2.3: navigator.onLine false, a failed /api call, or one slower than 8 s.
-  if (!navigator.onLine) { await offlinePlan(ts('off.no_net')); render(); return; }
-  const l = state.loc;
+  if (!navigator.onLine) { if (await offlinePlan('off.no_net', live)) render(); done(); return; }
   // Rounded to 0.01 deg on the phone too; the point goes in the body, never the URL.
   const body = {service: state.service, lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2), accuracy_m: l.accuracy_m,
     source: l.source, depth: 'quick'};
@@ -1058,25 +1074,29 @@ async function bindPlan() {
   try {
     const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body), redirect: 'manual', signal: ctl.signal});
+    if (!live()) return;
     if (r.type === 'opaqueredirect') {
-      await offlinePlan(ts('off.signed_out'));
+      if (!await offlinePlan('off.signed_out', live)) return;
     } else if (r.status >= 500) {
-      await offlinePlan(ts('off.server_down'));
+      if (!await offlinePlan('off.server_down', live)) return;
     } else if (r.status === 422 && await badLocation(r)) {
       return;  // #134: the phone's point is outside India or too rough; typing the place is the way on
     } else if (!r.ok) {
       state.plan = {error: ts('err.plan', {code: r.status})};
       announce(state.plan.error);
     } else {
-      state.plan = await r.json();
-      const o = state.plan.options[0];
+      const plan = await r.json();
+      if (!live()) return;
+      state.plan = plan;
+      const o = plan.options[0];
       announce(state.plan.abstain ? ts('ans.abstain_found') : o ? ts('ans.found', {n: state.plan.options.length, name: o.name}) : '');
       saveOfflinePack();  // background, never on the critical path
     }
   } catch (e) {
-    await offlinePlan(ts(e.name === 'AbortError' ? 'off.slow' : 'off.unreachable'));
+    if (!live() || !await offlinePlan(e.name === 'AbortError' ? 'off.slow' : 'off.unreachable', live)) return;
   } finally {
     clearTimeout(timer);
+    done();
   }
   render();
 }
@@ -1103,7 +1123,8 @@ function whyScreen(rank) {
     <header class="why-head"><h1 tabindex="-1"><span lang="en">${F(P + '.name', o.name)}</span></h1>
       <p>${bandHtml(o, P)}</p><p class="note"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
       <p>${th('why.distance', {km: N(P + '.travel.km', o.travel.km), low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}
-        <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p></header>
+        <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p>
+      ${tel ? `<a class="btn btn-go btn-block" href="${tel}">${icon('phone')} ${th('ans.call')}</a>` : ''}</header>
 
     <section class="section" aria-labelledby="h-q"><h2 id="h-q">${th('why.quotes_h')}</h2>${noTextCaptionHtml(o, p.query)}${quotes}</section>
     <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
@@ -1293,8 +1314,12 @@ function queueOutcome(o, said, at, extra = {}) {
     said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100, ...extra});
   return true;
 }
+// ponytail: when storage is blocked or full the queue lives in memory, so it is sent this session but lost on reload
+let memQ = null;
+function outQ() { return memQ || load('outq') || []; }
+function setOutQ(q) { memQ = save('outq', q) ? null : q; }
 function queueItem(item) {  // also the visit reports from community.js
-  save('outq', [...(load('outq') || []), item].slice(-50));
+  setOutQ([...outQ(), item].slice(-50));
   flushOutcomes();
 }
 let flushing = false;
@@ -1302,7 +1327,7 @@ async function flushOutcomes() {
   if (flushing || !navigator.onLine) return;
   flushing = true;
   try {
-    for (const item of load('outq') || []) {
+    for (let item; (item = outQ()[0]);) {  // re-read each time: an item queued while this runs is sent too
       let drop = false;
       try {
         const r = await fetch('/api/outcome', {method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -1310,7 +1335,7 @@ async function flushOutcomes() {
         drop = r.ok || (r.status >= 400 && r.status < 500);  // 4xx will never succeed; 5xx and network errors retry
       } catch { /* offline again: keep it */ }
       if (!drop) break;
-      save('outq', (load('outq') || []).filter(x => x.outcome_id !== item.outcome_id));
+      setOutQ(outQ().filter(x => x.outcome_id !== item.outcome_id));
     }
   } finally { flushing = false; }
 }
