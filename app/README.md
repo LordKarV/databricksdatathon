@@ -77,6 +77,7 @@ Response:
   "what_would_change": null | {"kind": "confirm_nearer | first_says_no", "facility_id", "name",
                                "first_name", "minutes_vs_first"},
   "time_window": {"window_min", "first_outside"},
+  "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
   "meta": {"stub": true, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
 }
 ```
@@ -95,10 +96,12 @@ the stub returns invented sample values.
               "calls_could_close", "no_public_evidence"},          // MODEL: shares of the area, 0..1
   "caveat": "Low web presence looks like a gap. Verify before deciding.",
   "gap": {"pins_sampled", "pins_in_district", "radius_km", "district_claiming", "district_confirmed",
-          "covered", "not_confirmed", "far", "no_claim"},                     // #86: data gap vs care gap
+          "covered", "not_confirmed", "far", "no_claim",
+          "public_standard": [{"facility_id", "name", "label"}]},           // #86: data gap vs care gap
   "pins": [{"pin", "lat", "lon", "first": null | {"facility_id", "name"}, "backup": null | {...},
             "travel": null | {"low", "high"}, "call_first": null | "name", "nearest_km": null | 96.0,
-            "gap": "covered | not_confirmed | far | no_claim"}],
+            "gap": "covered | not_confirmed | far | no_claim",
+            "public": null | {"facility_id", "name", "km", "label"}}],
   "ten_calls": [{"rank", "facility_id", "name", "phone_kind", "areas", "access_gain"}],   // MODEL
   "meta": {"stub", "model_hash"}
 }
@@ -314,7 +317,11 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   `basis` names the field behind each clause. The tests check it against the engine and the payload.
   - `what_would_change`: the nearer Not verified listing that a "yes" on the phone would move to first place. It is
     re-ranked with the confirmed-pair score. Otherwise: "if option 1 cannot take the patient, call option 2".
-  - `time_window.first_outside`: the page says plainly when the first choice is beyond the window.
+  - `time_window.first_outside`: when option 1 misses the window (60 min for emergencies), the answer's first line
+    says so ("The best-evidenced option is about 104 min away; that misses the 60-min window for this care"). It
+    shows 108 (and 102 for mothers and newborns) and `public_option`: the nearest hospital the public standard
+    expects to offer the care, labelled "by public standard, not verified". This holds whether or not the answer
+    abstains.
 - **Flags inside the citation.** Each quote carries the warnings the pipeline already computed:
   - source page: `url_kind` list or unverified (`audit/provenance/q1_sources.py`), or a Wikipedia page about a place
     in `place_gazetteer` more than 25 km away;
@@ -332,6 +339,9 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   - care gap: listings in the window claim it but none is confirmed, or every listing is beyond the window;
   - data gap: no listing within 150 km claims it, so we cannot tell.
 
-  The page states the PIN sample (the first 40 PINs by number).
+  The page states the PIN sample (the first 40 PINs by number). Where a PIN has no option with public evidence, its
+  row names the nearest public-standard hospital (`pins[].public`). Where the district shows a gap, the screen lists
+  the district's public-standard hospitals (`gap.public_standard`, at most 5). Both are labelled "by public standard,
+  not verified".
 - **Tests.** `tests/test_standout.py`. `tests/test_faithfulness.py` checks every new value on the page. It adds three
   probes: Pusa trauma, Pune heart surgery (a named doctor) and Nagpur MRI (flagged sources).

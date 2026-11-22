@@ -175,8 +175,44 @@ def test_change_falls_back_to_option_two_when_no_call_can_flip_it():
 
 @needs_data
 def test_first_choice_outside_the_window_is_flagged():
-    p = ENGINE.plan("nicu", 24.0, 84.0, 40, "gps")
-    assert p["time_window"] == {"window_min": 60, "first_outside": True}
+    plans = [ENGINE.plan(*q, 40, "gps") for q in PROBES + GRID_PROBES]
+    for p in plans:
+        first = p["options"][0] if p["options"] else None
+        if first:
+            assert p["time_window"]["first_outside"] == (first["travel"]["minutes"] > p["time_window"]["window_min"])
+        if p["abstain"]:
+            assert p["public_option"] == p["abstain"]["outside_option"]  # abstaining: the same public hospital
+    assert any(p["time_window"]["first_outside"] for p in plans if p["options"])  # the case occurs in the data
+
+
+@needs_data
+def test_likely_option_too_far_names_the_public_standard_hospital_without_abstaining():
+    p = ENGINE.plan("emergency_csection", 20.8, 85.01, 40, "gps")  # Odisha: a Likely option 1 beyond 60 min
+    first, po = p["options"][0], p["public_option"]
+    assert p["abstain"] is None and first["band"] == "likely" and first["travel"]["minutes"] > 60
+    assert p["time_window"]["first_outside"] and po and po["label"] == "by public standard, not verified"
+    i = ENGINE.fid[po["facility_id"]]
+    assert ENGINE.fac["public_standard"][i]
+    # nearest such hospital within the search radius
+    km = ENGINE._public_near(p["location"]["lat"], p["location"]["lon"])[0]
+    assert abs(po["travel"]["km"] - km) < km * 0.6 + 1
+    assert {"108"} <= {n["number"] for n in p["emergency_numbers"]}
+    inside = ENGINE.plan("mri", 28.6, 77.2, 40, "gps")
+    assert not inside["time_window"]["first_outside"] and inside["public_option"] is None
+
+
+@needs_data
+def test_area_names_public_standard_hospitals_where_there_is_no_public_evidence():
+    a = ENGINE.area("trauma_emergency", 25.15, 83.68)
+    none = [r for r in a["pins"] if r["first"] is None]
+    assert none and all(r["public"] and r["public"]["label"] == "by public standard, not verified" for r in none)
+    assert all(r["public"] is None for r in a["pins"] if r["first"])
+    for r in none:
+        assert ENGINE.fac["public_standard"][ENGINE.fid[r["public"]["facility_id"]]]
+    g = ENGINE.area("trauma_emergency", 25.6, 85.95)["gap"]  # Darbhanga
+    for h in g["public_standard"]:
+        i = ENGINE.fid[h["facility_id"]]
+        assert ENGINE.fac["public_standard"][i] and ENGINE.fac["district"][i] == "DARBHANGA"
 
 
 # ---------- data gap vs care gap ----------

@@ -81,7 +81,10 @@ REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
                 # #86 demo QA: the audit's trauma probe, a quote naming a doctor, quotes with source warnings
                 "pusa_trauma": ("trauma_emergency", 25.6, 85.95),
                 "pune_cardiac_named_doctor": ("cardiac_surgery", 18.52, 73.86),
-                "nagpur_mri_flagged_sources": ("mri", 21.15, 79.09)}
+                "nagpur_mri_flagged_sources": ("mri", 21.15, 79.09),
+                # a Likely option 1 that misses the 60-min window, without abstaining; and one that abstains
+                "odisha_csection_likely_far": ("emergency_csection", 20.8, 85.01),
+                "palamu_nicu_out_of_window": ("nicu", 24.0, 84.0)}
 
 
 # ---------- payloads ----------
@@ -283,6 +286,8 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
 
 
 # ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
+PUBLIC_LABEL = "by public standard, not verified"
+WINDOW_LINE = "The best-evidenced option is about"
 WHY_NOT_CODES = {"contradicted", "no_quote", "weak_quotes", "outside_window", "farther", "missing", "evidence_kind",
                  "location", "shared_phone", "not_confirmed", "weaker"}
 
@@ -328,8 +333,14 @@ def check_why_not(payload: dict, shown: set[str]) -> list[str]:
     tw = payload.get("time_window")
     if tw and opts and tw["first_outside"] != (first > tw["window_min"]):
         errs.append("time_window.first_outside disagrees with option 1's travel time")
-    if tw and tw["first_outside"] and "time_window.window_min" not in shown:
-        errs.append("time_window: first choice is outside the window but the page does not say so")
+    if tw and tw["first_outside"]:
+        need = ["time_window.window_min", "options.0.travel.minutes"]
+        po = payload.get("public_option")
+        if po:
+            need += ["public_option.name", "public_option.label", "public_option.travel.km"]
+            if po["label"] != PUBLIC_LABEL:
+                errs.append(f"public_option.label is {po['label']!r}")
+        errs += [f"time_window: {x} not shown while option 1 misses the window" for x in need if x not in shown]
     return errs
 
 
@@ -360,6 +371,20 @@ def check_gap(area: dict, shown: set[str]) -> list[str]:
     for k in ("covered", "not_confirmed", "far", "no_claim"):
         if g[k] != sum(r.get("gap") == k for r in area["pins"]):
             errs.append(f"area.gap.{k} is not the count of PIN rows with that gap")
+    # Where the area shows no public evidence, the public-standard hospitals are named and labelled as such.
+    for k, r in enumerate(area["pins"]):
+        if r["first"] is None and r.get("public"):
+            errs += [f"area.pins.{k}.public.{f} not shown" for f in ("name", "label", "km")
+                     if f"area.pins.{k}.public.{f}" not in shown]
+            if r["public"]["label"] != PUBLIC_LABEL:
+                errs.append(f"area.pins.{k}.public.label is {r['public']['label']!r}")
+    s = area["summary"]
+    if s["n_without_option"] > 0 or s["no_public_evidence"] > 0:
+        for k, h in enumerate(g.get("public_standard") or []):
+            errs += [f"area.gap.public_standard.{k}.{f} not shown" for f in ("name", "label")
+                     if f"area.gap.public_standard.{k}.{f}" not in shown]
+            if h["label"] != PUBLIC_LABEL:
+                errs.append(f"area.gap.public_standard.{k}.label is {h['label']!r}")
     return errs
 
 
@@ -391,6 +416,13 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
+        text = page.inner_text("#main")
+        if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
+            first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
+                                                     (payload.get("abstain") or {}).get("text") or "\0"]
+                             if text.find(x) >= 0), default=len(text))
+            if not 0 <= text.find(WINDOW_LINE) < first_row or "Call 108" not in text:
+                errs.append("plan: option 1 misses the window but that is not the first line, with 108")
         shown_note = "The nearest verified" in page.inner_text("#main")
         if bool(far) != shown_note:
             errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
