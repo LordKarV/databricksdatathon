@@ -3,8 +3,7 @@
 A read-only Databricks AI/BI dashboard for district planners and NGO coordinators, built to
 `viz/dashboard/DASHBOARD_SPEC.md` over the tables in `workspace.referral_saathi`. It answers, for a chosen
 state, district and service: how thin is the evidence, how far are people from confirmed care, what do
-records claim against what anyone confirmed, which records to check by phone, what the planner's sample
-journeys look like, and how far to trust the scores.
+records claim against what anyone confirmed, which records to check by phone, and how far to trust the scores.
 
 ## Links
 
@@ -13,14 +12,14 @@ journeys look like, and how far to trust the scores.
 - Workspace file: `/Users/<workspace-user>/databricksdatathon/dashboards/Referral Saathi: district planner.lvdash.json`
 - Dashboard id: `01f1e602d4de168ea830c833c7865de6` (also in `dashboard_id.txt`), warehouse `6a2f5637720a2c17`
 
-State after deploy, read back with the API on 2026-11-21: `lakeview get` returns lifecycle ACTIVE, 16
-datasets all with catalog `workspace` and schema `referral_saathi`, 7 pages (6 canvas plus the filter page);
+State after deploy, read back with the API on 2026-11-22: `lakeview get` returns lifecycle ACTIVE, 11
+datasets all with catalog `workspace` and schema `referral_saathi`, 6 pages (5 canvas plus the filter page);
 `GET /api/2.0/lakeview/dashboards/<id>/published` returns `embed_credentials: true`. Permissions: owner
 CAN_MANAGE, admins CAN_MANAGE, group `users` CAN_READ (granted so teammates added to the workspace can open
 it; the workspace has 1 user today).
 
 Not run: nobody has opened the dashboard in a browser yet. The API accepts the JSON and the dataset SQL is
-tested, but widget rendering (in particular the 7 Vega-Lite custom charts) has not been looked at. Open each
+tested, but widget rendering (in particular the 6 Vega-Lite custom charts) has not been looked at. Open each
 page once before the demo; if a custom chart is blank, see "If a widget does not render" below.
 
 ## Model v2 repoint (2026-11-21)
@@ -37,7 +36,15 @@ on 689 of 9,959 records, which would break the shared district filter. The phone
 3.2 (#82). Pages 3 and 6 state that the score has no demonstrated ranking ability for public facilities.
 The service filter now lists v2 taxonomy ids for `ds_pairs` (trauma_care, emergency_24x7) beside the v1 ids
 of `ds_funnel` (trauma_emergency); dialysis, emergency_csection, nicu, mri, cardiac_surgery and burn_care
-match in both. Tables 6.2 and 6.3 still quote the v1 sealed test.
+match in both.
+
+## v1 pages removed (2026-11-22, plan 6a)
+
+Page 5 (referral journeys from the v1 stub planner, `planner_plans`) and tables 6.2 and 6.3 (the v1 sealed
+test, `model_test_metrics`: 71 pairs, AUROC 0.78) contradicted the v2 TEST in the notebook, so they are gone,
+with their five datasets and four spec checks. The old page 6 is now page 5 and keeps the v2 bands (5.1) and
+the own-website chart (5.2). `ds_funnel` maps the v1 id trauma_emergency to the v2 id trauma_care, so the one
+service filter selects the same service in both datasets. The dashboard now reads no v1 model table.
 
 ## Files
 
@@ -75,8 +82,7 @@ are not bound.
 | 2. Access to confirmed care | 2.1 within 60 min of confirmed trauma by state with route-error whisker and dots for any record and any clinic, 2.2 people over an hour away, 2.3 dialysis need against access by district, 2.4 low caesarean districts, 2.5 weekly dialysis km by tier, 2.6 within an hour by settlement class, 2.7 PMNDP against records | 2.1, 2.2, 2.6 national; 2.3-2.5 state and district; 2.7 state |
 | 3. Claimed against confirmed | records counter (n), 3.3 any stated hours and 24x7 emergency statement, 3.1 evidence ladder as k of mentions with intervals, 3.2 facilities ranked by P_S, 3.4 official list facts with citation | state, district, service (3.4: state and district only) |
 | 4. Records to check by phone | records counter (n), 4.1 pin 50+ km, 4.3 directory phones hidden, 4.2 location confidence mix, 4.4 fixed / flagged / cannot fix as k of n, 4.5 records to call first | state, district |
-| 5. Referral journeys (sample) | 5.1 definitive care within 60 min by pathway with Wilson interval, 5.2 best plan type (100% stacked), 5.3 concentration on the most-chosen facility | state |
-| 6. How far to trust the scores | 6.1 badges, 6.4 crawlable own website by operator and settlement with intervals, 6.2 published sealed-test AUROC and ECE, 6.3 label counts | 6.1 state, district, service; 6.4 state, district; 6.2, 6.3 national |
+| 5. How far to trust the scores | 5.1 model v2 bands, 5.2 crawlable own website by operator and settlement with intervals | 5.1 state, district, service; 5.2 state, district |
 
 Honesty rules applied: every page starts with a caveat text widget (the shared one plus the page's caveats
 from `viz/STORYBOOK.md`); every rate shows n, either as k of n on the bar (with "small sample" when n < 30)
@@ -87,8 +93,8 @@ are ranked bars and tables). Theme colours are the `viz/style.py` tokens, with e
 
 ## Skipped tiles
 
-None. Every tile in the spec has its data loaded (`facility_list_facts`, `model_test_metrics`,
-`nfhs_lgd_crosswalk` keys and `geo_facility_site` were added by the loader). Differences from the spec:
+The spec's referral-journey page and sealed-test tables were removed with the v1 model (see above). Every other
+tile has its data loaded (`facility_list_facts`, `nfhs_lgd_crosswalk` keys and `geo_facility_site` were added by the loader). Differences from the spec:
 
 - 1.4 and 2.1 do not highlight the selected state. They are national; a highlight would need a dataset
   parameter bound to the state filter, which I did not add.
@@ -100,39 +106,32 @@ None. Every tile in the spec has its data loaded (`facility_list_facts`, `model_
   because they would repeat Jammu.
 - 2.5 Sanchor (dist_lgd 779) is not in `geo_district`; it keeps its own state and district names.
 - 2.6 has no interval: it is a share of the whole population from the access grid, not a sample.
-- 6.3 is a table with a text widget beside it, not text alone.
 - `ds_cleaning`, `ds_hours` and `ds_website` from the spec are columns of one record-level `ds_facility`, and
   `ds_bands` is an aggregation of `ds_pairs`, so widgets on a page cross-filter. The logic is the spec's SQL.
-- 6.2 also lists keyword count and rule grade, and the 39-searched-pairs view next to all 71.
 
 ## If a widget does not render
 
 The JSON follows the skill's widget contracts, but rendering is unchecked. The likeliest failures, in order:
-Vega-Lite features in the 7 custom charts (`fold`, `yOffset`, the `colors.textPrimary.default` signal), then
+Vega-Lite features in the 6 custom charts (`fold`, `yOffset`, the `colors.textPrimary.default` signal), then
 the scatter's `zero: false` scale option. Fix in `build_dashboard.py` and run `all`; the link does not change.
 
 ## Query tests
 
 | Dataset | Rows | Seconds | Widgets that read it |
 |---|---|---|---|
-| `ds_facility` | 9,959 | 1.7 | f_district, f_state, p1_highconf, p1_other, p1_points, p1_rates, p1_records, p3_24x7, p3_hours, p3_records, p4_callfirst, p4_cleaning, p4_dirphone, p4_locconf, p4_pinfar, p4_records, p6_website |
-| `ds_state` | 32 | 1.5 | p1_state, p2_golden, p2_outside |
-| `ds_district` | 784 | 1.1 | f_district, f_state, p1_districts |
-| `ds_dialysis_district` | 781 | 1.4 | f_district, f_state, p2_dialysis |
-| `ds_csection_district` | 169 | 1.4 | f_district, f_state, p2_csection |
-| `ds_dialysis_burden` | 780 | 1.5 | f_district, f_state, p2_burden |
-| `ds_settlement` | 9 | 1.3 | p2_settlement |
-| `ds_pmndp` | 36 | 1.3 | f_state, p2_pmndp |
-| `ds_funnel` | 9,244 | 1.6 | f_district, f_service, f_state, p3_funnel |
-| `ds_pairs` | 358,092 | 1.1 | f_district, f_service, f_state, p3_facilities, p6_bands |
-| `ds_list_facts` | 3,062 | 2.2 | f_district, f_state, p3_lists |
-| `ds_plans` | 3,150 | 1.4 | f_state, p5_plantype |
-| `ds_plans_window` | 21 | 1.7 | f_state, p5_window |
-| `ds_plans_concentration` | 18 | 1.4 | f_state, p5_concentration |
-| `ds_test_metrics` | 14 | 1.6 | p6_metrics |
-| `ds_test_labels` | 4 | 1.1 | p6_labels |
+| `ds_facility` | 9,959 | 2.7 | f_district, f_state, p1_highconf, p1_other, p1_points, p1_rates, p1_records, p3_24x7, p3_hours, p3_records, p4_callfirst, p4_cleaning, p4_dirphone, p4_locconf, p4_pinfar, p4_records, p6_website |
+| `ds_state` | 32 | 1.4 | p1_state, p2_golden, p2_outside |
+| `ds_district` | 784 | 1.0 | f_district, f_state, p1_districts |
+| `ds_dialysis_district` | 781 | 0.9 | f_district, f_state, p2_dialysis |
+| `ds_csection_district` | 169 | 0.9 | f_district, f_state, p2_csection |
+| `ds_dialysis_burden` | 780 | 0.9 | f_district, f_state, p2_burden |
+| `ds_settlement` | 9 | 0.9 | p2_settlement |
+| `ds_pmndp` | 36 | 0.9 | f_state, p2_pmndp |
+| `ds_funnel` | 9,244 | 1.4 | f_district, f_service, f_state, p3_funnel |
+| `ds_pairs` | 358,092 | 0.9 | f_district, f_service, f_state, p3_facilities, p6_bands |
+| `ds_list_facts` | 3,062 | 0.8 | f_district, f_state, p3_lists |
 
-Run at 2026-11-21 22:01:57 (local time) through `/api/2.0/sql/statements` with catalog `workspace` and schema `referral_saathi`, as `SELECT COUNT(*) FROM (<dataset SQL>) t`. All 16 returned SUCCEEDED.
+Run at 2026-11-22 02:20:00 (local time) through `/api/2.0/sql/statements` with catalog `workspace` and schema `referral_saathi`, as `SELECT COUNT(*) FROM (<dataset SQL>) t`. All 11 returned SUCCEEDED.
 
 ### Spec checks
 
@@ -149,10 +148,6 @@ Each check wraps the dataset SQL itself, so it tests what the widgets read.
 | ds_funnel national: mentioned, own checks, own and outside (spec 7969, 1798, 837) | SUCCEEDED: [['7969', '1798', '837']] |
 | ds_pairs v2 bands (derived/v2: Likely 20073, Call first 1671, No service text 242131, Unlikely 94217) | SUCCEEDED: [['Call first', '1671'], ['Likely', '20073'], ['No service text', '242131'], ['Unlikely', '94217']] |
 | ds_pairs v2 contract: rows (358092), exclude_review ids (0), NO_SERVICE_TEXT with P_S (0), operators | SUCCEEDED: [['358092', '0', '0', '3']] |
-| ds_plans_window Bihar major trauma (spec 15 of 150) | SUCCEEDED: [['15', '150', '0.1', '0.062', '0.158']] |
-| ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar) | SUCCEEDED: [['obstetric_emergency', 'Sub Divisional Hospital Pusa', '81', '131'], ['major_trauma', 'Rajeshwar Hospital', '79', '134']] |
-| ds_test_metrics shipped vs priors, all 71 (storybook 0.776 [0.680, 0.862] vs 0.789; ECE IPW 0.197) | SUCCEEDED: [['AUROC', 'Same scorecard, expert priors', '0.7887', '0.6923', '0.875', '0.684'], ['AUROC', 'Fitted ledger (shipped)', '0.7756', '0.6804', '0.8619', '0.6149'], ['ECE (lower is better)', 'Fitted ledger (shipped)', '0.097', '0.0783', '0.1804', '0.1966']] |
-| ds_test_labels (storybook 17, 1, 21, 32 of 71) | SUCCEEDED: [['Confirmed', '17', '71'], ['Contradicted', '1', '71'], ['No public information, searched', '21', '71'], ['No public information, never searched', '32', '71']] |
 | ds_dialysis_district coverage: NFHS districts reached and LGD rows | SUCCEEDED: [['704', '781']] |
 | filter values: states in ds_facility, districts in ds_facility | SUCCEEDED: [['34', '557']] |
 
@@ -311,7 +306,8 @@ ORDER BY pmndp_centres DESC
 Evidence ladder (one row per record and service).
 
 ```sql
-SELECT g.stname AS state, upper(g.dtname) AS district, p.service,
+SELECT g.stname AS state, upper(g.dtname) AS district, -- v1 named trauma trauma_emergency; v2 calls it trauma_care, so one service filter covers both datasets
+       CASE p.service WHEN 'trauma_emergency' THEN 'trauma_care' ELSE p.service END AS service,
        CAST(p.mentioned AS INT) AS mentioned,
        CAST(p.mentioned AND p.fields2 AS INT) AS in_2plus_fields,
        CAST(p.mentioned AND p.fields2 AND p.prereq AS INT) AS own_checks,
@@ -354,114 +350,3 @@ JOIN geo_facility g ON g.unique_id = f.unique_id
 JOIN facility_location l ON l.unique_id = f.unique_id
 ORDER BY state, district, facility, f.list_name
 ```
-
-### ds_plans
-
-Planner sample journeys (one row per origin and pathway).
-
-```sql
-SELECT state, pathway, origin_id, best_type, first_name, first_eta, def_name, def_eta,
-       def_low, def_high, p_objective,
-       CASE WHEN def_eta <= 60 THEN 1 ELSE 0 END AS definitive_within_60,
-       CASE WHEN first_eta <= 60 THEN 1 ELSE 0 END AS first_care_within_60
-FROM planner_plans
-WHERE origin_set IN ('Bihar', 'Uttar Pradesh', 'Maharashtra')
-```
-
-### ds_plans_window
-
-Definitive care within 60 minutes, by pathway.
-
-```sql
-WITH t AS (
-  SELECT state, pathway, SUM(CASE WHEN def_eta <= 60 THEN 1 ELSE 0 END) AS k, COUNT(*) AS n
-  FROM planner_plans
-  WHERE origin_set IN ('Bihar', 'Uttar Pradesh', 'Maharashtra')
-  GROUP BY state, pathway)
-SELECT state, pathway, k, n, k / n AS rate,
-       (k/n + 1.9208/n - 1.96*sqrt((k/n)*(1 - k/n)/n + 0.9604/(n*n))) / (1 + 3.8416/n) AS lo,
-       (k/n + 1.9208/n + 1.96*sqrt((k/n)*(1 - k/n)/n + 0.9604/(n*n))) / (1 + 3.8416/n) AS hi
-FROM t
-ORDER BY state, rate DESC
-```
-
-### ds_plans_concentration
-
-Most-chosen definitive facility per pathway.
-
-```sql
-WITH c AS (
-  SELECT state, pathway, def_name, COUNT(*) AS origins,
-         SUM(COUNT(*)) OVER (PARTITION BY state, pathway) AS planned
-  FROM planner_plans
-  WHERE origin_set IN ('Bihar', 'Uttar Pradesh', 'Maharashtra') AND def_name IS NOT NULL
-  GROUP BY state, pathway, def_name),
-r AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY state, pathway ORDER BY origins DESC, def_name) AS rk FROM c)
-SELECT state, pathway, def_name AS top_facility, origins, planned, origins / planned AS share
-FROM r WHERE rk = 1
-ORDER BY state, share DESC
-```
-
-### ds_test_metrics
-
-Published sealed-test results (quoted from results.json, not recomputed).
-
-```sql
-WITH a AS (
-  SELECT regexp_extract(path, '^pair_level_test[.]primary_target_(all|searched)[.]auroc[.]([A-Za-z0-9_]+)[.](.+)$', 1) AS view, regexp_extract(path, '^pair_level_test[.]primary_target_(all|searched)[.]auroc[.]([A-Za-z0-9_]+)[.](.+)$', 2) AS sys,
-         regexp_extract(path, '^pair_level_test[.]primary_target_(all|searched)[.]auroc[.]([A-Za-z0-9_]+)[.](.+)$', 3) AS stat, value_num
-  FROM model_test_metrics WHERE source_file = 'model/review/stats/results.json' AND path RLIKE '^pair_level_test[.]primary_target_(all|searched)[.]auroc[.]([A-Za-z0-9_]+)[.](.+)$'),
-e AS (
-  SELECT regexp_extract(path, '^pair_level_test[.]calibration_primary_(all|searched)[.](ece_raw|ece_ipw)(.*)$', 1) AS view, regexp_extract(path, '^pair_level_test[.]calibration_primary_(all|searched)[.](ece_raw|ece_ipw)(.*)$', 2) AS kind,
-         regexp_extract(path, '^pair_level_test[.]calibration_primary_(all|searched)[.](ece_raw|ece_ipw)(.*)$', 3) AS stat, value_num
-  FROM model_test_metrics WHERE source_file = 'model/review/stats/results.json' AND path RLIKE '^pair_level_test[.]calibration_primary_(all|searched)[.](ece_raw|ece_ipw)(.*)$'),
-auroc AS (
-  SELECT 'AUROC' AS metric, view, sys,
-         max(CASE WHEN stat = 'raw' THEN value_num END) AS value,
-         max(CASE WHEN stat = 'raw_boot.ci95[0]' THEN value_num END) AS lo,
-         max(CASE WHEN stat = 'raw_boot.ci95[1]' THEN value_num END) AS hi,
-         max(CASE WHEN stat = 'ipw' THEN value_num END) AS ipw_value
-  FROM a WHERE sys IN ('WL_shipped', 'B4_prior_only', 'B3_llm_judge', 'B0_any_mention', 'B1_keyword_count', 'B2_rule_grade')
-  GROUP BY view, sys),
-ece AS (
-  SELECT 'ECE (lower is better)' AS metric, view, 'WL_shipped' AS sys,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '' THEN value_num END) AS value,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '_boot.ci95[0]' THEN value_num END) AS lo,
-         max(CASE WHEN kind = 'ece_raw' AND stat = '_boot.ci95[1]' THEN value_num END) AS hi,
-         max(CASE WHEN kind = 'ece_ipw' AND stat = '' THEN value_num END) AS ipw_value
-  FROM e GROUP BY view)
-SELECT metric,
-       CASE view WHEN 'all' THEN 'All 71 test pairs' ELSE '39 searched pairs' END AS test_view,
-       CASE sys WHEN 'WL_shipped' THEN 'Fitted ledger (shipped)'
-                WHEN 'B4_prior_only' THEN 'Same scorecard, expert priors'
-                WHEN 'B3_llm_judge' THEN 'LLM judge'
-                WHEN 'B0_any_mention' THEN 'Any mention'
-                WHEN 'B1_keyword_count' THEN 'Keyword count'
-                WHEN 'B2_rule_grade' THEN 'Rule grade' END AS system,
-       value, lo, hi, ipw_value
-FROM (SELECT * FROM auroc UNION ALL SELECT * FROM ece)
-ORDER BY metric, test_view, value DESC
-```
-
-### ds_test_labels
-
-What the sealed-test labels were.
-
-```sql
-WITH m AS (SELECT path, value_num AS v FROM model_test_metrics WHERE source_file = 'model/review/stats/results.json'),
-p AS (
-  SELECT max(CASE WHEN path = 'inputs.test_label_counts.confirmed' THEN v END) AS confirmed,
-         max(CASE WHEN path = 'inputs.test_label_counts.contradicted' THEN v END) AS contradicted,
-         max(CASE WHEN path = 'inputs.test_label_counts.no_info' THEN v END) AS no_info,
-         max(CASE WHEN path = 'inputs.test_never_searched' THEN v END) AS never_searched,
-         max(CASE WHEN path = 'pair_level_test.primary_target_all.n' THEN v END) AS n
-  FROM m)
-SELECT ord, label, CAST(pairs AS INT) AS pairs, CAST(n AS INT) AS of_pairs, pairs / n AS share
-FROM p LATERAL VIEW stack(4,
-  1, 'Confirmed', confirmed,
-  2, 'Contradicted', contradicted,
-  3, 'No public information, searched', no_info - never_searched,
-  4, 'No public information, never searched', never_searched) s AS ord, label, pairs
-ORDER BY ord
-```
-
