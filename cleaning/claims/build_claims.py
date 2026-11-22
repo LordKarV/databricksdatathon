@@ -14,9 +14,11 @@ import lexicon as L
 
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "out")
-RAW = "/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"
-MERGE = "/Users/karthikvattem/projects/datathon/audit/merge/out"
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/merge")
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(D, "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+RAW = os.path.join(_DATA, "raw/facilities.parquet")
+MERGE = os.path.join(_ROOT, "audit/merge/out")
+sys.path.insert(0, os.path.join(_ROOT, "audit/merge"))
 UUID = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 
 # Spark: from_json(col,'array<string>') + posexplode; QUALIFY -> row_number() in a subquery;

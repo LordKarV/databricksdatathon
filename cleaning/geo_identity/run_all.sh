@@ -4,8 +4,9 @@
 # merge_signal.parquet, district_nfhs_map.csv; audit/scale/scale_flags.parquet; audit/claims/out/grades.parquet;
 # audit/identity labels and out/chain_membership.csv).
 set -e
-cd /Users/karthikvattem/projects/datathon/cleaning/geo_identity
-PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+cd "$(dirname "$0")"
+ROOT=${DATATHON_ROOT:-$(cd ../.. && pwd)}
+PY=${PY:-$ROOT/.venv/bin/python}
 $PY places.py >/dev/null 2>&1 || true   # self-check needs pin_gazetteer.parquet; re-run after s1
 for s in s1_pin_gazetteer s2_facility_location s3_resolve s4_groups s5_trust s6_eval s7_summary; do
   echo "== $s"; $PY $s.py > ${s}_stdout.txt

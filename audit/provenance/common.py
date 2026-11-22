@@ -1,13 +1,16 @@
 """Shared loaders for the provenance audit. Local snapshot only, no warehouse calls."""
 import json
+import os
 import re
 from urllib.parse import urlparse
 
 import duckdb
 import pandas as pd
 
-RAW = "/Users/karthikvattem/projects/datathon/data/raw"
-OUT = "/Users/karthikvattem/projects/datathon/audit/provenance"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+RAW = os.path.join(_DATA, "raw")
+OUT = os.path.dirname(os.path.abspath(__file__))
 UUID_RE = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 
 

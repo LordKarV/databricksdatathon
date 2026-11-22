@@ -2,13 +2,14 @@
 Outputs: q1_records.parquet (one row per well-formed facility), q1_results.json,
 handcheck_*.csv samples for manual precision checks."""
 import json
+import os
 import re
 import sys
 from collections import Counter
 
 import pandas as pd
 
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/provenance")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import OUT, facilities, host, jlist, norm_pin, norm_state, pin_states  # noqa: E402
 from domains import classify  # noqa: E402
 from proxies import (AFFILIATION_RX, _k, institution_mentions, is_foreign,  # noqa: E402

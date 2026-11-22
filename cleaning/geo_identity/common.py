@@ -4,12 +4,13 @@ Reuses the audit helpers (audit/geo/geo_common.py, audit/identity/common.py) ins
 Everything is plain pandas/numpy (+ rapidfuzz), so it runs unchanged in a Databricks serverless
 notebook on the driver: the largest table is the 165,627-row PIN directory.
 """
+import os
 import sys
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/karthikvattem/projects/datathon")
+ROOT = Path(os.environ.get("DATATHON_ROOT", Path(__file__).resolve().parents[2]))
 OUT = ROOT / "cleaning/geo_identity"
 AUDIT_GEO = ROOT / "audit/geo"
 sys.path.insert(0, str(AUDIT_GEO))

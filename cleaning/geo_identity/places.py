@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 from common import OUT, ROOT, hav_km, norm
-from geo_common import CITY_ALIAS, office_base
+from geo_common import CITY_ALIAS, PIN_DIR, office_base
 
 GOOD_SRC = ["pin_median", "facility_consensus", "district_median"]
 
@@ -26,7 +26,7 @@ def build_layers() -> dict:
     gz = pd.read_parquet(OUT / "pin_gazetteer.parquet")
     gz = gz[gz.src.isin(GOOD_SRC)].dropna(subset=["lat", "state"])
     d = gz.assign(name=gz.district.map(norm))
-    p = pd.read_parquet(ROOT / "data/raw/india_post_pincode_directory.parquet")[["pincode", "officename"]]
+    p = pd.read_parquet(PIN_DIR)[["pincode", "officename"]]
     o = p.merge(gz[["pin", "state", "lat", "lon"]], left_on="pincode", right_on="pin")
     o["name"] = o.officename.map(office_base)
     o = o.drop_duplicates(["name", "pin"])

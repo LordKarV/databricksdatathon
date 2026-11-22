@@ -25,9 +25,11 @@ import lexicon as L
 
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "out")
-RAW = "/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"
-GEO = "/Users/karthikvattem/projects/datathon/audit/geo/facility_geo.parquet"
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/merge")
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(D, "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+RAW = os.path.join(_DATA, "raw/facilities.parquet")
+GEO = os.path.join(_ROOT, "audit/geo/facility_geo.parquet")
+sys.path.insert(0, os.path.join(_ROOT, "audit/merge"))
 import analyze  # noqa: E402  (near_name)
 import detect  # noqa: E402  (toks, GENERIC)
 import re

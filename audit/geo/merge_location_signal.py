@@ -2,12 +2,13 @@
 from a different postal district (first 3 digits) than its zip field, or whose source URLs name
 more than one city slug on justdial/practo. Writes merge_signal.parquet and prints counts."""
 import json
+import os
 import re
 import sys
 
 import pandas as pd
 
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/geo")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from geo_common import GEO, load_facilities, parse_pin
 
 f = load_facilities()

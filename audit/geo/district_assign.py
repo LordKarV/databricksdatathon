@@ -12,13 +12,14 @@ nearest matched PIN centroids in the same state ('spatial_parent', approximate).
 Writes facility_district.parquet, district_nfhs_map.csv, district_assign_stats.json.
 """
 import json
+import os
 import sys
 
 import numpy as np
 import pandas as pd
 from rapidfuzz import fuzz, process
 
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/geo")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from geo_common import GEO, NFHS, nearest, norm
 
 NFHS_STATE = {"MAHARASTRA": "MAHARASHTRA", "JAMMU AND KASHMIR": "JAMMU AND KASHMIR", "NCT OF DELHI": "DELHI",

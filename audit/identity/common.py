@@ -1,9 +1,11 @@
 """Shared loader and normalizers for the identity audit. Local snapshot only."""
-import json, re, math
+import json, os, re, math
 import duckdb, pandas as pd
 
-D = "/Users/karthikvattem/projects/datathon/data/raw/"
-OUT = "/Users/karthikvattem/projects/datathon/audit/identity/out/"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+D = os.path.join(_DATA, "raw") + "/"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out") + "/"
 UUID = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 NULLS = {None, "", "null", "NULL", "[]", '[""]', "[null]"}
 
