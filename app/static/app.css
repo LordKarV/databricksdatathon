@@ -1,162 +1,319 @@
+/* Referral Saathi. Design: design/ui/DESIGN.md. Tokens first; change a colour here and nowhere else.
+   Light: a register page in daylight. Dark: the same page by torchlight. 108 red keeps its fill in both. */
 :root {
-  --bg: #ffffff; --fg: #1a1a1a; --muted: #4a4a4a; --line: #c9c9c9; --card: #f6f6f4;
-  --accent: #0b5cad; --accent-fg: #ffffff;
-  --danger: #b3001b; --danger-fg: #ffffff;
-  --ok: #1e6b30; --warn: #6b4e00; --bad: #8a1c1c;
-  --focus: #0b5cad;
+  --ground: #EEF1F4; --surface: #FFFFFF; --ink: #141A23; --ink-2: #4E5866;
+  --line: #D5DAE1; --line-strong: #747D8B;
+  --neel: #1F3FA8; --on-neel: #FFFFFF; --neel-wash: #DCE4F7;
+  --neem: #17683A; --neem-tint: #E2F2E7; --neem-edge: #4F8A60;
+  --haldi: #7A5300; --haldi-tint: #FFF0C2; --haldi-edge: #A87508;
+  --slate: #5A6270; --slate-tint: #ECEEF1;
+  --violet: #5B3E96;
+  --siren: #C8102E; --on-siren: #FFFFFF; --siren-text: #C8102E; --siren-wash: rgba(200, 16, 46, .14);
+  --font: Roboto, "Noto Sans", system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", "Kohinoor Devanagari",
+    "Nirmala UI", sans-serif;
+  --font-deva: "Noto Sans Devanagari", "Kohinoor Devanagari", "Nirmala UI", Mukta, Roboto, system-ui, sans-serif;
+  --r-section: 14px; --r-field: 12px; --r-stamp: 4px;
+  /* older names, still read by pulse.js and voice.js */
+  --bg: var(--surface); --fg: var(--ink); --muted: var(--ink-2); --card: var(--ground); --accent: var(--neel);
+  --danger: var(--siren); --danger-fg: var(--on-siren);
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121212; --fg: #f0f0f0; --muted: #c4c4c4; --line: #5a5a5a; --card: #1e1e1e;
-    --accent: #8cc4ff; --accent-fg: #0b1a2a;
-    --danger: #ff8a8a; --danger-fg: #2a0006;
-    --ok: #8fdc9f; --warn: #f0cf6b; --bad: #ff9c9c;
-    --focus: #8cc4ff;
+    --ground: #121417; --surface: #1E2126; --ink: #E8EBEF; --ink-2: #AEB5BF;
+    --line: #343941; --line-strong: #737B88;
+    --neel: #93B0FF; --on-neel: #0B1530; --neel-wash: #26355C;
+    --neem: #7BD69A; --neem-tint: #16301F; --neem-edge: #7BD69A;
+    --haldi: #F2C14E; --haldi-tint: #3A2E0D; --haldi-edge: #F2C14E;
+    --slate: #A9B0BA; --slate-tint: #262A30;
+    --violet: #C3A8F5;
+    --siren: #D21F3C; --siren-text: #FF8A94; --siren-wash: rgba(255, 90, 110, .16);
   }
 }
+
+/* ---------- base ---------- */
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--ground); }
 body {
-  margin: 0 auto; max-width: 40rem; padding: 0 16px 32px; background: var(--bg); color: var(--fg);
-  font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  margin: 0 auto; max-width: 40rem; padding: 0 16px 48px; background: var(--ground); color: var(--ink);
+  font: 400 17px/1.5 var(--font);
 }
-h1 { font-size: 1.35rem; margin: 12px 0 4px; }
-h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .03em; margin: 20px 0 6px; }
-h3 { font-size: 1.05rem; margin: 0 0 4px; }
-p { margin: 6px 0; }
-a { color: var(--accent); }
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.muted { color: var(--muted); }
-.small { font-size: .9rem; }
+:lang(hi) { font-family: var(--font-deva); line-height: 1.7; }
+span:lang(hi), a :lang(hi), button :lang(hi) { font-size: 1.06em; }
+h1, h2, h3 { line-height: 1.25; text-wrap: balance; }
+h1:lang(hi), h2:lang(hi), h3:lang(hi) { line-height: 1.45; }
+h1 { font-size: 28px; font-weight: 700; margin: 20px 0 8px; letter-spacing: -.01em; }
+h2 { font-size: 23px; font-weight: 700; margin: 32px 0 8px; }
+h3 { font-size: 20px; font-weight: 600; margin: 4px 0 4px; }
+p { margin: 8px 0; }
+a { color: var(--neel); text-underline-offset: .18em; }
+:focus-visible { outline: 3px solid var(--neel); outline-offset: 2px; }
+[tabindex="-1"]:focus { outline: none; }  /* headings and main take focus after a route change, for screen readers */
+.muted { color: var(--ink-2); }
+.small { font-size: 16px; }
 .visually-hidden {
   position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+[hidden] { display: none !important; }
 
-header.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; }
-header.top .brand { font-weight: 700; }
+/* ---------- header: the brand mark is a two-stop route, the app's own picture ---------- */
+header.top { padding: 10px 0 0; border-bottom: 1px solid var(--line); }
+header.top .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; }
+.brand svg { width: 30px; height: 14px; flex: none; color: var(--neel); }
+.top-links { display: flex; gap: 0 16px; flex-wrap: wrap; }
+.top-links a { display: inline-block; padding: 11px 0; line-height: 22px; font-weight: 600; text-decoration: none; }
+.top-links :lang(hi) { line-height: inherit; }
+.top-links a:hover { text-decoration: underline; }
 
+/* ---------- buttons: capsules, 48 px ---------- */
 button, .btn {
-  font: inherit; min-height: 48px; min-width: 48px; padding: 10px 14px; border-radius: 8px; cursor: pointer;
-  border: 2px solid var(--accent); background: var(--bg); color: var(--accent);
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+  font: inherit; font-weight: 600; min-height: 48px; min-width: 48px; padding: 10px 18px; border-radius: 999px;
+  cursor: pointer; border: 2px solid var(--neel); background: var(--surface); color: var(--neel);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+  text-align: center; line-height: 1.3;
 }
-.btn-primary { background: var(--accent); color: var(--accent-fg); }
-.btn-block { width: 100%; margin: 6px 0; }
-.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.btn-primary, button[aria-pressed="true"]:not(.tile), article.card .row > a[href$="#call"] { background: var(--neel); color: var(--on-neel); }
+a.btn[href="tel:108"], a.btn[href="tel:102"] { background: var(--siren); border-color: var(--siren); color: var(--on-siren); }
+.btn-block { width: 100%; margin: 8px 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 .row > * { flex: 1 1 9rem; }
 
+/* Quick / Compare / Area: one segmented control, not three loose buttons */
+.row[aria-label="Detail"] { gap: 0; border: 2px solid var(--neel); border-radius: 999px; padding: 2px; flex-wrap: nowrap; }
+.row[aria-label="Detail"] > button { flex: 1 1 0; border: 0; min-height: 44px; }
+
+/* ---------- 108 / 102: solid red in both themes, pinned while an answer is on screen ---------- */
+#bar108 { position: sticky; top: 0; z-index: 5; }
 .bar-108 {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  background: var(--danger); color: var(--danger-fg); border-radius: 8px; padding: 8px 12px; margin: 10px 0;
+  display: flex; align-items: center; gap: 4px 16px; flex-wrap: wrap;
+  background: var(--siren); color: var(--on-siren); border-radius: 0 0 var(--r-section) var(--r-section);
+  padding: 4px 16px; margin: 0 -16px 8px; box-shadow: 0 6px 16px -8px rgba(80, 0, 10, .55);
 }
-.bar-108 a { color: var(--danger-fg); font-weight: 700; min-height: 48px; display: inline-flex; align-items: center; }
-.bar-108.compact { background: transparent; color: var(--fg); border: 2px solid var(--danger); }
-.bar-108.compact a { color: var(--danger); }
+.bar-108 a { color: var(--on-siren); font-weight: 700; font-size: 18px; min-height: 48px; display: inline-flex; align-items: center; }
+.bar-108 a:focus-visible { outline-color: var(--on-siren); }
+.bar-108.compact {
+  background: var(--surface); color: var(--ink); border: 2px solid var(--siren); border-radius: var(--r-section);
+  margin: 16px 0; box-shadow: none; justify-content: space-between;
+}
+.bar-108.compact a { color: var(--siren-text); }
+.bar-108.compact a:focus-visible { outline-color: var(--neel); }
 
+/* ---------- offline: says what still works ---------- */
 .offline {
-  border: 2px dashed var(--warn); color: var(--fg); padding: 8px 12px; border-radius: 8px; margin: 10px 0;
+  background: var(--haldi-tint); color: var(--ink); border-left: 6px solid var(--haldi-edge);
+  border-radius: var(--r-field); padding: 10px 14px; margin: 12px 0;
+}
+.offline strong { color: var(--haldi); }
+
+/* ---------- sections ---------- */
+.card, .where, details {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-section); padding: 12px 16px; margin: 12px 0;
+}
+.where p { margin: 0 0 4px; }
+.where .row { margin-bottom: 0; }
+
+/* option cards: a spine in the band's colour and pattern, readable in greyscale */
+article.card:has(.band-likely) { border-left: 6px solid var(--neem-edge); }
+article.card:has(.band-not_verified) { border-left: 6px dashed var(--haldi-edge); }
+article.card:has(.band-unlikely) { border-left: 6px dotted var(--slate); }
+article.card h3 { margin-top: 2px; }
+article.card blockquote { margin: 10px 0; }
+
+/* "Call first": a recommendation, shaped as a tab, not a stamp */
+.call-first {
+  display: flex; align-items: center; gap: 8px; margin: -12px -16px 10px; padding: 6px 16px;
+  background: var(--neel); color: var(--on-neel); font-weight: 700; font-size: 16px;
+  border-radius: calc(var(--r-section) - 1px) calc(var(--r-section) - 1px) 0 0;
+}
+article.card:has(.band) > .call-first { margin-left: -16px; border-top-left-radius: 0; }
+.call-first::before { content: "\260E"; font-weight: 400; }
+
+/* ---------- band stamps: border, tint, a shape per band, the payload's own capitals ---------- */
+.band {
+  display: inline-flex; align-items: center; gap: 6px; vertical-align: middle;
+  font-size: 16px; font-weight: 700; line-height: 1.2; letter-spacing: .02em;
+  padding: 3px 8px 3px 5px; border: 2px solid currentColor; border-radius: var(--r-stamp);
+}
+.band > [aria-hidden] {
+  display: inline-grid; place-items: center; flex: none; width: 20px; height: 20px; font-size: 12px; line-height: 1;
+  color: var(--surface);
+}
+.band-likely { color: var(--neem); background: var(--neem-tint); }
+.band-likely > [aria-hidden] { background: var(--neem); border-radius: 50%; }
+.band-not_verified { color: var(--haldi); background: var(--haldi-tint); }
+.band-not_verified > [aria-hidden] {
+  background: var(--haldi); width: 22px; height: 22px; font-weight: 700;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.band-unlikely { color: var(--slate); background: var(--slate-tint); }
+.band-unlikely > [aria-hidden] { background: var(--slate); border-radius: 2px; }
+h1 .band { margin-left: 4px; }
+
+/* "by public standard, not verified": a claim nobody checked, so a dashed outline and no fill */
+[data-f="public_option.label"], [data-f="abstain.outside_option.label"],
+.gap [data-f$=".label"], [data-f^="area.pins."][data-f$=".public.label"] {
+  display: inline-block; color: var(--violet); border: 2px dashed currentColor; border-radius: var(--r-stamp);
+  padding: 0 6px; font-weight: 600; line-height: 1.4;
 }
 
-.where { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+/* ---------- quotes and their audit lines ---------- */
+blockquote { margin: 10px 0; padding: 2px 0 2px 12px; border-left: 3px solid var(--line-strong); }
+.tag {
+  display: inline-block; font-size: 16px; color: var(--ink-2); background: var(--ground);
+  border: 1px solid var(--line); border-radius: var(--r-stamp); padding: 0 6px; margin: 2px 0 2px 4px; line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.audit { display: block; font-size: 16px; margin-top: 4px; color: var(--ink-2); }
+.audit-weak { color: var(--haldi); font-weight: 600; }
+.why-not, .gap { padding-left: 20px; }
+.why-not li, .gap li { margin: 8px 0; }
 
-.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+/* ---------- time window missed ---------- */
+.window-miss { border: 2px solid var(--siren); }
+
+/* ---------- inputs ---------- */
+input[type=text], input[type=search], textarea, select {
+  font: inherit; width: 100%; min-height: 48px; padding: 10px 14px; border: 2px solid var(--line-strong);
+  border-radius: var(--r-field); background: var(--surface); color: var(--ink);
+}
+textarea { display: block; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { border-color: var(--neel); }
+label { display: block; font-weight: 600; margin: 12px 0 4px; }
+summary { min-height: 48px; position: relative; padding: 12px 0 12px 32px; cursor: pointer; font-weight: 600; line-height: 1.4; }
+summary::before { content: "+"; position: absolute; left: 0; top: 12px; display: grid; place-items: center; width: 22px; height: 22px;
+  border: 2px solid var(--neel); border-radius: 50%; color: var(--neel); font-weight: 700; line-height: 1; }
+summary::-webkit-details-marker { display: none; }
+details > summary { list-style: none; }
+details[open] > summary::before { content: "\2212"; }
+details details { background: var(--ground); border-color: var(--line); }
+.check { display: flex; align-items: center; gap: 12px; min-height: 48px; font-weight: 400; margin: 0; }
+.check input { width: 24px; height: 24px; flex: none; accent-color: var(--neel); }
+fieldset { border: 1px solid var(--line); border-radius: var(--r-section); margin: 12px 0; }
+legend { font-weight: 600; padding: 0 4px; }
+
+/* ---------- service tiles ---------- */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
 .tile {
-  min-height: 72px; flex-direction: column; align-items: flex-start; text-align: left; color: var(--fg);
-  border: 2px solid var(--line); background: var(--card);
+  min-height: 76px; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2px;
+  text-align: left; color: var(--ink); border: 1px solid var(--line); background: var(--surface);
+  border-radius: var(--r-section); padding: 10px 12px;
 }
-.tile .hi { font-size: 1.1rem; font-weight: 700; }
-.tile .en { font-size: .9rem; color: var(--muted); }
-.tile[aria-pressed="true"] { border-color: var(--accent); }
+.tile .hi { font-size: 20px; font-weight: 600; line-height: 1.45; }
+.tile .en { font-size: 16px; font-weight: 400; color: var(--ink-2); line-height: 1.3; }
+.tile[aria-pressed="true"] { border: 2px solid var(--neel); box-shadow: inset 0 0 0 1px var(--neel); }
 
-input[type=text], input[type=search] {
-  font: inherit; width: 100%; min-height: 48px; padding: 8px 10px; border: 2px solid var(--muted);
-  border-radius: 8px; background: var(--bg); color: var(--fg);
+/* ---------- tables: register pages ---------- */
+table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 16px; font-variant-numeric: tabular-nums; }
+caption { text-align: left; font-weight: 600; padding: 4px 0 8px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; vertical-align: top; }
+thead th { color: var(--ink-2); font-weight: 600; border-bottom: 2px solid var(--ink); }
+tfoot th, tfoot td { font-weight: 700; border-top: 3px double var(--ink); border-bottom: 0; }
+td.num, th.num { text-align: right; white-space: nowrap; }
+ol.script { padding-left: 24px; }
+ol.script li { margin: 10px 0; }
+
+/* ---------- route: numbered stops share the strip's discs ---------- */
+.route .stops { list-style: none; padding: 0; margin: 12px 0; counter-reset: stop; }
+.route .stops > li { counter-increment: stop; position: relative; padding: 0 0 12px 40px; margin: 0; }
+.route .stops > li::before {
+  content: counter(stop); position: absolute; left: 0; top: 2px; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--neel); color: var(--on-neel); font-weight: 700; font-size: 16px;
 }
-label { display: block; font-weight: 600; margin: 8px 0 4px; }
-details { border: 1px solid var(--line); border-radius: 8px; padding: 4px 12px; margin: 10px 0; }
-summary { min-height: 48px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
-.check { display: flex; align-items: center; gap: 10px; min-height: 48px; font-weight: 400; margin: 0; }
-.check input { width: 24px; height: 24px; }
-
-.card { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 10px 0; background: var(--card); }
-.band { font-weight: 700; display: inline-flex; gap: 6px; align-items: center; }
-.band-likely { color: var(--ok); }
-.band-not_verified { color: var(--warn); }
-.band-unlikely { color: var(--bad); }
-blockquote { margin: 6px 0; padding: 4px 10px; border-left: 4px solid var(--line); }
-.tag { font-size: .8rem; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; margin-left: 4px; }
-.audit { display: block; font-size: .9rem; margin-top: 2px; color: var(--fg); }
-.audit-weak { color: var(--warn); font-weight: 600; }
-.why-not li, .gap li { margin: 4px 0; }
-.call-first { font-weight: 700; text-transform: uppercase; font-size: .9rem; }
-
-table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: .95rem; }
-caption { text-align: left; font-weight: 600; padding: 4px 0; }
-th, td { border-bottom: 1px solid var(--line); padding: 6px 4px; text-align: left; }
-td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-ol.script li { margin: 6px 0; }
-
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-/* Referral slip (S8): one A5/A4 page in print; "Show big" for the family to photograph. */
-.slip { border: 2px solid var(--fg); border-radius: 8px; padding: 12px; margin: 10px 0; background: var(--bg); }
-.slip h2 { text-transform: none; letter-spacing: 0; font-size: 1.15rem; margin-top: 0; }
-.slip-table th { width: 30%; vertical-align: top; }
-.slip-table ul { margin: 4px 0; padding-left: 18px; }
-.slip a { overflow-wrap: anywhere; }
-.slip-name { border-top: 1px dashed var(--line); padding-top: 8px; }
-body.slip-big .slip { font-size: 200%; }
-body.slip-big header.top, body.slip-big #bar108 { display: none; }
-
-@page { size: A5; margin: 10mm; }
-@media print {
-  header.top, button, .btn, .bar-108, .no-print, #offline, #status { display: none !important; }
-  body { max-width: none; padding: 0; font-size: 10pt; background: #fff; color: #000; }
-  .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
-  .slip a { color: #000; text-decoration: none; }
+.route .stops > li:not(:last-child)::after {
+  content: ""; position: absolute; left: 13px; top: 34px; bottom: 0; width: 2px; background: var(--neel);
 }
+.route .stops ul { list-style: none; padding: 0 0 0 12px; margin: 6px 0; border-left: 2px solid var(--line); }
+.route .stops ul > li { margin: 6px 0; }
+.route .stop-name { margin: 2px 0; font-size: 18px; }
+.check-met::before, .check-miss::before { display: inline-block; width: 1.4em; font-weight: 700; }
+.check-met::before { content: "\2714"; color: var(--neem); }
+.check-miss::before { content: "\2716"; color: var(--siren-text); }
+.vs-direct { padding: 8px 12px; border-radius: var(--r-field); background: var(--neel-wash); color: var(--ink); }
 
-/* Offline answer: saved-data age (spec 3.2.3) - amber after 30 days, red after 90; words carry the meaning too. */
-.stale-amber { border-left: 6px solid var(--warn); padding-left: 8px; }
-.stale-red { border-left: 6px solid var(--bad); padding-left: 8px; }
-select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--muted); border-radius: 8px;
-  background: var(--bg); color: var(--fg); padding: 6px; }
+/* The route strip: the plan against the clock. Lanes are stop groups; the line draws itself once. */
+.strip { position: relative; margin: 12px 14px 8px; font-size: 16px; font-variant-numeric: tabular-nums; }
+.strip svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.strip-path { stroke: var(--neel); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 0; animation: strip-draw linear both; }
+.strip-eta { stroke: var(--neel); stroke-opacity: .3; stroke-width: 12; stroke-linecap: round; }
+.strip-late {
+  position: absolute; right: -14px; top: 26px; bottom: 30px; border-left: 2px dashed var(--siren-text);
+  background: repeating-linear-gradient(135deg, var(--siren-wash) 0 5px, transparent 5px 10px);
+}
+.strip-win { position: absolute; top: 0; white-space: nowrap; font-weight: 700; color: var(--siren-text); }
+.strip-stop, .strip-origin {
+  position: absolute; display: grid; place-items: center; border-radius: 50%; transform: translate(-50%, -50%);
+}
+.strip-stop { width: 26px; height: 26px; background: var(--neel); color: var(--on-neel); font-weight: 700;
+  box-shadow: 0 0 0 3px var(--surface); animation: strip-pop .25s ease-out both; }
+.strip-origin { width: 14px; height: 14px; background: var(--surface); border: 3px solid var(--neel); }
+.strip-lab { position: absolute; line-height: 1.3; white-space: nowrap; background: var(--surface); padding: 0 4px; border-radius: 4px; }
+.strip-lab b { display: block; }
+.strip-lab > span { display: block; color: var(--ink-2); }
+.strip-axis { position: absolute; left: -14px; right: -14px; bottom: 0; display: flex; justify-content: space-between;
+  color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 2px; }
+@keyframes strip-draw { from { stroke-dashoffset: 1; } }
+@keyframes strip-pop { from { opacity: 0; } }
 
-/* Compare (S10): identical card rows on phone; a real table on desk. Area (S11) tables scroll inside themselves. */
+/* ---------- compare (S10): cards on phone, a real table on desk ---------- */
 .compare-table { display: none; overflow-x: auto; }
-.rows { display: grid; grid-template-columns: 9rem 1fr; gap: 4px 8px; margin: 6px 0; }
-.rows dt { font-weight: 600; }
+.rows { display: grid; grid-template-columns: 9rem 1fr; gap: 6px 10px; margin: 8px 0; }
+.rows dt { font-weight: 600; color: var(--ink-2); }
 .rows dd { margin: 0; overflow-wrap: anywhere; }
 @media (min-width: 60rem) {
   body.wide { max-width: 72rem; }
   body.wide .compare-table { display: block; }
   body.wide .compare-cards { display: none; }
 }
-
-/* How this works (#45): wide tables scroll inside themselves, never the page. */
 .table-scroll { overflow-x: auto; }
 
-/* Route card (#47): numbered stops; stages at one hospital nest under it. */
-.route .stops { padding-left: 1.5rem; }
-.route .stops > li { margin-bottom: 0.75rem; }
-.route .stop-name { margin: 0.25rem 0; }
+/* ---------- referral slip (S8): one A5 page in print; "Show big" for the family to photograph ---------- */
+.slip { border: 2px solid var(--ink); border-radius: var(--r-field); padding: 12px 16px; margin: 12px 0; background: var(--surface); }
+.slip h2 { font-size: 20px; margin-top: 0; }
+.slip-table { table-layout: fixed; }
+.slip-table td { overflow-wrap: anywhere; }
+.slip-table th { width: 30%; }
+.slip-table ul { margin: 4px 0; padding-left: 18px; }
+.slip a { overflow-wrap: anywhere; }
+.slip-name { border-top: 1px dashed var(--line-strong); padding-top: 8px; }
+body.slip-big .slip { font-size: 200%; }
+body.slip-big header.top, body.slip-big #bar108 { display: none; }
 
-/* Data stories (#53): charts scale to the column; the presenter line leads each story. */
-.top-links { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
-.story { border-top: 1px solid var(--line); padding-top: 0.75rem; margin-top: 1rem; }
-.story-say { font-size: 1.05rem; }
-.story-chart { margin: 0.75rem 0; }
-.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
-.story-toc { padding-left: 1.25rem; }
+/* Offline answer: saved-data age (spec 3.2.3), amber after 30 days, red after 90; the words carry it too. */
+.stale-amber { border-left: 6px solid var(--haldi-edge); padding-left: 10px; }
+.stale-red { border-left: 6px solid var(--siren); padding-left: 10px; }
+
+/* ---------- data stories (#53) ---------- */
+.story { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 16px; }
+.story-say { font-size: 18px; }
+.story-chart { margin: 12px 0; }
+.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: var(--r-field); }
+.story-toc { padding-left: 20px; }
 .story details li { margin: 6px 0; }
 .story details a, .story-chart figcaption a { display: inline-block; padding: 6px 0; min-height: 24px; overflow-wrap: anywhere; }
 
-/* Field reports (community.js, community/field.py): dated evidence lines on the card; disagreement is outlined. */
-.field-reports { border-left: 4px solid var(--line); padding-left: 8px; margin: 6px 0; }
-.field-reports.disagree { border-left-color: var(--warn); }
+/* ---------- field reports and visit reports (community.js) ---------- */
+.field-reports { border-left: 4px solid var(--line-strong); padding-left: 10px; margin: 10px 0; }
+.field-reports.disagree { border-left: 4px dashed var(--haldi-edge); }
 .reason-step legend, #visit-form legend { font-weight: 600; padding: 0 4px; }
-#visit-form fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 10px 0; }
 #visit-form fieldset:disabled { opacity: .6; }
-.reason-step button { flex-direction: column; gap: 0; }
+.reason-step button { flex-direction: column; gap: 0; border-radius: var(--r-field); }
 #visit-form .check input { flex: none; }
+
+/* ---------- voice: the microphone answers with a slow ring while it records ---------- */
+[data-mic][aria-pressed="true"] { animation: mic-ring 1.6s ease-out infinite; }
+@keyframes mic-ring { from { box-shadow: 0 0 0 0 var(--siren-wash); } to { box-shadow: 0 0 0 14px transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+@page { size: A5; margin: 10mm; }
+@media print {
+  header.top, button, .btn, .bar-108, .no-print, #offline, #status { display: none !important; }
+  html, body { max-width: none; padding: 0; font-size: 10pt; background: #fff; color: #000; }
+  .slip { border: 1px solid #000; font-size: 10pt; page-break-inside: avoid; }
+  .slip a { color: #000; text-decoration: none; }
+}

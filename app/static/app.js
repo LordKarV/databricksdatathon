@@ -435,19 +435,65 @@ function stopHtml(r, g, P) {
         : s0.phone && s0.phone.display ? `Phone: ${F(S0 + '.phone.display', s0.phone.display)}` : 'No phone number in our data.'}</p>
     <ul>${stages}</ul></li>`;
 }
+// Route strip (design/ui/DESIGN.md): the plan against the clock, drawn only when the plan has a time window.
+// One lane per stop group; each arrival is a capsule from eta_low to eta_high (the range, not a guessed minute);
+// the window is a rule at the first check's limit with the time past it hatched. Every number carries data-f.
+// The SVG has no viewBox: x is a percentage of the axis, y is px, so strokes and dashes never stretch.
+const STRIP_LANE = 72, STRIP_Y0 = 80, STRIP_DRAW_MS = 700;
+function stripHtml(r, P) {
+  const c = r.window_checks[0];
+  if (!c) return '';
+  const C = `${P}.window_checks.0`;
+  const lanes = stopGroups(r.stops).map(g => ({s: r.stops[g.ks[0]], S: `${P}.stops.${g.ks[0]}`}));
+  const span = 1.08 * Math.max(c.limit_minutes, ...lanes.map(l => l.s.eta_high));
+  const x = m => +(100 * m / span).toFixed(2);
+  const y = k => STRIP_Y0 + k * STRIP_LANE;
+  let at = 0;  // the line only moves forward in time, even if a later stop's range starts earlier
+  const xs = lanes.map(l => (at = Math.max(at, x(l.s.eta_low))));
+  // Segments in drawing order: along lane k-1 to the next arrival, then down to lane k. Lengths are estimated
+  // for a 300 px axis so the whole line takes STRIP_DRAW_MS.
+  const segs = [[0, y(0), xs[0], y(0)]];
+  xs.slice(1).forEach((xk, k) => segs.push([xs[k], y(k), xk, y(k)], [xk, y(k), xk, y(k + 1)]));
+  const len = segs.map(([x1, y1, x2, y2]) => Math.abs(x2 - x1) * 3 + Math.abs(y2 - y1) + 1);
+  const total = len.reduce((a, b) => a + b, 0);
+  let t = 0;
+  const line = segs.map(([x1, y1, x2, y2], i) => {
+    const ms = Math.round(STRIP_DRAW_MS * len[i] / total), style = `animation-duration:${ms}ms;animation-delay:${t}ms`;
+    t += ms;
+    return `<line class="strip-path" x1="${x1}%" y1="${y1}" x2="${x2}%" y2="${y2}" pathLength="1" style="${style}"/>`;
+  }).join('');
+  const wx = x(c.limit_minutes);
+  const win = wx < 60 ? `left:calc(${wx}% + 6px)` : `right:calc(${(100 - wx).toFixed(2)}% + 6px)`;
+  const marks = lanes.map((l, k) => {
+    // the label sits above its lane, on the far side of the drop that arrives there
+    const pos = xs[k] <= 55 ? `left:calc(${xs[k]}% + 18px)` : `right:calc(${(100 - xs[k]).toFixed(2)}% + 18px);text-align:right`;
+    const delay = `animation-delay:${STRIP_DRAW_MS * len.slice(0, 2 * k + 1).reduce((a, b) => a + b, 0) / total | 0}ms`;
+    return `<span class="strip-stop" aria-hidden="true" style="left:${xs[k]}%;top:${y(k)}px;${delay}">${k + 1}</span>
+      <span class="strip-lab" style="${pos};top:${y(k) - 52}px"><b>${F(l.S + '.eta_low', l.s.eta_low, 'num')}-${F(l.S + '.eta_high', l.s.eta_high, 'num')} min</b>
+      ${F(l.S + '.purpose_word', l.s.purpose_word)}</span>`;
+  }).join('');
+  return `<div class="strip" role="img" aria-label="The route drawn against the clock. The stops and times are listed below."
+      style="height:${y(lanes.length - 1) + 48}px">
+    <div class="strip-late" style="left:${wx}%"></div>
+    <span class="strip-win" style="${win}">Window ${F(C + '.limit_minutes', c.limit_minutes, 'num')} min</span>
+    <svg aria-hidden="true">${lanes.map((l, k) => `<line class="strip-eta" x1="${x(l.s.eta_low)}%" x2="${x(l.s.eta_high)}%"
+      y1="${y(k)}" y2="${y(k)}"/>`).join('')}${line}</svg>
+    <span class="strip-origin" style="left:0;top:${y(0)}px"></span>${marks}
+    <div class="strip-axis"><span>Start</span><span>minutes from the start</span></div></div>`;
+}
 function routePlanHtml(r, P) {
   const t = r.totals, v = r.vs_direct;
-  return `<p>${F(P + '.type_word', r.type_word)}.</p>
+  return `<p>${F(P + '.type_word', r.type_word)}.</p>${stripHtml(r, P)}
     <ol class="stops">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>Definitive care in about ${F(P + '.totals.minutes_to_definitive', t.minutes_to_definitive, 'num')} min
       (${F(P + '.totals.low', t.low, 'num')}-${F(P + '.totals.high', t.high, 'num')}).
       Chance of first care in time: ${F(P + '.totals.p_first_care', t.p_first_care.toFixed(2), 'num')}.
       Chance of being treated: ${F(P + '.totals.p_treated', t.p_treated.toFixed(2), 'num')}.</p>` : ''}
-    ${r.window_checks.map((c, j) => `<p class="small">${F(`${P}.window_checks.${j}.check`, c.check)} within
+    ${r.window_checks.map((c, j) => `<p class="small check-${c.met ? 'met' : 'miss'}">${F(`${P}.window_checks.${j}.check`, c.check)} within
       ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
       <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
       (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small">${F(P + '.vs_direct.text', v.text)}
+    ${v ? `<p class="small vs-direct">${F(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
 }
 function routeHtml(p) {
@@ -634,13 +680,13 @@ function areaHtml(a) {
     </tbody></table>
     <p>${F('area.caveat', a.caveat)}</p>
     ${gapHtml(a)}
-    <table><caption>Plan per PIN area</caption>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Plan per PIN area"><table><caption>Plan per PIN area</caption>
       <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
-      <tbody>${rows}</tbody></table>
+      <tbody>${rows}</tbody></table></div>
     <h2 id="ten-calls">Calls that close the most of the gap</h2>
-    <table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
       <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
-      <tbody>${calls}</tbody></table>
+      <tbody>${calls}</tbody></table></div>
     <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
       <button type="button" id="area-print">Print chart</button></div>
     ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;
