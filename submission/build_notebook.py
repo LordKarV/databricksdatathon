@@ -115,8 +115,9 @@ print("00_rebuild_derived.ipynb:", " ".join(rebuilt.group(0).split()) if rebuilt
 ''')
 
 md("""
-The app reads small exports built from `derived/v1`, using only the standard library at run time. If they are
-missing (a fresh clone), the next cell builds them. The order matters: the planner first, then the facts, whose
+The app reads small exports built from `derived/v1` and `derived/v2`, using only the standard library at run time.
+The next cell rebuilds them every time (a few seconds each), so an export left over from an older checkout can never
+be read by mistake; a failed build stops the notebook. The order matters: the planner first, then the facts, whose
 export copies the sentences the planner cites, then the "How this works" page data.
 """)
 
@@ -124,12 +125,11 @@ code('''
 BUILDS = [("planner/out/planner_v2.json.gz", "planner/export_v2.py"),
           ("app/facts/out/facts.json.gz", "app/facts/build.py"),
           ("app/howto/out/how.json", "app/howto/build.py")]
-for out, script in BUILDS:
-    if (ROOT / out).is_file():
-        print(f"ok      {out}")
-    else:
-        r = subprocess.run([sys.executable, script], cwd=ROOT, capture_output=True, text=True, check=False)
-        print(f"built   {out}: {r.stdout.strip().splitlines()[-1] if r.stdout.strip() else r.stderr[-300:]}")
+for out, script in BUILDS:  # always rebuild: a stale export once broke a Databricks run
+    r = subprocess.run([sys.executable, script], cwd=ROOT, capture_output=True, text=True, check=False)
+    if r.returncode != 0:
+        raise RuntimeError(f"{script} failed: {r.stderr[-800:]}")
+    print(f"built   {out}: {r.stdout.strip().splitlines()[-1] if r.stdout.strip() else 'ok'}")
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
