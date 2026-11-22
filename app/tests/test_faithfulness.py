@@ -334,6 +334,14 @@ def engine_hi(text: str, payload: dict) -> str | None:
     return None if None in parts else "; ".join(parts)
 
 
+def dur_ok(shown: str, minutes: float) -> bool:
+    """Minutes shown as 'N min', 'N h' or 'N day(s)' (Hindi: मिनट, घंटे, दिन), rounded to that unit."""
+    m = re.fullmatch(r"(\d+) (min|h|days?|\u092e\u093f\u0928\u091f|\u0918\u0902\u091f\u0947|\u0926\u093f\u0928)", shown.strip())
+    unit = {"min": 1, "h": 60, "day": 1440, "days": 1440, "\u092e\u093f\u0928\u091f": 1, "\u0918\u0902\u091f\u0947": 60,
+            "\u0926\u093f\u0928": 1440}[m[2]] if m else 0
+    return bool(m) and abs(int(m[1]) * unit - minutes) <= unit / 2
+
+
 def check_item(payload: dict, it: dict) -> str | None:
     """None if the shown value is faithful, else a message."""
     path, kind, shown = it["path"], it["kind"], it["text"]
@@ -354,6 +362,9 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = bool(m) and (h, int(m[2])) == (when.hour, when.minute)
     elif kind == "pct":  # a stored fraction shown as a whole percent: '82' for 0.82
         ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
+    elif kind == "pct100":  # UI-SCORE-1: a model score out of 100, '47 / 100' for 0.47, so round(100 * p)
+        m = re.fullmatch(r"(\d+) / 100", shown.strip())
+        ok = bool(m) and isinstance(stored, (int, float)) and within_precision(m[1], 100 * stored)
     elif kind == "count":  # how many items a list holds: '3' for three options
         ok = isinstance(stored, list) and number(shown) == len(stored)
     elif kind == "likely":  # how many options in a list are in the Likely band: '2' in "2 of 3 options are Likely"
@@ -367,10 +378,12 @@ def check_item(payload: dict, it: dict) -> str | None:
     elif kind == "method":
         ok = shown in WORDS["travel.road" if stored == "osrm" else "travel.rough"]
     elif kind == "dur":  # minutes shown as 'N min', 'N h' or 'N day(s)' (Hindi: मिनट, घंटे, दिन), rounded to that unit
-        m = re.fullmatch(r"(\d+) (min|h|days?|\u092e\u093f\u0928\u091f|\u0918\u0902\u091f\u0947|\u0926\u093f\u0928)", shown.strip())
-        unit = {"min": 1, "h": 60, "day": 1440, "days": 1440, "\u092e\u093f\u0928\u091f": 1, "\u0918\u0902\u091f\u0947": 60,
-                "\u0926\u093f\u0928": 1440}[m[2]] if m else 0
-        ok = bool(m) and abs(int(m[1]) * unit - stored) <= unit / 2
+        ok = dur_ok(shown, stored)
+    elif kind == "leg":  # UI-MAP-1: minutes driven to a route stop since leaving the one before, as 'dur'
+        head, _, k = path.rpartition(".")
+        stops, k = resolve(payload, head), int(k)
+        gone = stops[k - 1]["eta_low"] + (stops[k - 1]["dwell_minutes"] or 0) if k else 0
+        ok = dur_ok(shown, stored["eta_low"] - gone)
     elif kind == "delta":  # minutes against the first choice: 'N min closer', 'N min farther', 'about the same time'
         m = re.fullmatch(r"(\d+) (?:min|\u092e\u093f\u0928\u091f) (closer|farther|\u092a\u093e\u0938|\u0926\u0942\u0930)", shown.strip())
         ok = (stored == 0 and shown.strip() in WORDS["delta.same"]) or (
@@ -801,6 +814,38 @@ def test_location_doubt_line_on_the_readout(base_url, browser):
         assert not errs, errs[:10]
 
 
+def test_why_page_shows_the_score_out_of_100(base_url, browser):
+    """UI-SCORE-1: a score of p = 0.47 reads "47 / 100" next to its band word on the Why page, in en and hi, and the
+    mark checks it as round(100 * p); no score is shown as a decimal."""
+    import copy
+    base = next(p for n, p in PAYLOADS if n.startswith("stub-trauma"))
+    payload = copy.deepcopy(base)
+    o = payload["options"][0]
+    o["p"] = 0.47
+    for lang in ("en", "hi"):
+        ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+        page = ctx.new_page()
+        page.route("**/api/plan", json_reply(payload))
+        page.add_init_script("localStorage.setItem('rs.lang', " + json.dumps(json.dumps(lang)) + ");"
+                             "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+                             " source: 'gps', t: Date.now(), label: null}))")
+        try:
+            page.goto(base_url + "/#/")
+            page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+            page.wait_for_selector("article.card")
+            page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
+            page.wait_for_selector(".why-head")
+            got = page.evaluate(COLLECT_JS)
+            text = page.inner_text("#main")
+        finally:
+            ctx.close()
+        scores = [it for it in got["items"] if it["path"] == "options.0.p"]
+        assert scores and all(it["kind"] == "pct100" and it["text"] == "47 / 100" for it in scores), scores
+        assert "47 / 100" in text and not re.search(r"\b0\.47\b", text)
+        errs = check_screen(f"score100/{lang}", payload, got, {"values_checked": 0})
+        assert not errs, errs[:10]
+
+
 NO_DIAL = ("window.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href^=\"tel:\"]');"
            " if (a) e.preventDefault(); }, true);")
 PHONE_BACK = """() => { Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'visible'});
@@ -1186,6 +1231,9 @@ def test_displayed_transforms_are_checked_against_the_stored_value():
     assert item("options.0.p_lo", "pct", "82") is None and item("options.0.p_hi", "pct", "93") is None
     assert item("options.0.p_lo", "pct", "0.82") is not None and item("options.0.p_lo", "pct", "80") is not None
     assert item("options", "count", "3") is None and item("options", "count", "2") is not None
+    assert item("options.0.p", "pct100", "81 / 100") is None
+    assert item("options.0.p", "pct100", "0.81") is not None and item("options.0.p", "pct100", "81") is not None
+    assert item("options.0.p", "pct100", "79 / 100") is not None and item("options.0.p", "pct100", "81 / 10") is not None
     assert item("options", "atleast", "over 99%") is None
     assert item("options", "atleast", "1.00") is not None and item("options", "atleast", "100%") is not None
     assert capped_pct_ok("87%", 0.871) and not capped_pct_ok("over 99%", 0.95) and not capped_pct_ok("99%", 0.995)
