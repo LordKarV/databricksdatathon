@@ -10,6 +10,10 @@ sum to the score (ledger() below; the plain words are in ledger_terms.py). The c
 not the derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
+Phone numbers are shown in national format when phonenumbers is importable at build time; it is not an app
+dependency (not in app/requirements.txt). deploy.sh adds it with uv:
+    uv run --no-project --with duckdb --with pandas --with pyarrow --with phonenumbers python app/facts/build.py
+Without it the build prints a warning and shows each listing's own spelling, as before.
 """
 from __future__ import annotations
 
@@ -24,6 +28,7 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
+from typing import Any
 from urllib.parse import unquote
 
 import numpy as np
@@ -135,6 +140,29 @@ def e164(raw: str) -> str | None:
     return None
 
 
+def load_phonenumbers() -> Any:
+    """The phonenumbers module, or None. Imported here so the app and its tests run without it (build time only)."""
+    try:
+        import phonenumbers
+    except ImportError:
+        return None
+    return phonenumbers
+
+
+def phone_display(raw: str, pn: Any) -> str:
+    """The number as shown. With phonenumbers (pn), a valid Indian number in national format: "0621 223 0333" for a
+    landline, "94700 03549" for a mobile (no trunk 0, the way mobiles are written in India). A 1800 toll-free
+    number, a number phonenumbers rejects, or no pn: the listing's own spelling. Dialling always uses e164()."""
+    e = e164(raw)
+    if pn is None or not e or not e.startswith("+91"):
+        return raw
+    n = pn.parse(e, None)
+    if not pn.is_valid_number(n):
+        return raw
+    s = pn.format_number(n, pn.PhoneNumberFormat.NATIONAL)
+    return s[1:] if pn.number_type(n) == pn.PhoneNumberType.MOBILE and s.startswith("0") else s
+
+
 def col(series: pd.Series, nd: int | None = None) -> list:
     if nd is not None:
         return [None if pd.isna(x) else round(float(x), nd) for x in series]
@@ -162,6 +190,11 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     shared = Counter(str(x) for p in tr.display_phones if p is not None for x in set(p))
     f["phone_raw"] = phones
     f["phone_e164"] = [e164(p) for p in phones]
+    pn = load_phonenumbers()
+    if pn is None:
+        print("WARNING: phonenumbers not importable; phones shown as listed. Build with uv run --with phonenumbers "
+              "(see the docstring) for national format.")
+    f["phone_display"] = [phone_display(p, pn) for p in phones]
     f["phone_shared"] = [shared.get(p, 0) if p else 0 for p in phones]
     f["loc_rule"] = f.location_reason_codes.fillna("").str.split("|").map(
         lambda codes: next((c for c in codes if c.startswith("LOC_")), ""))
@@ -579,7 +612,8 @@ def main() -> None:
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
                 "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
                 "p_e": col(f.existence_score, 3), "p_l": col(f.location_score, 3), "loc_rule": list(f.loc_rule),
-                "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw), "phone_shared": list(f.phone_shared),
+                "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw),
+                "phone_display": list(f.phone_display), "phone_shared": list(f.phone_shared),
                 "flags": [as_list(x) for x in f.trust_flags],
                 "reasons": [as_list(x) for x in f.trust_reasons],
                 "website_own": list(f.website_class == "own"), "url": col(f.url),

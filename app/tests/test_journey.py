@@ -137,7 +137,8 @@ def test_phones_and_map_points_come_from_the_payload():
         say = json.loads(re.search(r'id="say">(.*?)</script>', page).group(1))
         spoken = [d.replace(" ", "") for d in re.findall(r"\d(?: \d){4,}", " ".join(say["en"] + say.get("hi", [])))]
         digits = {re.sub(r"\D", "", p) for p in payload_phones(plan)}
-        assert all(any(d.endswith(s) for d in digits) for s in spoken), (name, spoken)
+        national = [s.removeprefix("0") for s in spoken]  # a landline is read with its trunk 0 ("0621 223 0333")
+        assert all(any(d.endswith(s) for d in digits) for s in national), (name, spoken)
 
 
 def test_required_content_and_route_order():
