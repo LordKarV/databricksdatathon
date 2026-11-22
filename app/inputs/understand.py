@@ -73,15 +73,20 @@ NOTE_SCHEMA = {
                    "red_flags": {"type": "array", "items": {"type": "string"}}},
 }
 # Clinical terms a note uses that a typed request rarely does (feasibility/vision/score.py LEXICON).
-NOTE_TERMS = {
-    "dialysis": r"dialysis|haemodialysis|hemodialysis|CKD stage 5|डायलिसिस",
-    "emergency_csection": r"LSCS|caesarean|cesarean|C-section|सिजेरियन",
-    "nicu": r"NICU|SNCU|preterm|premature|समय से पहले जन्म",
-    "cardiac_surgery": r"CABG|cardiothoracic|bypass surgery|valve replacement",
-    "mri": r"\bMRI\b",
-    "burn_care": r"\bburns?\b|जल",
-    "trauma_emergency": r"fracture|trauma|RTA|road traffic",
+# Whole words only (#85 H4): "RTA" must not fire inside "Mortality", nor "जल" (burn) inside "जल्दी" (quickly).
+# Latin terms take ASCII word edges; Devanagari terms take edges outside the Devanagari block, since \b does not
+# treat combining vowel signs and the virama as word characters.
+_EDGE_L, _EDGE_R = r"(?<![A-Za-z0-9\u0900-\u097F])", r"(?![A-Za-z0-9\u0900-\u097F])"
+_TERMS = {
+    "dialysis": ["dialysis", "haemodialysis", "hemodialysis", "CKD stage 5", "डायलिसिस"],
+    "emergency_csection": ["LSCS", "caesarean", "cesarean", "C-section", "सिजेरियन"],
+    "nicu": ["NICU", "SNCU", "preterm", "premature", "समय से पहले जन्म"],
+    "cardiac_surgery": ["CABG", "cardiothoracic", "bypass surgery", "valve replacement"],
+    "mri": ["MRI"],
+    "burn_care": ["burn", "burns", "जल गया", "जल गई", "जला", "जली", "जले", "जलना"],
+    "trauma_emergency": ["fracture", "trauma", "RTA", "road traffic"],
 }
+NOTE_TERMS = {s: _EDGE_L + "(?:" + "|".join(re.escape(t) for t in ts) + ")" + _EDGE_R for s, ts in _TERMS.items()}
 INJECTION = re.compile(r"ignore (all )?(prior|previous)|system note|to ai\b|suggested_service\s*=", re.IGNORECASE)
 
 
@@ -176,6 +181,17 @@ def _strict(name: str, schema: dict) -> dict:
 
 
 # ---------- text ----------
+MIN_TRIGGER = 3
+
+
+def verbatim_word(phrase: str, text: str) -> bool:
+    """The model's phrase occurs in the user's text as whole words, 3+ characters (#85: "a" passed before)."""
+    p = norm(phrase.strip().rstrip(".|।"))
+    if len(p) < MIN_TRIGGER:
+        return False
+    return re.search(_EDGE_L + re.escape(p) + _EDGE_R, norm(text)) is not None
+
+
 def parse_text(text: str) -> dict[str, Any]:
     text = text.strip()[:MAX_TEXT]
     danger = danger_hit(text)
@@ -205,7 +221,7 @@ def parse_text(text: str) -> dict[str, Any]:
         return {**out, "source": "model", "note": "symptoms_only"}
     if svc not in SERVICES_FOR_MODEL[:7]:
         return {**out, "source": "model", "note": "other"}
-    if not phrase or norm(phrase) not in norm(text):
+    if not verbatim_word(phrase, text):
         return {**out, "source": "model", "note": "phrase_not_verbatim"}
     return {**out, "service": svc, "phrase": find_phrase(text, norm(phrase)) or phrase, "source": "model"}
 
@@ -225,7 +241,7 @@ def note_guard(detected: str, trigger: str, svc: str) -> str:
         return "injection"
     if not detected.strip():
         return "no_text"
-    if not trigger.strip() or norm(trigger.strip().rstrip(".|।")) not in norm(detected):
+    if not verbatim_word(trigger, detected):
         return "not_verbatim"
     if svc == "none_of_these":
         return "none_found"
@@ -248,7 +264,14 @@ def read_note(image_data_url: str) -> dict[str, Any]:
     if svc not in NOTE_SERVICES:
         return {"ok": False, "note": "the model reply did not name a service from the list"}
     guard = note_guard(detected, trigger, svc)
-    danger = danger_hit(detected) or next((str(f) for f in ans.get("red_flags") or [] if str(f).strip()), None)
-    return {"ok": True, "service": None if svc == "none_of_these" else svc, "phrase": trigger or None,
-            "guard": guard, "sure": guard == "accept", "danger": danger is not None, "danger_phrase": danger,
+    # Both fields below come from the model's own reading; nothing checks them against the image (#85 H4). So model
+    # text is quoted only when the guard accepts, a red flag counts only if it is in the text the model read, and the
+    # page says "what we read", never "the note says".
+    # Danger still routes to 108 on any red flag (safety first), but a flag is quoted only when it is in that text.
+    ok = guard == "accept"
+    flags = [str(f).strip() for f in ans.get("red_flags") or [] if str(f).strip()]
+    danger = danger_hit(detected) or next((f for f in flags if norm(f) in norm(detected)), None)
+    return {"ok": True, "service": None if svc == "none_of_these" else svc, "phrase": trigger if ok else None,
+            "guard": guard, "sure": guard == "accept", "danger": danger is not None or bool(flags),
+            "danger_phrase": danger,
             "detected_text": detected[:2000]}

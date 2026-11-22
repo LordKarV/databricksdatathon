@@ -156,8 +156,9 @@ class FakeResp:
     def getheader(self, k):
         return self._h.get(k)
 
-    def read(self, n):
-        return self._b[:n]
+    def read(self, n):  # a stream: each read consumes, like http.client
+        out, self._b = self._b[:n], self._b[n:]
+        return out
 
 
 class Wire:
@@ -286,3 +287,43 @@ def test_endpoint(monkeypatch):
     assert r.status_code == 200 and r.json()["status"] == "found"
     assert c.post("/api/verify", json={"facility_id": FID, "service_id": "x"}).status_code == 422
     assert c.post("/api/verify", json={"facility_id": "a/b", "service_id": "dialysis"}).status_code == 422
+
+
+def test_fetch_stops_at_its_budget_even_when_bytes_trickle(monkeypatch):
+    # #85: a slow server kept a check running 41-56 s; the transport now enforces one total deadline
+    t = [0.0]
+    monkeypatch.setattr(V.time, "monotonic", lambda: t[0])
+
+    class Slow(FakeResp):
+        def read(self, n):
+            t[0] += 3.0  # every chunk takes 3 s
+            return b"x" * 10
+
+    class Conn:
+        def request(self, *a, **k):
+            pass
+
+        def getresponse(self):
+            return Slow(200, {"Content-Type": "text/html"}, b"")
+
+        def close(self):
+            pass
+    monkeypatch.setattr(V, "resolve_public", lambda host, port: "93.184.216.34")
+    monkeypatch.setattr(V, "open_connection", lambda *a: Conn())
+    with pytest.raises(TimeoutError):
+        V.http_transport("https://slow.example/", 8.0)
+    assert t[0] <= 12.0
+
+
+def test_unknown_charset_reads_as_utf8():
+    text, _, _ = V.page_text(V.Page(200, "https://a.example/", "text/html; charset=x-made-up",
+                                            b"<p>Dialysis unit</p>"))
+    assert "Dialysis unit" in text
+
+
+def test_unreachable_is_not_cached_for_a_day():
+    c = V.Checker.__new__(V.Checker)
+    c._cache = {("f", "s"): {"status": "unreachable", "checked_at_ms": 0}}
+    c.now = lambda: V.UNREACHABLE_TTL_S + 1
+    c._run = lambda fid, sid: {"status": "found", "checked_at_ms": 1}
+    assert c.check("f", "s")["status"] == "found"
