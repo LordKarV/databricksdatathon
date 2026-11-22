@@ -21,7 +21,7 @@ and the app stays within 1 to 2 points of the nearest listing plus a call ahead 
 sentence is "Going straight to All India Institute of Medical Sciences Patna takes 92 min and misses the 60-minute
 window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about 1 min.").*
 
-![Trauma answer on a 360 px phone screen](app/checks/screens/answer_trauma-light.png)
+![The Gaya accident answer on a 360 px phone: Dr. A Barkat Multispeciality Hospital, Likely, 1 min](demo/hero_gaya_trauma.png)
 
 It is for ASHAs and other front-line health workers deciding where to send a patient, and for district planners
 asking where the evidence of care is thin.
@@ -57,12 +57,10 @@ tells the same story as the notebook, in plain words.
   example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" and "Which
   hospital near Lucknow can handle an emergency C-section?" with claim ids.
 - **Notebooks** on serverless: `submission/referral_saathi.ipynb`, `submission/02_simulation.ipynb` and
-  `submission/00_rebuild_derived.ipynb`. Run ids: RUN_IDS (placeholder, filled at release step R6, listed in
-  `submission/README.md`).
+  `submission/00_rebuild_derived.ipynb`. All three ran on Databricks serverless on 2026-11-22: run ids 796897435272535,
+  418325743233710 and 245706239328385 ([release runs](submission/README.md#release-runs-2026-11-22-ran-on-databricks-serverless)).
 - **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
   about 7 minutes each; neither beat the rules, so it is a documented negative result (`model/reader/README.md`).
-- Stills of the dashboard and the Genie Benchmark tab: STILLS (placeholder, `demo/stills/`, captured in a signed-in
-  browser at release step R7).
 
 ## Data we brought in
 
