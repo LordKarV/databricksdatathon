@@ -24,6 +24,9 @@ TYPE = {"direct": "Go straight there", "one_stop": "Stop for first care, then go
         "two_stop": "Two stops, then go on", "single_site": "One hospital for every stage"}
 
 
+ROUTE_DOWN = "The suggested route could not be built just now. The options below do not depend on it."
+
+
 def _planner():
     """planner.service, or None when the planner is not shipped with this app."""
     if str(ROOT) not in sys.path:
@@ -118,5 +121,11 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float) -> dict[str, An
 def attach(plan: dict, eng: Engine) -> dict:
     """Add `itinerary` to a /api/plan payload (None when there is no route for this service or server)."""
     loc = plan["location"]
-    plan["itinerary"] = itinerary(eng, plan["query"]["service"], loc["lat"], loc["lon"])
+    # The options do not need the planner: a broken planner file, pathway or geo table must never fail /api/plan
+    # (#85 H3). Any error here leaves the options and says plainly that the route is missing.
+    try:
+        plan["itinerary"] = itinerary(eng, plan["query"]["service"], loc["lat"], loc["lon"])
+    except Exception:  # noqa: BLE001 - deliberate boundary: the route is optional
+        plan["itinerary"] = None
+        plan["itinerary_note"] = ROUTE_DOWN
     return plan

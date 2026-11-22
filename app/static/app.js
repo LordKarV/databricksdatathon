@@ -377,7 +377,7 @@ function routePlanHtml(r, P) {
 }
 function routeHtml(p) {
   const it = p.itinerary;
-  if (!it) return '';
+  if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2>Suggested route</h2>
     <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
       estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
