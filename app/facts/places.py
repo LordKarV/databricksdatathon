@@ -17,8 +17,10 @@ from typing import TypedDict
 
 MAX_MATCHES = 6
 # Official renames, old to new. When the typed name is in none of our tables, the other name of its pair is tried
-# (either way: our tables may carry the old name or the new one). Source for every pair: "List of renamed places in
-# India", https://en.wikipedia.org/wiki/List_of_renamed_places_in_India (with the year where that list gives one).
+# (either way: our tables may carry the old name or the new one). When the old name is itself a place in our tables
+# (Simla is a post office in Assam), the new one's matches in other states come first and the old ones stay, so
+# neither is picked for the user. Source for every pair: "List of renamed places in India",
+# https://en.wikipedia.org/wiki/List_of_renamed_places_in_India (with the year where that list gives one).
 RENAMES: tuple[tuple[str, str], ...] = (
     ("bombay", "mumbai"),  # 1995
     ("madras", "chennai"),  # 1996
@@ -51,7 +53,7 @@ RENAMES: tuple[tuple[str, str], ...] = (
     ("bellary", "ballari"),
     ("shimoga", "shivamogga"),
     ("tumkur", "tumakuru"),
-    ("bijapur", "vijayapura"),
+    # not ("bijapur", "vijayapura"): Bijapur is also the current name of a district in Chhattisgarh
     ("hubli", "hubballi"),
     ("chikmagalur", "chikkamagaluru"),
     ("hoshangabad", "narmadapuram"),
@@ -59,6 +61,8 @@ RENAMES: tuple[tuple[str, str], ...] = (
     ("aurangabad", "chhatrapati sambhaji nagar"),
     ("osmanabad", "dharashiv"),
     ("ahmednagar", "ahilyanagar"),
+    # not a rename: the common short name of Visakhapatnam, used for no other place (served as how "rename")
+    ("vizag", "visakhapatnam"),
 )
 # A spelling match (difflib ratio, same first letter) only when the name and its rename find nothing. 'Baharaich'
 # to 'bahraich' scores 0.94.
@@ -145,10 +149,12 @@ class Places:
         if places:
             for i, n in enumerate(places["name"]):
                 self.names.setdefault(norm(n), []).append(i)
-        self.renames: dict[str, list[str]] = {}
+        self.renames: dict[str, list[str]] = {}  # either way, for a name our tables do not have
+        self.renamed_to: dict[str, list[str]] = {}  # old to new only, for an old name that is also a place
         for a, b in RENAMES:
             self.renames.setdefault(a, []).append(b)
             self.renames.setdefault(b, []).append(a)
+            self.renamed_to.setdefault(a, []).append(b)
         self.by_letter: dict[str, list[str]] = {}
         for k in sorted(set(self.districts) | set(self.names)):
             self.by_letter.setdefault(k[:1], []).append(k)
@@ -201,7 +207,8 @@ class Places:
         return out
 
     def resolve(self, q: str) -> tuple[list[Match], dict | None]:
-        """lookup(q), else what an official rename (RENAMES) or a close spelling of the name finds.
+        """lookup(q), else what an official rename (RENAMES) or a close spelling of the name finds. An old name that
+        is also a place keeps its own matches after those of its new name in other states (Simla: Shimla first).
 
         Returns (matches, matched_as). Every match a fallback finds carries matched_as = {"query", "name", "how"}
         ("rename" or "spelling"), so the page can say which name it shows. "query" is the name as norm() read it,
@@ -210,10 +217,15 @@ class Places:
         each with at least one match, so a near miss is never quietly read as one of two real places.
         """
         found = self.lookup(q)
-        if found or pin_of(q):
+        if pin_of(q):
             return found, None
         name, _, state_q = q.strip().rpartition(",") if "," in q else (q, "", "")
         key, tail = norm(name), (f", {state_q}" if state_q.strip() else "")
+        if found:  # an old name that is also a place: add the renamed place where it is in another state
+            have = {m["state"] for m in found}
+            new = [(n, ms) for n in self.renamed_to.get(key, [])
+                   if (ms := [m for m in self.lookup(n + tail) if m["state"] not in have])]
+            return ((self._tagged(new, key, "rename")[0] + found)[:MAX_MATCHES], None) if new else (found, None)
         if not key:
             return [], None
         for other in self.renames.get(key, []):
