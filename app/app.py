@@ -191,10 +191,16 @@ class TranslateRequest(BaseModel):
 @app.post("/api/translate")
 def translate_quote(req: TranslateRequest, request: Request) -> JSONResponse:
     """Hindi machine translation of one facility quote, looked up here by claim id (SAFETY.md 14). Not logged."""
-    c = _need_engine().claims.get(req.claim_id)  # route stop quotes use the same claim ids
+    eng = _need_engine()
+    c = eng.claims.get(req.claim_id)  # route stop quotes use the same claim ids
     if c is None:
         raise HTTPException(404, "unknown claim id")
-    out = translate.translate(req.claim_id, c[1], reporter_key(request.headers))
+    # A claim id starts with the first 8 characters of its facility's id: its name and city stay untranslated.
+    # ponytail: linear scan of ~10k ids per request, an index if it ever shows up in a profile.
+    prefix = req.claim_id.split(":")[0]
+    i = next((j for u, j in eng.fid.items() if u.startswith(prefix)), None)
+    keep = () if i is None else (eng.fac["name"][i] or "", eng.fac["city"][i] or "")
+    out = translate.translate(req.claim_id, c[1], reporter_key(request.headers), keep)
     return JSONResponse(out, status_code=429 if out.get("reason") == "rate_limited" else 200,
                         headers={"Cache-Control": "no-store"})
 

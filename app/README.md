@@ -324,17 +324,24 @@ a "हिंदी में पढ़ें" button (`static/translate.js`, loa
   region, with read aloud (label first) through `speech.js`.
 - The body is `{claim_id}` only (extra fields are a 422). The server reads the quote from the engine's claims, which
   also hold the planner's route quotes; an unknown id is a 404.
-- `inputs/translate.py` calls `SERVING_ENDPOINT_TEXT` with the `/api/parse` client, temperature 0, one worked
-  example, 8 s timeout. The guard shows a translation only when every digit run (grouping commas ignored) and
-  every capitalised word or acronym is unchanged (a capitalised word opening a sentence counts only before
-  another capitalised word), no digit run is added, the rest is mostly Devanagari, no word mixes scripts, and it
-  is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
+- Names, numbers and terms never reach the model as words. `inputs/translate.py` replaces each protected span
+  with a placeholder (`⟦1⟧`, `⟦2⟧`, ...) and puts the span back after the reply. Protected: digit runs with
+  adjacent units or months (`5,000`, `24x7`, `1.5 Tesla`, `31 October 2023`), Title Case runs of 2+ words
+  (`Sheikh Bhikhari Medical College`), acronyms (`CABG`, `T2*`), capitalised words not opening a sentence, and the
+  facility's own name and city. The model (`SERVING_ENDPOINT_TEXT` through the `/api/parse` client, temperature 0,
+  one worked example, 8 s) is told to copy each placeholder. The guard shows the result only when every
+  placeholder comes back exactly once, no digit is added, the rest is mostly Devanagari, no word mixes scripts, and
+  it is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
+- A masked quote over 300 characters goes out in sentence or list-item chunks, at most 4, side by side within the
+  same 8 s; more chunks than that is "too long to translate", with no model call.
 - In-memory LRU cache (5,000) by claim id, endpoint and prompt version; 30 model calls per user per minute (the
   reporter key, or one shared bucket without it), per app instance. Quote and translation are never logged.
 - Offline, without the endpoint or on any failure the button reads "अनुवाद अभी उपलब्ध नहीं / Translation not
   available right now".
-- Live check (Llama 3.3 70B, 10 real quotes over 7 services): 5 passed the guard. Rejections were Title Case
-  terms or names transliterated (4) and one word in two scripts. A long specialty-list quote timed out once at 8 s.
+- Live check (Llama 3.3 70B, 20 real quotes, all 7 services): 18 of 20 passed; the other 2 hit the 8 s timeout
+  and passed in an earlier run. The first guard-only version passed 9 of 20, mostly because the model
+  transliterated names. The guard cannot catch a wrong ordinary word ("Caesarean section" came back as
+  "Caesarean अनुभाग", a section of a document); the label and the original above are the safeguard.
 - Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim).
 
 ## Voice: Hindi and English, speech to text and read aloud

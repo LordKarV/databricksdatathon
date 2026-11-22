@@ -4,6 +4,7 @@ Run from app/: python -m pytest tests/test_translate.py -q
 """
 import json
 import logging
+import re
 import sys
 from pathlib import Path
 from typing import ClassVar
@@ -19,63 +20,83 @@ import app as app_module
 
 client = TestClient(app_module.app)
 QUOTE = "Apollo Hospital has a 1.5 Tesla MRI and 20 ICU beds, open 24x7"
+MASKED = "⟦1⟧ has a ⟦2⟧ ⟦3⟧ and ⟦4⟧ ⟦5⟧ beds, open ⟦6⟧"
+SPANS = ["Apollo Hospital", "1.5 Tesla", "MRI", "20", "ICU", "24x7"]
+REPLY = "⟦1⟧ में ⟦2⟧ ⟦3⟧ और ⟦4⟧ ⟦5⟧ बेड हैं, ⟦6⟧ खुला"
 GOOD = "Apollo Hospital में 1.5 Tesla MRI और 20 ICU बेड हैं, 24x7 खुला"
 
 
 class FakeEngine:
     claims: ClassVar[dict] = {"c1:equi:0": ["equipment", QUOTE, False, "own_anchored"]}
+    fid: ClassVar[dict] = {"c1-0000": 0}
+    fac: ClassVar[dict] = {"name": ["Sunrise Kidney Care"], "city": ["Gaya"]}
 
 
 @pytest.fixture
 def model(monkeypatch):
-    """A fake text endpoint: records calls and answers {"hindi": model.answer}."""
+    """A fake text endpoint: records calls and answers {"hindi": answer}; answer may be a function of the text."""
     monkeypatch.setenv("SERVING_ENDPOINT_TEXT", "text-ep")
     monkeypatch.setattr(app_module, "_need_engine", lambda: FakeEngine())
     monkeypatch.setattr(t, "_cache", t.OrderedDict())
     monkeypatch.setattr(t, "_calls", {})
 
     class M:
-        answer = GOOD
+        answer = REPLY
         calls: ClassVar[list] = []
 
     def fake(endpoint, body):
         M.calls.append((endpoint, body))
         if isinstance(M.answer, Exception):
             raise M.answer
-        return {"choices": [{"message": {"content": json.dumps({"hindi": M.answer}, ensure_ascii=False)}}]}
+        a = M.answer(body["messages"][-1]["content"]) if callable(M.answer) else M.answer
+        return {"choices": [{"message": {"content": json.dumps({"hindi": a}, ensure_ascii=False)}}]}
 
     M.calls = []
     monkeypatch.setattr(u, "_invoke", fake)
     return M
 
 
+# ---------- protection: names, numbers and terms never reach the model as words ----------
+def test_protect_masks_names_numbers_terms_and_the_facility():
+    assert t.protect(QUOTE) == (MASKED, SPANS)
+    assert t.protect(t.EXAMPLE_SRC)[0] == t.EXAMPLE[0]["content"]  # the worked example matches the masking
+    assert t.protect("Has performed 5,000 hemodialysis sessions")[1] == ["5,000"]
+    assert t.protect("Dialysis Unit inaugurated on 31 October 2023")[1] == ["Dialysis Unit", "31 October 2023"]
+    assert t.protect("Attached to Sheikh Bhikhari Medical College, Hazaribagh")[1] == [
+        "Sheikh Bhikhari Medical College", "Hazaribagh"]
+    assert t.protect("Offers MRI in Patna. Burns unit open")[1] == ["MRI", "Patna"]  # sentence openers translate
+    assert t.protect("Offers Normal Vaginal Delivery")[1] == ["Normal Vaginal Delivery"]
+    assert t.protect("sunrise kidney care runs dialysis in gaya", ("Sunrise Kidney Care", "Gaya"))[1] == [
+        "sunrise kidney care", "gaya"]
+
+
+def test_restore_puts_the_spans_back():
+    assert t.restore(REPLY, SPANS) == GOOD
+
+
 # ---------- the guard ----------
 def test_guard_passes_a_good_translation():
-    assert t.guard(QUOTE, GOOD) is None
+    assert t.guard(QUOTE, SPANS, REPLY) is None
 
 
-def test_guard_fails_a_changed_number():
-    assert t.guard(QUOTE, GOOD.replace("20", "25")) == "number_changed"
-    assert t.guard(QUOTE, GOOD.replace("20", "२०")) == "number_changed"  # Devanagari digits are a change too
-    assert t.guard(QUOTE, GOOD + " 30") == "number_changed"  # an added number
+def test_guard_fails_an_added_number():
+    assert t.guard(QUOTE, SPANS, REPLY + " 30") == "number_added"
+    assert t.guard(QUOTE, SPANS, REPLY + " ३०") == "number_added"  # Devanagari digits too
 
 
-def test_guard_fails_a_dropped_or_transliterated_name():
-    assert t.guard(QUOTE, GOOD.replace("Apollo ", "")) == "name_changed"
-    assert t.guard(QUOTE, GOOD.replace("MRI", "एमआरआई")) == "name_changed"
+def test_guard_fails_a_dropped_doubled_or_broken_placeholder():
+    assert t.guard(QUOTE, SPANS, REPLY.replace("⟦1⟧ ", "")) == "placeholder_changed"  # name dropped
+    assert t.guard(QUOTE, SPANS, REPLY + " ⟦3⟧") == "placeholder_changed"
+    assert t.guard(QUOTE, SPANS, REPLY.replace("⟦4⟧", "⟦ 4⟧")) == "placeholder_changed"
+    assert t.guard(QUOTE, SPANS, REPLY + " ⟦7⟧") == "placeholder_changed"
 
 
-def test_guard_fails_english_or_overlong_output():
-    assert t.guard(QUOTE, QUOTE) == "not_hindi"
-    assert t.guard(QUOTE, GOOD + " और" * 3 * len(QUOTE)) == "too_long"
-    assert t.guard(QUOTE, "  ") == "empty"
-    assert t.guard(QUOTE, GOOD.replace("बेड", "बेड्s")) == "mixed_script"  # live: "निम्न सocio-economic"
-
-
-def test_guard_keeps_grouped_numbers_and_skips_sentence_start_words():
-    assert t.guard("Has performed 5,000 dialysis sessions", "5000 डायलिसिस सत्र किए हैं") is None
-    assert t.protected("Offers MRI in Patna. Burns unit open")[1] == ["MRI", "Patna"]
-    assert t.protected("Apollo Hospital offers MRI")[1] == ["Apollo", "Hospital", "MRI"]
+def test_guard_fails_english_mixed_or_overlong_output():
+    assert t.guard(QUOTE, SPANS, MASKED) == "not_hindi"
+    assert t.guard(QUOTE, SPANS, "  ") == "empty"
+    assert t.guard(QUOTE, SPANS, REPLY.replace("बेड", "बेड्s")) == "mixed_script"  # live: "निम्न सocio-economic"
+    assert t.guard(QUOTE, SPANS, REPLY.replace("⟦1⟧ में", "⟦1⟧में")) == "mixed_script"  # glued to a name
+    assert t.guard(QUOTE, SPANS, REPLY + " और" * 3 * len(QUOTE)) == "too_long"
 
 
 # ---------- the endpoint ----------
@@ -83,7 +104,7 @@ def test_translation_is_returned_for_a_known_claim(model):
     r = client.post("/api/translate", json={"claim_id": "c1:equi:0"})
     assert r.status_code == 200 and r.json() == {"available": True, "hindi": GOOD}
     body = model.calls[0][1]
-    assert body["temperature"] == 0 and body["messages"][-1]["content"] == QUOTE  # the server's own text
+    assert body["temperature"] == 0 and body["messages"][-1]["content"] == MASKED  # the server's own text, masked
 
 
 def test_the_endpoint_never_accepts_text(model):
@@ -105,9 +126,36 @@ def test_a_cached_second_call_makes_no_model_call(model):
 
 
 def test_a_guard_failure_shows_nothing(model):
-    model.answer = GOOD.replace("20", "200")
+    model.answer = REPLY.replace("⟦4⟧", "200")
     assert client.post("/api/translate", json={"claim_id": "c1:equi:0"}).json() == {
-        "available": False, "reason": "number_changed"}
+        "available": False, "reason": "placeholder_changed"}
+
+
+def test_the_facility_name_and_city_are_protected(model, monkeypatch):
+    q = "Sunrise Kidney Care is the only dialysis centre in Gaya town"
+    monkeypatch.setattr(FakeEngine, "claims", {"c1:capa:2": ["capability", q, False, "own_anchored"]})
+    model.answer = "⟦1⟧ ⟦2⟧ शहर का एकमात्र डायलिसिस केंद्र है"
+    r = client.post("/api/translate", json={"claim_id": "c1:capa:2"}).json()
+    assert model.calls[0][1]["messages"][-1]["content"] == "⟦1⟧ is the only dialysis centre in ⟦2⟧ town"
+    assert r == {"available": True, "hindi": "Sunrise Kidney Care Gaya शहर का एकमात्र डायलिसिस केंद्र है"}
+
+
+LONG = "; ".join(f"Ward {i} offers dialysis, surgery and care for children and older patients every day" for i in
+                 range(1, 6))
+
+
+def test_a_long_list_quote_is_translated_in_chunks(model, monkeypatch):
+    monkeypatch.setattr(FakeEngine, "claims", {"c1:desc:0": ["description", LONG, False, "own_anchored"]})
+    model.answer = lambda text: " ".join(re.findall(r"⟦\d+⟧", text)) + " वार्ड में डायलिसिस होता है"
+    r = client.post("/api/translate", json={"claim_id": "c1:desc:0"}).json()
+    assert 1 < len(model.calls) <= t.MAX_CHUNKS and r["available"] is True
+    assert sorted(re.findall(r"[0-9]", r["hindi"])) == list("12345")  # every ward number restored
+
+
+def test_a_quote_too_long_for_the_budget_makes_no_call(model, monkeypatch):
+    monkeypatch.setattr(FakeEngine, "claims", {"c1:desc:0": ["description", (LONG + "; ") * 3, False, "x"]})
+    r = client.post("/api/translate", json={"claim_id": "c1:desc:0"}).json()
+    assert r["available"] is False and r["reason"] == "too_long_to_translate" and not model.calls
 
 
 def test_no_endpoint_or_timeout_is_unavailable(model, monkeypatch):
@@ -122,6 +170,7 @@ def test_no_endpoint_or_timeout_is_unavailable(model, monkeypatch):
 def test_rate_limit(model, monkeypatch):
     monkeypatch.setattr(t, "RATE_N", 2)
     monkeypatch.setattr(FakeEngine, "claims", {f"c{i}:capa:0": ["capability", QUOTE, False, "x"] for i in range(3)})
+    monkeypatch.setattr(FakeEngine, "fid", {})
     codes = [client.post("/api/translate", json={"claim_id": f"c{i}:capa:0"}).status_code for i in range(3)]
     assert codes == [200, 200, 429] and len(model.calls) == 2
 
@@ -130,7 +179,7 @@ def test_no_logging_of_the_text(model, caplog, capsys):
     with caplog.at_level(logging.DEBUG):
         client.post("/api/translate", json={"claim_id": "c1:equi:0"})
     seen = caplog.text + "".join(capsys.readouterr())
-    assert "Apollo" not in seen and "बेड" not in seen
+    assert "Apollo" not in seen and "बेड" not in seen and "⟦" not in seen
 
 
 def test_the_page_never_sends_text_and_keeps_the_original_on_top():
