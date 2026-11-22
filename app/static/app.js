@@ -202,7 +202,7 @@ function needScripts(srcs) {
       const el = document.querySelector(`script[src="${src}"]`) || document.head.appendChild(Object.assign(
         document.createElement('script'), {src}));
       el.addEventListener('load', () => { el.dataset.loaded = '1'; ok(); });
-      el.addEventListener('error', fail);
+      el.addEventListener('error', () => { el.remove(); fail(); });  // removed, so a later call retries
     })));
 }
 async function loadArea() {
@@ -1053,7 +1053,7 @@ async function bindPlan() {
     source: l.source, depth: 'quick'};
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 8000);
-  const routeJs = needScripts(['/route.js']).catch(() => {});  // fetched alongside the plan (not on first paint)
+  needScripts(['/route.js']).catch(() => {});  // fetched alongside the plan; render() re-renders when it arrives
   try {
     const r = await fetch('/api/plan', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body), redirect: 'manual', signal: ctl.signal});
@@ -1077,7 +1077,6 @@ async function bindPlan() {
   } finally {
     clearTimeout(timer);
   }
-  await routeJs;
   render();
 }
 
@@ -1564,11 +1563,18 @@ function callBar() {
   if (state.callObs) { state.callObs.disconnect(); state.callObs = null; }
   const card = $('#main article.answer'), call = card && card.querySelector('.call-main');
   if (!call || !('IntersectionObserver' in window) || !matchMedia('(max-height: 600px)').matches) return;
+  // During the call loop (#181) the card's Call is no longer the next action: no bar (it would redial option 1).
+  const c = state.call, p = state.plan;
+  if (c && c.plan === p && (c.stage !== 'dialing' || c.rank !== p.options[0].rank)) return;
   const bar = document.createElement('div');
   bar.id = 'call-bar';
   bar.className = 'call-bar';
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', ts('ans.call_first'));
   bar.hidden = true;
-  bar.innerHTML = call.outerHTML.replace(/ data-[fk]="[^"]*"/g, '').replace('call-main', 'call-fixed');
+  const name = ($('#main article.answer .name') || {}).textContent || '';
+  bar.innerHTML = call.outerHTML.replace(/ data-[fk]="[^"]*"/g, '').replace('call-main', 'call-fixed')
+    .replace('</a>', `<span class="visually-hidden" lang="en"> ${esc(name)}</span></a>`);
   document.body.appendChild(bar);
   let cardOn = false, callOn = false;
   state.callObs = new IntersectionObserver(es => {

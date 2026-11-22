@@ -139,7 +139,11 @@
         ${travelHtml(po.travel, 'public_option.travel')}.</p>` : ''}
       <div id="call-reason"></div></div>`;
   }
-  function showCallLoop() { const el = document.getElementById('call-loop'); if (el) el.innerHTML = callLoopHtml(state.plan); }
+  function showCallLoop() {
+    const el = document.getElementById('call-loop');
+    if (el) el.innerHTML = callLoopHtml(state.plan);
+    if (typeof callBar === 'function') callBar();  // app.js: the fixed Call bar steps aside during the loop
+  }
   /** The phone is back from the dialler: the four outcomes for the option just called. */
   function callBack() {
     const c = state.call;
