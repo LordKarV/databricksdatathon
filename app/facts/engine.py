@@ -198,6 +198,13 @@ SAY = {
     "NO_SERVICE_TEXT": "Its listing has no line of its own about {label} (it names it only in a list). "
                        "We will phone to ask before going.",
 }
+# When the map point is in doubt (#140 2b) the distance is not stated: it may be the wrong place's distance.
+SAY_DOUBT = {
+    "likely": "This hospital's listing says it offers {label}. Its map point may be wrong, so ask for the address. "
+              "We will phone before going.",
+    "mentions": "This hospital's listing mentions {label}, but we have not confirmed it. Its map point may be wrong, "
+                "so ask for the address. We will phone before going.",
+}
 LIKELY_FARTHER = ("It is rated Likely, but it is {n} min farther. In an emergency we phone the nearest plausible "
                   "place first and go on if they say no")
 
@@ -558,11 +565,14 @@ class Engine:
         """score(), or the caller's replacement for this facility (community/field.py's field-adjusted score)."""
         return (scores or {}).get(fid) or self.score(fid, service)
 
-    def say_to_family(self, pr: Pair, band: str, label: str, km: float) -> str:
-        """The family sentence by model_band, then by the shown band (field reports can lower a Likely card)."""
+    def say_to_family(self, pr: Pair, band: str, label: str, km: float, doubt: bool = False) -> str:
+        """The family sentence by model_band, then by the shown band (field reports can lower a Likely card). When the
+        map point is in doubt it names the doubt instead of a distance (Lucknow C-section: 'less than 1 km away' for a
+        listing whose map point is far from its PIN)."""
         if self.model_band(pr) == "NO_SERVICE_TEXT":
             return SAY["NO_SERVICE_TEXT"].format(label=label)
-        return SAY["likely" if band == "likely" else "mentions"].format(label=label, dist=km_words(km))
+        key = "likely" if band == "likely" else "mentions"
+        return SAY_DOUBT[key].format(label=label) if doubt else SAY[key].format(label=label, dist=km_words(km))
 
     def option(self, rank: int, pr: Pair, service: str, lat: float, lon: float, trav: dict,
                scores: dict | None = None) -> dict:
@@ -573,7 +583,7 @@ class Engine:
         url = self.cited_url(i)
         evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url,
                      "flags": self.quote_flags(c, i)} for c in ev]
-        say = self.say_to_family(pr, band, label, trav["km"])
+        say = self.say_to_family(pr, band, label, trav["km"], self._doubt(i))
         return {
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
