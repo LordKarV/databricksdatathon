@@ -17,7 +17,9 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
   echo "== build data files from derived/"
   # Planner first: app/facts/build.py copies the claims the planner cites, so route stops show quotes (#47).
   uv run --no-project "${UV_DEPS[@]}" python planner/export_v2.py
-  uv run --no-project "${UV_DEPS[@]}" python app/facts/build.py
+  # phonenumbers formats the shown phone numbers (national format) at build time only; it is not an app dependency
+  # and stays out of app/requirements.txt. Without it build.py warns and shows each listing's own spelling.
+  uv run --no-project "${UV_DEPS[@]}" --with phonenumbers python app/facts/build.py
   uv run --no-project "${UV_DEPS[@]}" python app/packs/build_packs.py
   # 'How this works' page data (#45): reads REPORT.md, model/MODEL_SPEC.md, research/DATASETS.md and the facts
   # export at build time, writes app/howto/out/how.json (the docs themselves are not bundled).
