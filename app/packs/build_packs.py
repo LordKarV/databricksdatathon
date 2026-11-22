@@ -30,6 +30,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -38,7 +39,9 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-DERIVED = ROOT / "derived" / "v1"
+# DATATHON_ROOT: the folder holding derived/v1 (the volume that submission/00_rebuild_derived.ipynb writes to);
+# default this repo. Same variable as app/facts/build.py and planner/data_v1.py (#86 step 2).
+DERIVED = Path(os.environ.get("DATATHON_ROOT") or ROOT) / "derived" / "v1"
 sys.path.insert(0, str(ROOT))
 from common.eligibility import (  # noqa: E402, RUF100
     eligible_facilities,
@@ -304,7 +307,7 @@ def self_check(pack: dict, n_pins: int) -> None:
                 assert q == -1 or pack["q"][q][0], "empty quote"
 
 
-def write_pin_index(pins: pd.DataFrame) -> None:
+def write_pin_index(pins: pd.DataFrame, out: Path) -> None:
     """All-India PIN -> state table for /api/pack/locate, written on every build (also partial ones), so the
     server resolves the right state even when that state's pack is not built."""
     p = pins.sort_values("pin").reset_index(drop=True)
@@ -313,7 +316,7 @@ def write_pin_index(pins: pd.DataFrame) -> None:
     obj = {"v": FORMAT_VERSION, "scale": PIN_SCALE, "states": [[slug(st), st] for st in states],
            "pin": delta(p.pin), "lat": delta(np.round(p.lat * PIN_SCALE)), "lon": delta(np.round(p.lon * PIN_SCALE)),
            "s": [sidx[st] for st in p.state]}
-    (OUT / "pin_index.json").write_text(json.dumps(obj, separators=(",", ":")) + "\n")
+    (out / "pin_index.json").write_text(json.dumps(obj, separators=(",", ":")) + "\n")
 
 
 def write_report(rows: list[dict]) -> None:
@@ -341,18 +344,21 @@ def main() -> int:
     ap.add_argument("--states", help="comma-separated state names (default: all)")
     ap.add_argument("--built", default=json.loads((DERIVED / "MANIFEST.json").read_text()).get("build_date", ""),
                     help="build date written into each pack")
+    ap.add_argument("--out", type=Path, default=OUT,
+                    help="output folder (default app/packs/out, which the app serves); size reports only for it")
     args = ap.parse_args()
+    out = args.out
     fac, svc, pins = load()
     states = args.states.split(",") if args.states else sorted(pins.state.unique())
     built = args.built or "unknown"
-    OUT.mkdir(exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     rows, index = [], {}
     for st in states:
         pack = build_state(st, pins, fac, svc, built)
         self_check(pack, int((pins.state == st).sum()))
         raw, gz = encode(pack)
         name = slug(st)
-        (OUT / f"{name}.json.gz").write_bytes(gz)
+        (out / f"{name}.json.gz").write_bytes(gz)
         index[name] = {"state": st, "gzip_bytes": len(gz), "sha256": hashlib.sha256(gz).hexdigest()[:16],
                        "built": built, "pts": state_points(st, fac, svc)}
         rows.append({"state": st, "slug": name, "built": built, "pins": len(pack["pins"]["d"]),
@@ -360,15 +366,15 @@ def main() -> int:
                      "quotes": len(pack["q"]), "lists": len(pack["lists"]),
                      "raw_bytes": len(raw), "gzip_bytes": len(gz)})
     # A partial build keeps the index entries of packs built earlier whose files are still there.
-    old_index = OUT / "index.json"
+    old_index = out / "index.json"
     if args.states and old_index.is_file():
         prev = json.loads(old_index.read_text()).get("packs", {})
-        index = {**{k: v for k, v in prev.items() if (OUT / f"{k}.json.gz").is_file()}, **index}
-    (OUT / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "pts_scale": PTS_SCALE, "packs": index},
+        index = {**{k: v for k, v in prev.items() if (out / f"{k}.json.gz").is_file()}, **index}
+    (out / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "pts_scale": PTS_SCALE, "packs": index},
                                                separators=(",", ":")) + "\n")
-    write_pin_index(pins)
+    write_pin_index(pins, out)
     rows.sort(key=lambda r: -r["gzip_bytes"])
-    if not args.states:
+    if not args.states and out == OUT:
         write_report(rows)
     for r in rows[:5]:
         print(f"{r['state']}: {r['gzip_bytes']:,} B gzip ({r['pins']} PINs, {r['facilities']} facilities)")
