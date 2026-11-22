@@ -28,6 +28,7 @@ STRINGS = {
     # #140 2b: the listed town is far from the map point (facts/build.py town_far); never emergency option 1
     "town_far": {"en": "Town and map point disagree; check the address",
                  "hi": "शहर और नक्शे की जगह मेल नहीं खाते; पता पक्का करें"},
+    "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
@@ -49,6 +50,17 @@ RANK_RULE = {
 WINDOW = {"emergency": 60, "urgent": 60, "scheduled": 120, "planned": 240}
 OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
+# Listed website the crawl could not check or flags unreliable (#117 A, BE-001; facts/build.py site_flags and
+# SITE_STATUS), en and hi like STRINGS above. "unchecked" is neutral and has no reason line; "unreliable" names its
+# reason (no_identity, other_org) in one short line. Neither site is ever cited as a source.
+SITE_STRINGS = {
+    "unchecked": {"en": "Listed website could not be checked", "hi": "लिस्टिंग की वेबसाइट जाँची नहीं जा सकी"},
+    "unreliable": {"en": "Listed website unreliable", "hi": "लिस्टिंग में दी गई वेबसाइट भरोसे लायक नहीं"},
+    "no_identity": {"en": "it opens, but no page on it names this facility",
+                    "hi": "वेबसाइट खुलती है, पर किसी पेज पर इस अस्पताल का नाम नहीं है"},
+    "other_org": {"en": "it may belong to another organisation", "hi": "यह किसी दूसरी संस्था की वेबसाइट हो सकती है"},
+    "not_cited": {"en": "We do not cite it as a source.", "hi": "हम इसे सबूत के तौर पर नहीं दिखाते।"},
+}
 # Tie-break from health-worker reports (#86, lead's rule): leading options in the same band whose shown p differ by
 # at most TIE_P and whose travel differs by at most TIE_TRAVEL_MIN are tied; only those are reordered, and only for
 # TIE_BREAK_PROFILES: scheduled and planned care. Emergency (#101) and urgent care (NICU: a sick newborn is
@@ -142,7 +154,7 @@ NEED_PLAIN = {
     "burn_unit_or_plastic_surgery": "a burn unit or plastic surgery",
 }
 # Why the call asks about cost, by the operator the card shows; None leaves the question out.
-COST_REASON = {"private": "private hospital, may charge", "public": None,
+COST_REASON = {"private": STRINGS["private_cost"]["en"], "public": None,
                "unknown": "our data does not say if it is public or private"}
 # Words that name each prerequisite in a quote. A call-ahead question never says "our data does not mention it"
 # when a quote on the card names it (#121: "Do you have a dialysis unit?" next to "Advanced Kidney Dialysis").
@@ -212,8 +224,9 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place", "town_far"):  # older exports: no source or town checks, no warnings
+        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status", "town_far"):  # older exports
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
+        self.site_check = facts.get("site_check") or {}
         self.pin_centre = {int(p): (la, lo) for p, la, lo in zip(self.pins["pin"], self.pins["lat"], self.pins["lon"],
                                                                  strict=True)}
         self.sha = sha
@@ -439,9 +452,32 @@ class Engine:
         out += [f'Ignored: "{self.claims[c][1]}" names another facility' for c in ignored]
         return out
 
+    def cited_url(self, i: int) -> str:
+        """The source page a quote links to; "" when that page is the listed website and the crawl flags it (#117 A)."""
+        if self._f("site_status", i) and self._f("url_site", i):
+            return ""
+        return self._f("url", i) or ""
+
+    def website(self, i: int) -> dict | None:
+        """{site_status, reason, label, reason_line, text} in en and hi when the listed website is not cited (#117 A,
+        BE-001); None otherwise. reason_line is None for "unchecked", which states no reason against the site."""
+        status, code = self._f("site_status", i), self._f("site_flag", i)
+        if not status:
+            return None
+        s, stop = SITE_STRINGS, {"en": ".", "hi": "।"}
+        label = dict(s[status])
+        if status == "unchecked":
+            return {"site_status": status, "reason": code, "label": label, "reason_line": None,
+                    "text": {k: f"{label[k]}{stop[k]} {s['not_cited'][k]}" for k in stop}}
+        line = {"en": s[code]["en"][:1].upper() + s[code]["en"][1:] + stop["en"], "hi": s[code]["hi"] + stop["hi"]}
+        return {"site_status": status, "reason": code, "label": label, "reason_line": line,
+                "text": {k: f"{label[k]}: {s[code][k]}{stop[k]} {s['not_cited'][k]}" for k in stop}}
+
     def _is_real(self, i: int) -> list[str]:
         out = []
-        if self._f("website_own", i):
+        if status := self._f("site_status", i):  # an unchecked or unreliable site is no sign it is real (#117 A)
+            out.append(SITE_STRINGS[status]["en"])
+        elif self._f("website_own", i):
             out.append("own website")
         if self._f("phone_e164", i):
             out.append("phone not shared with other listings" if self._f("phone_shared", i) <= 1
@@ -460,8 +496,8 @@ class Engine:
         fid = self._f("id", i)
         band, p, lo, hi, contrib, ev = self._scored(fid, service, scores)
         rule = self.rules.get(pr.rule, {"n": 0, "k_confirmed": 0, "k_contradicted": 0})
-        url = self._f("url", i)
-        evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url or "",
+        url = self.cited_url(i)
+        evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url,
                      "flags": self.quote_flags(c, i)} for c in ev]
         say = (f"This hospital's listing says it offers {label}. It is about {round(trav['km'])} kilometres away. "
                "We will phone before going.") if band == "likely" else (
@@ -487,7 +523,7 @@ class Engine:
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
             "track_record": self._track(p, rule),
-            "phone": self._phone(i), "is_real": self._is_real(i),
+            "phone": self._phone(i), "is_real": self._is_real(i), "website": self.website(i),
             "where_check": WHERE.get(self._f("loc_rule", i), "Location not checked"),
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},
         }

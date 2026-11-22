@@ -513,7 +513,8 @@ print(f"UNLIKELY needs p <= {bt['unlikely']['p']:.2f}{' (fallback value)' if th[
       f"{ul['k_correct']} of {ul['n']} UNLIKELY pairs contradicted (95% {ul['wilson95'][0]:.3f} to {ul['wilson95'][1]:.3f}).")
 print("rule:", bt["rule"])
 bands = card["bands_all_pairs"]
-print("all pairs by band:", ", ".join(f"{k} {v:,}" for k, v in bands.items()), f"(of {sum(bands.values()):,})")
+print("model, all scored pairs by band (frozen; every service):", ", ".join(f"{k} {v:,}" for k, v in bands.items()),
+      f"(of {sum(bands.values()):,})")
 for urgency, c in card["conformal"].items():
     print(f"conformal top-k, {urgency} ({', '.join(c['services'])}): list k = {c['k']}; a confirmed facility is "
           f"among them in {c['coverage_k']} of {c['n_queries']} DEV queries (95% from {c['coverage_wilson95'][0]:.2f}); "
@@ -676,7 +677,7 @@ from itinerary import attach
 
 ENGINE = Engine.load()
 print(f"engine loaded: {len(ENGINE.fid):,} facilities, {sum(len(v) for v in ENGINE.pairs.values()):,} "
-      f"facility-service pairs, {len(ENGINE.claims):,} quotable sentences; data {ENGINE.meta['source']} "
+      f"facility-service pairs the app serves, {len(ENGINE.claims):,} quotable sentences; data {ENGINE.meta['source']} "
       f"as of {ENGINE.meta['as_of']}")
 
 def recommend(service: str, lat: float, lon: float) -> dict:
@@ -696,8 +697,8 @@ def show(plan: dict, n: int = 3) -> None:
               f"{t['km']:.0f} km, about {t['low']}-{t['high']} min ({t['label']})")
         for e in o["evidence"][:2]:
             print(f'   WHY  "{e["quote"]}"  [{e["claim_id"]}]')
-        pts = " + ".join(f"{c['label']} {c['points']:+d}" for c in o["contributions"])
-        print(f"   HOW  {pts} = {sum(c['points'] for c in o['contributions']):+d} points")
+        pts = " + ".join(f"{c['label']} {c['points']:+g}" for c in o["contributions"])
+        print(f"   HOW  {pts} = {sum(c['points'] for c in o['contributions']):+g} points")
         if o.get("why_first_text"):
             print("   FIRST", o["why_first_text"])
         print("   ASK ", o["call_ahead"][0]["question"])

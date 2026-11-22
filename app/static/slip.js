@@ -204,7 +204,7 @@
         ${row(t.travel, travelHtml(go, t))}
         ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer">${F(go.path, go.map, 'mapsurl')}</a>`)}
         ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="und">${F(q.path + '.quote', q.text)}</span>"
-          <span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)})</span><span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
+          ${q.source ? `<span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)})</span>` : ''}<span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
         ${row(t.call, `<span data-device>${esc(outcomeText(m, t))}</span>`)}
         ${m.backup ? row(t.ifNot, `${F(m.backup.path + '.name', m.backup.name)}, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
         ${m.route ? row(t.route, `<ol>${m.route.map(g => `<li><strong>${F(g.path + '.name', g.name)}</strong>:
