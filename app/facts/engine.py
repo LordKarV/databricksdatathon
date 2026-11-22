@@ -146,7 +146,7 @@ class Engine:
               and self.claims[c][3] != "other_facility"]
         ev = sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
-            band, p, lo, hi = pr.model
+            band, p, lo, hi, *_ = pr.model
             return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
                                      *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
@@ -177,10 +177,13 @@ class Engine:
         From the model card's score bin when published (#82 H2). Before that, the evidence rule's hand checks, which
         recorded only confirmed and contradicted: k_no_info is None (not recorded), never a made-up 0.
         """
-        for b in self.track_bins:
-            if b["lo"] <= p < b["hi"] or (p == b["hi"] == 1):
-                return {**{k: b[k] for k in ("n", "k_confirmed", "k_contradicted", "k_no_info", "split")},
-                        "basis": f"score {b['lo']:.1f} to {b['hi']:.1f}"}
+        if self.track_bins:
+            # Equal-count bins have data-dependent edges and need not tile [0, 1] (#84 review): a p below the lowest
+            # edge, above the highest or in a gap takes the nearest bin, and the basis says which bin it was.
+            b = min(self.track_bins, key=lambda b: 0 if b["lo"] <= p <= b["hi"] else min(abs(p - b["lo"]),
+                                                                                          abs(p - b["hi"])))
+            return {**{k: b[k] for k in ("n", "k_confirmed", "k_contradicted", "k_no_info", "split")},
+                    "basis": f"score {b['lo']:.2f} to {b['hi']:.2f}"}
         return {"n": rule["n"], "k_confirmed": rule["k_confirmed"], "k_contradicted": rule["k_contradicted"],
                 "k_no_info": None, "split": "dev", "basis": "evidence rule"}
 
@@ -210,6 +213,10 @@ class Engine:
     # ---------- helpers ----------
     def _f(self, k: str, i: int):
         return self.fac[k][i]
+
+    def _operator(self, i: int) -> str:
+        ops = self.fac.get("operator")  # older facts files have no operator column
+        return ops[i] if ops else "unknown"
 
     def _travel(self, lat: float, lon: float, i: int, state: str | None = None) -> dict:
         return travel(lat, lon, self._f("lat", i), self._f("lon", i), state)
@@ -294,13 +301,15 @@ class Engine:
         return {
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
-            "address": self._address(i), "operator": "unknown",
+            "address": self._address(i), "operator": self._operator(i),
             "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav,
             "band": band, "band_word": BAND_WORDS[band],
             "band_reason": None if band == "likely" else (
                 "listing evidence not yet confirmed by a second source" if band == "not_verified"
                 else RULE_PLAIN.get(pr.rule, "contradicted by a second source")),
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
+            # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
+            "range_kind": "similar_scores" if pr.model else "interval",
             "p_e": self._f("p_e", i), "p_l": self._f("p_l", i),
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
@@ -341,7 +350,7 @@ class Engine:
         if best is None:
             return None
         i = best[1]
-        return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": "unknown",
+        return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": self._operator(i),
                 "text": "By the public standard a hospital at this level should offer it; not verified in our data.",
                 "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
 

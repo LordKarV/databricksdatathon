@@ -272,7 +272,8 @@ function trackHtml(tr, P) {
     return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
       `(${F(P + '.n', tr.n, 'num')} checked with a clear answer; checks that found nothing were not counted)`;
   }
-  return `Of ${F(P + '.n', tr.n, 'num')} listings like this we checked: ${F(P + '.k_confirmed', tr.k_confirmed, 'num')} ` +
+  return `Of ${F(P + '.n', tr.n, 'num')} listings like this (${F(P + '.basis', tr.basis)}) we checked: ` +
+    `${F(P + '.k_confirmed', tr.k_confirmed, 'num')} ` +
     `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
     `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
@@ -486,7 +487,7 @@ const COMPARE_ROWS = [
   ['Band', (o, P) => bandHtml(o, P)],
   ['Offers (range)', (o, P) => `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
-  ['Exists / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
+  ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
   ['Quote', (o, P) => o.evidence.length ? quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
   ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
@@ -677,8 +678,8 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, range
-      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}).
+    <h2>How sure</h2><p>${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
+      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min

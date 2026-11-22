@@ -29,7 +29,7 @@ def built(tmp_path_factory):
     g = pd.read_parquet(build.V1 / "grades.parquet", columns=["unique_id", "service"])
     v1_to_tax = {v: k for k, v in build.TAXONOMY_TO_V1.items()}
     g = g[g.service.isin(v1_to_tax) & g.unique_id.isin(fidx)]
-    fx = pd.DataFrame({"unique_id": g.unique_id, "service_id": g.service.map(v1_to_tax), "band": "not_verified",
+    fx = pd.DataFrame({"unique_id": g.unique_id, "service_id": g.service.map(v1_to_tax), "band": "CALL_FIRST",
                        "p": 0.5, "lo": 0.3, "hi": 0.7})
     fx = pd.concat([fx, fx.head(3).assign(service_id="snakebite")])  # a taxonomy service with no app tile
     path = tmp_path_factory.mktemp("v2") / "facility_service_scores.parquet"
@@ -69,4 +69,38 @@ def test_engine_track_record_three_outcomes_or_none():
     eng.track_bins = [{"lo": 0.5, "hi": 1.0, "n": 50, "k_confirmed": 20, "k_contradicted": 5, "k_no_info": 25,
                        "split": "dev"}]
     tr = Engine._track(eng, 1.0, rule)
-    assert (tr["n"], tr["k_no_info"], tr["basis"]) == (50, 25, "score 0.5 to 1.0")
+    assert (tr["n"], tr["k_no_info"], tr["basis"]) == (50, 25, "score 0.50 to 1.00")
+
+
+def test_v2_bands_map_to_the_app_bands(built):
+    bands = {r[14][0] for rows in built.values() for r in rows if r[14]}
+    assert bands == {"not_verified"} and all(r[14][4] == "CALL_FIRST" for rows in built.values() for r in rows)
+
+
+def test_unscored_pairs_are_dropped_and_low_coverage_fails():
+    m = pd.DataFrame({"service": ["dialysis"] * 10, "m_band": ["LIKELY"] * 9 + [None]})
+    assert len(build.v2_only(m)) == 9
+    with pytest.raises(SystemExit):
+        build.v2_only(pd.DataFrame({"service": ["dialysis"] * 10, "m_band": ["LIKELY"] * 5 + [None] * 5}))
+
+
+def test_track_bins_that_do_not_tile_take_the_nearest_bin():
+    # equal-count bins (MODEL_SPEC 4.3) have data-dependent edges with gaps and no 0 or 1 at the ends
+    from facts.engine import Engine
+    eng = Engine.__new__(Engine)
+    eng.track_bins = [{"lo": 0.12, "hi": 0.30, "n": 30, "k_confirmed": 3, "k_contradicted": 9, "k_no_info": 18,
+                       "split": "dev"},
+                      {"lo": 0.41, "hi": 0.88, "n": 30, "k_confirmed": 18, "k_contradicted": 2, "k_no_info": 10,
+                       "split": "dev"}]
+    rule = {"n": 12, "k_confirmed": 9, "k_contradicted": 3}
+    assert Engine._track(eng, 0.05, rule)["basis"] == "score 0.12 to 0.30"   # below the lowest edge
+    assert Engine._track(eng, 0.95, rule)["basis"] == "score 0.41 to 0.88"   # above the highest
+    assert Engine._track(eng, 0.33, rule)["basis"] == "score 0.12 to 0.30"   # in the gap, nearer the first
+    assert Engine._track(eng, 0.60, rule)["k_confirmed"] == 18
+
+
+def test_operator_comes_from_v2_attributes():
+    if not build.ATTRS.is_file():
+        pytest.skip("derived/v2 facility_attributes not present")
+    f, _ = build.facilities()
+    assert set(f.operator) <= {"public", "private", "unknown"} and (f.operator == "public").sum() > 100
