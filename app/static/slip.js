@@ -214,15 +214,15 @@
       ${m.stub ? '<p class="small" lang="en"><strong>Sample data, not a real referral.</strong></p>' : ''}
       <table class="slip-table"><tbody>
         ${row(t.service, F('query.service_label.' + svcKey, m.service[svcKey]))}
-        ${row(t.go, `<strong>${F(go.path + '.name', go.name)}</strong><br>${F(go.path + '.' + go.addrKey, go.address)}`)}
+        ${row(t.go, `<strong lang="en">${F(go.path + '.name', go.name)}</strong><br><span lang="en">${F(go.path + '.' + go.addrKey, go.address)}</span>`)}
         ${row(t.phone, phoneHtml(go) || esc(t.noPhone))}
         ${row(t.travel, travelHtml(go, t, lang))}
-        ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer">${F(go.path, go.map, 'mapsurl')}</a>`)}
-        ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="und">${F(q.path + '.quote', q.text)}</span>"
-          ${q.source ? `<span class="small">(${esc(t.source)}: ${F(q.path + '.source_url', q.source)})</span>` : ''}<span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
+        ${row(t.map, `<a href="${esc(go.map)}" rel="noopener noreferrer" lang="en">${F(go.path, go.map, 'mapsurl')}</a>`)}
+        ${m.quotes.length ? row(t.why, `${esc(t.listing)}:<ul>${m.quotes.map(q => `<li>"<span lang="en">${F(q.path + '.quote', q.text)}</span>"
+          ${q.source ? `<span class="small">(${esc(t.source)}: <span lang="en">${F(q.path + '.source_url', q.source)}</span>)</span>` : ''}<span hidden>${F(q.path + '.claim_id', q.claim)}</span></li>`).join('')}</ul>`) : ''}
         ${row(t.call, `<span data-device>${esc(outcomeText(m, t))}</span>`)}
-        ${m.backup ? row(t.ifNot, `${F(m.backup.path + '.name', m.backup.name)}, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
-        ${m.route ? row(t.route, `<ol>${m.route.map(g => `<li><strong>${F(g.path + '.name', g.name)}</strong>:
+        ${m.backup ? row(t.ifNot, `<span lang="en">${F(m.backup.path + '.name', m.backup.name)}</span>, ${F(m.backup.path + '.travel.km', m.backup.km, 'num')} ${esc(t.km)}. ${esc(t.phone)}: ${phoneHtml(m.backup) || esc(t.noPhone)}`) : ''}
+        ${m.route ? row(t.route, `<ol>${m.route.map(g => `<li><strong lang="en">${F(g.path + '.name', g.name)}</strong>:
           ${g.stages.map(x => `${lang === 'hi' ? E(x.path + '.purpose_word', x.purpose, lang) : F(x.path + '.purpose_word', x.purpose)}${x.dwell != null
             ? ` (${esc(t.stay)} ${F(x.path + '.dwell_minutes', durText(x.dwell, lang), 'dur')})` : ''}`).join(', ')}.
           ${esc(t.about)} ${F(g.path + '.eta_low', g.low, 'num')}-${F(g.path + '.eta_high', g.high, 'num')} ${esc(t.min)}.

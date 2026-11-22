@@ -25,7 +25,10 @@ function esc(s) {
 const $ = sel => document.querySelector(sel);
 const svc = key => SERVICES.find(s => s.key === key);
 function announce(text) { $('#status').textContent = ''; setTimeout(() => { $('#status').textContent = text; }, 50); }
-function timeStr(t) { return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN', {hour: '2-digit', minute: '2-digit'}); }
+function timeStr(t) {  // Hindi: 24-hour (Chromium's hi-IN data writes a Latin am/pm)
+  return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN',
+    state.lang === 'hi' ? {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'} : {hour: '2-digit', minute: '2-digit'});
+}
 const locale = () => (state.lang === 'hi' ? 'hi-IN' : 'en-IN');
 
 // ---------- strings ----------
@@ -53,7 +56,7 @@ function phoneLang() { return (navigator.language || '').toLowerCase().startsWit
 // the reviewed template from hi.json "engine" is shown, marked data-k="template" with the payload path; a sentence
 // joined with "; " is translated clause by clause; text with no template stays English, marked lang="en".
 const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-function engHi(text, q) {
+function engHi(text, q, mark = false) {
   const map = (I18N.hi || {}).engine || {};
   const one = part => {
     if (map[part] != null) return map[part];
@@ -66,7 +69,10 @@ function engHi(text, q) {
       const m = part.match(new RegExp('^' + pat + '$'));
       if (!m) continue;
       const vals = {label: q ? q.service_label.hi : ''};
-      names.forEach((n, i) => { vals[n] = n === 'need' && (map._needs || {})[m[i + 1]] || m[i + 1]; });
+      names.forEach((n, i) => {
+        const hi = n === 'need' && (map._needs || {})[m[i + 1]];
+        vals[n] = hi || (mark && /[A-Za-z]/.test(m[i + 1]) ? '\u0001' + m[i + 1] + '\u0002' : m[i + 1]);
+      });
       return v.replace(/\{(\w+)\}/g, (_, n) => vals[n] ?? '');
     }
     return null;
@@ -78,8 +84,9 @@ function engHi(text, q) {
 }
 function E(path, text, q = curQuery()) {
   if (state.lang !== 'hi') return F(path, text);
-  const hi = engHi(String(text), q);
-  return hi != null ? `<span data-f="${path}" data-k="template">${esc(hi)}</span>` : `<span lang="en">${F(path, text)}</span>`;
+  const hi = engHi(String(text), q, true);
+  const html = hi == null ? '' : esc(hi).replace(/\u0001/g, '<span lang="en">').replace(/\u0002/g, '</span>');
+  return hi != null ? `<span data-f="${path}" data-k="template">${html}</span>` : `<span lang="en">${F(path, text)}</span>`;
 }
 const curQuery = () => (state.plan && state.plan.query) || (state.area && state.area.query) || null;
 
@@ -490,11 +497,12 @@ function trackBar(tr) {
 // copies from model/gold/v3/test_eval/results.json.
 function testRecordHtml(tr) {
   if (!tr) return '';
-  const M = k => F('meta.test_record.' + k, tr[k], ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k) ? 'num' : 'text');
+  const num = k => ['k', 'n', 'pct', 'lo_pct', 'hi_pct', 'public_n'].includes(k);
+  const M = k => (num(k) ? F('meta.test_record.' + k, tr[k], 'num') : `<span lang="en">${F('meta.test_record.' + k, tr[k])}</span>`);
   return `<div class="test-record"><p class="note"><strong>${th('test.h')}</strong>: ${th('test.line', {k: M('k'), n: M('n'),
     pct: M('pct'), lo: M('lo_pct'), hi: M('hi_pct'), pub: M('public_n')})}</p>
     <details class="note"><summary>${th('test.hashes')}</summary>
-      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: M('opened')})}
+      <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: `<span lang="en">${F('meta.test_record.opened', tr.opened)} UTC</span>`})}
       ${th('test.results')}: ${M('source')}.</p>
       <p>${th('test.model_version')} <code>${M('model_version')}</code><br>${th('test.pred_hash')}
         <code>${M('predictions_sha256')}</code><br>${th('test.label_hash')} <code>${M('labels_sha256')}</code></p>
@@ -548,8 +556,9 @@ function changeHtml(p) {
   if (!c) return '';
   const d = deltaHtml('what_would_change.minutes_vs_first', c.minutes_vs_first);
   const line = c.kind === 'confirm_nearer'
-    ? th('whynot.confirm_nearer', {name: F('what_would_change.name', c.name), label: labelF(p.query), d})
-    : th('whynot.first_says_no', {first: F('what_would_change.first_name', c.first_name), name: F('what_would_change.name', c.name), d});
+    ? th('whynot.confirm_nearer', {name: `<span lang="en">${F('what_would_change.name', c.name)}</span>`, label: labelF(p.query), d})
+    : th('whynot.first_says_no', {first: `<span lang="en">${F('what_would_change.first_name', c.first_name)}</span>`,
+      name: `<span lang="en">${F('what_would_change.name', c.name)}</span>`, d});
   return `<p><strong>${th('whynot.change_h')}</strong> ${line}</p>`;
 }
 // The answer's first line when option 1 misses the service's time window (#86, lead's decision on the issue): say so,
@@ -561,7 +570,7 @@ function windowHtml(p) {
   return `<section class="panel window-miss" aria-label="${th('window.label')}">
     <p><strong>${th('window.miss', {min: N('options.0.travel.minutes', p.options[0].travel.minutes), win: N('time_window.window_min', w.window_min)})}</strong></p>
     <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
-    ${po ? `<p>${th('window.public', {name: `<strong>${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+    ${po ? `<p>${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
       ${travelHtml(po.travel, 'public_option.travel')}.</p>` : `<p>${th('window.no_public')}</p>`}
   </section>`;
 }
@@ -654,14 +663,15 @@ function stopHtml(r, g, P) {
       ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
       <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
         ${evidenceHtml(s, S)}</details>
-      ${s.fallback ? `<p class="note">${th('route.fallback', {name: F(S + '.fallback.name', s.fallback.name),
+      ${s.fallback ? `<p class="note">${th('route.fallback', {name: `<span lang="en">${F(S + '.fallback.name', s.fallback.name)}</span>`,
         eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: N(S + '.fallback.p', s.fallback.p.toFixed(2))})}</p>` : ''}
+      ${s.note ? `<p class="note">${E(S + '.note', s.note)}</p>` : ''}
       ${s.flags.map((f, j) => `<p class="note">${E(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
   }).join('');
   const phone = ph ? `<a href="tel:${esc(ph)}">${th('route.call', {phone: F(S0 + '.phone.' + (s0.phone.display ? 'display' : 'e164'), s0.phone.display || ph)})}</a>`
     : s0.phone && s0.phone.display ? th('route.phone', {phone: F(S0 + '.phone.display', s0.phone.display)}) : th('route.no_phone');
   return `<li><p class="stop-name"><strong lang="en">${F(S0 + '.name', s0.name)}</strong></p>
-    <p class="note">${s0.place ? F(S0 + '.place', s0.place) + '. ' : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
+    <p class="note">${s0.place ? `<span lang="en">${F(S0 + '.place', s0.place)}</span>. ` : ''}${th('route.arrive', {low: N(S0 + '.eta_low', s0.eta_low), high: N(S0 + '.eta_high', s0.eta_high)})}
       ${phone}</p>
     <ul>${stages}</ul></li>`;
 }
@@ -674,7 +684,8 @@ function routePlanHtml(r, P) {
       treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p>` : ''}
     ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
     ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
-      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
+      ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}
+    ${v && v.direct_minutes != null ? `<p class="note">${th('route.direct', {n: N(P + '.vs_direct.direct_minutes', v.direct_minutes)})}</p>` : ''}`;
 }
 function checkHtml(c, C, full) {
   return `<p class="window${c.met ? '' : ' miss'}">${icon(c.met ? 'ok' : 'warn')}<span>${th(full ? 'route.check' : 'route.check_short', {
@@ -713,7 +724,8 @@ function routeHtml(p) {
   if (!it) return p.itinerary_note ? `<p class="panel note">${E('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2 id="h-route">${th('route.h')}</h2>
     <p class="note">${th('route.intro', {name: E('itinerary.pathway_name', it.pathway_name)})}</p>
-    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
+    ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}
+    ${it.itinerary_note ? `<p class="note">${E('itinerary.itinerary_note', it.itinerary_note)}</p>` : ''}`;
   if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
   if (!it.plans.length) return '';
   const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
@@ -727,7 +739,8 @@ function routeHtml(p) {
   const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
   return `<section class="section" aria-labelledby="h-route">${head}
     <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
-      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}${legend}
+      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}
+      ${r.vs_direct && r.vs_direct.text ? `<p class="vs-direct-main">${E(P + '.vs_direct.text', r.vs_direct.text)}</p>` : ''}${legend}
       <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
 }
 
@@ -1149,7 +1162,7 @@ function whyScreen(rank) {
         : `<p class="panel">${th('why.no_dial')}</p>`}
       <div class="pair">${RSInput.speakHtml()}</div><p id="speak-note" class="note" aria-live="polite"></p>
       <ol class="script">
-        <li>${th('script.is_this', {name: `<span lang="en">${F(P + '.name', o.name)}</span>`, town: F(P + '.town', o.town)})}</li>
+        <li>${th('script.is_this', {name: `<span lang="en">${F(P + '.name', o.name)}</span>`, town: `<span lang="en">${F(P + '.town', o.town)}</span>`})}</li>
         <li>${th('script.need', {label: labelF(p.query)})}</li>
         ${o.call_ahead.map((c, j) => `<li>${E(`${P}.call_ahead.${j}.question`, c.question)}
           <span class="because">${th('why.ask_because', {why: E(`${P}.call_ahead.${j}.asked_because`, c.asked_because)})}</span></li>`).join('')}
