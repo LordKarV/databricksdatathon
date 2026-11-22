@@ -11,13 +11,13 @@ from fastapi.testclient import TestClient
 
 APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
-import app as app_module
 import errors
 import outcomes
 from community import pulse as area_pulse
 from inputs import understand
 from voice import transcribe as voice
 
+import app as app_module
 from app import app
 
 client = TestClient(app)
