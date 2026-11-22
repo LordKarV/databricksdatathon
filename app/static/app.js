@@ -302,10 +302,27 @@ function travelHtml(t, P) {
 function bandHtml(o, P) {
   // derived/v2 sub-bands of "Not verified": the listing describes the service but nothing confirms it (CALL FIRST),
   // or the listing has no sentence about the service at all (NO SERVICE TEXT; its p is not shown as a chance)
-  const word = o.model_band === 'NO_SERVICE_TEXT' ? 'NO SERVICE TEXT: call to ask' :
-    o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  const path = o.model_band === 'NO_SERVICE_TEXT' ? `${P}.model_band` : `${P}.band`;
-  return `<span class="band band-${o.band}" data-f="${path}" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+  if (o.model_band === 'NO_SERVICE_TEXT') return noTextBandHtml(o, P, state.plan.query);
+  const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
+  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+}
+// NO SERVICE TEXT names the service (#118): "NO SERVICE TEXT" next to general emergency quotes read as a contradiction
+// on camera. The fixed words are the band (data-k band), the service label is the payload's own (query.service_label).
+const SL = 'query.service_label';
+function noTextBandHtml(o, P, q) {
+  return `<span class="band band-${o.band}"><span aria-hidden="true">${BAND_ICON[o.band]}</span>
+    <span><span data-f="${P}.model_band" data-k="band">No line about</span> ${F(SL + '.en', q.service_label.en)}: call to ask</span></span>
+    <span class="small" lang="hi">(${F(SL + '.hi', q.service_label.hi)} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902 \u0932\u093f\u0916\u093e, \u092a\u0939\u0932\u0947 \u092b\u093c\u094b\u0928 \u0915\u0930\u0915\u0947 \u092a\u0942\u091b\u0947\u0902)</span>`;
+}
+// Caption above the quotes of a NO SERVICE TEXT option: they are the listing's general lines, not about the service.
+// Trauma's are general emergency lines (v1 cites emergency sentences for it); other services get the plain form.
+function noTextCaptionHtml(o, q) {
+  if (o.model_band !== 'NO_SERVICE_TEXT' || !o.evidence.length) return '';
+  const en = F(SL + '.en', q.service_label.en), hi = F(SL + '.hi', q.service_label.hi);
+  const line = q.service === 'trauma_emergency'
+    ? `General emergency lines, not about ${en} <span lang="hi">(\u0907\u092e\u0930\u091c\u0947\u0902\u0938\u0940 \u0915\u0940 \u0906\u092e \u092c\u093e\u0924\u0947\u0902, ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0928\u0939\u0940\u0902)</span>`
+    : `Lines from the listing, none about ${en} on its own <span lang="hi">(\u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0940 \u092c\u093e\u0924\u0947\u0902, \u0907\u0928\u092e\u0947\u0902 ${hi} \u0915\u0947 \u092c\u093e\u0930\u0947 \u092e\u0947\u0902 \u0905\u0932\u0917 \u0938\u0947 \u0915\u0941\u091b \u0928\u0939\u0940\u0902)</span>`;
+  return `<p class="small quote-caption">${line}</p>`;
 }
 // Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
 function quoteFlagsHtml(e, P) {
@@ -374,7 +391,7 @@ function card(o, label, i) {
     <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
-    ${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
+    ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
@@ -587,7 +604,7 @@ const COMPARE_ROWS = [
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
   ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
-  ['Quote', (o, P) => o.evidence.length ? quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
+  ['Quote', (o, P) => o.evidence.length ? noTextCaptionHtml(o, state.plan.query) + quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
   ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
   ['Phone', (o, P) => !o.phone || !o.phone.e164 ? 'no number in our data'
     : o.phone.shared_listings > 1 ? `shared by ${F(P + '.phone.shared_listings', o.phone.shared_listings, 'num')} listings` : 'number on file, not shared'],
@@ -798,7 +815,7 @@ function whyScreen(rank) {
     <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
     <h2>From its own listing</h2>
-    ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
+    ${noTextCaptionHtml(o, p.query)}${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
       : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
     <h2>Check the website now</h2>

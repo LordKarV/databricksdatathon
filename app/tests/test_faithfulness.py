@@ -49,8 +49,10 @@ sys.path.insert(0, str(APP))
 from facts.redact import redact_names  # noqa: E402, RUF100
 from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
+# NO_SERVICE_TEXT (derived/v2 sub-band, from options.N.model_band) names the service (#118): "No line about" is the
+# band's marked part, the label after it is marked query.service_label.en, and ": call to ask" is fixed text.
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
-              "NO_SERVICE_TEXT": "NO SERVICE TEXT: call to ask"}  # derived/v2 sub-band, shown from options.N.model_band
+              "NO_SERVICE_TEXT": "No line about"}
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
@@ -559,6 +561,21 @@ def test_sealed_test_record_equals_the_results_file():
         assert how == want
 
 
+def check_no_text(payload: dict, text: str) -> list[str]:
+    """A NO SERVICE TEXT option (#118): its chip names the service, and a caption above its quotes says they are not
+    about the service, so general emergency lines do not read as contradicting the chip."""
+    label = payload["query"]["service_label"]["en"]
+    errs = []
+    for o in payload["options"]:
+        if o.get("model_band") != "NO_SERVICE_TEXT":
+            continue
+        if f"No line about {label}: call to ask" not in text:
+            errs.append(f"{o['name']}: NO SERVICE TEXT chip does not name {label!r}")
+        if o["evidence"] and not re.search(rf"\b(?:not|none) about {re.escape(label)}\b", text):
+            errs.append(f"{o['name']}: quotes of a NO SERVICE TEXT option have no caption")
+    return errs
+
+
 def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
     """Tie-break (#86): a tied option's why page has the named row, with the rule and every tied option's value
     marked; an option outside the tie (or a plan without one) has no such row."""
@@ -610,6 +627,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
+        errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]

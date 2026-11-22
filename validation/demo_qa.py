@@ -4,7 +4,9 @@
 
 Prints counts and examples for: unredacted doctor names in shown quotes, citations flagged as a page about another
 place, option names of an unrelated specialty (eye, dental, IVF ...), and first options outside the time window.
-Exit code 1 when a doctor name or an other-place citation is shown; the rest are for a human to read.
+Also (#118): a shown option's first quote, the one its card shows, is never flagged as a page about another place.
+Exit code 1 when a doctor name, an other-place citation or an other-place first quote is shown; the rest are for a
+human to read.
 """
 import collections
 import re
@@ -25,10 +27,16 @@ NAMED = re.compile(r"\b(?:Dr|DR|Prof)\b\.?\s*[A-Z][a-z]+\s+[A-Z][a-z]+")
 MISMATCH = re.compile(r"\b(eye|netra|netralaya|dental|dentist|skin|derma|ayurved|homoeo|homeo|physio|vet|veterinary"
                       r"|ivf|fertility)\b", re.I)
 issues = collections.defaultdict(list)
+n_first = 0  # shown options with at least one quote: the first-quote check's denominator
 for place, (la, lo) in PTS.items():
     for s in SERVICES:
         p = itinerary.attach(e.plan(s, la, lo, 40, "gps"), e)
         for k, o in enumerate(p["options"]):
+            if o["evidence"]:
+                n_first += 1
+                first = o["evidence"][0]
+                if any(f["code"] == "src_other_place" for f in first.get("flags", [])):
+                    issues["first quote flagged other-place"].append((place, s, k + 1, o["name"], first["claim_id"]))
             if MISMATCH.search(o["name"]):
                 issues["mismatched specialty option"].append((place, s, k + 1, o["name"], o["band"]))
             for ev in o["evidence"]:
@@ -53,9 +61,11 @@ for place, (la, lo) in PTS.items():
             row = (place, s, first, tw["window_min"], bool(p.get("public_option")))
             issues["first option outside window"].append(row)
 for k in ("unredacted name", "unredacted name in route", "other-place source (flagged)",
-          "mismatched specialty option", "mismatched specialty route stop", "first option outside window"):
-    print(f"== {k}: {len(issues[k])}")
+          "first quote flagged other-place", "mismatched specialty option", "mismatched specialty route stop",
+          "first option outside window"):
+    of = f" of {n_first} shown options with a quote" if k == "first quote flagged other-place" else ""
+    print(f"== {k}: {len(issues[k])}{of}")
     for x in issues[k][:12]:
         print("  ", x)
 sys.exit(1 if issues["unredacted name"] or issues["unredacted name in route"]
-         or issues["other-place source (flagged)"] else 0)
+         or issues["other-place source (flagged)"] or issues["first quote flagged other-place"] else 0)
