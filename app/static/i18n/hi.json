@@ -633,5 +633,23 @@
   "trauma centre": "ट्रॉमा सेंटर",
   "obstetrics": "प्रसव की सुविधा",
   "anaesthesia": "बेहोशी के डॉक्टर"
- }
+ },
+ "area.need.h": "ज़िले की जानकारी",
+ "area.need.people": "{district} ज़िले में लगभग {people} लोग रहते हैं।",
+ "area.need.listings": "हमारे डेटा में इस ज़िले की {n} लिस्टिंग हैं: हर दस लाख लोगों पर {per_m}, जबकि पूरे भारत में {india}।",
+ "area.need.nfhs": "{district} के लिए NFHS-5 सर्वे, ज़िले का अनुमान, अस्पतालों का डेटा नहीं:",
+ "area.need.cs": "{cs}% डिलीवरी ऑपरेशन से हुईं।",
+ "area.need.cs_split": "सरकारी अस्पतालों में {pub}%, जबकि प्राइवेट में {priv}%।",
+ "area.need.inst": "{inst}% डिलीवरी अस्पताल या स्वास्थ्य केंद्र में हुईं।",
+ "area.need.headline": "अगर {name} फ़ोन पर हाँ कहे, तो {n} में से {k} PIN क्षेत्रों में {w} मिनट के अंदर इलाज मिलेगा (अभी {now})।",
+ "area.need.headline_all": "जाँचे गए सभी {n} PIN क्षेत्रों में {w} मिनट के अंदर संभावना ज़्यादा वाली जगह पहले से है।",
+ "area.need.headline_none": "किसी फ़ोन से कोई PIN क्षेत्र नहीं जुड़ेगा: बाकी क्षेत्रों से {w} मिनट के अंदर कोई लिस्टिंग यह इलाज देने की बात नहीं कहती।",
+ "area.need.sources": "स्रोत: {list}।",
+ "area.gov.h": "सरकारी सूचियाँ",
+ "area.gov.laqshya": "{name}: प्रसव ऑपरेशन थिएटर के लिए LaQshya प्रमाणपत्र, {date} तक मान्य।",
+ "area.gov.laqshya_expired": "{name}: प्रसव ऑपरेशन थिएटर का LaQshya प्रमाणपत्र, {date} को खत्म हो चुका।",
+ "area.gov.pmndp": "मुफ़्त डायलिसिस योजना (PMNDP): {state} के {total} में से {working} ज़िलों में {centres} सरकारी केंद्र चल रहे हैं।",
+ "area.gov.none": "NHSRC की सूची में इस ज़िले में LaQshya प्रमाणपत्र वाला कोई प्रसव ऑपरेशन थिएटर नहीं।",
+ "area.need.cs_public": "सरकारी अस्पतालों में {pub}%।",
+ "area.need.cs_private": "प्राइवेट अस्पतालों में {priv}%।"
 }
