@@ -5,24 +5,27 @@ the quote comes from the engine's own claims, so no client text ever reaches the
 and stays the evidence; the translation is shown under it with a label.
 
 Names, numbers and terms never reach the model as words: protect() swaps each for a placeholder (⟦1⟧, ⟦2⟧, ...) and
-restore() puts the original span back after the reply, so the model cannot transliterate "Hazaribagh" or turn 20
-into २०. The guard shows a translation only when every placeholder comes back exactly once, no digit is added, the
+restore() puts the span back after the reply, so the model cannot transliterate "Hazaribagh" or turn 20 into २०.
+Clinical terms (medical_terms.json) are masked the same way but come back as their one fixed Hindi rendering, so
+"Caesarean section" is always "ऑपरेशन से डिलीवरी", never a model's guess. The guard shows a translation only when every placeholder comes back exactly once, no digit is added, the
 rest is mostly Devanagari, no word mixes scripts, and it is at most 3x the source. Same endpoint and client as
 /api/parse. Nothing here logs the quote or the translation.
 """
 from __future__ import annotations
 
+import json
 import os
 import re
 import threading
 import time
 from collections import Counter, OrderedDict, deque
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 from inputs.understand import ModelUnavailable, _strict, call_model
 
 TIMEOUT_S = 8
-PROMPT_VERSION = "3"  # part of the cache key with the endpoint name: a new prompt or model never reuses old answers
+PROMPT_VERSION = "4"  # part of the cache key with the endpoint name: a new prompt or model never reuses old answers
 CACHE_MAX = 5000
 RATE_N, RATE_WINDOW_S = 30, 60  # model calls per user per minute; one shared bucket when the user is unknown
 MAX_LEN_RATIO = 3
@@ -39,12 +42,23 @@ SYSTEM = (
 )
 # One worked example; test_translate.py checks that protect() masks EXAMPLE_SRC to the user turn below.
 EXAMPLE_SRC = "MRI and CT scan available 24x7 at Apollo Hospital, Patna, with 20 ICU beds"
-EXAMPLE = [{"role": "user", "content": "⟦1⟧ and ⟦2⟧ scan available ⟦3⟧ at ⟦4⟧, ⟦5⟧, with ⟦6⟧ ⟦7⟧ beds"},
-           {"role": "assistant", "content": '{"hindi": "⟦4⟧ , ⟦5⟧ में ⟦1⟧ और ⟦2⟧ स्कैन ⟦3⟧ उपलब्ध है, और ⟦6⟧ ⟦7⟧ '
-                                            'बेड हैं"}'}]
+EXAMPLE = [{"role": "user", "content": "⟦1⟧ and ⟦2⟧ available ⟦3⟧ at ⟦4⟧, ⟦5⟧, with ⟦6⟧ ⟦7⟧ ⟦8⟧"},
+           {"role": "assistant", "content": '{"hindi": "⟦4⟧ , ⟦5⟧ में ⟦1⟧ और ⟦2⟧ ⟦3⟧ उपलब्ध है, और ⟦6⟧ ⟦7⟧ ⟦8⟧ हैं"}'}]
 SCHEMA = {"type": "object", "additionalProperties": False, "required": ["hindi"],
           "properties": {"hindi": {"type": "string"}}}
 
+_SEP = re.compile(r"[\s-]+")
+
+
+def _terms() -> tuple[dict[str, str], str]:
+    """Variant (lower case, single spaces) -> fixed Hindi, and one alternation of all variants, longest first."""
+    doc = json.loads((Path(__file__).with_name("medical_terms.json")).read_text(encoding="utf-8"))
+    hi = {_SEP.sub(" ", v.lower()): t["hi"] for t in doc["terms"] for v in t["en"]}
+    alts = [r"[\s-]+".join(re.escape(w) for w in v.split(" ")) for v in sorted(hi, key=len, reverse=True)]
+    return hi, "|".join(alts)
+
+
+TERM_HI, _TERM_ALTS = _terms()
 _NUM = r"[0-9][0-9,]*(?:\.[0-9]+)?"  # 5,000 and 1.5 stay one span
 _MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October|November|December|"
           r"Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)\.?")
@@ -68,19 +82,21 @@ _MIXED = re.compile(r"[\u0900-\u097F][A-Za-z]|[A-Za-z][\u0900-\u097F]")  # one w
 
 
 def protect(src: str, keep: tuple[str, ...] = ()) -> tuple[str, list[str]]:
-    """(src with each protected span replaced by ⟦n⟧, the spans in order).
+    """(src with each protected span replaced by ⟦n⟧, what each ⟦n⟧ restores to, in order).
 
-    keep: the facility's own name and city, protected wherever they appear (any case). A single capitalised word
-    opening a sentence ("Offers", "Burns") is as often an ordinary word as a name, so the model translates it.
+    keep: the facility's own name and city, protected wherever they appear (any case). Clinical terms come next and
+    are listed by their fixed Hindi rendering. A single capitalised word opening a sentence ("Offers") is as often
+    an ordinary word as a name, so the model translates it.
     """
     names = "|".join(re.escape(k) for k in sorted({k for k in keep if k and len(k) > 2}, key=len, reverse=True))
-    pat = re.compile((rf"(?P<keep>(?i:(?<![\w])(?:{names})(?![\w])))|" if names else "") + _SPANS)
+    pat = re.compile((rf"(?P<keep>(?i:(?<![\w])(?:{names})(?![\w])))|" if names else "")
+                     + rf"(?P<term>(?i:(?<![\w])(?:{_TERM_ALTS})(?![\w])))|" + _SPANS)
     spans: list[str] = []
 
     def sub(m: re.Match[str]) -> str:
         if m.lastgroup == "one" and _SENTENCE_OPEN.search(src[:m.start()]):
             return m.group(0)
-        spans.append(m.group(0))
+        spans.append(TERM_HI[_SEP.sub(" ", m.group(0).lower())] if m.lastgroup == "term" else m.group(0))
         return f"⟦{len(spans)}⟧"
 
     return pat.sub(sub, src), spans

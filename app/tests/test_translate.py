@@ -20,10 +20,10 @@ import app as app_module
 
 client = TestClient(app_module.app)
 QUOTE = "Apollo Hospital has a 1.5 Tesla MRI and 20 ICU beds, open 24x7"
-MASKED = "⟦1⟧ has a ⟦2⟧ ⟦3⟧ and ⟦4⟧ ⟦5⟧ beds, open ⟦6⟧"
-SPANS = ["Apollo Hospital", "1.5 Tesla", "MRI", "20", "ICU", "24x7"]
-REPLY = "⟦1⟧ में ⟦2⟧ ⟦3⟧ और ⟦4⟧ ⟦5⟧ बेड हैं, ⟦6⟧ खुला"
-GOOD = "Apollo Hospital में 1.5 Tesla MRI और 20 ICU बेड हैं, 24x7 खुला"
+MASKED = "⟦1⟧ has a ⟦2⟧ ⟦3⟧ and ⟦4⟧ ⟦5⟧ ⟦6⟧, open ⟦7⟧"
+SPANS = ["Apollo Hospital", "1.5 Tesla", "MRI", "20", "ICU", "बेड", "24 घंटे"]  # terms restore to fixed Hindi
+REPLY = "⟦1⟧ में ⟦2⟧ ⟦3⟧ और ⟦4⟧ ⟦5⟧ ⟦6⟧ हैं, ⟦7⟧ खुला"
+GOOD = "Apollo Hospital में 1.5 Tesla MRI और 20 ICU बेड हैं, 24 घंटे खुला"
 
 
 class FakeEngine:
@@ -60,14 +60,25 @@ def model(monkeypatch):
 def test_protect_masks_names_numbers_terms_and_the_facility():
     assert t.protect(QUOTE) == (MASKED, SPANS)
     assert t.protect(t.EXAMPLE_SRC)[0] == t.EXAMPLE[0]["content"]  # the worked example matches the masking
-    assert t.protect("Has performed 5,000 hemodialysis sessions")[1] == ["5,000"]
-    assert t.protect("Dialysis Unit inaugurated on 31 October 2023")[1] == ["Dialysis Unit", "31 October 2023"]
+    assert t.protect("Has performed 5,000 hemodialysis sessions")[1] == ["5,000", "हीमोडायलिसिस"]
+    assert t.protect("Dialysis Unit inaugurated on 31 October 2023")[1] == ["डायलिसिस यूनिट", "31 October 2023"]
     assert t.protect("Attached to Sheikh Bhikhari Medical College, Hazaribagh")[1] == [
         "Sheikh Bhikhari Medical College", "Hazaribagh"]
-    assert t.protect("Offers MRI in Patna. Burns unit open")[1] == ["MRI", "Patna"]  # sentence openers translate
-    assert t.protect("Offers Normal Vaginal Delivery")[1] == ["Normal Vaginal Delivery"]
-    assert t.protect("sunrise kidney care runs dialysis in gaya", ("Sunrise Kidney Care", "Gaya"))[1] == [
+    assert t.protect("Offers MRI in Patna. Plenty of parking")[1] == ["MRI", "Patna"]  # sentence openers translate
+    assert t.protect("Offers Mother Teresa Ward")[1] == ["Mother Teresa Ward"]  # the verb is translated
+    assert t.protect("sunrise kidney care runs a clinic in gaya", ("Sunrise Kidney Care", "Gaya"))[1] == [
         "sunrise kidney care", "gaya"]
+
+
+def test_clinical_terms_restore_to_one_fixed_hindi_rendering():
+    # The two words the model got wrong live: "Caesarean अनुभाग" (a document section) and "trained by burning".
+    assert t.protect("Normal Vaginal Delivery and Caesarean section") == (
+        "⟦1⟧ and ⟦2⟧", ["नॉर्मल डिलीवरी", "ऑपरेशन से डिलीवरी"])
+    assert t.protect("burn-trained paramedical staff")[1] == ["जलने के इलाज में प्रशिक्षित"]
+    assert t.protect("C-section, c section and CAESAREAN SECTION")[1] == ["ऑपरेशन से डिलीवरी"] * 3
+    assert t.protect("24x7 emergency, burns unit and X-ray")[1] == [
+        "24 घंटे खुली इमरजेंसी", "जलने के इलाज की यूनिट", "एक्स-रे"]  # longest phrase first
+    assert t.protect("Bedside care")[1] == []  # whole words only
 
 
 def test_restore_puts_the_spans_back():
@@ -94,7 +105,7 @@ def test_guard_fails_a_dropped_doubled_or_broken_placeholder():
 def test_guard_fails_english_mixed_or_overlong_output():
     assert t.guard(QUOTE, SPANS, MASKED) == "not_hindi"
     assert t.guard(QUOTE, SPANS, "  ") == "empty"
-    assert t.guard(QUOTE, SPANS, REPLY.replace("बेड", "बेड्s")) == "mixed_script"  # live: "निम्न सocio-economic"
+    assert t.guard(QUOTE, SPANS, REPLY.replace("हैं", "हैंs")) == "mixed_script"  # live: "निम्न सocio-economic"
     assert t.guard(QUOTE, SPANS, REPLY.replace("⟦1⟧ में", "⟦1⟧में")) == "mixed_script"  # glued to a name
     assert t.guard(QUOTE, SPANS, REPLY + " और" * 3 * len(QUOTE)) == "too_long"
 
@@ -132,12 +143,12 @@ def test_a_guard_failure_shows_nothing(model):
 
 
 def test_the_facility_name_and_city_are_protected(model, monkeypatch):
-    q = "Sunrise Kidney Care is the only dialysis centre in Gaya town"
+    q = "Sunrise Kidney Care is the only kidney centre in Gaya town"
     monkeypatch.setattr(FakeEngine, "claims", {"c1:capa:2": ["capability", q, False, "own_anchored"]})
-    model.answer = "⟦1⟧ ⟦2⟧ शहर का एकमात्र डायलिसिस केंद्र है"
+    model.answer = "⟦1⟧ ⟦2⟧ शहर का एकमात्र किडनी केंद्र है"
     r = client.post("/api/translate", json={"claim_id": "c1:capa:2"}).json()
-    assert model.calls[0][1]["messages"][-1]["content"] == "⟦1⟧ is the only dialysis centre in ⟦2⟧ town"
-    assert r == {"available": True, "hindi": "Sunrise Kidney Care Gaya शहर का एकमात्र डायलिसिस केंद्र है"}
+    assert model.calls[0][1]["messages"][-1]["content"] == "⟦1⟧ is the only kidney centre in ⟦2⟧ town"
+    assert r == {"available": True, "hindi": "Sunrise Kidney Care Gaya शहर का एकमात्र किडनी केंद्र है"}
 
 
 LONG = "; ".join(f"Ward {i} offers dialysis, surgery and care for children and older patients every day" for i in

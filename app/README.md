@@ -332,16 +332,20 @@ a "हिंदी में पढ़ें" button (`static/translate.js`, loa
   one worked example, 8 s) is told to copy each placeholder. The guard shows the result only when every
   placeholder comes back exactly once, no digit is added, the rest is mostly Devanagari, no word mixes scripts, and
   it is at most 3x the source. Otherwise the reply is `{available: false, reason}` and nothing is shown.
+- Clinical terms come back in fixed Hindi, not the model's choice: `inputs/medical_terms.json` maps each term
+  (caesarean section, burn-trained, dialysis, 24x7, cath lab, beds, ...) to one Devanagari rendering that follows
+  `kb/taxonomy/HINDI_GLOSSARY.md` and the service labels (from PR #104); acronyms stay in Latin script. Terms are
+  masked like names (case-insensitive, whole words, longest first) and restored to that rendering.
 - A masked quote over 300 characters goes out in sentence or list-item chunks, at most 4, side by side within the
   same 8 s; more chunks than that is "too long to translate", with no model call.
 - In-memory LRU cache (5,000) by claim id, endpoint and prompt version; 30 model calls per user per minute (the
   reporter key, or one shared bucket without it), per app instance. Quote and translation are never logged.
 - Offline, without the endpoint or on any failure the button reads "अनुवाद अभी उपलब्ध नहीं / Translation not
   available right now".
-- Live check (Llama 3.3 70B, 20 real quotes, all 7 services): 18 of 20 passed; the other 2 hit the 8 s timeout
-  and passed in an earlier run. The first guard-only version passed 9 of 20, mostly because the model
-  transliterated names. The guard cannot catch a wrong ordinary word ("Caesarean section" came back as
-  "Caesarean अनुभाग", a section of a document); the label and the original above are the safeguard.
+- Live check (Llama 3.3 70B, 20 real quotes, all 7 services): 19 of 20 passed; the other had one word in two
+  scripts ("सocio-आर्थिक") and was rejected. The first, guard-only version passed 9 of 20. The guard still cannot
+  catch a reordered sentence: "teaching hospital ... Hazaribagh with ICU, NICU and PICU" came back listing
+  Hazaribagh among the units. The label and the original above are the safeguard.
 - Tests: `tests/test_translate.py` (fake model), `tests/test_translate_page.py` (Chromium: quotes still verbatim).
 
 ## Voice: Hindi and English, speech to text and read aloud
