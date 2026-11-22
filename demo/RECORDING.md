@@ -20,7 +20,7 @@ and re-check the numbers in brackets on the day; the narration reads them off th
 | Script time | Location (Sensors) | Do this | What the screen shows |
 |---|---|---|---|
 | 0:15 data | any | Bottom bar: Data stories | The data stories. Stay on them; the model stories there are from v1. |
-| 0:35 the chatbot trap | Thane 19.16, 72.95 | Home, "Dialysis", then "Why this place?" on card 1 | The Passed over line names Wockhardt Hospital Nagpur and why (its record says Nagpur; its map point is in Mumbai). |
+| 0:35 the chatbot trap | Thane 19.16, 72.95 | Home, "Dialysis", then "Why this place?" on card 1 | The Passed over line names Wockhardt Hospital Nagpur and why ("Its map point may be wrong..."; checked locally 2026-11-22). Card 1 is Navkaar Hospitals, Likely, 2 min. |
 | 0:55 the model | Gaya 24.79, 85.0 | Home, "Accident or injury", then "Why this place?" on card 1 | Dr. A Barkat Multispeciality Hospital, Likely. The Why page lists the witnesses; the rows add up to the score. |
 | 1:25 the sealed test | Gaya 24.79, 85.0 | Stay on card 1's Why page | The sealed-test line at the top: 25 of 28 places rated Likely were confirmed. Hold it about 5 s. Fallback: How this works, the v2 evaluation table. |
 | 2:05 the map and route | Gaya 24.79, 85.0 | Back to the answer, scroll to the map, then the route | "Going straight to All India Institute of Medical Sciences Patna takes [92] min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about [1] min." |
