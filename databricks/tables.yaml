@@ -243,7 +243,7 @@ tables:
   primary_key: [unique_id, service]
   spot: grade
   description: >-
-    Grader v1 reference grades (frozen before the web verdicts), same columns as grades. Copy of cleaning/claims/out/grades_v1.parquet.
+    SUPERSEDED (model v1 prototype, kept for history). Grader v1 reference grades (frozen before the web verdicts), same columns as grades. Copy of cleaning/claims/out/grades_v1.parquet.
 
 # ---------------------------------------------------------------- derived/v2, model v2 (derived/v2/README.md)
 # Separate _v2 names so the v1 tables the app and notebook read are untouched. Not loaded on purpose:
@@ -594,7 +594,7 @@ tables:
   primary_key: [unique_id, service]
   spot: p_s
   description: >-
-    One row per (record, service) for the 7 gold services from the fusion prototype: p_s with range, band
+    SUPERSEDED (model v1 prototype, kept for history). One row per (record, service) for the 7 gold services from the fusion prototype: p_s with range, band
     (Likely, Unverified, Unlikely), text level T, location and existence scores. Source: model/proto/fusion/pair_scores.parquet.
   columns:
     p_s: "Chance a public check confirms it (runs high)"
@@ -609,7 +609,7 @@ tables:
   primary_key: [unique_id, service]
   spot: T
   description: >-
-    Evidence features per (record, service) behind pair_scores. Source: model/proto/evidence/pair_features.parquet.
+    SUPERSEDED (model v1 prototype, kept for history). Evidence features per (record, service) behind pair_scores. Source: model/proto/evidence/pair_features.parquet.
 
 - table: facility_scores
   group: dashboard
@@ -617,7 +617,7 @@ tables:
   primary_key: [unique_id]
   spot: p_l
   description: >-
-    Location and existence scores per record from the fusion prototype. Source: model/proto/fusion/facility_scores.parquet.
+    SUPERSEDED (model v1 prototype, kept for history). Location and existence scores per record from the fusion prototype. Source: model/proto/fusion/facility_scores.parquet.
 
 - table: geo_facility
   group: dashboard
@@ -734,7 +734,7 @@ tables:
   primary_key: [origin_set, origin_id, pathway]
   spot: best_type
   description: >-
-    Best referral plan per (sampled origin, pathway) from the planner with stub probabilities (journeys stories 1,
+    SUPERSEDED (model v1 prototype, kept for history). Best referral plan per (sampled origin, pathway) from the planner with stub probabilities (journeys stories 1,
     2, 6): 150 PIN origins per state in Bihar, Uttar Pradesh and Maharashtra plus benchmark points.
     Source: viz/journeys/data/plans_best.csv.
 
@@ -753,7 +753,7 @@ tables:
   primary_key: [source_file, path]
   spot: value_text
   description: >-
-    Every value in the two published sealed-test files (model/review/stats/results.json and
+    SUPERSEDED (model v1 prototype, kept for history). Every value in the two published sealed-test files (model/review/stats/results.json and
     model/proto/fusion/test_metrics.json) as (source_file, JSON path, value). Quoted, never recomputed.
     Example path: pair_level_test.primary_target_all.auroc.WL_shipped.raw.
 
