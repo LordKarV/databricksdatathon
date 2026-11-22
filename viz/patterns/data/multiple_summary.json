@@ -1,0 +1,43 @@
+{
+ "n_tests": 613,
+ "n_significant": 407,
+ "n_replicated": 293,
+ "bh_threshold_raw_p": 0.03231641345810507,
+ "by_family": {
+  "anomalies": {
+   "tests": 2,
+   "significant": 1,
+   "replicated": 0
+  },
+  "archetypes": {
+   "tests": 12,
+   "significant": 10,
+   "replicated": 10
+  },
+  "cooccurrence": {
+   "tests": 473,
+   "significant": 306,
+   "replicated": 218
+  },
+  "district": {
+   "tests": 24,
+   "significant": 20,
+   "replicated": 15
+  },
+  "public_private": {
+   "tests": 23,
+   "significant": 23,
+   "replicated": 16
+  },
+  "quality_correlates": {
+   "tests": 72,
+   "significant": 43,
+   "replicated": 32
+  },
+  "time": {
+   "tests": 7,
+   "significant": 4,
+   "replicated": 2
+  }
+ }
+}

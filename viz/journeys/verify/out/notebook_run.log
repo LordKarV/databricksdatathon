@@ -1,0 +1,183 @@
+code /Users/karthikvattem/projects/datathon | data /Users/karthikvattem/projects/datathon | out /Users/karthikvattem/projects/datathon/viz/journeys | source local
+0/490 origins, 8 s
+50/490 origins, 11 s
+100/490 origins, 14 s
+150/490 origins, 17 s
+200/490 origins, 21 s
+250/490 origins, 25 s
+300/490 origins, 29 s
+350/490 origins, 35 s
+400/490 origins, 39 s
+450/490 origins, 44 s
+best_type                                   abstain  ...  two_sites
+origin_set             pathway                       ...           
+Benchmark (40 queries) burns                      3  ...          0
+                       dialysis_start             6  ...         17
+                       major_trauma               4  ...          0
+                       obstetric_emergency       14  ...          0
+                       sick_newborn               2  ...          0
+                       snakebite                 40  ...          0
+                       stemi                      1  ...          0
+Bihar                  burns                      0  ...          0
+                       dialysis_start            13  ...          0
+                       major_trauma              16  ...          0
+                       obstetric_emergency       19  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      0  ...          0
+Maharashtra            burns                      0  ...          0
+                       dialysis_start            14  ...         27
+                       major_trauma               2  ...          0
+                       obstetric_emergency       25  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      2  ...          0
+Uttar Pradesh          burns                      0  ...          0
+                       dialysis_start            14  ...         69
+                       major_trauma               3  ...          0
+                       obstetric_emergency       16  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      0  ...          0
+
+[28 rows x 6 columns]
+done in 51 s; 3430 rows
+trauma one-stop share (state samples): (0.7377777777777778, 0.695248014543135, 0.7762821404713018, 332, 450)
+origin_set           Benchmark (40 queries)  Bihar  Maharashtra  Uttar Pradesh
+pathway                                                                       
+burns                                 0.025  0.000        0.007          0.007
+major_trauma                          0.450  0.753        0.733          0.727
+obstetric_emergency                   0.275  0.487        0.380          0.313
+sick_newborn                          0.000  0.000        0.007          0.007
+snakebite                             0.000  0.000        0.000          0.000
+stemi                                 0.000  0.000        0.000          0.000
+                pathway                                                metric    stat   value    lo95    hi95    q25     q75    n
+0          major_trauma                           First care, stop plan (min)  median   36.00   34.00   40.00   24.0   47.00  350
+1          major_trauma               Definitive care, best direct plan (min)  median   84.50   79.00   91.00   55.0  113.00  350
+2          major_trauma                      Definitive care, stop plan (min)  median  171.50  163.00  177.00  141.0  195.00  350
+3          major_trauma  Extra minutes to definitive care (stop minus direct)  median   76.50   70.00   83.50   47.0  112.75  350
+4          major_trauma               P(first care in time), best direct plan    mean    0.10    0.08    0.11    NaN     NaN  350
+5          major_trauma                      P(first care in time), stop plan    mean    0.85    0.84    0.86    NaN     NaN  350
+6          major_trauma       P(care in time, both windows), best direct plan    mean    0.10    0.08    0.11    NaN     NaN  350
+7          major_trauma              P(care in time, both windows), stop plan    mean    0.42    0.41    0.42    NaN     NaN  350
+8   obstetric_emergency                           First care, stop plan (min)  median   36.00   32.50   39.00   21.0   48.00  188
+9   obstetric_emergency               Definitive care, best direct plan (min)  median  105.00   95.50  110.50   83.0  126.00  188
+10  obstetric_emergency                      Definitive care, stop plan (min)  median  158.00  150.99  164.50  133.0  184.00  188
+11  obstetric_emergency  Extra minutes to definitive care (stop minus direct)  median   48.00   43.50   52.00   38.0   66.25  188
+12  obstetric_emergency               P(first care in time), best direct plan    mean    0.00    0.00    0.00    NaN     NaN  188
+13  obstetric_emergency                      P(first care in time), stop plan    mean    0.76    0.76    0.77    NaN     NaN  188
+14  obstetric_emergency       P(care in time, both windows), best direct plan    mean    0.00    0.00    0.00    NaN     NaN  188
+15  obstetric_emergency              P(care in time, both windows), stop plan    mean    0.00    0.00    0.00    NaN     NaN  188
+                pathway     origin_set      series  within_minutes  count    n  share   lo95   hi95  median_minutes_reached  abstain
+0          major_trauma          Bihar  definitive              60     15  150  0.100  0.062  0.158                   153.0       16
+3          major_trauma          Bihar  first_care              60    128  150  0.853  0.788  0.901                    34.0       16
+4          major_trauma  Uttar Pradesh  definitive              60     26  150  0.173  0.121  0.242                   161.0        3
+7          major_trauma  Uttar Pradesh  first_care              60    135  150  0.900  0.842  0.938                    40.0        3
+8          major_trauma    Maharashtra  definitive              60     23  150  0.153  0.104  0.220                   153.0        2
+11         major_trauma    Maharashtra  first_care              60    133  150  0.887  0.826  0.928                    39.5        2
+12  obstetric_emergency          Bihar  definitive              60     24  150  0.160  0.110  0.227                   138.0       19
+15  obstetric_emergency          Bihar  first_care              60     97  150  0.647  0.567  0.719                    43.0       19
+16  obstetric_emergency  Uttar Pradesh  definitive              60     46  150  0.307  0.238  0.385                   113.5       16
+19  obstetric_emergency  Uttar Pradesh  first_care              60     93  150  0.620  0.540  0.694                    49.0       16
+20  obstetric_emergency    Maharashtra  definitive              60     48  150  0.320  0.251  0.398                   103.0       25
+23  obstetric_emergency    Maharashtra  first_care              60    105  150  0.700  0.622  0.768                    43.0       25
+24                stemi          Bihar  definitive              60     51  150  0.340  0.269  0.419                    72.0        0
+27                stemi          Bihar  first_care              60     51  150  0.340  0.269  0.419                    72.0        0
+28                stemi  Uttar Pradesh  definitive              60     84  150  0.560  0.480  0.637                    52.0        0
+31                stemi  Uttar Pradesh  first_care              60     84  150  0.560  0.480  0.637                    52.0        0
+32                stemi    Maharashtra  definitive              60    101  150  0.673  0.595  0.743                    48.0        2
+35                stemi    Maharashtra  first_care              60    101  150  0.673  0.595  0.743                    48.0        2
+36                burns          Bihar  definitive              60     81  150  0.540  0.460  0.618                    59.0        0
+39                burns          Bihar  first_care              60     81  150  0.540  0.460  0.618                    59.0        0
+40                burns  Uttar Pradesh  definitive              60     99  150  0.660  0.581  0.731                    48.5        0
+43                burns  Uttar Pradesh  first_care              60    100  150  0.667  0.588  0.737                    48.0        0
+44                burns    Maharashtra  definitive              60    103  150  0.687  0.609  0.755                    43.0        0
+47                burns    Maharashtra  first_care              60    104  150  0.693  0.615  0.762                    43.0        0
+48         sick_newborn          Bihar  definitive              60    111  150  0.740  0.664  0.804                    45.5        0
+51         sick_newborn          Bihar  first_care              60    111  150  0.740  0.664  0.804                    45.5        0
+52         sick_newborn  Uttar Pradesh  definitive              60    107  150  0.713  0.636  0.780                    46.5        0
+55         sick_newborn  Uttar Pradesh  first_care              60    108  150  0.720  0.643  0.786                    46.5        0
+56         sick_newborn    Maharashtra  definitive              60    100  150  0.667  0.588  0.737                    51.0        0
+59         sick_newborn    Maharashtra  first_care              60    101  150  0.673  0.595  0.743                    51.0        0
+Three itinerary maps on a plain background with straight connectors and no boundaries. Major trauma from Muzaffarpur district, Bihar: stabilise at Phular Superspeciality Hospital (leg 4.5 km, arrive at 6 min, P 0.92); then definitive care at Rajeshwar Hospital (leg 80.7 km, arrive at 105 min, P 0.31). Obstetric emergency from Beed district, Maharashtra: stabilise at Matoshree Hospital (leg 17.2 km, arrive at 19 min, P 0.78); then definitive care at Kalyani Hospital (leg 139.4 km, arrive at 163 min, P 0.55). Dialysis start from Yavatmal district, Maharashtra: assessment at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.61); then fistula surgery at Acharaya Vinoba Bhave Rural Hospital (leg 112.2 km, arrive at 92 min, P 0.71); then dialysis sessions at Alliance Hospital Amravati (leg 133.4 km, arrive at 109 min, P 0.94). Each stop is annotated with the record sentence that supports it and any location-confidence flag. Probabilities are the derived/v1 stub.
+                           mds_group  deaths_per_year  records  snake_records  asv_records  snake_hi95  web_snakebite_records
+0                      Uttar Pradesh        10971.429      948              1            0       0.006                      5
+1                              Bihar         7278.571      260              0            0       0.015                      3
+2   Andhra Pradesh (incl. Telangana)         5921.429      769              1            0       0.007                      7
+3                     Madhya Pradesh         4842.857      313              0            0       0.012                      0
+4                        Maharashtra         4000.000     1654              4            0       0.006                      7
+5                          Rajasthan         3721.429      408              1            0       0.014                      3
+6                        West Bengal         3050.000      493              0            0       0.008                      3
+7                         Tamil Nadu         3007.143      825              4            2       0.012                     10
+8                             Odisha         2878.571      119              0            0       0.031                      0
+9                            Gujarat         2771.429      996              0            0       0.004                      2
+10                         Karnataka         2357.143      533              0            0       0.007                      6
+11                         Jharkhand         1435.714      157              0            0       0.024                      0
+12                      Chhattisgarh         1200.000      143              0            0       0.026                      0
+13                            Punjab         1035.714      485              0            0       0.008                      3
+14                  All other states          871.429      628              0            0       0.006                      0
+15                           Haryana          678.571      465              0            0       0.008                      1
+16                             Assam          521.429      119              0            0       0.031                      0
+17                   Jammu & Kashmir          500.000       70              0            0       0.052                      0
+18                            Kerala          464.286      522              6            3       0.025                      8
+19               Northeastern states          171.429       52              0            0       0.069                      0
+9959 5 58 17
+{'total_pop_raster': 1457435392.0, 'pop_in_blocks': 1457435392.0, 'pop_in_districts': 1451872512.0, 'n_blocks': 156048, 'units': {'claimed': 1041, 'graded': 974, 'corroborated': 408}, 'unit_districts': {'claimed': 275, 'graded': 267, 'corroborated': 166}} {'centres': 1994, 'districts': 751} median weekly km 384.0 share 600+ 0.3095251 share 300+ {'claimed': np.float32(0.43663126), 'graded': np.float32(0.44494462), 'corroborated': np.float32(0.5883086)}
+            tier                band    population  share
+0        claimed         under 60 km  2.650636e+08  0.182
+1        claimed           60 to 150  2.234002e+08  0.153
+2        claimed          150 to 300  3.326098e+08  0.228
+3        claimed          300 to 600  4.248400e+08  0.291
+4        claimed      600 km or more  2.115219e+08  0.145
+5        claimed  300+ at factor p10  5.509693e+08  0.378
+6        claimed  600+ at factor p10  1.481229e+08  0.102
+7        claimed  300+ at factor p90  8.695565e+08  0.597
+8        claimed  600+ at factor p90  4.653073e+08  0.319
+9         graded         under 60 km  2.588277e+08  0.178
+10        graded           60 to 150  2.205115e+08  0.151
+11        graded          150 to 300  3.296181e+08  0.226
+12        graded          300 to 600  4.291729e+08  0.294
+13        graded      600 km or more  2.193051e+08  0.150
+14        graded  300+ at factor p10  5.634248e+08  0.387
+15        graded  600+ at factor p10  1.524492e+08  0.105
+16        graded  300+ at factor p90  8.799772e+08  0.604
+17        graded  600+ at factor p90  4.780955e+08  0.328
+18  corroborated         under 60 km  1.881599e+08  0.129
+19  corroborated           60 to 150  1.705912e+08  0.117
+20  corroborated          150 to 300  2.412624e+08  0.166
+21  corroborated          300 to 600  4.063090e+08  0.279
+22  corroborated      600 km or more  4.511128e+08  0.310
+23  corroborated  300+ at factor p10  7.893365e+08  0.542
+24  corroborated  600+ at factor p10  3.633571e+08  0.249
+25  corroborated  300+ at factor p90  1.027851e+09  0.705
+26  corroborated  600+ at factor p90  7.191668e+08  0.493
+                pathway     origin_set  n_planned  n_destinations                                               top_facility top_district  top_count  top_share   lo95   hi95  top3_share
+0   obstetric_emergency          Bihar        131               3                               Sub Divisional Hospital Pusa   SAMASTIPUR         81      0.618  0.533  0.697       1.000
+1   obstetric_emergency  Uttar Pradesh        134              14                                  Ganga Sewa Sadan Hospital     VARANASI         34      0.254  0.188  0.334       0.507
+2   obstetric_emergency    Maharashtra        125              11                              Care Multispeciality Hospital         PUNE         23      0.184  0.126  0.261       0.440
+3          major_trauma          Bihar        134              12                                         Rajeshwar Hospital        PATNA         79      0.590  0.505  0.669       0.881
+4          major_trauma  Uttar Pradesh        147              26                        Charak Hospital And Research Centre      LUCKNOW         30      0.204  0.147  0.276       0.442
+5          major_trauma    Maharashtra        148              24                Jehangir Hospital, Pune, Maharashtra, India         PUNE         29      0.196  0.140  0.267       0.405
+6        dialysis_start          Bihar        137               7                                         Rajeshwar Hospital        PATNA         47      0.343  0.269  0.426       0.912
+7        dialysis_start  Uttar Pradesh        136              34                                          Manipal Hospitals    GHAZIABAD         20      0.147  0.097  0.216       0.338
+8        dialysis_start    Maharashtra        136              20  Dr. Babasaheb Ambedkar Hospital & Research Center, Nagpur         PUNE         21      0.154  0.103  0.225       0.382
+9                 burns          Bihar        150              19                   Sri Krishna Medical College and Hospital  MUZAFFARPUR         34      0.227  0.167  0.300       0.500
+10                burns  Uttar Pradesh        150              49                                             Suman Hospital    SULTANPUR         13      0.087  0.051  0.143       0.227
+11                burns    Maharashtra        150              48           Geetanjali Multispeciality Hospital, Wai, Satara       SATARA         12      0.080  0.046  0.135       0.220
+12                stemi          Bihar        150              22                                              Asia Hospital        PATNA         28      0.187  0.132  0.257       0.440
+13                stemi  Uttar Pradesh        150              50                               Gupta Heart & Medical Centre    GORAKHPUR         14      0.093  0.056  0.151       0.227
+14                stemi    Maharashtra        148              56           Prakash Institute of Medical Sciences & Research       SANGLI          9      0.061  0.032  0.112       0.162
+15         sick_newborn          Bihar        150              22                                    I.B.Smriti Arogya Sadan    DARBHANGA         19      0.127  0.083  0.189       0.287
+16         sick_newborn  Uttar Pradesh        150              58                                Rainbow Childrens Hospitals     AZAMGARH         11      0.073  0.041  0.127       0.200
+17         sick_newborn    Maharashtra        150              45                                            Jadhav Hospital       SATARA         12      0.080  0.046  0.135       0.220
+Bihar csection strong/moderate: 13
+8
+  charts:
+  s1_plan_mix.png
+  s1b_stop_tradeoff.png
+  s2_time_to_care.png
+  s3_itineraries.png
+  s4_snakebite.png
+  s5_dialysis_burden.png
+  s5b_dialysis_tiers.png
+  s6_funnel.png

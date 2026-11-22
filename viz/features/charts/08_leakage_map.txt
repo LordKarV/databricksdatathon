@@ -1,0 +1,1 @@
+Leakage matrix for 110 features against gold, NABH and all-list labels. Gold evidence overlap on 60 DEV pairs with URLs: record source domain 35, own website 26, NABH portal 3, any 43. Direct leakage for NABH labels: d_nabh_code_known, d_nabh_full_accreditation, d_nabh_listed, d_nabh_service_code.

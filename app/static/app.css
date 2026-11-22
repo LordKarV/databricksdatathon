@@ -138,3 +138,13 @@ select { font: inherit; width: 100%; min-height: 48px; border: 2px solid var(--m
 .route .stops { padding-left: 1.5rem; }
 .route .stops > li { margin-bottom: 0.75rem; }
 .route .stop-name { margin: 0.25rem 0; }
+
+/* Data stories (#53): charts scale to the column; the presenter line leads each story. */
+.top-links { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+.story { border-top: 1px solid var(--line); padding-top: 0.75rem; margin-top: 1rem; }
+.story-say { font-size: 1.05rem; }
+.story-chart { margin: 0.75rem 0; }
+.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.story-toc { padding-left: 1.25rem; }
+.story details li { margin: 6px 0; }
+.story details a, .story-chart figcaption a { display: inline-block; padding: 6px 0; min-height: 24px; overflow-wrap: anywhere; }

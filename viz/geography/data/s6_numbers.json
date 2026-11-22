@@ -1,0 +1,135 @@
+{
+ "with_site": 4866,
+ "records": 9959,
+ "any_claim_site": [
+  1653,
+  2058,
+  0.8032069970845481,
+  0.7854715953680866,
+  0.8198125350908196
+ ],
+ "any_claim_nosite": [
+  38,
+  1496,
+  0.02540106951871658,
+  0.018561505514550176,
+  0.034671849261047466
+ ],
+ "confirmation": [
+  {
+   "service": "trauma",
+   "label": "Trauma / 24x7 emergency",
+   "has_site": true,
+   "confirmed": 1489,
+   "claimed": 1861,
+   "rate": 0.800107469102633,
+   "lo": 0.7813274263043243,
+   "hi": 0.8176510606620754
+  },
+  {
+   "service": "trauma",
+   "label": "Trauma / 24x7 emergency",
+   "has_site": false,
+   "confirmed": 36,
+   "claimed": 1325,
+   "rate": 0.027169811320754716,
+   "lo": 0.019689098770841372,
+   "hi": 0.03738437033187184
+  },
+  {
+   "service": "dialysis",
+   "label": "Dialysis",
+   "has_site": true,
+   "confirmed": 474,
+   "claimed": 661,
+   "rate": 0.7170953101361573,
+   "lo": 0.6815801417416921,
+   "hi": 0.7501016302773874
+  },
+  {
+   "service": "dialysis",
+   "label": "Dialysis",
+   "has_site": false,
+   "confirmed": 0,
+   "claimed": 374,
+   "rate": 0.0,
+   "lo": 0.0,
+   "hi": 0.010167223513768732
+  },
+  {
+   "service": "csection",
+   "label": "Emergency C-section",
+   "has_site": true,
+   "confirmed": 112,
+   "claimed": 264,
+   "rate": 0.42424242424242425,
+   "lo": 0.36612962821437034,
+   "hi": 0.48452837263389226
+  },
+  {
+   "service": "csection",
+   "label": "Emergency C-section",
+   "has_site": false,
+   "confirmed": 3,
+   "claimed": 173,
+   "rate": 0.017341040462427744,
+   "lo": 0.0059146456907766265,
+   "hi": 0.04973741807702461
+  }
+ ],
+ "coverage": [
+  {
+   "group": "Private",
+   "with_site": 4528,
+   "records": 8805,
+   "rate": 0.5142532651902328,
+   "lo": 0.5038096998406851,
+   "hi": 0.5246843986341927
+  },
+  {
+   "group": "Public",
+   "with_site": 83,
+   "records": 467,
+   "rate": 0.1777301927194861,
+   "lo": 0.14572884534429864,
+   "hi": 0.21499034344445755
+  },
+  {
+   "group": "Operator not stated",
+   "with_site": 255,
+   "records": 687,
+   "rate": 0.37117903930131,
+   "lo": 0.33586176110180826,
+   "hi": 0.4079290007747202
+  },
+  {
+   "group": "Urban centre",
+   "with_site": 4591,
+   "records": 9247,
+   "rate": 0.4964853465988969,
+   "lo": 0.4862979664663701,
+   "hi": 0.5066756457939459
+  },
+  {
+   "group": "Town or semi-dense",
+   "with_site": 233,
+   "records": 557,
+   "rate": 0.41831238779174146,
+   "lo": 0.37804261606508427,
+   "hi": 0.459701231752196
+  },
+  {
+   "group": "Rural",
+   "with_site": 42,
+   "records": 155,
+   "rate": 0.2709677419354839,
+   "lo": 0.2071649368938382,
+   "hi": 0.34584888316337603
+  }
+ ],
+ "web_quote_precision": "21 of 22 quotes that confirm a dataset claim were right (Wilson 0.78-0.99), kb/web_evidence/WEB_EVIDENCE.md self-check",
+ "web_conf_site_in_vf_sources": [
+  1883,
+  2059
+ ]
+}

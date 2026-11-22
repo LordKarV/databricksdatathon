@@ -354,3 +354,26 @@ def test_every_number_in_the_comparison_sentence_is_a_field():
             assert numbers_in(text) == sorted(float(v) for v in vs["text_numbers"].values()), vs
             seen.add(tuple(sorted(vs["text_numbers"])))
     assert len(seen) >= 4   # the sentence variants were all exercised
+
+
+def test_gold_eval_summary_counts():
+    from planner import eval_gold_dev as ev
+    assert ev.wilson(0, 0) == [None, None] and ev.rate(1, 4)["share"] == 0.25
+    base = {"baseline_pick": None, "baseline_is_gold": False, "baseline_verdict": None, "pathway": "p"}
+    rows = [
+        {**base, "gold_verdict": "confirmed", "planner_pick": "a", "planner_is_gold": True, "planner_verdict": "confirmed", "why_not_gold": None},
+        {**base, "gold_verdict": "confirmed", "planner_pick": "b", "planner_is_gold": False, "planner_verdict": "unknown",
+         "why_not_gold": {"was_candidate": False, "weakest_capability": "blood_transfusion"}},
+        {**base, "gold_verdict": "contradicted", "planner_pick": "c", "planner_is_gold": False, "planner_verdict": "contradicted",
+         "why_not_gold": {"was_candidate": True, "weakest_capability": "icu"}},
+        {**base, "gold_verdict": "no_info", "planner_pick": None, "planner_is_gold": False, "planner_verdict": None,
+         "why_not_gold": {"was_candidate": False, "weakest_capability": "icu"}},
+    ]
+    s = ev.summarise(rows, "planner")
+    assert (s["queries"], s["abstained"]) == (4, 1)
+    assert s["picked_verdict"]["confirmed"]["k"] == 1 and s["picked_verdict"]["unknown"]["k"] == 1
+    assert s["picks_gold_facility_by_gold_verdict"]["confirmed"] == {"k": 1, "n": 2, "share": 0.5, "ci95": ev.wilson(1, 2)}
+    assert s["confirmed_among_picks_with_a_clear_label"]["k"] == 1 and s["confirmed_among_picks_with_a_clear_label"]["n"] == 2
+    m = ev.missed_summary(rows)
+    assert (m["n"], m["not_a_candidate"], m["candidate_but_outranked"]) == (1, 1, 0)
+    assert m["not_a_candidate_by_missing_capability"] == {"p: blood_transfusion": 1}

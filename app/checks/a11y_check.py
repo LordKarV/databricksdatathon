@@ -253,6 +253,15 @@ def how_page(page: Page) -> None:
     page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
 
 
+def stories_page(page: Page) -> None:
+    """'Data stories' (#53) with every expandable section open and the charts loaded."""
+    go(page, "#/stories")
+    page.get_by_text("What we found in the data").wait_for()
+    page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+    page.evaluate("document.querySelectorAll('#main img').forEach(i => i.loading = 'eager')")
+    page.wait_for_function("[...document.querySelectorAll('#main img')].every(i => i.complete && i.naturalWidth > 0)")
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -274,6 +283,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "area_trauma": area,
     "route_trauma": route_all_open,
     "how_this_works": how_page,
+    "data_stories": stories_page,
 }
 
 

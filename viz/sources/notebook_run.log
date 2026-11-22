@@ -1,0 +1,87 @@
+s1: 158444 urls, 9959 records, agg 48.33%, social 13.26%, official 10.55%, about 28.0%, median 8, cap50 1197, practo 33109, fb records 8840
+s2:
+          source_class  size_band  clean_rate   lo95   hi95  class_weight  records_citing  weight_share
+0              social        1-5       0.935  0.925  0.945      1200.650            2685         0.489
+1              social       6-10       0.875  0.860  0.888       787.392            2795         0.321
+2              social      11-20       0.719  0.692  0.747       275.280            1489         0.112
+3              social      21-50       0.540  0.514  0.570       191.740            2055         0.078
+4              social  All sizes       0.861  0.852  0.869      2455.062            9024         1.000
+5            official        1-5       0.935  0.920  0.950       505.000            1144         0.350
+6            official       6-10       0.908  0.892  0.925       537.588            1519         0.373
+7            official      11-20       0.827  0.791  0.860       199.731             777         0.139
+8            official      21-50       0.682  0.639  0.724       198.519            1161         0.138
+9            official  All sizes       0.875  0.865  0.887      1440.837            4601         1.000
+10  health_aggregator        1-5       0.942  0.929  0.954       573.750            1446         0.167
+11  health_aggregator       6-10       0.894  0.881  0.908       845.834            2316         0.246
+12  health_aggregator      11-20       0.729  0.704  0.755       584.042            1436         0.170
+13  health_aggregator      21-50       0.564  0.542  0.584      1428.148            2412         0.416
+14  health_aggregator  All sizes       0.737  0.725  0.748      3431.773            7610         1.000 
+ {'1-5': 0.065, '6-10': 0.115, '11-20': 0.258, '21-50': 0.439}
+s3:
+              stratum                     label          measure                            measure_label    rate    lo95    hi95  sentences_supported  sentences_tested  pages
+0     official_about       Facility's own site        supported       Wording found (exact or 90% fuzzy)  0.0958  0.0783  0.1164                  277              2891    117
+1     official_about       Facility's own site  token_supported  Most words found (70% of content words)  0.3795  0.3436  0.4146                 1097              2891    117
+2   aggregator_about  Aggregator page about it        supported       Wording found (exact or 90% fuzzy)  0.0485  0.0214  0.0796                   38               783     32
+3   aggregator_about  Aggregator page about it  token_supported  Most words found (70% of content words)  0.1571  0.1061  0.2105                  123               783     32
+4          list_page              Listing page        supported       Wording found (exact or 90% fuzzy)  0.0147  0.0048  0.0262                   12               814     33
+5          list_page              Listing page  token_supported  Most words found (70% of content words)  0.1400  0.0934  0.1904                  114               814     33
+6         government         Government portal        supported       Wording found (exact or 90% fuzzy)  0.0116  0.0029  0.0233                   12              1035     42
+7         government         Government portal  token_supported  Most words found (70% of content words)  0.0870  0.0522  0.1254                   90              1035     42
+8           research            Research paper        supported       Wording found (exact or 90% fuzzy)  0.0083  0.0024  0.0165                    7               841     34
+9           research            Research paper  token_supported  Most words found (70% of content words)  0.1367  0.0988  0.1748                  115               841     34
+10               all          All tested pages        supported       Wording found (exact or 90% fuzzy)  0.0544  0.0441  0.0653                  346              6364    258
+11               all          All tested pages  token_supported  Most words found (70% of content words)  0.2418  0.2177  0.2668                 1539              6364    258
+s4:
+       vector    group  size_band  records_flagged  records   rate   lo95   hi95
+0   research     with       1-10                1       26  0.038  0.007  0.189
+1   research     with      11-20               15       57  0.263  0.166  0.390
+2   research     with      21-30                6       29  0.207  0.098  0.384
+3   research     with      31-50              120      323  0.372  0.321  0.425
+4   research     with  All sizes              142      435  0.326  0.284  0.372
+5   research  without       1-10              161     5836  0.028  0.024  0.032
+6   research  without      11-20              146     1522  0.096  0.082  0.112
+7   research  without      21-30              107      611  0.175  0.147  0.207
+8   research  without      31-50              350     1555  0.225  0.205  0.247
+9   research  without  All sizes              764     9524  0.080  0.075  0.086
+10      list     with       1-10               47     1274  0.037  0.028  0.049
+11      list     with      11-20              112     1060  0.106  0.089  0.126
+12      list     with      21-30              101      510  0.198  0.166  0.235
+13      list     with      31-50              429     1606  0.267  0.246  0.289
+14      list     with  All sizes              689     4450  0.155  0.145  0.166
+15      list  without       1-10              115     4588  0.025  0.021  0.030
+16      list  without      11-20               49      519  0.094  0.072  0.123
+17      list  without      21-30               12      130  0.092  0.054  0.154
+18      list  without      31-50               41      272  0.151  0.113  0.198
+19      list  without  All sizes              217     5509  0.039  0.035  0.045 
+      vector  observed  expected_from_size  others  share_of_gap_from_size  expected_exact_urls  share_of_gap_exact_urls  at50_with_rate  at50_with_lo95  at50_with_hi95  at50_with_records  at50_without_rate  at50_without_lo95  at50_without_hi95  at50_without_records
+0  research     0.326               0.193   0.080                   0.458                0.208                    0.518           0.426           0.368           0.487                258              0.259              0.232              0.288                   939
+1      list     0.155               0.095   0.039                   0.479                0.101                    0.533           0.315           0.287           0.344               1030              0.174              0.124              0.238                   167 
+lang 330/39512 vs 81/411598; median urls 50.0 vs 8.0
+s5:
+ outcome           Text read  No answer (timeout or connection)  Refused (403, robots, login)  Empty page or 404  urls
+stratum                                                                                                              
+aggregator_about         32                                  2                             3                  3    40
+government               42                                 35                             6                  5    88
+list_page                33                                  4                             3                  0    40
+official_about          117                                 14                             7                 12   150
+research                 34                                  0                            29                  4    67 
+                               portal_type  timed_out  urls   rate   lo95   hi95
+0          District portal directory page          0    27  0.000  0.000  0.125
+1                   Other government page          9    28  0.321  0.179  0.507
+2  Scheme, empanelment or registry portal         23    27  0.852  0.675  0.941
+3        Not a government host (misfiled)          3     6  0.500  0.188  0.812 
+                                         urls  records
+portal_type                                          
+District portal directory page           620      397
+Other government page                    945      378
+Scheme, empanelment or registry portal   498      337
+Not a government host (misfiled)         343      242
+s6:
+               domains  median_dev_from_prior  median_ci90_width  min_rel  max_rel  share_of_domains
+records_band                                                                                       
+1                8754                 0.0017             0.3101   0.7996   0.9205            0.7994
+2-4              1458                 0.0013             0.3023   0.7730   0.9185            0.1331
+5-19              507                 0.0032             0.2941   0.7752   0.9265            0.0463
+20-99             161                 0.0081             0.2714   0.8008   0.9216            0.0147
+100+               71                 0.0162             0.1468   0.7752   0.9256            0.0065
+/Users/karthikvattem/projects/datathon/.venv-viz/bin/python   4.26s user 0.28s system 100% cpu 4.537 total

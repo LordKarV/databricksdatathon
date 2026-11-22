@@ -1,0 +1,17 @@
+pathway,metric,stat,value,lo95,hi95,q25,q75,n
+major_trauma,"First care, stop plan (min)",median,36.0,34.0,40.0,24.0,47.0,350
+major_trauma,"Definitive care, best direct plan (min)",median,84.5,79.0,91.0,55.0,113.0,350
+major_trauma,"Definitive care, stop plan (min)",median,171.5,163.0,177.0,141.0,195.0,350
+major_trauma,Extra minutes to definitive care (stop minus direct),median,76.5,70.0,83.5,47.0,112.75,350
+major_trauma,"P(first care in time), best direct plan",mean,0.09788657142857143,0.08284086428571429,0.1127100142857143,,,350
+major_trauma,"P(first care in time), stop plan",mean,0.8509171428571429,0.8419894000000001,0.8590128357142857,,,350
+major_trauma,"P(care in time, both windows), best direct plan",mean,0.09788657142857143,0.08284086428571429,0.1127100142857143,,,350
+major_trauma,"P(care in time, both windows), stop plan",mean,0.41521199999999997,0.4064771071428571,0.42391725714285716,,,350
+obstetric_emergency,"First care, stop plan (min)",median,36.0,32.5,39.0,21.0,48.0,188
+obstetric_emergency,"Definitive care, best direct plan (min)",median,105.0,95.5,110.5,83.0,126.0,188
+obstetric_emergency,"Definitive care, stop plan (min)",median,158.0,150.9875,164.5,133.0,184.0,188
+obstetric_emergency,Extra minutes to definitive care (stop minus direct),median,48.0,43.5,52.0,38.0,66.25,188
+obstetric_emergency,"P(first care in time), best direct plan",mean,0.0,0.0,0.0,,,188
+obstetric_emergency,"P(first care in time), stop plan",mean,0.7640191489361701,0.7596851063829787,0.7683531914893615,,,188
+obstetric_emergency,"P(care in time, both windows), best direct plan",mean,0.0,0.0,0.0,,,188
+obstetric_emergency,"P(care in time, both windows), stop plan",mean,0.0,0.0,0.0,,,188

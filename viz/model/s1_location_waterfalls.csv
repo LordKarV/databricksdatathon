@@ -1,0 +1,28 @@
+case,kind,name,step,label,votes,points,start,end
+S1,Strong,"Civil Hospital, Panipat",b_loc,Base,b_loc=+1,12.925537196644402,0.0,12.925537196644402
+S1,Strong,"Civil Hospital, Panipat",src,Point source,,0.0,12.925537196644402,12.925537196644402
+S1,Strong,"Civil Hospital, Panipat",v_coords,Coord- inates,,0.0,12.925537196644402,12.925537196644402
+S1,Strong,"Civil Hospital, Panipat",v_pin,PIN centre,v_pin=+1,38.356972889655424,12.925537196644402,51.28251008629982
+S1,Strong,"Civil Hospital, Panipat",v_city,Stated city,v_city=+1,63.28171520167253,51.28251008629982,114.56422528797236
+S1,Strong,"Civil Hospital, Panipat",v_name,Place in name,v_name=+1,0.0,114.56422528797236,114.56422528797236
+S1,Strong,"Civil Hospital, Panipat",v_state,Stated state,v_state=+1,21.24605024959015,114.56422528797236,135.81027553756252
+S1,Strong,"Civil Hospital, Panipat",f_,Flags,,0.0,135.81027553756252,135.81027553756252
+S1,Strong,"Civil Hospital, Panipat",total,Total,,135.81027553756252,0.0,135.81027553756252
+U1,Uncertain,Referal Hospital,b_loc,Base,b_loc=+1,12.925537196644402,0.0,12.925537196644402
+U1,Uncertain,Referal Hospital,src,Point source,src_pin=+1,12.044577127960373,12.925537196644402,24.970114324604776
+U1,Uncertain,Referal Hospital,v_coords,Coord- inates,v_coords=-1,0.0,24.970114324604776,24.970114324604776
+U1,Uncertain,Referal Hospital,v_pin,PIN centre,,0.0,24.970114324604776,24.970114324604776
+U1,Uncertain,Referal Hospital,v_city,Stated city,v_city=-1,-63.28171520167253,24.970114324604776,-38.31160087706776
+U1,Uncertain,Referal Hospital,v_name,Place in name,,0.0,-38.31160087706776,-38.31160087706776
+U1,Uncertain,Referal Hospital,v_state,Stated state,v_state=+1,21.24605024959015,-38.31160087706776,-17.06555062747761
+U1,Uncertain,Referal Hospital,f_,Flags,,0.0,-17.06555062747761,-17.06555062747761
+U1,Uncertain,Referal Hospital,total,Total,,-17.06555062747761,0.0,-17.06555062747761
+C1,Contaminated,Wockhardt Hospital Nagpur,b_loc,Base,b_loc=+1,12.925537196644402,0.0,12.925537196644402
+C1,Contaminated,Wockhardt Hospital Nagpur,src,Point source,,0.0,12.925537196644402,12.925537196644402
+C1,Contaminated,Wockhardt Hospital Nagpur,v_coords,Coord- inates,,0.0,12.925537196644402,12.925537196644402
+C1,Contaminated,Wockhardt Hospital Nagpur,v_pin,PIN centre,v_pin=+1,38.356972889655424,12.925537196644402,51.28251008629982
+C1,Contaminated,Wockhardt Hospital Nagpur,v_city,Stated city,v_city=-1,-63.28171520167253,51.28251008629982,-11.99920511537271
+C1,Contaminated,Wockhardt Hospital Nagpur,v_name,Place in name,v_name=-1,0.0,-11.99920511537271,-11.99920511537271
+C1,Contaminated,Wockhardt Hospital Nagpur,v_state,Stated state,v_state=+1,21.24605024959015,-11.99920511537271,9.246845134217441
+C1,Contaminated,Wockhardt Hospital Nagpur,f_,Flags,,0.0,9.246845134217441,9.246845134217441
+C1,Contaminated,Wockhardt Hospital Nagpur,total,Total,,9.246845134217441,0.0,9.246845134217441

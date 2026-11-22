@@ -1,0 +1,43 @@
+0/490 origins, 10 s
+50/490 origins, 13 s
+100/490 origins, 17 s
+150/490 origins, 21 s
+200/490 origins, 24 s
+250/490 origins, 28 s
+300/490 origins, 32 s
+350/490 origins, 35 s
+400/490 origins, 39 s
+450/490 origins, 43 s
+best_type                                   abstain  ...  two_sites
+origin_set             pathway                       ...           
+Benchmark (40 queries) burns                      3  ...          0
+                       dialysis_start             6  ...         17
+                       major_trauma               4  ...          0
+                       obstetric_emergency       14  ...          0
+                       sick_newborn               2  ...          0
+                       snakebite                 40  ...          0
+                       stemi                      1  ...          0
+Bihar                  burns                      0  ...          0
+                       dialysis_start            13  ...          0
+                       major_trauma              16  ...          0
+                       obstetric_emergency       19  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      0  ...          0
+Maharashtra            burns                      0  ...          0
+                       dialysis_start            14  ...         27
+                       major_trauma               2  ...          0
+                       obstetric_emergency       25  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      2  ...          0
+Uttar Pradesh          burns                      0  ...          0
+                       dialysis_start            14  ...         69
+                       major_trauma               3  ...          0
+                       obstetric_emergency       16  ...          0
+                       sick_newborn               0  ...          0
+                       snakebite                150  ...          0
+                       stemi                      0  ...          0
+
+[28 rows x 6 columns]
+done in 48 s; 3430 rows
