@@ -496,5 +496,10 @@
   "area.gov.pmndp": "Free dialysis programme (PMNDP): {centres} government centres working in {working} of {total} districts of {state}.",
   "area.gov.none": "No LaQshya-certified maternity operating theatre in this district on NHSRC's list.",
   "area.need.cs_public": "{pub}% in public facilities.",
-  "area.need.cs_private": "{priv}% in private facilities."
+  "area.need.cs_private": "{priv}% in private facilities.",
+  "ans.receipt.from": "From its own listing",
+  "ans.receipt.source": "Source page",
+  "ans.why_first.nearest": "Why first: the nearest place that could treat this. {name} is rated Likely but {n} min farther: call here first, then {name}.",
+  "ans.why_first.rows": "Why first: {rows}.",
+  "ans.why_first.rule": "Why first: {rule}"
 }
