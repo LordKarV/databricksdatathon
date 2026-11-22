@@ -17,6 +17,31 @@ can be re-run; their raw output goes to `build/databricks_staging/independent_*.
 Fixes made during this check: none were needed. No workspace object was changed. The only new files are
 the four scripts in `databricks/verify/`, this file, and the JSON outputs in `build/databricks_staging/`.
 
+## Re-run on 2026-11-22 (plan 6e)
+
+The four read-only scripts were re-run unchanged, after the dashboard dropped its v1 pages (#143), the Genie
+space gained benchmarks (#155) and the six v1 tables were commented SUPERSEDED (#148). Run from a checkout
+that has the unpublished inputs (see databricks/README.md, "What a clean checkout can rebuild"). No workspace
+object was changed by the scripts. Call_outcomes (section 4) was not re-run.
+
+| # | Check | Result on 2026-11-22 |
+|---|---|---|
+| 1 | Tables: rows vs local source, keys, comments | Pass, 61 of 61 (the manifest grew from 57); only `call_outcomes` is in UC and not in the manifest |
+| 2 | Dashboard: lifecycle, published, datasets, HTTP | ACTIVE, 6 pages, 41 widgets, published 2026-11-22T07:20:02Z with embed_credentials true, both URLs HTTP 200. 10 of 11 datasets ran with rows |
+| 3 | Genie: the 3 VERIFY questions vs our SQL | Pass on numbers, 3 of 3: e-RaktKosh Kerala 41, Uttar Pradesh 33, Punjab 29; Kerala C-section 11 claimed, 3 confirmed; Odisha Sundargarh 3.66 M, 0 and 0 |
+| 5 | App: ping, real plan | `/api/ping` 200; `POST /api/plan` (dialysis, 25.6, 85.14) 200, 15.6 KB, 3 options: Satyavrat Hospital, Advanced Neuro Hospital, Ford Hospital And Research Center (all Patna) |
+
+Notes from this run:
+- The one dataset that "failed" is ds_pairs. The verifier fetches its rows inline and hit the 25 MB inline
+  limit: since the v2 repoint it returns 358,092 rows. This is a limit of the verifier, not the dashboard.
+  `build_dashboard.py test` counts the same SQL with `SELECT COUNT(*)` and gets 358,092 rows, SUCCEEDED.
+- Genie's Odisha answer restates the question as "districts in Bihar" in its first line, then answers for
+  Odisha. That is a wording slip; the numbers are right.
+- The Genie benchmark accuracy, 10 of 12 on the live space, is in databricks/genie/GENIE.md.
+- Rendering of the dashboard pages and the Genie Benchmark tab is still unchecked in a browser.
+
+The sections below are the first run, on 2026-11-21.
+
 ## 1. Tables
 
 Script: `databricks/verify/verify_tables.py` (run through `uv run --offline --with pyyaml --python .venv/bin/python`).
@@ -126,8 +151,8 @@ Script: `databricks/verify/verify_app.py`.
 - The app does not have `POST /api/outcome` yet (no reference to it or to call_outcomes in `app/`). A write
   to call_outcomes as the SP has not been run.
 - No LLM call from the app to either serving endpoint has been run.
-- Genie: no benchmark set and no eval run; consider a wording pass so answers say "no public evidence in
-  this dataset" and avoid column names.
+- Genie: a 12-question benchmark is attached (10 of 12 on 2026-11-22, GENIE.md); a wording pass so answers
+  say "no public evidence in this dataset" and avoid column names is still open.
 - 245 NABH facts lack a usable citation URL; the dashboard and Genie should show them as missing links.
 - Column comments: 43 of 57 tables have none.
 - Primary keys are verified but not declared as UC constraints.

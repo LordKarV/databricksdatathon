@@ -26,7 +26,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 GALLERY = "viz/gallery.json"
 OUT = Path(__file__).resolve().parent / "out"
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
+# The model_ stories describe the v1 prototype model (its sealed test and AUROC); the v2 TEST in the notebook
+# supersedes them, so the page leaves them out rather than show two contradicting results.
+SUPERSEDED_PREFIX = "model_"
 TEXT_FIELDS = ("id", "act", "theme", "headline", "presenter_line", "caveat", "verification")
 
 
@@ -48,6 +51,8 @@ def main() -> None:
     charts_dir.mkdir(parents=True)
     stories, problems, missing_data, total = [], [], [], 0
     for s in sorted(gallery["stories"], key=lambda x: int(x["order"])):
+        if s["id"].startswith(SUPERSEDED_PREFIX):
+            continue
         missing = [k for k in TEXT_FIELDS if not str(s.get(k, "")).strip()]
         if missing:
             problems.append(f"{s.get('id')}: empty field(s) {missing}")

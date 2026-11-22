@@ -130,7 +130,13 @@ def test_why_not_rows_rest_on_engine_fields(s, la, lo):
         pr = ENGINE.index[s][i]
         assert w["band"] == ENGINE.score(w["facility_id"], s)[0]
         assert w["minutes_vs_first"] == w["travel"]["minutes"] - first["travel"]["minutes"]
-        assert 1 <= len(w["basis"]) <= 2 and w["reason"] and not re.search(r"\d", w["reason"])
+        # The only number a reason may hold is the "Likely, but N min farther" lead (#140 2d), and it is the row's own
+        # minutes_vs_first; every other number on the row comes from a marked field.
+        lead = w["reason"].startswith("It is rated Likely, but it is ")
+        assert 1 <= len(w["basis"]) <= 2 and w["reason"]
+        assert re.findall(r"\d+", w["reason"]) == ([str(w["minutes_vs_first"])] if lead else [])
+        assert not lead or (w["basis"][0] == {"code": "farther", "field": "minutes_vs_first",
+                                              "value": w["minutes_vs_first"]} and w["band"] == "likely" != first["band"])
         for b in w["basis"]:
             c = b["code"]
             if c == "location":

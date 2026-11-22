@@ -3,82 +3,57 @@
   "ds_facility": {
    "state": "SUCCEEDED",
    "rows": 9959,
-   "seconds": 2.0
+   "seconds": 2.7
   },
   "ds_state": {
    "state": "SUCCEEDED",
    "rows": 32,
-   "seconds": 0.9
+   "seconds": 1.4
   },
   "ds_district": {
    "state": "SUCCEEDED",
    "rows": 784,
-   "seconds": 0.8
+   "seconds": 1.0
   },
   "ds_dialysis_district": {
    "state": "SUCCEEDED",
    "rows": 781,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   "ds_csection_district": {
    "state": "SUCCEEDED",
    "rows": 169,
-   "seconds": 0.7
+   "seconds": 0.9
   },
   "ds_dialysis_burden": {
    "state": "SUCCEEDED",
    "rows": 780,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   "ds_settlement": {
    "state": "SUCCEEDED",
    "rows": 9,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   "ds_pmndp": {
    "state": "SUCCEEDED",
    "rows": 36,
-   "seconds": 0.8
+   "seconds": 0.9
   },
   "ds_funnel": {
    "state": "SUCCEEDED",
    "rows": 9244,
-   "seconds": 1.0
+   "seconds": 1.4
   },
   "ds_pairs": {
    "state": "SUCCEEDED",
    "rows": 358092,
-   "seconds": 1.1
+   "seconds": 0.9
   },
   "ds_list_facts": {
    "state": "SUCCEEDED",
    "rows": 3062,
    "seconds": 0.8
-  },
-  "ds_plans": {
-   "state": "SUCCEEDED",
-   "rows": 3150,
-   "seconds": 0.8
-  },
-  "ds_plans_window": {
-   "state": "SUCCEEDED",
-   "rows": 21,
-   "seconds": 0.6
-  },
-  "ds_plans_concentration": {
-   "state": "SUCCEEDED",
-   "rows": 18,
-   "seconds": 0.7
-  },
-  "ds_test_metrics": {
-   "state": "SUCCEEDED",
-   "rows": 14,
-   "seconds": 0.8
-  },
-  "ds_test_labels": {
-   "state": "SUCCEEDED",
-   "rows": 4,
-   "seconds": 0.6
   }
  },
  "checks": [
@@ -199,93 +174,6 @@
    ]
   },
   {
-   "check": "ds_plans_window Bihar major trauma (spec 15 of 150)",
-   "state": "SUCCEEDED",
-   "result": [
-    [
-     "15",
-     "150",
-     "0.1",
-     "0.062",
-     "0.158"
-    ]
-   ]
-  },
-  {
-   "check": "ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar)",
-   "state": "SUCCEEDED",
-   "result": [
-    [
-     "obstetric_emergency",
-     "Sub Divisional Hospital Pusa",
-     "81",
-     "131"
-    ],
-    [
-     "major_trauma",
-     "Rajeshwar Hospital",
-     "79",
-     "134"
-    ]
-   ]
-  },
-  {
-   "check": "ds_test_metrics shipped vs priors, all 71 (storybook 0.776 [0.680, 0.862] vs 0.789; ECE IPW 0.197)",
-   "state": "SUCCEEDED",
-   "result": [
-    [
-     "AUROC",
-     "Same scorecard, expert priors",
-     "0.7887",
-     "0.6923",
-     "0.875",
-     "0.684"
-    ],
-    [
-     "AUROC",
-     "Fitted ledger (shipped)",
-     "0.7756",
-     "0.6804",
-     "0.8619",
-     "0.6149"
-    ],
-    [
-     "ECE (lower is better)",
-     "Fitted ledger (shipped)",
-     "0.097",
-     "0.0783",
-     "0.1804",
-     "0.1966"
-    ]
-   ]
-  },
-  {
-   "check": "ds_test_labels (storybook 17, 1, 21, 32 of 71)",
-   "state": "SUCCEEDED",
-   "result": [
-    [
-     "Confirmed",
-     "17",
-     "71"
-    ],
-    [
-     "Contradicted",
-     "1",
-     "71"
-    ],
-    [
-     "No public information, searched",
-     "21",
-     "71"
-    ],
-    [
-     "No public information, never searched",
-     "32",
-     "71"
-    ]
-   ]
-  },
-  {
    "check": "ds_dialysis_district coverage: NFHS districts reached and LGD rows",
    "state": "SUCCEEDED",
    "result": [
@@ -306,5 +194,5 @@
    ]
   }
  ],
- "run_at": "2026-11-21 22:01:57"
+ "run_at": "2026-11-22 02:20:00"
 }

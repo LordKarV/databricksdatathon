@@ -343,13 +343,21 @@ function placeChoices(matches) {
   }));
   $('#place-choices [data-place]').focus();
 }
+// The six digits of a typed PIN ("848 125", "848-125", "PIN 848125", "pin: 848125", "848125."), else null.
+// Same rule as pin_of() in facts/places.py, so a PIN that resolves online also resolves from a saved pack.
+function pinOf(v) {
+  const m = String(v || '').trim().match(/^(?:(?:pin|\u092a\u093f\u0928)(?:\s*code|\s*\u0915\u094b\u0921)?\s*[:#.-]?\s*)?([0-9](?:[0-9\s-]*[0-9])?)[.,;:!]*$/i);
+  const d = m ? m[1].replace(/[\s-]/g, '') : '';
+  return d.length === 6 ? d : null;
+}
 // Offline: a PIN, or a district name, from every saved pack.
 async function packHit(v) {
   try {
     await needScripts(['/pack.js', '/offline.js']);
     const pack = await window.RSOffline.loadPack();
     if (!pack) return {pack: null};
-    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const pin = pinOf(v);
+    if (pin) return {pack, hit: window.RSOffline.resolvePin(pack, pin), source: 'pin'};
     const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
       .replace(/ (district|dist|zila|zilla|jila)$/, '');
     for (const p of pack.packs || [pack]) {
@@ -375,7 +383,7 @@ function bindChange() {
     if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
     if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
     if (online) {
-      placeErr(/^\d{6}$/.test(v) ? PT.pinMissing(v) : PT.nameMissing(v));
+      placeErr(pinOf(v) ? PT.pinMissing(pinOf(v)) : PT.nameMissing(v));
       return;
     }
     const {pack, hit, source} = await packHit(v);
