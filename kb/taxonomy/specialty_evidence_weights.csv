@@ -1,0 +1,1347 @@
+specialty,service,kind,k_text_positive,n_facilities,pooled_rate,weight,k_fit_half,n_fit_half,weight_fit_half,k_test_half,n_test_half
+hematology,blood_bank,prereq,114,463,0.2321,0.2456,58.0,241.0,0.2393,56.0,222.0
+haematology,blood_bank,prereq,5,35,0.2321,0.1753,1.0,16.0,0.1512,4.0,19.0
+transfusionMedicine,blood_bank,label,15,18,0.8,0.8158,7.0,9.0,0.7471,8.0,9.0
+Hematology,blood_bank,prereq,1,7,0.2321,0.2089,0.0,3.0,0.1932,1.0,4.0
+Haematology,blood_bank,prereq,0,4,0.2321,0.1934,,,,0.0,4.0
+bloodBank,blood_bank,label,3,4,0.8,0.7917,2.0,3.0,0.7246,1.0,1.0
+haematologyLaboratory,blood_bank,prereq,0,4,0.2321,0.1934,0.0,2.0,0.202,0.0,2.0
+haematologyAndHaematoncology,blood_bank,prereq,0,3,0.2321,0.2018,0.0,1.0,0.2116,0.0,2.0
+hematologyOncology,blood_bank,prereq,0,3,0.2321,0.2018,0.0,1.0,0.2116,0.0,2.0
+clinicalHaematology,blood_bank,prereq,0,2,0.2321,0.211,0.0,1.0,0.2116,0.0,1.0
+clinicalHematology,blood_bank,prereq,1,2,0.2321,0.2564,1.0,2.0,0.2475,,
+Transfusion Medicine,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+benignAndMalignantHematology,blood_bank,prereq,0,1,0.2321,0.221,0.0,1.0,0.2116,,
+bloodCentre,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+bloodStorageUnit,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+bloodTransfusionMedicine,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+clinicalHermatology,blood_bank,prereq,1,1,0.2321,0.2686,,,,1.0,1.0
+diagnosticsBloodBank,blood_bank,label,0,1,0.8,0.7619,,,,0.0,1.0
+haematologist,blood_bank,prereq,1,1,0.2321,0.2686,,,,1.0,1.0
+hematologyLaboratory,blood_bank,prereq,0,1,0.2321,0.221,,,,0.0,1.0
+immunoHaematology,blood_bank,prereq,0,1,0.2321,0.221,,,,0.0,1.0
+immunohematologyAndBloodTransfusion,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+immunohematologyBloodTransfusion,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+immunohematologyandbloodtransfusion,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+pediatricHaematology,blood_bank,prereq,0,1,0.2321,0.221,0.0,1.0,0.2116,,
+specialisedPediatricHematologyAndOncologyServices,blood_bank,prereq,0,1,0.2321,0.221,0.0,1.0,0.2116,,
+transfusionMedicineAndBloodBank,blood_bank,label,1,1,0.8,0.8095,,,,1.0,1.0
+transfusionMedicineAndBloodCentre,blood_bank,label,1,1,0.8,0.8095,1.0,1.0,0.746,,
+transfusionMedicineAndCellularTherapy,blood_bank,label,1,1,0.8,0.8095,1.0,1.0,0.746,,
+transfusionMedicineOrBloodBank,blood_bank,label,0,1,0.8,0.7619,,,,0.0,1.0
+transfusionTherapy,blood_bank,label,0,1,0.8,0.7619,0.0,1.0,0.6984,,
+plasticSurgery,burn_care,prereq,123,1582,0.0906,0.0779,52.0,771.0,0.0678,71.0,811.0
+reconstructivePlasticSurgery,burn_care,prereq,30,183,0.0906,0.1567,17.0,99.0,0.1564,13.0,84.0
+burnAndTraumaPlasticSurgery,burn_care,label,87,131,0.6821,0.6665,41.0,57.0,0.7254,46.0,74.0
+reconstructiveSurgery,burn_care,prereq,3,13,0.0906,0.1458,1.0,6.0,0.1002,2.0,7.0
+Plastic Surgery,burn_care,prereq,3,5,0.0906,0.1924,0.0,2.0,0.073,3.0,3.0
+plasticAndReconstructiveSurgery,burn_care,prereq,0,4,0.0906,0.0755,0.0,1.0,0.0765,0.0,3.0
+burnGeneralSurgery,burn_care,label,2,3,0.6821,0.6801,2.0,2.0,0.7662,0.0,1.0
+burns,burn_care,label,2,3,0.6821,0.6801,1.0,1.0,0.7551,1.0,2.0
+Plastic & Reconstructive Surgery,burn_care,prereq,1,2,0.0906,0.1278,,,,1.0,2.0
+Reconstructive Surgery,burn_care,prereq,2,2,0.0906,0.1732,,,,2.0,2.0
+burnAndPlasticSurgery,burn_care,label,2,2,0.6821,0.711,1.0,1.0,0.7551,1.0,1.0
+burnsAndPlasticSurgery,burn_care,label,2,2,0.6821,0.711,1.0,1.0,0.7551,1.0,1.0
+burnsAndTraumaPlasticSurgery,burn_care,label,1,2,0.6821,0.6656,1.0,2.0,0.7208,,
+Burns Management,burn_care,label,1,1,0.6821,0.6973,,,,1.0,1.0
+PLASTIC SURGEON,burn_care,prereq,0,1,0.0906,0.0862,0.0,1.0,0.0765,,
+Plastic & Reconstructive surgery,burn_care,prereq,0,1,0.0906,0.0862,0.0,1.0,0.0765,,
+burnManagement,burn_care,label,1,1,0.6821,0.6973,1.0,1.0,0.7551,,
+burnUnit,burn_care,label,0,1,0.6821,0.6496,0.0,1.0,0.7075,,
+burnsCenter,burn_care,label,1,1,0.6821,0.6973,1.0,1.0,0.7551,,
+burnsManagement,burn_care,label,1,1,0.6821,0.6973,1.0,1.0,0.7551,,
+burnsSpecialist,burn_care,label,1,1,0.6821,0.6973,1.0,1.0,0.7551,,
+burnsSurgery,burn_care,label,1,1,0.6821,0.6973,,,,1.0,1.0
+neuroplasticPlasticSurgery,burn_care,prereq,1,1,0.0906,0.1339,1.0,1.0,0.1241,,
+oculoPlasticSurgery,burn_care,prereq,0,1,0.0906,0.0862,,,,0.0,1.0
+oculoPlasticsAndReconstructiveOrbitalSurgery,burn_care,prereq,0,1,0.0906,0.0862,,,,0.0,1.0
+ophthalmicPlasticAndFacialAestheticSurgery,burn_care,prereq,0,1,0.0906,0.0862,0.0,1.0,0.0765,,
+paediatricPlasticSurgery,burn_care,prereq,0,1,0.0906,0.0862,0.0,1.0,0.0765,,
+pediatricHeadInjuryAndBurns,burn_care,label,1,1,0.6821,0.6973,1.0,1.0,0.7551,,
+plasticReconstructiveSurgery,burn_care,prereq,0,1,0.0906,0.0862,,,,0.0,1.0
+plasticsurgery,burn_care,prereq,0,1,0.0906,0.0862,,,,0.0,1.0
+cardiology,cardiac_surgery,prereq,584,3003,0.2112,0.1946,301.0,1460.0,0.2064,283.0,1543.0
+anesthesia,cardiac_surgery,prereq,254,1320,0.2112,0.1927,126.0,641.0,0.1974,128.0,679.0
+cardiacSurgery,cardiac_surgery,label,334,587,0.5944,0.5698,169.0,297.0,0.5706,165.0,290.0
+pediatricCardiology,cardiac_surgery,prereq,78,202,0.2112,0.3704,40.0,92.0,0.3972,38.0,110.0
+cardiothoracicSurgery,cardiac_surgery,label,125,190,0.5944,0.6518,64.0,97.0,0.6484,61.0,93.0
+anesthesiology,cardiac_surgery,prereq,46,162,0.2112,0.276,28.0,84.0,0.3123,18.0,78.0
+paediatricCardiology,cardiac_surgery,prereq,7,17,0.2112,0.3034,4.0,8.0,0.3029,3.0,9.0
+pediatricAnesthesiology,cardiac_surgery,prereq,3,17,0.2112,0.1953,2.0,7.0,0.2401,1.0,10.0
+neuroanesthesiology,cardiac_surgery,prereq,3,14,0.2112,0.2125,0.0,6.0,0.1724,3.0,8.0
+Cardiology,cardiac_surgery,prereq,9,12,0.2112,0.4133,4.0,7.0,0.3141,5.0,5.0
+anaesthesiology,cardiac_surgery,prereq,3,12,0.2112,0.2258,3.0,7.0,0.2771,0.0,5.0
+nonInvasiveCardiology,cardiac_surgery,prereq,2,8,0.2112,0.2223,1.0,2.0,0.2492,1.0,6.0
+ambulatoryAnesthesiology,cardiac_surgery,prereq,0,7,0.2112,0.1565,0.0,5.0,0.1793,0.0,2.0
+cardiacAndPulmonaryRehabilitation,cardiac_surgery,prereq,4,5,0.2112,0.329,2.0,3.0,0.2818,2.0,2.0
+cardiacSciences,cardiac_surgery,prereq,5,5,0.2112,0.369,3.0,3.0,0.3253,2.0,2.0
+cardiologist,cardiac_surgery,prereq,1,5,0.2112,0.209,0.0,1.0,0.2134,1.0,4.0
+preventiveCardiology,cardiac_surgery,prereq,2,5,0.2112,0.249,1.0,3.0,0.2383,1.0,2.0
+Anaesthesiology,cardiac_surgery,prereq,3,4,0.2112,0.301,3.0,4.0,0.3117,,
+anaesthesia,cardiac_surgery,prereq,1,4,0.2112,0.2177,1.0,1.0,0.261,0.0,3.0
+cardiacAnesthesia,cardiac_surgery,prereq,1,4,0.2112,0.2177,,,,1.0,4.0
+cardioThoracicSurgery,cardiac_surgery,label,3,4,0.5944,0.6203,,,,3.0,4.0
+Cardio Thoracic Surgery,cardiac_surgery,label,3,3,0.5944,0.6473,2.0,2.0,0.6302,1.0,1.0
+cardiacAnesthesiology,cardiac_surgery,prereq,1,3,0.2112,0.2272,0.0,1.0,0.2134,1.0,2.0
+cardiacCare,cardiac_surgery,prereq,1,3,0.2112,0.2272,,,,1.0,3.0
+cardiovascularSurgery,cardiac_surgery,label,2,3,0.5944,0.6038,1.0,1.0,0.6126,1.0,2.0
+heartTransplant,cardiac_surgery,label,1,3,0.5944,0.5603,0.0,1.0,0.565,1.0,2.0
+neuroAnesthesiology,cardiac_surgery,prereq,1,3,0.2112,0.2272,1.0,3.0,0.2383,,
+nonInvasiveCardiologyCentre,cardiac_surgery,prereq,2,3,0.2112,0.2706,2.0,3.0,0.2818,,
+pediatricCardiacSurgery,cardiac_surgery,label,2,3,0.5944,0.6038,1.0,1.0,0.6126,1.0,2.0
+regionalAnesthesiologyAndAcutePain,cardiac_surgery,prereq,0,3,0.2112,0.1837,0.0,1.0,0.2134,0.0,2.0
+Anaesthesia,cardiac_surgery,prereq,1,2,0.2112,0.2375,0.0,1.0,0.2134,1.0,1.0
+CTVS,cardiac_surgery,label,2,2,0.5944,0.6313,,,,2.0,2.0
+Non-Invasive Cardiology,cardiac_surgery,prereq,2,2,0.2112,0.2829,2.0,2.0,0.2946,,
+Pediatric Cardiology,cardiac_surgery,prereq,0,2,0.2112,0.192,0.0,2.0,0.2037,,
+cardiacElectrophysiology,cardiac_surgery,prereq,0,2,0.2112,0.192,0.0,1.0,0.2134,0.0,1.0
+cardiacScience,cardiac_surgery,prereq,1,2,0.2112,0.2375,,,,1.0,2.0
+cardioThoracicAndVascularSurgery,cardiac_surgery,label,1,2,0.5944,0.5858,1.0,2.0,0.5847,,
+cardiologyAndCardiothoracicSurgery,cardiac_surgery,label,1,2,0.5944,0.5858,1.0,2.0,0.5847,,
+cardiothoracic,cardiac_surgery,label,1,2,0.5944,0.5858,,,,1.0,2.0
+cardiothoracicVascularSurgery,cardiac_surgery,label,1,2,0.5944,0.5858,0.0,1.0,0.565,1.0,1.0
+cardiovascularAndThoracicSurgery,cardiac_surgery,label,2,2,0.5944,0.6313,1.0,1.0,0.6126,1.0,1.0
+paediatricCardiacCentre,cardiac_surgery,prereq,1,2,0.2112,0.2375,0.0,1.0,0.2134,1.0,1.0
+Anesthesiology,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+Anesthesiology Department,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+CARDIOLOGY & ENT,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+CVTS,cardiac_surgery,label,1,1,0.5944,0.6137,,,,1.0,1.0
+Cardiac Diseases,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+Cardiac Electrophysiology,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+Cardiac Rehabilitation,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+Cardiac Sciences,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+Cardio-Thoracic,cardiac_surgery,label,1,1,0.5944,0.6137,1.0,1.0,0.6126,,
+Cardiology and Critical Coronary Care,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+Cardiothoracic Surgery,cardiac_surgery,label,0,1,0.5944,0.5661,0.0,1.0,0.565,,
+Ctvs,cardiac_surgery,label,0,1,0.5944,0.5661,,,,0.0,1.0
+Non-Interventional Cardiology,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+Pediatric CVTS - Cardio Vascular and Thoracic Surgery,cardiac_surgery,label,1,1,0.5944,0.6137,,,,1.0,1.0
+Preventive Cardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+Sports Cardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+adultCardiacAnesthesiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+adultCongenitalCardiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+anaesthesiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+anesthesiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+cardiac,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+cardiac surgeon,cardiac_surgery,label,0,1,0.5944,0.5661,0.0,1.0,0.565,,
+cardiac-surgery,cardiac_surgery,label,1,1,0.5944,0.6137,1.0,1.0,0.6126,,
+cardiacAnaesthesiology,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+cardiacAndCardiothoracicSurgery,cardiac_surgery,label,1,1,0.5944,0.6137,,,,1.0,1.0
+cardiacDiagnostics,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+cardiacElectroPhysiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+cardiacElectroPhysiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+cardiacInvasiveProcedures,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+cardiacPhysiotherapy,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+cardiacRehabilitationAndPhysiotherapy,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+cardiacSurgeon,cardiac_surgery,label,0,1,0.5944,0.5661,,,,0.0,1.0
+cardioThoracicVascularSurgery,cardiac_surgery,label,1,1,0.5944,0.6137,,,,1.0,1.0
+cardiologyAndCriticalCoronaryCare,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+cardiologyAndElectrophysiology,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+cardiologyCardiacSurgery,cardiac_surgery,label,1,1,0.5944,0.6137,1.0,1.0,0.6126,,
+cardiologyCare,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+cardiologyInterventional,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+cardiologyTests,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+cardiologyThrombolysis,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+cardiothoracicAndCardiovascularSurgery,cardiac_surgery,label,0,1,0.5944,0.5661,0.0,1.0,0.565,,
+cardiothoracicSurgeon,cardiac_surgery,label,0,1,0.5944,0.5661,,,,0.0,1.0
+clinicalCardiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+clinicalCardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+ctvs,cardiac_surgery,label,1,1,0.5944,0.6137,1.0,1.0,0.6126,,
+departmentOfEndoscopicAnesthesia,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+diagnosticCardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+echocardiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+heartFailureClinic,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+heartValveCentre,cardiac_surgery,label,1,1,0.5944,0.6137,1.0,1.0,0.6126,,
+hospiceAndPalliativeMedicineAnesthesiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+neuroAnaesthesiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+non-invasiveCardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+non-invasiveCardiologyCentre,cardiac_surgery,prereq,1,1,0.2112,0.2488,,,,1.0,1.0
+noninvasiveCardiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+oncoanesthesiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+paediatricCardiacSciences,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+pediatricAnesthesia,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+pediatricCardiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+perioperativeAnesthesia,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+preventiveCardiologist,cardiac_surgery,prereq,0,1,0.2112,0.2012,,,,0.0,1.0
+transplantAnesthesiology,cardiac_surgery,prereq,0,1,0.2112,0.2012,0.0,1.0,0.2134,,
+valvularHeartSurgery,cardiac_surgery,label,1,1,0.5944,0.6137,,,,1.0,1.0
+womensCardiologyCare,cardiac_surgery,prereq,1,1,0.2112,0.2488,1.0,1.0,0.261,,
+ophthalmology,cataract_surgery,prereq,756,2823,0.2683,0.2678,371.0,1406.0,0.2639,385.0,1417.0
+cataractAndAnteriorSegmentSurgery,cataract_surgery,label,568,680,0.8358,0.8353,275.0,342.0,0.8042,293.0,338.0
+Ophthalmology,cataract_surgery,prereq,1,5,0.2683,0.2546,0.0,2.0,0.2394,1.0,3.0
+opthalmology,cataract_surgery,prereq,1,2,0.2683,0.2893,,,,1.0,2.0
+MICS & Cataract,cataract_surgery,label,1,1,0.8358,0.8436,1.0,1.0,0.8161,,
+cataract,cataract_surgery,label,1,1,0.8358,0.8436,1.0,1.0,0.8161,,
+cataractAndLensImplantation,cataract_surgery,label,1,1,0.8358,0.8436,1.0,1.0,0.8161,,
+cataractAndRefractiveLensSurgery,cataract_surgery,label,1,1,0.8358,0.8436,1.0,1.0,0.8161,,
+cataractSurgeon,cataract_surgery,label,0,1,0.8358,0.796,,,,0.0,1.0
+cataractSurgery,cataract_surgery,label,1,1,0.8358,0.8436,,,,1.0,1.0
+childhoodCataracts,cataract_surgery,label,1,1,0.8358,0.8436,1.0,1.0,0.8161,,
+eyeCare,cataract_surgery,prereq,1,1,0.2683,0.3031,,,,1.0,1.0
+eyeHospital,cataract_surgery,prereq,1,1,0.2683,0.3031,,,,1.0,1.0
+ophthalmologist,cataract_surgery,prereq,0,1,0.2683,0.2555,0.0,1.0,0.2508,,
+phacoSurgery,cataract_surgery,label,1,1,0.8358,0.8436,,,,1.0,1.0
+cardiology,cath_lab_angioplasty,prereq,711,3003,0.2554,0.2369,375.0,1460.0,0.2571,336.0,1543.0
+pediatricCardiology,cath_lab_angioplasty,prereq,81,202,0.2554,0.3879,40.0,92.0,0.4062,41.0,110.0
+interventionalCardiology,cath_lab_angioplasty,label,38,46,0.8,0.8182,18.0,23.0,0.7613,20.0,23.0
+paediatricCardiology,cath_lab_angioplasty,prereq,8,17,0.2554,0.3542,4.0,8.0,0.3392,4.0,9.0
+Cardiology,cath_lab_angioplasty,prereq,8,12,0.2554,0.4096,4.0,7.0,0.3518,4.0,5.0
+nonInvasiveCardiology,cath_lab_angioplasty,prereq,4,8,0.2554,0.3253,2.0,2.0,0.3408,2.0,6.0
+interventionalCardiologyCentre,cath_lab_angioplasty,label,4,6,0.8,0.7692,3.0,5.0,0.7095,1.0,1.0
+cardiacAndPulmonaryRehabilitation,cath_lab_angioplasty,prereq,4,5,0.2554,0.3643,2.0,3.0,0.326,2.0,2.0
+cardiacSciences,cath_lab_angioplasty,prereq,3,5,0.2554,0.3243,1.0,3.0,0.2825,2.0,2.0
+cardiologist,cath_lab_angioplasty,prereq,1,5,0.2554,0.2443,0.0,1.0,0.2618,1.0,4.0
+preventiveCardiology,cath_lab_angioplasty,prereq,2,5,0.2554,0.2843,1.0,3.0,0.2825,1.0,2.0
+Interventional Cardiology,cath_lab_angioplasty,label,2,3,0.8,0.7826,1.0,2.0,0.7153,1.0,1.0
+cardiacCare,cath_lab_angioplasty,prereq,2,3,0.2554,0.309,,,,2.0,3.0
+nonInvasiveCardiologyCentre,cath_lab_angioplasty,prereq,1,3,0.2554,0.2655,1.0,3.0,0.2825,,
+Non-Invasive Cardiology,cath_lab_angioplasty,prereq,2,2,0.2554,0.3231,2.0,2.0,0.3408,,
+Pediatric Cardiology,cath_lab_angioplasty,prereq,0,2,0.2554,0.2321,0.0,2.0,0.2499,,
+cardiacElectrophysiology,cath_lab_angioplasty,prereq,1,2,0.2554,0.2776,1.0,1.0,0.3094,0.0,1.0
+cardiacScience,cath_lab_angioplasty,prereq,1,2,0.2554,0.2776,,,,1.0,2.0
+coronaryAngiography,cath_lab_angioplasty,label,2,2,0.8,0.8182,1.0,1.0,0.7494,1.0,1.0
+paediatricCardiacCentre,cath_lab_angioplasty,prereq,1,2,0.2554,0.2776,1.0,1.0,0.3094,0.0,1.0
+CARDIOLOGY & ENT,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+Cardiac Diseases,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+Cardiac Electrophysiology,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+Cardiac Rehabilitation,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+Cardiac Sciences,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+Cardiology and Critical Coronary Care,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+Interventional Cardiologist,cath_lab_angioplasty,label,1,1,0.8,0.8095,1.0,1.0,0.7494,,
+Non-Interventional Cardiology,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+Preventive Cardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+Sports Cardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+Transradial Cardiology,cath_lab_angioplasty,label,0,1,0.8,0.7619,0.0,1.0,0.7018,,
+adultCongenitalCardiologist,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+balloonAngioplasty,cath_lab_angioplasty,label,1,1,0.8,0.8095,,,,1.0,1.0
+cardiac,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+cardiacCatheterisation,cath_lab_angioplasty,label,1,1,0.8,0.8095,1.0,1.0,0.7494,,
+cardiacDiagnostics,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+cardiacElectroPhysiologist,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+cardiacElectroPhysiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+cardiacInvasiveProcedures,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+cardiacPhysiotherapy,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+cardiacRehabilitationAndPhysiotherapy,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+cardiologyAndCriticalCoronaryCare,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+cardiologyAndElectrophysiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+cardiologyAndInterventionalCardiology,cath_lab_angioplasty,label,1,1,0.8,0.8095,1.0,1.0,0.7494,,
+cardiologyCare,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+cardiologyInterventional,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+cardiologyTests,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+cardiologyThrombolysis,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+clinicalCardiologist,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+clinicalCardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+coronaryAngioplasty,cath_lab_angioplasty,label,1,1,0.8,0.8095,1.0,1.0,0.7494,,
+diagnosticCardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+echocardiologist,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+heartFailureClinic,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+interventional cardiology,cath_lab_angioplasty,label,1,1,0.8,0.8095,1.0,1.0,0.7494,,
+non-invasiveCardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+non-invasiveCardiologyCentre,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+noninvasiveCardiology,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+paediatricCardiacSciences,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,1.0,1.0,0.3094,,
+pediatricCardiologist,cath_lab_angioplasty,prereq,1,1,0.2554,0.2908,,,,1.0,1.0
+preventiveCardiologist,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,,,,0.0,1.0
+transradialCardiology,cath_lab_angioplasty,label,0,1,0.8,0.7619,0.0,1.0,0.7018,,
+womensCardiologyCare,cath_lab_angioplasty,prereq,0,1,0.2554,0.2432,0.0,1.0,0.2618,,
+pathology,chemotherapy,prereq,209,2248,0.1143,0.0932,105.0,1094.0,0.0963,104.0,1154.0
+medicalOncology,chemotherapy,label,382,1435,0.3109,0.2668,188.0,716.0,0.2638,194.0,719.0
+clinicalPathology,chemotherapy,prereq,33,535,0.1143,0.0636,17.0,265.0,0.0677,16.0,270.0
+hematology,chemotherapy,prereq,89,463,0.1143,0.189,46.0,241.0,0.1851,43.0,222.0
+pediatricHematologyOncology,chemotherapy,label,60,123,0.3109,0.4631,32.0,62.0,0.4657,28.0,61.0
+anatomicPathology,chemotherapy,prereq,18,117,0.1143,0.1481,10.0,64.0,0.1465,8.0,53.0
+oncology,chemotherapy,prereq,17,82,0.1143,0.1891,6.0,42.0,0.134,11.0,40.0
+haematology,chemotherapy,prereq,9,35,0.1143,0.2052,3.0,16.0,0.1474,6.0,19.0
+boneMarrowTransplant,chemotherapy,label,13,23,0.3109,0.4469,6.0,9.0,0.4201,7.0,14.0
+histopathology,chemotherapy,prereq,2,20,0.1143,0.1071,1.0,11.0,0.1067,1.0,9.0
+pediatricOncology,chemotherapy,label,12,17,0.3109,0.4924,8.0,11.0,0.4575,4.0,6.0
+paediatricOncology,chemotherapy,label,10,11,0.3109,0.5232,7.0,8.0,0.4708,3.0,3.0
+cytopathology,chemotherapy,prereq,1,9,0.1143,0.1133,0.0,3.0,0.1003,1.0,6.0
+histopathologyLaboratory,chemotherapy,prereq,0,9,0.1143,0.0788,0.0,5.0,0.0923,0.0,4.0
+Hematology,chemotherapy,prereq,1,7,0.1143,0.1217,0.0,3.0,0.1003,1.0,4.0
+Pathology,chemotherapy,prereq,3,6,0.1143,0.2033,2.0,3.0,0.1873,1.0,3.0
+Histopathology,chemotherapy,prereq,1,5,0.1143,0.1314,1.0,3.0,0.1438,0.0,2.0
+Oncology,chemotherapy,prereq,2,5,0.1143,0.1714,1.0,1.0,0.1575,1.0,4.0
+cancerCare,chemotherapy,prereq,2,5,0.1143,0.1714,1.0,2.0,0.1503,1.0,3.0
+Haematology,chemotherapy,prereq,0,4,0.1143,0.0952,,,,0.0,4.0
+haematologyLaboratory,chemotherapy,prereq,0,4,0.1143,0.0952,0.0,2.0,0.1049,0.0,2.0
+Cytopathology,chemotherapy,prereq,0,3,0.1143,0.0994,0.0,2.0,0.1049,0.0,1.0
+Medical Oncology,chemotherapy,label,3,3,0.3109,0.4008,,,,3.0,3.0
+boneMarrowTransplantation,chemotherapy,label,3,3,0.3109,0.4008,1.0,1.0,0.3421,2.0,2.0
+chemotherapy,chemotherapy,label,3,3,0.3109,0.4008,2.0,2.0,0.372,1.0,1.0
+haematoOncology,chemotherapy,label,3,3,0.3109,0.4008,2.0,2.0,0.372,1.0,1.0
+haematologyAndHaematoncology,chemotherapy,prereq,1,3,0.1143,0.1428,0.0,1.0,0.1098,1.0,2.0
+hematoOncology,chemotherapy,label,3,3,0.3109,0.4008,2.0,2.0,0.372,1.0,1.0
+hematologyOncology,chemotherapy,prereq,1,3,0.1143,0.1428,0.0,1.0,0.1098,1.0,2.0
+oncopathology,chemotherapy,prereq,3,3,0.1143,0.2298,2.0,2.0,0.1958,1.0,1.0
+paediatricHaematologyOncologyAndBMT,chemotherapy,label,3,3,0.3109,0.4008,2.0,2.0,0.372,1.0,1.0
+Cancer Care,chemotherapy,prereq,0,2,0.1143,0.1039,0.0,1.0,0.1098,0.0,1.0
+clinicalHaematology,chemotherapy,prereq,0,2,0.1143,0.1039,0.0,1.0,0.1098,0.0,1.0
+clinicalHematology,chemotherapy,prereq,2,2,0.1143,0.1948,2.0,2.0,0.1958,,
+hematoOncologyAndBMT,chemotherapy,label,1,2,0.3109,0.3281,0.0,1.0,0.2945,1.0,1.0
+histoPathology,chemotherapy,prereq,2,2,0.1143,0.1948,2.0,2.0,0.1958,,
+histocytopathology,chemotherapy,prereq,0,2,0.1143,0.1039,,,,0.0,2.0
+molecularPathology,chemotherapy,prereq,1,2,0.1143,0.1493,,,,1.0,2.0
+paediatricHematoOncologyAndBMT,chemotherapy,label,1,2,0.3109,0.3281,0.0,1.0,0.2945,1.0,1.0
+pediatricHematoOncology,chemotherapy,label,1,2,0.3109,0.3281,,,,1.0,2.0
+BONE MARROW TRANSPLANT,chemotherapy,label,0,1,0.3109,0.2961,0.0,1.0,0.2945,,
+Bone Marrow Transplant,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Bone marrow Transplant,chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+Breast Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Cytology & Histopathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+GI Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Gynecological Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Haematology & Haemato Oncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+"Haematology, Haemato-Oncology & Bone Marrow Transplant",chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+Head and Neck Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Hemato Oncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Hemato Oncology & BMT,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Hemato-Oncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Hematology & Hemato Oncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Hematopathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Histopathology & Cytology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+Immunopathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Molecular pathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+MolecularPathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Onco Care,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Oncologist/Cancer Specialist,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+Oncology & Oncology Surgery,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+Paediatric Hemato Oncology & BMT,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+Pathology Laboratory,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Pathology laboratory,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Prostate Cancer,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Surgical Pathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Thoracic Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+Toxicopathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+Urological Cancer,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+adultAndPaediatricOncology,chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+advancedPathology,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+benignAndMalignantHematology,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+bioChemistryPathologyAndMicrobiology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+bone marrow Transplant,chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+bone marrow translant,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+boneMarrowTransplantationUnit,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+boneMarrowTransplants,chemotherapy,label,0,1,0.3109,0.2961,0.0,1.0,0.2945,,
+breastCancerClinic,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+cancerPathology,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+carTCell,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+carTCellTherapy,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+clinicalHematologyHematoOncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+clinicalHermatology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+generalPathology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+haematologist,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+haematologyAndBMT,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+haematologyAndHaematoOncology,chemotherapy,label,1,1,0.3109,0.3437,,,,1.0,1.0
+haematopathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+headAndNeckCancer,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+hematologyLaboratory,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+hematopathology,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+immunoHaematology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+laboratoryAndOncopathology,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+lumbarPunctureAndIntrathecalChemotherapy,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+nephropathology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+neuroPathology,chemotherapy,prereq,1,1,0.1143,0.1564,,,,1.0,1.0
+oncologicReconstruction,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+oncologist,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+oncologyAndOncologySurgery,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+oncologyNursing,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+paediatricBoneMarrowTransplant,chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+paediatricHaematologyAndBMT,chemotherapy,label,0,1,0.3109,0.2961,0.0,1.0,0.2945,,
+paediatricHaematologyOncology,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+paediatricHematoOncology,chemotherapy,label,0,1,0.3109,0.2961,0.0,1.0,0.2945,,
+paediatricHematologyOncology,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+pathologyAndCytology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+pathologyAndMicrobiology,chemotherapy,prereq,0,1,0.1143,0.1088,0.0,1.0,0.1098,,
+pediatricHaematology,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+pediatricHaematologyOncology,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+pediatricHemato-Oncology,chemotherapy,label,0,1,0.3109,0.2961,0.0,1.0,0.2945,,
+pediatricHemato-oncology,chemotherapy,label,0,1,0.3109,0.2961,,,,0.0,1.0
+pediatricOncologyAndHematologyCentre,chemotherapy,label,1,1,0.3109,0.3437,1.0,1.0,0.3421,,
+specialisedPediatricHematologyAndOncologyServices,chemotherapy,prereq,1,1,0.1143,0.1564,1.0,1.0,0.1575,,
+surgicalPathology,chemotherapy,prereq,0,1,0.1143,0.1088,,,,0.0,1.0
+radiology,ct_scan,prereq,1029,2993,0.3762,0.344,505.0,1462.0,0.3459,524.0,1531.0
+interventionalRadiology,ct_scan,prereq,153,296,0.3762,0.508,76.0,143.0,0.5131,77.0,153.0
+diagnosticRadiology,ct_scan,prereq,63,169,0.3762,0.3731,32.0,73.0,0.4262,31.0,96.0
+breastImaging,ct_scan,prereq,87,140,0.3762,0.5908,40.0,64.0,0.5671,47.0,76.0
+neuroradiology,ct_scan,prereq,17,42,0.3762,0.3956,11.0,26.0,0.4051,6.0,16.0
+cardiothoracicRadiology,ct_scan,prereq,20,35,0.3762,0.5005,9.0,19.0,0.4266,11.0,16.0
+pediatricRadiology,ct_scan,prereq,20,28,0.3762,0.5734,14.0,16.0,0.601,6.0,12.0
+Radiology,ct_scan,prereq,2,6,0.3762,0.3663,0.0,2.0,0.3471,2.0,4.0
+radiodiagnosis,ct_scan,prereq,1,4,0.3762,0.3552,0.0,3.0,0.332,1.0,1.0
+Interventional Radiology,ct_scan,prereq,2,2,0.3762,0.4329,1.0,1.0,0.4113,1.0,1.0
+clinicalImagingInterventionalRadiology,ct_scan,prereq,2,2,0.3762,0.4329,1.0,1.0,0.4113,1.0,1.0
+vascularSurgeryAndInterventionalRadiology,ct_scan,prereq,2,2,0.3762,0.4329,,,,2.0,2.0
+diagnosticsRadiology,ct_scan,prereq,0,1,0.3762,0.3583,,,,0.0,1.0
+imagingInterventionalRadiology,ct_scan,prereq,1,1,0.3762,0.4059,,,,1.0,1.0
+imagingTests,ct_scan,prereq,1,1,0.3762,0.4059,1.0,1.0,0.4113,,
+interventionalNeuroRadiology,ct_scan,prereq,0,1,0.3762,0.3583,0.0,1.0,0.3636,,
+interventionalNeuroradiology,ct_scan,prereq,1,1,0.3762,0.4059,1.0,1.0,0.4113,,
+interventionalRadiology & Imaging Services,ct_scan,prereq,0,1,0.3762,0.3583,,,,0.0,1.0
+interventionalRadiologyAndImaging,ct_scan,prereq,0,1,0.3762,0.3583,,,,0.0,1.0
+paediatricRadiology,ct_scan,prereq,0,1,0.3762,0.3583,,,,0.0,1.0
+pediatricNeuroradiology,ct_scan,prereq,1,1,0.3762,0.4059,1.0,1.0,0.4113,,
+vascularAndInterventionalRadiology,ct_scan,prereq,1,1,0.3762,0.4059,1.0,1.0,0.4113,,
+addictionPsychiatry,de_addiction,label,89,183,0.4941,0.4871,47.0,85.0,0.5508,42.0,98.0
+addictionMedicinePM,de_addiction,label,21,46,0.4941,0.4679,8.0,21.0,0.4593,13.0,25.0
+addictionInternalMedicine,de_addiction,label,11,17,0.4941,0.5644,7.0,8.0,0.6369,4.0,9.0
+addictionMedicinePMR,de_addiction,label,3,4,0.4941,0.5368,2.0,3.0,0.558,1.0,1.0
+psychiatryAndDeaddictionTherapy,de_addiction,label,0,2,0.4941,0.4492,0.0,1.0,0.5159,0.0,1.0
+neuropsychiatryAndDrugDeAddiction,de_addiction,label,0,1,0.4941,0.4706,0.0,1.0,0.5159,,
+substanceAbuseAndAddictionTreatment,de_addiction,label,1,1,0.4941,0.5182,1.0,1.0,0.5635,,
+substanceUseDisorder,de_addiction,label,1,1,0.4941,0.5182,,,,1.0,1.0
+nephrology,dialysis,prereq,835,2153,0.3899,0.3879,404.0,1058.0,0.382,431.0,1095.0
+pediatricNephrology,dialysis,prereq,34,92,0.3899,0.3732,20.0,42.0,0.4483,14.0,50.0
+dialysis,dialysis,label,11,12,0.8788,0.893,6.0,6.0,0.9519,5.0,6.0
+Nephrology,dialysis,prereq,6,9,0.3899,0.4758,3.0,3.0,0.4694,3.0,6.0
+paediatricNephrology,dialysis,prereq,4,8,0.3899,0.4214,2.0,4.0,0.4082,2.0,4.0
+nephrologyIncludingDialysis,dialysis,label,6,6,0.8788,0.9068,3.0,3.0,0.9457,3.0,3.0
+nephrologyAndDialysis,dialysis,label,3,4,0.8788,0.8573,2.0,3.0,0.9022,1.0,1.0
+nephrologyAndUrology,dialysis,prereq,2,3,0.3899,0.426,1.0,1.0,0.4188,1.0,2.0
+pediatricDialysis,dialysis,label,2,3,0.8788,0.8511,2.0,2.0,0.9432,0.0,1.0
+renalSciences,dialysis,prereq,1,3,0.3899,0.3825,0.0,1.0,0.3712,1.0,2.0
+nephrologyWithDialysis,dialysis,label,2,2,0.8788,0.8898,,,,2.0,2.0
+AV Fistula creation for dialysis,dialysis,label,0,1,0.8788,0.8369,,,,0.0,1.0
+Nephrology & Dialysis,dialysis,label,1,1,0.8788,0.8846,1.0,1.0,0.9405,,
+Nephrology and Renal Science,dialysis,prereq,1,1,0.3899,0.419,1.0,1.0,0.4188,,
+Renal Sciences,dialysis,prereq,0,1,0.3899,0.3713,,,,0.0,1.0
+acuteChronicKidneyFailureHemodialysis,dialysis,label,1,1,0.8788,0.8846,,,,1.0,1.0
+haemodialysis,dialysis,label,1,1,0.8788,0.8846,1.0,1.0,0.9405,,
+kidneyHealthCentre,dialysis,prereq,1,1,0.3899,0.419,1.0,1.0,0.4188,,
+kidneySciences,dialysis,prereq,1,1,0.3899,0.419,1.0,1.0,0.4188,,
+nephrology & renal science,dialysis,prereq,0,1,0.3899,0.3713,,,,0.0,1.0
+nephrology-urology,dialysis,prereq,0,1,0.3899,0.3713,0.0,1.0,0.3712,,
+nephrologyAndRenalScience,dialysis,prereq,1,1,0.3899,0.419,1.0,1.0,0.4188,,
+nephrologyDialysis,dialysis,label,1,1,0.8788,0.8846,,,,1.0,1.0
+nephrologyTransplantMedicine,dialysis,prereq,0,1,0.3899,0.3713,,,,0.0,1.0
+nephrologyUrology,dialysis,prereq,1,1,0.3899,0.419,,,,1.0,1.0
+paediatricDialysis,dialysis,label,1,1,0.8788,0.8846,,,,1.0,1.0
+preventiveNephrology,dialysis,prereq,1,1,0.3899,0.419,1.0,1.0,0.4188,,
+urologyAndNephrology,dialysis,prereq,0,1,0.3899,0.3713,0.0,1.0,0.3712,,
+urologyNephrology,dialysis,prereq,1,1,0.3899,0.419,,,,1.0,1.0
+emergencyMedicine,emergency_24x7,label,1652,2079,0.7951,0.7946,802.0,1001.0,0.8012,850.0,1078.0
+pediatricEmergencyMedicine,emergency_24x7,label,35,46,0.7951,0.7713,13.0,17.0,0.7847,22.0,29.0
+accidentAndEmergency,emergency_24x7,label,5,5,0.7951,0.8361,1.0,1.0,0.8112,4.0,4.0
+Emergency Medicine,emergency_24x7,label,4,4,0.7951,0.8293,2.0,2.0,0.8198,2.0,2.0
+forensicMedicineAndToxicology,emergency_24x7,prereq,3,4,0.9167,0.8889,1.0,2.0,0.7727,2.0,2.0
+emergencyMedicalServices,emergency_24x7,label,3,3,0.7951,0.8219,,,,3.0,3.0
+medicalToxicologyEM,emergency_24x7,prereq,3,3,0.9167,0.9275,,,,3.0,3.0
+preventiveMedicalToxicology,emergency_24x7,prereq,3,3,0.9167,0.9275,2.0,2.0,0.8182,1.0,1.0
+Critaical Care & Emergency,emergency_24x7,label,1,1,0.7951,0.8049,1.0,1.0,0.8112,,
+accidentEmergencyMedicine,emergency_24x7,label,1,1,0.7951,0.8049,1.0,1.0,0.8112,,
+addictionEmergencyMedicine,emergency_24x7,label,1,1,0.7951,0.8049,,,,1.0,1.0
+emergencyMedicineDoctor,emergency_24x7,label,0,1,0.7951,0.7573,,,,0.0,1.0
+emergencymedicine,emergency_24x7,label,1,1,0.7951,0.8049,,,,1.0,1.0
+paediatricEmergency,emergency_24x7,label,1,1,0.7951,0.8049,1.0,1.0,0.8112,,
+toxicology,emergency_24x7,prereq,1,1,0.9167,0.9206,1.0,1.0,0.8095,,
+toxicologyAndOccupationalHealth,emergency_24x7,prereq,1,1,0.9167,0.9206,,,,1.0,1.0
+gynecologyAndObstetrics,emergency_csection,prereq,423,4489,0.091,0.0942,221.0,2235.0,0.0989,202.0,2254.0
+anesthesia,emergency_csection,prereq,104,1320,0.091,0.079,54.0,641.0,0.0847,50.0,679.0
+anesthesiology,emergency_csection,prereq,11,162,0.091,0.0704,10.0,84.0,0.115,1.0,78.0
+obstetricsAndGynaecology,emergency_csection,prereq,4,48,0.091,0.0856,2.0,18.0,0.1041,2.0,30.0
+obstetricsAndGynecology,emergency_csection,prereq,4,39,0.091,0.0986,2.0,21.0,0.0965,2.0,18.0
+pediatricAnesthesiology,emergency_csection,prereq,2,17,0.091,0.1032,2.0,7.0,0.1465,0.0,10.0
+neuroanesthesiology,emergency_csection,prereq,0,14,0.091,0.0535,0.0,6.0,0.0752,0.0,8.0
+obstetricAnesthesiology,emergency_csection,prereq,8,14,0.091,0.2888,3.0,7.0,0.1835,5.0,7.0
+anaesthesiology,emergency_csection,prereq,0,12,0.091,0.0569,0.0,7.0,0.0724,0.0,5.0
+ambulatoryAnesthesiology,emergency_csection,prereq,0,7,0.091,0.0674,0.0,5.0,0.0782,0.0,2.0
+Anaesthesiology,emergency_csection,prereq,0,4,0.091,0.0758,0.0,4.0,0.0815,,
+Obstetrics & Gynaecology,emergency_csection,prereq,0,4,0.091,0.0758,0.0,2.0,0.0889,0.0,2.0
+anaesthesia,emergency_csection,prereq,0,4,0.091,0.0758,0.0,1.0,0.0931,0.0,3.0
+obstetrics,emergency_csection,prereq,1,4,0.091,0.1175,1.0,4.0,0.1231,,
+neuroAnesthesiology,emergency_csection,prereq,1,3,0.091,0.1226,1.0,3.0,0.1285,,
+regionalAnesthesiologyAndAcutePain,emergency_csection,prereq,1,3,0.091,0.1226,1.0,1.0,0.1407,0.0,2.0
+Anaesthesia,emergency_csection,prereq,0,2,0.091,0.0827,0.0,1.0,0.0931,0.0,1.0
+gynaecologyAndObstetrics,emergency_csection,prereq,0,2,0.091,0.0827,,,,0.0,2.0
+ Obstetrics?,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+Anesthesiology,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+Anesthesiology Department,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+Gynaecology & obstetrics,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+OBG,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+OBSTETRICS & GYNAECOLOGY,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+Obstetrics & Gynecology,emergency_csection,prereq,1,1,0.091,0.1343,,,,1.0,1.0
+Obstetrics And Gynaecology,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+Obstetrics and Gynaecology,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+Obstetrics&Gynaecology,emergency_csection,prereq,1,1,0.091,0.1343,1.0,1.0,0.1407,,
+anaesthesiologist,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+anesthesiologist,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+departmentOfEndoscopicAnesthesia,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+gynecologist/obstetrician,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+gynecologistAndObstetrician,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+gynecologyAndObstetricsSurgery,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+gynecologyObstetricSurgery,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+gynecologyObstetrics,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+hospiceAndPalliativeMedicineAnesthesiology,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+neuroAnaesthesiology,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+obstetricAndGynecology,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+obstetricsAndGynacology,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+obstetrics_gynecology,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+oncoanesthesiology,emergency_csection,prereq,0,1,0.091,0.0867,0.0,1.0,0.0931,,
+pediatricAnesthesia,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+perioperativeAnesthesia,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+placentalAbruption,emergency_csection,prereq,0,1,0.091,0.0867,,,,0.0,1.0
+transplantAnesthesiology,emergency_csection,prereq,1,1,0.091,0.1343,1.0,1.0,0.1407,,
+ophthalmology,eye_emergency,prereq,201,2823,0.0713,0.0712,104.0,1406.0,0.074,97.0,1417.0
+eyeTraumaAndEmergencyEyeCare,eye_emergency,label,104,266,0.3926,0.3911,56.0,130.0,0.431,48.0,136.0
+Ophthalmology,eye_emergency,prereq,0,5,0.0713,0.057,0.0,2.0,0.0671,0.0,3.0
+retinalDetachment,eye_emergency,label,2,3,0.3926,0.4283,2.0,3.0,0.4633,,
+opthalmology,eye_emergency,prereq,1,2,0.0713,0.1103,,,,1.0,2.0
+Retinal Detachment,eye_emergency,label,0,1,0.3926,0.3739,0.0,1.0,0.4122,,
+eyeCare,eye_emergency,prereq,0,1,0.0713,0.0679,,,,0.0,1.0
+eyeHospital,eye_emergency,prereq,0,1,0.0713,0.0679,,,,0.0,1.0
+ophthalmologist,eye_emergency,prereq,0,1,0.0713,0.0679,0.0,1.0,0.0703,,
+gynecologyAndObstetrics,high_risk_pregnancy,prereq,450,4489,0.1006,0.1002,228.0,2235.0,0.102,222.0,2254.0
+maternalFetalMedicineOrPerinatology,high_risk_pregnancy,label,261,739,0.3605,0.3534,125.0,368.0,0.3401,136.0,371.0
+obstetricsAndGynaecology,high_risk_pregnancy,prereq,9,48,0.1006,0.1619,2.0,18.0,0.1058,7.0,30.0
+obstetricsAndGynecology,high_risk_pregnancy,prereq,3,39,0.1006,0.085,1.0,21.0,0.0736,2.0,18.0
+Obstetrics & Gynaecology,high_risk_pregnancy,prereq,0,4,0.1006,0.0838,0.0,2.0,0.0918,0.0,2.0
+obstetrics,high_risk_pregnancy,prereq,0,4,0.1006,0.0838,0.0,4.0,0.0841,,
+foetalMedicine,high_risk_pregnancy,label,3,3,0.3605,0.4439,2.0,2.0,0.4069,1.0,1.0
+fetalMedicineAndRadiology,high_risk_pregnancy,label,2,2,0.3605,0.4186,1.0,1.0,0.3787,1.0,1.0
+gynaecologyAndObstetrics,high_risk_pregnancy,prereq,0,2,0.1006,0.0915,,,,0.0,2.0
+highRiskPregnancyAndInfertility,high_risk_pregnancy,label,2,2,0.3605,0.4186,,,,2.0,2.0
+ Obstetrics?,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+Gynaecology & obstetrics,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+OBG,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+OBSTETRICS & GYNAECOLOGY,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+Obstetrics & Gynecology,high_risk_pregnancy,prereq,1,1,0.1006,0.1434,,,,1.0,1.0
+Obstetrics And Gynaecology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+Obstetrics and Gynaecology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+Obstetrics&Gynaecology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+fetalAndMaternalMedicine,high_risk_pregnancy,label,1,1,0.3605,0.3909,1.0,1.0,0.3787,,
+fetomaternalMedicine,high_risk_pregnancy,label,0,1,0.3605,0.3433,0.0,1.0,0.331,,
+gynecologist/obstetrician,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+gynecologistAndObstetrician,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+gynecologyAndObstetricsSurgery,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+gynecologyObstetricSurgery,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+gynecologyObstetrics,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+highRiskPregnancyCare,high_risk_pregnancy,label,1,1,0.3605,0.3909,1.0,1.0,0.3787,,
+obstetricAndGynecology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+obstetricsAndGynacology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,0.0,1.0,0.0962,,
+obstetrics_gynecology,high_risk_pregnancy,prereq,0,1,0.1006,0.0958,,,,0.0,1.0
+infectiousDiseases,hiv_art,prereq,38,965,0.0378,0.0393,20.0,459.0,0.0434,18.0,506.0
+pediatricInfectiousDiseases,hiv_art,prereq,1,60,0.0378,0.0219,0.0,33.0,0.0153,1.0,27.0
+infectiousDiseaseControl,hiv_art,prereq,0,4,0.0378,0.0315,0.0,1.0,0.0386,0.0,3.0
+contactLensAndLowVisionAids,hiv_art,label,0,2,0.0,0.0,0.0,2.0,0.0,,
+infectionControl,hiv_art,prereq,0,1,0.0378,0.036,0.0,1.0,0.0386,,
+lowVisionAids,hiv_art,label,0,1,0.0,0.0,,,,0.0,1.0
+lowVisionAidsAndContactLenses,hiv_art,label,0,1,0.0,0.0,0.0,1.0,0.0,,
+microbiologyAndInfectiousDieaseSerology,hiv_art,prereq,0,1,0.0378,0.036,,,,0.0,1.0
+pediatricsInfectiousDiseases,hiv_art,prereq,0,1,0.0378,0.036,,,,0.0,1.0
+severeInfections,hiv_art,prereq,0,1,0.0378,0.036,,,,0.0,1.0
+criticalCareMedicine,icu,label,1185,1673,0.7225,0.7085,572.0,809.0,0.7074,613.0,864.0
+anesthesia,icu,prereq,748,1320,0.5786,0.5668,350.0,641.0,0.5465,398.0,679.0
+anesthesiology,icu,prereq,98,162,0.5786,0.602,49.0,84.0,0.5794,49.0,78.0
+neurocriticalCare,icu,label,16,18,0.7225,0.8013,5.0,6.0,0.746,11.0,12.0
+pediatricAnesthesiology,icu,prereq,9,17,0.5786,0.556,4.0,7.0,0.5651,5.0,10.0
+criticalCare,icu,label,14,14,0.7225,0.8368,6.0,6.0,0.7844,8.0,8.0
+neuroanesthesiology,icu,prereq,11,14,0.5786,0.6639,4.0,6.0,0.5868,7.0,8.0
+anaesthesiology,icu,prereq,10,12,0.5786,0.6741,7.0,7.0,0.6762,3.0,5.0
+criticalCareMedicineAnesthesiology,icu,label,8,8,0.7225,0.8018,3.0,3.0,0.7563,5.0,5.0
+ambulatoryAnesthesiology,icu,prereq,5,7,0.5786,0.6138,4.0,5.0,0.6103,1.0,2.0
+neurocriticalCareNeurosurgery,icu,label,6,7,0.7225,0.7574,4.0,5.0,0.7358,2.0,2.0
+anesthesiologyAndCriticalCare,icu,label,5,6,0.7225,0.7481,2.0,2.0,0.7452,3.0,4.0
+intensiveCareUnit,icu,label,4,5,0.7225,0.738,2.0,2.0,0.7452,2.0,3.0
+Anaesthesiology,icu,prereq,4,4,0.5786,0.6488,4.0,4.0,0.6357,,
+anaesthesia,icu,prereq,4,4,0.5786,0.6488,1.0,1.0,0.5836,3.0,3.0
+icuAndCriticalCare,icu,label,3,3,0.7225,0.7587,,,,3.0,3.0
+neuroAnesthesiology,icu,prereq,2,3,0.5786,0.5901,2.0,3.0,0.5764,,
+regionalAnesthesiologyAndAcutePain,icu,prereq,1,3,0.5786,0.5466,1.0,1.0,0.5836,0.0,2.0
+Anaesthesia,icu,prereq,1,2,0.5786,0.5714,0.0,1.0,0.536,1.0,1.0
+Critical Care,icu,label,2,2,0.7225,0.7478,,,,2.0,2.0
+Critical Care Medicine,icu,label,2,2,0.7225,0.7478,1.0,1.0,0.7331,1.0,1.0
+accidentAndCriticalCare,icu,label,2,2,0.7225,0.7478,1.0,1.0,0.7331,1.0,1.0
+anaesthesiologyAndCriticalCare,icu,label,2,2,0.7225,0.7478,,,,2.0,2.0
+anesthesiaAndCriticalCare,icu,label,2,2,0.7225,0.7478,1.0,1.0,0.7331,1.0,1.0
+emergencyCriticalCare,icu,label,2,2,0.7225,0.7478,1.0,1.0,0.7331,1.0,1.0
+intensiveCareMedicine,icu,label,2,2,0.7225,0.7478,2.0,2.0,0.7452,,
+internalMedicineAndCriticalCare,icu,label,2,2,0.7225,0.7478,2.0,2.0,0.7452,,
+neuroCriticalCare,icu,label,2,2,0.7225,0.7478,1.0,1.0,0.7331,1.0,1.0
+neurointensiveCare,icu,label,2,2,0.7225,0.7478,2.0,2.0,0.7452,,
+Anaesthesia & Critical Care,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+Anaesthesia & Intensive Care,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+Anaesthesiology & Critical Care,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+Anesthesiology,icu,prereq,1,1,0.5786,0.5986,,,,1.0,1.0
+Anesthesiology Department,icu,prereq,1,1,0.5786,0.5986,1.0,1.0,0.5836,,
+I.C.U.,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+ICU & Critical Care,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+INTENSIVIST & ANAESTHESIOLOGIST,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+Intensive Care Physician and Critical Care,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+Intensive care,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+adultCriticalCareMedicare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+anaesthesiologist,icu,prereq,1,1,0.5786,0.5986,,,,1.0,1.0
+anesthesiologist,icu,prereq,1,1,0.5786,0.5986,,,,1.0,1.0
+cardiacIntensiveCare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+critical-care,icu,label,0,1,0.7225,0.6881,0.0,1.0,0.6855,,
+criticalCareDoctor,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+criticalCareIntensiveCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+criticalIntensiveCare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+departmentOfEndoscopicAnesthesia,icu,prereq,0,1,0.5786,0.551,,,,0.0,1.0
+generalMedicineAndICU,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+hospiceAndPalliativeMedicineAnesthesiology,icu,prereq,0,1,0.5786,0.551,,,,0.0,1.0
+intensive/critical care,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+intensiveAndCriticalCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+intensiveCardiacCareCentre,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+intensiveCare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+intensiveCarePhysicianAndCriticalCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+intensivist,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+isolationICU,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+medicineAndCriticalCare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+neuroAnaesthesiology,icu,prereq,1,1,0.5786,0.5986,1.0,1.0,0.5836,,
+neuroCriticalCareNeurosurgery,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+neuroIntensiveCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+neurocriticalCareAnesthesia,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+oncoanesthesiology,icu,prereq,1,1,0.5786,0.5986,1.0,1.0,0.5836,,
+pediatricAnesthesia,icu,prereq,1,1,0.5786,0.5986,,,,1.0,1.0
+pediatricIntensivist,icu,label,0,1,0.7225,0.6881,0.0,1.0,0.6855,,
+perioperativeAnesthesia,icu,prereq,1,1,0.5786,0.5986,,,,1.0,1.0
+pulmonarySciencesAndCriticalCare,icu,label,1,1,0.7225,0.7357,,,,1.0,1.0
+respiratoryMedicineAndCriticalCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+transplantAnesthesiology,icu,prereq,1,1,0.5786,0.5986,1.0,1.0,0.5836,,
+traumaCriticalCare,icu,label,1,1,0.7225,0.7357,1.0,1.0,0.7331,,
+gynecologyAndObstetrics,institutional_delivery,prereq,989,4489,0.2197,0.2203,499.0,2235.0,0.2233,490.0,2254.0
+obstetricsAndMaternityCare,institutional_delivery,label,199,358,0.5537,0.5558,102.0,197.0,0.518,97.0,161.0
+obstetricsAndGynaecology,institutional_delivery,prereq,9,48,0.2197,0.197,4.0,18.0,0.2224,5.0,30.0
+obstetricsAndGynecology,institutional_delivery,prereq,10,39,0.2197,0.244,4.0,21.0,0.2061,6.0,18.0
+Obstetrics & Gynaecology,institutional_delivery,prereq,0,4,0.2197,0.1831,0.0,2.0,0.2022,0.0,2.0
+obstetrics,institutional_delivery,prereq,2,4,0.2197,0.2664,2.0,4.0,0.2687,,
+antenatalCare,institutional_delivery,label,0,2,0.5537,0.5034,,,,0.0,2.0
+gynaecologyAndObstetrics,institutional_delivery,prereq,0,2,0.2197,0.1997,,,,0.0,2.0
+ Obstetrics?,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+Gynaecology & obstetrics,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+OBG,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+OBSTETRICS & GYNAECOLOGY,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+Obstetrics & Gynecology,institutional_delivery,prereq,1,1,0.2197,0.2568,,,,1.0,1.0
+Obstetrics And Gynaecology,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+Obstetrics and Gynaecology,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+Obstetrics&Gynaecology,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+antenatalAndPostnatalCare,institutional_delivery,label,0,1,0.5537,0.5274,,,,0.0,1.0
+gynecologist/obstetrician,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+gynecologistAndObstetrician,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+gynecologyAndObstetricsSurgery,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+gynecologyObstetricSurgery,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+gynecologyObstetrics,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+midwifery,institutional_delivery,label,1,1,0.5537,0.575,,,,1.0,1.0
+obstetricAndGynecology,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+obstetricsAndGynacology,institutional_delivery,prereq,0,1,0.2197,0.2092,0.0,1.0,0.2119,,
+obstetrics_gynecology,institutional_delivery,prereq,0,1,0.2197,0.2092,,,,0.0,1.0
+pregnancyCare,institutional_delivery,label,1,1,0.5537,0.575,1.0,1.0,0.543,,
+urology,kidney_transplant,prereq,333,2624,0.1697,0.1272,164.0,1315.0,0.1253,169.0,1309.0
+nephrology,kidney_transplant,prereq,312,2153,0.1697,0.1451,152.0,1058.0,0.144,160.0,1095.0
+transplantSurgery,kidney_transplant,prereq,182,468,0.1697,0.3799,83.0,217.0,0.3639,99.0,251.0
+pediatricUrology,kidney_transplant,prereq,37,129,0.1697,0.2711,17.0,74.0,0.2155,20.0,55.0
+renalTransplantationUrology,kidney_transplant,label,81,111,0.7273,0.7294,41.0,58.0,0.7088,40.0,53.0
+pediatricNephrology,kidney_transplant,prereq,26,92,0.1697,0.2624,12.0,42.0,0.2461,14.0,50.0
+femaleUrology,kidney_transplant,prereq,6,13,0.1697,0.2847,3.0,6.0,0.2406,3.0,7.0
+Urology,kidney_transplant,prereq,4,12,0.1697,0.2311,2.0,6.0,0.2021,2.0,6.0
+neuroUrology,kidney_transplant,prereq,6,12,0.1697,0.2936,3.0,5.0,0.2502,3.0,7.0
+Nephrology,kidney_transplant,prereq,2,9,0.1697,0.186,0.0,3.0,0.1415,2.0,6.0
+paediatricNephrology,kidney_transplant,prereq,0,8,0.1697,0.1212,0.0,4.0,0.1357,0.0,4.0
+liverTransplantation,kidney_transplant,prereq,2,7,0.1697,0.1998,0.0,3.0,0.1415,2.0,4.0
+microsurgeryAndTransplantPlasticSurgery,kidney_transplant,prereq,0,7,0.1697,0.1257,0.0,4.0,0.1357,0.0,3.0
+organTransplant,kidney_transplant,prereq,4,7,0.1697,0.2738,1.0,2.0,0.1934,3.0,5.0
+reconstructiveUrology,kidney_transplant,prereq,3,6,0.1697,0.2459,2.0,5.0,0.2102,1.0,1.0
+urologyAndAndrology,kidney_transplant,prereq,1,6,0.1697,0.169,1.0,4.0,0.1773,0.0,2.0
+organTransplantation,kidney_transplant,prereq,3,5,0.1697,0.2557,2.0,4.0,0.219,1.0,1.0
+kidneyTransplantation,kidney_transplant,label,2,4,0.7273,0.6894,1.0,2.0,0.6948,1.0,2.0
+liverTransplant,kidney_transplant,prereq,3,4,0.1697,0.2664,1.0,2.0,0.1934,2.0,2.0
+laproscopicUrology,kidney_transplant,prereq,2,3,0.1697,0.2345,2.0,3.0,0.2285,,
+nephrologyAndUrology,kidney_transplant,prereq,0,3,0.1697,0.1476,0.0,1.0,0.155,0.0,2.0
+renalSciences,kidney_transplant,prereq,2,3,0.1697,0.2345,0.0,1.0,0.155,2.0,2.0
+renalTransplantation,kidney_transplant,label,3,3,0.7273,0.7628,2.0,2.0,0.7403,1.0,1.0
+Kidney Transplant,kidney_transplant,label,2,2,0.7273,0.7521,,,,2.0,2.0
+Liver Transplant,kidney_transplant,prereq,2,2,0.1697,0.2452,,,,2.0,2.0
+hairTransplant,kidney_transplant,prereq,1,2,0.1697,0.1997,0.0,1.0,0.155,1.0,1.0
+kidneyTransplantationCentre,kidney_transplant,label,1,2,0.7273,0.7066,1.0,2.0,0.6948,,
+liverTransplantationCentre,kidney_transplant,prereq,0,2,0.1697,0.1543,0.0,2.0,0.148,,
+lungTransplant,kidney_transplant,prereq,2,2,0.1697,0.2452,,,,2.0,2.0
+neurourology,kidney_transplant,prereq,0,2,0.1697,0.1543,0.0,2.0,0.148,,
+urologicalSurgery,kidney_transplant,prereq,0,2,0.1697,0.1543,,,,0.0,2.0
+urologyRenalTransplant,kidney_transplant,label,1,2,0.7273,0.7066,1.0,1.0,0.7279,0.0,1.0
+ABO-i Kidney Transplant,kidney_transplant,label,1,1,0.7273,0.7403,1.0,1.0,0.7279,,
+EndoUrology,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+Hair Transplantation,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+Heart & Lung Transplant,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+Kidney Transplant Surgery,kidney_transplant,label,0,1,0.7273,0.6926,0.0,1.0,0.6803,,
+Multi-organ Transplant,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+Nephrology and Renal Science,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+Renal Sciences,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+RenalTransplantationUrology,kidney_transplant,label,1,1,0.7273,0.7403,1.0,1.0,0.7279,,
+Robotic Urology,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+Stem Cell Transplant,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+Stem Cell Transplantation,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+UROLOGY,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+Urology & Renal Transplant Surgery,kidney_transplant,label,1,1,0.7273,0.7403,,,,1.0,1.0
+Urology and Andrology,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+corneaTransplantation,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+cornealTransplantSurgery,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+cornealTransplantation,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+femaleUrologicalDisease,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+femaleUrologyCentre,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+hairTransplantSurgeon,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+heartAndLungTransplant,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+heartAndLungTransplantCentre,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+heartAndLungTransplantation,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+hematopoieticStemCellTransplant,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+kidneyHealthCentre,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+kidneySciences,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+kidneyTransplant,kidney_transplant,label,0,1,0.7273,0.6926,,,,0.0,1.0
+liverTransplantAndBiliarySciences,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+liverTransplantAndGISurgery,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+liverTransplantAndHepatobiliarySciences,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+liverTransplantAndHepatobiliarySurgery,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+liverTransplantationAndHepatobiliarySurgery,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+lungTransplantation,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+multiVisceralAndAbdominalOrganTransplant,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+nephrology & renal science,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+nephrology-urology,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+nephrologyAndRenalScience,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+nephrologyAndRenalTransplant,kidney_transplant,label,1,1,0.7273,0.7403,,,,1.0,1.0
+nephrologyTransplantMedicine,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+nephrologyUrology,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+neuroUrologyAndUrodynamicsCentre,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+paediatricSurgeryAndPediatricUrology,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+paediatricUrology,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+pancreasTransplantation,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+pancreaticTransplantationCentre,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+pediatricKidneyTransplant,kidney_transplant,label,1,1,0.7273,0.7403,1.0,1.0,0.7279,,
+pediatricLiverTransplantation,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+preventiveNephrology,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+renalSciencesAndKidneyTransplant,kidney_transplant,label,1,1,0.7273,0.7403,1.0,1.0,0.7279,,
+roboticUrology,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+solidOrganTransplantation,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+stemCellTransplant,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+surgicalGastroenterologyAndLiverTransplantation,kidney_transplant,prereq,1,1,0.1697,0.2092,1.0,1.0,0.2026,,
+transplantImmunologyAndImmunogenetics,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+transplantImmunologyImmunogenetics,kidney_transplant,prereq,1,1,0.1697,0.2092,,,,1.0,1.0
+urologyAndNephrology,kidney_transplant,prereq,0,1,0.1697,0.1616,0.0,1.0,0.155,,
+urologyNephrology,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+urologyReconstructiveUroSurgery,kidney_transplant,prereq,0,1,0.1697,0.1616,,,,0.0,1.0
+radiology,mri,prereq,655,2993,0.255,0.2191,318.0,1462.0,0.2181,337.0,1531.0
+interventionalRadiology,mri,prereq,117,296,0.255,0.3864,60.0,143.0,0.3999,57.0,153.0
+diagnosticRadiology,mri,prereq,57,169,0.255,0.3286,32.0,73.0,0.3999,25.0,96.0
+breastImaging,mri,prereq,70,140,0.255,0.4694,32.0,64.0,0.4427,38.0,76.0
+neuroradiology,mri,prereq,15,42,0.255,0.3242,9.0,26.0,0.3085,6.0,16.0
+cardiothoracicRadiology,mri,prereq,14,35,0.255,0.3473,7.0,19.0,0.3126,7.0,16.0
+pediatricRadiology,mri,prereq,14,28,0.255,0.3979,8.0,16.0,0.3664,6.0,12.0
+Radiology,mri,prereq,2,6,0.255,0.2731,0.0,2.0,0.2359,2.0,4.0
+radiodiagnosis,mri,prereq,0,4,0.255,0.2125,0.0,3.0,0.2257,0.0,1.0
+Interventional Radiology,mri,prereq,1,2,0.255,0.2773,1.0,1.0,0.2948,0.0,1.0
+clinicalImagingInterventionalRadiology,mri,prereq,2,2,0.255,0.3228,1.0,1.0,0.2948,1.0,1.0
+vascularSurgeryAndInterventionalRadiology,mri,prereq,1,2,0.255,0.2773,,,,1.0,2.0
+diagnosticsRadiology,mri,prereq,0,1,0.255,0.2429,,,,0.0,1.0
+imagingInterventionalRadiology,mri,prereq,0,1,0.255,0.2429,,,,0.0,1.0
+imagingTests,mri,prereq,0,1,0.255,0.2429,0.0,1.0,0.2471,,
+interventionalNeuroRadiology,mri,prereq,0,1,0.255,0.2429,0.0,1.0,0.2471,,
+interventionalNeuroradiology,mri,prereq,1,1,0.255,0.2905,1.0,1.0,0.2948,,
+interventionalRadiology & Imaging Services,mri,prereq,0,1,0.255,0.2429,,,,0.0,1.0
+interventionalRadiologyAndImaging,mri,prereq,0,1,0.255,0.2429,,,,0.0,1.0
+paediatricRadiology,mri,prereq,0,1,0.255,0.2429,,,,0.0,1.0
+pediatricNeuroradiology,mri,prereq,1,1,0.255,0.2905,1.0,1.0,0.2948,,
+vascularAndInterventionalRadiology,mri,prereq,1,1,0.255,0.2905,1.0,1.0,0.2948,,
+neurosurgery,neurosurgery,label,954,1690,0.5262,0.564,478.0,848.0,0.5626,476.0,842.0
+anesthesia,neurosurgery,prereq,425,1320,0.3271,0.322,211.0,641.0,0.3292,214.0,679.0
+spineNeurosurgery,neurosurgery,label,284,687,0.5262,0.4166,140.0,357.0,0.3988,144.0,330.0
+anesthesiology,neurosurgery,prereq,58,162,0.3271,0.3546,27.0,84.0,0.3231,31.0,78.0
+skullBaseNeurosurgery,neurosurgery,label,59,144,0.5262,0.4239,26.0,65.0,0.4277,33.0,79.0
+orthopedicSpineSurgery,neurosurgery,prereq,16,99,0.3271,0.1894,8.0,54.0,0.1974,8.0,45.0
+pediatricNeurosurgery,neurosurgery,label,48,78,0.5262,0.5972,22.0,36.0,0.5778,26.0,42.0
+brainInjuryNeurology,neurosurgery,prereq,13,31,0.3271,0.3832,5.0,13.0,0.3517,8.0,18.0
+cerebrovascularNeurosurgery,neurosurgery,label,18,25,0.5262,0.6339,12.0,17.0,0.6043,6.0,8.0
+pediatricAnesthesiology,neurosurgery,prereq,6,17,0.3271,0.339,3.0,7.0,0.3557,3.0,10.0
+neuroanesthesiology,neurosurgery,prereq,9,14,0.3271,0.4571,4.0,6.0,0.4079,5.0,8.0
+neurosciences,neurosurgery,prereq,7,14,0.3271,0.3983,4.0,6.0,0.4079,3.0,8.0
+functionalNeurosurgery,neurosurgery,label,9,13,0.5262,0.5917,5.0,8.0,0.5485,4.0,5.0
+peripheralNerveNeurosurgery,neurosurgery,label,8,13,0.5262,0.5614,4.0,6.0,0.5522,4.0,7.0
+anaesthesiology,neurosurgery,prereq,5,12,0.3271,0.3607,3.0,7.0,0.3557,2.0,5.0
+spineSurgery,neurosurgery,prereq,4,12,0.3271,0.3294,2.0,5.0,0.3442,2.0,7.0
+Neurosurgery,neurosurgery,label,8,9,0.5262,0.6388,2.0,3.0,0.5373,6.0,6.0
+neuroSurgery,neurosurgery,label,7,9,0.5262,0.6043,1.0,3.0,0.4938,6.0,6.0
+neuroOncologyNeurosurgery,neurosurgery,label,6,8,0.5262,0.5902,1.0,2.0,0.5162,5.0,6.0
+neurotraumaNeurosurgery,neurosurgery,label,7,8,0.5262,0.6259,4.0,5.0,0.5743,3.0,3.0
+ambulatoryAnesthesiology,neurosurgery,prereq,1,7,0.3271,0.2793,0.0,5.0,0.2642,1.0,2.0
+neurocriticalCareNeurosurgery,neurosurgery,label,4,7,0.5262,0.538,3.0,5.0,0.5343,1.0,2.0
+neuroSciences,neurosurgery,prereq,2,5,0.3271,0.3417,2.0,4.0,0.3585,0.0,1.0
+neuroscience,neurosurgery,prereq,0,5,0.3271,0.2617,0.0,1.0,0.3145,0.0,4.0
+neurovascularSurgery,neurosurgery,label,3,5,0.5262,0.541,2.0,3.0,0.5373,1.0,2.0
+Anaesthesiology,neurosurgery,prereq,3,4,0.3271,0.3976,3.0,4.0,0.4002,,
+anaesthesia,neurosurgery,prereq,2,4,0.3271,0.3559,1.0,1.0,0.3621,1.0,3.0
+Neuro Sciences,neurosurgery,prereq,1,3,0.3271,0.3279,,,,1.0,3.0
+Neuroscience,neurosurgery,prereq,1,3,0.3271,0.3279,0.0,1.0,0.3145,1.0,2.0
+neuroAnesthesiology,neurosurgery,prereq,1,3,0.3271,0.3279,1.0,3.0,0.3306,,
+neurologyAndNeurosurgery,neurosurgery,label,3,3,0.5262,0.588,2.0,2.0,0.5617,1.0,1.0
+regionalAnesthesiologyAndAcutePain,neurosurgery,prereq,0,3,0.3271,0.2844,0.0,1.0,0.3145,0.0,2.0
+spineCare,neurosurgery,prereq,2,3,0.3271,0.3714,1.0,2.0,0.3457,1.0,1.0
+vascularNeurosurgery,neurosurgery,label,2,3,0.5262,0.5446,1.0,1.0,0.5408,1.0,2.0
+Anaesthesia,neurosurgery,prereq,1,2,0.3271,0.3428,0.0,1.0,0.3145,1.0,1.0
+brainInjuryMedicinePMR,neurosurgery,prereq,1,2,0.3271,0.3428,0.0,1.0,0.3145,1.0,1.0
+minimallyInvasiveSpineSurgery,neurosurgery,prereq,1,2,0.3271,0.3428,,,,1.0,2.0
+neuroEndovascularTherapy,neurosurgery,label,0,2,0.5262,0.4784,0.0,1.0,0.4932,0.0,1.0
+neurosurgeryAndSpineSurgery,neurosurgery,label,1,2,0.5262,0.5239,0.0,1.0,0.4932,1.0,1.0
+paediatricNeurosciences,neurosurgery,prereq,0,2,0.3271,0.2973,0.0,1.0,0.3145,0.0,1.0
+spinalSurgery,neurosurgery,prereq,2,2,0.3271,0.3883,1.0,1.0,0.3621,1.0,1.0
+ skullBaseNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+Anesthesiology,neurosurgery,prereq,1,1,0.3271,0.3591,,,,1.0,1.0
+Anesthesiology Department,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+ENT and Skull Base Surgery,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+Nerve Surgeries,neurosurgery,label,0,1,0.5262,0.5012,,,,0.0,1.0
+Nerve Tumor Treatment,neurosurgery,label,0,1,0.5262,0.5012,,,,0.0,1.0
+Neurosciences,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+Neurosciences & Spinal Disorders,neurosurgery,prereq,0,1,0.3271,0.3115,0.0,1.0,0.3145,,
+Spine & Deformity Connections,neurosurgery,prereq,0,1,0.3271,0.3115,0.0,1.0,0.3145,,
+Spine Surgery,neurosurgery,prereq,1,1,0.3271,0.3591,,,,1.0,1.0
+anaesthesiologist,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+anesthesiologist,neurosurgery,prereq,1,1,0.3271,0.3591,,,,1.0,1.0
+arthroscopicAndSpineSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,,,,1.0,1.0
+brainSpineSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,,,,1.0,1.0
+departmentOfEndoscopicAnesthesia,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+endoscopicAssistedSpineSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+endoscopicMinimallyInvasiveNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+endoscopicNeuroSurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+fullEndoscopicSpineSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+hospiceAndPalliativeMedicineAnesthesiology,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+jointReplacementAndSpineSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+minimalInvasiveNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+minimalInvasiveSpineSurgery,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+neuroAnaesthesiology,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+neuroAndSpineSurgery,neurosurgery,prereq,0,1,0.3271,0.3115,0.0,1.0,0.3145,,
+neuroCriticalCareNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+neuroScience,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+neuroSpinalSurgery,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+neurology-neuro-surgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+neuroplasticNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+neurosurgeon,neurosurgery,label,0,1,0.5262,0.5012,,,,0.0,1.0
+neurosurgerySpineSurgery,neurosurgery,label,0,1,0.5262,0.5012,,,,0.0,1.0
+neurosurgicalPediatrics,neurosurgery,label,1,1,0.5262,0.5488,,,,1.0,1.0
+oncoanesthesiology,neurosurgery,prereq,0,1,0.3271,0.3115,0.0,1.0,0.3145,,
+paediatricNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+pediatricAnesthesia,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+pediatricNeurosurgeryAndTrauma,neurosurgery,label,0,1,0.5262,0.5012,,,,0.0,1.0
+pediatricPlasticSurgeryAndNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+pediatricPlasticSurgeryNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+perioperativeAnesthesia,neurosurgery,prereq,0,1,0.3271,0.3115,,,,0.0,1.0
+skullBaseSurgery,neurosurgery,label,0,1,0.5262,0.5012,0.0,1.0,0.4932,,
+spinalInfections,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+spinalNeurosurgery,neurosurgery,label,1,1,0.5262,0.5488,1.0,1.0,0.5408,,
+spine-surgery,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+spineEndoscopy,neurosurgery,prereq,1,1,0.3271,0.3591,1.0,1.0,0.3621,,
+transplantAnesthesiology,neurosurgery,prereq,0,1,0.3271,0.3115,0.0,1.0,0.3145,,
+pediatrics,nicu,prereq,632,3429,0.2467,0.1847,292.0,1683.0,0.1742,340.0,1746.0
+neonatologyPerinatalMedicine,nicu,prereq,509,1252,0.2467,0.404,240.0,601.0,0.394,269.0,651.0
+paediatrics,nicu,prereq,6,19,0.2467,0.2804,2.0,7.0,0.2475,4.0,12.0
+pediatricsAndNeonatology,nicu,prereq,6,17,0.2467,0.2955,3.0,8.0,0.2744,3.0,9.0
+neonatology,nicu,prereq,8,14,0.2467,0.3804,3.0,5.0,0.3074,5.0,9.0
+paediatricsAndNeonatology,nicu,prereq,2,12,0.2467,0.2167,2.0,10.0,0.2228,0.0,2.0
+neonatalPerinatalMedicine,nicu,prereq,5,9,0.2467,0.3426,1.0,1.0,0.2707,4.0,8.0
+Paediatrics,nicu,prereq,1,5,0.2467,0.2374,1.0,4.0,0.2368,0.0,1.0
+neonatalPerinatal,nicu,prereq,2,4,0.2467,0.2889,0.0,2.0,0.2129,2.0,2.0
+pediatricNeonatology,nicu,prereq,1,3,0.2467,0.258,0.0,1.0,0.223,1.0,2.0
+pediatricsNeonatology,nicu,prereq,0,3,0.2467,0.2145,0.0,2.0,0.2129,0.0,1.0
+neonatalSurgery,nicu,prereq,2,2,0.2467,0.3152,,,,2.0,2.0
+paediatric,nicu,prereq,0,2,0.2467,0.2243,0.0,1.0,0.223,0.0,1.0
+paediatricsNeonatology,nicu,prereq,1,2,0.2467,0.2697,0.0,1.0,0.223,1.0,1.0
+NICU/ PICU/ Neonatology,nicu,label,1,1,1.0,1.0,,,,1.0,1.0
+Neonatal and Paediatric Surgery,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+Neonatal-Perinatal,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+Neonatology,nicu,prereq,1,1,0.2467,0.2826,1.0,1.0,0.2707,,
+NeonatologyPerinatalMedicine,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+PAEDIATRICS & NEONATOLOGY,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+Paediatrics & Neonatal Care,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+Paediatrics & Neonatology,nicu,prereq,0,1,0.2467,0.235,,,,0.0,1.0
+Peadiatrics & Neonatology,nicu,prereq,1,1,0.2467,0.2826,,,,1.0,1.0
+Pediatrics,nicu,prereq,1,1,0.2467,0.2826,,,,1.0,1.0
+Pediatrics & Neonatology,nicu,prereq,1,1,0.2467,0.2826,1.0,1.0,0.2707,,
+adolescentPaediatricianCouncillor,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+neonatalAndPaediatricSurgery,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+neonatalAndPaediatrics,nicu,prereq,1,1,0.2467,0.2826,,,,1.0,1.0
+neonatalCare,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+neonatalCriticalCare,nicu,label,1,1,1.0,1.0,,,,1.0,1.0
+neonatalIntensiveCareUnit,nicu,label,1,1,1.0,1.0,,,,1.0,1.0
+neonatalPediatricSurgery,nicu,prereq,1,1,0.2467,0.2826,,,,1.0,1.0
+neonatalogyPerinatalMedicine,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+paediatricCare,nicu,prereq,0,1,0.2467,0.235,,,,0.0,1.0
+paediatricMedicine,nicu,prereq,1,1,0.2467,0.2826,1.0,1.0,0.2707,,
+paediatricNeonatology,nicu,prereq,0,1,0.2467,0.235,,,,0.0,1.0
+pediatricNeontology,nicu,prereq,0,1,0.2467,0.235,0.0,1.0,0.223,,
+pediatrician,nicu,prereq,0,1,0.2467,0.235,,,,0.0,1.0
+pediatricsNeonatalCriticalCare,nicu,label,1,1,1.0,1.0,1.0,1.0,1.0,,
+pediatricsNeonatalogy,nicu,prereq,1,1,0.2467,0.2826,1.0,1.0,0.2707,,
+orthopedicSurgery,orthopaedic_trauma_surgery,prereq,476,3519,0.1436,0.1353,237.0,1732.0,0.1369,239.0,1787.0
+orthopedicSpineSurgery,orthopaedic_trauma_surgery,prereq,43,99,0.1436,0.3855,26.0,54.0,0.391,17.0,45.0
+orthopedics,orthopaedic_trauma_surgery,prereq,3,40,0.1436,0.0979,1.0,26.0,0.0855,2.0,14.0
+orthopaedics,orthopaedic_trauma_surgery,prereq,3,27,0.1436,0.1249,0.0,13.0,0.0889,3.0,14.0
+orthopedicTraumaAndFractureSurgery,orthopaedic_trauma_surgery,label,18,23,0.6939,0.7413,12.0,15.0,0.7306,6.0,8.0
+orthopaedicSurgery,orthopaedic_trauma_surgery,prereq,3,18,0.1436,0.1545,3.0,6.0,0.2282,0.0,12.0
+spineSurgery,orthopaedic_trauma_surgery,prereq,2,12,0.1436,0.1523,1.0,5.0,0.1573,1.0,7.0
+Orthopaedics,orthopaedic_trauma_surgery,prereq,3,11,0.1436,0.1894,0.0,4.0,0.1222,3.0,7.0
+Orthopedics,orthopaedic_trauma_surgery,prereq,0,4,0.1436,0.1197,,,,0.0,4.0
+orthopaedicsAndJointReplacement,orthopaedic_trauma_surgery,prereq,0,3,0.1436,0.1249,0.0,1.0,0.1396,0.0,2.0
+spineCare,orthopaedic_trauma_surgery,prereq,0,3,0.1436,0.1249,0.0,2.0,0.1333,0.0,1.0
+Orthopaedics & Joint Replacement,orthopaedic_trauma_surgery,prereq,0,2,0.1436,0.1306,,,,0.0,2.0
+minimallyInvasiveSpineSurgery,orthopaedic_trauma_surgery,prereq,0,2,0.1436,0.1306,,,,0.0,2.0
+orthopedicTrauma,orthopaedic_trauma_surgery,label,2,2,0.6939,0.7217,2.0,2.0,0.7078,,
+paediatricOrthopaedic,orthopaedic_trauma_surgery,prereq,1,2,0.1436,0.176,1.0,2.0,0.1787,,
+spinalSurgery,orthopaedic_trauma_surgery,prereq,1,2,0.1436,0.176,0.0,1.0,0.1396,1.0,1.0
+Bone Grafting,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+Limb Replantation,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+Neurosciences & Spinal Disorders,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+ORTHOPAEDICS,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+Orthopaedic Trauma & Facture Management,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,1.0,1.0,0.6939,,
+Orthopaedics and Trauma,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+Orthopedic Surgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,,,,0.0,1.0
+Orthopedic Trauma Specialist,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+Orthopedics & Joint Replacement,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,1.0,1.0,0.1873,,
+Orthopedics & Traumatology,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,,,,0.0,1.0
+PaediatricOrthopedics,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,1.0,1.0,0.1873,,
+Periarticular Surgeries,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+Spine & Deformity Connections,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,1.0,1.0,0.1873,,
+Spine Surgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,,,,0.0,1.0
+Trauma & Orthopaedic,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,1.0,1.0,0.6939,,
+accidentFractureCare,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,1.0,1.0,0.6939,,
+arthroscopicAndSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,,,,0.0,1.0
+boneAndJoint,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,,,,1.0,1.0
+brainSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,,,,0.0,1.0
+endoscopicAssistedSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+facialFractureTreatment,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+fractureAndTraumaClinic,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+fractureTreatment,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+fullEndoscopicSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+jointReplacementAndSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+limbLengthening,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+limbReconstruction,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+maxillaFractureTreatment,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+minimalInvasiveSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,,,,0.0,1.0
+neuroAndSpineSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+neuroSpinalSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+orthopaedicsAndSportsMedicine,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,,,,1.0,1.0
+orthopaedicsAndTrauma,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+orthopedicTraumaAndComplexFractureSurgery,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,1.0,1.0,0.6939,,
+orthopedicTraumaCare,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,,,,0.0,1.0
+orthopedicsAndJointReplacement,orthopaedic_trauma_surgery,prereq,1,1,0.1436,0.1844,1.0,1.0,0.1873,,
+orthopedicsAndJointReplacementSurgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+orthopedicsAndTraumatology,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,,,,0.0,1.0
+orthopedist,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+polytraumaAndFracture,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,0.0,1.0,0.6463,,
+spinalInfections,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+spine-surgery,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+spineEndoscopy,orthopaedic_trauma_surgery,prereq,0,1,0.1436,0.1368,0.0,1.0,0.1396,,
+traumaAndFractureSurgery,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+traumaAndJointReplacement,orthopaedic_trauma_surgery,label,0,1,0.6939,0.6608,,,,0.0,1.0
+traumaAndOrthopaedics,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,1.0,1.0,0.6939,,
+traumaFractureCare,orthopaedic_trauma_surgery,label,1,1,0.6939,0.7085,,,,1.0,1.0
+pediatrics,paediatric_inpatient,prereq,34,3429,0.0098,0.0099,15.0,1683.0,0.0089,19.0,1746.0
+paediatrics,paediatric_inpatient,prereq,0,19,0.0098,0.005,0.0,7.0,0.0065,0.0,12.0
+Paediatrics,paediatric_inpatient,prereq,0,5,0.0098,0.0079,0.0,4.0,0.0074,0.0,1.0
+paediatric,paediatric_inpatient,prereq,0,2,0.0098,0.0089,0.0,1.0,0.0084,0.0,1.0
+Pediatrics,paediatric_inpatient,prereq,0,1,0.0098,0.0094,,,,0.0,1.0
+adolescentPaediatricianCouncillor,paediatric_inpatient,prereq,0,1,0.0098,0.0094,0.0,1.0,0.0084,,
+paediatricCare,paediatric_inpatient,prereq,0,1,0.0098,0.0094,,,,0.0,1.0
+paediatricMedicine,paediatric_inpatient,prereq,0,1,0.0098,0.0094,0.0,1.0,0.0084,,
+pediatrician,paediatric_inpatient,prereq,0,1,0.0098,0.0094,,,,0.0,1.0
+pediatrics,picu,prereq,301,3429,0.0884,0.0878,139.0,1683.0,0.0826,162.0,1746.0
+pediatricCriticalCareMedicine,picu,label,128,218,0.5919,0.5876,59.0,96.0,0.6149,69.0,122.0
+paediatrics,picu,prereq,4,19,0.0884,0.1479,1.0,7.0,0.0986,3.0,12.0
+Paediatrics,picu,prereq,1,5,0.0884,0.1108,1.0,4.0,0.1109,0.0,1.0
+paediatric,picu,prereq,0,2,0.0884,0.0804,0.0,1.0,0.0791,0.0,1.0
+NICU/ PICU/ Neonatology,picu,label,1,1,0.5919,0.6114,,,,1.0,1.0
+Pediatrics,picu,prereq,0,1,0.0884,0.0842,,,,0.0,1.0
+adolescentPaediatricianCouncillor,picu,prereq,0,1,0.0884,0.0842,0.0,1.0,0.0791,,
+paediatricCare,picu,prereq,0,1,0.0884,0.0842,,,,0.0,1.0
+paediatricCriticalCareMedicine,picu,label,1,1,0.5919,0.6114,1.0,1.0,0.6344,,
+paediatricIntensiveCareUnit,picu,label,1,1,0.5919,0.6114,1.0,1.0,0.6344,,
+paediatricMedicine,picu,prereq,0,1,0.0884,0.0842,0.0,1.0,0.0791,,
+pediatricIntensiveCare,picu,label,0,1,0.5919,0.5637,0.0,1.0,0.5868,,
+pediatricIntensiveCareUnit,picu,label,1,1,0.5919,0.6114,,,,1.0,1.0
+pediatrician,picu,prereq,0,1,0.0884,0.0842,,,,0.0,1.0
+psychiatry,psychiatric_care,label,180,1172,0.2225,0.1547,82.0,563.0,0.1479,98.0,609.0
+addictionPsychiatry,psychiatric_care,label,65,183,0.2225,0.3421,28.0,85.0,0.307,37.0,98.0
+neuropsychiatry,psychiatric_care,label,43,123,0.2225,0.3318,26.0,64.0,0.3599,17.0,59.0
+childAndAdolescentPsychiatry,psychiatric_care,label,37,92,0.2225,0.3701,15.0,41.0,0.3153,22.0,51.0
+geriatricPsychiatry,psychiatric_care,label,20,38,0.2225,0.4215,8.0,16.0,0.3398,12.0,22.0
+consultationLiaisonPsychiatry,psychiatric_care,label,7,11,0.2225,0.3693,3.0,5.0,0.2894,4.0,6.0
+perinatalAndReproductivePsychiatry,psychiatric_care,label,3,10,0.2225,0.2483,1.0,5.0,0.2094,2.0,5.0
+communityAndPublicPsychiatry,psychiatric_care,label,2,5,0.2225,0.258,0.0,2.0,0.1925,2.0,3.0
+emergencyPsychiatry,psychiatric_care,label,5,5,0.2225,0.378,2.0,2.0,0.2834,3.0,3.0
+forensicPsychiatry,psychiatric_care,label,1,4,0.2225,0.2271,0.0,3.0,0.1841,1.0,1.0
+Psychiatry,psychiatric_care,label,0,3,0.2225,0.1935,0.0,1.0,0.2016,0.0,2.0
+psychiatryAndDeaddictionTherapy,psychiatric_care,label,0,2,0.2225,0.2023,0.0,1.0,0.2016,0.0,1.0
+psychiatryAndPsychology,psychiatric_care,label,1,2,0.2225,0.2477,1.0,2.0,0.2379,,
+psychotherapy,psychiatric_care,label,1,2,0.2225,0.2477,0.0,1.0,0.2016,1.0,1.0
+Anxiety,psychiatric_care,label,1,1,0.2225,0.2595,1.0,1.0,0.2492,,
+Depression,psychiatric_care,label,1,1,0.2225,0.2595,1.0,1.0,0.2492,,
+Neuropsychiatry,psychiatric_care,label,0,1,0.2225,0.2119,,,,0.0,1.0
+Obsessive Compulsive Disorder (OCD,psychiatric_care,label,1,1,0.2225,0.2595,1.0,1.0,0.2492,,
+Other Neuro-Psychiatric Disorders,psychiatric_care,label,1,1,0.2225,0.2595,1.0,1.0,0.2492,,
+PSYCHIATRY,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+Psychotherapy,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+childAndAdolescentPsychiatrist,psychiatric_care,label,0,1,0.2225,0.2119,,,,0.0,1.0
+interventionalPsychiatry,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+militaryPsychiatry,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+neuroPsychiatry,psychiatric_care,label,1,1,0.2225,0.2595,,,,1.0,1.0
+neuropsychiatryAndDrugDeAddiction,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+paediatricPsychiatry,psychiatric_care,label,0,1,0.2225,0.2119,,,,0.0,1.0
+pediatricAndAdolescentPsychiatry,psychiatric_care,label,0,1,0.2225,0.2119,,,,0.0,1.0
+psychiatricMedicineAndPsychology,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+psychiatricSocialWork,psychiatric_care,label,1,1,0.2225,0.2595,,,,1.0,1.0
+psychiatrist,psychiatric_care,label,0,1,0.2225,0.2119,,,,0.0,1.0
+psychiatryAndBehavioralHealth,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+psychiatryPsychology,psychiatric_care,label,0,1,0.2225,0.2119,0.0,1.0,0.2016,,
+womenMentalHealth,psychiatric_care,label,1,1,0.2225,0.2595,,,,1.0,1.0
+radiationOncology,radiotherapy,label,95,110,0.8455,0.8609,44.0,52.0,0.838,51.0,58.0
+oncology,radiotherapy,prereq,19,82,0.2909,0.2433,7.0,42.0,0.1726,12.0,40.0
+Oncology,radiotherapy,prereq,1,5,0.2909,0.2727,0.0,1.0,0.1764,1.0,4.0
+cancerCare,radiotherapy,prereq,3,5,0.2909,0.3527,1.0,2.0,0.2138,2.0,3.0
+radiotherapy,radiotherapy,label,2,5,0.8455,0.7564,2.0,4.0,0.7639,0.0,1.0
+Radiation Oncology,radiotherapy,label,4,4,0.8455,0.8713,,,,4.0,4.0
+Cancer Care,radiotherapy,prereq,0,2,0.2909,0.2645,0.0,1.0,0.1764,0.0,1.0
+radiationOncologist,radiotherapy,label,1,2,0.8455,0.8141,1.0,2.0,0.7879,,
+Breast Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+GI Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+Gynecological Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+Head and Neck Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+Onco Care,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+Oncologist/Cancer Specialist,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+Oncology & Oncology Surgery,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+Prostate Cancer,radiotherapy,prereq,0,1,0.2909,0.2771,,,,0.0,1.0
+Thoracic Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+Urological Cancer,radiotherapy,prereq,1,1,0.2909,0.3247,,,,1.0,1.0
+breastCancerClinic,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+headAndNeckCancer,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+oncologicReconstruction,radiotherapy,prereq,1,1,0.2909,0.3247,1.0,1.0,0.224,,
+oncologist,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+oncologyAndOncologySurgery,radiotherapy,prereq,0,1,0.2909,0.2771,0.0,1.0,0.1764,,
+oncologyNursing,radiotherapy,prereq,1,1,0.2909,0.3247,1.0,1.0,0.224,,
+radiationTherapy,radiotherapy,label,1,1,0.8455,0.8529,1.0,1.0,0.8254,,
+stereotacticRadiosurgery,radiotherapy,label,1,1,0.8455,0.8529,1.0,1.0,0.8254,,
+forensicMedicineAndToxicology,snakebite_antivenom,prereq,0,4,0.0833,0.0694,0.0,2.0,0.0,0.0,2.0
+medicalToxicologyEM,snakebite_antivenom,prereq,0,3,0.0833,0.0725,,,,0.0,3.0
+preventiveMedicalToxicology,snakebite_antivenom,prereq,1,3,0.0833,0.1159,0.0,2.0,0.0,1.0,1.0
+SNAKE BITE TREATMENT,snakebite_antivenom,label,1,1,0.5,0.5238,1.0,1.0,1.0,,
+poisoningSnakeBite,snakebite_antivenom,label,0,1,0.5,0.4762,,,,0.0,1.0
+toxicology,snakebite_antivenom,prereq,0,1,0.0833,0.0794,0.0,1.0,0.0,,
+toxicologyAndOccupationalHealth,snakebite_antivenom,prereq,0,1,0.0833,0.0794,,,,0.0,1.0
+cardiology,stemi_thrombolysis,prereq,19,3003,0.0085,0.0063,10.0,1460.0,0.0069,9.0,1543.0
+pediatricCardiology,stemi_thrombolysis,prereq,5,202,0.0085,0.0233,3.0,92.0,0.0285,2.0,110.0
+paediatricCardiology,stemi_thrombolysis,prereq,1,17,0.0085,0.0316,1.0,8.0,0.0424,0.0,9.0
+Cardiology,stemi_thrombolysis,prereq,0,12,0.0085,0.0053,0.0,7.0,0.0069,0.0,5.0
+nonInvasiveCardiology,stemi_thrombolysis,prereq,0,8,0.0085,0.006,0.0,2.0,0.0085,0.0,6.0
+cardiacAndPulmonaryRehabilitation,stemi_thrombolysis,prereq,0,5,0.0085,0.0068,0.0,3.0,0.0081,0.0,2.0
+cardiacSciences,stemi_thrombolysis,prereq,0,5,0.0085,0.0068,0.0,3.0,0.0081,0.0,2.0
+cardiologist,stemi_thrombolysis,prereq,0,5,0.0085,0.0068,0.0,1.0,0.0089,0.0,4.0
+preventiveCardiology,stemi_thrombolysis,prereq,1,5,0.0085,0.0468,0.0,3.0,0.0081,1.0,2.0
+cardiacCare,stemi_thrombolysis,prereq,0,3,0.0085,0.0074,,,,0.0,3.0
+nonInvasiveCardiologyCentre,stemi_thrombolysis,prereq,0,3,0.0085,0.0074,0.0,3.0,0.0081,,
+Non-Invasive Cardiology,stemi_thrombolysis,prereq,0,2,0.0085,0.0077,0.0,2.0,0.0085,,
+Pediatric Cardiology,stemi_thrombolysis,prereq,0,2,0.0085,0.0077,0.0,2.0,0.0085,,
+cardiacElectrophysiology,stemi_thrombolysis,prereq,0,2,0.0085,0.0077,0.0,1.0,0.0089,0.0,1.0
+cardiacScience,stemi_thrombolysis,prereq,0,2,0.0085,0.0077,,,,0.0,2.0
+CARDIOLOGY & ENT,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+Cardiac Diseases,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+Cardiac Electrophysiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+Cardiac Rehabilitation,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+Cardiac Sciences,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+Cardiology and Critical Coronary Care,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+Non-Interventional Cardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+Preventive Cardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+Sports Cardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+adultCongenitalCardiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+cardiac,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiacDiagnostics,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiacElectroPhysiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+cardiacElectroPhysiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiacInvasiveProcedures,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiacPhysiotherapy,stemi_thrombolysis,prereq,1,1,0.0085,0.0557,,,,1.0,1.0
+cardiacRehabilitationAndPhysiotherapy,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiologyAndCriticalCoronaryCare,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiologyAndElectrophysiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiologyCare,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiologyInterventional,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+cardiologyTests,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+cardiologyThrombolysis,stemi_thrombolysis,prereq,1,1,0.0085,0.0557,1.0,1.0,0.0565,,
+clinicalCardiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+clinicalCardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+diagnosticCardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+echocardiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+non-invasiveCardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+non-invasiveCardiologyCentre,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+noninvasiveCardiology,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+paediatricCardiacSciences,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+pediatricCardiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+preventiveCardiologist,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,,,,0.0,1.0
+womensCardiologyCare,stemi_thrombolysis,prereq,0,1,0.0085,0.0081,0.0,1.0,0.0089,,
+neurology,stroke_care,prereq,92,1958,0.0494,0.047,47.0,987.0,0.0477,45.0,971.0
+pediatricNeurology,stroke_care,prereq,5,65,0.0494,0.0704,2.0,26.0,0.0653,3.0,39.0
+childNeurology,stroke_care,prereq,2,35,0.0494,0.0543,2.0,21.0,0.0733,0.0,14.0
+brainInjuryNeurology,stroke_care,prereq,4,31,0.0494,0.0978,2.0,13.0,0.0911,2.0,18.0
+vascularNeurology,stroke_care,label,7,28,0.2619,0.255,2.0,11.0,0.1855,5.0,17.0
+neurosciences,stroke_care,prereq,2,14,0.0494,0.0879,1.0,6.0,0.0771,1.0,8.0
+paediatricNeurology,stroke_care,prereq,0,11,0.0494,0.0319,0.0,7.0,0.0372,0.0,4.0
+Neurology,stroke_care,prereq,0,9,0.0494,0.0341,0.0,6.0,0.0386,0.0,3.0
+neuroSciences,stroke_care,prereq,0,5,0.0494,0.0395,0.0,4.0,0.0419,0.0,1.0
+neurointerventionalSurgery,stroke_care,label,0,5,0.2619,0.2095,0.0,2.0,0.1705,0.0,3.0
+neuroscience,stroke_care,prereq,0,5,0.0494,0.0395,0.0,1.0,0.0478,0.0,4.0
+Neuro Sciences,stroke_care,prereq,0,3,0.0494,0.043,,,,0.0,3.0
+Neuroscience,stroke_care,prereq,0,3,0.0494,0.043,0.0,1.0,0.0478,0.0,2.0
+brainInjuryMedicinePMR,stroke_care,prereq,0,2,0.0494,0.0449,0.0,1.0,0.0478,0.0,1.0
+endovascularNeurosurgery,stroke_care,label,1,2,0.2619,0.2835,1.0,2.0,0.2159,,
+paediatricNeurosciences,stroke_care,prereq,1,2,0.0494,0.0904,0.0,1.0,0.0478,1.0,1.0
+Neurosciences,stroke_care,prereq,0,1,0.0494,0.047,,,,0.0,1.0
+Pediatric Neurology,stroke_care,prereq,0,1,0.0494,0.047,0.0,1.0,0.0478,,
+brainHaemorrhageStroke,stroke_care,label,1,1,0.2619,0.2971,,,,1.0,1.0
+neuroIntervention,stroke_care,label,0,1,0.2619,0.2494,,,,0.0,1.0
+neuroScience,stroke_care,prereq,0,1,0.0494,0.047,,,,0.0,1.0
+neurointervention,stroke_care,label,0,1,0.2619,0.2494,,,,0.0,1.0
+neurointerventionAndStroke,stroke_care,label,0,1,0.2619,0.2494,,,,0.0,1.0
+neurovascularDisorders,stroke_care,label,0,1,0.2619,0.2494,0.0,1.0,0.1786,,
+strokeCentre,stroke_care,label,1,1,0.2619,0.2971,,,,1.0,1.0
+strokeManagement,stroke_care,label,1,1,0.2619,0.2971,,,,1.0,1.0
+pathology,surgical_oncology,prereq,298,2248,0.1361,0.1326,150.0,1094.0,0.1371,148.0,1154.0
+surgicalOncology,surgical_oncology,label,507,974,0.4933,0.52,253.0,480.0,0.5259,254.0,494.0
+clinicalPathology,surgical_oncology,prereq,46,535,0.1361,0.0878,21.0,265.0,0.0832,25.0,270.0
+gynecologicalOncology,surgical_oncology,label,67,168,0.4933,0.4089,38.0,87.0,0.4483,29.0,81.0
+urologicOncology,surgical_oncology,label,53,122,0.4933,0.4427,25.0,63.0,0.4214,28.0,59.0
+anatomicPathology,surgical_oncology,prereq,19,117,0.1361,0.1586,9.0,64.0,0.1393,10.0,53.0
+oncology,surgical_oncology,prereq,34,82,0.1361,0.36,15.0,42.0,0.2856,19.0,40.0
+orthopedicOncology,surgical_oncology,label,23,78,0.4933,0.3354,12.0,37.0,0.3855,11.0,41.0
+gynecologicOncology,surgical_oncology,label,19,44,0.4933,0.451,7.0,19.0,0.4352,12.0,25.0
+histopathology,surgical_oncology,prereq,3,20,0.1361,0.1431,1.0,11.0,0.1195,2.0,9.0
+orthopaedicOncology,surgical_oncology,label,10,14,0.4933,0.5843,6.0,7.0,0.5916,4.0,7.0
+cytopathology,surgical_oncology,prereq,0,9,0.1361,0.0939,0.0,3.0,0.1176,0.0,6.0
+histopathologyLaboratory,surgical_oncology,prereq,0,9,0.1361,0.0939,0.0,5.0,0.1082,0.0,4.0
+uroOncology,surgical_oncology,label,3,7,0.4933,0.4765,3.0,6.0,0.499,0.0,1.0
+Pathology,surgical_oncology,prereq,2,6,0.1361,0.1816,0.0,3.0,0.1176,2.0,3.0
+headAndNeckOncology,surgical_oncology,label,5,6,0.4933,0.5717,4.0,4.0,0.5822,1.0,2.0
+Histopathology,surgical_oncology,prereq,0,5,0.1361,0.1089,0.0,3.0,0.1176,0.0,2.0
+Oncology,surgical_oncology,prereq,2,5,0.1361,0.1889,0.0,1.0,0.1288,2.0,4.0
+cancerCare,surgical_oncology,prereq,0,5,0.1361,0.1089,0.0,2.0,0.1229,0.0,3.0
+oncosurgery,surgical_oncology,label,4,5,0.4933,0.5546,1.0,1.0,0.5225,3.0,4.0
+thoracicOncology,surgical_oncology,label,4,5,0.4933,0.5546,2.0,2.0,0.5442,2.0,3.0
+Cytopathology,surgical_oncology,prereq,0,3,0.1361,0.1184,0.0,2.0,0.1229,0.0,1.0
+Surgical Oncology,surgical_oncology,label,3,3,0.4933,0.5594,,,,3.0,3.0
+gynaecologicOncology,surgical_oncology,label,3,3,0.4933,0.5594,1.0,1.0,0.5225,2.0,2.0
+oncopathology,surgical_oncology,prereq,3,3,0.1361,0.2488,2.0,2.0,0.2138,1.0,1.0
+Cancer Care,surgical_oncology,prereq,1,2,0.1361,0.1692,0.0,1.0,0.1288,1.0,1.0
+GI Oncology,surgical_oncology,label,1,2,0.4933,0.4939,1.0,1.0,0.5225,0.0,1.0
+histoPathology,surgical_oncology,prereq,2,2,0.1361,0.2146,2.0,2.0,0.2138,,
+histocytopathology,surgical_oncology,prereq,0,2,0.1361,0.1237,,,,0.0,2.0
+molecularPathology,surgical_oncology,prereq,1,2,0.1361,0.1692,,,,1.0,2.0
+musculoskeletalOncology,surgical_oncology,label,0,2,0.4933,0.4484,0.0,1.0,0.4749,0.0,1.0
+Bone Tumor Treatment,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Breast Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Breast Oncology and reconstruction,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Breast and Thoracic Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Cancer Surgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+Cytology & Histopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Esophageal & stomach cancer surgeries,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+GI & Uro-Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+GI Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+GI oncology,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+Gynae Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Gynaecologic Oncology,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Gynecological Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Head & Neck Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Head And Neck Oncosurgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Head Neck Oncologist,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+Head and Neck Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Head and neck oncology,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+HeadAndNeckOncosurgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Hematopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Histopathology & Cytology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+Immunopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Mastectomy in Breast Cancer,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Molecular pathology,surgical_oncology,prereq,1,1,0.1361,0.1773,,,,1.0,1.0
+MolecularPathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Onco Care,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Onco Surgery,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+Oncologist/Cancer Specialist,surgical_oncology,prereq,1,1,0.1361,0.1773,1.0,1.0,0.1764,,
+Oncology & Oncology Surgery,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+Orthopaedic Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+Pathology Laboratory,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Pathology laboratory,surgical_oncology,prereq,1,1,0.1361,0.1773,,,,1.0,1.0
+Prostate Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Soft tissue sarcoma surgeries,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+Surgical Oncologist,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+Surgical Pathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Thoracic Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Toxicopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Uro-Oncology,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Uro-oncology,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+Urological Cancer,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+Urological Cancer Surgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+Urology Oncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+advancedPathology,surgical_oncology,prereq,1,1,0.1361,0.1773,,,,1.0,1.0
+andrologyAndUroOncology,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+bioChemistryPathologyAndMicrobiology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+brainTumorSurgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+breastCancerClinic,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+breastOncoSurgery,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+breastSurgicalOncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+cancerPathology,surgical_oncology,prereq,1,1,0.1361,0.1773,1.0,1.0,0.1764,,
+cancerSurgeries,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+cancerSurgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+gastroIntestinalAndBreastSurgicalOncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+gastroIntestinalOncosurgery,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+generalAndCancerSurgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+generalPathology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+gynaecOncology,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+gynaecologicalOncology,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+gynaeoncology,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+gyneOncology,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+gynecologicOncologist,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+haematopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+headAndNeckCancer,surgical_oncology,prereq,1,1,0.1361,0.1773,1.0,1.0,0.1764,,
+headAndNeckOncologicSurgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+headAndNeckSurgicalOncology,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+headNeckOncology,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+hematopathology,surgical_oncology,prereq,1,1,0.1361,0.1773,,,,1.0,1.0
+interventionalOncology,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+laboratoryAndOncopathology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+nephropathology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+neuroPathology,surgical_oncology,prereq,1,1,0.1361,0.1773,,,,1.0,1.0
+oncoSurgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+oncoSurgeryChemoTherapyUnit,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+oncologicReconstruction,surgical_oncology,prereq,1,1,0.1361,0.1773,1.0,1.0,0.1764,,
+oncologist,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+oncology-oncosurgery,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+oncologyAndOncoSurgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+oncologyAndOncologySurgery,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+oncologyAndOncosurgery,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+oncologyNursing,surgical_oncology,prereq,1,1,0.1361,0.1773,1.0,1.0,0.1764,,
+oncologyOncosurgery,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+orthopedicOncologist,surgical_oncology,label,0,1,0.4933,0.4698,,,,0.0,1.0
+pathologyAndCytology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+pathologyAndMicrobiology,surgical_oncology,prereq,0,1,0.1361,0.1296,0.0,1.0,0.1288,,
+pediatricOncosurgery,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+surgicalOncologyAndReconstructiveSurgery,surgical_oncology,label,1,1,0.4933,0.5174,1.0,1.0,0.5225,,
+surgicalPathology,surgical_oncology,prereq,0,1,0.1361,0.1296,,,,0.0,1.0
+uroOncoTreatment,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+uroOncosurgery,surgical_oncology,label,1,1,0.4933,0.5174,,,,1.0,1.0
+urologicalOncology,surgical_oncology,label,0,1,0.4933,0.4698,0.0,1.0,0.4749,,
+pulmonology,tb_care,prereq,120,1589,0.0838,0.0756,61.0,764.0,0.0801,59.0,825.0
+infectiousDiseases,tb_care,prereq,103,965,0.0838,0.1063,51.0,459.0,0.1102,52.0,506.0
+pediatricPulmonology,tb_care,prereq,4,81,0.0838,0.0562,2.0,33.0,0.0714,2.0,48.0
+pediatricInfectiousDiseases,tb_care,prereq,2,60,0.0838,0.046,1.0,33.0,0.0525,1.0,27.0
+pulmonaryMedicine,tb_care,prereq,2,23,0.0838,0.0855,1.0,14.0,0.0818,1.0,9.0
+respiratoryMedicine,tb_care,prereq,0,17,0.0838,0.0453,0.0,5.0,0.0713,0.0,12.0
+paediatricPulmonology,tb_care,prereq,0,5,0.0838,0.0671,0.0,2.0,0.081,0.0,3.0
+chestMedicine,tb_care,prereq,0,4,0.0838,0.0698,0.0,3.0,0.0775,0.0,1.0
+infectiousDiseaseControl,tb_care,prereq,1,4,0.0838,0.1115,1.0,1.0,0.1325,0.0,3.0
+Pulmonology,tb_care,prereq,0,3,0.0838,0.0729,,,,0.0,3.0
+chestSurgery,tb_care,prereq,0,3,0.0838,0.0729,,,,0.0,3.0
+interventionalPulmonology,tb_care,prereq,0,3,0.0838,0.0729,,,,0.0,3.0
+pulmonary,tb_care,prereq,0,3,0.0838,0.0729,0.0,1.0,0.0849,0.0,2.0
+pulmonologist,tb_care,prereq,0,2,0.0838,0.0762,0.0,1.0,0.0849,0.0,1.0
+Chest Medicine,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+Pulmonologist,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+Pulmonology and Respiratory Medicine,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+Tuberculosis TB and Chest,tb_care,label,1,1,0.7143,0.7279,1.0,1.0,0.8095,,
+Tuberculosis and Respiratory Medicine/Pulmonary Medicine,tb_care,label,1,1,0.7143,0.7279,1.0,1.0,0.8095,,
+chest medicine,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+chestAndAllergy,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+infectionControl,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+interventionalPulmonologyAndChestMedicine,tb_care,prereq,1,1,0.0838,0.1274,1.0,1.0,0.1325,,
+lungTransplantationChestSurgery,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+microbiologyAndInfectiousDieaseSerology,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+pediatricPulmonary,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+pediatricTuberculosisTreatment,tb_care,label,1,1,0.7143,0.7279,1.0,1.0,0.8095,,
+pediatricsInfectiousDiseases,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+pulmonaryAndSleepMedicine,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+pulmonology-sleep-study,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+pulmonologyAndRespiratoryMedicine,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+pulmonologyPFT,tb_care,prereq,0,1,0.0838,0.0798,0.0,1.0,0.0849,,
+pulmonologyRespiratoryCare,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+respiratoryMedicineAndInterventionalPulmonology,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+severeInfections,tb_care,prereq,0,1,0.0838,0.0798,,,,0.0,1.0
+spinalTuberculosis,tb_care,label,1,1,0.7143,0.7279,1.0,1.0,0.8095,,
+tbAndChestRespiratory,tb_care,label,0,1,0.7143,0.6803,,,,0.0,1.0
+tuberculosis,tb_care,label,0,1,0.7143,0.6803,0.0,1.0,0.7619,,
+tuberculosisAndRespiratoryDiseases,tb_care,label,1,1,0.7143,0.7279,,,,1.0,1.0
+generalSurgery,trauma_care,prereq,849,3191,0.2662,0.2661,447.0,1532.0,0.2918,402.0,1659.0
+polytrauma,trauma_care,label,9,14,0.6735,0.6609,4.0,5.0,0.72,5.0,9.0
+General Surgery,trauma_care,prereq,3,8,0.2662,0.2973,0.0,3.0,0.2531,3.0,5.0
+Polytrauma,trauma_care,label,1,2,0.6735,0.6577,1.0,1.0,0.7143,0.0,1.0
+accidentAndTrauma,trauma_care,label,2,2,0.6735,0.7032,,,,2.0,2.0
+polyTrauma,trauma_care,label,2,2,0.6735,0.7032,1.0,1.0,0.7143,1.0,1.0
+traumaCare,trauma_care,label,2,2,0.6735,0.7032,1.0,1.0,0.7143,1.0,1.0
+traumaSurgery,trauma_care,label,1,2,0.6735,0.6577,1.0,2.0,0.6818,,
+traumatology,trauma_care,label,1,2,0.6735,0.6577,0.0,1.0,0.6667,1.0,1.0
+Accident & Trauma,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+Emergency Trauma Care,trauma_care,label,0,1,0.6735,0.6414,,,,0.0,1.0
+OrthopaedicsTraumaAndSportsMedicine,trauma_care,label,0,1,0.6735,0.6414,0.0,1.0,0.6667,,
+TRAUMA CARE,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+Trauma Reconstruction,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+Trauma Surgery,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+Traumatology,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+accidentAndTraumaCare,trauma_care,label,0,1,0.6735,0.6414,,,,0.0,1.0
+accidentTraumaCare,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+complexTrauma,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+general-surgery,trauma_care,prereq,0,1,0.2662,0.2535,0.0,1.0,0.2772,,
+generalSurgeon,trauma_care,prereq,0,1,0.2662,0.2535,,,,0.0,1.0
+handTraumaSurgery,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+neuroTrauma,trauma_care,label,0,1,0.6735,0.6414,,,,0.0,1.0
+neuroTraumaSurgery,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+neurotrauma,trauma_care,label,0,1,0.6735,0.6414,0.0,1.0,0.6667,,
+pediatricNeurosurgeryAndTrauma,trauma_care,label,0,1,0.6735,0.6414,,,,0.0,1.0
+pediatricTrauma,trauma_care,label,0,1,0.6735,0.6414,,,,0.0,1.0
+polyTraumaAndAccidentCare,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+polytraumaAndFracture,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+trauma-care-centre,trauma_care,label,0,1,0.6735,0.6414,0.0,1.0,0.6667,,
+traumaAndEmergency,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+traumaAnesthesiology,trauma_care,label,1,1,0.6735,0.689,,,,1.0,1.0
+traumaCentre,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+traumaCriticalCare,trauma_care,label,1,1,0.6735,0.689,1.0,1.0,0.7143,,
+radiology,ultrasound,prereq,1325,2993,0.4709,0.4429,635.0,1462.0,0.4348,690.0,1531.0
+interventionalRadiology,ultrasound,prereq,155,296,0.4709,0.5203,73.0,143.0,0.505,82.0,153.0
+diagnosticRadiology,ultrasound,prereq,95,169,0.4709,0.5525,46.0,73.0,0.5949,49.0,96.0
+breastImaging,ultrasound,prereq,102,140,0.4709,0.6964,49.0,64.0,0.6943,53.0,76.0
+neuroradiology,ultrasound,prereq,19,42,0.4709,0.4584,10.0,26.0,0.4201,9.0,16.0
+cardiothoracicRadiology,ultrasound,prereq,24,35,0.4709,0.6076,14.0,19.0,0.598,10.0,16.0
+pediatricRadiology,ultrasound,prereq,22,28,0.4709,0.6545,13.0,16.0,0.6201,9.0,12.0
+Radiology,ultrasound,prereq,3,6,0.4709,0.4776,0.0,2.0,0.4237,3.0,4.0
+radiodiagnosis,ultrasound,prereq,0,4,0.4709,0.3924,0.0,3.0,0.4053,0.0,1.0
+Interventional Radiology,ultrasound,prereq,1,2,0.4709,0.4735,1.0,1.0,0.4915,0.0,1.0
+clinicalImagingInterventionalRadiology,ultrasound,prereq,2,2,0.4709,0.519,1.0,1.0,0.4915,1.0,1.0
+sonography,ultrasound,label,2,2,0.8889,0.899,2.0,2.0,0.8485,,
+vascularSurgeryAndInterventionalRadiology,ultrasound,prereq,2,2,0.4709,0.519,,,,2.0,2.0
+3D-4D Sonography and Ultrasound,ultrasound,label,1,1,0.8889,0.8942,,,,1.0,1.0
+3d_4d_Sonography,ultrasound,label,1,1,0.8889,0.8942,,,,1.0,1.0
+Color Doppler,ultrasound,label,1,1,0.8889,0.8942,1.0,1.0,0.8413,,
+Radiology/Ultrasonology,ultrasound,label,0,1,0.8889,0.8466,0.0,1.0,0.7937,,
+Sonography,ultrasound,label,1,1,0.8889,0.8942,1.0,1.0,0.8413,,
+colorDoppler,ultrasound,label,1,1,0.8889,0.8942,1.0,1.0,0.8413,,
+diagnosticsRadiology,ultrasound,prereq,1,1,0.4709,0.4961,,,,1.0,1.0
+imagingInterventionalRadiology,ultrasound,prereq,1,1,0.4709,0.4961,,,,1.0,1.0
+imagingTests,ultrasound,prereq,1,1,0.4709,0.4961,1.0,1.0,0.4915,,
+interventionalNeuroRadiology,ultrasound,prereq,0,1,0.4709,0.4485,0.0,1.0,0.4439,,
+interventionalNeuroradiology,ultrasound,prereq,1,1,0.4709,0.4961,1.0,1.0,0.4915,,
+interventionalRadiology & Imaging Services,ultrasound,prereq,0,1,0.4709,0.4485,,,,0.0,1.0
+interventionalRadiologyAndImaging,ultrasound,prereq,0,1,0.4709,0.4485,,,,0.0,1.0
+paediatricRadiology,ultrasound,prereq,0,1,0.4709,0.4485,,,,0.0,1.0
+pediatricNeuroradiology,ultrasound,prereq,1,1,0.4709,0.4961,1.0,1.0,0.4915,,
+ultrasound,ultrasound,label,1,1,0.8889,0.8942,,,,1.0,1.0
+vascularAndInterventionalRadiology,ultrasound,prereq,1,1,0.4709,0.4961,1.0,1.0,0.4915,,
+pulmonology,ventilator_support,prereq,178,1589,0.1151,0.1121,76.0,764.0,0.0997,102.0,825.0
+pediatricPulmonology,ventilator_support,prereq,13,81,0.1151,0.1515,6.0,33.0,0.1537,7.0,48.0
+pulmonaryMedicine,ventilator_support,prereq,4,23,0.1151,0.1465,3.0,14.0,0.1513,1.0,9.0
+respiratoryMedicine,ventilator_support,prereq,1,17,0.1151,0.0892,0.0,5.0,0.0858,1.0,12.0
+paediatricPulmonology,ventilator_support,prereq,0,5,0.1151,0.092,0.0,2.0,0.0975,0.0,3.0
+chestMedicine,ventilator_support,prereq,0,4,0.1151,0.0959,0.0,3.0,0.0932,0.0,1.0
+Pulmonology,ventilator_support,prereq,0,3,0.1151,0.1,,,,0.0,3.0
+chestSurgery,ventilator_support,prereq,0,3,0.1151,0.1,,,,0.0,3.0
+interventionalPulmonology,ventilator_support,prereq,1,3,0.1151,0.1435,,,,1.0,3.0
+pulmonary,ventilator_support,prereq,0,3,0.1151,0.1,0.0,1.0,0.1021,0.0,2.0
+pulmonologist,ventilator_support,prereq,0,2,0.1151,0.1046,0.0,1.0,0.1021,0.0,1.0
+Chest Medicine,ventilator_support,prereq,0,1,0.1151,0.1096,0.0,1.0,0.1021,,
+Pulmonologist,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+Pulmonology and Respiratory Medicine,ventilator_support,prereq,1,1,0.1151,0.1572,1.0,1.0,0.1497,,
+acuteRespiratoryFailureArds,ventilator_support,label,0,1,0.0,0.0,,,,0.0,1.0
+chest medicine,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+chestAndAllergy,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+interventionalPulmonologyAndChestMedicine,ventilator_support,prereq,1,1,0.1151,0.1572,1.0,1.0,0.1497,,
+lungTransplantationChestSurgery,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+pediatricPulmonary,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+pulmonaryAndSleepMedicine,ventilator_support,prereq,1,1,0.1151,0.1572,1.0,1.0,0.1497,,
+pulmonology-sleep-study,ventilator_support,prereq,0,1,0.1151,0.1096,0.0,1.0,0.1021,,
+pulmonologyAndRespiratoryMedicine,ventilator_support,prereq,1,1,0.1151,0.1572,1.0,1.0,0.1497,,
+pulmonologyPFT,ventilator_support,prereq,0,1,0.1151,0.1096,0.0,1.0,0.1021,,
+pulmonologyRespiratoryCare,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0
+respiratoryMedicineAndInterventionalPulmonology,ventilator_support,prereq,0,1,0.1151,0.1096,,,,0.0,1.0

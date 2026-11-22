@@ -1,0 +1,22 @@
+evidence words: ['anti snake venom', 'anti-snake venom', 'ASV', 'snake venom antiserum', 'antivenom', 'snake bite treatment', 'snakebite'] proposed
+claims 469498
+facilities with own non-negated match: 5 | any claim match: 5
+                                   unique_id                                                                                                                                                                                                                                                                        text
+46627   17f18101-79d6-4067-8bb1-c0ee49e81a10                                                                                                                                                                                                                  Offers snake bite treatment and 24/7 emergency/trauma care
+46631   17f18101-79d6-4067-8bb1-c0ee49e81a10                                                                                                                                                                                                                                                        Snake bite treatment
+186923  5d96a487-a72f-48ab-99d5-a70af2d2be19                                                                                                                                                                                                                   Manages snakebite and poisoning emergencies with dialysis
+186954  5d96a487-a72f-48ab-99d5-a70af2d2be19                                                                                                                                                                                                                                  Emergency care for snakebite and poisoning
+353758  b9386c11-f799-4fd3-9f1e-54f26b2e7b6b                                                                                                                                                                                                                               Treats snake bite cases with anti-snake venom
+353800  b9386c11-f799-4fd3-9f1e-54f26b2e7b6b                                                                                                                                                                         Adequate stock of anti-snake venom and anti-rabies vaccines with no shortages reported (as of 2010)
+417147  de9e99ef-fe33-4767-a44e-a72c80bf9704                                                                                                                                                                                                                                24x7 anti-snake venom treatment is available
+417152  de9e99ef-fe33-4767-a44e-a72c80bf9704                                                                                                                                                                                                                                            Anti-snake venom (ASV) treatment
+421319  e0fcd8ad-b818-4cef-975d-afdfd2e6d413  Specialised units and facilities include Blood Bank, Burns Unit, Dialysis Unit, Geriatric Home Care Service, Human Milk Bank, Hyperbaric 
+loose snake/antivenom/ASV facilities in claims: 23
+facility_location rows 9959 9959
+{'KERALA': 3, 'TAMIL NADU': 2}
+UTTAR PRADESH 0 of 948 wilson upper 0.004035817924398451 exact upper 0.0038836620547952317
+BIHAR 0 of 260 wilson upper 0.014559724001923333 exact upper 0.014087822580252183
+MDS higher 557.5 total 807.4999999999999 share 0.6904024767801858 per year higher 39821.42857142857
+['unique_id', 'service_id', 'web_positive', 'web_positive_strong', 'n_positive_rows', 'n_positive_quotes', 'n_pages_positive', 'n_negated_rows', 'n_rows', 'positive_on_services_page', 'positive_sentence', 'best_quote', 'best_url', 'best_field', 'best_fetched_at', 'best_positive', 'identity_conf', 'scope']
+web positive snakebite records 58
+{'TAMIL NADU': 10, 'KERALA': 8, 'MAHARASHTRA': 7, 'KARNATAKA': 6, 'ANDHRA PRADESH': 5, 'UTTAR PRADESH': 5, 'PUNJAB': 3, 'BIHAR': 3, 'WEST BENGAL': 3, 'RAJASTHAN': 3}

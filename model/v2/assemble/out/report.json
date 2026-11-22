@@ -1,0 +1,41 @@
+{
+ "full_quote_test_text": {
+  "n": 81462,
+  "matched": 81462
+ },
+ "full_quote_test_specialties": {
+  "n": 86877,
+  "matched": 86877
+ },
+ "raw_pos_shift": {
+  "list_atoms": 61868,
+  "raw_pos_ne_idx": 7818
+ },
+ "spotcheck_matched": 15,
+ "spotcheck_n": 15,
+ "spotcheck_wilson": [
+  0.7961,
+  1.0
+ ],
+ "witness_rows": 4011386,
+ "present_rows": 349290,
+ "present_by_family": {
+  "S": 123204,
+  "P": 94658,
+  "T": 72881,
+  "W": 24608,
+  "D": 13281,
+  "X": 10618,
+  "K": 4898,
+  "O": 4342,
+  "C": 615,
+  "N": 185
+ },
+ "facility_level_rows": 12663,
+ "sizes_mb": {
+  "facility_features.parquet": 2.0,
+  "witnesses.parquet": 17.6,
+  "facility_attributes.parquet": 0.6,
+  "claim_atoms.parquet": 2.9
+ }
+}

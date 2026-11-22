@@ -1,0 +1,198 @@
+{
+ "datasets": {
+  "ds_facility": {
+   "state": "SUCCEEDED",
+   "rows": 9959,
+   "seconds": 2.7
+  },
+  "ds_state": {
+   "state": "SUCCEEDED",
+   "rows": 32,
+   "seconds": 1.4
+  },
+  "ds_district": {
+   "state": "SUCCEEDED",
+   "rows": 784,
+   "seconds": 1.0
+  },
+  "ds_dialysis_district": {
+   "state": "SUCCEEDED",
+   "rows": 781,
+   "seconds": 0.9
+  },
+  "ds_csection_district": {
+   "state": "SUCCEEDED",
+   "rows": 169,
+   "seconds": 0.9
+  },
+  "ds_dialysis_burden": {
+   "state": "SUCCEEDED",
+   "rows": 780,
+   "seconds": 0.9
+  },
+  "ds_settlement": {
+   "state": "SUCCEEDED",
+   "rows": 9,
+   "seconds": 0.9
+  },
+  "ds_pmndp": {
+   "state": "SUCCEEDED",
+   "rows": 36,
+   "seconds": 0.9
+  },
+  "ds_funnel": {
+   "state": "SUCCEEDED",
+   "rows": 9244,
+   "seconds": 1.4
+  },
+  "ds_pairs": {
+   "state": "SUCCEEDED",
+   "rows": 358092,
+   "seconds": 0.9
+  },
+  "ds_list_facts": {
+   "state": "SUCCEEDED",
+   "rows": 3062,
+   "seconds": 0.8
+  }
+ },
+ "checks": [
+  {
+   "check": "ds_facility national: records, high conf, names other, directory phones (spec 9959, 7762, 1232, 292)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "9959",
+     "7762",
+     "1232",
+     "292"
+    ]
+   ]
+  },
+  {
+   "check": "ds_facility cleaning: cannot_fix, rated_no_concerns, both (spec 2610, 7812, 1589)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "2610",
+     "7812",
+     "1589"
+    ]
+   ]
+  },
+  {
+   "check": "ds_facility hours: any, 24x7, schedule (spec 6074, 2829, 2808)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "6074",
+     "2829",
+     "2808"
+    ]
+   ]
+  },
+  {
+   "check": "ds_state Bihar per_m, lo, hi, records, pop_m (spec 1.95, 1.72, 2.20, 260, 133.5)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "1.95",
+     "1.72",
+     "2.2",
+     "260",
+     "133.5"
+    ]
+   ]
+  },
+  {
+   "check": "geo_dialysis_district hot districts and people (spec 69, 103.8 M)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "69",
+     "103.8"
+    ]
+   ]
+  },
+  {
+   "check": "geo_csection_district districts in the two low bands (spec 152 = 39 + 113)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "5-10%",
+     "113"
+    ],
+    [
+     "under 5%",
+     "39"
+    ]
+   ]
+  },
+  {
+   "check": "ds_funnel national: mentioned, own checks, own and outside (spec 7969, 1798, 837)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "7969",
+     "1798",
+     "837"
+    ]
+   ]
+  },
+  {
+   "check": "ds_pairs v2 bands (derived/v2: Likely 20073, Call first 1671, No service text 242131, Unlikely 94217)",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "Call first",
+     "1671"
+    ],
+    [
+     "Likely",
+     "20073"
+    ],
+    [
+     "No service text",
+     "242131"
+    ],
+    [
+     "Unlikely",
+     "94217"
+    ]
+   ]
+  },
+  {
+   "check": "ds_pairs v2 contract: rows (358092), exclude_review ids (0), NO_SERVICE_TEXT with P_S (0), operators",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "358092",
+     "0",
+     "0",
+     "3"
+    ]
+   ]
+  },
+  {
+   "check": "ds_dialysis_district coverage: NFHS districts reached and LGD rows",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "704",
+     "781"
+    ]
+   ]
+  },
+  {
+   "check": "filter values: states in ds_facility, districts in ds_facility",
+   "state": "SUCCEEDED",
+   "result": [
+    [
+     "34",
+     "557"
+    ]
+   ]
+  }
+ ],
+ "run_at": "2026-11-22 02:20:00"
+}

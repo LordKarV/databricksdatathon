@@ -1,0 +1,291 @@
+[
+ {
+  "name": "chosen_point_provenance",
+  "status": "pass",
+  "metric": "0 mismatches",
+  "threshold": "0",
+  "detail": "listing_coordinates rows equal raw: 8788/8788; postcode_centre rows equal pin_gazetteer point: 868/868; conflict rows keeping raw coords as alt: 1165/1165",
+  "examples": []
+ },
+ {
+  "name": "chosen_point_vs_own_pin_polygon",
+  "status": "warn",
+  "metric": "415 of 9596 chosen points > 50 km from own PIN polygon (raw: 1273)",
+  "threshold": "high-confidence points within 10 km of their PIN polygon",
+  "detail": "PIN polygon available for 9596. Distance to own PIN polygon, raw -> chosen: inside 5920 -> 6651; > 10 km 1698 -> 855; > 50 km 1273 -> 415. Chosen > 50 km by loc_src: {'address_city_centre': 218, 'listing_coordinates': 172, 'postcode_centre': 25}. High-confidence points > 10 km outside their own PIN polygon: 28.",
+  "examples": [
+   "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+   "10f3985d-a8fc-4e9a-9835-da54218060ad",
+   "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+   "181acde8-8007-4612-b3b1-b737b28d134d",
+   "1961618c-d50e-42ea-9a80-3adb07a21443"
+  ]
+ },
+ {
+  "name": "chosen_vs_stated_city",
+  "status": "warn",
+  "metric": "217 of 8306 chosen points > 50 km from stated city district",
+  "threshold": "no high-confidence point > 50 km from its stated city",
+  "detail": "City resolves to <= 2 LGD districts for 8306 of 9959. Point > 50 km outside the stated city's district: raw 974 -> chosen 217; > 10 km: raw 1203 -> chosen 369. Chosen > 50 km by loc_conf: {'disputed': 159, 'high': 23, 'medium': 21, 'low': 14}. 23 are 'high'; hand review of those: 19 are real city-vs-(PIN+coords) conflicts the s2 'city_points_elsewhere' rule missed, 4 are this check's false alarms (Gorantla, Khanpur, Sheikhpura are also localities; Mahe polygon).",
+  "examples": [
+   "0020c82a-2608-406f-9298-779bdd657681 Srp Hospital (city Aranthangi, PIN 636003, district SALEM)",
+   "078259b4-57f0-4bb3-aff4-126869c8c2e9 NETRA Eye Clinic (city Mumbai, PIN 422001, district NASHIK)",
+   "0914c599-783f-4e13-a05b-6cd3b06f3afc North Kashmir Nursing Home & Hospital (city Handwara, PIN 193221, district KUPWARA)",
+   "14979420-8be6-4880-bcdf-05347f2aca33 Vatsalya Clinic (city Ambarnath, PIN 412207, district PUNE)",
+   "1653a41f-075d-49c8-9f6a-f35b71f8ab57 Sardar Patel Hospital (city Vadodara, PIN 396445, district NAVSARI)"
+  ]
+ },
+ {
+  "name": "district_coverage",
+  "status": "warn",
+  "metric": "9946/9959 assigned",
+  "threshold": "every record has a district, or district_src 'none' when it has none",
+  "detail": "district assigned for 9946 of 9959. All 13 missing rows still carry district_src '['map_point']' and state {'MAHARASHTRA': 6, 'GUJARAT': 4, 'TELANGANA': 2, 'MADHYA PRADESH': 1}: the nearest reference PIN point has no district (pin_gazetteer src prefix3 / missing). s2 sets district_src before checking that the looked-up district is non-null. nfhs_how for them: {'null': 13}.",
+  "examples": [
+   "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+   "18a0b6a3-8792-43ef-8753-47548e4aab02",
+   "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+   "5106028d-191f-4a51-a596-05d8b41e857b",
+   "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+  ]
+ },
+ {
+  "name": "district_sample_30",
+  "status": "pass",
+  "metric": "correct 29/30 = 0.97 (95% Wilson 0.833-0.994)",
+  "threshold": "Wilson lower bound >= 0.80",
+  "detail": "Random 30 of the 9,946 assigned districts, judged against LGD archive PIN-village / urban-body districts, LGD polygons and the address text. Wrong: ['Address Shivaji Nagar Satpur and city say Nashik; PIN 401303 and coordinates say Palghar; record flagged disputed']",
+  "examples": [
+   "3a49afc3-4dbf-4ae2-8565-07b72e822d7e"
+  ]
+ },
+ {
+  "name": "district_vs_lgd_exhaustive",
+  "status": "warn",
+  "metric": "9802/9946 agree with LGD",
+  "threshold": "assigned district matches LGD polygon or PIN district set",
+  "detail": "Of 9946 assigned districts: agree with the LGD polygon holding the chosen point 9372, with the LGD districts of the PIN 7832 (PIN in LGD for 8476), with either 9802. Neither: 144, mostly post-2011 splits and renames that India Post names still use (Chittoor->Tirupati, East Godavari->Kakinada) and Delhi/Hyderabad/Kolkata boundary edges. Real error: PIN 799001 (Agartala) carries district 'Nirmal' (a Telangana district) from the India Post directory, so 6 Agartala facilities show district Nirmal, TRIPURA. Top neither pairs {('CHITTOOR', 'Tirupati'): 17, ('EAST GODAVARI', 'Kakinada'): 8, ('EAST', 'Shahdara'): 6, ('Nirmal', 'West Tripura'): 6, ('MEDCHAL MALKAJGIRI', 'Ranga Reddy'): 6, ('HYDERABAD', 'Medchal Malkajgiri'): 5}.",
+  "examples": [
+   "2f829ae1-e706-42ea-88ca-7a07b588c9fc",
+   "40f9f8de-b064-4b43-b30f-64f88f104494",
+   "43ff0012-b765-4574-9543-a217b58d412e",
+   "5ad204a8-139e-4ef7-a583-74a5d60d55f9",
+   "82f67036-f403-477d-8822-e2813f949ae5"
+  ]
+ },
+ {
+  "name": "external_district_tables_consistency",
+  "status": "warn",
+  "metric": "289 (IDP NFHS map) and 289 (LGD polygon join) of 9959 disagree with derived/v1 district",
+  "threshold": "external join tables keyed on the canonical v1 district",
+  "detail": "data/external/idp-nfhs-district/facility_idp_district.csv and lgd_district_polygons/facility_lgd_district.parquet were built from the older audit district assignment (raw coordinates), so their district and code_best differ from derived/v1 facility_location.district for about 2.8% of records (e.g. VADODARA vs SURAT). Anything that joins HMIS or NFHS codes through these tables uses a different district than the app shows.",
+  "examples": [
+   "001a220c-c718-42bb-afe3-a37a1ddbf575",
+   "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+   "009bd786-fb16-42c9-a48d-c0e05ecfd267",
+   "00fd1dbd-dc4d-47ea-9ffa-68ddf7e5d13f",
+   "01826eff-1dc6-4b9f-8dcd-cab7336eb688"
+  ]
+ },
+ {
+  "name": "high_conf_far_from_pin_centre",
+  "status": "warn",
+  "metric": "164 high records > 10 km from PIN centre",
+  "threshold": "high confidence only when coords are within 10 km of a precise PIN point",
+  "detail": "164 of 7762 high-confidence records (radius shown 1.0 km) have coordinates > 10 km from the PIN centre; 53 > 20 km, 15 > 40 km. 106 high records have a PIN point that is only a 3-digit-prefix median (radius 50 km), so 'agreement' there means within 50 km. Root cause: s2_facility_location.py choose(): `if d <= max(10.0, r.p_radius)` returns conf='high', radius=1.0.",
+  "examples": [
+   "02a3b541-de4e-42d8-95e0-c6dbc700f5dc",
+   "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+   "19302dcf-d303-48a9-bb40-1d68e9b04a89",
+   "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+   "3437e5aa-101e-4a91-9543-e1a4e6907291"
+  ]
+ },
+ {
+  "name": "location_table_integrity",
+  "status": "pass",
+  "metric": "0 violations",
+  "threshold": "0 violations",
+  "detail": "{\"rows_not_9959\": 0, \"dup_ids\": 0, \"ids_not_in_raw\": 0, \"name_not_verbatim\": 0, \"address_city_not_verbatim\": 0, \"address_stateOrRegion_not_verbatim\": 0, \"raw_lat_changed\": 0, \"raw_lon_changed\": 0, \"pin_not_parsed_from_raw\": 0, \"chosen_point_missing\": 0, \"chosen_point_outside_india_box\": 0, \"bad_loc_src\": 0, \"bad_loc_conf\": 0, \"radius_not_positive\": 0, \"state_final_missing\": 0}",
+  "examples": []
+ },
+ {
+  "name": "match_counts_vs_readme",
+  "status": "pass",
+  "metric": "21/21 counts reproduce",
+  "threshold": "every stated count reproduces",
+  "detail": "mismatches {}; match rows whose VF id is not in the 9,959 cleaned records (11 byte-duplicate raw rows): {'hot_uids_outside_9959': 118}",
+  "examples": []
+ },
+ {
+  "name": "match_eraktkosh",
+  "status": "warn",
+  "metric": "precision 19/20 = 0.95 (95% Wilson 0.764-0.991); missed 4/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 388; sample 20: yes 19, likely 0, uncertain 1, no 0. README: external/eraktkosh README: 16 correct + 2 likely + 2 uncertain of 20 (80% strict, 90% with likely) (Wilson 0.699-0.972); intervals overlap: True. Rejected: 10 drawn from 486 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 4, uncertain 1 (miss rate 4/10, Wilson 0.168-0.687). Wrong or uncertain accepted: ['Verma Union Hospital vs VF Verma Hospital Pardeshipura (PIN 474009 is Gwalior)']. Missed: ['Medical College Hospital Gandhi Nagar Kottayam, 250 m: missed', 'Pt JLN Medical College Chamba blood centre = Government Medical College Chamba, 450 m: missed', 'Chandrakona RH BSU = Chandrakona Rural Hospital, 1 m: missed', 'Vyas Blood Centre at Vyas Medicity = Vyas Medicity hospital: missed']",
+  "examples": [
+   "3678db60-d22b-4a38-9148-aa66aba6d060",
+   "a9077716-04f1-44c5-9ad7-801c68d74978",
+   "481aafee-f67e-441c-80c0-995902a6ff98",
+   "79abc4f1-1f13-40d0-89a3-738fe020089e",
+   "7ae37791-7094-498f-a9bd-66fe1d3e8066"
+  ]
+ },
+ {
+  "name": "match_hot",
+  "status": "warn",
+  "metric": "precision 18/20 = 0.90 (95% Wilson 0.699-0.972); missed 1/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 3263; sample 20: yes 14, likely 4, uncertain 1, no 1. README: external/hotosm README: 15/20 correct or likely (75%) (Wilson 0.531-0.888); intervals overlap: True. Rejected: 10 drawn from 1854 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: ['VF ESI Anantapur (description Pedda Waltair); OSM ESI Hospital Tirupati matched only through a copied geocode', 'generic ESI Hospital; VF city Asansol, PIN and coordinates Hooghly']. Missed: ['KVG Medical College and Hospital Sullia vs OSM Kvg Hospial Sullia (typo), 113 m: missed']",
+  "examples": [
+   "df1f03c7-c970-40e7-9a35-4f294f5a3aaf",
+   "51d9cc1b-7639-46d2-87f4-65cc038d2673",
+   "a2424d67-963b-4570-8c5c-08761c417153"
+  ]
+ },
+ {
+  "name": "match_laqshya",
+  "status": "pass",
+  "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 0/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 66; sample 20: yes 20, likely 0, uncertain 0, no 0. README: external/laqshya_master README: 17 correct, 3 plausible, 0 wrong of 20 (Wilson 0.839-1.0); intervals overlap: True. Rejected: 10 drawn from 233 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 0, uncertain 0 (miss rate 0/10, Wilson 0.0-0.278). Wrong or uncertain accepted: []. Missed: []",
+  "examples": []
+ },
+ {
+  "name": "match_trauma",
+  "status": "pass",
+  "metric": "precision 19/20 = 0.95 (95% Wilson 0.764-0.991); missed 0/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 20; sample 20: yes 18, likely 1, uncertain 0, no 1 (the sample is the whole accepted set, so this is exact). README: external/mohfw_trauma_196 README: 19/20 (all 20 accepted) (Wilson 0.764-0.991); intervals overlap: True. Rejected: 10 drawn from 37 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 0, uncertain 0 (miss rate 0/10, Wilson 0.0-0.278). Wrong or uncertain accepted: ['VF Civil Hospital merges Tezpur (Mahabhairab), Bongaigaon and Dhemaji; README already marks it wrong']. Missed: [] Recall note: TCF 'New Medical College Hospital, Kota' was refused against Jhalawar Medical College, while VF holds 'Government Medical College, Kota' (95c8fde2-09e3-47b0-b2c9-96b492149fa4), its parent college.",
+  "examples": [
+   "2b4c984c-2c3b-4667-9d90-b3a9c5b74053"
+  ]
+ },
+ {
+  "name": "match_nabh",
+  "status": "warn",
+  "metric": "precision 18/20 = 0.90 (95% Wilson 0.699-0.972); missed 3/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 2061; sample 20: yes 15, likely 3, uncertain 1, no 1. README: external/nabh_accredited README: 39/40 (97.5%) (Wilson 0.871-0.996); intervals overlap: True. Rejected: 10 drawn from 2845 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 3, uncertain 1 (miss rate 3/10, Wilson 0.108-0.603). Wrong or uncertain accepted: ['Positron Hospital Suncity Sector 35 vs Rohtak Cancer Care Hospital Delhi Road; different addresses', 'VF R K Hospital Farrukhabad (Awas Vikas) vs NABH R K Hospital Tajganj Agra; matched through VF coordinates that sit in Agra']. Missed: ['Aastha Multispeciality Hospital, same point; VF already matched to another NABH row (2017-1113)', 'Vijay Marie Hospital Khairatabad; VF point 6 km off; VF has no NABH match: missed', 'Ayushman Hospital Dwarka Sector 10; VF matched only to the imaging-centre row']",
+  "examples": [
+   "6d98f93e-2e8a-4c9d-9b78-b3a194b032f9",
+   "7ad4a537-79c5-4ad0-9b53-bc4ebe0365bf",
+   "b7161769-235e-493d-92fc-b56aa3a0d271",
+   "7346f35c-499c-42c6-b2eb-9e82cbe31b3a",
+   "b86d8aa2-09a8-476c-9765-3ddc3ecebade"
+  ]
+ },
+ {
+  "name": "match_nmc",
+  "status": "pass",
+  "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 1/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 81; sample 20: yes 19, likely 1, uncertain 0, no 0. README: external/nmc_colleges README: 19/20 clean, 1 right name on a mislocated VF record (Wilson 0.764-0.991); intervals overlap: True. Rejected: 10 drawn from 281 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 1 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: []. Missed: ['Sukh Sagar Hospital Mukunwara Chargawan is the Sukh Sagar Medical College campus: missed']",
+  "examples": [
+   "10f3907d-3484-43fd-9171-906d0ba9bebf"
+  ]
+ },
+ {
+  "name": "match_osm",
+  "status": "warn",
+  "metric": "precision 17/20 = 0.85 (95% Wilson 0.64-0.948); missed 1/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 2791; sample 20: yes 14, likely 3, uncertain 1, no 2. README: kb/opendata/OPENDATA.md: high 17/20 validation (0.64-0.95); medium 7/10 pooled (Wilson 0.64-0.948); intervals overlap: True. Rejected: 10 drawn from 2142 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: ['AllCure SuperSpeciality vs Jogeshwari Hospital: only the place word is shared', 'Aasha Children Hospital Porbandar vs Aastha Children Hospital Surat: VF point is a copied Surat geocode', 'Bhandari Hospital Vijay Nagar vs OSM Bhandari Hospital addr Pardesipura, 1.8 km']. Missed: ['Gabberia State General Hospital both sides, 4.2 km; VF PIN 711322 vs OSM 711302: missed match']",
+  "examples": [
+   "99d8aef2-7c02-45cb-b47a-9e2928de8512",
+   "c9519ac0-4b34-41f4-b562-cd65b2059527",
+   "9223b026-cbca-4d6d-8b5e-3ef3aa795764",
+   "751ecc82-b1c1-4bf2-97a4-fd41a5d2e8aa"
+  ]
+ },
+ {
+  "name": "match_pmndp_goa",
+  "status": "pass",
+  "metric": "accepted 1/1 correct; rejected 7/7 correct",
+  "threshold": "all 8 Goa rows judged",
+  "detail": "Goa list only (8 rows, the other states are counts). Accepted Goa Medical College = VF dda3e7e4 (same PIN 403202). For the 7 refused rows no VF record in Goa (35 records) names Hospicio, Canacona, Navelim, Balli, Valpoi or Asilo, so the refusals are right. README 1/1 precision confirmed; its 'recall 1/8' is coverage of VF, not matcher recall.",
+  "examples": []
+ },
+ {
+  "name": "match_wikidata",
+  "status": "pass",
+  "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 1/10 rejected",
+  "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+  "detail": "Accepted population 206; sample 20: yes 18, likely 2, uncertain 0, no 0. README: kb/opendata/OPENDATA.md: pooled with OSM, high 17/20 validation (Wilson 0.64-0.948); intervals overlap: True. Rejected: 10 drawn from 200 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: []. Missed: ['Asirvatham Speciality Hospital Rajaji St vs Arthur Asirvatham Hospital, 91 m: missed match']",
+  "examples": [
+   "e6bad3d8-feea-430a-9b13-78d6d7c4b6d5"
+  ]
+ },
+ {
+  "name": "moved_sample_30",
+  "status": "warn",
+  "metric": "right 24/30 = 0.80 (95% Wilson 0.627-0.905)",
+  "threshold": "Wilson lower bound >= 0.70",
+  "detail": "Population: 1171 records whose ranking point is > 25 km from the raw coordinates (s7 says 1171). Judged from address lines, city, PIN and description: right 24, wrong 1, unclear 5. Unclear rows are records whose text names two towns. Wrong: ['Thiru Nagar and Pandiyan Nagar are Madurai localities where the raw point sits; PIN 641008 (Coimbatore) chosen'].",
+  "examples": [
+   "c50d0b3e-8615-4166-9579-6708be64ef66",
+   "15d98412-dbb0-487e-b9f8-1916f98232ac",
+   "279fa2c2-e4ef-4a9a-9285-888887133057",
+   "76a3a7f6-d5f5-4dd8-a6c9-1fa614928e79",
+   "90003975-1c3c-43ba-9c26-610b29adbcab"
+  ]
+ },
+ {
+  "name": "nfhs_join",
+  "status": "pass",
+  "metric": "9934/9959 joined",
+  "threshold": "every key exists in NFHS-5",
+  "detail": "NFHS key present for 9934 of 9959; every key exists in the raw NFHS-5 table: True. How: {'exact': 9460, 'fuzzy': 295, 'parent_table': 173, 'null': 13, 'no_nfhs_row': 12, 'spatial_parent': 6}. The two documented gaps hold in the raw table: no Purba Barddhaman row, Mizoram has a 'Chandel' row: True. 'Maharastra' is the raw NFHS spelling, not a join error.",
+  "examples": []
+ },
+ {
+  "name": "pin_gazetteer_vs_polygon_and_lgd",
+  "status": "warn",
+  "metric": "22 PINs / 28 facilities",
+  "threshold": "0 facility PINs > 25 km from both their polygon and their LGD districts",
+  "detail": "22 of 2502 facility PINs with both references are > 25 km from both (any one reference: polygon 69, LGD 24). They carry 28 facilities; 16 are placed on the wrong PIN point (loc_src postcode_centre), e.g. ['0b3d5090-2525-48f1-8969-6ef4947f9ca5', '1dbb2f3d-e4c6-4fcb-9e95-a02eab39e091', '21a2f3a1-d780-40ae-bce1-0fb0fd6612e5']. By gazetteer src: {'pin_median': 17, 'district_median': 4, 'prefix3_median': 1}.",
+  "examples": [
+   "PIN 283205 (FIROZABAD, src district_median): 303 km from its polygon, 283 km outside its LGD districts, 1 facilities",
+   "PIN 494001 (RAIPUR, src district_median): 226 km from its polygon, 180 km outside its LGD districts, 2 facilities",
+   "PIN 733134 (DINAJPUR UTTAR, src pin_median): 149 km from its polygon, 92 km outside its LGD districts, 2 facilities",
+   "PIN 822115 (PALAMU, src pin_median): 148 km from its polygon, 74 km outside its LGD districts, 1 facilities",
+   "PIN 491443 (RAJNANDGAON, src pin_median): 111 km from its polygon, 96 km outside its LGD districts, 1 facilities"
+  ]
+ },
+ {
+  "name": "raw_to_pin_distance_rederived",
+  "status": "pass",
+  "metric": "1367 of 9869 raw points > 50 km from PIN centre",
+  "threshold": "recomputed distances equal stored within 10 m and counts equal s2_stats",
+  "detail": "n=9869 (6 outside India box, 84 without a PIN point); quantiles p50/p75/p90/p95/p99 km = [1.9, 6.7, 122.9, 260.1, 512.7]; >10 km 2085, >25 km 1612, >50 km 1367 (13.9%), >100 km 1101, >500 km 105. Max abs diff vs stored raw_coords_to_pin_km 0.0032 km; s2_stats says [1367, 9869].",
+  "examples": [
+   "00a441f9-f65d-4250-a1f9-a068164cba74",
+   "019bb317-b4e2-42c3-8548-661888a5ded8",
+   "01b20470-c820-4564-9cf8-69d162803ba2",
+   "02677523-f32c-421a-8d36-adadba9cbf8f",
+   "05d4a465-dc3f-41b3-b435-cc76c0d42553"
+  ]
+ },
+ {
+  "name": "state_final_vs_point_and_district",
+  "status": "warn",
+  "metric": "49 records",
+  "threshold": "state_final agrees with the state holding the point and district",
+  "detail": "state_final (shown in app/facts and planner) differs from district_state for 52 records; for 49 the chosen point also lies in district_state per the LGD polygon (32 high confidence). Top pairs {('ANDHRA PRADESH', 'TELANGANA'): 21, ('DELHI', 'UTTAR PRADESH'): 3, ('CHANDIGARH', 'PUNJAB'): 2, ('UTTAR PRADESH', 'MADHYA PRADESH'): 2}. Root cause: s2_facility_location.py `state_final = state_final_stated.fillna(p_state)` always prefers the typed state, including the pre-2014 'Andhra Pradesh' for Hyderabad.",
+  "examples": [
+   "076633ac-580a-42b0-8bb6-94828bd6ccfe Indira IVF Chandigarh (Chandigarh): state_final PUNJAB, point and district in CHANDIGARH",
+   "0afa0b00-0807-4d1d-9eec-d620eb199be0 Bhaskara hospital (Hyderabad): state_final ANDHRA PRADESH, point and district in TELANGANA",
+   "0cf3edb4-cd74-4395-839d-4f1a99f783a7 Woodlands Hospital (Hyderabad): state_final ANDHRA PRADESH, point and district in TELANGANA",
+   "0d9c1629-aa77-4b85-b2e3-e8173ff26e2c Narayan Hospital And Trauma Centre (Rudrapur): state_final UTTARAKHAND, point and district in UTTAR PRADESH",
+   "0f8375e1-a47c-4959-94c5-313e0e2512a1 City Hospital (Rajgarh): state_final HIMACHAL PRADESH, point and district in CHHATTISGARH"
+  ]
+ },
+ {
+  "name": "v2_location_contract",
+  "status": "warn",
+  "metric": "not_run",
+  "threshold": "-",
+  "detail": "derived/v2 has no parquet files yet; contract not run",
+  "examples": []
+ }
+]

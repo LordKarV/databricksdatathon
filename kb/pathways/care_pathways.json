@@ -1,0 +1,1496 @@
+{
+ "version": "0.1",
+ "built": "2026-11-21",
+ "notes": [
+  "Facility-level referral pathways for the multi-stop planner. Not clinical advice and not a triage tool.",
+  "Every number carries basis = guideline (with source id and a verbatim quote) or basis = assumption (with the reason). Assumptions are listed again in PATHWAYS.md under open questions.",
+  "Quotes are verbatim from the source text except that non-ASCII characters were replaced by ASCII equivalents and line breaks joined.",
+  "window.minutes counts from window.from. dwell_minutes is the time spent at a stop before the patient can move on. The last stage has no dwell.",
+  "A rule's condition holds machine-readable thresholds; when and then say the same in words. definitive_travel_minutes_gt compares the travel time from the origin to the definitive facility."
+ ],
+ "sources": {
+  "icmr_stw_stemi": {
+   "title": "Standard Treatment Workflow: ST Elevation Myocardial Infarction (STEMI), ICD-11 BA41.0",
+   "publisher": "ICMR / Department of Health Research, MoHFW",
+   "year": 2026,
+   "origin": "india",
+   "url": "https://www.icmr.gov.in/icmrobject/uploads/STWs/1768823342_cardiology_1-5.pdf"
+  },
+  "mohfw_stemi_2022": {
+   "title": "Guidelines for Management of ST-Elevated Myocardial Infarction (NP-NCD)",
+   "publisher": "Directorate General of Health Services, MoHFW",
+   "year": 2022,
+   "origin": "india",
+   "url": "https://medbox.org/preview/65c9d158f8d597982c0b9646/doc.pdf",
+   "note": "Read from a medbox.org mirror; the official mohfw.gov.in copy was unreachable."
+  },
+  "csi_stemi_2017": {
+   "title": "Cardiological Society of India: Position statement for the management of ST elevation myocardial infarction in India. Indian Heart J 2017;69 Suppl 1:S63-S97",
+   "publisher": "Cardiological Society of India",
+   "year": 2017,
+   "origin": "india",
+   "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5388060/fullTextXML"
+  },
+  "iphs_2022_dh": {
+   "title": "Indian Public Health Standards 2022, Volume I: Sub District Hospital and District Hospital",
+   "publisher": "MoHFW",
+   "year": 2022,
+   "origin": "india",
+   "url": "https://nhsrcindia.org/sites/default/files/Volume%201_SDH-DH.pdf"
+  },
+  "iphs_2022_chc": {
+   "title": "Indian Public Health Standards 2022, Volume II: Community Health Centre",
+   "publisher": "MoHFW",
+   "year": 2022,
+   "origin": "india",
+   "url": "https://nhsrcindia.org/sites/default/files/CHC%20IPHS%202022%20Guidelines%20pdf.pdf"
+  },
+  "iphs_2022_phc": {
+   "title": "Indian Public Health Standards 2022, Volume III: Health and Wellness Centre - Primary Health Centre",
+   "publisher": "MoHFW",
+   "year": 2022,
+   "origin": "india",
+   "url": "https://nhsrcindia.org/sites/default/files/PHC%20IPHS_2022_Guideline_pdf.pdf"
+  },
+  "fru_2025": {
+   "title": "Revised Guidelines for Operationalizing First Referral Units (FRUs)",
+   "publisher": "National Health Mission, MoHFW",
+   "year": 2025,
+   "origin": "india",
+   "url": "https://www.nhsrcindia.org/sites/default/files/2025-12/FRU%20guidenline%202%201.pdf"
+  },
+  "dghs_trauma_stg_2025": {
+   "title": "Standard Treatment Guidelines for Management of Trauma: A Guidance Document for Clinical Management of Trauma in India",
+   "publisher": "Trauma and Burn Division, DGHS, MoHFW",
+   "year": 2025,
+   "origin": "india",
+   "url": "https://www.dghs.mohfw.gov.in/uploads/assets/SwQ7pJMiJepMtqfUQNUJrGOROd584XHIgipqf7gI.pdf"
+  },
+  "field_triage_2021": {
+   "title": "National guideline for the field triage of injured patients: Recommendations of the National Expert Panel on Field Triage, 2021. J Trauma Acute Care Surg",
+   "publisher": "American College of Surgeons Committee on Trauma expert panel",
+   "year": 2022,
+   "origin": "international",
+   "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9323557/fullTextXML"
+  },
+  "snake_stg_2017": {
+   "title": "Standard Treatment Guidelines: Management of Snake Bite",
+   "publisher": "National Health Mission, MoHFW",
+   "year": 2017,
+   "origin": "india",
+   "url": "https://ncdc.mohfw.gov.in/uploads/pdf/Standard-Treatment-Guidelines-for-Management-of-Snake-Bite.pdf"
+  },
+  "dghs_burns_stg_2025": {
+   "title": "Standard Treatment Guidelines for Management of Burns: A Guidance Document for Clinical Management and Rehabilitation of Burn Injuries in India",
+   "publisher": "Trauma and Burn Division, DGHS, MoHFW",
+   "year": 2025,
+   "origin": "india",
+   "url": "https://www.dghs.mohfw.gov.in/uploads/assets/S1Ipab4025VceQpFs7Qa6THwh07NLmggStsg1cDD.pdf"
+  },
+  "bba_first_aid_2018": {
+   "title": "British Burn Association First Aid Clinical Practice Guidelines",
+   "publisher": "British Burn Association",
+   "year": 2018,
+   "origin": "international",
+   "url": "https://www.salisbury.nhs.uk/media/kgklfbxt/british-burn-association-first-aid-clinical-practice-guidelines.pdf"
+  },
+  "pmndp_og": {
+   "title": "Operational Guidelines for Pradhan Mantri National Dialysis Programme (Part 1 Haemodialysis, Part 2 Peritoneal Dialysis)",
+   "publisher": "MoHFW",
+   "year": 2026,
+   "origin": "india",
+   "url": "https://nhsrcindia.org/sites/default/files/2026-07/Operational%20Guidelines%20for%20PMNDP.pdf",
+   "note": "No year printed on the cover; 2026 inferred from the URL folder and the text 'As on 31st March 2026'."
+  },
+  "pmndp_bid_2023": {
+   "title": "Revised Bid Document for Provision of Hemodialysis Services at District Hospitals (PMNDP model RFP)",
+   "publisher": "Department of Health and Family Welfare",
+   "year": 2023,
+   "origin": "india",
+   "url": "https://www.nhsrcindia.org/sites/default/files/FINAL%20DIALYSIS%20REVISED%2006%20JUN%2023.pdf"
+  },
+  "icmr_stw_hd": {
+   "title": "Standard Treatment Workflow: Hemodialysis (ICD-11-N005.9)",
+   "publisher": "ICMR / Department of Health Research, MoHFW",
+   "year": 2026,
+   "origin": "india",
+   "url": "https://www.icmr.gov.in/icmrobject/uploads/STWs/1784807343_hemodialysis-new2.pdf"
+  },
+  "icmr_stw_ckd": {
+   "title": "Standard Treatment Workflow: Chronic Kidney Disease (ICD-11-GB61)",
+   "publisher": "ICMR / Department of Health Research, MoHFW",
+   "year": 2026,
+   "origin": "india",
+   "url": "https://www.icmr.gov.in/icmrobject/uploads/STWs/1784807344_chronickidneydisease-updated.pdf"
+  },
+  "isn_mhd": {
+   "title": "Guidelines for Maintenance Hemodialysis in India / Standard Treatment Guidelines Haemodialysis",
+   "publisher": "Indian Society of Nephrology / MoHFW",
+   "year": null,
+   "origin": "india",
+   "url": "https://medbox.org/index.php/dl/5e3be55792355f4aff08cee4",
+   "note": "No year printed in the copy read."
+  },
+  "mnh_2010": {
+   "title": "Operational Guidelines on Maternal and Newborn Health",
+   "publisher": "MoHFW (NRHM), Govt of India",
+   "year": 2010,
+   "origin": "india",
+   "url": "https://nhsrcindia.org/sites/default/files/2021-04/Operational%20Guidelines%20for%20Maternal%20Newborn%20Health.pdf"
+  },
+  "dakshata_jobaids": {
+   "title": "DAKSHATA Job-aids and Checklists (includes Safe Childbirth Checklist)",
+   "publisher": "Maternal Health Division, MoHFW / NHM",
+   "year": null,
+   "origin": "india",
+   "url": "https://nhm.gov.in/images/pdf/Dakshata_Implementation/3-days_Dakshata_Training-English/Resource_Material/Spiral_Booklet_for_printing-Job-aids_and_checklists/Job_aids_and_Checklists.pdf",
+   "note": "Undated Dakshata training package; includes the Safe Childbirth Checklist."
+  },
+  "dakshata_facilitators": {
+   "title": "Dakshata Facilitators Guidelines",
+   "publisher": "Maternal Health Division, MoHFW / NHM",
+   "year": null,
+   "origin": "india",
+   "url": "https://nhm.gov.in/images/pdf/programmes/maternal-health/guidelines/Dakshata-Facilitators_Guidelines.pdf",
+   "note": "Undated Dakshata training package."
+  },
+  "uterotonics_note_2015": {
+   "title": "Guidance Note on Use of Uterotonics during labour",
+   "publisher": "Maternal Health Division, MoHFW, Govt of India",
+   "year": 2015,
+   "origin": "india",
+   "url": "https://nhm.gov.in/images/pdf/programmes/maternal-health/guidelines/Guidance_Notes_on_Use_of_Uterotonics_during_labor.pdf"
+  },
+  "icmr_stw_pph": {
+   "title": "Standard Treatment Workflow (STW): Postpartum Haemorrhage (updated)",
+   "publisher": "ICMR / Department of Health Research, MoHFW",
+   "year": 2025,
+   "origin": "india",
+   "url": "https://www.icmr.gov.in/icmrobject/uploads/STWs/1768382528_updatedpostpartumhaemorrhage.pdf"
+  },
+  "antenatal_steroids_2014": {
+   "title": "Use of Antenatal Corticosteroids in Preterm Labour (Under Specific Conditions by ANM): Operational Guidelines",
+   "publisher": "Child Health Division, MoHFW, Govt of India",
+   "year": 2014,
+   "origin": "india",
+   "url": "https://medbox.org/index.php/dl/5e148832db60a2044c2d3cf0"
+  },
+  "nice_ng192": {
+   "title": "Caesarean birth, NICE guideline NG192, Recommendations",
+   "publisher": "National Institute for Health and Care Excellence",
+   "year": 2021,
+   "origin": "international",
+   "url": "https://www.nice.org.uk/guidance/ng192/chapter/Recommendations"
+  },
+  "fbnc_2025": {
+   "title": "Facility Based Newborn Care Operational Guidelines 2025",
+   "publisher": "Child Health Division, MoHFW, Govt of India",
+   "year": 2025,
+   "origin": "india",
+   "url": "https://nhm.gov.in/images/pdf/programmes/CH-Programmes/FBNC/FBNC%20Operational%20Guidelines%202025.pdf"
+  },
+  "icmr_stw_neonatal_transport": {
+   "title": "Standard Treatment Workflow (STW): Neonatal Transport",
+   "publisher": "ICMR / Department of Health Research, MoHFW",
+   "year": 2020,
+   "origin": "india",
+   "url": "https://www.icmr.gov.in/icmrobject/uploads/STWs/1726568619_neonatal_transport.pdf"
+  }
+ },
+ "pathways": [
+  {
+   "id": "stemi",
+   "name": "Heart attack (STEMI): thrombolysis at a nearer facility, then a PCI centre",
+   "service": "stemi",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "first_medical_contact",
+   "sources": [
+    "icmr_stw_stemi",
+    "mohfw_stemi_2022",
+    "csi_stemi_2017",
+    "iphs_2022_chc",
+    "iphs_2022_dh",
+    "iphs_2022_phc",
+    "fru_2025"
+   ],
+   "stages": [
+    {
+     "id": "thrombolysis",
+     "name": "Thrombolysis at the nearest capable facility",
+     "purpose": "stabilise",
+     "actions": [
+      "12-lead ECG and diagnosis",
+      "aspirin, clopidogrel, statin",
+      "thrombolysis after checking contraindications",
+      "repeat ECG at 60 to 90 minutes to judge success"
+     ],
+     "requires_all": [
+      "ecg",
+      "thrombolysis",
+      "emergency_24x7"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "CHC",
+      "SDH",
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "IPHS 2022 lists MI management and streptokinase at CHC, SDH and DH and no thrombolytic at PHC. The MoHFW STEMI guideline allows thrombolysis at a PHC that has a trained medical officer and ECG (grade L-2).",
+     "window": {
+      "minutes": 720,
+      "from": "symptom_onset",
+      "kind": "hard",
+      "basis": "guideline",
+      "source": "icmr_stw_stemi",
+      "quote": "THROMBOLYSE 1. Within 12 hours of symptom onset, if no contra-indication"
+     },
+     "dwell_minutes": {
+      "typical": 90,
+      "basis": "guideline",
+      "source": "icmr_stw_stemi",
+      "quote": "ECG to be done at 60-90 min after starting thrombolysis to assess whether thrombolysis is successful",
+      "note": "Upper end of the 60 to 90 minute check. No Indian door-in-door-out target was found."
+     },
+     "repeat": null
+    },
+    {
+     "id": "pci",
+     "name": "PCI-capable centre",
+     "purpose": "definitive",
+     "actions": [
+      "primary PCI if reached in time",
+      "angiography and PCI 3 to 24 hours after successful thrombolysis",
+      "rescue PCI at once after failed thrombolysis"
+     ],
+     "requires_all": [
+      "pci_cath_lab"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "MoHFW grade L-5: medical college or private cath lab centre. IPHS 2022 calls a cath lab at a district hospital aspirational.",
+     "window": {
+      "minutes": 120,
+      "from": "first_medical_contact",
+      "kind": "target",
+      "basis": "guideline",
+      "source": "icmr_stw_stemi",
+      "quote": "Tranfer to PCI capable hospital if PCI can be performed within 120 min"
+     },
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "lyse_first_if_pci_not_within_120",
+     "type": "add_stop_only_if",
+     "stage": "thrombolysis",
+     "when": "Primary PCI cannot be performed within 120 minutes of first medical contact.",
+     "then": "Thrombolyse at the nearest capable facility first, then transfer. If PCI is reachable in time, go direct.",
+     "condition": {
+      "definitive_travel_minutes_gt": 120,
+      "counts": "travel only; time inside the PCI centre before the procedure is extra and is not in this number"
+     },
+     "basis": "guideline",
+     "source": "csi_stemi_2017",
+     "quote": "Thrombolytic therapy is recommended within 12 h of symptom onset in patients without contraindications if primary PCI cannot be performed by an experienced team within 120 min of FMC(preferably within 90 min)"
+    },
+    {
+     "id": "lyse_first_if_transfer_30_plus",
+     "type": "caution",
+     "stage": "thrombolysis",
+     "when": "Transfer time to the PCI centre is 30 minutes or more (stricter reading in the MoHFW guideline).",
+     "then": "Shown as a caution on the card: MoHFW says thrombolysing first is appropriate from 30 minutes of transfer time. The planner decides on the 120 minute rule.",
+     "condition": {
+      "definitive_travel_minutes_gte": 30
+     },
+     "basis": "guideline",
+     "source": "mohfw_stemi_2022",
+     "quote": "Pharmaco-invasive approach is appropriate for patients with STEMI who are eligible for treatment with fibrinolytic drugs and in whom \"transfer time\" >= 30 min or door- balloon time > 90 min"
+    },
+    {
+     "id": "pci_3_to_24h_after_lysis",
+     "type": "refer_if",
+     "stage": "pci",
+     "when": "Thrombolysis was successful.",
+     "then": "Transfer for PCI within 3 to 24 hours.",
+     "condition": {
+      "after_stabilise_minutes_min": 180,
+      "after_stabilise_minutes_max": 1440
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_stemi",
+     "quote": "If successful, transfer patient for PCI within 3-24 hours"
+    },
+    {
+     "id": "failed_lysis_transfer_now",
+     "type": "never_delay",
+     "stage": "pci",
+     "when": "Thrombolysis failed (less than 50% ST resolution or persisting pain).",
+     "then": "Transfer immediately to the PCI centre; do not wait for the 3 hour mark.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "icmr_stw_stemi",
+     "quote": "If thrombolysis failed, transfer patient immediately for PCI capable hospital"
+    },
+    {
+     "id": "late_presenter_direct",
+     "type": "skip_stop_if",
+     "stage": "thrombolysis",
+     "when": "Symptoms began 12 to 24 hours ago.",
+     "then": "Go to the PCI centre directly; thrombolyse on the way only if pain is ongoing.",
+     "condition": {
+      "symptom_onset_minutes_gt": 720
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_stemi",
+     "quote": "PATIENT WITH STEMI IN 12-24 HOURS Transfer to PCI capable hospital immediately If ongoing pain, thrombolysis and transfer immediately"
+    },
+    {
+     "id": "not_for_spoke_lysis",
+     "type": "skip_stop_if",
+     "stage": "thrombolysis",
+     "when": "Earlier thrombolysis, or a history such as stroke or heart disease.",
+     "then": "Do not thrombolyse at the spoke; refer to the hub hospital.",
+     "condition": {
+      "patient_flag": "prior_thrombolysis_or_stroke_history"
+     },
+     "basis": "guideline",
+     "source": "mohfw_stemi_2022",
+     "quote": "are not thrombolize at spoke hospital instead they are referred to the hub hospital"
+    },
+    {
+     "id": "shock_direct_pci",
+     "type": "skip_stop_if",
+     "stage": "thrombolysis",
+     "when": "Cardiogenic shock or acute heart failure.",
+     "then": "Primary PCI regardless of delay. Found only in the CSI statement, which quotes international guidelines.",
+     "condition": {
+      "patient_flag": "cardiogenic_shock_or_acute_heart_failure"
+     },
+     "basis": "guideline",
+     "source": "csi_stemi_2017",
+     "quote": "those who present with cardiogenic shock or acute heart failure, irrespective of time delay from the onset of symptoms"
+    },
+    {
+     "id": "no_ecg_facility_first_dose",
+     "type": "before_transfer",
+     "stage": null,
+     "when": "First contact is a facility with no ECG (grade L-1).",
+     "then": "Give aspirin, clopidogrel and atorvastatin, then transport by 108 ambulance with a medical officer and inform the receiving centre.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "mohfw_stemi_2022",
+     "quote": "Transport patient as lying case in ambulance (108) with oxygen accompanied by a MO"
+    }
+   ],
+   "open_questions": [
+    "The 120 minute rule includes time inside the PCI centre. How many minutes should the planner add to travel time for that? No Indian figure was encoded.",
+    "No numeric door-in-door-out target for the referring facility was found in an Indian guideline. The 90 minute dwell is the repeat-ECG check, not a transfer target.",
+    "The MoHFW 2022 text has internal inconsistencies (a 6 hour lysis window in Appendix C against 12 hours elsewhere; 'door to needle within 2 hours'). The 12 hour window from ICMR and CSI is used.",
+    "STEMI is not one of the 8 graded services in derived/v1. The pathway needs the thrombolysis, ecg and pci_cath_lab tags before it can be planned."
+   ],
+   "decisions": [
+    "Lead, issue #6: the ICMR 120 minute rule is the STEMI decision rule; the MoHFW 30 minute transfer reading is shown as a caution line, not a second decision rule."
+   ]
+  },
+  {
+   "id": "major_trauma",
+   "name": "Major trauma: nearest 24x7 emergency facility, then definitive trauma care",
+   "service": "trauma",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "injury",
+   "sources": [
+    "dghs_trauma_stg_2025",
+    "iphs_2022_chc",
+    "iphs_2022_dh",
+    "iphs_2022_phc",
+    "fru_2025",
+    "field_triage_2021"
+   ],
+   "stages": [
+    {
+     "id": "stabilise",
+     "name": "Stabilise at the nearest emergency facility",
+     "purpose": "stabilise",
+     "actions": [
+      "airway and breathing support, chest tube if needed",
+      "control external bleeding",
+      "two large-bore IV lines, fluids and blood",
+      "spinal motion restriction and splints",
+      "call the receiving hospital"
+     ],
+     "requires_all": [
+      "emergency_24x7"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "PHC",
+      "CHC",
+      "SDH",
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "IPHS 2022: triage, resuscitation and stabilisation are essential at every CHC; at PHC level they are 24x7 only in a 24x7 PHC.",
+     "window": {
+      "minutes": 60,
+      "from": "injury",
+      "kind": "target",
+      "basis": "assumption",
+      "why": "IPHS 2022 asks for stabilisation within the 'Golden Hour' from onset of the emergency but gives no number. 60 minutes is the usual meaning and was not found stated in an Indian source."
+     },
+     "dwell_minutes": {
+      "typical": 30,
+      "basis": "assumption",
+      "why": "No Indian time-at-stabilising-facility target was found. The guideline only says not to delay transfer for CT or wound procedures. 30 minutes is a planning placeholder."
+     },
+     "repeat": null
+    },
+    {
+     "id": "definitive",
+     "name": "Definitive trauma care",
+     "purpose": "definitive",
+     "actions": [
+      "CT and full survey",
+      "surgery, neurosurgery or orthopaedics as needed",
+      "blood and intensive care"
+     ],
+     "requires_all": [
+      "general_surgery_ot",
+      "blood_transfusion",
+      "ct_scan",
+      "icu"
+     ],
+     "requires_any": [
+      [
+       "trauma_centre",
+       "neurosurgery",
+       "orthopaedics"
+      ]
+     ],
+     "facility_levels": [
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "MoHFW trauma care facility levels I to III could be read only as search snippets, so they are not encoded.",
+     "window": null,
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "stop_only_if_definitive_far",
+     "type": "add_stop_only_if",
+     "stage": "stabilise",
+     "when": "The definitive facility is more than 60 minutes away.",
+     "then": "Stabilise at the nearest 24x7 emergency facility first; otherwise go direct.",
+     "condition": {
+      "definitive_travel_minutes_gt": 60
+     },
+     "basis": "assumption",
+     "why": "The 60 minute threshold comes from the planner design in issue #6. No Indian guideline gives a time or distance threshold for bypassing the nearest facility."
+    },
+    {
+     "id": "india_says_nearest_first",
+     "type": "refer_if",
+     "stage": "stabilise",
+     "when": "Pre-hospital phase, Indian guidance.",
+     "then": "Immediate transport to the nearest facility. This conflicts with the direct-to-trauma-centre branch above; see open questions.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dghs_trauma_stg_2025",
+     "quote": "Emphasize on early airway maintenance, haemorrhage control, immobilization and immediate transport to nearest facility"
+    },
+    {
+     "id": "in_extremis_nearest",
+     "type": "refer_if",
+     "stage": "stabilise",
+     "when": "Unstable airway, severe shock or traumatic arrest (international guidance).",
+     "then": "Closest hospital for initial stabilisation whatever the distance to the trauma centre.",
+     "condition": {
+      "patient_flag": "in_extremis"
+     },
+     "basis": "guideline",
+     "source": "field_triage_2021",
+     "quote": "patients in extremis (e.g., unstable airway, severe shock, or traumatic arrest) may require transport to the closest hospital for initial stabilization"
+    },
+    {
+     "id": "do_not_wait_for_ct",
+     "type": "never_delay",
+     "stage": "stabilise",
+     "when": "At the stabilising facility.",
+     "then": "Do not delay transfer for CT, aortography or wound procedures.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dghs_trauma_stg_2025",
+     "quote": "Avoid sophisticated diagnostic studies, such as CT and aortography; if indicated, do not delay transfer in obtaining these studies"
+    },
+    {
+     "id": "stabilise_before_transfer",
+     "type": "before_transfer",
+     "stage": "stabilise",
+     "when": "Before leaving the stabilising facility.",
+     "then": "Secure the airway, control bleeding, start two IV lines and fluids, speak directly to the receiving doctor, send trained staff with the patient.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dghs_trauma_stg_2025",
+     "quote": "Establish two large-bore intravenous lines and begin crystalloid solution infusion"
+    },
+    {
+     "id": "head_injury_needs_neurosurgery",
+     "type": "refer_if",
+     "stage": "definitive",
+     "when": "Moderate head injury (GCS 9 to 12).",
+     "then": "The definitive facility must offer neurosurgery.",
+     "condition": {
+      "needs_capability": "neurosurgery"
+     },
+     "basis": "guideline",
+     "source": "dghs_trauma_stg_2025",
+     "quote": "Admit or transfer to a facility capable of definitive neurosurgical care"
+    },
+    {
+     "id": "txa_within_3h",
+     "type": "before_transfer",
+     "stage": "stabilise",
+     "when": "Severely injured patient.",
+     "then": "Tranexamic acid within 3 hours of injury, at whichever facility is reached first.",
+     "condition": {
+      "injury_minutes_lt": 180
+     },
+     "basis": "guideline",
+     "source": "dghs_trauma_stg_2025",
+     "quote": "For severely injured administer Inj Tranexamic acid (1 gram) within 3 hours of injury"
+    }
+   ],
+   "open_questions": [
+    "Indian guidance (DGHS 2025) says immediate transport to the nearest facility and gives no bypass rule. The direct-to-trauma-centre branch under 60 minutes follows the planner design and international practice, not an Indian guideline. Decide whether to keep it.",
+    "The 60 minute window, the 60 minute add-stop threshold and the 30 minute dwell are assumptions.",
+    "MoHFW trauma care facility levels I, II and III and the highway spacing norms could not be opened (search snippets only). The trauma_centre tag therefore has no official definition here; external/mohfw_trauma_196 may supply the list.",
+    "The Indian guideline does not say which facility counts as capable of stabilisation. emergency_24x7 alone is used."
+   ]
+  },
+  {
+   "id": "obstetric_emergency",
+   "name": "Obstetric emergency including emergency caesarean: basic emergency obstetric care, then a First Referral Unit",
+   "service": "csection",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "onset_of_complication",
+   "sources": [
+    "mnh_2010",
+    "fru_2025",
+    "dakshata_jobaids",
+    "dakshata_facilitators",
+    "uterotonics_note_2015",
+    "icmr_stw_pph",
+    "antenatal_steroids_2014",
+    "nice_ng192",
+    "iphs_2022_chc",
+    "iphs_2022_phc",
+    "iphs_2022_dh"
+   ],
+   "stages": [
+    {
+     "id": "basic_emoc",
+     "name": "Stabilise at a basic emergency obstetric care facility",
+     "purpose": "stabilise",
+     "actions": [
+      "IV line and fluids",
+      "oxytocin infusion, uterine massage, balloon tamponade for bleeding",
+      "first dose of magnesium sulphate for severe pre-eclampsia or eclampsia",
+      "first dose of antibiotics for sepsis or prolonged labour",
+      "phone the receiving unit, send a health worker and the partograph"
+     ],
+     "requires_all": [
+      "basic_emoc"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "PHC",
+      "CHC"
+     ],
+     "facility_level_note": "MoHFW 2010 level 2: 24x7 PHCs and CHCs that are not First Referral Units. IPHS 2022: every PHC type must identify, stabilise and refer PPH, eclampsia and sepsis.",
+     "window": null,
+     "dwell_minutes": {
+      "typical": 30,
+      "basis": "assumption",
+      "why": "No general time-at-stabilising-facility figure was found; only condition-specific limits (tamponade judged at 15 minutes, 4 hours between partograph alert and action lines). 30 minutes is a planning placeholder."
+     },
+     "repeat": null
+    },
+    {
+     "id": "comprehensive_emoc",
+     "name": "First Referral Unit: caesarean section and blood",
+     "purpose": "definitive",
+     "actions": [
+      "emergency caesarean section",
+      "blood transfusion",
+      "surgery for bleeding or ruptured uterus",
+      "full treatment of eclampsia and sepsis",
+      "newborn resuscitation and stabilisation"
+     ],
+     "requires_all": [
+      "comprehensive_emoc",
+      "blood_transfusion"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "CHC",
+      "SDH",
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "Only CHCs designated as First Referral Units: IPHS 2022 lists caesarean as essential at an FRU CHC and only desirable at a non-FRU CHC. FRU 2025: operating theatres, anaesthesia and a blood storage unit available 24/7.",
+     "window": {
+      "minutes": 60,
+      "from": "decision_to_refer",
+      "kind": "target",
+      "basis": "guideline",
+      "source": "mnh_2010",
+      "quote": "The ideal situation is where every mother delivers in an institution with access to a referral centre within one hour in case of complications, requiring surgery and blood transfusion.",
+      "note": "An access norm described as the ideal situation, not a clinical deadline. IPHS 2022 says only 'within the Golden Hour'."
+     },
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "stop_only_if_fru_far",
+     "type": "add_stop_only_if",
+     "stage": "basic_emoc",
+     "when": "The First Referral Unit is more than 60 minutes away.",
+     "then": "Stabilise at the nearest basic emergency obstetric care facility first; otherwise go direct.",
+     "condition": {
+      "definitive_travel_minutes_gt": 60
+     },
+     "basis": "assumption",
+     "why": "Taken from the one-hour access norm in the MoHFW 2010 guideline. No Indian guideline states a rule for bypassing the nearer facility."
+    },
+    {
+     "id": "needs_surgery_or_blood",
+     "type": "refer_if",
+     "stage": "comprehensive_emoc",
+     "when": "Caesarean section or blood transfusion is needed (obstructed labour, bleeding that does not stop, ruptured uterus).",
+     "then": "A basic facility can only stabilise; plan for the First Referral Unit from the start.",
+     "condition": {
+      "needs_capability": "comprehensive_emoc"
+     },
+     "basis": "guideline",
+     "source": "mnh_2010",
+     "quote": "stabilise other complications for onward referral if C section and blood transfusion are required."
+    },
+    {
+     "id": "slow_labour_four_hours",
+     "type": "refer_if",
+     "stage": "comprehensive_emoc",
+     "when": "Labour crosses the partograph alert line.",
+     "then": "Start the referral; the woman should reach the First Referral Unit within 4 hours, before the action line.",
+     "condition": {
+      "arrive_within_minutes": 240
+     },
+     "basis": "guideline",
+     "source": "dakshata_facilitators",
+     "quote": "There is a difference of four hours between the two lines which are enough for the woman to reach a functional FRU for further care."
+    },
+    {
+     "id": "eclampsia_first_dose",
+     "type": "before_transfer",
+     "stage": "basic_emoc",
+     "when": "Severe pre-eclampsia or eclampsia at a facility that is not a First Referral Unit.",
+     "then": "Give the first dose of magnesium sulphate, then refer immediately.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dakshata_jobaids",
+     "quote": "Give first dose of inj. magnesium sulfate and refer immediately to FRU/Higher center"
+    },
+    {
+     "id": "pph_transfer_with_oxytocin",
+     "type": "before_transfer",
+     "stage": "basic_emoc",
+     "when": "Bleeding after birth and no blood or surgery at this facility.",
+     "then": "Transfer with an oxytocin drip running and, if possible, a tamponade in place.",
+     "condition": {
+      "needs_capability": "blood_transfusion"
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_pph",
+     "quote": "Patient must be transported with I/V fluids containing oxytocin on flow and preferably with uterine/vaginal tamponade in situ."
+    },
+    {
+     "id": "pph_txa_3h",
+     "type": "before_transfer",
+     "stage": "basic_emoc",
+     "when": "Bleeding after birth.",
+     "then": "Tranexamic acid as early as possible and within 3 hours of delivery, at whichever facility is reached first.",
+     "condition": {
+      "delivery_minutes_lt": 180
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_pph",
+     "quote": "to be used as early as possible irrespective of cause but definitely within three hours of delivery"
+    },
+    {
+     "id": "preterm_steroid_then_refer",
+     "type": "before_transfer",
+     "stage": "basic_emoc",
+     "when": "Preterm labour between 24 and 34 weeks.",
+     "then": "Give the pre-referral dose of dexamethasone, then refer the mother before delivery to a centre with newborn care. See the sick_newborn pathway.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "antenatal_steroids_2014",
+     "quote": "Refer the pregnant women to higher centre where neonatal resuscitation facilities exist"
+    },
+    {
+     "id": "transport_30_and_60",
+     "type": "refer_if",
+     "stage": "comprehensive_emoc",
+     "when": "Arranging transport.",
+     "then": "Assured referral transport means a vehicle within 30 minutes and arrival at the referral site within one hour.",
+     "condition": {
+      "transport_available_minutes": 30,
+      "travel_minutes_max": 60
+     },
+     "basis": "guideline",
+     "source": "mnh_2010",
+     "quote": "A transport service that could become available within 30 minutes and be able to take the woman or newborn to a referral site within one hour."
+    },
+    {
+     "id": "caesarean_30_minutes",
+     "type": "never_delay",
+     "stage": "comprehensive_emoc",
+     "when": "Immediate threat to the life of the woman or baby, once the decision for caesarean is made.",
+     "then": "Caesarean within 30 minutes of the decision, so the receiving unit must be phoned ahead and ready. International figure; see open questions.",
+     "condition": {
+      "decision_to_delivery_minutes": 30
+     },
+     "basis": "guideline",
+     "source": "nice_ng192",
+     "quote": "Perform category 1 caesarean birth as soon as possible, and in most situations within 30 minutes of making the decision."
+    }
+   ],
+   "open_questions": [
+    "The 60 minute add-stop threshold and the 30 minute dwell are assumptions. No Indian guideline gives a bypass rule or a general time at the stabilising facility.",
+    "Decision-to-delivery of 30 minutes was not found in a primary Indian document. It was read in NICE NG192 (UK) and in a secondary web reproduction that credits a MoHFW caesarean guideline.",
+    "IPHS 2022 uses 'Golden Hour' with no number. The one-hour figure here is the MoHFW 2010 access norm.",
+    "The facility text rarely says whether a CHC is a First Referral Unit. external/laqshya_master may help identify working units.",
+    "No Indian time limits were found for magnesium sulphate or for antibiotics in maternal sepsis."
+   ]
+  },
+  {
+   "id": "burns",
+   "name": "Burns: first aid and fluids at a nearer facility, then a burn unit",
+   "service": "burns",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "injury",
+   "sources": [
+    "dghs_burns_stg_2025",
+    "iphs_2022_dh",
+    "iphs_2022_chc",
+    "iphs_2022_phc",
+    "bba_first_aid_2018"
+   ],
+   "stages": [
+    {
+     "id": "fluids",
+     "name": "Fluid resuscitation and dressing at the nearest facility",
+     "purpose": "stabilise",
+     "actions": [
+      "primary survey",
+      "two wide-bore IV cannulas and IV fluids for burns over 15% (adults) or 10% (children)",
+      "tetanus toxoid, clean dressing, pain relief",
+      "cover and keep warm"
+     ],
+     "requires_all": [
+      "iv_fluid_resuscitation"
+     ],
+     "requires_any": [
+      [
+       "burns_dressing",
+       "emergency_24x7"
+      ]
+     ],
+     "facility_levels": [
+      "PHC",
+      "CHC",
+      "SDH",
+      "DH"
+     ],
+     "facility_level_note": "DGHS 2025: PHC gives first aid, basic treatment and referral; if IV resuscitation is not possible at primary level, transfer to secondary.",
+     "window": null,
+     "window_note": "No Indian deadline for starting IV fluids was found ('Fluid resuscitation should be prompt and adequate').",
+     "dwell_minutes": {
+      "typical": 60,
+      "basis": "assumption",
+      "why": "No source states the time spent at the first facility before onward transfer. 60 minutes is a planning placeholder for survey, IV access and first fluids."
+     },
+     "repeat": null
+    },
+    {
+     "id": "burn_unit",
+     "name": "Burn unit or tertiary burn care",
+     "purpose": "definitive",
+     "actions": [
+      "continued fluid resuscitation and monitoring",
+      "wound care and surgery (excision and grafting within 3 to 5 days)",
+      "intensive care for major burns",
+      "rehabilitation"
+     ],
+     "requires_all": [
+      "general_surgery_ot"
+     ],
+     "requires_any": [
+      [
+       "burn_unit",
+       "plastic_surgery"
+      ]
+     ],
+     "facility_levels": [
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "IPHS 2022: every district hospital should have a burn unit (3 to 10 beds by size). DGHS 2025: surgery preferably at a tertiary centre with a dedicated burn unit.",
+     "window": null,
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "stop_only_if_burn_unit_far",
+     "type": "add_stop_only_if",
+     "stage": "fluids",
+     "when": "The burn unit is more than 60 minutes away and the burn needs IV fluids.",
+     "then": "Start fluids at the nearest facility first; otherwise go direct.",
+     "condition": {
+      "definitive_travel_minutes_gt": 60
+     },
+     "basis": "assumption",
+     "why": "The Indian guideline grades by burn size and type, not by travel time, and gives no time threshold. 60 minutes matches the trauma placeholder."
+    },
+    {
+     "id": "direct_to_tertiary_types",
+     "type": "skip_stop_if",
+     "stage": "fluids",
+     "when": "Smoke inhalation, electrical burn, chemical burn of the eye.",
+     "then": "Direct transfer to a tertiary burn centre.",
+     "condition": {
+      "patient_flag": "inhalation_or_electrical_or_chemical_eye"
+     },
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "ARRANGING TRANSFER DIRECTLY TO THE BURN CENTRE/ BURN ICU IMMEDIATELY: Direct transfer to the tertiary care centre is recommended"
+    },
+    {
+     "id": "direct_to_tertiary_airway",
+     "type": "skip_stop_if",
+     "stage": "fluids",
+     "when": "Unprotected airway, decreased consciousness or signs of airway obstruction.",
+     "then": "Direct transfer to a tertiary centre.",
+     "condition": {
+      "patient_flag": "airway_or_unconscious"
+     },
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "Direct transfer to a tertiary centre is considered if the following is present: unprotected airway - decreased consciousness - Signs of airway obstruction."
+    },
+    {
+     "id": "small_burn_stays_primary",
+     "type": "skip_stop_if",
+     "stage": "burn_unit",
+     "when": "Partial thickness burn under 10% of body surface (under 5% if younger than 10 or older than 50), not on hands, feet, face, genitalia or joints.",
+     "then": "Can be treated at primary level; no burn unit needed.",
+     "condition": {
+      "tbsa_percent_lt": 10,
+      "tbsa_percent_lt_age_under_10_or_over_50": 5
+     },
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "Partial thickness burns < 10 per cent TBSA in all other age groups"
+    },
+    {
+     "id": "refer_to_tertiary_sizes",
+     "type": "refer_if",
+     "stage": "burn_unit",
+     "when": "Deep partial thickness over 40%, full thickness over 10%, burns of hands, feet, face, genitalia, perineum or joints, suspected inhalation injury, burns with other major injuries.",
+     "then": "After stabilisation, refer to a tertiary centre rather than a district-level unit.",
+     "condition": {
+      "needs_capability": "burn_unit",
+      "level": "tertiary"
+     },
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "After stabilisation, burns that are recommended to be referred to the TERTIARY CARE CENTRE are: Deep partial thickness >40% TBSA - Full thickness burn > 10% TBSA"
+    },
+    {
+     "id": "start_fluids_before_transfer",
+     "type": "before_transfer",
+     "stage": "fluids",
+     "when": "The first hospital lacks a surgeon, anaesthetist, operating theatre or dressing room.",
+     "then": "Start fluid resuscitation, then refer; fluids can continue in the ambulance.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "it is recommended that the burn patients be referred to a tertiary care centre after initiating fluid resuscitation"
+    },
+    {
+     "id": "airway_without_delay",
+     "type": "never_delay",
+     "stage": "fluids",
+     "when": "Emergent airway management is needed.",
+     "then": "Refer to a tertiary centre without delay.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "The cases requiring emergent airway management must be referred to a tertiary care centre without delay."
+    },
+    {
+     "id": "cool_at_site",
+     "type": "before_transfer",
+     "stage": null,
+     "when": "At the scene, before any travel.",
+     "then": "Cool with tap water for 10 minutes (India) at the site; no ice, no ointments; cover with a clean cloth. International guidance says 20 minutes within 3 hours of injury.",
+     "condition": {
+      "cooling_minutes": 10
+     },
+     "basis": "guideline",
+     "source": "dghs_burns_stg_2025",
+     "quote": "Continuous cooling for the first 10 minutes dissipates heat, reduces pain, limits the depth of burn injury and minimises the extent of burn oedema."
+    }
+   ],
+   "open_questions": [
+    "The 60 minute add-stop threshold and the 60 minute dwell are assumptions; Indian burn guidance sets no travel-time rule and no time-at-first-facility figure.",
+    "India has no formal definition separating a burn unit from a burn centre; IPHS gives only bed numbers. The burn_unit tag cannot tell district units from tertiary centres.",
+    "Whether to treat burns as time-critical at all: the DGHS guideline says most burns are not a mortal threat within the first hour. An alternative is to plan by burn size and type only, which needs patient details the app does not collect.",
+    "Cooling time differs: 10 minutes (DGHS 2025) against 20 minutes within 3 hours (British Burn Association, WHO).",
+    "No ICMR Standard Treatment Workflow for burns was found."
+   ]
+  },
+  {
+   "id": "sick_newborn",
+   "name": "Sick newborn: newborn stabilisation unit, then special newborn care or NICU",
+   "service": "nicu",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "recognition_of_danger_signs",
+   "sources": [
+    "fbnc_2025",
+    "icmr_stw_neonatal_transport",
+    "antenatal_steroids_2014",
+    "iphs_2022_chc",
+    "iphs_2022_dh",
+    "mnh_2010"
+   ],
+   "stages": [
+    {
+     "id": "stabilise",
+     "name": "Stabilise at a newborn stabilisation unit",
+     "purpose": "stabilise",
+     "actions": [
+      "warmth",
+      "airway and breathing support, oxygen",
+      "check and correct blood sugar",
+      "treat shock, first dose of antibiotics",
+      "confirm a bed at the receiving unit and send a referral slip"
+     ],
+     "requires_all": [
+      "neonatal_stabilisation"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "CHC",
+      "SDH",
+      "DH"
+     ],
+     "facility_level_note": "FBNC 2025: a 4 to 6 bed unit at sub-district level (CHC or First Referral Unit). Every delivery point has only a newborn care corner, which identifies and refers.",
+     "window": null,
+     "dwell_minutes": {
+      "typical": 60,
+      "basis": "assumption",
+      "why": "No pre-transfer time was found. The 2 day average stay in FBNC 2025 is for full admissions, not stabilisation before transfer. 60 minutes is a planning placeholder."
+     },
+     "repeat": null
+    },
+    {
+     "id": "special_care",
+     "name": "Special newborn care unit or NICU",
+     "purpose": "definitive",
+     "actions": [
+      "full care for small and sick newborns",
+      "ventilation and surgery only at a NICU"
+     ],
+     "requires_all": [],
+     "requires_any": [
+      [
+       "sncu",
+       "nicu"
+      ]
+     ],
+     "facility_levels": [
+      "SDH",
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "FBNC 2025: SNCU of 12 or more beds at district hospitals, busy sub-district hospitals and medical colleges; NICU at teaching hospitals. IPHS 2022 gives NICU beds at district hospitals of 100 beds or more.",
+     "window": null,
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "stop_only_if_special_care_far",
+     "type": "add_stop_only_if",
+     "stage": "stabilise",
+     "when": "The special newborn care unit is more than 60 minutes away.",
+     "then": "Stabilise at the nearest newborn stabilisation unit first; otherwise go direct.",
+     "condition": {
+      "definitive_travel_minutes_gt": 60
+     },
+     "basis": "assumption",
+     "why": "No newborn referral time target exists in the sources read. FBNC 2025 lets distance decide for 1500 to 1800 g babies without giving a number. 60 minutes matches the other pathways."
+    },
+    {
+     "id": "stabilise_before_transfer",
+     "type": "before_transfer",
+     "stage": "stabilise",
+     "when": "Any transfer of a sick newborn.",
+     "then": "Give the best treatment available at that level and transfer only after stabilisation.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "fbnc_2025",
+     "quote": "the transfer is made only after stabilization"
+    },
+    {
+     "id": "to_sncu",
+     "type": "refer_if",
+     "stage": "special_care",
+     "when": "Birth weight under 1800 g, gestation under 34 weeks, or danger signs such as apnoea, breathing distress or persistent low temperature.",
+     "then": "Transfer from the delivery point or stabilisation unit to a special newborn care unit.",
+     "condition": {
+      "needs_capability": "sncu",
+      "birth_weight_g_lt": 1800
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_neonatal_transport",
+     "quote": "NBCC/NBSU TO SNCU: Birth weight <1800 grams and/or gestational age <34 weeks"
+    },
+    {
+     "id": "to_nicu",
+     "type": "refer_if",
+     "stage": "special_care",
+     "when": "Birth weight under 1000 g, gestation under 28 weeks, need for mechanical ventilation, surgery or exchange transfusion.",
+     "then": "The definitive unit must be a NICU; a special newborn care unit is not enough.",
+     "condition": {
+      "needs_capability": "nicu",
+      "birth_weight_g_lt": 1000
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_neonatal_transport",
+     "quote": "SNCU TO NICU: Birth weight <1000 grams and/or gestational age < 28 weeks; Neonates with: Respiratory distress requiring mechanical ventilation"
+    },
+    {
+     "id": "sncu_cannot_ventilate",
+     "type": "refer_if",
+     "stage": "special_care",
+     "when": "Choosing between a special newborn care unit and a NICU.",
+     "then": "A special newborn care unit does not offer surgery or mechanical ventilation.",
+     "condition": {
+      "needs_capability": "nicu"
+     },
+     "basis": "guideline",
+     "source": "fbnc_2025",
+     "quote": "small and sick neonates not requiring surgical intervention and mechanical ventilation"
+    },
+    {
+     "id": "distance_decides_1500_1800",
+     "type": "refer_if",
+     "stage": "stabilise",
+     "when": "Baby weighs 1500 to 1800 g.",
+     "then": "Either a stabilisation unit or a special newborn care unit, depending on distance and how sick the baby is.",
+     "condition": {
+      "birth_weight_g_gte": 1500,
+      "birth_weight_g_lt": 1800
+     },
+     "basis": "guideline",
+     "source": "fbnc_2025",
+     "quote": "Newborns weighing 1500-1800 g can be managed at either NBSU or SNCU depending on the distance to the nearest facility, sickness"
+    },
+    {
+     "id": "move_the_mother_first",
+     "type": "skip_stop_if",
+     "stage": "stabilise",
+     "when": "Preterm labour and delivery is not imminent.",
+     "then": "Refer the mother before delivery to a centre with newborn care instead of moving the baby later. See the obstetric_emergency pathway.",
+     "condition": {
+      "patient_flag": "preterm_labour_not_imminent"
+     },
+     "basis": "guideline",
+     "source": "antenatal_steroids_2014",
+     "quote": "Refer the pregnant women to higher centre where neonatal resuscitation facilities exist"
+    }
+   ],
+   "open_questions": [
+    "No time target for newborn referral and no pre-transfer time were found. The 60 minute add-stop threshold and the 60 minute dwell are assumptions.",
+    "No explicit rule to bypass a stabilisation unit was found; the admission criteria imply that babies with emergency signs or under 1800 g belong in a special newborn care unit.",
+    "The existing nicu service in derived/v1 matches NICU and SNCU wording together. The planner needs them apart: only a NICU ventilates or operates.",
+    "NICU norms (equipment, admission criteria) were not found in a national programme guideline; only the ICMR transfer list and IPHS bed numbers."
+   ]
+  },
+  {
+   "id": "snakebite",
+   "name": "Snakebite: nearest facility with anti-snake venom, no intermediate stop",
+   "service": "snakebite",
+   "urgency": "emergency",
+   "objective": "time_critical",
+   "clock_start": "bite",
+   "sources": [
+    "snake_stg_2017",
+    "iphs_2022_phc",
+    "iphs_2022_chc",
+    "iphs_2022_dh",
+    "fru_2025"
+   ],
+   "stages": [
+    {
+     "id": "asv",
+     "name": "Nearest facility that has anti-snake venom",
+     "purpose": "definitive",
+     "actions": [
+      "IV line, fluids if in shock",
+      "20 minute whole blood clotting test",
+      "full dose of anti-snake venom as soon as there are signs of envenomation",
+      "observe 24 hours"
+     ],
+     "requires_all": [
+      "anti_snake_venom"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "PHC",
+      "CHC",
+      "SDH",
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "IPHS 2022 lists snake venom antiserum at PHC, CHC, SDH and DH. Nothing at sub-centre level.",
+     "window": null,
+     "dwell_minutes": null,
+     "repeat": null
+    }
+   ],
+   "rules": [
+    {
+     "id": "nearest_facility_now",
+     "type": "never_delay",
+     "stage": "asv",
+     "when": "Always.",
+     "then": "Go to the nearest health facility immediately. No traditional first aid, no tourniquet, no waiting for symptoms.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "Shift the victim to the nearest health facility (PHC or hospital) immediately."
+    },
+    {
+     "id": "asv_without_delay",
+     "type": "never_delay",
+     "stage": "asv",
+     "when": "Signs of envenomation.",
+     "then": "Full dose without delay; do not wait for test reports.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "administer FULL dose without any delay. Do NOT wait for any test report."
+    },
+    {
+     "id": "no_asv_here",
+     "type": "refer_if",
+     "stage": "asv",
+     "when": "The first-contact facility has no anti-snake venom.",
+     "then": "Transfer to the nearest facility where stock is confirmed by telephone. The planner should prefer facilities with confirmed stock and prompt a call.",
+     "condition": {
+      "needs_capability": "anti_snake_venom",
+      "confirm": "by_phone"
+     },
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "If ASV is not available at First contact centre transfer to the nearest health facility where ASV is available after confirmation by telephone."
+    },
+    {
+     "id": "cannot_lift_neck",
+     "type": "refer_if",
+     "stage": "asv",
+     "when": "Progressive paralysis: the patient cannot lift the neck.",
+     "then": "Refer at once to a hospital with a mechanical ventilator, after atropine and neostigmine.",
+     "condition": {
+      "needs_capability": "ventilator"
+     },
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "If patient cannot perform neck lift action, immediately refer the patient to a hospital with a mechanical ventilator."
+    },
+    {
+     "id": "bleeding_or_kidney",
+     "type": "refer_if",
+     "stage": "asv",
+     "when": "Still bleeding after the full dose, or signs of kidney injury.",
+     "then": "Transfer to a tertiary hospital with dialysis.",
+     "condition": {
+      "needs_capability": "haemodialysis_unit"
+     },
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "Signs of kidney injury or abnormal kidney function test transfer to a tertiary care medical college or higher level of health facility."
+    },
+    {
+     "id": "finish_asv_before_transfer",
+     "type": "before_transfer",
+     "stage": "asv",
+     "when": "Onward transfer for ventilation or dialysis.",
+     "then": "Complete the anti-snake venom infusion first, unless breathing is failing.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "where facilities for mechanical ventilator and dialysis are available, if required after completion of ASV infusion only"
+    },
+    {
+     "id": "bandage_only_if_30_to_180",
+     "type": "before_transfer",
+     "stage": "asv",
+     "when": "Expected time to hospital is more than 30 minutes and less than 3 hours.",
+     "then": "A crepe bandage may be applied, by qualified medical personnel only.",
+     "condition": {
+      "travel_minutes_gt": 30,
+      "travel_minutes_lt": 180
+     },
+     "basis": "guideline",
+     "source": "snake_stg_2017",
+     "quote": "If victim is expected to reach the hospital in more than 30 minutes but less than 3 hours crepe bandage may be applied by qualified medical personnel only"
+    }
+   ],
+   "open_questions": [
+    "No numeric bite-to-treatment target exists in the Indian guideline ('as soon as there is evidence of envenomation'), so the stage has no window. The planner should minimise time to the first facility with anti-snake venom.",
+    "Stock is the real constraint and the facility text rarely states it. Listing on the IPHS medicines list does not mean stock on the day.",
+    "The National Action Plan for Snakebite Envenoming (NAPSE, 2024) could not be opened (404).",
+    "Snakebite is not one of the 8 graded services in derived/v1; it needs the anti_snake_venom tag."
+   ]
+  },
+  {
+   "id": "dialysis_start",
+   "name": "Starting maintenance dialysis: assessment, vascular access, recurring sessions",
+   "service": "dialysis",
+   "urgency": "scheduled",
+   "objective": "fewest_trips",
+   "clock_start": "referral_for_dialysis",
+   "sources": [
+    "pmndp_og",
+    "pmndp_bid_2023",
+    "icmr_stw_hd",
+    "icmr_stw_ckd",
+    "isn_mhd",
+    "iphs_2022_dh"
+   ],
+   "stages": [
+    {
+     "id": "assessment",
+     "name": "Nephrology assessment and baseline tests",
+     "purpose": "assess",
+     "actions": [
+      "decision to start dialysis by a nephrologist or a physician trained in nephrology",
+      "baseline blood tests, hepatitis B and C and HIV status, blood group",
+      "hepatitis B vaccination",
+      "discuss dialysis type"
+     ],
+     "requires_all": [
+      "nephrology",
+      "laboratory"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "PMNDP: the decision to refer for dialysis must come from a nephrologist or trained physician in a government hospital, with tests in a government laboratory.",
+     "window": null,
+     "dwell_minutes": {
+      "typical": 240,
+      "basis": "assumption",
+      "why": "No source gives the length of the assessment visit. Half a day is a planning placeholder for a consultation with blood tests."
+     },
+     "repeat": null
+    },
+    {
+     "id": "access",
+     "name": "Vascular access (AV fistula, or a catheter as a bridge)",
+     "purpose": "access",
+     "actions": [
+      "AV fistula creation, with admission",
+      "temporary or tunnelled catheter if dialysis is needed before the fistula matures"
+     ],
+     "requires_all": [
+      "vascular_access_surgery"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "DH",
+      "MC",
+      "private"
+     ],
+     "facility_level_note": "Sources disagree: PMNDP says tertiary level, the ICMR CKD workflow lists district hospital, IPHS 2022 lists fistula creation as desirable only at district hospitals of 200 beds or more.",
+     "window": {
+      "minutes": 60480,
+      "from": "fistula_creation",
+      "kind": "target",
+      "basis": "guideline",
+      "source": "isn_mhd",
+      "quote": "The \" Rule of 6\" should be followed in deciding when to use an AV fistula, 6 weeks from the time of creation",
+      "note": "Earliest first use of a new fistula: 6 weeks. This is a wait before the next stage, not a deadline."
+     },
+     "dwell_minutes": {
+      "typical": 1440,
+      "basis": "assumption",
+      "why": "The ICMR workflow says admission is needed for access creation but gives no length of stay. One day is a planning placeholder."
+     },
+     "repeat": null
+    },
+    {
+     "id": "sessions",
+     "name": "Recurring haemodialysis sessions",
+     "purpose": "recurring",
+     "actions": [
+      "haemodialysis session of at least 4 hours",
+      "viral markers every quarter"
+     ],
+     "requires_all": [
+      "haemodialysis_unit"
+     ],
+     "requires_any": [],
+     "facility_levels": [
+      "SDH",
+      "DH",
+      "MC",
+      "private",
+      "programme_unit"
+     ],
+     "facility_level_note": "PMNDP: one dialysis centre in each district hospital, being extended to sub-district hospitals and community health centres. Free for patients below the poverty line.",
+     "window": null,
+     "dwell_minutes": null,
+     "session_minutes": {
+      "typical": 240,
+      "basis": "guideline",
+      "source": "pmndp_og",
+      "quote": "Each dialysis session must be of at least 4 hrs duration"
+     },
+     "repeat": {
+      "per_week": 3,
+      "basis": "guideline",
+      "source": "isn_mhd",
+      "quote": "Patients on MHD must receive 3 times dialysis in a week for at least 4 hrs each time",
+      "note": "PMNDP says 2 to 3 times a week, and the ISN guideline records that most Indian patients receive twice weekly dialysis."
+     }
+    }
+   ],
+   "rules": [
+    {
+     "id": "emergency_goes_direct",
+     "type": "skip_stop_if",
+     "stage": "assessment",
+     "when": "Urgent indication: refractory high potassium or ECG changes, fluid overload not responding to diuretics, severe acidosis, uraemic complications, dialysable poisoning.",
+     "then": "Stabilise and go straight to a facility that can dialyse now, with a temporary catheter if there is no access. This becomes an emergency, single-stop plan.",
+     "condition": {
+      "patient_flag": "urgent_dialysis_indication"
+     },
+     "basis": "guideline",
+     "source": "icmr_stw_hd",
+     "quote": "URGENT - stabilise & arrange emergency dialysis / refer"
+    },
+    {
+     "id": "stabilise_potassium_first",
+     "type": "before_transfer",
+     "stage": null,
+     "when": "Urgent case with high potassium at a facility without dialysis.",
+     "then": "Give IV calcium, insulin with dextrose and salbutamol, then transfer for dialysis.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "icmr_stw_hd",
+     "quote": "give IV calcium, insulin - dextrose, salbutamol, then dialyse"
+    },
+    {
+     "id": "late_presenter_catheter_bridge",
+     "type": "skip_stop_if",
+     "stage": "access",
+     "when": "Dialysis is needed before a fistula exists (most Indian patients present late).",
+     "then": "Start sessions with a temporary access and create the permanent access within the first 3 months on dialysis.",
+     "condition": {
+      "permanent_access_within_days": 90
+     },
+     "basis": "guideline",
+     "source": "isn_mhd",
+     "quote": "these patients may begin dialysis with a temporary access and an attempt to construct a permanent access should be made within the 1st 3 months on HD"
+    },
+    {
+     "id": "fistula_six_weeks",
+     "type": "refer_if",
+     "stage": "sessions",
+     "when": "A new AV fistula has been created.",
+     "then": "Sessions through the fistula start no earlier than 6 weeks after creation; plan a catheter if dialysis is needed sooner.",
+     "condition": {
+      "after_access_days_min": 42
+     },
+     "basis": "guideline",
+     "source": "isn_mhd",
+     "quote": "6 weeks from the time of creation"
+    },
+    {
+     "id": "prefer_same_site",
+     "type": "refer_if",
+     "stage": "sessions",
+     "when": "Choosing the recurring-session facility.",
+     "then": "Prefer the nearest unit: the patient travels there for every session. Fewer trips and shorter trips outrank a single shorter first visit.",
+     "condition": null,
+     "basis": "guideline",
+     "source": "pmndp_og",
+     "quote": "Haemodialysis requires the patient to travel to the centre each time."
+    },
+    {
+     "id": "separate_machine_if_seropositive",
+     "type": "refer_if",
+     "stage": "sessions",
+     "when": "Hepatitis B, hepatitis C or HIV positive.",
+     "then": "The unit needs a separate machine and area for seropositive patients.",
+     "condition": {
+      "needs_capability": "haemodialysis_unit",
+      "patient_flag": "seropositive"
+     },
+     "basis": "guideline",
+     "source": "pmndp_og",
+     "quote": "Seropositive patients should be dialyzed in a separate area with separate machines."
+    }
+   ],
+   "open_questions": [
+    "No Indian norm for maximum travel time or distance to a dialysis unit was found; only 'one dialysis centre in each district hospital'.",
+    "Where an AV fistula can be created is contested (tertiary per PMNDP, district hospital per ICMR, desirable only at 200+ bed district hospitals per IPHS). Access creation cannot be assumed at every district hospital.",
+    "The assessment and access dwell times are assumptions. Time from first nephrology visit to first planned session was not found.",
+    "Peritoneal dialysis is a home-based alternative (catheter at a hub hospital, 10 to 14 days break-in, 4 to 5 days training). It is described in PATHWAYS.md but not encoded as a pathway.",
+    "Sessions are encoded at 3 per week (ISN, ICMR). PMNDP allows 2 to 3 and practice is often 2."
+   ]
+  }
+ ]
+}

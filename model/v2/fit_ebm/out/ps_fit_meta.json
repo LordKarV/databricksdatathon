@@ -1,0 +1,349 @@
+{
+ "terms": [
+  {
+   "name": "a_T",
+   "family": "T",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_spec_weight",
+   "family": "T",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_list_truncated",
+   "family": "T",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_contamination",
+   "family": "C",
+   "sign": -1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_negation",
+   "family": "N",
+   "sign": -1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_scope_conflict",
+   "family": "S",
+   "sign": -1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "a_prereq",
+   "family": "P",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "x_nabh_service_code",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "x_nabh_full_accreditation",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "x_nmc_course_strong",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "x_laqshya_ot_valid",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "x_mohfw_trauma_centre",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "x_erk_blood_centre_on_site",
+   "family": "X",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "e_web_strength",
+   "family": "W",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "e_web_negated",
+   "family": "W",
+   "sign": -1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "web_state",
+   "family": "W",
+   "sign": 0,
+   "kind": "nominal",
+   "anchor": "none"
+  },
+  {
+   "name": "c_log2_n_urls",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "d_any_detail",
+   "family": "D",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "g_iphs_prior",
+   "family": "K",
+   "sign": 1,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "operator_public",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "g_type_hospital",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "g_log_beds",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "nan"
+  },
+  {
+   "name": "g_n_specialties",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "k_text_24x7_any",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "k_text_nabh",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  },
+  {
+   "name": "k_text_pmjay",
+   "family": "G",
+   "sign": 0,
+   "kind": "continuous",
+   "anchor": "0.0"
+  }
+ ],
+ "terms_noweb": [
+  "a_T",
+  "a_spec_weight",
+  "a_list_truncated",
+  "a_contamination",
+  "a_negation",
+  "a_scope_conflict",
+  "a_prereq",
+  "x_nabh_service_code",
+  "x_nabh_full_accreditation",
+  "x_nmc_course_strong",
+  "x_laqshya_ot_valid",
+  "x_mohfw_trauma_centre",
+  "x_erk_blood_centre_on_site",
+  "d_any_detail",
+  "g_iphs_prior",
+  "operator_public",
+  "g_type_hospital",
+  "g_log_beds",
+  "g_n_specialties",
+  "k_text_24x7_any",
+  "k_text_nabh",
+  "k_text_pmjay"
+ ],
+ "masks": {
+  "eraktkosh": [
+   "x_erk_blood_centre_on_site"
+  ],
+  "laqshya": [
+   "x_laqshya_ot_valid"
+  ],
+  "mohfw_tcf": [
+   "x_mohfw_trauma_centre"
+  ],
+  "nabh": [
+   "x_nabh_service_code",
+   "x_nabh_full_accreditation",
+   "k_text_nabh"
+  ],
+  "nmc": [
+   "x_nmc_course_strong"
+  ],
+  "pmndp_goa": []
+ },
+ "ebm_params": {
+  "interactions": 0,
+  "outer_bags": 8,
+  "max_bins": 256,
+  "max_rounds": 5000,
+  "learning_rate": 0.04,
+  "early_stopping_rounds": 50,
+  "random_state": 20261121,
+  "n_jobs": -2
+ },
+ "platt": {
+  "C1_shift": {
+   "scale": [
+    1.0
+   ],
+   "offset": -1.267320089982369
+  },
+  "C1_platt": {
+   "scale": [
+    0.5595384611298817
+   ],
+   "offset": -1.0044043044248865
+  },
+  "C0_gold": {
+   "scale": [
+    1.0
+   ],
+   "offset": 0.0
+  },
+  "C3_resid": {
+   "scale": [
+    0.5595384611298817,
+    1.0
+   ],
+   "offset": -1.0044043044248865
+  },
+  "C1_shift_noweb": {
+   "scale": [
+    1.0
+   ],
+   "offset": -1.2995866022579297
+  },
+  "C1_platt_noweb": {
+   "scale": [
+    0.47674972155829426
+   ],
+   "offset": -0.9781052978441448
+  },
+  "C0_gold_noweb": {
+   "scale": [
+    1.0
+   ],
+   "offset": 0.0
+  },
+  "C3_resid_noweb": {
+   "scale": [
+    0.47674972155829426,
+    1.0
+   ],
+   "offset": -0.9781052978441448
+  }
+ },
+ "clamp_edits_final": [
+  {
+   "term": "x_nabh_service_code",
+   "bin": 1,
+   "before": -0.7104725281116357,
+   "after": 0.0
+  },
+  {
+   "term": "x_nmc_course_strong",
+   "bin": 1,
+   "before": -0.2455116017282513,
+   "after": 0.0
+  },
+  {
+   "term": "x_nabh_service_code",
+   "bin": 1,
+   "before": -0.7023521914417543,
+   "after": 0.0
+  },
+  {
+   "term": "x_nmc_course_strong",
+   "bin": 1,
+   "before": -0.1473663826312004,
+   "after": 0.0
+  },
+  {
+   "term": "x_nabh_full_accreditation",
+   "bin": 1,
+   "before": -0.08900550176919929,
+   "after": 0.0
+  },
+  {
+   "term": "x_nabh_full_accreditation",
+   "bin": 1,
+   "before": -0.07179414116999212,
+   "after": 0.0
+  }
+ ],
+ "sign_violations": 0,
+ "pu_family_counts": {
+  "eraktkosh|positive": 365,
+  "eraktkosh|unlabeled": 5280,
+  "laqshya|positive": 27,
+  "laqshya|unlabeled": 255,
+  "nabh|positive": 6838,
+  "nabh|unlabeled": 6864,
+  "nmc|positive": 1476,
+  "nmc|unlabeled": 1035
+ },
+ "reader_slot_active": false,
+ "log": [
+  "gold labelled pairs 195 (pos 62); PU rows 22140 (pos 8706); terms 26; masks {'eraktkosh': ['x_erk_blood_centre_on_site'], 'laqshya': ['x_laqshya_ot_valid'], 'mohfw_tcf': ['x_mohfw_trauma_centre'], 'nabh': ['x_nabh_service_code', 'x_nabh_full_accreditation', 'k_text_nabh'], 'nmc': ['x_nmc_course_strong'], 'pmndp_goa': []}",
+  "scored 358524 pairs with C1_platt; max additivity gap <= 1e-09",
+  "scored 358524 pairs with C3_resid; max additivity gap <= 1e-09",
+  "scored 358524 pairs with C0_gold; max additivity gap <= 1e-09",
+  "pu stage intercept -0.2246; done"
+ ]
+}

@@ -1,5 +1,9 @@
 # Witness Ledger: final model spec with measured results
 
+> **v1 history.** This spec and its numbers describe the v1 prototype (hash de82eeee...), which the app no longer
+> uses. The shipped model is v2: [`derived/v2/model_card.json`](../derived/v2/model_card.json) and
+> [`derived/v2/README.md`](../derived/v2/README.md); its sealed TEST is in [`gold/v3/test_eval/`](gold/v3/test_eval/).
+
 Status (2026-11-21). The evidence, fusion and decision prototypes are built and were run on all 10,088
 records. A statistical review and an explainability review then recomputed their numbers. This spec is
 the build contract for the weekend and the judges' reference. It covers what the model does, what it
@@ -471,8 +475,14 @@ no_info (4 one way, 5 the other). The sign is reliable; whether anything is foun
 
 Additivity (8.9e-16), deletion per family (1,105 pairs, 5.6e-16), monotone in T (minimum change
 -2e-15, which is rounding), adding foreign evidence lowers z by at least 0.58, location vote weights
->= 0, Wockhardt dialysis not Likely (P_S 0.54, P_L 0.58), Aravind not Likely for any service
-(P/fusion/tests_report.json). Decision recomputation: 1,929 rows, error 0.0
+>= 0, and in the v1 prototype Wockhardt dialysis not Likely (P_S 0.54, P_L 0.58), Aravind not Likely
+for any service (P/fusion/tests_report.json). The shipped v2 model (A_platt) fails the Wockhardt
+test: Wockhardt dialysis is LIKELY at P_S 0.897 with the PLACE UNCLEAR overlay (P_L 0.705 clears the
+0.7 gate by 0.005; the stated-city and name-place votes are -1 against the Mumbai map point and PIN).
+The two Nair Hospital sentences are still rejected (c1, -7.4 points); two sentences counted as own
+units, "Offers dialysis services at concessional pricing (Rs. 350 or less per session) ..." and
+"In-house dialysis units", carry the text ladder (+53.5). Aravind is still not Likely for any service
+(model/v2/final/check/CHECK.md). Decision recomputation: 1,929 rows, error 0.0
 (P/decision/faithfulness_report.json). Quotes: 11 of 12 card quotes match the raw array at idx; the
 twelfth is the raw_pos offset in 3.1 (RV/explain/recompute_s1.json). Evidence tests pass
 (P/evidence/test_results.json). The Wockhardt/Aravind test is weak while only 2 pairs are Likely: it
@@ -488,6 +498,8 @@ passes for any model whose P_S stays below t_L.
 | A4 Likely precision >= 0.85 | not testable (N = 0) |
 | A5 success@1 >= B0 + 10 points, Unsafe@1 <= B0 | fails (5 vs 6 of 40) |
 | A6 contaminated records not Likely, faithfulness passes | passes, trivially, since nothing is Likely |
+
+Statuses are v1. Under the shipped v2 model A6 fails for Wockhardt dialysis (LIKELY, section 4.9).
 
 ### 4.11 Claims that did not survive review
 
@@ -505,7 +517,9 @@ passes for any model whose P_S stays below t_L.
   services. Three sentences in three fields earn what one any-mention tag earns. Among the text
   steps only t1 (+0.754) and t5 (+1.075) are materially above 0 before Platt.
 - "The name-place witness catches Wockhardt." The fitted location head gave v_name weight 0. Wockhardt
-  is caught by the stated city vote (-63.3 points) and the band rule (P/fusion/examples.txt).
+  is caught by the stated city vote (-63.3 points) and the band rule (P/fusion/examples.txt). In v2
+  it is not caught: the city and name-place votes cost -28.9 and -40.4 points, but the coordinate,
+  PIN and state votes outweigh them, P_L is 0.705, and dialysis is LIKELY with PLACE UNCLEAR.
 - "The ownership filter improves accuracy." No ablation interval excludes 0: shipped minus
   no-ownership-filter is +0.050 [-0.018, 0.167] IPW AUROC (P/fusion/test_metrics.json). Rejection
   touches 130 pairs.
@@ -617,6 +631,10 @@ What we ignored: "Provides dialysis treatment at Nair Hospital, Mumbai Central"
   - each names a different hospital.
 ```
 
+This card shows v1 numbers. In v2 the record puts 70.5% (P_L 0.705) on the Mumbai point and dialysis
+is LIKELY at P_S 0.897: the card still leads with PLACE UNCLEAR and lists the two ignored sentences,
+but the badge no longer holds it back (section 4.9).
+
 ### 5.3 Global model card (HOW we decided)
 
 1. Data funnel: 10,088 rows, 9,959 records, 69,713 pairs, 22,787 atoms, 15,550 units, badge counts.
@@ -633,8 +651,9 @@ What we ignored: "Provides dialysis treatment at Nair Hospital, Mumbai Central"
 9. Assumptions in words: heads independent given features; options fail independently except within
    a leakage group; P_S means publicly confirmable; road factor 1.3 and speeds of 25 to 40 km/h are
    not measured.
-10. Walk-throughs: Wockhardt (caught), Aravind (caught only by location and scope), Sharda (not
-    caught).
+10. Walk-throughs: Wockhardt (caught in v1; in v2 not caught: dialysis LIKELY at P_S 0.897 with
+    PLACE UNCLEAR, section 4.9), Aravind (caught by location, scope and the silent website, not by
+    attribution), Sharda (not caught).
 11. Versions and test openings.
 
 ### 5.4 Faithfulness guarantee
@@ -726,7 +745,10 @@ Cut lines:
   service. 12 of 40 had more context logit than evidence logit (RV/explain/audit_benchmark_cards.json).
   The emergency plan rule hides these as leads, but the ranking still uses them.
 - Unanchored contamination. 95% of service sentences carry no anchor. Aravind's dialysis text counts as
-  own and is held back only by the scope and location terms.
+  own (+53.5 points in v2) and is held back by the scope term (s1, -38.4), the silent website
+  (w_silent, -21.2) and the location gate (P_L 0.394): v2 dialysis is CALL FIRST at P_S 0.476.
+  Wockhardt's "concessional pricing" sentence, which reads like the Nair Hospital programme, counts
+  as own and helps make its dialysis LIKELY (section 4.9).
 - Self-consistent contamination. Sharda Hospital (listed city Greater Noida, PIN 270001 not in India
   Post, map point in Chandauli) ranked first for q29 trauma with P_L 0.77 and no warning. The v2
   dissent rule is designed for this case and has not yet been run on it.
@@ -739,3 +761,14 @@ Cut lines:
   installing duckdb and rapidfuzz on serverless is unverified.
 - Every v2 change in sections 3.1 to 3.4 is designed but not run. Its effect on the numbers in
   section 4 is unknown until step 5 of section 7.
+- Routes never use a facility whose map point is in doubt (#183). In the route guard sweep (50 PIN
+  centres, `random.Random(140)`, every service with a care pathway; `app/tests/test_route_guard.py`),
+  cases with a route fell from 218 to 201 of 250. In these 13 there is no route because every pathway
+  stop's map point is in doubt; options still shown, flagged (PIN, service):
+  263139 emergency_csection; 504203 emergency_csection; 504203 trauma_emergency;
+  451660 trauma_emergency; 413412 emergency_csection; 413412 nicu; 413502 emergency_csection;
+  207402 emergency_csection; 670358 emergency_csection; 431720 nicu; 756182 trauma_emergency;
+  243126 emergency_csection; 457772 trauma_emergency.
+  In the other 4, option 1 itself has a doubtful map point, is Likely and has evidence for every
+  stage, so route guard rule 1 drops the farther routes and the note says to go straight to it:
+  670358 nicu; 628007 nicu; 848132 emergency_csection; 713214 trauma_emergency.

@@ -1,0 +1,16 @@
+[
+ {
+  "name": "v_doctor_mobiles_exports",
+  "status": "warn",
+  "metric": "7452 facilities show a mobile; auditor's Dr rule hits 553, of which 26 are not 'Dr' as a title (Drishti, Dream...); strict 'Dr.'/'Dr ' title: 535, 535 with an unshared number",
+  "threshold": "doctor-titled records with a mobile counted with a title-only rule",
+  "detail": "Strict rule: 'Dr' followed by '.' or a space. Not hand-checked for whether the number is personal.",
+  "examples": [
+   "05e3b7b0 'Drishti Netralay' (auditor rule only)",
+   "090176ac 'Drishti Eye Centre' (auditor rule only)",
+   "1812c40a 'Drishtikunj Netralaya' (auditor rule only)",
+   "00ba2483 'Dr. Agarwal\u2019s Eye Hospital' ...4406",
+   "013d88ce 'Dr. The Heart and Internal Medicine Clin' ...1837"
+  ]
+ }
+]

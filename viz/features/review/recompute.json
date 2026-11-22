@@ -1,0 +1,159 @@
+{
+ "dev_searched_confirmed": [
+  61,
+  22
+ ],
+ "dev_service_auc[a_n_atoms]": {
+  "n": 61,
+  "pos": 22,
+  "auc": 0.718,
+  "lo": 0.576,
+  "hi": 0.849
+ },
+ "dev_service_auc[k_text_nabh]": {
+  "n": 61,
+  "pos": 22,
+  "auc": 0.686,
+  "lo": 0.558,
+  "hi": 0.802
+ },
+ "dev_service_auc[g_n_specialties]": {
+  "n": 61,
+  "pos": 22,
+  "auc": 0.672,
+  "lo": 0.533,
+  "hi": 0.807
+ },
+ "dev_service_auc[c_n_urls]": {
+  "n": 61,
+  "pos": 22,
+  "auc": 0.661,
+  "lo": 0.517,
+  "hi": 0.793
+ },
+ "dev_service_auc[g_type_hospital]": {
+  "n": 61,
+  "pos": 22,
+  "auc": 0.577,
+  "lo": 0.526,
+  "hi": 0.638
+ },
+ "g_type_hospital_2x2": {
+  "hospital=0": "0/6 confirmed",
+  "hospital=1": "22/55 confirmed"
+ },
+ "dev_location_n_wrong": [
+  52,
+  12
+ ],
+ "dev_location_auc[c_n_urls]": {
+  "n": 52,
+  "pos": 40,
+  "auc": 0.271,
+  "lo": 0.12,
+  "hi": 0.449
+ },
+ "dev_location_auc[b_votes_against]": {
+  "n": 52,
+  "pos": 40,
+  "auc": 0.022,
+  "lo": 0.0,
+  "hi": 0.05
+ },
+ "dev_location_auc[b_loc_conf]": {
+  "n": 52,
+  "pos": 40,
+  "auc": 0.978,
+  "lo": 0.941,
+  "hi": 1.0
+ },
+ "dev_location_auc[b_loc_conf, v1 only]": {
+  "n": 15,
+  "pos": 13,
+  "auc": 1.0,
+  "lo": 1.0,
+  "hi": 1.0
+ },
+ "dev_location_n[v1]": [
+  15,
+  2
+ ],
+ "dev_location_auc[b_loc_conf, v2 only]": {
+  "n": 37,
+  "pos": 27,
+  "auc": 0.974,
+  "lo": 0.933,
+  "hi": 1.0
+ },
+ "dev_location_n[v2]": [
+  37,
+  10
+ ],
+ "dev_location_auc[c_location_score_v1 as shipped]": {
+  "n": 52,
+  "pos": 40,
+  "auc": 1.0,
+  "lo": 1.0,
+  "hi": 1.0
+ },
+ "dev_location_auc[v1 score_model, before gold override]": {
+  "n": 52,
+  "pos": 40,
+  "auc": 0.981,
+  "lo": 0.948,
+  "hi": 1.0
+ },
+ "nabh_dialysis": {
+  "nabh_listed": 488,
+  "text_T_ge1": 201,
+  "any_atom": 202
+ },
+ "nabh_emergency_csection": {
+  "nabh_listed": 890,
+  "text_T_ge1": 95,
+  "any_atom": 95
+ },
+ "pairs_T0": 61744,
+ "pairs_no_atom": 61700,
+ "pairs_atom_but_T0": 44,
+ "pairs_total": 69713,
+ "evidence_regdomain_counts_top": {
+  "bajajfinservhealth.in": 13,
+  "drlogy.com": 6,
+  "myhospitalnow.com": 5,
+  "hexahealth.com": 4,
+  "gov.in": 3,
+  "ac.in": 3,
+  "nabh.co": 3,
+  "practo.com": 2,
+  "edu.in": 2,
+  "aimsindia.com": 2,
+  "wikipedia.org": 2,
+  "keshlata.com": 1,
+  "explurger.com": 1,
+  "doabahospitalpvtltd.com": 1,
+  "nephroplus.com": 1
+ },
+ "source_domains_that_are_public_suffixes": {
+  "co.in": 0,
+  "gov.in": 0,
+  "org.in": 0,
+  "nic.in": 0,
+  "ac.in": 0,
+  "net.in": 0
+ },
+ "nabh_dialysis_by_code": {
+  "DIA listed": {
+   "n": 227,
+   "text_mentions_dialysis": 100
+  },
+  "NPH only (no DIA)": {
+   "n": 261,
+   "text_mentions_dialysis": 102
+  },
+  "DIA or NPH": {
+   "n": 488,
+   "text_mentions_dialysis": 202
+  }
+ }
+}

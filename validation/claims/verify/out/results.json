@@ -1,0 +1,228 @@
+[
+ {
+  "name": "app_pairs_cite_plans",
+  "status": "fail",
+  "metric": "5 cited plan sentences in 4 app pairs; 1 pairs cite only plans",
+  "threshold": "0",
+  "detail": "pairs citing only plans: [('cardiac_surgery', 'e0893a32', 'moderate')]",
+  "examples": [
+   "cardiac_surgery e0893a32 moderate e0893a32:proc:20: 'Plans to introduce angiography, balloon angioplasty, and byp'",
+   "cardiac_surgery e0893a32 moderate e0893a32:capa:29: 'Plans to establish a super specialty medical centre offering'",
+   "dialysis 0c78cad5 strong 0c78cad5:capa:10: 'Plans to introduce an in-house dialysis unit'",
+   "nicu eac16a4a moderate eac16a4a:capa:4: 'Plans to establish Newborn Intensive Care Unit (NICU) and Pa'",
+   "trauma_emergency 40731bc2 moderate 40731bc2:desc:2: 'The project spans 13 acres with an initial capacity of 200+ '"
+  ]
+ },
+ {
+  "name": "auditor_rerun_identical",
+  "status": "pass",
+  "metric": "0 of 34 checks differ",
+  "threshold": "0",
+  "detail": "",
+  "examples": []
+ },
+ {
+  "name": "claims_arrays_rebuilt",
+  "status": "pass",
+  "metric": "451110 raw array items; missing 0, extra 0, text differs 0",
+  "threshold": "0",
+  "detail": "idx differs from raw position for 43706 claims in 1813 records (CL-9 recount)",
+  "examples": []
+ },
+ {
+  "name": "claims_description_rebuilt",
+  "status": "pass",
+  "metric": "0 differences over 18388 sentences",
+  "threshold": "0",
+  "detail": "lookbehind split on RE2 whitespace after . ! ?",
+  "examples": []
+ },
+ {
+  "name": "cleaning_csection_word_section",
+  "status": "fail",
+  "metric": "6 sentences; 6 facilities whose only C-section evidence is these; 6 in app pairs.emergency_csection (grades {'moderate': 3, 'strong': 2, 'weak': 1}); 6 planner comprehensive_emoc rows (p [0.6, 0.76, 0.79, 0.8, 0.91, 0.92])",
+  "threshold": "0",
+  "detail": "kb lexicon.json has '\\bc-? ?section' and 0 such matches",
+  "examples": [
+   "0a77c719:capa:26: 'Master of Implant Prosthetic Section, ICOI, awarded in 2012'",
+   "338be233:desc:0: '100 bedded charitable hospital serving women & children from the middl'",
+   "54302144:equi:29: 'Dedicated paediatric section'",
+   "80b72174:capa:4: 'In 2012, a sting operation led to a case against the doctor under IPC '",
+   "8c0ec23b:capa:12: 'Mission to eradicate blindness in North India by providing quality car'"
+  ]
+ },
+ {
+  "name": "cleaning_vs_kb_tag_drift",
+  "status": "warn",
+  "metric": "9 app pairs rest only on sentences kb no longer tags",
+  "threshold": "0",
+  "detail": "{\"dialysis\": {\"cleaning_only\": 15, \"kb_only\": 6, \"facilities_only_from_these\": 1, \"in_app\": 1}, \"csection\": {\"cleaning_only\": 6, \"kb_only\": 0, \"facilities_only_from_these\": 6, \"in_app\": 6}, \"mri\": {\"cleaning_only\": 0, \"kb_only\": 0, \"facilities_only_from_these\": 0, \"in_app\": 0}, \"icu\": {\"cleaning_only\": 0, \"kb_only\": 0, \"facilities_only_from_these\": 0, \"in_app\": 0}, \"nicu\": {\"cleaning_only\": 0, \"kb_only\": 0, \"facilities_only_from_these\": 0, \"in_app\": 0}, \"burns\": {\"cleaning_only\": 1, \"kb_only\": 0, \"facilities_only_from_these\": 1, \"in_app\": 1}, \"cardiac_surgery\": {\"cleaning_only\": 6, \"kb_only\": 0, \"facilities_only_from_these\": 1, \"in_app\": 1}}; trauma is split into emergency_24x7 and trauma_care in kb by design and is left out",
+  "examples": [
+   "dialysis 2f915a8d strong",
+   "csection 0a77c719 weak",
+   "csection 338be233 strong",
+   "csection 54302144 moderate",
+   "csection 80b72174 moderate"
+  ]
+ },
+ {
+  "name": "description_fragments_recount",
+  "status": "warn",
+  "metric": "1728 / 18388 (9.4%) description sentences",
+  "threshold": "< 1%",
+  "detail": "abbreviation ends 1591, short 431, 'etc.' endings not counted 99; 'Dr.' alone ends 1322",
+  "examples": [
+   "0001f41e:desc:1",
+   "0001f41e:desc:3",
+   "00052555:desc:1",
+   "00052555:desc:2",
+   "00052555:desc:3"
+  ]
+ },
+ {
+  "name": "kb_future_cue_gap",
+  "status": "warn",
+  "metric": "13 kb positive pairs over 7 sentences; 12 planner citations ({'proposed': 8, 'existing': 4})",
+  "threshold": "0",
+  "detail": "by service {'neurosurgery': 2, 'chemotherapy': 2, 'icu': 2, 'cath_lab_angioplasty': 2, 'dialysis': 1, 'ct_scan': 1, 'surgical_oncology': 1, 'trauma_care': 1, 'cardiac_surgery': 1}",
+  "examples": [
+   "0c78cad5:capa:10 dialysis: 'Plans to introduce an in-house dialysis unit'",
+   "149332ef:capa:9 ct_scan: 'Plans to offer 32-slice CT scanning as a diagnostic capability'",
+   "39bd7760:capa:15 neurosurgery: 'Plans to introduce Cardiology, Gastroenterology, ENT, Neurosurgery, Ne'",
+   "40731bc2:desc:2 trauma_care: 'The project spans 13 acres with an initial capacity of 200+ beds and p'",
+   "bb761c26:capa:3 icu: 'Plans to expand with a cardiac ICU, a cath lab, and fully automated la'"
+  ]
+ },
+ {
+  "name": "mri_therapy_recount",
+  "status": "fail",
+  "metric": "10 kb mri pairs; 3 facilities MRI only through them; 3 shown in app pairs.mri",
+  "threshold": "0",
+  "detail": "app grades ['moderate', 'moderate', 'moderate']; e7795a4f is EMRT, abe799fb is RFQMR (Cytotron), cd8b64e1 QMRT",
+  "examples": [
+   "abe799fb moderate 0.8024",
+   "cd8b64e1 moderate 0.7821",
+   "e7795a4f moderate 0.8086"
+  ]
+ },
+ {
+  "name": "negation_technique_recount",
+  "status": "warn",
+  "metric": "17 / 47 negation-cued pairs fired only by technique wording; 5 of them are wrong matches the cue happens to remove",
+  "threshold": "0",
+  "detail": "by service {'de_addiction': 4, 'cath_lab_angioplasty': 3, 'neurosurgery': 3, 'orthopaedic_trauma_surgery': 2, 'cataract_surgery': 1, 'stemi_thrombolysis': 1, 'palliative_care': 1, 'radiotherapy': 1, 'burn_care': 1}",
+  "examples": [
+   "0ad45bb1:desc:0",
+   "0eee91dc:capa:24",
+   "1f58d11b:desc:1",
+   "39d34a57:proc:44",
+   "444fb0a8:proc:15"
+  ]
+ },
+ {
+  "name": "other_facility_own_place_recount",
+  "status": "warn",
+  "metric": "372 / 9506 other_facility sentences in 148 records (90 name the record's own district or city literally)",
+  "threshold": "0",
+  "detail": "place-only other_facility sentences 6311; auditor reported 126 in 52 records, its CSV has 140 rows in 53 records and no saved code writes it",
+  "examples": [
+   "001f21d5:capa:3",
+   "03ff3462:capa:5",
+   "04b0ff52:capa:10",
+   "04b0ff52:capa:27",
+   "0564ac18:capa:42"
+  ]
+ },
+ {
+  "name": "planner_cited_any_shared_cue",
+  "status": "fail",
+  "metric": "74 cited (capability, claim) pairs over 71 sentences carry a kb shared non-offer cue; 48164 citations",
+  "threshold": "0",
+  "detail": "by status {'proposed': 73, 'existing': 1}; by cue {'negation': 25, 'future': 25, 'camp': 19, 'referral': 4, 'past': 1}; hand verdicts {'nonoffer': 26, 'offer': 22, 'camp': 18, 'wrong_other': 4, 'unclear': 4}",
+  "examples": [
+   "laboratory <- a39093c2:equi:2 [nonoffer] 'Ayurveda medicine manufacturing and quality testing laborato'",
+   "laboratory <- cbff204e:capa:49 [nonoffer] 'In April 2016, BMCRI planned to open a private diagnostic la'",
+   "basic_emoc <- 715f8c0a:capa:2 [camp] 'Offers maternity-related services including a Free Maternity'",
+   "neonatal_stabilisation <- 5991bda9:capa:2 [nonoffer] 'Plans to start newborn nursery for sick newborns and phototh'",
+   "nicu <- eac16a4a:capa:4 [nonoffer] 'Plans to establish Newborn Intensive Care Unit (NICU) and Pa'"
+  ]
+ },
+ {
+  "name": "planner_dental_scope",
+  "status": "fail",
+  "metric": "633 proposed (capability, facility) rows at 536 dental facilities; 623 are hospital capabilities",
+  "threshold": "0",
+  "detail": "by capability {'general_surgery_ot': 408, 'laboratory': 80, 'ct_scan': 53, 'orthopaedics': 43, 'plastic_surgery': 20, 'pci_cath_lab': 7, 'ecg': 4, 'basic_emoc': 4, 'trauma_centre': 3, 'nephrology': 3, 'ventilator': 2, 'iv_fluid_resuscitation': 2, 'blood_transfusion': 1, 'neurosurgery': 1, 'burns_dressing': 1, 'sncu': 1}; planner/data_v1.py _match has no scope rule (cleaning/claims/lexicon.py scope_conflict exists but is not used)",
+  "examples": [
+   "general_surgery_ot De Rich Smile Dental Care & : 'Dr. Anushrut Swaroop is a dental surgeon and certi'",
+   "general_surgery_ot Kaverri Dental Clinic: 'In-house Oral and Maxillofacial Surgeon and Implan'",
+   "general_surgery_ot One Smile Dental Studio: 'Safa Khan is a Dental Surgeon'",
+   "general_surgery_ot Dr. Gupta's Dental and LASER: 'Dr. Vikash is a dental surgeon on staff'",
+   "laboratory The Sterling Dental Clinic: 'On-site modern dental laboratory'"
+  ]
+ },
+ {
+  "name": "planner_echo_promotion",
+  "status": "warn",
+  "metric": "215 proposed (capability, facility) rows reach p_two (planner p checked) only through repeated identical sentences",
+  "threshold": "0",
+  "detail": "rows at p_two in planner_v1: 9851; planner/data_v1.py capability_p counts matches without dup_in_record",
+  "examples": [
+   "ecg 01673d9b",
+   "thrombolysis f69e771e",
+   "pci_cath_lab 050479fe",
+   "general_surgery_ot 027972c1",
+   "blood_transfusion 0007a104"
+  ]
+ },
+ {
+  "name": "planner_proposed_precision_handread",
+  "status": "warn",
+  "metric": "41/50 = 0.82 Wilson (0.692, 0.902); wrong 7, unclear 2",
+  "threshold": ">= 0.90",
+  "detail": "population 33033 distinct citations; errors are dental or ENT clinics matching broad words",
+  "examples": [
+   "laboratory 22a4e5a1:capa:10: genetic testing lab, not a clinical chemistry lab",
+   "laboratory 7d147406:capa:2: dental laboratory",
+   "ct_scan 6cf068f7:proc:25: dental CT (CBCT) at a dental clinic",
+   "general_surgery_ot 58f4d06e:capa:22: ENT surgeon and BDS at an ENT/dental clinic",
+   "general_surgery_ot b9a61290:capa:1: oral surgeon at a dental clinic"
+  ]
+ },
+ {
+  "name": "spine_neuro_recount",
+  "status": "pass",
+  "metric": "265 / 687 facilities",
+  "threshold": "documented decision",
+  "detail": "TAXONOMY.md item 11 documents the label: True; evidence weight 0.4166 is fitted from 284/687 text positives",
+  "examples": []
+ },
+ {
+  "name": "split_records_recount",
+  "status": "warn",
+  "metric": "30 heads, 88 fragment rows, present in v1 tables {'facility_location': 0, 'record_trust': 0, 'facility_trust': 0, 'grades': 0, 'claims': 0}",
+  "threshold": "0",
+  "detail": "fragment JSON array items 2540 (all arrays, incl. specialties); heads followed by a fragment row in file order: 0 (fragments sort to the top, so stitching needs a content key, not adjacency); live table: 10088 rows, 9971 non-null source",
+  "examples": [
+   "12d987ef-1ff8-4025-bf5d-8870f2083a90",
+   "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5",
+   "22142a37-a47a-4a9a-bc80-f5981361f000",
+   "287913e3-162c-45d5-873a-eada15f8591b",
+   "3e951c62-51b0-459e-972c-2e1790618894"
+  ]
+ },
+ {
+  "name": "ultrasound_3d_alternative",
+  "status": "warn",
+  "metric": "101 pairs match only through the 3D alternative; 82 at dental, eye or prosthetics facilities (40 facilities); 39 facilities have ultrasound only from those",
+  "threshold": "0",
+  "detail": "facility name/type rule, independent of the auditor's hand labels",
+  "examples": [
+   "00154d81:equi:2",
+   "00cde61f:capa:32",
+   "00cde61f:equi:3",
+   "0207488f:proc:4",
+   "039a1b36:proc:5"
+  ]
+ }
+]

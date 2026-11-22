@@ -1,0 +1,8 @@
+21:28:31 gold 221 pos 168 PU rows 19933 terms 249
+21:28:36 B group5 fold 0 {'em_iters': 33, 'converged': True, 'n_rows': 9024, 'dropped_gold': 0, 'dropped_pu': 0}
+21:28:41 B group5 fold 1 {'em_iters': 32, 'converged': True, 'n_rows': 8817, 'dropped_gold': 0, 'dropped_pu': 0}
+21:28:44 B group5 fold 2 {'em_iters': 36, 'converged': True, 'n_rows': 9077, 'dropped_gold': 0, 'dropped_pu': 0}
+21:28:48 B group5 fold 3 {'em_iters': 31, 'converged': True, 'n_rows': 9343, 'dropped_gold': 0, 'dropped_pu': 0}
+21:28:55 B group5 fold 4 {'em_iters': 28, 'converged': True, 'n_rows': 9038, 'dropped_gold': 0, 'dropped_pu': 0}
+21:28:55 platt {'scheme': 'group5', 'a_full': 0.6436197541546378, 'c_full': 0.3742214916825642, 'gain': 0.01864721830458097, 'se': 0.015648030972887545, 'ci95_of_diff': [-0.05088481267611318, 0.011303402993680243], 'used': True, 'rule': 'Platt used only when the out-of-fold gain is at least one SE'}
+21:28:55 done

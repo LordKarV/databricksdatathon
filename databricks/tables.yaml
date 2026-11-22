@@ -1,0 +1,782 @@
+# Manifest for load_tables.py. One entry per Unity Catalog table in workspace.referral_saathi.
+#   table:       target table name
+#   group:       derived | derived_v2 | kb | dashboard | lists (usable in --only)
+#   file:        local source, relative to the project root. {derived} expands to --derived (default derived/v1).
+#                .csv files are converted to parquet in build/databricks_staging/ before upload.
+#   build:       instead of file, a function in build_staging.py that writes the staged parquet
+#   primary_key: columns that identify a row; verified unique and non-null after load
+#   nullable_key: key columns allowed to be null (uniqueness still checked, nulls group together)
+#   known_dup_keys: duplicate keys present in the source itself (default 0)
+#   spot:        column compared on 3 rows (default: first non-key scalar column)
+#   description: table comment
+#   columns:     column comments (from the READMEs named in each description)
+# Licence: Virtue Foundation derived tables are team-workspace only (Marketplace consumer terms).
+
+tables:
+
+# ---------------------------------------------------------------- derived/v1 (derived/v1/README.md)
+
+- table: data_point_scores
+  group: derived
+  file: "{derived}/data_point_scores.parquet"
+  primary_key: [dp_id]
+  spot: score
+  description: >-
+    One row per data point in the Virtue Foundation records (location, existence, facility-service claim,
+    claim sentence attribution, phone, email) with a score in [0, 1] that it is true, a 90% interval and the
+    evidence behind it. Source: derived/v1/data_point_scores.parquet, see derived/v1/README.md.
+  columns:
+    dp_id: "Data point id: loc:<uid>, exist:<uid>, svc:<uid>:<service>, sent:<claim_id>, phone:<uid>, email:<uid>"
+    dp_type: "location, existence, service_claim, claim_attribution, phone or email"
+    unique_id: "Original Virtue Foundation record id"
+    claim_id: "Claim sentence id (claim_attribution only)"
+    service: "Service for service_claim; pipe-joined services named by a sentence"
+    field: "Source field of a sentence: procedure, capability, equipment, description"
+    original_value: "Verbatim original value from the record"
+    score: "P(data point is true) after verification overrides"
+    score_lo: "Lower end of the 90% interval"
+    score_hi: "Upper end of the 90% interval"
+    status: "verified_true, verified_false or unverified"
+    reason_codes: "Pipe-joined: evidence rule, GOLD_TRUE / GOLD_FALSE, SOURCES_ABOVE_AVERAGE / SOURCES_BELOW_AVERAGE, PAGE_CHECKED"
+    evidence_refs: "Gold label files and evidence URLs, or the audit rule, its hand-check citation and script"
+    rule: "Evidence rule (see evidence_rules)"
+    q_ev: "Evidence-only probability, no sources"
+    source_support: "Weighted mean reliability of the sources the point is attributed to"
+    score_model: "Model score before the gold override (used for the held-out evaluation)"
+    gold_split: "dev or test when a gold verdict exists"
+    grade: "Grade for service claims"
+    attribution: "Sentence attribution: own_anchored, unanchored, ambiguous, other_facility"
+
+- table: facility_trust
+  group: derived
+  file: "{derived}/facility_trust.parquet"
+  primary_key: [unique_id]
+  spot: overall_score
+  description: >-
+    One row per facility record: existence, location and attribution scores, service claim counts, source
+    support and plain-English drivers. overall_score = existence x location x attribution.
+    Source: derived/v1/facility_trust.parquet, see derived/v1/README.md.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    existence_score: "P(facility exists)"
+    location_score: "P(cleaned location is right)"
+    location_lo: "Lower end of the 90% location interval"
+    location_hi: "Upper end of the 90% location interval"
+    n_sentences: "Claim sentences in the record"
+    n_sentences_other_facility: "Sentences attributed to another facility"
+    attribution_score: "Mean sentence score"
+    n_service_claims: "Facility-service claims"
+    n_service_verified_true: "Service claims verified true by gold labels"
+    n_service_verified_false: "Service claims verified false by gold labels"
+    service_score_mean: "Mean service claim score"
+    source_support: "Identity-profile weighted reliability of the record's sources"
+    top_sources: "JSON: up to 3 domains with weight and reliability"
+    overall_score: "existence_score x location_score x attribution_score"
+    overall_lo: "overall_score from the lower bounds"
+    trust_level_cleaning: "Trust level from record_trust"
+    drivers: "Plain-English reasons for the score"
+
+- table: source_domains
+  group: derived
+  file: "{derived}/source_domains.parquet"
+  primary_key: [domain]
+  spot: reliability
+  description: >-
+    One row per registrable source domain cited by the records, with a reliability posterior (records citing
+    this source tend to be right), its 90% credible interval and the counts behind it.
+    Source: derived/v1/source_domains.parquet, see derived/v1/README.md.
+  columns:
+    domain: "Registrable domain"
+    source_class: "Modal source class of its URLs"
+    class_mix: "JSON: top 3 classes"
+    reliability: "Posterior mean reliability"
+    ci05: "5th percentile of the reliability posterior"
+    ci95: "95th percentile of the reliability posterior"
+    credit: "Effective true data-point mass assigned to the domain"
+    blame: "Effective false data-point mass assigned to the domain"
+    class_prior_mean: "Mean of the Beta prior for its class"
+    n_records: "Records citing the domain"
+    reason: "Plain-English summary"
+
+- table: source_classes
+  group: derived
+  file: "{derived}/source_classes.parquet"
+  primary_key: [source_class]
+  spot: reliability
+  description: >-
+    One row per source class (official, government, social, maps ...): pooled reliability with 90% interval,
+    domain reliability spread and verified counts. Source: derived/v1/source_classes.parquet.
+
+- table: source_urls
+  group: derived
+  file: "{derived}/source_urls.parquet"
+  primary_key: [unique_id, url_pos]
+  spot: domain
+  description: >-
+    One row per (record, URL) from the records' source_urls, with host, domain, class, kind (about, list,
+    unverified), domain reliability and the page-check result. Source: derived/v1/source_urls.parquet.
+  columns:
+    url_pos: "Position of the URL in the record's source_urls"
+    url_kind: "about, list or unverified"
+
+- table: source_page_checks
+  group: derived
+  file: "{derived}/source_page_checks.parquet"
+  primary_key: [unique_id, url, claim_id]
+  nullable_key: [claim_id]
+  spot: fetch_status
+  description: >-
+    One row per (fetched URL, claim sentence) test: was the sentence found on the page it is attributed to.
+    URLs with no usable page have one row with claim_id null. Source: derived/v1/source_page_checks.parquet.
+  columns:
+    supported: "Exact match or partial_ratio >= 90"
+    token_supported: "At least 70% of content words found (looser measure)"
+    snippet: "At most 160 characters of normalised page text around the best match"
+
+- table: evidence_rules
+  group: derived
+  file: "{derived}/evidence_rules.parquet"
+  primary_key: [rule]
+  spot: q_ev
+  description: >-
+    One row per evidence rule with its hand-check and gold-dev counts, Beta(a, b) and q_ev = a / (a + b).
+    Source: derived/v1/evidence_rules.parquet, see the rule table in derived/v1/README.md.
+
+# gold_pairs is NOT loaded here: labels live in workspace.referral_saathi_eval (no app grant), see app_plumbing/grants.sql (#82 H5).
+- table: facility_location
+  group: derived
+  file: "{derived}/facility_location.parquet"
+  primary_key: [unique_id]
+  spot: loc_lat
+  description: >-
+    One row per facility record: cleaned ranking point, radius, location confidence and notes, LGD district and
+    NFHS key. Byte copy of cleaning/geo_identity/facility_location.parquet via derived/v1.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    loc_lat: "Cleaned ranking point latitude"
+    loc_lon: "Cleaned ranking point longitude"
+    loc_radius: "Location uncertainty radius (km)"
+    loc_conf: "Location confidence: high, medium, low, disputed"
+    loc_src: "Where the ranking point came from (listing_coordinates when unchanged)"
+    raw_coords_to_pin_km: "Distance from the listed coordinates to the PIN centroid (km)"
+    district: "District of the cleaned point"
+    nfhs_district_name: "NFHS-5 district key"
+
+- table: record_trust
+  group: derived
+  file: "{derived}/record_trust.parquet"
+  primary_key: [unique_id]
+  spot: trust_level
+  description: >-
+    One row per facility record: cleaned phones and emails, website class, trust flags and trust level.
+    trust_flags and scale_flags are arrays (use array_contains). Copy of cleaning/geo_identity/record_trust.parquet.
+  columns:
+    display_phones: "Phones safe to show (directory numbers removed)"
+    trust_flags: "Array of trust flags, e.g. official_phone_is_directory"
+    scale_flags: "Array of size and scale flags"
+    trust_level: "no_concerns or a concern level (covers location and contact data only)"
+
+- table: facility_groups
+  group: derived
+  file: "{derived}/facility_groups.parquet"
+  primary_key: [unique_id]
+  spot: dup_group_id
+  description: >-
+    One row per facility record: duplicate group, canonical flag, possible same-site links and co-located
+    units. Copy of cleaning/geo_identity/facility_groups.parquet.
+
+- table: pin_gazetteer
+  group: derived
+  file: "{derived}/pin_gazetteer.parquet"
+  primary_key: [pin]
+  spot: district
+  description: >-
+    One row per India Post PIN: state, district, centroid and radius. Copy of
+    cleaning/geo_identity/pin_gazetteer.parquet (India Post data, GODL-India).
+
+- table: place_gazetteer
+  group: derived
+  file: "{derived}/place_gazetteer.parquet"
+  primary_key: [state, name, kind]
+  spot: lat
+  description: >-
+    One row per (state, place name, kind) with a centroid and spread. Copy of cleaning/geo_identity/place_gazetteer.parquet.
+
+- table: claims
+  group: derived
+  file: "{derived}/claims.parquet"
+  primary_key: [claim_id]
+  spot: text
+  description: >-
+    One row per claim sentence from the records' procedure, capability, equipment and description fields, with
+    attribution (own, other facility ...), services named and non-offer cues. claim_id = uid8:field4:idx.
+    Copy of cleaning/claims/out/claims.parquet.
+  columns:
+    claim_id: "Claim sentence id: uid8:field4:idx"
+    unique_id: "Original Virtue Foundation record id"
+    text: "Claim sentence text"
+    attribution: "own_anchored, unanchored, ambiguous or other_facility"
+    context: "Sentence context; direct means it names another facility"
+    services: "Services the sentence names (cleaning/claims tags)"
+
+- table: specialties
+  group: derived
+  file: "{derived}/specialties.parquet"
+  primary_key: [unique_id, spec]
+  spot: n_raw
+  description: >-
+    One row per (record, specialty value) from the records' specialties field. Copy of cleaning/claims/out/specialties.parquet.
+
+- table: grades
+  group: derived
+  file: "{derived}/grades.parquet"
+  primary_key: [unique_id, service]
+  spot: grade
+  description: >-
+    Canonical grade table (grader v2, other-facility quarantine on): one row per (record, service) the text
+    mentions, with grade, rule, counts, corroboration and risk flags and cited claim ids. Service keys are the
+    cleaning/claims tags (trauma, csection, burns ...). Copy of cleaning/claims/out/grades.parquet.
+
+- table: grades_v1
+  group: derived
+  file: "{derived}/grades_v1.parquet"
+  primary_key: [unique_id, service]
+  spot: grade
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). Grader v1 reference grades (frozen before the web verdicts), same columns as grades. Copy of cleaning/claims/out/grades_v1.parquet.
+
+# ---------------------------------------------------------------- derived/v2, model v2 (derived/v2/README.md)
+# Separate _v2 names so the v1 tables the app and notebook read are untouched. Not loaded on purpose:
+# reader_scores (negative result, not shipped) and every gold/label table (eval schema stays separate).
+
+- table: facility_service_scores_v2
+  group: derived_v2
+  file: derived/v2/facility_service_scores.parquet
+  primary_key: [unique_id, service_id]
+  spot: p
+  description: >-
+    Model v2 (A_platt) service scores: one row per (unique_id, service_id), 9,947 eligible facilities x 36
+    services. The 12 exclude_review records are not scored. Show the band, not p, for NO_SERVICE_TEXT rows.
+    Bands map to the app as LIKELY = likely, CALL_FIRST and NO_SERVICE_TEXT = not_verified, UNLIKELY = unlikely.
+    lo/hi are the observed confirmed rate of DEV pairs in the same score bin, not an interval around p.
+    The model has no demonstrated ranking ability for public facilities (model_card.json public_note).
+    Source: derived/v2/facility_service_scores.parquet, see derived/v2/README.md and derived/v2/model_card.json.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    service_id: "Service id from kb/taxonomy/services.json (36 services)"
+    band: "LIKELY (p >= 0.3686, P_L and P_E >= 0.7, own-unit text T >= 2), UNLIKELY (p <= 0.20, or contamination C = 2 with T <= 1), CALL_FIRST (neither, T >= 2) or NO_SERVICE_TEXT (neither, T < 2: no sentence about the service as its own unit, p rests on context only; show the band, not p)"
+    overlays: "Flags beside the band, not bands: BORDERLINE (LIKELY with p - t_L < 0.05), PLACE_UNCLEAR, ON_A_PUBLIC_LIST:list:fetched_date"
+    p: "P_S: the chance that a web check which finds a decisive answer confirms the service. Not the chance that a phone call finds it."
+    lo: "Lower end of the Wilson 95% interval of the observed confirmed rate among decided DEV pairs whose out-of-fold P_S falls in the same 0.2-wide score bin as p. The bin's track record, NOT an interval around p: every row of a bin carries the same lo/hi and p need not lie inside it."
+    hi: "Upper end of the Wilson 95% interval of the observed confirmed rate among decided DEV pairs in the same 0.2-wide score bin as p. The bin's track record, NOT an interval around p."
+    p_location: "Location head P_L: P(the cleaned location is right)"
+    p_exists: "Existence head P_E: P(the facility exists)"
+    base: "Scorecard base: logit(p) = base + sum(points) / (20 / ln 2)"
+    contributions: "JSON list of {label, family, points, evidence_ids, card_phrase}; each evidence id is a witnesses_v2.evidence_id or a claim_atoms_v2.atom_id"
+    operator: "public, private or unknown (from facility_attributes_v2)"
+    is_24x7: "24x7 flag from facility_attributes_v2"
+    hours_text: "Hours text from facility_attributes_v2"
+    as_of: "Build date"
+    model_version: "Model version, equal to model_card.json model_version"
+
+- table: facility_attributes_v2
+  group: derived_v2
+  file: derived/v2/facility_attributes.parquet
+  primary_key: [unique_id]
+  spot: operator
+  description: >-
+    Model v2 facility attributes: one row per facility record (9,959, including the 12 exclude_review records
+    that facility_service_scores_v2 does not score). Operator, facility level and type, 24x7 flags for 10 scopes
+    with source and date, OPD hours, beds, empanelment, accreditation and NABH list status, website state.
+    Has no state or district: join facility_location for those. Built by model/v2/assemble/build.py, see
+    model/v2/assemble/ASSEMBLE.md.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    operator: "public (469), private (8,805) or unknown (685)"
+    operator_src: "operatorTypeId, name or none"
+    facility_level: "Public level from the name: mc, dh, sdh, phc, chc or unknown"
+    facility_type: "Facility type, retyped from name or specialties for 1,300 rows (for example dental clinics to dentist)"
+    opd_hours: "OPD hours (web or dataset text), with _src, _quote, _evidence and _date columns"
+    beds: "Beds from the cleaned capacity field"
+    empanel_pmjay: "PM-JAY empanelment from text or web"
+    nabh_list_status: "Status on the NABH list where matched"
+    web_state: "Website state: alive, dead or none"
+
+- table: witnesses_v2
+  group: derived_v2
+  file: derived/v2/witnesses.parquet
+  primary_key: [witness_id]
+  spot: witness
+  description: >-
+    Model v2 witness knowledge base: one row per (facility, service, witness), 4,011,386 rows of which 349,290
+    are present. Every (facility, service, family) has at least one row; placeholder rows (absent or
+    not_observable) carry value 0, no evidence and no quote. service '*' marks a facility-level witness.
+    Built by model/v2/assemble/build.py, see model/v2/assemble/ASSEMBLE.md.
+  columns:
+    witness_id: "Row id"
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id, or * for a facility-level witness"
+    family: "T C N S P X W O D R K"
+    witness: "Named witness, for example vf_text_unit, nabh_code_DIA, web_service_A, iphs_expected"
+    role: "offer, unit_or_equipment, list, department, certificate, designation, prerequisite, existence, location_warning, level_prior ..."
+    value: "1 for a plain witness; the specialty evidence weight for specialties; 0.5 for a weaker form"
+    observability: "present, absent (the source sees the facility and says nothing) or not_observable (the source cannot see it)"
+    evidence_id: "claim_id, list record id or stored page path; referenced by facility_service_scores_v2.contributions"
+    evidence_url: "Where the evidence can be checked"
+    quote: "Verbatim quote from the source"
+
+- table: claim_atoms_v2
+  group: derived_v2
+  file: derived/v2/claim_atoms.parquet
+  primary_key: [atom_id]
+  spot: service
+  description: >-
+    Model v2 claim atoms: one row per (claim sentence or specialties item, service), 79,806 atoms in 48,752 echo
+    units, with ownership, attribution and quarantine. Built by model/v2/assemble/build.py, see
+    model/v2/assemble/ASSEMBLE.md.
+  columns:
+    atom_id: "Atom id; referenced by facility_service_scores_v2.contributions"
+    claim_id: "Claim sentence id (one sentence can name several services)"
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id"
+    text: "Claim sentence text"
+    attribution: "Sentence attribution: own_anchored, unanchored, ambiguous, other_facility"
+    counts_as_own: "True when the atom counts as the facility's own unit"
+    unit_id: "Echo unit the atom collapses into"
+    is_unit_rep: "True for the representative atom of its echo unit"
+
+- table: facility_features_v2
+  group: derived_v2
+  file: derived/v2/facility_features.parquet
+  primary_key: [unique_id, service]
+  spot: a_T
+  description: >-
+    Model v2 feature matrix: one row per (facility, service), 9,959 x 36 = 358,524 rows, 137 columns (the 64
+    features kept by the feature study plus the per-facility fusion inputs). List and website features are NaN
+    where the source cannot see the pair; obs_<family> gives present / absent / not_observable per family.
+    Built by model/v2/assemble/build.py, see model/v2/assemble/ASSEMBLE.md.
+  columns:
+    unique_id: "Original Virtue Foundation record id"
+    service: "Taxonomy service id"
+    a_T: "Own-text level T"
+    a_contamination: "Contamination level C"
+    operator_public: "1 public, 0 private, null unknown"
+    web_state: "alive, dead or none"
+
+# ---------------------------------------------------------------- kb
+
+- table: services
+  group: kb
+  build: services
+  primary_key: [service_id]
+  spot: category_id
+  description: >-
+    Canonical referral service taxonomy v1.1: 36 services in 11 categories plus 1 candidate, with names, definition,
+    urgency, required capabilities, evidence, IPHS 2022 levels, phrase routing and answer_mode. Nested values are
+    JSON strings. Built from kb/taxonomy/services.json, see kb/taxonomy/TAXONOMY.md. A mention counts as a claim;
+    nothing here says a facility offers a service.
+  columns:
+    service_id: "Taxonomy service id (trauma_emergency is an alias of trauma_care)"
+    aliases: "cleaning/claims keys that map to this service"
+    answer_mode: "evidence, evidence_plus_prior, prior or not_answered"
+    name_phrases: "Phrases that select the service"
+    symptom_phrases: "JSON: symptom phrases with route and second_card"
+
+- table: service_coverage
+  group: kb
+  file: kb/taxonomy/out/coverage.csv
+  primary_key: [service]
+  spot: facilities_any
+  description: >-
+    Per-service facility counts over the 9,959 usable records: any mention, text positive, 2+ fields, specialty
+    only, states, sentences, low_coverage flag. Source: kb/taxonomy/out/coverage.csv (TAXONOMY.md Counts).
+
+- table: specialty_map
+  group: kb
+  file: kb/taxonomy/specialty_map.csv
+  primary_key: [specialty]
+  nullable_key: [specialty]  # one row maps the empty specialties value
+  spot: service_id
+  description: >-
+    All 2,933 distinct raw specialties strings mapped to a service id (or a ; list), too_general, out_of_scope or
+    not_a_service, with method, confidence, facility count and prereq_for. Source: kb/taxonomy/specialty_map.csv.
+
+- table: specialty_evidence_weights
+  group: kb
+  file: kb/taxonomy/specialty_evidence_weights.csv
+  primary_key: [specialty, service]
+  spot: weight
+  description: >-
+    1,346 (specialty value, service) pairs with the measured share of tagged facilities that have positive text
+    for the service, shrunk toward the group rate; use instead of a 0/1 specialty label.
+    Source: kb/taxonomy/specialty_evidence_weights.csv.
+
+- table: claim_service_matches
+  group: kb
+  file: kb/taxonomy/out/lexicon_matches.parquet
+  primary_key: [claim_id, service]
+  spot: kind
+  description: >-
+    One row per (claim sentence, taxonomy service) lexicon match (v1.1), with attribution, sentence kind and
+    non-offer cue. Source: kb/taxonomy/out/lexicon_matches.parquet.
+
+- table: web_site_identity
+  group: kb
+  file: kb/web_evidence/out/site_identity.parquet
+  primary_key: [target_id, unique_id]
+  spot: confidence
+  description: >-
+    One row per (crawl target, record): does the website belong to the facility. Name, PIN and locality
+    evidence with quote and URL, conflicts, confidence (high, medium, low, none) and attributable.
+    Source: kb/web_evidence/out/site_identity.parquet, see kb/web_evidence/WEB_EVIDENCE.md.
+  columns:
+    attributable: "Confidence high or medium and not a chain homepage; use web rows only when true"
+
+- table: web_page_identity
+  group: kb
+  file: kb/web_evidence/out/page_identity.parquet
+  primary_key: [page_id, unique_id]
+  spot: name_how
+  description: >-
+    Site identity evidence per (crawled page, record). Source: kb/web_evidence/out/page_identity.parquet.
+
+- table: web_services
+  group: kb
+  file: kb/web_evidence/out/web_services.parquet
+  primary_key: [unique_id, page_id, seg_start, service_id, field]
+  spot: quote
+  description: >-
+    One row per (record, page, line, service) a facility website states, with an exact quote, URL and fetch
+    time. Use only rows with attributable and positive; prefer strength = strong.
+    Source: kb/web_evidence/out/web_services.parquet.
+  columns:
+    service_id: "Taxonomy service id"
+    quote: "Exact substring of the page text"
+    positive: "Not negated, no non-offer cue, not a staff, directory, research, template or edu line"
+    strength: "strong when a positive line also carries an offer cue (we, our, available, unit ...)"
+    attributable: "The page is attributable to this record"
+
+- table: web_service_summary
+  group: kb
+  file: kb/web_evidence/out/web_service_summary.parquet
+  primary_key: [unique_id, service_id]
+  spot: web_positive
+  description: >-
+    One row per (record, service) over attributable website rows: web_positive, web_positive_strong, counts and
+    the best quote and URL. Source: kb/web_evidence/out/web_service_summary.parquet.
+
+- table: web_hours
+  group: kb
+  file: kb/web_evidence/out/web_hours.parquet
+  primary_key: [fact_id]
+  spot: value_text
+  description: >-
+    Hours facts from facility websites: 24x7 statements by scope, OPD and other schedules, dialysis shifts, 24x7
+    doctor. vf_details schema plus page columns. Use when attributable, status in (ok, flagged) and polarity = positive.
+    Source: kb/web_evidence/out/web_hours.parquet.
+
+- table: web_facts
+  group: kb
+  file: kb/web_evidence/out/web_details.parquet
+  primary_key: [fact_id]
+  spot: attribute
+  description: >-
+    Detail facts from facility websites: beds by unit, equipment counts, accreditation, empanelment, ambulance,
+    blood centre, free or government care, staffing, emergency phone listed. Each with an exact quote and URL.
+    Use when attributable, status in (ok, flagged) and polarity = positive. Source: kb/web_evidence/out/web_details.parquet.
+
+- table: web_facility_details
+  group: kb
+  file: kb/web_evidence/out/web_facility_details.parquet
+  primary_key: [unique_id, fact_type, attribute]
+  spot: value_text
+  description: >-
+    One row per (record, fact_type, attribute) from website hours and details, same columns as facility_details
+    plus best_url. Source: kb/web_evidence/out/web_facility_details.parquet.
+
+- table: open_data_matches
+  group: kb
+  file: kb/opendata/vf_opendata_match.parquet
+  primary_key: [unique_id, source]
+  spot: tier
+  description: >-
+    Best OpenStreetMap and best Wikidata candidate for each facility record, with match features, tier (high,
+    medium, conflict, none), match_conf, source_url and the source's own fields. OSM data is ODbL.
+    Source: kb/opendata/vf_opendata_match.parquet, see kb/opendata/OPENDATA.md.
+
+- table: open_data_facts
+  group: kb
+  file: kb/opendata/vf_opendata_facts.parquet
+  primary_key: [unique_id, source, field, value]
+  known_dup_keys: 1  # the source repeats one OSM speciality value (Bone and Joints) for one record; loaded verbatim
+  spot: value
+  description: >-
+    Long table of facts from matched OSM and Wikidata features (high and medium matches only): field, value,
+    evidence, source_url, match tier and confidence, licence, observed_at. Source: kb/opendata/vf_opendata_facts.parquet.
+
+- table: facility_details
+  group: kb
+  file: kb/vf_details/out/facility_details.parquet
+  primary_key: [unique_id, fact_type, attribute]
+  spot: value_text
+  description: >-
+    One row per facility x (fact_type, attribute) from the provided records' text: support counts, the value
+    stated most often and the best quote (hours, unit beds, equipment, staffing, accreditation, empanelment,
+    ambulance, blood centre). Source: kb/vf_details/out/facility_details.parquet, see kb/vf_details/VF_DETAILS.md.
+
+- table: vf_facts
+  group: kb
+  file: kb/vf_details/out/facts.parquet
+  primary_key: [fact_id]
+  spot: value_text
+  description: >-
+    One row per quote-backed fact from the provided records (regex, LLM or typed field). Use a fact only when
+    status is ok or flagged and polarity is positive. Source: kb/vf_details/out/facts.parquet.
+  columns:
+    fact_id: "Stable across reruns: claim id + type + attribute + occurrence"
+    polarity: "positive, neutral or negative"
+    status: "ok, flagged or excluded"
+    quote: "Exact substring of source_text"
+    method: "regex, llm or structured"
+
+- table: crawl_sites
+  group: kb
+  file: kb/crawl/sites.parquet
+  primary_key: [target_id]
+  spot: site_status
+  description: >-
+    One row per crawl target website: status (ok, dns_fail, hijacked_spam, parked ...), pages stored, redirects and
+    quality flags. No page text. Source: kb/crawl/sites.parquet, see kb/crawl/README.md.
+
+- table: care_pathways
+  group: kb
+  build: care_pathways
+  primary_key: [pathway_id]
+  spot: service
+  description: >-
+    The 7 referral care pathways (stemi, major_trauma, obstetric_emergency, burns, sick_newborn, snakebite,
+    dialysis_start): urgency, objective, clock start, sources, open questions. Facility-level routing only, not
+    clinical advice. Built from kb/pathways/care_pathways.json, see kb/pathways/PATHWAYS.md.
+
+- table: pathway_stages
+  group: kb
+  build: pathway_stages
+  primary_key: [pathway_id, stage_id]
+  spot: stage_order
+  description: >-
+    One row per pathway stage in order (the last is definitive): required capability tags (requires_all, and
+    one from each requires_any group), facility levels, time window and dwell minutes with their basis
+    (guideline or assumption). Built from kb/pathways/care_pathways.json.
+
+- table: pathway_rules
+  group: kb
+  build: pathway_rules
+  primary_key: [pathway_id, rule_id]
+  spot: type
+  description: >-
+    One row per pathway rule: add_stop_only_if, skip_stop_if, never_delay, before_transfer, refer_if or caution,
+    with condition thresholds, basis, source and quote. Built from kb/pathways/care_pathways.json.
+
+- table: pathway_capabilities
+  group: kb
+  build: pathway_capabilities
+  primary_key: [capability_id]
+  spot: kb_status
+  description: >-
+    The 26 capability tags the pathway stages need, with meaning, evidence words and the taxonomy service they
+    map to. Built from kb/pathways/capabilities.json.
+
+# ---------------------------------------------------------------- dashboard inputs (viz/dashboard/DASHBOARD_SPEC.md)
+
+- table: pair_scores
+  group: dashboard
+  file: model/proto/fusion/pair_scores.parquet
+  primary_key: [unique_id, service]
+  spot: p_s
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). One row per (record, service) for the 7 gold services from the fusion prototype: p_s with range, band
+    (Likely, Unverified, Unlikely), text level T, location and existence scores. Source: model/proto/fusion/pair_scores.parquet.
+  columns:
+    p_s: "Chance a public check confirms it (runs high)"
+    band: "Likely, Unverified or Unlikely; show as text, not a probability"
+    T: "Text evidence level"
+    p_l: "Location score (0.7 or more was right 30 of 33 times)"
+    p_e: "Existence score"
+
+- table: pair_features
+  group: dashboard
+  file: model/proto/evidence/pair_features.parquet
+  primary_key: [unique_id, service]
+  spot: T
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). Evidence features per (record, service) behind pair_scores. Source: model/proto/evidence/pair_features.parquet.
+
+- table: facility_scores
+  group: dashboard
+  file: model/proto/fusion/facility_scores.parquet
+  primary_key: [unique_id]
+  spot: p_l
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). Location and existence scores per record from the fusion prototype. Source: model/proto/fusion/facility_scores.parquet.
+
+- table: geo_facility
+  group: dashboard
+  file: viz/geography/data/_cache/facilities.parquet
+  primary_key: [unique_id]
+  spot: stname
+  description: >-
+    One row per record with the LGD state (stname) and district (dtname) of its cleaned point, settlement class
+    (degurba) and per-service claimed and corroborated flags. Dashboard state and district filters come from here.
+    Source: viz/geography/data/_cache/facilities.parquet.
+
+- table: geo_facility_site
+  group: dashboard
+  file: viz/geography/verify/out/records.parquet
+  primary_key: [unique_id]
+  spot: own_site
+  description: >-
+    One row per record with the crawl's own-site flag (own_site) and per-service evidence flags (dashboard tile
+    6.4). Source: viz/geography/verify/out/records.parquet.
+
+- table: geo_state_density
+  group: dashboard
+  file: viz/geography/data/s1_state.csv
+  primary_key: [stname]
+  spot: per_m
+  description: >-
+    Records per million people by state or UT with a 95% Poisson interval (geography story 1). Aggregate.
+    Source: viz/geography/data/s1_state.csv.
+
+- table: geo_state_access
+  group: dashboard
+  file: viz/geography/data/s4_state.csv
+  primary_key: [stname]
+  spot: corr
+  description: >-
+    Share of people within 60 minutes of confirmed trauma care, any record and any clinic, by state (geography
+    story 4). Columns any and map are reserved words: backtick them. Source: viz/geography/data/s4_state.csv.
+
+- table: geo_district
+  group: dashboard
+  file: viz/geography/data/s1_district.csv
+  primary_key: [dist_lgd, dtname]  # dist_lgd is 0 for Muzaffarabad and Mirpur
+  spot: records
+  description: >-
+    One row per LGD district (784): population, records, records per million (geography story 1).
+    Source: viz/geography/data/s1_district.csv.
+
+- table: geo_dialysis_district
+  group: dashboard
+  file: viz/geography/data/s2_district.csv
+  primary_key: [nfhs_state, nfhs_district]
+  spot: share60
+  description: >-
+    One row per NFHS district: dialysis need proxy (ncd, in percent), confirmed dialysis per million, share within
+    60 minutes and the hot flag (geography story 2). Source: viz/geography/data/s2_district.csv.
+
+- table: geo_csection_district
+  group: dashboard
+  file: viz/geography/data/s3_district.csv
+  primary_key: [nfhs_state, nfhs_district]
+  spot: band
+  description: >-
+    One row per NFHS district: caesarean rate band against claimed, corroborated and LaQshya facilities (geography
+    story 3). Source: viz/geography/data/s3_district.csv.
+
+- table: geo_settlement
+  group: dashboard
+  file: viz/geography/data/s5_classes.csv
+  primary_key: [code]
+  spot: cls
+  description: >-
+    Within an hour of confirmed care, by settlement class (3 rows, geography story 5). Source: viz/geography/data/s5_classes.csv.
+
+- table: dialysis_burden_district
+  group: dashboard
+  file: viz/journeys/data/s5_district_dialysis.csv
+  primary_key: [dist_lgd, district]  # dist_lgd is 0 for Muzaffarabad and Mirpur
+  spot: median_weekly_km_corroborated
+  description: >-
+    Weekly road km and hours for three dialysis sessions, by district and evidence tier (journeys story 5).
+    Source: viz/journeys/data/s5_district_dialysis.csv.
+
+- table: claims_funnel_pairs
+  group: dashboard
+  file: viz/claims/data/s3_pairs.csv
+  primary_key: [unique_id, service]
+  spot: mentioned
+  description: >-
+    One row per (record, service) with any mention or outside evidence: mentioned, fields2, prereq, has_site,
+    web, listed (claims story 3 evidence ladder). Source: viz/claims/data/s3_pairs.csv.
+
+- table: facility_hours
+  group: dashboard
+  file: viz/claims/data/s6_facility_hours.csv
+  primary_key: [unique_id]
+  spot: dataset_any_hours
+  description: >-
+    One row per record: any stated hours, 24x7 emergency and clock schedule from the dataset, the website and
+    OSM (claims story 6). Source: viz/claims/data/s6_facility_hours.csv.
+
+- table: pmndp_state
+  group: dashboard
+  build: pmndp_state
+  primary_key: [state]
+  spot: nhsrc_functional_centres
+  description: >-
+    Public dialysis centres (PMNDP, NHSRC state counts) against records that mention dialysis, by state (claims
+    story 4). state is lower case as published; state_lgd is the LGD upper-case spelling for the state filter.
+    Source: viz/claims/data/s4_pmndp.csv.
+
+- table: planner_plans
+  group: dashboard
+  file: viz/journeys/data/plans_best.csv
+  primary_key: [origin_set, origin_id, pathway]
+  spot: best_type
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). Best referral plan per (sampled origin, pathway) from the planner with stub probabilities (journeys stories 1,
+    2, 6): 150 PIN origins per state in Bihar, Uttar Pradesh and Maharashtra plus benchmark points.
+    Source: viz/journeys/data/plans_best.csv.
+
+- table: nfhs_lgd_crosswalk
+  group: dashboard
+  file: data/external/lgd_district_polygons/nfhs_lgd_crosswalk.csv
+  primary_key: [dist_lgd, dtname]  # dist_lgd is 0 for Muzaffarabad and Mirpur
+  spot: nfhs_final
+  description: >-
+    LGD district to NFHS-5 district key, so NFHS-keyed tables filter by LGD district.
+    Source: data/external/lgd_district_polygons/nfhs_lgd_crosswalk.csv.
+
+- table: model_test_metrics
+  group: dashboard
+  build: model_test_metrics
+  primary_key: [source_file, path]
+  spot: value_text
+  description: >-
+    SUPERSEDED (model v1 prototype, kept for history). Every value in the two published sealed-test files (model/review/stats/results.json and
+    model/proto/fusion/test_metrics.json) as (source_file, JSON path, value). Quoted, never recomputed.
+    Example path: pair_level_test.primary_target_all.auroc.WL_shipped.raw.
+
+# ---------------------------------------------------------------- official lists, per-facility facts only
+
+- table: facility_list_facts
+  group: lists
+  build: facility_list_facts
+  primary_key: [fact_id]
+  spot: status
+  description: >-
+    One row per (facility, official list, service) matched fact with its citation: NABH, LaQshya, NMC, MoHFW
+    trauma care facilities, e-RaktKosh and Goa PMNDP. Per-facility matched facts only; the full lists (NABH, NMC,
+    MoHFW trauma) are restricted and are not loaded. Service null = a facility-level fact (for example NABH).
+    Built by databricks/build_staging.py from data/external/<slug>/ matcher outputs.
+  columns:
+    fact_id: "list_slug:list_record_id:unique_id:service"
+    unique_id: "Virtue Foundation record id"
+    list_slug: "nabh, laqshya, nmc, mohfw_trauma, eraktkosh or pmndp_goa"
+    service: "Dashboard service id (trauma_emergency, emergency_csection ...) or taxonomy id; null for facility-level facts"
+    status: "What the list says about the facility (status, level, validity)"
+    valid_to: "Certificate validity end date where the list has one (LaQshya)"
+    listed_name: "The facility's name as the list writes it"
+    match_score: "Matcher score (scale differs per list)"
+    citation_url: "Where the fact can be checked"
+    as_of: "Day the list was read"

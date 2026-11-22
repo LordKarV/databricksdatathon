@@ -1,0 +1,104 @@
+{
+ "rows_witnesses": 4011386,
+ "rows_present": 349290,
+ "rows_features": 358524,
+ "rows_attributes": 9959,
+ "atoms": 79806,
+ "units": 48752,
+ "reader_present": false,
+ "T": {
+  "0": 328302,
+  "1": 8323,
+  "2": 10613,
+  "3": 3594,
+  "4": 3335,
+  "5": 4357
+ },
+ "C": {
+  "0": 358065,
+  "1": 327,
+  "2": 132
+ },
+ "N": 142,
+ "S": 123204,
+ "P": {
+  "0": 272548,
+  "1": 79096,
+  "2": 6880
+ },
+ "votes": {
+  "coords": {
+   "1": 8788,
+   "-1": 1165,
+   "0": 6
+  },
+  "pin": {
+   "1": 9038,
+   "-1": 844,
+   "0": 77
+  },
+  "city": {
+   "1": 8718,
+   "-1": 903,
+   "0": 338
+  },
+  "name_place": {
+   "0": 9065,
+   "1": 824,
+   "-1": 70
+  },
+  "state": {
+   "1": 9798,
+   "0": 81,
+   "-1": 80
+  },
+  "text_pin": {
+   "0": 9600,
+   "1": 266,
+   "-1": 93
+  },
+  "map_link": {
+   "0": 9052,
+   "1": 652,
+   "-1": 255
+  }
+ },
+ "city_resolve": {
+  "ok": 9570,
+  "ambiguous": 338,
+  "not_found": 51
+ },
+ "vote_city_changed": 2169,
+ "vote_pin_changed": 162,
+ "phone_class": {
+  "listed": 9547,
+  "none": 412
+ },
+ "phone_class_changed": 634,
+ "operator": {
+  "private": 8805,
+  "unknown": 685,
+  "public": 469
+ },
+ "operator_src": {
+  "operatorTypeId": 9272,
+  "none": 685,
+  "name": 2
+ },
+ "web_state": {
+  "alive": 5881,
+  "dead": 2134,
+  "none": 1944
+ },
+ "focus": {
+  "dental": 1671,
+  "eye": 573,
+  "diagnostic": 519,
+  "ayush": 290,
+  "ivf": 195,
+  "skin_hair": 157,
+  "ent": 74,
+  "physio_rehab": 61
+ },
+ "seconds": 3244
+}

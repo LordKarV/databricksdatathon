@@ -1,0 +1,517 @@
+{
+ "version": "0.1",
+ "built": "2026-11-21",
+ "notes": [
+  "Capability tags the pathway stages need. kb_status existing = one of the 8 services graded in derived/v1 (kb_service names it); proposed = new tag for kb/taxonomy to reconcile.",
+  "evidence_words are starting points for matching facility text, not a tested lexicon. None of the proposed tags has been run against the data.",
+  "used_by lists pathway.stage; used_by_rules lists pathway.rule ids that name the tag in a condition.",
+  "v2_service: the kb/taxonomy service whose derived/v2 score (p and band) the planner uses for this tag; null when v2 scores no matching service, and the planner then reads the record's own offer sentences."
+ ],
+ "capabilities": [
+  {
+   "id": "emergency_24x7",
+   "meaning": "Emergency department or casualty open round the clock with a doctor, able to triage, resuscitate and stabilise.",
+   "evidence_words": [
+    "24x7 emergency",
+    "24 hours emergency",
+    "casualty",
+    "emergency department",
+    "emergency room",
+    "accident and emergency",
+    "trauma and emergency"
+   ],
+   "used_by": [
+    "stemi.thrombolysis",
+    "major_trauma.stabilise",
+    "burns.fluids"
+   ],
+   "used_by_rules": [],
+   "kb_status": "existing",
+   "kb_service": "trauma",
+   "v2_service": "emergency_24x7"
+  },
+  {
+   "id": "ecg",
+   "meaning": "12-lead ECG available in the emergency area.",
+   "evidence_words": [
+    "ECG",
+    "electrocardiogram",
+    "12-lead",
+    "cardiac monitor"
+   ],
+   "used_by": [
+    "stemi.thrombolysis"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "thrombolysis",
+   "meaning": "Can give clot-dissolving drugs for a heart attack: a trained doctor, ECG, defibrillator, and a thrombolytic in stock.",
+   "evidence_words": [
+    "thrombolysis",
+    "thrombolytic",
+    "fibrinolysis",
+    "streptokinase",
+    "tenecteplase",
+    "reteplase",
+    "alteplase",
+    "STEMI care",
+    "heart attack treatment"
+   ],
+   "used_by": [
+    "stemi.thrombolysis"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": "stemi_thrombolysis"
+  },
+  {
+   "id": "pci_cath_lab",
+   "meaning": "Cardiac catheterisation laboratory doing angioplasty (PCI).",
+   "evidence_words": [
+    "cath lab",
+    "catheterisation laboratory",
+    "catheterization lab",
+    "angioplasty",
+    "PTCA",
+    "primary PCI",
+    "stent",
+    "interventional cardiology",
+    "angiography"
+   ],
+   "used_by": [
+    "stemi.pci"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": "cath_lab_angioplasty"
+  },
+  {
+   "id": "general_surgery_ot",
+   "meaning": "Operating theatre with a general surgeon and anaesthesia.",
+   "evidence_words": [
+    "operation theatre",
+    "operating theatre",
+    "OT",
+    "general surgery",
+    "surgeon",
+    "anaesthesia",
+    "anesthesia",
+    "emergency surgery",
+    "laparotomy"
+   ],
+   "used_by": [
+    "major_trauma.definitive",
+    "burns.burn_unit"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "blood_transfusion",
+   "meaning": "Blood bank or blood storage unit; can transfuse.",
+   "evidence_words": [
+    "blood bank",
+    "blood storage unit",
+    "blood transfusion",
+    "blood centre",
+    "component separation"
+   ],
+   "used_by": [
+    "major_trauma.definitive",
+    "obstetric_emergency.comprehensive_emoc"
+   ],
+   "used_by_rules": [
+    "obstetric_emergency.pph_transfer_with_oxytocin"
+   ],
+   "kb_status": "proposed",
+   "v2_service": "blood_bank"
+  },
+  {
+   "id": "ct_scan",
+   "meaning": "CT scanner on site.",
+   "evidence_words": [
+    "CT scan",
+    "CT",
+    "computed tomography",
+    "NCCT",
+    "MDCT"
+   ],
+   "used_by": [
+    "major_trauma.definitive"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": "ct_scan"
+  },
+  {
+   "id": "icu",
+   "meaning": "Intensive care unit with monitoring and ventilation.",
+   "evidence_words": [
+    "ICU",
+    "intensive care",
+    "critical care",
+    "HDU",
+    "high dependency"
+   ],
+   "used_by": [
+    "major_trauma.definitive"
+   ],
+   "used_by_rules": [],
+   "kb_status": "existing",
+   "kb_service": "icu",
+   "v2_service": "icu"
+  },
+  {
+   "id": "trauma_centre",
+   "meaning": "Designated trauma centre or trauma care facility.",
+   "evidence_words": [
+    "trauma centre",
+    "trauma center",
+    "trauma care facility",
+    "level I trauma",
+    "level II trauma",
+    "polytrauma"
+   ],
+   "used_by": [
+    "major_trauma.definitive"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": "trauma_care"
+  },
+  {
+   "id": "neurosurgery",
+   "meaning": "Neurosurgeon and theatre for head and spine injury.",
+   "evidence_words": [
+    "neurosurgery",
+    "neurosurgeon",
+    "neuro surgery",
+    "craniotomy",
+    "head injury surgery",
+    "neuro trauma"
+   ],
+   "used_by": [
+    "major_trauma.definitive"
+   ],
+   "used_by_rules": [
+    "major_trauma.head_injury_needs_neurosurgery"
+   ],
+   "kb_status": "proposed",
+   "v2_service": "neurosurgery"
+  },
+  {
+   "id": "orthopaedics",
+   "meaning": "Orthopaedic surgery for fractures.",
+   "evidence_words": [
+    "orthopaedic",
+    "orthopedic",
+    "orthopaedics",
+    "fracture surgery",
+    "ortho",
+    "bone and joint"
+   ],
+   "used_by": [
+    "major_trauma.definitive"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": "orthopaedic_trauma_surgery"
+  },
+  {
+   "id": "anti_snake_venom",
+   "meaning": "Anti-snake venom in stock, with adrenaline and a doctor able to give it.",
+   "evidence_words": [
+    "anti snake venom",
+    "anti-snake venom",
+    "ASV",
+    "snake venom antiserum",
+    "antivenom",
+    "snake bite treatment",
+    "snakebite"
+   ],
+   "used_by": [
+    "snakebite.asv"
+   ],
+   "used_by_rules": [
+    "snakebite.no_asv_here"
+   ],
+   "kb_status": "proposed",
+   "v2_service": "snakebite_antivenom"
+  },
+  {
+   "id": "ventilator",
+   "meaning": "Mechanical ventilator and staff to run it.",
+   "evidence_words": [
+    "ventilator",
+    "mechanical ventilation",
+    "ventilatory support",
+    "intubation"
+   ],
+   "used_by": [],
+   "used_by_rules": [
+    "snakebite.cannot_lift_neck"
+   ],
+   "kb_status": "proposed",
+   "v2_service": "ventilator_support"
+  },
+  {
+   "id": "iv_fluid_resuscitation",
+   "meaning": "Can start IV lines and give IV fluids under a doctor.",
+   "evidence_words": [
+    "IV fluids",
+    "intravenous fluids",
+    "fluid resuscitation",
+    "Ringer lactate",
+    "inpatient beds",
+    "indoor admission"
+   ],
+   "used_by": [
+    "burns.fluids"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "burns_dressing",
+   "meaning": "A doctor and a clean room for burn dressings.",
+   "evidence_words": [
+    "burn dressing",
+    "burns dressing",
+    "dressing room",
+    "minor OT",
+    "wound dressing"
+   ],
+   "used_by": [
+    "burns.fluids"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "burn_unit",
+   "meaning": "Dedicated burn unit, burn ward or burn centre.",
+   "evidence_words": [
+    "burn unit",
+    "burns unit",
+    "burn ward",
+    "burns ward",
+    "burn centre",
+    "burn center",
+    "burn ICU",
+    "burn care"
+   ],
+   "used_by": [
+    "burns.burn_unit"
+   ],
+   "used_by_rules": [
+    "burns.refer_to_tertiary_sizes"
+   ],
+   "kb_status": "existing",
+   "kb_service": "burns",
+   "v2_service": "burn_care"
+  },
+  {
+   "id": "plastic_surgery",
+   "meaning": "Plastic or reconstructive surgery, including skin grafting.",
+   "evidence_words": [
+    "plastic surgery",
+    "plastic surgeon",
+    "reconstructive surgery",
+    "skin graft",
+    "skin grafting"
+   ],
+   "used_by": [
+    "burns.burn_unit"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "nephrology",
+   "meaning": "Nephrologist, or a physician trained in nephrology, seeing patients.",
+   "evidence_words": [
+    "nephrology",
+    "nephrologist",
+    "kidney specialist",
+    "renal medicine",
+    "kidney clinic"
+   ],
+   "used_by": [
+    "dialysis_start.assessment"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "laboratory",
+   "meaning": "Laboratory doing kidney function, electrolytes, blood counts and viral markers.",
+   "evidence_words": [
+    "laboratory",
+    "pathology lab",
+    "biochemistry",
+    "renal function test",
+    "creatinine",
+    "HBsAg",
+    "viral markers"
+   ],
+   "used_by": [
+    "dialysis_start.assessment"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "vascular_access_surgery",
+   "meaning": "Creates dialysis access: AV fistula surgery or dialysis catheter insertion.",
+   "evidence_words": [
+    "AV fistula",
+    "arteriovenous fistula",
+    "fistula creation",
+    "vascular access",
+    "permcath",
+    "dialysis catheter",
+    "vascular surgery"
+   ],
+   "used_by": [
+    "dialysis_start.access"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "haemodialysis_unit",
+   "meaning": "Haemodialysis unit with machines, RO water plant and technicians, running regular sessions.",
+   "evidence_words": [
+    "dialysis",
+    "haemodialysis",
+    "hemodialysis",
+    "dialysis unit",
+    "dialysis centre",
+    "dialysis machine",
+    "PMNDP",
+    "RO plant"
+   ],
+   "used_by": [
+    "dialysis_start.sessions"
+   ],
+   "used_by_rules": [
+    "snakebite.bleeding_or_kidney",
+    "dialysis_start.separate_machine_if_seropositive"
+   ],
+   "kb_status": "existing",
+   "kb_service": "dialysis",
+   "v2_service": "dialysis"
+  },
+  {
+   "id": "basic_emoc",
+   "meaning": "Basic emergency obstetric care round the clock: deliveries, injectable antibiotics, oxytocin and magnesium sulphate, assisted delivery, manual removal of placenta.",
+   "evidence_words": [
+    "24x7 delivery",
+    "labour room",
+    "BEmONC",
+    "basic emergency obstetric",
+    "normal delivery",
+    "assisted delivery",
+    "maternity"
+   ],
+   "used_by": [
+    "obstetric_emergency.basic_emoc"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "comprehensive_emoc",
+   "meaning": "Comprehensive emergency obstetric care round the clock: caesarean section with anaesthesia and an operating theatre (a First Referral Unit).",
+   "evidence_words": [
+    "caesarean",
+    "cesarean",
+    "C-section",
+    "LSCS",
+    "CEmONC",
+    "comprehensive emergency obstetric",
+    "First Referral Unit",
+    "FRU"
+   ],
+   "used_by": [
+    "obstetric_emergency.comprehensive_emoc"
+   ],
+   "used_by_rules": [
+    "obstetric_emergency.needs_surgery_or_blood"
+   ],
+   "kb_status": "existing",
+   "kb_service": "csection",
+   "v2_service": "emergency_csection"
+  },
+  {
+   "id": "neonatal_stabilisation",
+   "meaning": "Newborn stabilisation unit (NBSU): radiant warmers, oxygen, a trained nurse each shift.",
+   "evidence_words": [
+    "NBSU",
+    "newborn stabilisation unit",
+    "newborn stabilization unit",
+    "radiant warmer",
+    "newborn care corner",
+    "phototherapy"
+   ],
+   "used_by": [
+    "sick_newborn.stabilise"
+   ],
+   "used_by_rules": [],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "sncu",
+   "meaning": "Special newborn care unit (SNCU): 12 or more beds, round the clock doctor, no ventilation or surgery.",
+   "evidence_words": [
+    "SNCU",
+    "special newborn care unit",
+    "special newborn care",
+    "sick newborn care unit",
+    "level II neonatal"
+   ],
+   "used_by": [
+    "sick_newborn.special_care"
+   ],
+   "used_by_rules": [
+    "sick_newborn.to_sncu"
+   ],
+   "kb_status": "proposed",
+   "v2_service": null
+  },
+  {
+   "id": "nicu",
+   "meaning": "Neonatal intensive care unit with ventilation and neonatologists.",
+   "evidence_words": [
+    "NICU",
+    "neonatal intensive care",
+    "neonatal ICU",
+    "neonatal ventilator",
+    "level III neonatal",
+    "neonatologist"
+   ],
+   "used_by": [
+    "sick_newborn.special_care"
+   ],
+   "used_by_rules": [
+    "sick_newborn.to_nicu",
+    "sick_newborn.sncu_cannot_ventilate"
+   ],
+   "kb_status": "existing",
+   "kb_service": "nicu",
+   "v2_service": "nicu"
+  }
+ ]
+}

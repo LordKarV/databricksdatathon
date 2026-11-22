@@ -1,0 +1,54 @@
+[pass] h_export_staleness: pack ev p mismatches 0/11505; planner p mismatches 0/8874
+    derived/v1 data_point_scores mtime 14:06; packs/facts/planner built 16:12-16:31 the same day.
+    ex=[]
+[pass] h_gazetteer_pins_not_india_post: 127/19713 gazetteer PINs not in India Post; 127 of them in packs; src {'prefix3_median_not_in_directory': 113, 'facility_consensus_not_in_directory': 14}; with >=1 facility 0
+    Documented repair R2 in cleaning/geo_identity/s1_pin_gazetteer.py:13 (facility PINs missing from the directory, placed at facility consensus or 3-digit-prefix median). Not an issue.
+    ex=['122021 HARYANA nan src=prefix3_median_not_in_directory n_fac=nan', '122022 HARYANA nan src=facility_consensus_not_in_directory n_fac=nan', '122050 HARYANA nan src=prefix3_median_not_in_directory n_fac=nan', '131031 HARYANA nan src=prefix3_median_not_in_directory n_fac=nan', '134002 HARYANA nan src=prefix3_median_not_in_directory n_fac=nan']
+[pass] h_manifest_rowcounts: 17/17 tables match
+    
+    ex=[]
+[pass] h_pin_index_vs_gazetteer: pin_index 19711 vs gazetteer-with-state 19711
+    
+    ex=[]
+[warn] h_verified_true_suppressed: 2 gold verified-true app pairs carry an excluded grade; 0 of them in any pack
+    Packs drop them; engine.py:111 checks grade before verified_true, so online they show as unlikely.
+    ex=['611ce272-c782-4276-9e90-848e5ab6e9e8 cardiac_surgery attributed_elsewhere split=test', 'e5cd0285-1da5-4156-88a5-1d10967931f3 csection counter_evidence split=dev']
+[warn] h_vet_not_flagged: 2 non-excluded records with >= 3 animal sentences
+    Manual read needed; candidates only.
+    ex=['48cf0b63-fe40-439a-b09a-6b7c8566b077 ChromoXpert Research and Diagnostics n=12', "72e3ccb4-9da3-43d8-bd7e-ed56a536fde6 Employees' State Insurance Corporation Dispensary, Behla Mohalla, Sirhind n=4"]
+[warn] v_rl01_fragments: 88 fragments, 30 with coordinates
+    Raw is sorted by unique_id, so fragments sit at the top of the file (rows 0..) and cannot be re-attached by row order; stitching needs content matching.
+    ex=['  *  __Clinical Pathology', '  *  __Genomics', '  *  __Hematology']
+[warn] v_rl01_truncated: 30 truncated, 0 recoverable by name
+    types {'hospital': 16, 'clinic': 12, 'dentist': 2}; states {'Uttar Pradesh': 6, 'Tamil Nadu': 4, 'Telangana': 3, 'Karnataka': 3, 'Punjab': 2, 'Gujarat': 2, 'Haryana': 2, 'Bihar': 2, 'Odisha': 1, 'Uttarakhand': 1, 'Ncr-delhi': 1, 'Madhya Pradesh': 1, 'West Bengal': 1, 'Chhattisgarh': 1}; 0 ids also usable; 0 have a same-city same-name usable record. Vasundhara Dental (Ghaziabad) is labelled 'Ncr-delhi', so UP is 7 by geography.
+    ex=['12d987ef-1ff8-4025-bf5d-8870f2083a90', '19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5', '22142a37-a47a-4a9a-bc80-f5981361f000', '287913e3-162c-45d5-873a-eada15f8591b', '3e951c62-51b0-459e-972c-2e1790618894']
+[pass] v_rl02_facts_excluded_pairs: 51 of 8012 facts pairs are pack-excluded grades
+    facts keeps them on purpose; app/facts/engine.py:111 bands them unlikely and the area view keeps only OWN_EVIDENCE/tag_only/weak grades, so they are not shown as options. Not an issue, a known divergence.
+    ex=[]
+[warn] v_rl02_planner_and_pack_exclusions: vet in planner 12, vet cap entries 8, excluded-pair entries 41, vet pack answers 10
+    planner keeps 12 of 12 exclude_review records; capability entries on them 8 (max p 0.783): Counter({'laboratory': 4, 'emergency_24x7': 1, 'ecg': 1, 'blood_transfusion': 1, 'orthopaedics': 1}); planner entries on pack-excluded pairs 41 by cap Counter({'emergency_24x7': 13, 'haemodialysis_unit': 9, 'comprehensive_emoc': 7, 'icu': 5, 'nicu': 5, 'burn_unit': 2}), max p 0.970; vet records in packs {('tamil_nadu', '885c79f6-9f32-4878-8384-5a90259cfae4'): 1}; (PIN, service) answers listing a vet record 10. app/itinerary.py:_stop shows a planner stop even when the facility id is not in facts (phone None).
+    ex=['emergency_24x7 885c79f6-9f32-4878-8384-5a90259cfae4 p=0.7643', 'ecg 3701980c-4699-4a84-a9f1-024939ba0e34 p=0.7828', 'blood_transfusion 8b8ee908-073c-4356-9c3f-dabbbf915f3e p=0.7149', 'emergency_24x7 17c02c25-710e-4e30-a313-82df5b9d3572 p=0.2626', 'emergency_24x7 1df3d3c4-c4d3-446d-a687-9d5841a57d84 p=0.2435']
+[warn] v_rl03_facts_noncanonical_pairs: 117/8012 facts pairs and 361 planner capability entries are on the 77 non-canonical copies
+    facts fac keeps all 77 non-canonical records; engine ranks records.
+    ex=['001316e5-1cf1-4c5f-9c81-3f8d8118df3f', '00a441f9-f65d-4250-a1f9-a068164cba74', '019bb317-b4e2-42c3-8548-661888a5ded8', '0580bb14-c959-499f-b390-9ecfa4589eb4', '05b48b3a-dea7-4e78-97f2-f151dd96959c']
+[warn] v_rl03_opendata_shared: facts: 44 shared objects, 9 outside one group; match table: 44 shared, 9 outside one group
+    
+    ex=['osm:node/2696699678 00361ecc Gunam Hospital - Hosur / 8295bdfd Gunam Super Speciality Hospi', 'osm:node/6531706878 aecc588b Bhagyalatha Hospital - Denta / c35407a7 Bhagyalatha Hospital - Eye U', 'osm:node/6758705097 0306a038 Maxivision Super Speciality  / 58242a13 Dr. Ramalinga Reddy Maxivisi', 'osm:node/6944265465 3bf5f2f1 United Hospital / 491e9e6c United Hospital, Gulbarga', 'osm:node/7199716902 0ee2ea22 Burdwan Medical College Burd / 146e1e13 Burwan Medical College & Hos / a9968578 Burdwan Dental College & Hos']
+[warn] v_rl03_pack_duplicate_groups: 259/29839 lists, 2158/137977 answers; inside top-3 only: 257 lists, 2155 answers
+    by state {'ASSAM': 511, 'KERALA': 457, 'TAMIL NADU': 394, 'UTTAR PRADESH': 196, 'MANIPUR': 173, 'TRIPURA': 76}. s4_groups.py docstring says 'the app shows one card per group' but no file under app/ or planner/ reads dup_group_id or is_canonical.
+    ex=['arunachal_pradesh list 34: Nemcare Hospital | Nemcare SuperSpeciality Hospit | Dibrugarh Assam Medical Colleg', 'arunachal_pradesh list 35: Dibrugarh Assam Medical Colleg | Nemcare Hospital | Nemcare SuperSpeciality Hospit', 'arunachal_pradesh list 36: Nemcare Hospital | Nemcare SuperSpeciality Hospit | Shanti Nursing Home', 'arunachal_pradesh list 59: Narayana Superspeciality Hospi | Nemcare Hospital | Nemcare SuperSpeciality Hospit | Raj Medicity', 'assam list 98: Narayana Superspeciality Hospi | Nemcare Hospital | Nemcare SuperSpeciality Hospit | Christian Institute of Health ']
+[pass] v_rl04_density_denominator: national 6.84/M (all records / all pop), 6.84/M (joined states); focus {'BIHAR': 1.96, 'UTTAR PRADESH': 3.82, 'JHARKHAND': 3.74, 'ODISHA': 2.42, 'ASSAM': 3.44}
+    states with records but no population row: {}; population-only states: ['LADAKH', 'LAKSHADWEEP']; total pop 1456.9 M
+    ex=[]
+[warn] v_rl04_gap_from_v1: max abs diff vs auditor table 0.003; {'ODISHA/emergency_csection': 0.829, 'BIHAR/burn_care': 0.731, 'BIHAR/cardiac_surgery': 0.529, 'ODISHA/trauma_emergency': 0.429}; national {'burn_care': 0.58, 'cardiac_surgery': 0.36, 'dialysis': 0.294, 'emergency_csection': 0.485, 'mri': 0.345, 'nicu': 0.352, 'trauma_emergency': 0.123}
+    Independent of pack decoding (BallTree haversine on derived/v1 candidates).
+    ex=['ODISHA/emergency_csection 0.829', 'BIHAR/burn_care 0.731', 'BIHAR/cardiac_surgery 0.529', 'ODISHA/trauma_emergency 0.429']
+[warn] v_rl05_url_repeats: 5652 repeated rows in 1525 records; support change (max, n>0.01, n>0) {'service': (0.0202, 29, 1505), 'identity': (0.0226, 23, 1505), 'attribution': (0.0228, 69, 1505)}
+    by class {'official': 2519, 'health_aggregator': 793, 'other_health_site': 745, 'other': 292}; s5_fit.record_edges sums w per (record, domain) over url rows (s5_fit.py:73) with no url dedupe. Reliability held fixed: first-order.
+    ex=['0007a104-2bd7-412d-8ffd-7161e703dbc2', '00154d81-ce6b-4c73-a49b-4bd3c20580f7', '0020c82a-2608-406f-9298-779bdd657681', '002e6234-a91d-4aa7-8c01-f0e5f75a013e', '00361ecc-7edf-4799-ad64-5831d6eda89a']
+[warn] v_rl06_specialties_nraw: 165 rows wrong in 11 records (ratio {2.0: 165}); only-v1 0, only-raw 0
+    files mentioning n_raw: ['cleaning/claims/measure.py', 'cleaning/claims/build_claims.py', 'cleaning/geo_identity/s7_summary.py']
+    ex=['08344cdb-f455-4c22-8d31-a0a8e849124b', '1a0f7290-f227-49fe-9b92-a8c698a165d8', '277e82f0-241a-458a-b9fc-e32d2b3dfcba', '9264b21d-4aea-460a-9c77-613407df8439', 'b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60']
+[warn] v_rl07_pins: no district 13 ({'MAHARASHTRA': 6, 'GUJARAT': 4, 'TELANGANA': 2, 'MADHYA PRADESH': 1}); gazetteer no district 227; India Post PINs not in facts.pins 102 {'NA': 100, 'UTTAR PRADESH': 1, 'WEST BENGAL': 1}; no state [900056, 900099]
+    engine.area() snaps a lat/lon to the nearest facts.pins PIN (engine.py:299), so a dropped PIN is answered with its neighbour's district rather than failing; the impact is a wrong area, not no answer.
+    ex=['12ebca41-d6cd-4a95-98ca-22c943741a8b', '18a0b6a3-8792-43ef-8753-47548e4aab02', '121999', '122998', '122999']

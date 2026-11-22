@@ -6,6 +6,7 @@ Cleaning rules (all measured in q1-q5):
 - capacity_text: facility-level bed total read from the record's own text (max candidate), with the claim cited.
 - flags: list of short codes the finder shows as uncertainty, never used to fabricate a value.
 """
+import os
 import re
 import pandas as pd
 from common import df, num, jlist
@@ -46,7 +47,7 @@ for _, r in d.iterrows():
         "scale_flags": f,
     })
 out = pd.DataFrame(rows)
-out.to_parquet("/Users/karthikvattem/projects/datathon/audit/scale/scale_flags.parquet", index=False)
+out.to_parquet(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scale_flags.parquet"), index=False)
 fc = pd.Series([x for f in out.scale_flags for x in f]).value_counts()
 print("rows", len(out), "rows_with_any_flag", int((out.scale_flags.map(len) > 0).sum()))
 print(fc.to_string())

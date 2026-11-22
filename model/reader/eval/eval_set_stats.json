@@ -1,0 +1,103 @@
+{
+ "rows": 629,
+ "usable": 564,
+ "not_in_claims": 0,
+ "unsettled_label": 65,
+ "conflicting_duplicates": 0,
+ "facilities": 506,
+ "by_target": {
+  "about_this": {
+   "n": 234,
+   "positive": 173,
+   "negative": 61
+  },
+  "offers": {
+   "n": 330,
+   "positive": 281,
+   "negative": 49
+  }
+ },
+ "by_source": {
+  "about_this | audit/merge/handcheck/dev/q1_precision_dev.tsv": {
+   "n": 8,
+   "positive": 8,
+   "negative": 0
+  },
+  "about_this | audit/merge/handcheck/dev/q1_recall_U1_dev.tsv": {
+   "n": 29,
+   "positive": 28,
+   "negative": 1
+  },
+  "about_this | audit/merge/handcheck/dev/q1_recall_U2_dev.tsv": {
+   "n": 30,
+   "positive": 25,
+   "negative": 5
+  },
+  "about_this | audit/merge/handcheck/q1_holdout.tsv": {
+   "n": 20,
+   "positive": 9,
+   "negative": 11
+  },
+  "about_this | audit/merge/handcheck/q1_recall_U1.tsv": {
+   "n": 30,
+   "positive": 29,
+   "negative": 1
+  },
+  "about_this | audit/merge/handcheck/q1_recall_U2.tsv": {
+   "n": 30,
+   "positive": 26,
+   "negative": 4
+  },
+  "about_this | audit/merge/handcheck/q2_holdout.tsv": {
+   "n": 9,
+   "positive": 3,
+   "negative": 6
+  },
+  "about_this | audit/merge/handcheck/q3_sample.tsv": {
+   "n": 26,
+   "positive": 17,
+   "negative": 9
+  },
+  "about_this | cleaning/claims/handcheck_labels.csv": {
+   "n": 52,
+   "positive": 28,
+   "negative": 24
+  },
+  "offers | cleaning/claims/handcheck_labels.csv": {
+   "n": 15,
+   "positive": 1,
+   "negative": 14
+  },
+  "offers | kb/taxonomy/out/handcheck_lexicon_v0.csv": {
+   "n": 140,
+   "positive": 128,
+   "negative": 12
+  },
+  "offers | kb/taxonomy/out/handcheck_lexicon_v1_trauma.csv": {
+   "n": 20,
+   "positive": 17,
+   "negative": 3
+  },
+  "offers | kb/taxonomy/out/handcheck_v1_1_sample.csv": {
+   "n": 155,
+   "positive": 135,
+   "negative": 20
+  }
+ },
+ "offers_by_service": {
+  "emergency_24x7": 84,
+  "trauma_care": 29,
+  "dialysis": 28,
+  "mri": 25,
+  "cardiac_surgery": 21,
+  "nicu": 21,
+  "emergency_csection": 21,
+  "burn_care": 20,
+  "safe_abortion_mtp": 20,
+  "stemi_thrombolysis": 20,
+  "paediatric_inpatient": 20,
+  "psychiatric_care": 10,
+  "ultrasound": 10,
+  "icu": 1
+ }
+}

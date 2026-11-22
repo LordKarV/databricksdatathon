@@ -1,15 +1,17 @@
 """Shared loaders and normalisers for the location-consistency audit."""
+import os
 import re
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/karthikvattem/projects/datathon")
+ROOT = Path(os.environ.get("DATATHON_ROOT", Path(__file__).resolve().parents[2]))
+DATA = Path(os.environ.get("DATATHON_DATA_ROOT", ROOT / "data"))
 GEO = ROOT / "audit/geo"
-FAC = ROOT / "data/raw/facilities.parquet"
-PIN_DIR = ROOT / "data/raw/india_post_pincode_directory.parquet"
-NFHS = ROOT / "data/raw/nfhs_5_district_health_indicators.parquet"
+FAC = DATA / "raw/facilities.parquet"
+PIN_DIR = DATA / "raw/india_post_pincode_directory.parquet"
+NFHS = DATA / "raw/nfhs_5_district_health_indicators.parquet"
 
 # India Post postal zones by first PIN digit (9 = Army Postal Service)
 ZONE = {

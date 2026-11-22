@@ -20,7 +20,7 @@ from rapidfuzz import fuzz
 RADIUS_KM = 10.0      # geo gate: same PIN, or within this distance
 NAME_MIN = 88         # WRatio on normalized names, with a geo match
 NAME_MIN_NOGEO = 95   # WRatio when NMC has no usable PIN: same state only
-CORE_MIN = 80         # token_set_ratio on names minus generic words
+CORE_MIN = 88         # ratio on sorted core tokens (names minus generic words)
 SEED = 7
 
 # NMC course -> service. strong = a department that by regulation runs the
@@ -42,10 +42,13 @@ ALIAS = {
     r"\bpgimer\b": "postgraduate institute of medical education and research",
     r"\bjipmer\b": "jawaharlal institute of postgraduate medical education and research",
     r"\bgovt\b": "government", r"\bgmc\b": "government medical college",
-    r"\bhosp\b": "hospital", r"\binst\b": "institute", r"\bmed\b": "medical",
+    r"\bhosp\b": "hospital", r"\bmedial\b": "medical", r"\bcol\b": "college", r"\binstt?\b": "institute", r"\bmed\b": "medical",
     r"\bsciences\b": "science", r"\bcentre\b": "center", r"\bdr\b": "",
 }
 STOP = r"\b(the|and|of|for|in|at|ltd|pvt|private|limited)\b"
+
+
+NON_MBBS = re.compile(r"ayurved|homo?eo|dental|unani|siddha|nursing|veterinary|physiotherap|pharmacy")
 
 
 def norm(s):
@@ -63,20 +66,36 @@ def norm(s):
 # nearby "City Hospital" on the shared word alone.
 GENERIC = set("medical college hospital hospitals institute science research center government health care "
               "foundation teaching general district multispeciality multi speciality super specialty trust "
-              "education postgraduate academy school campus india".split())
+              "education postgraduate academy school medicine campus india".split())
 
 
 def core(n):
     return " ".join(t for t in n.split() if t not in GENERIC and not t.isdigit())
 
 
-def name_ok(a, b, full_min):
-    ca, cb = core(a), core(b)
-    return bool(ca and cb) and fuzz.WRatio(a, b) >= full_min and fuzz.token_set_ratio(ca, cb) >= CORE_MIN
+def name_ok(a, b, full_min, loc=frozenset()):
+    """a, b: normalized names. loc: normalized city tokens of both records.
+
+    Place words are removed from both cores. Two place-only names ("Government
+    Medical College, Kota") must agree on the place; a distinctive name on one
+    side and none on the other ("Jakir Hossain ..., Burdwan" vs "Burdwan
+    Medical College") is rejected.
+    """
+    ta, tb = set(core(a).split()), set(core(b).split())
+    if not ta or not tb or fuzz.WRatio(a, b) < full_min:
+        return False
+    da, db = ta - loc, tb - loc
+    if not da and not db:
+        da, db = ta, tb
+    elif not da or not db:
+        return False
+    sa, sb = " ".join(sorted(da)), " ".join(sorted(db))
+    return fuzz.ratio(sa, sb) >= CORE_MIN or fuzz.token_set_ratio(sa, sb) >= 95
 
 
 def state_key(s):
-    return re.sub(r"[^a-z]", "", str(s or "").lower()).replace("and", "")
+    k = re.sub(r"[^a-z]", "", str(s or "").lower()).replace("and", "")
+    return k.replace("chattisgarh", "chhattisgarh")
 
 
 def haversine(lat1, lon1, lat2, lon2):
@@ -135,9 +154,10 @@ def match(cols, vf, pins):
     plat, plon = vf["plat"].to_numpy(float), vf["plon"].to_numpy(float)
     vstate = vf["address_stateOrRegion"].map(state_key).to_numpy()
     vnorm = vf["name"].map(norm).tolist()
+    vloc = vf["address_city"].map(norm).tolist()
     out = []
     for r in cols.itertuples():
-        n = norm(r.college_name)
+        n, nloc = norm(r.college_name), norm(r.city)
         if pd.notna(r.best_lat):
             same_pin = (vf["vpin"] == r.pin).to_numpy()
             dist = np.fmin(haversine(r.best_lat, r.best_lon, vlat, vlon), haversine(r.best_lat, r.best_lon, plat, plon))
@@ -146,7 +166,13 @@ def match(cols, vf, pins):
             same_pin, dist = np.zeros(len(vf), bool), np.full(len(vf), np.nan)
             cand, full_min, gate = np.where(vstate == state_key(r.state_name))[0], NAME_MIN_NOGEO, "state"
         for i in cand:
-            if name_ok(n, vnorm[i], full_min):
+            if NON_MBBS.search(vnorm[i]):  # NMC lists allopathic MBBS colleges only
+                continue
+            loc = frozenset((nloc + " " + vloc[i]).split())
+            # second route: exact PIN and one full name contained in the other
+            # (VF names often carry street-address junk after the college name)
+            pin_subset = same_pin[i] and core(n) and core(vnorm[i]) and fuzz.token_set_ratio(n, vnorm[i]) >= 97
+            if pin_subset or name_ok(n, vnorm[i], full_min, loc):
                 out.append(dict(college_id=r.college_id, college_name=r.college_name, nmc_pin=r.pin,
                                 nmc_state=r.state_name, unique_id=vf.at[i, "unique_id"], vf_name=vf.at[i, "name"],
                                 vf_city=vf.at[i, "address_city"], vf_pin=vf.at[i, "vpin"], gate=gate,

@@ -2,28 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>Referral Saathi</title>
+<meta name="theme-color" content="#FFFFFF">
+<title>Bharosa</title>
 <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="preload" href="/fonts/barlow-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/barlow-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/app.css">
 <script src="/app.js" defer></script>
+<script src="/input.js" defer></script>
 </head>
 <body>
-<a class="visually-hidden" href="#main">Skip to content</a>
-<header class="top">
-  <span class="brand">Referral Saathi</span>
-  <span class="small muted">Sample data, no model yet</span>
-</header>
-<aside id="offline" class="offline" aria-label="Connection" hidden>
-  <strong>No internet.</strong> Showing the saved page. Plans need internet until offline packs land.
-</aside>
+<a class="visually-hidden skip" id="skip" href="#main">Skip to content</a>
+<header class="top" id="top"></header>
+<aside id="offline" class="offline" aria-label="Connection" hidden></aside>
 <div id="bar108"></div>
 <main id="main" tabindex="-1">
-  <h1>Referral Saathi</h1>
+  <h1>Bharosa</h1>
   <p>Loading...</p>
   <noscript><p>This page needs JavaScript. In an emergency call <a href="tel:108">108</a>.</p></noscript>
 </main>
+<nav class="nav" id="nav" aria-label="Main"></nav>
 <div id="status" class="visually-hidden" role="status" aria-live="polite"></div>
 </body>
 </html>

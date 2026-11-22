@@ -1,0 +1,194 @@
+[
+ {
+  "name": "int01_exclude_review_shipped",
+  "status": "fail",
+  "metric": "1 pack rows + 8 planner capability rows, 5 of 12 records; 12 in planner facility list, 0 in facts.json",
+  "threshold": "0",
+  "detail": "exclude_review records reachable from app exports",
+  "examples": [
+   "tamil_nadu.json.gz 885c79f6 trauma_emergency p=76",
+   "emergency_24x7 885c79f6 p=0.7643",
+   "ecg 3701980c p=0.7828",
+   "blood_transfusion 8b8ee908 p=0.7149",
+   "orthopaedics 885c79f6 p=0.7828"
+  ]
+ },
+ {
+  "name": "int02_test_gold_in_score",
+  "status": "warn",
+  "metric": "141 test points verified ({'location': 56, 'existence': 56, 'service_claim': 29}); score != score_model on 141; facility_trust location_score overridden on 56",
+  "threshold": "documented (README: 'Verified by gold (dev or test)')",
+  "detail": "facility_trust has no gold_split or pre-override column; only reason codes reveal it",
+  "examples": [
+   "loc:04bae564-9f3f-4b55-8854-3bfd587793a8",
+   "loc:08d4967a-b02f-4373-aace-2db8f64b0e27",
+   "loc:09c73691-739e-4b31-88ba-2d31c89f7af3",
+   "loc:0b88e73f-787e-45c4-bcd3-ec8b27a53c74",
+   "loc:18aca974-cadb-4c0f-a4e1-efde9710c729"
+  ]
+ },
+ {
+  "name": "int03_specialty_label_conflicts",
+  "status": "warn",
+  "metric": "10 keys with 2+ labels (1971 records); 4 involve a real service (9 records)",
+  "threshold": "0",
+  "detail": "consumers (build_lexicon, specialty_weights) join on the raw spelling, so labels depend on spelling",
+  "examples": [
+   "anxiety: ['out_of_scope', 'psychiatric_care']",
+   "cardiovascularandthoracicsurgery: ['cardiac_surgery', 'out_of_scope']",
+   "depression: ['out_of_scope', 'psychiatric_care']",
+   "gynaeoncology: ['out_of_scope', 'surgical_oncology']"
+  ]
+ },
+ {
+  "name": "int04_url_repeats",
+  "status": "warn",
+  "metric": "5652 exact repeats of 158444 rows in 1525 records; 5739 ignoring case and trailing slash",
+  "threshold": "0",
+  "detail": "README grain says one (record, URL) pair; repeats are kept to reproduce q1_results totals",
+  "examples": [
+   "ed6652f3-7d23-4789-8050-1dab7dca6238: 46",
+   "20397ed5-ac41-41f4-89cb-1f8aafa9bb34: 45",
+   "58a4d0b7-5b03-4b7f-965b-6e260b2c0918: 42",
+   "5afdab41-c9d9-4dd1-b4bf-874357f4b7b4: 42"
+  ]
+ },
+ {
+  "name": "int05_facts_pins_dropped",
+  "status": "warn",
+  "metric": "227 of 19711 PINs missing from facts.json; 202 facilities sit in them",
+  "threshold": "0",
+  "detail": "all missing PINs have null district (build.py pins() dropna)",
+  "examples": [
+   "121999",
+   "122021",
+   "122022",
+   "122050",
+   "122998"
+  ]
+ },
+ {
+  "name": "int06_planner_grade_policy",
+  "status": "warn",
+  "metric": "41 planner rows the packs and engine treat as unlikely: {'attributed_elsewhere': 24, 'counter_evidence': 13} by grade, 7 verified_false (3 overlap); 41 of them score above no_mention_p=0.02",
+  "threshold": "0",
+  "detail": "packs drop EXCLUDED_GRADES and verified_false; app/facts/engine.py:111 treats both as unlikely",
+  "examples": [
+   "emergency_24x7 17c02c25 attributed_elsewhere/unverified p=0.2626",
+   "emergency_24x7 1df3d3c4 attributed_elsewhere/unverified p=0.2435",
+   "emergency_24x7 2d16d221 attributed_elsewhere/unverified p=0.2553",
+   "emergency_24x7 4d6c620f counter_evidence/unverified p=0.1594",
+   "emergency_24x7 5c0d519d counter_evidence/unverified p=0.1353"
+  ]
+ },
+ {
+  "name": "int07_null_strings",
+  "status": "warn",
+  "metric": "226 string-null cells; 17 placeholder claims (8 of them '-')",
+  "threshold": "0",
+  "detail": "{\"kb/opendata/vf_candidates.parquet:vf_type\": 105, \"kb/opendata/vf_opendata_match.parquet:vf_type\": 105, \"derived/v1/grades.parquet:facilityTypeId\": 8, \"derived/v1/grades_v1.parquet:facilityTypeId\": 8}",
+  "examples": [
+   "0e8c24cc:proc:5 -",
+   "0e8c24cc:equi:2 -",
+   "30ed41d1:proc:0 Null",
+   "45a4db60:proc:23 N/A",
+   "45a4db60:equi:1 N/A"
+  ]
+ },
+ {
+  "name": "int08_location_keys",
+  "status": "warn",
+  "metric": "7 of 9882 PINs invalid; 52 of 9959 district_state != state_final (21 are Andhra Pradesh vs Telangana)",
+  "threshold": "0",
+  "detail": "",
+  "examples": [
+   "13594579-5b83-48ec-8c81-4b21ad0a6881 112001",
+   "231f141f-cc05-42a9-949a-accf4bab933c 430115",
+   "3b7c281e-3946-4cb2-8520-5c29e4c38e6b 359009",
+   "076633ac-580a-42b0-8bb6-94828bd6ccfe",
+   "0afa0b00-0807-4d1d-9eec-d620eb199be0"
+  ]
+ },
+ {
+  "name": "int09_opendata_dup",
+  "status": "warn",
+  "metric": "1 of 6001",
+  "threshold": "0",
+  "detail": "",
+  "examples": [
+   "dda3a4d5-9b8c-45cb-9d67-49f5c68ae415 node/6994541474 bone and joints"
+  ]
+ },
+ {
+  "name": "int10_orphans_ranges",
+  "status": "warn",
+  "metric": "1 orphan llm_hours rows (keep=[False]); 6 raw coords outside India; 5 of 4761 years with no year",
+  "threshold": "0",
+  "detail": "",
+  "examples": [
+   "data/crawl/pages/68908ad91c7ef7a35ae5.json.gz|text|197",
+   "364dae5c-b868-450a-9e4e-e6705852c229",
+   "515fb95f-d589-418f-b510-d8bf7438f884",
+   "7c6e6ca4-d07f-4613-a926-47d5ae7a2afe",
+   "0"
+  ]
+ },
+ {
+  "name": "m01_duplicate_groups_in_packs",
+  "status": "warn",
+  "metric": "259 of 29839 distinct lists hold 2+ records of one duplicate group; 2158 of 137977 (service, PIN) entries; 165 of 11505 pack evidence rows are non-canonical copies",
+  "threshold": "0",
+  "detail": "build_packs.top_lists ranks every record; facts.json does not export dup_group_id",
+  "examples": [
+   "arunachal_pradesh.json.gz list 34: ['b2db2916', 'e93a7ae0', '2ee91ec2']",
+   "arunachal_pradesh.json.gz list 35: ['2ee91ec2', 'b2db2916', 'e93a7ae0']",
+   "arunachal_pradesh.json.gz list 36: ['b2db2916', 'e93a7ae0', 'ae711d74']",
+   "arunachal_pradesh.json.gz list 59: ['95348d2b', 'b2db2916', 'e93a7ae0', '7d528d2e']",
+   "assam.json.gz list 98: ['95348d2b', 'b2db2916', 'e93a7ae0', '587bf5c2']"
+  ]
+ },
+ {
+  "name": "m02_description_split_at_abbreviations",
+  "status": "warn",
+  "metric": "1765 of 18388 description sentences end at an abbreviation (1179 records); 471 are a bare fragment like 'Dr.'",
+  "threshold": "0",
+  "detail": "cleaning/claims/build_claims.py:44 splits on '([.!?])\\s+' with no abbreviation guard",
+  "examples": [
+   "fc933a2e:desc:4 Dr.",
+   "42d62a1a:desc:2 Parag C.",
+   "2f715935:desc:1 The clinic is visited by gynecologist Dr.",
+   "aece024e:desc:1 Deepak Rajaram Nevrekar; offers pathology, hematology, biochemistry, serology, microbiology, hormones, and digital X-Ray imaging; home service including home blood sample collections; authorized collection centre for Metropolis Healthcare Limited, SRL Diagnostics, Dr.",
+   "0692f4c1:desc:2 Rbm Hospital Pvt Ltd."
+  ]
+ },
+ {
+  "name": "m03_auditor_suite_order",
+  "status": "warn",
+  "metric": "check_enums reads schema_profile output: True; runs before check_schema_profile: True",
+  "threshold": "",
+  "detail": "reproduced: a clean rerun reported check_enums FileNotFoundError",
+  "examples": []
+ },
+ {
+  "name": "m04_pin_dtype",
+  "status": "warn",
+  "metric": "facility_location.pin double, pin_gazetteer.pin int64",
+  "threshold": "same type",
+  "detail": "a PIN stored as double prints 112001.0 in a Delta table or Genie answer",
+  "examples": []
+ },
+ {
+  "name": "m05_uncited_service_points",
+  "status": "warn",
+  "metric": "1280 service points cite no sentence ({'tag_only': 1213, 'attributed_elsewhere': 29, 'counter_evidence': 20, 'weak': 18}); 18 graded weak; 1019 of 11505 pack evidence rows carry no quote",
+  "threshold": "weak = 0",
+  "detail": "G_amb grades count ambiguous mentions but cite_evidence keeps only own sentences",
+  "examples": [
+   "svc:07f992f7-29f2-466c-b012-c19a24ddc895:burns",
+   "svc:07f992f7-29f2-466c-b012-c19a24ddc895:trauma",
+   "svc:181d14e0-c9ab-430b-88fe-ae104b11225e:trauma",
+   "svc:1f9f026a-6969-4696-9c46-da8727e40656:icu",
+   "svc:2ee91ec2-1e36-4498-a1a5-ef628c7eb9b4:nicu"
+  ]
+ }
+]

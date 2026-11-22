@@ -1,0 +1,248 @@
+{
+ "rows_fit_half": 52050,
+ "rows_test_half": 54035,
+ "test_base_rate": 0.2394,
+ "logloss_per_value_weights": 0.4505,
+ "logloss_binary_label_interface": 0.4555,
+ "logloss_constant_rate": 0.5504,
+ "prior_strength_M": 20,
+ "pairs": 1346,
+ "group_rates": {
+  "label:blood_bank": [
+   28,
+   35
+  ],
+  "label:burn_care": [
+   103,
+   151
+  ],
+  "label:cardiac_surgery": [
+   488,
+   821
+  ],
+  "label:cataract_surgery": [
+   575,
+   688
+  ],
+  "label:cath_lab_angioplasty": [
+   52,
+   65
+  ],
+  "label:chemotherapy": [
+   517,
+   1663
+  ],
+  "label:de_addiction": [
+   126,
+   255
+  ],
+  "label:dialysis": [
+   29,
+   33
+  ],
+  "label:emergency_24x7": [
+   1704,
+   2143
+  ],
+  "label:eye_emergency": [
+   106,
+   270
+  ],
+  "label:high_risk_pregnancy": [
+   270,
+   749
+  ],
+  "label:hiv_art": [
+   0,
+   4
+  ],
+  "label:icu": [
+   1289,
+   1784
+  ],
+  "label:institutional_delivery": [
+   201,
+   363
+  ],
+  "label:kidney_transplant": [
+   96,
+   132
+  ],
+  "label:neurosurgery": [
+   1434,
+   2725
+  ],
+  "label:nicu": [
+   4,
+   4
+  ],
+  "label:orthopaedic_trauma_surgery": [
+   34,
+   49
+  ],
+  "label:picu": [
+   132,
+   223
+  ],
+  "label:psychiatric_care": [
+   372,
+   1672
+  ],
+  "label:radiotherapy": [
+   104,
+   123
+  ],
+  "label:snakebite_antivenom": [
+   1,
+   2
+  ],
+  "label:stroke_care": [
+   11,
+   42
+  ],
+  "label:surgical_oncology": [
+   733,
+   1486
+  ],
+  "label:tb_care": [
+   5,
+   7
+  ],
+  "label:trauma_care": [
+   33,
+   49
+  ],
+  "label:ultrasound": [
+   8,
+   9
+  ],
+  "label:ventilator_support": [
+   0,
+   1
+  ],
+  "prereq:blood_bank": [
+   123,
+   530
+  ],
+  "prereq:burn_care": [
+   163,
+   1800
+  ],
+  "prereq:cardiac_surgery": [
+   1031,
+   4881
+  ],
+  "prereq:cataract_surgery": [
+   760,
+   2833
+  ],
+  "prereq:cath_lab_angioplasty": [
+   846,
+   3313
+  ],
+  "prereq:chemotherapy": [
+   414,
+   3623
+  ],
+  "prereq:ct_scan": [
+   1403,
+   3729
+  ],
+  "prereq:dialysis": [
+   889,
+   2280
+  ],
+  "prereq:emergency_24x7": [
+   11,
+   12
+  ],
+  "prereq:emergency_csection": [
+   562,
+   6176
+  ],
+  "prereq:eye_emergency": [
+   202,
+   2833
+  ],
+  "prereq:high_risk_pregnancy": [
+   463,
+   4602
+  ],
+  "prereq:hiv_art": [
+   39,
+   1033
+  ],
+  "prereq:icu": [
+   902,
+   1559
+  ],
+  "prereq:institutional_delivery": [
+   1011,
+   4602
+  ],
+  "prereq:kidney_transplant": [
+   956,
+   5634
+  ],
+  "prereq:mri": [
+   951,
+   3729
+  ],
+  "prereq:neurosurgery": [
+   575,
+   1758
+  ],
+  "prereq:nicu": [
+   1183,
+   4795
+  ],
+  "prereq:orthopaedic_trauma_surgery": [
+   541,
+   3767
+  ],
+  "prereq:paediatric_inpatient": [
+   34,
+   3460
+  ],
+  "prereq:picu": [
+   306,
+   3460
+  ],
+  "prereq:radiotherapy": [
+   32,
+   110
+  ],
+  "prereq:snakebite_antivenom": [
+   1,
+   12
+  ],
+  "prereq:stemi_thrombolysis": [
+   28,
+   3310
+  ],
+  "prereq:stroke_care": [
+   106,
+   2146
+  ],
+  "prereq:surgical_oncology": [
+   421,
+   3093
+  ],
+  "prereq:tb_care": [
+   233,
+   2780
+  ],
+  "prereq:trauma_care": [
+   852,
+   3201
+  ],
+  "prereq:ultrasound": [
+   1756,
+   3729
+  ],
+  "prereq:ventilator_support": [
+   201,
+   1747
+  ]
+ }
+}

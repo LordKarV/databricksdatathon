@@ -6,13 +6,14 @@ copying them. Local snapshot only; no warehouse queries.
 from __future__ import annotations
 
 import hashlib
+import os
 import sys
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/karthikvattem/projects/datathon")
-RAW = ROOT / "data/raw"
+ROOT = Path(os.environ.get("DATATHON_ROOT", Path(__file__).resolve().parents[2]))
+RAW = Path(os.environ.get("DATATHON_DATA_ROOT", ROOT / "data")) / "raw"
 OUT = ROOT / "derived/v1"
 WORK = OUT / "_work"  # intermediate tables, removed by package.py
 HERE = Path(__file__).resolve().parent

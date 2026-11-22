@@ -1,0 +1,883 @@
+{
+ "test_exclusion": {
+  "test_facilities": 150,
+  "test_groups": 150,
+  "blocked_facilities": 209,
+  "removed": {
+   "gold_dev_pairs": {
+    "rows": 0,
+    "facilities": 0
+   },
+   "gold_dev_facility": {
+    "rows": 0,
+    "facilities": 0
+   },
+   "pu_labels": {
+    "rows": 1237,
+    "facilities": 197
+   }
+  }
+ },
+ "y_S_cc": {
+  "burn_care": {
+   "pos": 15,
+   "neg": 7,
+   "missing": 50
+  },
+  "cardiac_surgery": {
+   "pos": 26,
+   "neg": 12,
+   "missing": 39
+  },
+  "dialysis": {
+   "pos": 28,
+   "neg": 4,
+   "missing": 47
+  },
+  "emergency_24x7": {
+   "pos": 18,
+   "neg": 8,
+   "missing": 55
+  },
+  "emergency_csection": {
+   "pos": 20,
+   "neg": 7,
+   "missing": 55
+  },
+  "mri": {
+   "pos": 16,
+   "neg": 5,
+   "missing": 47
+  },
+  "nicu": {
+   "pos": 21,
+   "neg": 4,
+   "missing": 55
+  },
+  "stemi_thrombolysis": {
+   "pos": 14,
+   "neg": 2,
+   "missing": 8
+  },
+  "trauma_care": {
+   "pos": 10,
+   "neg": 4,
+   "missing": 20
+  }
+ },
+ "y_S_cc_by_operator": {
+  "private": {
+   "pos": 137,
+   "neg": 49,
+   "missing": 291
+  },
+  "public": {
+   "pos": 28,
+   "neg": 3,
+   "missing": 45
+  },
+  "unknown": {
+   "pos": 3,
+   "neg": 1,
+   "missing": 40
+  }
+ },
+ "y_S_by_operator": {
+  "private": {
+   "pos": 137,
+   "neg": 242,
+   "missing": 98
+  },
+  "public": {
+   "pos": 28,
+   "neg": 30,
+   "missing": 18
+  },
+  "unknown": {
+   "pos": 3,
+   "neg": 30,
+   "missing": 11
+  }
+ },
+ "y_S_cc_by_version": {
+  "e2e": {
+   "pos": 15,
+   "neg": 15,
+   "missing": 91
+  },
+  "v1": {
+   "pos": 15,
+   "neg": 7,
+   "missing": 14
+  },
+  "v2": {
+   "pos": 31,
+   "neg": 4,
+   "missing": 105
+  },
+  "v3_dev": {
+   "pos": 107,
+   "neg": 27,
+   "missing": 166
+  }
+ },
+ "v3_cc_kish_n_eff": {
+  "n": 134,
+  "n_eff": 43.2,
+  "by_service": {
+   "burn_care": {
+    "n": 15,
+    "n_eff": 10.5
+   },
+   "cardiac_surgery": {
+    "n": 20,
+    "n_eff": 11.5
+   },
+   "dialysis": {
+    "n": 15,
+    "n_eff": 6.7
+   },
+   "emergency_24x7": {
+    "n": 16,
+    "n_eff": 5.9
+   },
+   "emergency_csection": {
+    "n": 11,
+    "n_eff": 7.7
+   },
+   "mri": {
+    "n": 13,
+    "n_eff": 6.3
+   },
+   "nicu": {
+    "n": 14,
+    "n_eff": 7.8
+   },
+   "stemi_thrombolysis": {
+    "n": 16,
+    "n_eff": 9.6
+   },
+   "trauma_care": {
+    "n": 14,
+    "n_eff": 8.1
+   }
+  }
+ },
+ "gold_rows": 601,
+ "gold_primary": 597,
+ "by_version": {
+  "v3_dev": 300,
+  "v2": 140,
+  "e2e": 125,
+  "v1": 36
+ },
+ "dup_conflicts": 0,
+ "gold_cites_list": 13,
+ "y_S": {
+  "burn_care": {
+   "pos": 15,
+   "neg": 34,
+   "missing": 23
+  },
+  "cardiac_surgery": {
+   "pos": 26,
+   "neg": 37,
+   "missing": 14
+  },
+  "dialysis": {
+   "pos": 28,
+   "neg": 43,
+   "missing": 8
+  },
+  "emergency_24x7": {
+   "pos": 18,
+   "neg": 37,
+   "missing": 26
+  },
+  "emergency_csection": {
+   "pos": 20,
+   "neg": 53,
+   "missing": 9
+  },
+  "mri": {
+   "pos": 16,
+   "neg": 32,
+   "missing": 20
+  },
+  "nicu": {
+   "pos": 21,
+   "neg": 34,
+   "missing": 25
+  },
+  "stemi_thrombolysis": {
+   "pos": 14,
+   "neg": 10,
+   "missing": 0
+  },
+  "trauma_care": {
+   "pos": 10,
+   "neg": 22,
+   "missing": 2
+  }
+ },
+ "y_S_by_version": {
+  "e2e": {
+   "pos": 15,
+   "neg": 61,
+   "missing": 45
+  },
+  "v1": {
+   "pos": 15,
+   "neg": 20,
+   "missing": 1
+  },
+  "v2": {
+   "pos": 31,
+   "neg": 51,
+   "missing": 58
+  },
+  "v3_dev": {
+   "pos": 107,
+   "neg": 170,
+   "missing": 23
+  }
+ },
+ "fac_rows": 630,
+ "fac_by_src": {
+  "gold_dev": 575,
+  "geo_hand_check": 29,
+  "cleaning_hand_check": 26
+ },
+ "y_L": {
+  "cleaning_hand_check": {
+   "pos": 22,
+   "neg": 4,
+   "missing": 0
+  },
+  "geo_hand_check": {
+   "pos": 27,
+   "neg": 2,
+   "missing": 0
+  },
+  "gold_dev": {
+   "pos": 354,
+   "neg": 34,
+   "missing": 187
+  }
+ },
+ "y_E": {
+  "1.0": 394,
+  "NaN": 134,
+  "0.0": 47
+ },
+ "y_E_strict": {
+  "1.0": 394,
+  "NaN": 181
+ },
+ "gold_groups": 524,
+ "gold_states": 33,
+ "pu": [
+  {
+   "label_family": "eraktkosh",
+   "service": "blood_bank",
+   "excluded_expired": 0,
+   "positive": 343,
+   "unlabeled": 5105
+  },
+  {
+   "label_family": "laqshya",
+   "service": "emergency_csection",
+   "excluded_expired": 25,
+   "positive": 9,
+   "unlabeled": 111
+  },
+  {
+   "label_family": "laqshya",
+   "service": "institutional_delivery",
+   "excluded_expired": 30,
+   "positive": 9,
+   "unlabeled": 106
+  },
+  {
+   "label_family": "mohfw_tcf",
+   "service": "trauma_care",
+   "excluded_expired": 0,
+   "positive": 15,
+   "unlabeled": 342
+  },
+  {
+   "label_family": "nabh",
+   "service": "cardiac_surgery",
+   "excluded_expired": 0,
+   "positive": 510,
+   "unlabeled": 505
+  },
+  {
+   "label_family": "nabh",
+   "service": "cath_lab_angioplasty",
+   "excluded_expired": 0,
+   "positive": 510,
+   "unlabeled": 505
+  },
+  {
+   "label_family": "nabh",
+   "service": "chemotherapy",
+   "excluded_expired": 0,
+   "positive": 314,
+   "unlabeled": 701
+  },
+  {
+   "label_family": "nabh",
+   "service": "dialysis",
+   "excluded_expired": 0,
+   "positive": 463,
+   "unlabeled": 552
+  },
+  {
+   "label_family": "nabh",
+   "service": "emergency_24x7",
+   "excluded_expired": 0,
+   "positive": 283,
+   "unlabeled": 732
+  },
+  {
+   "label_family": "nabh",
+   "service": "emergency_csection",
+   "excluded_expired": 0,
+   "positive": 855,
+   "unlabeled": 160
+  },
+  {
+   "label_family": "nabh",
+   "service": "high_risk_pregnancy",
+   "excluded_expired": 0,
+   "positive": 855,
+   "unlabeled": 160
+  },
+  {
+   "label_family": "nabh",
+   "service": "institutional_delivery",
+   "excluded_expired": 0,
+   "positive": 855,
+   "unlabeled": 160
+  },
+  {
+   "label_family": "nabh",
+   "service": "kidney_transplant",
+   "excluded_expired": 0,
+   "positive": 472,
+   "unlabeled": 543
+  },
+  {
+   "label_family": "nabh",
+   "service": "radiotherapy",
+   "excluded_expired": 0,
+   "positive": 314,
+   "unlabeled": 701
+  },
+  {
+   "label_family": "nabh",
+   "service": "stemi_thrombolysis",
+   "excluded_expired": 0,
+   "positive": 510,
+   "unlabeled": 505
+  },
+  {
+   "label_family": "nabh",
+   "service": "surgical_oncology",
+   "excluded_expired": 0,
+   "positive": 314,
+   "unlabeled": 701
+  },
+  {
+   "label_family": "nabh",
+   "service": "trauma_care",
+   "excluded_expired": 0,
+   "positive": 283,
+   "unlabeled": 732
+  },
+  {
+   "label_family": "nmc",
+   "service": "blood_bank",
+   "excluded_expired": 0,
+   "positive": 8,
+   "unlabeled": 61
+  },
+  {
+   "label_family": "nmc",
+   "service": "burn_care",
+   "excluded_expired": 0,
+   "positive": 15,
+   "unlabeled": 54
+  },
+  {
+   "label_family": "nmc",
+   "service": "cardiac_surgery",
+   "excluded_expired": 0,
+   "positive": 21,
+   "unlabeled": 48
+  },
+  {
+   "label_family": "nmc",
+   "service": "cataract_surgery",
+   "excluded_expired": 0,
+   "positive": 55,
+   "unlabeled": 14
+  },
+  {
+   "label_family": "nmc",
+   "service": "cath_lab_angioplasty",
+   "excluded_expired": 0,
+   "positive": 21,
+   "unlabeled": 48
+  },
+  {
+   "label_family": "nmc",
+   "service": "chemotherapy",
+   "excluded_expired": 0,
+   "positive": 4,
+   "unlabeled": 65
+  },
+  {
+   "label_family": "nmc",
+   "service": "ct_scan",
+   "excluded_expired": 0,
+   "positive": 53,
+   "unlabeled": 16
+  },
+  {
+   "label_family": "nmc",
+   "service": "de_addiction",
+   "excluded_expired": 0,
+   "positive": 47,
+   "unlabeled": 22
+  },
+  {
+   "label_family": "nmc",
+   "service": "dialysis",
+   "excluded_expired": 0,
+   "positive": 13,
+   "unlabeled": 56
+  },
+  {
+   "label_family": "nmc",
+   "service": "emergency_24x7",
+   "excluded_expired": 0,
+   "positive": 21,
+   "unlabeled": 48
+  },
+  {
+   "label_family": "nmc",
+   "service": "emergency_csection",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "eye_emergency",
+   "excluded_expired": 0,
+   "positive": 55,
+   "unlabeled": 14
+  },
+  {
+   "label_family": "nmc",
+   "service": "high_risk_pregnancy",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "icu",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "institutional_delivery",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "kidney_transplant",
+   "excluded_expired": 0,
+   "positive": 20,
+   "unlabeled": 49
+  },
+  {
+   "label_family": "nmc",
+   "service": "mri",
+   "excluded_expired": 0,
+   "positive": 53,
+   "unlabeled": 16
+  },
+  {
+   "label_family": "nmc",
+   "service": "neurosurgery",
+   "excluded_expired": 0,
+   "positive": 17,
+   "unlabeled": 52
+  },
+  {
+   "label_family": "nmc",
+   "service": "nicu",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "orthopaedic_trauma_surgery",
+   "excluded_expired": 0,
+   "positive": 60,
+   "unlabeled": 9
+  },
+  {
+   "label_family": "nmc",
+   "service": "paediatric_inpatient",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "picu",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "psychiatric_care",
+   "excluded_expired": 0,
+   "positive": 47,
+   "unlabeled": 22
+  },
+  {
+   "label_family": "nmc",
+   "service": "radiotherapy",
+   "excluded_expired": 0,
+   "positive": 16,
+   "unlabeled": 53
+  },
+  {
+   "label_family": "nmc",
+   "service": "safe_abortion_mtp",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "nmc",
+   "service": "stemi_thrombolysis",
+   "excluded_expired": 0,
+   "positive": 31,
+   "unlabeled": 38
+  },
+  {
+   "label_family": "nmc",
+   "service": "stroke_care",
+   "excluded_expired": 0,
+   "positive": 17,
+   "unlabeled": 52
+  },
+  {
+   "label_family": "nmc",
+   "service": "surgical_oncology",
+   "excluded_expired": 0,
+   "positive": 8,
+   "unlabeled": 61
+  },
+  {
+   "label_family": "nmc",
+   "service": "tb_care",
+   "excluded_expired": 0,
+   "positive": 41,
+   "unlabeled": 28
+  },
+  {
+   "label_family": "nmc",
+   "service": "trauma_care",
+   "excluded_expired": 0,
+   "positive": 60,
+   "unlabeled": 9
+  },
+  {
+   "label_family": "nmc",
+   "service": "ultrasound",
+   "excluded_expired": 0,
+   "positive": 53,
+   "unlabeled": 16
+  },
+  {
+   "label_family": "nmc",
+   "service": "ventilator_support",
+   "excluded_expired": 0,
+   "positive": 59,
+   "unlabeled": 10
+  },
+  {
+   "label_family": "pmndp_goa",
+   "service": "dialysis",
+   "excluded_expired": 0,
+   "positive": 1,
+   "unlabeled": 1
+  }
+ ],
+ "pu_pos_weight": [
+  {
+   "label_family": "eraktkosh",
+   "service": "blood_bank",
+   "weight": 274.4
+  },
+  {
+   "label_family": "laqshya",
+   "service": "emergency_csection",
+   "weight": 7.65
+  },
+  {
+   "label_family": "laqshya",
+   "service": "institutional_delivery",
+   "weight": 7.65
+  },
+  {
+   "label_family": "mohfw_tcf",
+   "service": "trauma_care",
+   "weight": 14.25
+  },
+  {
+   "label_family": "nabh",
+   "service": "cardiac_surgery",
+   "weight": 497.25
+  },
+  {
+   "label_family": "nabh",
+   "service": "cath_lab_angioplasty",
+   "weight": 497.25
+  },
+  {
+   "label_family": "nabh",
+   "service": "chemotherapy",
+   "weight": 306.15
+  },
+  {
+   "label_family": "nabh",
+   "service": "dialysis",
+   "weight": 451.42
+  },
+  {
+   "label_family": "nabh",
+   "service": "emergency_24x7",
+   "weight": 275.92
+  },
+  {
+   "label_family": "nabh",
+   "service": "emergency_csection",
+   "weight": 833.62
+  },
+  {
+   "label_family": "nabh",
+   "service": "high_risk_pregnancy",
+   "weight": 833.62
+  },
+  {
+   "label_family": "nabh",
+   "service": "institutional_delivery",
+   "weight": 833.62
+  },
+  {
+   "label_family": "nabh",
+   "service": "kidney_transplant",
+   "weight": 460.2
+  },
+  {
+   "label_family": "nabh",
+   "service": "radiotherapy",
+   "weight": 306.15
+  },
+  {
+   "label_family": "nabh",
+   "service": "stemi_thrombolysis",
+   "weight": 497.25
+  },
+  {
+   "label_family": "nabh",
+   "service": "surgical_oncology",
+   "weight": 306.15
+  },
+  {
+   "label_family": "nabh",
+   "service": "trauma_care",
+   "weight": 275.92
+  },
+  {
+   "label_family": "nmc",
+   "service": "blood_bank",
+   "weight": 7.6
+  },
+  {
+   "label_family": "nmc",
+   "service": "burn_care",
+   "weight": 14.25
+  },
+  {
+   "label_family": "nmc",
+   "service": "cardiac_surgery",
+   "weight": 15.2
+  },
+  {
+   "label_family": "nmc",
+   "service": "cataract_surgery",
+   "weight": 52.25
+  },
+  {
+   "label_family": "nmc",
+   "service": "cath_lab_angioplasty",
+   "weight": 19.95
+  },
+  {
+   "label_family": "nmc",
+   "service": "chemotherapy",
+   "weight": 3.8
+  },
+  {
+   "label_family": "nmc",
+   "service": "ct_scan",
+   "weight": 25.17
+  },
+  {
+   "label_family": "nmc",
+   "service": "de_addiction",
+   "weight": 22.32
+  },
+  {
+   "label_family": "nmc",
+   "service": "dialysis",
+   "weight": 12.35
+  },
+  {
+   "label_family": "nmc",
+   "service": "emergency_24x7",
+   "weight": 19.95
+  },
+  {
+   "label_family": "nmc",
+   "service": "emergency_csection",
+   "weight": 56.05
+  },
+  {
+   "label_family": "nmc",
+   "service": "eye_emergency",
+   "weight": 26.12
+  },
+  {
+   "label_family": "nmc",
+   "service": "high_risk_pregnancy",
+   "weight": 28.02
+  },
+  {
+   "label_family": "nmc",
+   "service": "icu",
+   "weight": 29.45
+  },
+  {
+   "label_family": "nmc",
+   "service": "institutional_delivery",
+   "weight": 56.05
+  },
+  {
+   "label_family": "nmc",
+   "service": "kidney_transplant",
+   "weight": 9.5
+  },
+  {
+   "label_family": "nmc",
+   "service": "mri",
+   "weight": 25.17
+  },
+  {
+   "label_family": "nmc",
+   "service": "neurosurgery",
+   "weight": 16.15
+  },
+  {
+   "label_family": "nmc",
+   "service": "nicu",
+   "weight": 29.92
+  },
+  {
+   "label_family": "nmc",
+   "service": "orthopaedic_trauma_surgery",
+   "weight": 57.0
+  },
+  {
+   "label_family": "nmc",
+   "service": "paediatric_inpatient",
+   "weight": 56.05
+  },
+  {
+   "label_family": "nmc",
+   "service": "picu",
+   "weight": 28.02
+  },
+  {
+   "label_family": "nmc",
+   "service": "psychiatric_care",
+   "weight": 44.65
+  },
+  {
+   "label_family": "nmc",
+   "service": "radiotherapy",
+   "weight": 15.2
+  },
+  {
+   "label_family": "nmc",
+   "service": "safe_abortion_mtp",
+   "weight": 28.02
+  },
+  {
+   "label_family": "nmc",
+   "service": "stemi_thrombolysis",
+   "weight": 14.72
+  },
+  {
+   "label_family": "nmc",
+   "service": "stroke_care",
+   "weight": 8.07
+  },
+  {
+   "label_family": "nmc",
+   "service": "surgical_oncology",
+   "weight": 7.6
+  },
+  {
+   "label_family": "nmc",
+   "service": "tb_care",
+   "weight": 38.95
+  },
+  {
+   "label_family": "nmc",
+   "service": "trauma_care",
+   "weight": 42.28
+  },
+  {
+   "label_family": "nmc",
+   "service": "ultrasound",
+   "weight": 25.17
+  },
+  {
+   "label_family": "nmc",
+   "service": "ventilator_support",
+   "weight": 28.02
+  },
+  {
+   "label_family": "pmndp_goa",
+   "service": "dialysis",
+   "weight": 1.0
+  }
+ ]
+}

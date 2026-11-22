@@ -21,8 +21,8 @@ derived/v1 score and interval. Each pack records its band source. Ranking is str
 the decision layer's expected time to treatment.
 
 Run from the repo root:  .venv-app/bin/python app/packs/build_packs.py [--states BIHAR,...]
-Writes app/packs/out/<slug>.json.gz (git-ignored: facility data), out/index.json, app/packs/sizes.json
-and app/packs/SIZES.md.
+Writes app/packs/out/<slug>.json.gz (git-ignored: facility data), out/index.json (with each state's facility
+points for the radius rule in /api/pack/locate), app/packs/sizes.json and app/packs/SIZES.md.
 """
 from __future__ import annotations
 
@@ -30,14 +30,33 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-DERIVED = ROOT / "derived" / "v1"
+# DATATHON_ROOT: the folder holding derived/v1 (the volume that submission/00_rebuild_derived.ipynb writes to);
+# default this repo. Same variable as app/facts/build.py and planner/data_v1.py (#86 step 2).
+DERIVED = Path(os.environ.get("DATATHON_ROOT") or ROOT) / "derived" / "v1"
+sys.path.insert(0, str(ROOT))
+from common.eligibility import (  # noqa: E402, RUF100
+    eligible_facilities,
+    eligible_pairs,
+    groups,
+    report,
+    same_site_groups,
+    to_sites,
+)
+from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
+
+sys.path.insert(0, str(ROOT / "app"))  # facts.redact: the same name redaction as the live answer (#86)
+from facts.build import moved_pins, not_centre, pin_table  # noqa: E402, RUF100
+from facts.redact import redact_names  # noqa: E402, RUF100
+
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
 
@@ -47,7 +66,9 @@ TOP_K = 3
 QUOTE_MAX = 160  # characters on a phone card; longer quotes are cut with "..."
 FAC_SCALE = 10_000  # facility coordinates in 1e-4 degree (about 11 m)
 PIN_SCALE = 1_000  # PIN centroids in 1e-3 degree (about 110 m)
+PTS_SCALE = 10  # index.json facility points in 0.1 degree (at most about 8 km off): enough for a 150 km radius test
 MODEL_SCORES = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
+ATTRS = ROOT / "derived" / "v2" / "facility_attributes.parquet"  # facilityTypeId, for the type-fit rule (#117 B)
 
 # derived/v1 service names -> app service keys (app/stub_data.py). "icu" has no app tile, so it is dropped.
 SERVICE_MAP = {
@@ -55,42 +76,82 @@ SERVICE_MAP = {
     "dialysis": "dialysis", "mri": "mri", "cardiac_surgery": "cardiac_surgery",
 }
 SERVICES = list(SERVICE_MAP.values())
-EXCLUDED_GRADES = {"attributed_elsewhere", "counter_evidence"}
+TAXONOMY_TO_APP = {"trauma_care": "trauma_emergency"}  # kb/taxonomy ids that differ from the app keys
+V2_BAND = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
 
 
 def slug(state: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", state.lower()).strip("_")
 
 
+def _is_list(x: object) -> bool:
+    """A parquet list cell (array or list); False for None or NaN (a record with no trust row)."""
+    return isinstance(x, (list, tuple, np.ndarray))
+
+
 def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Returns facilities, candidate (facility, service) evidence rows, and PINs."""
     loc = pd.read_parquet(DERIVED / "facility_location.parquet",
-                          columns=["unique_id", "name", "loc_lat", "loc_lon", "loc_conf"])
-    trust = pd.read_parquet(DERIVED / "record_trust.parquet", columns=["unique_id", "display_phones", "trust_flags"])
-    fac = loc.merge(trust, on="unique_id", how="left").dropna(subset=["loc_lat", "loc_lon"])
+                          columns=["unique_id", "name", "loc_lat", "loc_lon", "loc_conf", "state_final"])
+    trust = pd.read_parquet(DERIVED / "record_trust.parquet",
+                            columns=["unique_id", "display_phones", "trust_flags", "trust_level"])
+    fac = loc.merge(trust, on="unique_id", how="left")
+    keep, counts = eligible_facilities(fac)  # same rule as the facts engine and the planner (#78)
+    report("packs.facilities", counts)
+    fac = fac[keep]
+    fac["state_final"] = fac.state_final.fillna("")
     # Facility switchboard only: the record's own first phone, never a chain helpline. A phone the cleaning
     # step marked as a directory number is kept but flagged so the card can say so.
-    fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if p is not None and len(p) else "")
-    fac["tel_dir"] = fac.trust_flags.map(lambda f: int(f is not None and "official_phone_is_directory" in list(f)))
+    fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if _is_list(p) and len(p) else "")
+    fac["tel_dir"] = fac.trust_flags.map(lambda f: int(_is_list(f) and "official_phone_is_directory" in list(f)))
 
     dps = pd.read_parquet(DERIVED / "data_point_scores.parquet",
                           columns=["dp_type", "unique_id", "claim_id", "service", "original_value",
                                    "score", "score_lo", "score_hi", "status", "grade"])
-    svc = dps[(dps.dp_type == "service_claim") & dps.service.isin(SERVICE_MAP)
-              & ~dps.grade.isin(EXCLUDED_GRADES) & (dps.status != "verified_false")].copy()
+    svc = dps[(dps.dp_type == "service_claim") & dps.service.isin(SERVICE_MAP)].copy()
+    keep, counts = eligible_pairs(svc)
+    report("packs.pairs", counts)
+    svc = svc[keep]
     svc["service"] = svc.service.map(SERVICE_MAP)
     svc = svc[svc.unique_id.isin(fac.unique_id)]
-    svc = apply_bands(svc.reset_index(drop=True), MODEL_SCORES)
+    # Duplicate listings of one site become one facility (#78): the canonical record, with every member's quotes.
+    sites, counts = same_site_groups(groups(DERIVED), fac)
+    report("packs.same_site_groups", counts)
+    text_of = {(u, sv): v for u, sv, v in zip(svc.unique_id, svc.service, svc.original_value, strict=True)}
+    svc, counts = to_sites(svc, sites)
+    report("packs.duplicates", counts)
+    svc = type_fit(svc, fac)
+    svc = apply_bands(svc, MODEL_SCORES)
 
-    # Sentence text -> claim id, so every quote cites the claim it came from.
+    # Sentence text -> claim id, so every quote cites the claim it came from (a merged member's own claim id).
     sent = dps[dps.dp_type == "claim_attribution"][["unique_id", "claim_id", "original_value"]]
     cid = {(u, t): c for u, c, t in sent.itertuples(index=False)}
-    svc["quotes"] = [_two_shortest(u, v, cid) for u, v in zip(svc.unique_id, svc.original_value, strict=True)]
+    svc["quotes"] = [_site_quotes(rep, [(m, text_of[(m, sv)]) for m in members], cid)
+                     for rep, sv, members in zip(svc.unique_id, svc.service, svc.members, strict=True)]
 
     pins = pd.read_parquet(DERIVED / "pin_gazetteer.parquet", columns=["pin", "state", "district", "lat", "lon"])
     pins = pins.dropna(subset=["state", "lat", "lon"])
     pins["district"] = pins.district.fillna("")
     return fac.reset_index(drop=True), svc.reset_index(drop=True), pins.reset_index(drop=True)
+
+
+def centre_skip() -> frozenset[int]:
+    """facts/build.py not_centre on the same gazetteer: PINs the area view names another district for (LGD correction).
+
+    offline.js districtCentre skips them as facts/places.py does online, so both pick the same centre PIN and the
+    area view there names the district. Only for that choice: the pack keeps each PIN's own district.
+    """
+    return frozenset(not_centre(pin_table(DERIVED), moved_pins()))
+
+
+def type_fit(svc: pd.DataFrame, fac: pd.DataFrame) -> pd.DataFrame:
+    """Drop pairs whose facility type cannot offer the service: the app's and the planner's rule (common/typefit.py)."""
+    types = (pd.read_parquet(ATTRS, columns=["unique_id", "facilityTypeId"]).set_index("unique_id").facilityTypeId
+             if ATTRS.is_file() else pd.Series(dtype=object))
+    kinds = kinds_by_id(fac.unique_id, fac.name, fac.unique_id.map(types))
+    keep, counts = fit_mask(svc.unique_id, svc.service, kinds)
+    report("packs.type_fit_left_out", counts)
+    return svc[keep]
 
 
 def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
@@ -103,9 +164,10 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
         out.attrs["band_source"] = "placeholder: likely only for pairs verified true; model scores not published yet"
         return out
     m = pd.read_parquet(model_path, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "as_of"])
-    # Accept derived/v1 service names or app keys for service_id.
-    m["service"] = m.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+    # service_id is a kb/taxonomy id (derived/v2); also accept derived/v1 names or app keys.
+    m["service"] = m.service_id.map(lambda s: TAXONOMY_TO_APP.get(s, SERVICE_MAP.get(s, s)))
     m = m[m.service.isin(SERVICES)].drop_duplicates(["unique_id", "service"])
+    m["band"] = m.band.map(lambda b: V2_BAND.get(str(b).upper(), b))  # the same mapping as app/facts/build.py
     unknown = set(m.band) - {"likely", "not_verified", "unlikely"}
     if unknown:
         raise ValueError(f"unknown bands in {model_path}: {sorted(unknown)}")
@@ -117,14 +179,31 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
     return out
 
 
-def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
-    """The two shortest distinct cited sentences as (text, claim_id suffix after uid8)."""
-    parts = sorted({p.strip() for p in (joined or "").split(" || ") if p.strip()}, key=len)[:2]
+def _site_quotes(rep: str, members: list[tuple[str, str | None]], cid: dict[tuple[str, str], str]
+                 ) -> list[tuple[str, str]]:
+    """The two shortest distinct sentences over a site's listings, as (text, claim reference).
+
+    The reference is the claim id's suffix after the facility's uid8 (pack.js adds the prefix back). A sentence from
+    a merged duplicate listing keeps its own claim id, stored whole after a leading "=".
+    """
+    owner: dict[str, str] = {}
+    for m, joined in members:
+        for t in (joined or "").split(" || "):
+            if t.strip():
+                owner.setdefault(t.strip(), m)
     out = []
-    for t in parts:
-        c = cid.get((uid, t), "")
-        out.append((t if len(t) <= QUOTE_MAX else t[:QUOTE_MAX - 3] + "...", c.split(":", 1)[1] if c else ""))
+    # (length, text): ties between equal-length sentences break the same way on every build (#78)
+    for t in sorted(owner, key=lambda t: (len(t), t))[:2]:
+        c = cid.get((owner[t], t), "")
+        ref = "" if not c else (c.split(":", 1)[1] if owner[t] == rep else "=" + c)
+        shown = redact_names(t)  # never a doctor's name on a phone card (#86)
+        out.append((shown if len(shown) <= QUOTE_MAX else shown[:QUOTE_MAX - 3] + "...", ref))
     return out
+
+
+def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
+    """The two shortest distinct cited sentences of one listing as (text, claim_id suffix after uid8)."""
+    return _site_quotes(uid, [(uid, joined)], cid)
 
 
 def _haversine(lat1: np.ndarray, lon1: np.ndarray, lat2: np.ndarray, lon2: np.ndarray) -> np.ndarray:
@@ -154,7 +233,9 @@ def delta(values: np.ndarray) -> list[int]:
     return np.diff(v, prepend=0).tolist()
 
 
-def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataFrame, built: str) -> dict:
+def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataFrame, built: str,
+                skip: frozenset[int] = frozenset()) -> dict:
+    """`skip`: centre_skip(), the PINs that are never a district centre."""
     sp = pins[pins.state == state].sort_values("pin").reset_index(drop=True)
     fac_ll = fac.set_index("unique_id")[["loc_lat", "loc_lon"]]
     per_service: dict[str, list[tuple[int, ...]]] = {}
@@ -166,6 +247,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
     ev = svc.loc[used_ev]
     # Facilities sorted by latitude so the coordinate deltas stay small.
     f = fac[fac.unique_id.isin(ev.unique_id)].sort_values(["loc_lat", "loc_lon"]).reset_index(drop=True)
+    listings = dict(zip(ev.unique_id, ev.listings, strict=False))
     fidx = {u: i for i, u in enumerate(f.unique_id)}
     ev = ev.assign(f=ev.unique_id.map(fidx), s=ev.service.map(SERVICES.index)).sort_values(["f", "s"])
     evidx = {old: new for new, old in enumerate(ev.index)}
@@ -183,6 +265,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
         index[s] = [lists.setdefault(tuple(evidx[i] for i in lst), len(lists)) for lst in per_service[s]]
     districts = sorted(set(sp.district))
     didx = {d: i for i, d in enumerate(districts)}
+    fac_states = sorted(set(f.state_final))  # a card says "in <state>" when the facility is across the border
 
     return {
         "v": FORMAT_VERSION, "state": state, "built": built, "source": "derived/v1",
@@ -192,8 +275,11 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
         "fac": {
             "uid8": [u[:8] for u in f.unique_id], "name": f.name.tolist(), "tel": f.tel.tolist(),
             "tel_dir": f.tel_dir.tolist(), "loc_low": [int(c != "high") for c in f.loc_conf],
+            "dup": f.unique_id.map(listings).fillna(1).astype(int).tolist(),  # duplicate listings merged (#78)
             "lat": delta(np.round(f.loc_lat * FAC_SCALE)), "lon": delta(np.round(f.loc_lon * FAC_SCALE)),
+            "st": [fac_states.index(x) for x in f.state_final],
         },
+        "fac_states": fac_states,
         "ev": {
             "f": delta(ev.f), "s": ev.s.tolist(), "likely": ev.likely.tolist(),
             "p": np.round(ev.score * 100).astype(int).tolist(),
@@ -208,11 +294,22 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
             "lat": delta(np.round(sp.lat * PIN_SCALE)),
             "lon": delta(np.round(sp.lon * PIN_SCALE)),
             "d": [didx[d] for d in sp.district],
+            "not_centre": [int(x) for x in sp.pin if int(x) in skip],
         },
         "districts": districts,
         "index": index,
         "scale": {"fac": FAC_SCALE, "pin": PIN_SCALE},
     }
+
+
+def state_points(state: str, fac: pd.DataFrame, svc: pd.DataFrame) -> list[list[int]]:
+    """Distinct 0.1-degree points of the state's own facilities that offer any app service, for index.json.
+
+    /api/pack/locate saves every pack with such a point within the planner's radius of the phone.
+    """
+    f = fac[(fac.state_final == state) & fac.unique_id.isin(svc.unique_id)]
+    pts = np.unique(np.round(f[["loc_lat", "loc_lon"]].to_numpy() * PTS_SCALE).astype(int), axis=0)
+    return pts.tolist()
 
 
 def encode(pack: dict) -> tuple[bytes, bytes]:
@@ -234,6 +331,18 @@ def self_check(pack: dict, n_pins: int) -> None:
                 assert pack["services"][pack["ev"]["s"][e]] == s, "list row has the wrong service"
                 q = pack["ev"]["q1"][e]
                 assert q == -1 or pack["q"][q][0], "empty quote"
+
+
+def write_pin_index(pins: pd.DataFrame, out: Path) -> None:
+    """All-India PIN -> state table for /api/pack/locate, written on every build (also partial ones), so the
+    server resolves the right state even when that state's pack is not built."""
+    p = pins.sort_values("pin").reset_index(drop=True)
+    states = sorted(p.state.unique())
+    sidx = {st: i for i, st in enumerate(states)}
+    obj = {"v": FORMAT_VERSION, "scale": PIN_SCALE, "states": [[slug(st), st] for st in states],
+           "pin": delta(p.pin), "lat": delta(np.round(p.lat * PIN_SCALE)), "lon": delta(np.round(p.lon * PIN_SCALE)),
+           "s": [sidx[st] for st in p.state]}
+    (out / "pin_index.json").write_text(json.dumps(obj, separators=(",", ":")) + "\n")
 
 
 def write_report(rows: list[dict]) -> None:
@@ -261,27 +370,38 @@ def main() -> int:
     ap.add_argument("--states", help="comma-separated state names (default: all)")
     ap.add_argument("--built", default=json.loads((DERIVED / "MANIFEST.json").read_text()).get("build_date", ""),
                     help="build date written into each pack")
+    ap.add_argument("--out", type=Path, default=OUT,
+                    help="output folder (default app/packs/out, which the app serves); size reports only for it")
     args = ap.parse_args()
+    out = args.out
     fac, svc, pins = load()
     states = args.states.split(",") if args.states else sorted(pins.state.unique())
     built = args.built or "unknown"
-    OUT.mkdir(exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     rows, index = [], {}
+    skip = centre_skip()
     for st in states:
-        pack = build_state(st, pins, fac, svc, built)
+        pack = build_state(st, pins, fac, svc, built, skip)
         self_check(pack, int((pins.state == st).sum()))
         raw, gz = encode(pack)
         name = slug(st)
-        (OUT / f"{name}.json.gz").write_bytes(gz)
+        (out / f"{name}.json.gz").write_bytes(gz)
         index[name] = {"state": st, "gzip_bytes": len(gz), "sha256": hashlib.sha256(gz).hexdigest()[:16],
-                       "built": built}
+                       "built": built, "pts": state_points(st, fac, svc)}
         rows.append({"state": st, "slug": name, "built": built, "pins": len(pack["pins"]["d"]),
                      "facilities": len(pack["fac"]["name"]), "evidence_rows": len(pack["ev"]["s"]),
                      "quotes": len(pack["q"]), "lists": len(pack["lists"]),
                      "raw_bytes": len(raw), "gzip_bytes": len(gz)})
-    (OUT / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "packs": index}, indent=1) + "\n")
+    # A partial build keeps the index entries of packs built earlier whose files are still there.
+    old_index = out / "index.json"
+    if args.states and old_index.is_file():
+        prev = json.loads(old_index.read_text()).get("packs", {})
+        index = {**{k: v for k, v in prev.items() if (out / f"{k}.json.gz").is_file()}, **index}
+    (out / "index.json").write_text(json.dumps({"v": FORMAT_VERSION, "pts_scale": PTS_SCALE, "packs": index},
+                                               separators=(",", ":")) + "\n")
+    write_pin_index(pins, out)
     rows.sort(key=lambda r: -r["gzip_bytes"])
-    if not args.states:
+    if not args.states and out == OUT:
         write_report(rows)
     for r in rows[:5]:
         print(f"{r['state']}: {r['gzip_bytes']:,} B gzip ({r['pins']} PINs, {r['facilities']} facilities)")

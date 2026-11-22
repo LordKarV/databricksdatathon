@@ -1,0 +1,17 @@
+group,issue,records,rows,unit_note,count,unit,rate,lo,hi
+fixed,"Malformed rows dropped (fragments, truncated)",0,118.0,"of 10,088 raw rows",118,rows,,,
+fixed,Byte-identical duplicate rows dropped,0,11.0,"9,970 well-formed rows to 9,959 records",11,rows,,,
+fixed,Residual duplicates linked into one card,152,,75 groups,152,records,0.015262576563912039,0.013034896125385055,0.01786407952429304
+fixed,"Ranked on a corrected point, not the listing pin",1171,,"postcode, city or map-link point",1171,records,0.11758208655487498,0.111402655622031,0.12405643267663272
+fixed,Directory phone removed from display,292,,,292,records,0.029320212872778393,0.02618400599698358,0.032819401223703346
+fixed,Placeholder or unparseable email dropped,376,,,376,records,0.0377547946580982,0.03418601926642303,0.04168004689686918
+fixed,Duplicate claim sentences counted once,5349,,"27,528 sentences",5349,records,0.5371021186866152,0.5272966117071519,0.5468790130463322
+fixed,Sentences naming another facility quarantined,2489,,"9,506 sentences",2489,records,0.24992469123405964,0.24151856432820218,0.2585236726175303
+flagged,Location low confidence,1142,,note cites postcode and city,1142,records,0.11467014760518124,0.10856030919498745,0.12107714684968159
+flagged,Location disputed (two candidate towns),538,,,538,records,0.05402148810121498,0.04975109158762769,0.05863581682211758
+flagged,Size or capacity implausible or contradicted,1037,,caveat line,1037,records,0.10412692037353148,0.09828013835517443,0.11027899401123797
+flagged,A strong grade backed only by a specialty tag,881,,'corroborated only by a label',881,records,0.08846269705793755,0.08304300977281735,0.09419975598589954
+flagged,Outpatient type claiming an inpatient service,574,,'ask if they admit',574,records,0.05763630886635204,0.05322732623585587,0.06238643600643452
+cannot,"Service text naming no facility, in a record naming another",1390,,"7,514 sentences; no rule can see them",1390,records,0.1395722462094588,0.13290491411975208,0.14651753499356118
+cannot,Merged record: a sentence places care at another facility,1232,,record cannot be split,1232,records,0.12370719951802389,0.11738539883614395,0.13031919178988788
+cannot,Lists cut at 50 items,1495,,a missing service may still exist,1495,records,0.15011547344110854,0.14323522805685218,0.15726554473471765

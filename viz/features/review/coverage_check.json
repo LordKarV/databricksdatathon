@@ -1,0 +1,69 @@
+{
+ "pairs": 69713,
+ "facilities": 9959,
+ "e_web_service": {
+  "coverage": 0.4886,
+  "nonzero": 0.0701
+ },
+ "e_has_website": {
+  "coverage": 1.0,
+  "nonzero": 0.8048
+ },
+ "e_site_alive": {
+  "coverage": 0.8048,
+  "nonzero": 0.5905
+ },
+ "g_log_beds": {
+  "coverage": 0.2507,
+  "nonzero": 0.2502
+ },
+ "k_text_nabh": {
+  "coverage": 1.0,
+  "nonzero": 0.1247
+ },
+ "a_prereq": {
+  "coverage": 1.0,
+  "nonzero": 0.3089
+ },
+ "a_T": {
+  "coverage": 1.0,
+  "nonzero": 0.1143
+ },
+ "d_nabh_service_code": {
+  "coverage": 0.5714,
+  "nonzero": 0.0316
+ },
+ "b_votes_against": {
+  "coverage": 1.0,
+  "nonzero": 0.2093
+ },
+ "c_share_social": {
+  "coverage": 1.0,
+  "nonzero": 0.9061
+ },
+ "c_n_urls": {
+  "coverage": 1.0,
+  "nonzero": 1.0
+ },
+ "g_n_specialties": {
+  "coverage": 1.0,
+  "nonzero": 1.0
+ },
+ "d_nabh_service_code_pairs_with_code_known": [
+  4216,
+  39836
+ ],
+ "n_features": 110,
+ "features_nonzero_below_0.001": [
+  "a_negation",
+  "c_pagecheck_supported",
+  "d_laqshya_labour_room",
+  "d_laqshya_ot_ever",
+  "d_laqshya_ot_valid",
+  "d_mohfw_trauma_centre",
+  "e_web_negated"
+ ],
+ "csection_indep_only": 1103,
+ "csection_indep_only_via_nabh_obg_only": 714,
+ "csection_text_only": 248
+}

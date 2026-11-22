@@ -1,0 +1,53 @@
+[
+ {
+  "name": "report_numbers_shown_in_app",
+  "status": "fail",
+  "metric": "4 of 17 REPORT.md cells shown in the app/notebook disagree with derived/v1",
+  "threshold": "0",
+  "detail": "cells recomputed from derived/v1; a mismatch is shown to judges on the How page and in notebook sections 2-3; the 50 km finding also disagrees with the Flagged row on the same page",
+  "examples": [
+   "findings: far >50 km: page says 1,407/9,682, derived/v1 gives 1367/9869",
+   "findings: far >100 km: page says 1,114, derived/v1 gives 1101",
+   "findings: records naming another facility: page says 1,405/9,959, derived/v1 gives 2489/9959",
+   "fixed: district and NFHS join: page says 9,961/9,970, derived/v1 gives 9934/9959"
+  ]
+ },
+ {
+  "name": "notebook_outputs_current",
+  "status": "fail",
+  "metric": "3 of 7 committed notebook numbers differ from current data",
+  "threshold": "0",
+  "detail": "submission/referral_saathi.ipynb saved outputs vs app/facts/out/facts.json.gz, app/howto/out/how.json, kb/taxonomy/lexicon.json; no validation area opens the notebook",
+  "examples": [
+   "engine pairs: notebook/how 8012, current 7980",
+   "services in the taxonomy (project and README say 36): notebook/how 37, current 36",
+   "lexicon.json services (what the cell counts): notebook/how 37, current 36"
+  ]
+ },
+ {
+  "name": "type_operator_vs_name",
+  "status": "warn",
+  "metric": "government-named records typed private: 5 of 175; public/government operator on 467 of 9959; operator null 687; 'Hospital' names typed clinic/dentist/doctor 32; clinic/dental names typed hospital 28",
+  "threshold": "hand-read precision of each cue before trusting type/operator as features",
+  "detail": "cue counts only (not hand-read); lists in validation/critic/out/",
+  "examples": [
+   "7687df38-39d2-487f-9df1-a91452c08996 'Civil Hospital Barnala' operator=private",
+   "aee4f51b-2464-483e-90f0-a9417f4b296c 'District Hospital, Kanhangad, India' operator=private",
+   "c63d560f-2d07-44fd-96c0-a61cb41dffdd 'S.N.M. District Hospital & Tuberculosis Sanatorium, Firozabad' operator=private",
+   "016ca7b7-d33d-45fa-836a-13d1fd7c3ece 'Dr. Chauhan Hirva (Aadit Eye Hospital)' type=doctor",
+   "04ad106d-21a9-4236-8754-f82c5cd6ea3d 'Patil Accident Hospital' type=clinic"
+  ]
+ },
+ {
+  "name": "dashboard_sources_vs_v1",
+  "status": "fail",
+  "metric": "3 discrepancies",
+  "threshold": "0",
+  "detail": "sources: viz/geography/data/_cache/facilities.parquet (UC geo_facility), model/proto/fusion/pair_scores.parquet (UC pair_scores); databricks/VERIFY.md checked row counts and keys only",
+  "examples": [
+   "1 exclude_review (veterinary) records count as service claims in geo_facility: ['885c79f6-9f32-4878-8384-5a90259cfae4']",
+   "pair_scores scores 12 veterinary records (84 rows)",
+   "pair_scores bands for the 7 app services {'Unlikely': 37108, 'Unverified': 32603, 'Likely': 2} (prototype model) vs app interim rule Likely on 45 pairs: the dashboard and the app can show different bands for the same pair"
+  ]
+ }
+]

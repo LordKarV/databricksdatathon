@@ -1,0 +1,35 @@
+{
+ "records": 9959,
+ "population": 1457435337.95507,
+ "national_per_m": 6.833236261427206,
+ "bihar_records": 260,
+ "bihar_pop": 133483512.65214565,
+ "bihar_per_m": 1.9478060985520573,
+ "bihar_per_m_ci": [
+  1.7182202719431847,
+  2.1995258969364055
+ ],
+ "bihar_stunting": 42.57967891445134,
+ "bihar_insurance": 14.13514708215789,
+ "bihar_patna": 144,
+ "bihar_districts": 38,
+ "bihar_zero_districts": 7,
+ "bihar_patna_pop_share": 0.057837998548483524,
+ "rho_stunting": [
+  -0.4523460410557184,
+  -0.6895440612980099,
+  -0.11556094168657463
+ ],
+ "rho_insurance": [
+  0.06451612903225806,
+  -0.2566039989842716,
+  0.3821526387871889
+ ],
+ "n_states_rho": 32,
+ "zero_districts": 227,
+ "districts": 784,
+ "zero_pop": 162707081.78431958,
+ "top_state": "CHANDIGARH",
+ "top_per_m": 36.540499327405215,
+ "ratio_delhi_bihar": 7.992504651418991
+}

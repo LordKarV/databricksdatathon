@@ -1,0 +1,18 @@
+[fail   ] app_pairs_cite_plans: 5 cited plan sentences in 4 app pairs; 1 pairs cite only plans
+[pass   ] auditor_rerun_identical: 0 of 34 checks differ
+[pass   ] claims_arrays_rebuilt: 451110 raw array items; missing 0, extra 0, text differs 0
+[pass   ] claims_description_rebuilt: 0 differences over 18388 sentences
+[fail   ] cleaning_csection_word_section: 6 sentences; 6 facilities whose only C-section evidence is these; 6 in app pairs.emergency_csection (grades {'moderate': 3, 'strong': 2, 'weak': 1}); 6 planner comprehensive_emoc rows (p [0.6, 0.76, 0.79, 0.8, 0.91, 0.92])
+[warn   ] cleaning_vs_kb_tag_drift: 9 app pairs rest only on sentences kb no longer tags
+[warn   ] description_fragments_recount: 1728 / 18388 (9.4%) description sentences
+[warn   ] kb_future_cue_gap: 13 kb positive pairs over 7 sentences; 12 planner citations ({'proposed': 8, 'existing': 4})
+[fail   ] mri_therapy_recount: 10 kb mri pairs; 3 facilities MRI only through them; 3 shown in app pairs.mri
+[warn   ] negation_technique_recount: 17 / 47 negation-cued pairs fired only by technique wording; 5 of them are wrong matches the cue happens to remove
+[warn   ] other_facility_own_place_recount: 372 / 9506 other_facility sentences in 148 records (90 name the record's own district or city literally)
+[fail   ] planner_cited_any_shared_cue: 74 cited (capability, claim) pairs over 71 sentences carry a kb shared non-offer cue; 48164 citations
+[fail   ] planner_dental_scope: 633 proposed (capability, facility) rows at 536 dental facilities; 623 are hospital capabilities
+[warn   ] planner_echo_promotion: 215 proposed (capability, facility) rows reach p_two (planner p checked) only through repeated identical sentences
+[warn   ] planner_proposed_precision_handread: 41/50 = 0.82 Wilson (0.692, 0.902); wrong 7, unclear 2
+[pass   ] spine_neuro_recount: 265 / 687 facilities
+[warn   ] split_records_recount: 30 heads, 88 fragment rows, present in v1 tables {'facility_location': 0, 'record_trust': 0, 'facility_trust': 0, 'grades': 0, 'claims': 0}
+[warn   ] ultrasound_3d_alternative: 101 pairs match only through the 3D alternative; 82 at dental, eye or prosthetics facilities (40 facilities); 39 facilities have ultrasound only from those

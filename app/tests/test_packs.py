@@ -62,3 +62,4 @@ def test_loader_query_bihar_dialysis():
             assert q["text"]
             assert q["claim_id"] is None or q["claim_id"].startswith(o["uid8"] + ":")
     assert any(q["claim_id"] for o in opts for q in o["quotes"]), "no quote carries a claim id"
+

@@ -1,0 +1,290 @@
+{
+ "about": "Independence checks on the gold v3 TEST, frozen model v2. Code: independence.py. Decided pairs only. Agent-labelled, not human-checked. DEV rows are the fit set (in-sample).",
+ "test_predictions_sha256": "1b85f4c81afd936a057d9349247c716f7fa65091931d51e30ccdcef83f6e3ff4",
+ "overall": {
+  "n": 60,
+  "confirmed": 47,
+  "contradicted": 13,
+  "auroc": 0.819,
+  "auroc_ci95": [
+   0.686,
+   0.924
+  ],
+  "ci_source": "results.json headline_decided"
+ },
+ "by_website_family": {
+  "W_gt_0": {
+   "n": 21,
+   "confirmed": 21,
+   "contradicted": 0,
+   "auroc": null,
+   "auroc_ci95": null
+  },
+  "W_le_0": {
+   "n": 39,
+   "confirmed": 26,
+   "contradicted": 13,
+   "auroc": 0.703,
+   "auroc_ci95": [
+    0.521,
+    0.864
+   ]
+  },
+  "note": "W > 0: the facility's own website states the service, so the model and the web check read the same page."
+ },
+ "by_label_evidence_source": {
+  "record_source": {
+   "n": 39,
+   "confirmed": 33,
+   "contradicted": 6,
+   "auroc": 0.894,
+   "auroc_ci95": [
+    0.768,
+    0.988
+   ]
+  },
+  "independent_domain": {
+   "n": 19,
+   "confirmed": 13,
+   "contradicted": 6,
+   "auroc": 0.705,
+   "auroc_ci95": [
+    0.4,
+    0.945
+   ]
+  },
+  "no_url": {
+   "n": 2,
+   "confirmed": 1,
+   "contradicted": 1,
+   "auroc": 1.0,
+   "auroc_ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "note": "record_source: a label URL is the same URL or domain the dataset record was built from (derived/v1/source_urls.parquet)."
+ },
+ "bands": [
+  {
+   "band": "LIKELY",
+   "pairs": 63,
+   "confirmed": 25,
+   "contradicted": 3,
+   "no_info": 35,
+   "no_info_share": 0.556,
+   "confirmed_of_decided": {
+    "k": 25,
+    "n": 28,
+    "rate": 0.893,
+    "ci95": [
+     0.728,
+     0.963
+    ]
+   }
+  },
+  {
+   "band": "CALL_FIRST",
+   "pairs": 11,
+   "confirmed": 0,
+   "contradicted": 0,
+   "no_info": 11,
+   "no_info_share": 1.0,
+   "confirmed_of_decided": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci95": null
+   }
+  },
+  {
+   "band": "NO_SERVICE_TEXT",
+   "pairs": 72,
+   "confirmed": 20,
+   "contradicted": 8,
+   "no_info": 44,
+   "no_info_share": 0.611,
+   "confirmed_of_decided": {
+    "k": 20,
+    "n": 28,
+    "rate": 0.714,
+    "ci95": [
+     0.529,
+     0.847
+    ]
+   }
+  },
+  {
+   "band": "UNLIKELY",
+   "pairs": 4,
+   "confirmed": 2,
+   "contradicted": 2,
+   "no_info": 0,
+   "no_info_share": 0.0,
+   "confirmed_of_decided": {
+    "k": 2,
+    "n": 4,
+    "rate": 0.5,
+    "ci95": [
+     0.15,
+     0.85
+    ]
+   }
+  }
+ ],
+ "band_as_score": {
+  "band_ordinal": {
+   "n": 60,
+   "confirmed": 47,
+   "contradicted": 13,
+   "auroc": 0.67,
+   "auroc_ci95": [
+    0.509,
+    0.813
+   ]
+  },
+  "likely_vs_rest": {
+   "n": 60,
+   "confirmed": 47,
+   "contradicted": 13,
+   "auroc": 0.651,
+   "auroc_ci95": [
+    0.507,
+    0.778
+   ]
+  },
+  "note": "AUROC of the band the app shows (UNLIKELY < NO_SERVICE_TEXT < CALL_FIRST < LIKELY), and of LIKELY against every other band."
+ },
+ "services_with_0_test_negatives": [
+  "emergency_24x7",
+  "emergency_csection",
+  "nicu",
+  "stemi_thrombolysis"
+ ],
+ "decided_by_service": {
+  "burn_care": {
+   "n": 6,
+   "confirmed": 4
+  },
+  "cardiac_surgery": {
+   "n": 6,
+   "confirmed": 4
+  },
+  "dialysis": {
+   "n": 4,
+   "confirmed": 2
+  },
+  "emergency_24x7": {
+   "n": 7,
+   "confirmed": 7
+  },
+  "emergency_csection": {
+   "n": 7,
+   "confirmed": 7
+  },
+  "mri": {
+   "n": 7,
+   "confirmed": 5
+  },
+  "nicu": {
+   "n": 8,
+   "confirmed": 8
+  },
+  "stemi_thrombolysis": {
+   "n": 3,
+   "confirmed": 3
+  },
+  "trauma_care": {
+   "n": 12,
+   "confirmed": 7
+  }
+ },
+ "existence_head": {
+  "counts": {
+   "yes": 114,
+   "unclear": 36
+  },
+  "y_E_rule": {
+   "n": 134,
+   "confirmed": 114,
+   "contradicted": 20,
+   "auroc": 0.617,
+   "auroc_ci95": [
+    0.481,
+    0.743
+   ],
+   "rule": "confirmed = exists yes (1); contradicted = no, or unclear after a search (0); unclear and never searched excluded (model/v2/labels y_E rule)",
+   "ci_source": "extras.json existence_head.y_E_rule (evaluate.py)"
+  }
+ },
+ "unlikely_by_route": {
+  "t_U": 0.2,
+  "TEST": {
+   "p_route": {
+    "k": 2,
+    "n": 2,
+    "rate": 1.0,
+    "ci95": [
+     0.342,
+     1.0
+    ],
+    "pairs": [
+     "v3t2_016",
+     "v3t2_144"
+    ]
+   },
+   "c2_route": {
+    "k": 0,
+    "n": 2,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.658
+    ],
+    "pairs": [
+     "v3t2_085",
+     "v3t2_120"
+    ]
+   }
+  },
+  "DEV": {
+   "p_route": {
+    "k": 7,
+    "n": 7,
+    "rate": 1.0,
+    "ci95": [
+     0.646,
+     1.0
+    ],
+    "pairs": [
+     "e2e_060",
+     "e2e_085",
+     "e2e_099",
+     "e2e_123",
+     "e2e_133",
+     "e2e_135",
+     "e2e_141"
+    ]
+   },
+   "c2_route": {
+    "k": 3,
+    "n": 8,
+    "rate": 0.375,
+    "ci95": [
+     0.137,
+     0.694
+    ],
+    "pairs": [
+     "emergency_csection_suspect_1",
+     "mri_suspect_2",
+     "v2_burn_care_suspect_1",
+     "v2_cardiac_surgery_suspect_1",
+     "v2_dialysis_suspect_4",
+     "v2_emergency_csection_suspect_1",
+     "v2_trauma_emergency_suspect_1",
+     "v3d_164"
+    ]
+   }
+  }
+ }
+}

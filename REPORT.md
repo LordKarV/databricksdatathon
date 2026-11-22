@@ -15,8 +15,8 @@ Short version:
 
 | # | Finding | Verified count / denominator | Verdict | Reproduce with | What goes wrong for a patient |
 |---|---|---|---|---|---|
-| 1 | Records hold text about another facility (merged records) | About 1,405 / 9,959 name another facility (about 14%); about 5% are harmful misattributions. Other-district mentions: 23 of 30 sampled were misattribution or contradiction | adjusted | audit/merge/detect.py, analyze.py; audit/merge/verify/ | Sent to an eye hospital for dialysis because a Delhi government hospital's sentence sits in its record (Aravind), or to Nagpur for services done in Mumbai (Wockhardt) |
-| 2 | Listing coordinates are often in the wrong town, usually in the right state | 1,407 / 9,682 more than 50 km from their own PIN (1,114 more than 100 km); 1,340 of the 1,407 stay in the same state. Coordinates follow the contaminating facility: 723 / 1,367 (52.9%) records that say "located in elsewhere" are far from their PIN, against 821 / 8,165 (10.1%) | confirmed | audit/geo/facility_geo.py, summary_tables.py; audit/merge/verify/v_missed.py | Told a hospital is 5 km away when it is 300 km away (HOSMAT Bangalore is placed at Gadag, about 350 km off), or never shown the nearest real option |
+| 1 | Records hold text about another facility (merged records) | 2,489 / 9,959 records have a sentence that names another facility (25.0%); in 1,232 of them it is written as if about the record itself (direct context) and is quarantined as evidence. About 5% are harmful misattributions. Other-district mentions: 23 of 30 sampled were misattribution or contradiction | adjusted | audit/merge/detect.py, analyze.py; audit/merge/verify/; derived/v1/claims.parquet (attribution, context) | Sent to an eye hospital for dialysis because a Delhi government hospital's sentence sits in its record (Aravind), or to Nagpur for services done in Mumbai (Wockhardt) |
+| 2 | Listing coordinates are often in the wrong town, usually in the right state | 1,367 / 9,869 more than 50 km from their own PIN (1,101 more than 100 km); 1,297 of the 1,367 stay in the same state (nearest PIN centre to the point vs the record's own PIN). Coordinates follow the contaminating facility: 723 / 1,367 (52.9%) records that say "located in elsewhere" are far from their PIN, against 821 / 8,165 (10.1%) | confirmed | derived/v1/facility_location.parquet, pin_gazetteer.parquet; audit/geo/facility_geo.py, summary_tables.py; audit/merge/verify/v_missed.py | Told a hospital is 5 km away when it is 300 km away (HOSMAT Bangalore is placed at Gadag, about 350 km off), or never shown the nearest real option |
 | 3 | "Strong-looking" evidence is often only wording or a label | Strong dialysis grades whose prerequisite is met by the claim sentence itself: 345 / 355. Trauma sentences with explicit trauma wording: 3,586 / 9,019 (the rest are generic "24/7 emergency"). Nephrology tag on 2,159 records, dialysis text on only 847 of them. An LLM rated both contaminated dialysis records "offers dialysis, confidence 1" | adjusted / confirmed | audit/claims/verify/v_grades.py, v_dialysis_unit.py; audit/claims/trauma_split.py; audit/capabilities/aiq2.sql | A one-word list item or a specialty tag ranks like a staffed unit; a highway trauma case goes to a nursing home with "24/7 emergency care" |
 | 4 | The "official" phone often reaches a directory or call centre | +919693969347 sits on 431 records in 37 state strings and is the officialPhone of 87. 348 / 9,464 officialPhones are held by records in 3 or more cities; of the 45 most-shared numbers, 33 are directory numbers and 0 belong to one facility | confirmed | audit/identity/q3_contacts.py, q3b_shared_phone_source.py; audit/merge/verify/v_phone.py | The health worker calls to confirm a bed and reaches a real-estate or booking line, in an emergency |
 | 5 | Typed locations are ambiguous or silently wrong | 5 / 40 realistic inputs are district names in two states (Aurangabad, Bilaspur, Hamirpur, Pratapgarh, Balrampur); "Hydrabad" silently resolves to a village office in Uttar Pradesh; "bijapur" aliasing to Karnataka hides a current Chhattisgarh district | adjusted | audit/geo/resolve_input.py; audit/geo/verify/v_resolve.py | A worker in Bihar typing "Aurangabad" gets Maharashtra hospitals about 1,000 km away |
@@ -47,7 +47,7 @@ Verdicts are the verifier's. Rows marked "verifier-found" are issues the finder 
 
 | ID | Finding | Verified count / denominator | Verdict | Script | Product impact |
 |---|---|---|---|---|---|
-| F1 | Claim sentences name a different facility | About 1,405 / 9,959 records (detector: 1,952); sentence precision 20 of 30 | adjusted | merge/detect.py; analyze.py; sample.py | Quarantine direct-context sentences and show them as "mentions another facility" |
+| F1 | Claim sentences name a different facility | 2,489 / 9,959 records after cleaning, 1,232 with a direct-context sentence (audit detector: 1,952); sentence precision 20 of 30 | adjusted | merge/detect.py; analyze.py; sample.py | Quarantine direct-context sentences and show them as "mentions another facility" |
 | F2 | Near-spelling merges (Batra/Katra, Vedanta/Medanta) | About 77 / 9,959 true of 107 flagged; real total about 120 to 130 | adjusted | merge/analyze.py (near_name) | Most dangerous: names look identical to user and LLM |
 | F3 | Claims mention another state or district | 2,494 / 9,959 other-district (verifier lexicon; finder 2,189); 1,005 other-state | confirmed | merge/gazetteer.py; detect.py; analyze.py | "Varanasi" hospital whose own text says Noida |
 | F4 | Single-specialty name with acute claims | About 44 / 3,485 true (111 candidates) | adjusted | merge/q3_name_content.py | Only detector that catches the Aravind record |
@@ -299,9 +299,9 @@ One Databricks App: FastAPI serving server-rendered HTML with no client framewor
   | Dash (bare) | 1,502,548 | 49.86 | 3 |
   | Gradio (bare) | 1,015,442 | 34.79 | 3 |
 
-  An ASHA on 2G gets an answer in under a second. Chat and Genie were rejected because they need typing, cannot guarantee the citation layout, and put an LLM in the trust seat.
+  An ASHA on 2G gets an answer in under a second. Chat and Genie were rejected for the ASHA's screen because they need typing, cannot guarantee the citation layout, and put an LLM in the trust seat. Planners, who do type, got both later on the same tables: the Genie space in `databricks/genie/` and the AI/BI dashboard in `databricks/dashboard/` (section 5.5).
 - **Verified capability.** Warehouse, ai_query, strict JSON output and 8 chat endpoints were all probed and work. FastAPI ships pre-installed in the App runtime (documented). Not yet verified: App deploy, App reads from Unity Catalog, App calls to an endpoint, App writes. That makes a hello-world App the first hour of work.
-- **Flexibility.** One backend serves the phone page, the planner page and a JSON API. A WhatsApp bot, IVR or a better grader can plug in behind the same card contract. A new service is one lexicon row plus a prerequisite list. Genie or a dashboard can sit on the same tables later.
+- **Flexibility.** One backend serves the phone page, the planner page and a JSON API. A WhatsApp bot, IVR or a better grader can plug in behind the same card contract. A new service is one lexicon row plus a prerequisite list. A Genie space and a dashboard now sit on the same tables (section 5.5).
 - **Caveat.** The 2G numbers come from a local server. Through Databricks Apps every viewer must sign in to the workspace, so an ASHA cannot use the hosted demo today. We present 2G as "built for public hosting" and measure the deployed URL once on Friday.
 
 ### 4.3 User workflow
@@ -418,9 +418,12 @@ FastAPI in 1 of the 3 allowed Apps. It reads the tables once at start-up through
 - **LLM use 2, offline, gated, not run:** ai_query attribution on the 242 ambiguous or other-facility service sentences. A row survives only if its claim_id exists and its quote is an exact substring after whitespace folding. It may only lower a grade, and is labelled "model-assessed". Enable it only if it beats the rules on the 40 labelled sentences.
 - **Not used:** Vector Search or RAG (the problem is attribution, not retrieval), GPU, Lakebase (only as a stretch for the ledger), Agent Bricks, live routing (outbound internet is restricted).
 
-### 5.5 Genie space or dashboard
+### 5.5 Genie space and dashboard
 
-Stretch only, after the App is stable: a Genie space over facility, grades, card and nfhs_context for planners' ad hoc questions. It is cut first.
+Planned as a stretch and built once the App was stable, both for district planners and both over `workspace.referral_saathi`:
+
+- Genie space "Referral Saathi planner": `databricks/genie/space.py` holds the tables, instructions, example SQL and benchmark questions, and `databricks/genie/GENIE.md` has the benchmark accuracy.
+- AI/BI dashboard "Referral Saathi: district planner": `databricks/dashboard/build_dashboard.py` builds it, and `databricks/dashboard/DASHBOARD.md` lists its pages and query tests.
 
 ---
 

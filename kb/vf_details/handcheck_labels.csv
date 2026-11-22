@@ -1,0 +1,51 @@
+fact_id,correct,note
+8a5e6d99:desc:0:hours_24x7:emergency:0,1,
+15267a39:capa:15:hours_24x7:emergency:0,1,
+c3c94375:capa:4:hours_24x7:emergency:0,1,
+253a699b:capa:0:hours_24x7:facility:0,1,urgent care read as facility-wide 24x7; emergency would be more specific
+0020c82a:capa:9:hours_24x7:emergency:0,1,
+0d974ba8:capa:42:hours_24x7:emergency:0,1,
+ef472a00:capa:22:unit_beds:total:0,1,
+29903d8a:desc:3:unit_beds:total:0,1,
+5eea5ecb:capa:5:unit_beds:icu:0,1,
+10f3907d:capa:13:unit_beds:total:0,1,
+1a8a1388:desc:0:unit_beds:total:0,1,
+f5c2649b:capa:2:unit_beds:icu:0,1,
+3e361e63:capa:35:empanelment:private_insurance:0,1,
+f4442d7d:capa:10:empanelment:private_insurance:0,1,
+b0c23b95:proc:22:empanelment:rajasthan:0,1,
+948a0b3c:capa:30:empanelment:pmjay:0,1,
+cc591ffe:capa:43:empanelment:private_insurance:0,1,
+0c4c5870:capa:4:empanelment:private_insurance:0,1,
+2f41ede8:capa:9:staffing:doctors:0,1,
+f14cec09:capa:30:staffing:doctors:0,0,department count (7 ENT doctors) stored as facility doctors at a large hospital
+5fef0b90:capa:0:staffing:doctors:0,1,
+831fc382:capa:15:staffing:doctors:0,0,department count (2 dermatologists) stored as facility doctors
+97b3aa4c:capa:1:staffing:doctors:0,1,
+b0e6c53b:capa:39:accreditation:NABH:0,0,"sentence is an award or programme title, not hospital NABH accreditation"
+5a1403dd:capa:20:accreditation:NABL:0,1,
+94cf9f27:capa:29:accreditation:NABH:0,1,
+51ee60c0:capa:10:accreditation:NABH:0,1,
+3ae74c25:capa:37:accreditation:NABH:0,1,
+28ce4bae:capa:7:ambulance:ambulance_service:0,1,
+81f69525:proc:11:ambulance:ambulance_service:0,1,
+517d37f8:desc:0:ambulance:ambulance_service:0,1,"directory category list; right reading, weak evidence (flagged kind_list)"
+1f6abc96:equi:0:ambulance:ambulance_service:0,1,
+ed6652f3:capa:19:free_or_government:government_run_text:0,1,
+9a5cb946:capa:7:free_or_government:free_care:0,0,"free consultation inside a paid dental plan, not free care"
+827ad1e1:desc:1:free_or_government:free_care:0,1,
+e008e81e:capa:22:free_or_government:free_care:0,1,
+c5598920:equi:10:blood_centre:blood_storage_unit:0,1,
+0c1dac60:equi:6:blood_centre:blood_bank:0,1,
+8061433e:equi:6:blood_centre:blood_bank:0,1,
+907f5a8b:capa:22:blood_centre:blood_bank:0,1,
+32247c86:equi:1:equipment_count:ct_slices:0,1,
+34aea2cc:equi:2:equipment_count:operation_theatres:0,1,
+c7f931e9:equi:0:equipment_count:ct_slices:0,1,
+b4203fde:capa:3:equipment_count:mri_tesla:0,1,
+e6dbaf82:capa:29:opd_hours:general:0,1,"LLM read 11:00-05:00 as 11:00-17:00; plausible, source is ambiguous"
+825f5bbc:capa:19:opd_hours:general:0,1,
+380c9661:capa:42:opd_hours:doctor_session:0,1,
+a27ba028:capa:26:opd_hours:general:0,1,00:00-24:00 schedule; same fact as 24x7
+ca63c642:proc:14:hours_dialysis_shifts:dialysis_shifts:0,1,
+bfe9ab42:equi:31:hours_dialysis_shifts:dialysis_shifts:0,1,

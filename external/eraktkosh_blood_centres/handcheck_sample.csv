@@ -1,0 +1,21 @@
+hospital_code,erk_name,erk_type,erk_category,erk_district,unique_id,vf_name,vf_city,vf_district,score,km,gate,vf_claims_blood,verdict
+280756.0,Doaba Hospital Blood Centre,Blood Bank,Private,Jalandhar,d7b9aaf1-fb11-4a90-96be-78db26d7101f,Doaba Hospital,Jalandhar,JALANDHAR,100.0,0.01,distance,False,correct
+284973.0,Vgm Blood Centre,Blood Bank,Charitable/Vol,Coimbatore,454b7120-eb0d-4520-8f22-9dd200e0c499,VGM Gastro Centre,Coimbatore,COIMBATORE,100.0,0.29,distance,False,likely (VGM is a gastro hospital; blood centre plausibly inside it)
+96114.0,DR JAI DEV MEMORIAL ROTARY AMBALA HOSPITAL ,Blood Bank,Private,Ambala,8a28e8ec-067c-4bae-abe7-e567079db1ec,Dr. Jai Dev Memorial Rotary Ambala Hospital,Ambala Cantt,AMBALA,100.0,0.32,distance,False,correct
+18005.0,Breach Candy Hospital Trust Blood Centre,Blood Bank,Charitable/Vol,Mumbai,7788feca-a218-4eab-85aa-51476de90e79,"Breach Candy Hospital, Mumbai, India",Mumbai,MUMBAI,87.5,0.03,distance,True,correct
+285341.0,Trinity Hospital Melthum BSU,BSU,Private,Aizawl,4ed242f2-3e17-4a73-9869-a1044fdca242,Trinity Hospital,Aizawl,AIZAWL,100.0,,district,False,correct
+283959.0,Ganga Sewa Sadan Blood Centre,Blood Bank,Private,Varanasi,52a696ab-bdf5-4f6e-8bcf-37afc8dd579a,Ganga Sewa Sadan Hospital,Chandpur,VARANASI,100.0,6.06,distance,True,correct (Chandpur is a locality of Varanasi)
+12104.0,Tomo Riba Institute of Health and Medical Science Hospital Naharlagun ,Blood Bank,Govt.,Papum Pare,4138f021-e871-4aab-a556-8f407bce7d00,"Tomo Riba Institute of Health and Medical Sciences, Naharlagun, India",Naharlagun,PAPUM PARE,92.6470588235294,0.08,distance,False,correct
+864.0,Narhari Hospital,Blood Bank,Charitable/Vol,Vadodara,4b7af570-9cf8-44a3-adec-a47b5d0b7715,Narhari Hospital,Vadodara,VADODARA,100.0,,district,True,correct
+91112.0,Shri Maharaja Gulab Singh Hospital Blood Bank,Blood Bank,Govt.,Jammu,a96d4572-8445-4eec-9fe5-41d32d88b92b,"Shri Maharaja Gulab Singh Hospital, Government Medical College Jammu",Jammu,JAMMU,100.0,0.45,distance,True,correct
+11051.0,"Blood Centre, Alchemist Hospital",Blood Bank,Private,Panchkula,aa07dc77-d6d2-4be0-94cb-078724248add,Alchemist Hospital,Gurgaon,PANCHKULA,100.0,0.01,distance,True,uncertain (Alchemist runs Panchkula and Gurgaon hospitals; VF record says Gurgaon but sits at the Panchkula point)
+16085.0,Mary Queens Mission Hospital,Blood Bank,Private,Kottayam,19a60c6c-6c94-45ab-8cbf-e31e5caa014c,Mary Queens Mission Hospital,Kanjirapally,KOTTAYAM,100.0,0.0,distance,True,correct
+18136.0,M/S. Gleneagles Hospital-Super Speciality Andtransplant Centre,Blood Bank,Private,Mumbai,20bea7f8-37a8-4cb7-b1c8-fb5b4de9e32d,Gleneagles Hospital,Mumbai,MUMBAI,100.0,0.13,distance,False,correct
+280569.0,Sharda Narayan Hospital Blood Centre,Blood Bank,Private,Mau,bfa6780d-a589-493c-b846-834f232d4efd,Sharda Narayan Sips Hospital,Lucknow,MAU,100.0,1.57,distance,True,uncertain (VF name mixes Sharda Narayan Mau with SIPS Lucknow: likely merged record)
+284877.0,Shivay Blood Centre ,Blood Bank,Private,Deoghar,9526592c-3f0e-4970-8ddd-d7be11947443,Shivay Hospital,Deoghar,DEOGHAR,100.0,0.26,distance,False,"likely (Shivay Blood Centre vs Shivay Hospital, 0.26 km)"
+282776.0,Blood Centre Fims,Blood Bank,Private,Sonipat,d9178b81-b6a0-4558-a977-7760e67ba8c2,Fims Hospital,Sonipat,SONIPAT,100.0,5.09,distance,False,correct
+29143.0,Usha Mullapudi Cardiac Centre Blood Centre,Blood Bank,Private,Medchal Malkajgiri,938551a5-6a9e-4b6b-827e-f72dc0b8c51b,Usha Mullapudi Cardiac Centre,Hyderabad,MEDCHAL MALKAJGIRI,100.0,0.0,distance,False,correct
+282774.0,Nidaan Blood Centre,Blood Bank,Private,Sonipat,648100ea-1f63-4c73-9471-5846cbb5b7ce,Nidaan Hospital,Gurgaon,SONIPAT,100.0,3.87,distance,False,correct (VF city Gurgaon is wrong; both at Sonipat)
+13004.0,Shri Maharaja Hari Singh Hospital ,Blood Bank,Govt.,Srinagar,579acb48-18ec-40ef-b7be-29de18d9ed5c,Sri Maharaja Hari Singh Hospital,Srinagar,SRINAGAR,98.46153846153847,,district,True,correct
+494.0,Sanjiban Hospital,Blood Bank,Private,Howrah,f2d60f30-0fcd-457b-8271-4d882ef260f4,Sanjiban Hospital,Howrah,HOWRAH,100.0,0.01,distance,True,correct
+18039.0,Lilavati Hospital And Research Centre Blood Centre,Blood Bank,Charitable/Vol,Mumbai,436c7e0a-fd63-4414-9a28-c39ff09d4775,"Lilavati Hospital and Research Centre, Mumbai, India",Mumbai,MUMBAI SUBURBAN,100.0,0.03,distance,False,correct

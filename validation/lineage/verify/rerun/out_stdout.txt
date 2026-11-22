@@ -1,0 +1,25 @@
+pass  derived_copies_identical: 9/9 identical
+pass  derived_inputs_unchanged: 28/28 inputs match
+pass  derived_manifest_matches_files: 0 mismatched, 0 unlisted
+pass  derived_scripts_unchanged: 11/11 scripts match
+pass  exports_deterministic_fixed_hashseed: 0 files differ
+warn  exports_rebuild: planner equal, facts sha 1f6352f3212b, packs 11/36 byte-identical
+fail  exports_strict_json: 1/38 files have NaN/Infinity
+pass  live_aggregates: 456/456 equal
+pass  live_content_fingerprint: 171/171 columns equal
+pass  live_schema: 3/3 tables
+warn  makefile_python: .venv-app/bin/python
+pass  raw_manifest_recompute: 345/345 manifest checks reproduce
+pass  raw_record_identity: 10088 rows, 9970 well-formed, 9959 ids, 9959 distinct rows
+pass  raw_sha256: 6/6 files match
+pass  rebuild_deterministic_fixed_hashseed: 0 files differ
+warn  rebuild_inputs_in_repo: 13/33 inputs git-ignored
+warn  rebuild_matches_derived: 14/23 byte-identical; 0 real diffs; 8 float-ulp only
+pass  selfcheck: selfcheck ok: 518191 data points, 10951 domains, 17 tables
+fail  static_abs_paths: 84 lines in 64 files
+warn  static_hash_order: 6 lines in 5 files
+warn  static_network: 19 lines in 4 files
+warn  static_shell_portability: 3 lines in 2 files
+pass  static_unseeded_random: 0 lines in 0 files
+warn  static_venv_pins: 6 lines in 5 files
+warn  static_warehouse_llm: 7 lines in 3 files

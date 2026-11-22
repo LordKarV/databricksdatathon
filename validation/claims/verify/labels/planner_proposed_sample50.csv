@@ -1,0 +1,51 @@
+cap,cid,verdict,note
+orthopaedics,9f3c6c60:capa:11,correct,
+general_surgery_ot,d911e733:equi:3,correct,
+general_surgery_ot,2b694c15:equi:8,correct,
+orthopaedics,408a3128:capa:36,correct,
+laboratory,22a4e5a1:capa:10,wrong,"genetic testing lab, not a clinical chemistry lab"
+laboratory,211259cc:capa:35,correct,
+neurosurgery,ef0ae66f:capa:32,correct,
+laboratory,72b1bbcd:proc:6,correct,
+basic_emoc,d40967c4:capa:1,correct,
+general_surgery_ot,1a8956a6:capa:10,correct,
+laboratory,7d147406:capa:2,wrong,dental laboratory
+ecg,ba990df7:equi:1,correct,
+general_surgery_ot,f17e6aec:proc:4,correct,
+ct_scan,c3021718:equi:1,correct,
+laboratory,164e1423:capa:1,correct,
+general_surgery_ot,b2be5e1f:capa:18,unclear,"gynaecologic laparoscopic surgeon; an OT is implied, general surgery is not"
+nephrology,1653a41f:capa:37,correct,
+laboratory,44aacde8:capa:10,correct,
+basic_emoc,fdd31470:capa:1,unclear,only the facility name says Maternity Home
+neurosurgery,45bd71c5:desc:2,correct,
+nephrology,cc6ef0bb:capa:35,correct,
+orthopaedics,7d17919a:capa:8,correct,
+vascular_access_surgery,5f551b24:capa:18,correct,
+nephrology,fe0bf20e:proc:17,correct,
+ct_scan,6cf068f7:proc:25,wrong,dental CT (CBCT) at a dental clinic
+plastic_surgery,8b1f6969:proc:9,correct,
+general_surgery_ot,7fcd1e71:proc:29,correct,
+general_surgery_ot,453f9bcc:capa:6,correct,
+laboratory,4c67ed2e:desc:0,correct,
+general_surgery_ot,58f4d06e:capa:22,wrong,ENT surgeon and BDS at an ENT/dental clinic
+trauma_centre,9dcac40a:capa:15,correct,
+laboratory,d4225cd0:capa:28,correct,
+ct_scan,0890cbf1:proc:3,correct,
+neurosurgery,fe0bf20e:proc:9,correct,
+orthopaedics,c76aa351:capa:6,correct,
+ventilator,373756b9:desc:3,correct,
+trauma_centre,fa4ff91a:capa:13,correct,
+laboratory,7879815f:capa:37,correct,
+basic_emoc,778ccdbe:capa:26,correct,
+neurosurgery,8d8ddf59:capa:30,correct,
+pci_cath_lab,32bbd492:proc:20,correct,
+general_surgery_ot,b9a61290:capa:1,wrong,oral surgeon at a dental clinic
+orthopaedics,f29d6b40:capa:8,correct,
+laboratory,000fcec9:equi:6,correct,
+orthopaedics,8e33d750:capa:30,correct,
+pci_cath_lab,bf3f4a9c:equi:1,correct,
+general_surgery_ot,75047c69:capa:1,wrong,ENT surgeon at an ENT/dental clinic
+orthopaedics,0b99b80e:proc:2,wrong,dentofacial orthopaedics is orthodontics
+laboratory,b8d51d1f:equi:2,correct,
+ecg,14733f30:equi:5,correct,

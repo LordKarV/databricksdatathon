@@ -1,0 +1,25 @@
+pass    v2_keys_unique: 0 null keys, 0 duplicated keys | 358524 rows
+pass    v2_coverage: 358092/358092 pairs; 0 unknown service ids; 0 ids outside the usable set | usable 9959 minus 12 exclude_review
+fail    v2_excluded_not_scored: 12 of 12 scored | exclude_review (veterinary) records must not be scored (validation INT-01)
+fail    v2_probabilities: 22370 bad cells {'lo<=p<=hi': 22370} | 358524 rows x ['p', 'lo', 'hi', 'p_location', 'p_exists']
+fail    v2_logit_identity: missing ['logit'] | ['unique_id', 'service_id', 'band', 'overlays', 'p', 'lo', 'hi', 'p_location', 'p_exists', 'base', 'contributions', 'operator', 'is_24x7', 'hours_text', 'as_of'
+Traceback (most recent call last):
+  File "/Users/karthikvattem/projects/datathon/validation/contracts_v2.py", line 567, in <module>
+    r = f()
+        ^^^
+  File "/Users/karthikvattem/projects/datathon/validation/contracts_v2.py", line 162, in run
+    return fn()
+           ^^^^
+  File "/Users/karthikvattem/projects/datathon/validation/contracts_v2.py", line 283, in check_v2_evidence_ids_resolve
+    c = contributions()
+        ^^^^^^^^^^^^^^^
+  File "/Users/karthikvattem/projects/datathon/validation/contracts_v2.py", line 128, in contributions
+    flat = pc.list_flatten(col)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/pyarrow/compute.py", line 272, in wrapper
+    return func.call(args, options, memory_pool)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_compute.pyx", line 405, in pyarrow._compute.Function.call
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+pyarrow.lib.ArrowNotImplementedError: Function 'list_flatten' has no kernel matching input types (large_string)

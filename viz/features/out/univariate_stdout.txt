@@ -1,0 +1,168 @@
+redundancy ...
+{
+ "dev_pairs": 88,
+ "dev_searched": 61,
+ "dev_confirmed": 22,
+ "dev_location_facilities": 52,
+ "dev_location_no": 12,
+ "pu_nabh_pairs": 4216,
+ "pu_nabh_pos": 2206,
+ "pu_nabh_pos_by_service": {
+  "cardiac_surgery": {
+   "sum": 531,
+   "count": 1054
+  },
+  "dialysis": {
+   "sum": 488,
+   "count": 1054
+  },
+  "emergency_csection": {
+   "sum": 890,
+   "count": 1054
+  },
+  "trauma_emergency": {
+   "sum": 297,
+   "count": 1054
+  }
+ },
+ "pu_lists_pos": 2397,
+ "pu_lists_pos_by_service": {
+  "burn_care": 19,
+  "cardiac_surgery": 543,
+  "dialysis": 501,
+  "emergency_csection": 988,
+  "mri": 0,
+  "nicu": 4,
+  "trauma_emergency": 342
+ },
+ "n_states_nabh": 29,
+ "n_states_all": 34,
+ "evidence_overlap": {
+  "dev_pairs_with_evidence_urls": 60,
+  "evidence_urls": 89,
+  "pairs_hit": {
+   "record_source_domain": 35,
+   "own_website": 26,
+   "nabh_portal": 3,
+   "any_of_these": 43
+  },
+  "note": "A pair is hit when any evidence URL's domain (or registrable domain) is among the record's cited source domains (derived/v1/source_urls), its crawled own-site domain (kb/crawl/targets), or contains 'nabh'. DEV split only."
+ },
+ "bootstrap": {
+  "dev": 2000,
+  "nabh": 1000,
+  "lists": 300
+ },
+ "min_minority": 5
+}
+                            feature  coverage  dev_n  dev_auc  dev_auc_lo  dev_auc_hi  dev_too_small  loc_auc  nabh_auc  nabh_auc_lo  nabh_auc_hi  lists_auc  cluster
+0                     a_any_mention     1.000     61    0.583       0.492       0.670          False    0.400     0.600        0.586        0.615      0.626       73
+1                         a_n_atoms     1.000     61    0.718       0.585       0.853          False    0.394     0.619        0.602        0.635      0.631       73
+2                               a_T     1.000     61    0.622       0.487       0.761          False    0.467     0.613        0.597        0.628      0.629       73
+3                        a_tag_only     1.000     61    0.507       0.436       0.588          False    0.538     0.512        0.506        0.520      0.519       78
+4                    a_n_fields_own     1.000     61    0.601       0.462       0.744          False    0.451     0.593        0.577        0.609      0.608       73
+5                     a_n_units_own     1.000     61    0.614       0.477       0.755          False    0.438     0.598        0.581        0.613      0.610       73
+6                          a_prereq     1.000     61    0.639       0.498       0.765          False    0.454     0.653        0.631        0.674      0.753       41
+7                        a_negation     1.000     61      NaN         NaN         NaN           True      NaN     0.500        0.499        0.501      0.500        1
+8                   a_contamination     1.000     61    0.550       0.447       0.667          False    0.322     0.503        0.501        0.504      0.503       15
+9              a_rejected_ownership     1.000     61    0.550       0.447       0.665          False    0.331     0.503        0.501        0.504      0.503       15
+10                 a_scope_conflict     1.000     61      NaN         NaN         NaN           True      NaN     0.490        0.485        0.494      0.345       39
+11                 a_list_truncated     1.000     61    0.583       0.453       0.709          False    0.383     0.629        0.610        0.648      0.645       51
+12                          a_grade     1.000     61    0.650       0.523       0.783          False    0.656     0.614        0.599        0.631      0.631       73
+13                    a_m_procedure     1.000     61    0.589       0.459       0.725          False    0.345     0.570        0.552        0.585      0.572       74
+14                   a_m_capability     1.000     61    0.652       0.507       0.791          False    0.485     0.570        0.556        0.583      0.578       73
+15                    a_m_equipment     1.000     61    0.545       0.447       0.657          False    0.412     0.534        0.526        0.542      0.530       71
+16                  a_m_description     1.000     61    0.562       0.467       0.665          False    0.479     0.502        0.496        0.507      0.505       68
+17                  a_m_specialties     1.000     61    0.559       0.461       0.665          False    0.492     0.553        0.543        0.563      0.558       76
+18                     a_echo_dupes     1.000     61    0.533       0.476       0.605           True    0.428     0.520        0.511        0.529      0.519       77
+19                   a_own_anchored     1.000     61    0.543       0.467       0.627          False    0.508     0.513        0.505        0.519      0.513       69
+20                       a_quantity     1.000     61    0.474       0.434       0.500           True    0.483     0.502        0.500        0.505      0.502       70
+21               a_quarantine_share     1.000     61    0.580       0.440       0.710          False    0.214     0.518        0.500        0.540      0.531       50
+22          a_pair_quarantine_share     0.115     49    0.534       0.416       0.660          False    0.322     0.506        0.500        0.512      0.506       15
+23                      k_text_nabh     1.000     61    0.686       0.565       0.804          False    0.592     0.569        0.544        0.592      0.624       66
+24                     k_text_pmjay     1.000     61    0.595       0.489       0.712          False    0.408     0.477        0.466        0.486      0.533       16
+25                 k_text_cghs_echs     1.000     61    0.533       0.475       0.607           True    0.538     0.516        0.506        0.527      0.522       17
+26                k_text_blood_bank     1.000     61    0.576       0.453       0.699          False    0.446     0.553        0.536        0.567      0.581       21
+27                  k_text_ot_count     1.000     61    0.543       0.465       0.627          False    0.562     0.517        0.502        0.531      0.528       33
+28                  k_text_24x7_any     1.000     61    0.614       0.496       0.726          False    0.492     0.546        0.530        0.560      0.685       44
+29   k_text_service_equipment_count     0.429     27    0.441       0.354       0.500           True    0.475     0.505        0.502        0.509      0.505       70
+30              k_text_service_24x7     0.571     41    0.597       0.493       0.716          False    0.431     0.521        0.509        0.533      0.537       75
+31                   b_coord_pin_km     0.991     61    0.449       0.298       0.612          False    0.167     0.501        0.477        0.522      0.511       36
+32                b_coords_far_50km     0.991     61    0.540       0.451       0.642          False    0.192     0.502        0.486        0.517      0.495       35
+33                       b_loc_conf     1.000     61    0.478       0.359       0.599          False    0.978     0.495        0.479        0.514      0.510       35
+34                       b_disputed     1.000     61    0.530       0.451       0.617          False    0.208     0.499        0.491        0.507      0.492       34
+35          b_city_points_elsewhere     1.000     61    0.555       0.488       0.634           True    0.250     0.498        0.490        0.506      0.492       34
+36                 b_copied_geocode     1.000     61    0.523       0.500       0.577           True    0.417     0.504        0.500        0.508      0.501       38
+37                  b_votes_against     1.000     61    0.545       0.430       0.662          False    0.022     0.494        0.473        0.514      0.488       35
+38             b_coord_shared_3plus     1.000     61      NaN         NaN         NaN           True      NaN       NaN          NaN          NaN      0.499       83
+39                   b_n_source_ids     1.000     61    0.640       0.491       0.781          False    0.295     0.621        0.598        0.643      0.715       47
+40                b_directory_phone     1.000     61    0.487       0.458       0.500           True    0.458     0.505        0.495        0.517      0.507        3
+41                       b_no_phone     1.000     61    0.484       0.423       0.551           True    0.525     0.497        0.491        0.504      0.490       57
+42                      b_dup_group     1.000     61    0.487       0.458       0.500           True    0.512     0.516        0.503        0.533      0.518       81
+43              b_email_placeholder     1.000     61    0.497       0.446       0.558           True    0.483     0.505        0.496        0.516      0.508       82
+44           b_breadth_exceeds_size     1.000     61    0.543       0.467       0.633          False    0.550     0.489        0.475        0.502      0.504       53
+45              b_scale_implausible     1.000     61    0.487       0.456       0.500           True    0.458     0.516        0.507        0.526      0.516        5
+46          b_claims_6plus_services     1.000     61    0.497       0.447       0.556           True    0.471     0.515        0.509        0.522      0.516       79
+47              b_website_other_org     1.000     61      NaN         NaN         NaN           True      NaN     0.504        0.500        0.508      0.503        4
+48                   b_merge_bucket     1.000     61    0.594       0.467       0.713          False    0.312     0.595        0.576        0.615      0.678       47
+49            b_scale_contradiction     1.000     61      NaN         NaN         NaN           True      NaN     0.499        0.496        0.501      0.501        6
+50                         c_n_urls     1.000     61    0.661       0.518       0.794          False    0.271     0.631        0.612        0.646      0.715       47
+51                 c_share_official     1.000     61    0.463       0.328       0.599          False    0.644     0.529        0.511        0.545      0.537       54
+52               c_share_aggregator     1.000     61    0.619       0.474       0.752          False    0.449     0.517        0.492        0.540      0.556       49
+53                   c_share_social     1.000     61    0.431       0.279       0.584          False    0.538     0.416        0.396        0.440      0.337       48
+54             c_share_business_dir     1.000     61    0.568       0.424       0.709          False    0.405     0.527        0.503        0.557      0.525       60
+55               c_share_government     1.000     61    0.518       0.385       0.647          False    0.450     0.542        0.527        0.553      0.594       24
+56                     c_share_maps     1.000     61    0.503       0.385       0.633          False    0.353     0.499        0.480        0.517      0.506       59
+57              c_share_about_pages     1.000     61    0.427       0.280       0.579          False    0.709     0.462        0.441        0.486      0.409       55
+58        c_mean_domain_reliability     1.000     61    0.410       0.272       0.558          False    0.779     0.445        0.425        0.468      0.353       46
+59                 c_source_support     1.000     61    0.474       0.326       0.621          False    0.827     0.478        0.456        0.499      0.392       46
+60              c_location_score_v1     1.000     61    0.578       0.453       0.700          False    1.000     0.481        0.460        0.506      0.433       46
+61            c_pagecheck_supported     0.006      6    0.375       0.000       0.500           True      NaN     0.400        0.317        0.489      0.481       84
+62                    d_nabh_listed     1.000     61    0.592       0.476       0.715          False    0.567       NaN          NaN          NaN        NaN       65
+63        d_nabh_full_accreditation     1.000     61    0.565       0.483       0.656          False    0.467       NaN          NaN          NaN        NaN       64
+64              d_nabh_service_code     0.571     42    0.493       0.419       0.572           True    0.558       NaN          NaN          NaN        NaN       63
+65                d_nabh_code_known     1.000     61    0.595       0.482       0.713          False    0.583       NaN          NaN          NaN        NaN       63
+66                    d_nmc_college     1.000     61    0.462       0.412       0.500           True    0.483     0.505        0.500        0.511        NaN       26
+67              d_nmc_course_strong     1.000     61      NaN         NaN         NaN           True      NaN     0.503        0.499        0.506        NaN       27
+68                 d_nmc_course_any     1.000     61      NaN         NaN         NaN           True      NaN     0.503        0.499        0.507        NaN       26
+69       d_erk_blood_centre_on_site     1.000     61    0.524       0.421       0.638          False    0.571     0.562        0.541        0.585      0.569       22
+70                 d_erk_nearest_km     1.000     61    0.484       0.337       0.626          False    0.519     0.453        0.416        0.490      0.437        8
+71                d_erk_within_10km     1.000     61    0.455       0.385       0.500           True    0.571     0.505        0.498        0.512      0.510        9
+72               d_laqshya_ot_valid     0.143     12      NaN         NaN         NaN           True      NaN       NaN          NaN          NaN        NaN       19
+73                d_laqshya_ot_ever     0.143     12      NaN         NaN         NaN           True      NaN       NaN          NaN          NaN        NaN       18
+74            d_laqshya_labour_room     0.143     12      NaN         NaN         NaN           True      NaN       NaN          NaN          NaN        NaN       18
+75            d_mohfw_trauma_centre     0.143      8      NaN         NaN         NaN           True      NaN       NaN          NaN          NaN        NaN       30
+76                    e_has_website     1.000     61    0.512       0.408       0.613          False    0.521     0.536        0.523        0.548      0.565       58
+77                     e_site_alive     0.805     49    0.557       0.445       0.658          False    0.743     0.531        0.516        0.547      0.568       80
+78                  e_identity_conf     0.591     40    0.620       0.486       0.750          False    0.798     0.494        0.479        0.508      0.531       56
+79                    e_web_service     0.489     32    0.647       0.477       0.809          False    0.204     0.618        0.597        0.638      0.630       72
+80             e_web_service_strong     0.489     32    0.567       0.407       0.732          False    0.130     0.595        0.577        0.613      0.607       72
+81               e_web_service_page     0.489     32    0.595       0.439       0.750          False    0.111     0.569        0.554        0.584      0.582       72
+82                    e_web_negated     0.489     32      NaN         NaN         NaN           True      NaN     0.501        0.500        0.502      0.501        2
+83                e_web_hours_found     0.489     32    0.651       0.501       0.794          False    0.370     0.516        0.495        0.536      0.551       61
+84             e_web_24x7_emergency     0.489     32    0.667       0.500       0.821          False    0.167     0.543        0.518        0.567      0.663       62
+85                 e_web_nabh_claim     0.489     32    0.560       0.407       0.722          False    0.611     0.545        0.519        0.573      0.600       67
+86                      f_osm_match     1.000     61    0.590       0.453       0.716          False    0.775     0.549        0.525        0.570      0.653       52
+87                   f_osm_conflict     1.000     61    0.533       0.476       0.601           True    0.292     0.502        0.492        0.513      0.503       37
+88                 f_wikidata_match     1.000     61    0.520       0.453       0.596           True    0.538     0.522        0.511        0.533      0.527       23
+89              f_osm_emergency_yes     0.280     29    0.577       0.500       0.700           True      NaN     0.536        0.520        0.553      0.541       31
+90              f_osm_opening_hours     0.280     29    0.577       0.500       0.684           True      NaN     0.511        0.495        0.528      0.504        7
+91                       f_osm_24x7     0.280     29    0.577       0.500       0.684           True      NaN     0.510        0.496        0.527      0.512        7
+92         f_osm_speciality_service     0.026      4      NaN         NaN         NaN           True      NaN     0.532        0.467        0.589      0.529       32
+93                  g_type_hospital     1.000     61    0.577       0.526       0.635          False    0.492     0.526        0.517        0.538      0.716       43
+94                    g_type_clinic     1.000     61    0.436       0.378       0.486          False    0.508     0.475        0.464        0.484      0.315       43
+95                   g_type_dentist     1.000     61      NaN         NaN         NaN           True      NaN     0.499        0.497        0.500      0.474       40
+96                         g_public     1.000     61    0.498       0.391       0.617          False    0.462     0.506        0.497        0.512      0.521       25
+97                   g_public_level     0.029     15    0.306       0.083       0.556          False    0.661     0.500        0.493        0.515      0.678       28
+98                g_medical_college     1.000     61    0.459       0.390       0.527          False    0.508     0.520        0.511        0.529      0.547       28
+99                 g_iphs_essential     1.000     61    0.565       0.486       0.658          False    0.429     0.500        0.499        0.500      0.503       20
+100                      g_log_beds     0.251     38    0.436       0.250       0.619          False    0.260     0.694        0.666        0.721      0.702       29
+101                   g_log_doctors     0.363     27    0.489       0.255       0.735          False    0.516     0.620        0.590        0.644      0.719       45
+102                 g_n_specialties     1.000     61    0.672       0.524       0.803          False    0.473     0.681        0.655        0.704      0.792       42
+103  h_nfhs_institutional_birth_pct     0.997     61    0.399       0.250       0.553          False    0.416     0.541        0.521        0.562      0.513       13
+104             h_nfhs_csection_pct     0.997     61    0.371       0.222       0.525          False    0.553     0.549        0.523        0.573      0.496       12
+105            h_nfhs_insurance_pct     0.997     61    0.515       0.361       0.661          False    0.420     0.521        0.492        0.543      0.525       14
+106     h_nfhs_women_high_sugar_pct     0.997     61    0.435       0.280       0.598          False    0.628     0.545        0.525        0.564      0.483       12
+107                  h_tt_motor_min     0.997     61    0.435       0.305       0.566          False    0.469     0.487        0.465        0.506      0.482       10
+108                  h_log_pop_25km     0.999     61    0.509       0.355       0.660          False    0.477     0.542        0.519        0.570      0.479       11
+109               h_vf_records_25km     1.000     61    0.460       0.311       0.613          False    0.486     0.553        0.521        0.590      0.474       11

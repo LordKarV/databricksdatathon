@@ -1,0 +1,28 @@
+{
+ "backbone": "microsoft/MiniLM-L12-H384-uncased",
+ "name": "minilm-l12",
+ "max_len": 192,
+ "temperature": [
+  0.8304413913138577,
+  0.7104154162669611
+ ],
+ "best_epoch": 2,
+ "params": 33360770,
+ "model_version": "reader-minilm-l12-v1",
+ "val": {
+  "loss": 0.26177399883894487,
+  "about_auroc": 0.9879286121673003,
+  "about_ap": 0.9930191399019496,
+  "about_acc": 0.9423076923076923,
+  "offers_auroc": 0.9944418621747823,
+  "offers_ap": 0.9943152415330067,
+  "offers_acc": 0.9662770878987095,
+  "epoch": 2,
+  "train_loss_ema": 0.2344390589730108
+ },
+ "train_seconds": 7571,
+ "device": "mps",
+ "train_examples": 123947,
+ "batch_size": 128,
+ "micro_batch_size": 128
+}

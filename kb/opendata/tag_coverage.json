@@ -1,0 +1,488 @@
+{
+ "osm_all": {
+  "n": 136396,
+  "name": {
+   "non_null": 134099,
+   "share": 0.9832
+  },
+  "opening_hours_raw": {
+   "non_null": 3962,
+   "share": 0.029
+  },
+  "emergency": {
+   "non_null": 1831,
+   "share": 0.0134
+  },
+  "speciality_raw": {
+   "non_null": 6499,
+   "share": 0.0476
+  },
+  "beds": {
+   "non_null": 271,
+   "share": 0.002
+  },
+  "operator": {
+   "non_null": 5809,
+   "share": 0.0426
+  },
+  "operator_type": {
+   "non_null": 10065,
+   "share": 0.0738
+  },
+  "phone": {
+   "non_null": 7653,
+   "share": 0.0561
+  },
+  "website": {
+   "non_null": 2988,
+   "share": 0.0219
+  },
+  "wheelchair": {
+   "non_null": 978,
+   "share": 0.0072
+  },
+  "source_tag": {
+   "non_null": 110580,
+   "share": 0.8107
+  },
+  "check_date": {
+   "non_null": 2788,
+   "share": 0.0204
+  },
+  "addr_postcode": {
+   "non_null": 107049,
+   "share": 0.7848
+  },
+  "addr_city": {
+   "non_null": 7874,
+   "share": 0.0577
+  },
+  "wikidata": {
+   "non_null": 286,
+   "share": 0.0021
+  }
+ },
+ "osm_hospital": {
+  "n": 56215,
+  "name": {
+   "non_null": 54999,
+   "share": 0.9784
+  },
+  "opening_hours_raw": {
+   "non_null": 1253,
+   "share": 0.0223
+  },
+  "emergency": {
+   "non_null": 1756,
+   "share": 0.0312
+  },
+  "speciality_raw": {
+   "non_null": 2273,
+   "share": 0.0404
+  },
+  "beds": {
+   "non_null": 214,
+   "share": 0.0038
+  },
+  "operator": {
+   "non_null": 2540,
+   "share": 0.0452
+  },
+  "operator_type": {
+   "non_null": 4139,
+   "share": 0.0736
+  },
+  "phone": {
+   "non_null": 3994,
+   "share": 0.071
+  },
+  "website": {
+   "non_null": 1920,
+   "share": 0.0342
+  },
+  "wheelchair": {
+   "non_null": 552,
+   "share": 0.0098
+  },
+  "source_tag": {
+   "non_null": 43989,
+   "share": 0.7825
+  },
+  "check_date": {
+   "non_null": 1398,
+   "share": 0.0249
+  },
+  "addr_postcode": {
+   "non_null": 45501,
+   "share": 0.8094
+  },
+  "addr_city": {
+   "non_null": 3547,
+   "share": 0.0631
+  },
+  "wikidata": {
+   "non_null": 275,
+   "share": 0.0049
+  }
+ },
+ "osm_clinic": {
+  "n": 22949,
+  "name": {
+   "non_null": 22571,
+   "share": 0.9835
+  },
+  "opening_hours_raw": {
+   "non_null": 1313,
+   "share": 0.0572
+  },
+  "emergency": {
+   "non_null": 53,
+   "share": 0.0023
+  },
+  "speciality_raw": {
+   "non_null": 1947,
+   "share": 0.0848
+  },
+  "beds": {
+   "non_null": 44,
+   "share": 0.0019
+  },
+  "operator": {
+   "non_null": 1641,
+   "share": 0.0715
+  },
+  "operator_type": {
+   "non_null": 1562,
+   "share": 0.0681
+  },
+  "phone": {
+   "non_null": 1691,
+   "share": 0.0737
+  },
+  "website": {
+   "non_null": 587,
+   "share": 0.0256
+  },
+  "wheelchair": {
+   "non_null": 151,
+   "share": 0.0066
+  },
+  "source_tag": {
+   "non_null": 17470,
+   "share": 0.7613
+  },
+  "check_date": {
+   "non_null": 640,
+   "share": 0.0279
+  },
+  "addr_postcode": {
+   "non_null": 17177,
+   "share": 0.7485
+  },
+  "addr_city": {
+   "non_null": 2034,
+   "share": 0.0886
+  },
+  "wikidata": {
+   "non_null": 3,
+   "share": 0.0001
+  }
+ },
+ "osm_kind_counts": {
+  "hospital": 56215,
+  "centre": 37758,
+  "clinic": 22949,
+  "dentist": 6328,
+  "doctors": 3846,
+  "health_post": 3515,
+  "alternative": 1769,
+  "laboratory": 1272,
+  "yes": 1209,
+  "hospice": 395,
+  "blood_bank": 258,
+  "rehabilitation": 181,
+  "physiotherapist": 126,
+  "optometrist": 98,
+  "blood_donation": 86,
+  "counselling": 51,
+  "midwife": 50,
+  "sample_collection": 43,
+  "nursing_home": 40,
+  "doctor": 38,
+  "psychotherapist": 32,
+  "speech_therapist": 12,
+  "vaccination_centre": 7,
+  "occupational_therapist": 6,
+  "birthing_centre": 6
+ },
+ "osm_type_counts": {
+  "node": 126700,
+  "way": 9590,
+  "relation": 106
+ },
+ "osm_no_coordinate": 4,
+ "hours": {
+  "with_tag": 3962,
+  "parsed": 3836,
+  "is_24x7_true": 1346,
+  "is_24x7_false": 2490,
+  "top_raw": {
+   "24/7": 1331,
+   "Mo-Su 09:00-21:00": 45,
+   "Mo-Sa 08:00-20:00": 32,
+   "Mo-Sa 10:00-19:00": 27,
+   "Mo-Sa 10:00-20:00": 26,
+   "Mo-Sa 18:00-21:00": 23,
+   "Mo-Sa 18:00-20:00": 23,
+   "Mo-Sa 09:00-18:00": 23,
+   "Mo-Sa 08:00-18:00": 20,
+   "Mo-Sa 09:00-21:00": 20,
+   "Mo-Su 10:00-22:00": 20,
+   "Mo-Sa 09:00-20:00": 18,
+   "Mo-Sa 10:00-14:00,17:00-21:00": 18,
+   "Mo-Sa 10:00-18:00": 16,
+   "Mo-Sa 09:00-19:00": 16,
+   "Mo-Sa 10:00-13:00,18:00-21:00": 16,
+   "Mo-Sa 10:00-21:00": 15,
+   "Mo-Su 10:00-20:00": 15,
+   "Mo-Sa 17:00-21:00": 15,
+   "Mo-Sa 10:00-17:00": 14,
+   "Mo-Sa 17:00-20:00": 14,
+   "Mo-Sa 09:30-19:30": 14,
+   "Mo-Su 09:00-18:00": 13,
+   "Mo-Sa 09:00-17:00": 13,
+   "Mo-Sa 10:00-13:00": 13
+  },
+  "unparsed_examples": {
+   "sunrise-sunset": 5,
+   "Mo-Su,PH 12:00-12:00": 2,
+   "\"by appointment\"": 2,
+   "09:00": 2,
+   "available on call": 2,
+   "Available on call": 2,
+   "Mo-Su 08:30-20:00; Tu[3] off; Tu [4] off": 1,
+   "Morning 6 to 9 AM; Evening 5 to 10 PM": 1,
+   "24 hours Emergency": 1,
+   "\"Buiding is closed.\"": 1,
+   "Mo-Su 09:00-11:00 \"by appointment\"; Mo-Sa 17:00-20:00": 1,
+   "\"9 to 12, 5 to 8\"": 1,
+   "Mo-Sa 10:30-12:30,16:00-20:00; Su unknown": 1,
+   "Mo-Fr 19:30-21:30, Sa-Su unknown": 1,
+   "Mo-Sa 08:00-08:00": 1,
+   "\"Morning 10:00am to 1:00pm Evening 5:30pm to 9:00pm\"": 1,
+   "Sunrise-Sunset": 1,
+   "Mo-Fr 9: 00-12: 00": 1,
+   "Mo-Fr 11:00-20: 30;Sa-Su 11:00-13:00": 1,
+   "Mo-Sa 08:-14:00": 1,
+   "Mo-Sa 10:00-13:00:16:00-20:00": 1,
+   "10:00-13:000;18:00-20:30": 1,
+   "Mo-Fr 18: 30-21: 00": 1,
+   "Mo-Fr 18:00-21: 00": 1,
+   "Mo-Fr 9: 00-21: 00": 1
+  }
+ },
+ "emergency_values": {
+  "yes": 1483,
+  "no": 344,
+  "ambulance_station": 1,
+  "04146 259 194": 1,
+  "phone": 1,
+  "emergency_ward_entrance": 1
+ },
+ "top_specialities": {
+  "general": 2433,
+  "gynaecology": 569,
+  "ophthalmology": 413,
+  "paediatrics": 384,
+  "orthopaedics": 360,
+  "dentist": 352,
+  "dermatology": 350,
+  "homeopathy": 324,
+  "ayurveda": 274,
+  "cardiology": 256,
+  "surgery": 195,
+  "neurology": 135,
+  "radiology": 132,
+  "dentistry": 132,
+  "urology": 125,
+  "psychiatry": 125,
+  "orthodontics": 119,
+  "emergency": 116,
+  "otolaryngology": 116,
+  "dental oral maxillo facial surgery": 108,
+  "physiotherapy": 106,
+  "blood check": 106,
+  "fertility": 105,
+  "pathology": 92,
+  "gastroenterology": 88,
+  "multi speciality": 83,
+  "internal": 79,
+  "ent": 79,
+  "physiologist": 77,
+  "vaccination": 72,
+  "child psychiatry": 72,
+  "oncology": 71,
+  "maternity": 71,
+  "plastic surgery": 68,
+  "nephrology": 65,
+  "clinic": 53,
+  "community": 52,
+  "clinical pathology": 49,
+  "diabetology": 46,
+  "endocrinology": 45
+ },
+ "beds_quantiles": {
+  "0.1": 1.0,
+  "0.5": 22.0,
+  "0.9": 200.0,
+  "0.99": 1220.7000000000007
+ },
+ "last_edit_year": {
+  "2008": 1,
+  "2009": 17,
+  "2010": 84,
+  "2011": 68,
+  "2012": 90,
+  "2013": 113,
+  "2014": 494,
+  "2015": 338,
+  "2016": 758,
+  "2017": 512,
+  "2018": 464,
+  "2019": 11056,
+  "2020": 73333,
+  "2021": 13295,
+  "2022": 7690,
+  "2023": 5925,
+  "2024": 8996,
+  "2025": 5882,
+  "2026": 7280
+ },
+ "state_counts": {
+  "MAHARASHTRA": 15953,
+  "KERALA": 12665,
+  "TAMIL NADU": 11406,
+  "TELANGANA": 9484,
+  "GUJARAT": 9240,
+  "UTTAR PRADESH": 8959,
+  "RAJASTHAN": 8315,
+  "KARNATAKA": 7950,
+  "ANDHRA PRADESH": 7488,
+  "PUNJAB": 6820,
+  "BIHAR": 6563,
+  "MADHYA PRADESH": 6048,
+  "WEST BENGAL": 4204,
+  "ODISHA": 3372,
+  "HARYANA": 3217,
+  "ASSAM": 2141,
+  "JHARKHAND": 2033,
+  "UTTARAKHAND": 1937,
+  "CHHATTISGARH": 1840,
+  "DELHI": 1574,
+  "JAMMU AND KASHMIR": 1071,
+  "HIMACHAL PRADESH": 974,
+  "GOA": 608,
+  "MEGHALAYA": 387,
+  "MIZORAM": 385,
+  "MANIPUR": 374,
+  "TRIPURA": 258,
+  "NAGALAND": 258,
+  "CHANDIGARH": 233,
+  "PUDUCHERRY": 217,
+  "SIKKIM": 156,
+  "ARUNACHAL PRADESH": 149,
+  "ANDAMAN AND NICOBAR ISLANDS": 41,
+  "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU": 35,
+  "LADAKH": 31,
+  "LAKSHADWEEP": 6
+ },
+ "wikidata": {
+  "n": 14286,
+  "name": {
+   "non_null": 14277,
+   "share": 0.9994
+  },
+  "lat": {
+   "non_null": 13789,
+   "share": 0.9652
+  },
+  "beds": {
+   "non_null": 106,
+   "share": 0.0074
+  },
+  "website": {
+   "non_null": 601,
+   "share": 0.0421
+  },
+  "operator": {
+   "non_null": 5,
+   "share": 0.0003
+  },
+  "postcode": {
+   "non_null": 12714,
+   "share": 0.89
+  },
+  "health_specialty": {
+   "non_null": 47,
+   "share": 0.0033
+  },
+  "inception": {
+   "non_null": 494,
+   "share": 0.0346
+  }
+ },
+ "wikidata_kind_top": {
+  "health sub-centre": 11382,
+  "primary health centre": 1104,
+  "hospital": 1103,
+  "public hospital": 267,
+  "rural hospital": 201,
+  "medical organization": 192,
+  "community health center": 162,
+  "Block Primary Health Centre": 152,
+  "family welfare center": 86,
+  "sub-divisional hospital": 36,
+  "private hospital": 35,
+  "medical school": 34,
+  "state general hospital": 24,
+  "medical college in India": 19,
+  "district hospital in India": 19,
+  "clinic": 19,
+  "dental clinic": 10,
+  "tertiary referral hospital": 9,
+  "Institute of National Importance": 9,
+  "university": 8
+ },
+ "wikidata_state_counts": {
+  "WEST BENGAL": 11523,
+  "TRIPURA": 1088,
+  "KERALA": 337,
+  "KARNATAKA": 188,
+  "MAHARASHTRA": 124,
+  "TAMIL NADU": 75,
+  "TELANGANA": 44,
+  "DELHI": 43,
+  "JHARKHAND": 43,
+  "UTTAR PRADESH": 36,
+  "ASSAM": 36,
+  "GUJARAT": 33,
+  "ODISHA": 32,
+  "BIHAR": 29,
+  "HARYANA": 25,
+  "ANDHRA PRADESH": 24,
+  "MIZORAM": 21,
+  "PUNJAB": 20,
+  "MADHYA PRADESH": 19,
+  "RAJASTHAN": 15,
+  "JAMMU AND KASHMIR": 7,
+  "CHANDIGARH": 5,
+  "SIKKIM": 5,
+  "CHHATTISGARH": 4,
+  "UTTARAKHAND": 3,
+  "HIMACHAL PRADESH": 3,
+  "NAGALAND": 2,
+  "PUDUCHERRY": 2,
+  "MEGHALAYA": 2,
+  "GOA": 1
+ }
+}

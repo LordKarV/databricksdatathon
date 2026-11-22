@@ -1,0 +1,12 @@
+{
+  "name": "referral-saathi",
+  "description": "Referral Saathi: evidence-backed facility referrals",
+  "resources": [
+    {"name": "sql-warehouse", "description": "Warehouse for workspace.referral_saathi tables",
+     "sql_warehouse": {"id": "6a2f5637720a2c17", "permission": "CAN_USE"}},
+    {"name": "serving-endpoint-text", "description": "Text LLM",
+     "serving_endpoint": {"name": "databricks-meta-llama-3-3-70b-instruct", "permission": "CAN_QUERY"}},
+    {"name": "serving-endpoint-vision", "description": "Vision LLM",
+     "serving_endpoint": {"name": "databricks-llama-4-maverick", "permission": "CAN_QUERY"}}
+  ]
+}

@@ -1,66 +1,125 @@
 // Network first for navigations and the shell; cached shell on network error or status >= 500
 // (a stopped Databricks App answers with a proxy error page, not a network error). Redirects pass
 // through so an expired session can sign in again. API calls are never cached here, except the
-// offline state packs, which are stored on request (message 'cache-pack') in their own cache.
-const CACHE = 'rs-shell-v3';
-const PACKS = 'rs-packs-v1';
-const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/slip.js', '/manifest.webmanifest'];
+// offline state packs, which are stored on request (message 'cache-pack') in IndexedDB (spec, #32).
+const CACHE = 'rs-shell-v40';
+const OLD_PACKS = 'rs-packs-v1';  // Cache Storage before #32; moved to IndexedDB on activate
+
+// ---------- pack store: IndexedDB 'rs-packs', object store 'packs', {slug, body, sha256, built, saved_at} ----------
+function idb() {
+  return new Promise((ok, fail) => {
+    const r = indexedDB.open('rs-packs', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('packs', {keyPath: 'slug'});
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => fail(r.error);
+  });
+}
+async function tx(mode, fn) {
+  const db = await idb();
+  try {
+    return await new Promise((ok, fail) => {
+      const t = db.transaction('packs', mode);
+      const req = fn(t.objectStore('packs'));
+      t.oncomplete = () => ok(req && req.result);
+      t.onerror = t.onabort = () => fail(t.error);
+    });
+  } finally {
+    db.close();
+  }
+}
+const getPack = slug => tx('readonly', s => s.get(slug));
+const putPack = rec => tx('readwrite', s => s.put(rec));
+const dropPack = slug => tx('readwrite', s => s.delete(slug)).then(() => ({status: 'dropped'}));
+
+async function migrateOldPacks() {
+  if (!(await caches.has(OLD_PACKS))) return;
+  const cache = await caches.open(OLD_PACKS);
+  for (const req of await cache.keys()) {
+    const res = await cache.match(req);
+    const slug = new URL(req.url).pathname.split('/').pop();
+    if (!(await getPack(slug))) {
+      await putPack({slug, body: await res.arrayBuffer(), sha256: res.headers.get('X-Pack-Sha256'),
+        built: res.headers.get('X-Pack-Built') || '', saved_at: Date.now()});
+    }
+  }
+  await caches.delete(OLD_PACKS);
+}
+function packResponse(rec) {
+  return new Response(rec.body, {headers: {'Content-Type': 'application/json', 'X-Pack-Sha256': rec.sha256 || '',
+    'X-Pack-Built': rec.built || ''}});
+}
+const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/how.js', '/stories.js', '/input.js',
+  '/passed.js', '/receipt.js',
+  '/lexicon.json', '/manifest.webmanifest', '/voice.js', '/speech.js', '/speech_templates.json',
+  '/community.js', '/journey.js', '/pulse.js', '/translate.js', '/route.js', '/map.js', '/trap.js', '/i18n/en.json', '/i18n/hi.json',
+  '/fonts/barlow-500.woff2', '/fonts/barlow-600.woff2', '/fonts/barlow-condensed-600.woff2',
+  '/fonts/plex-mono-500-digits.woff2', '/fonts/hind-500-deva.woff2', '/fonts/hind-600-deva.woff2'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));
 
 self.addEventListener('activate', e => e.waitUntil(
-  caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== PACKS).map(k => caches.delete(k))))
+  migrateOldPacks().catch(() => {})
+    .then(() => caches.keys())
+    .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== OLD_PACKS).map(k => caches.delete(k))))
     .then(() => self.clients.claim())));
+
+// A hanging network (weak 2G: no answer, no refusal) would hold the page on the network for a minute or more.
+// After NET_MS the cached copy answers; with nothing cached, the network is still awaited.
+const NET_MS = 4000;
+function network(req) {
+  return Promise.race([fetch(req), new Promise((_, no) => setTimeout(() => no(new Error('network timeout')), NET_MS))]);
+}
 
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
   if (url.pathname.startsWith('/api/pack/') && url.pathname !== '/api/pack/version') {
     // Offline: answer from the stored pack. Online: the network, untouched (no write-through).
-    e.respondWith(fetch(e.request).catch(() => caches.open(PACKS).then(c => c.match(url.pathname))
-      .then(r => r || new Response('{"error":"pack not saved"}', {status: 504, headers: {'Content-Type': 'application/json'}}))));
+    const slug = url.pathname.split('/').pop();
+    e.respondWith(network(e.request).catch(() => getPack(slug).catch(() => null)
+      .then(rec => rec ? packResponse(rec) : fetch(e.request).catch(() =>
+        new Response('{"error":"pack not saved"}', {status: 504, headers: {'Content-Type': 'application/json'}})))));
     return;
   }
   if (url.pathname.startsWith('/api/')) return;
   const key = e.request.mode === 'navigate' ? '/' : url.pathname;
-  if (!SHELL.includes(key)) return;
-  e.respondWith(fetch(e.request).then(res => {
+  if (!SHELL.includes(key) && !key.startsWith('/i18n/')) return;  // other languages: cached once chosen
+  e.respondWith(network(e.request).then(res => {
     if (res.status >= 500) return caches.match(key).then(c => c || res);
     if (res.ok && res.type === 'basic') {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(key, copy));
     }
     return res;
-  }).catch(() => caches.match(key)));
+  }).catch(() => caches.match(key).then(c => c || fetch(e.request))));
 });
 
-// Loader stub: the page posts {type: 'cache-pack', slug}; the reply goes back on the message port, or
-// to the posting client, as {type: 'pack-status', slug, status, sha256?, error?}.
+// Loader stub: the page posts {type: 'cache-pack' | 'drop-pack', slug}; the reply goes back on the message port, or
+// to the posting client, as {type: 'pack-status', slug, status, sha256?, error?}. offline.js drops neighbour
+// packs that no recent fix needed.
 async function cachePack(slug) {
   const v = await fetch('/api/pack/version', {cache: 'no-store'}).then(r => r.ok ? r.json() : null);
   const meta = v && v.packs && v.packs[slug];
   if (!meta) return {status: 'unknown-slug'};
-  const cache = await caches.open(PACKS);
-  const key = '/api/pack/' + slug;
-  const old = await cache.match(key);
-  if (old && old.headers.get('X-Pack-Sha256') === meta.sha256) return {status: 'unchanged', sha256: meta.sha256};
-  const res = await fetch(key, {cache: 'no-store'});
+  const old = await getPack(slug);
+  if (old && old.sha256 === meta.sha256) return {status: 'unchanged', sha256: meta.sha256};
+  const res = await fetch('/api/pack/' + slug, {cache: 'no-store'});
   if (!res.ok) return {status: 'error', error: 'HTTP ' + res.status};
-  // The body arrives decoded; store it with the sha so the next check can skip the download.
+  // The body arrives decoded; stored with the sha so the next check can skip the download. Format unchanged.
   const body = await res.arrayBuffer();
-  await cache.put(key, new Response(body, {headers: {'Content-Type': 'application/json',
-    'X-Pack-Sha256': meta.sha256, 'X-Pack-Built': meta.built || ''}}));
+  await putPack({slug, body, sha256: meta.sha256, built: meta.built || '', saved_at: Date.now()});
   return {status: 'saved', sha256: meta.sha256, bytes: body.byteLength};
 }
 
 self.addEventListener('message', e => {
   const m = e.data || {};
-  if (m.type !== 'cache-pack' || typeof m.slug !== 'string') return;
+  if ((m.type !== 'cache-pack' && m.type !== 'drop-pack') || typeof m.slug !== 'string') return;
   const reply = r => {
     const msg = Object.assign({type: 'pack-status', slug: m.slug}, r);
     if (e.ports && e.ports[0]) e.ports[0].postMessage(msg);
     else if (e.source) e.source.postMessage(msg);
   };
-  e.waitUntil(cachePack(m.slug).then(reply, err => reply({status: 'error', error: String(err)})));
+  e.waitUntil((m.type === 'drop-pack' ? dropPack : cachePack)(m.slug)
+    .then(reply, err => reply({status: 'error', error: String(err)})));
 });

@@ -1,0 +1,3168 @@
+{
+ "meta": {
+  "generated_utc": "2026-11-22T02:22:57Z",
+  "skip_network": true,
+  "timeout_s": 1200,
+  "areas": [
+   "claims",
+   "contracts_v2",
+   "integrity",
+   "labels",
+   "lineage",
+   "location",
+   "privacy_licence",
+   "record_loss",
+   "web_facts"
+  ],
+  "counts": {
+   "pass": 122,
+   "warn": 88,
+   "fail": 20,
+   "not_run": 21
+  },
+  "seconds": 642.2
+ },
+ "checks": [
+  {
+   "area": "claims",
+   "check": "claims_file_is_cleaning_copy",
+   "seconds": 0.1,
+   "metric": "sha256 equal=True; manifest rows 469498 vs 469498",
+   "threshold": "byte copy and row count equal",
+   "detail": "derived/v1/claims.parquet must be the cleaning/claims output it says it copies",
+   "examples": [
+    "e233088e021b81c3"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "claims_verbatim_at_index",
+   "seconds": 0.6,
+   "metric": "0 / 469498 claims not verbatim at stated field and index",
+   "threshold": "0",
+   "detail": "no raw item: 0; text differs: 0",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "claims_substring_of_raw_field",
+   "seconds": 10.4,
+   "metric": "0 / 469498",
+   "threshold": "0",
+   "detail": "claim text found verbatim inside its stated raw field of the same record",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "raw_items_represented_once",
+   "seconds": 0.0,
+   "metric": "misses 0, extras 0, duplicate keys 0; expected 469498, claims 469498",
+   "threshold": "0",
+   "detail": "independent Python reconstruction over the 9,959 kept records (kie, UUID id, first copy)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "idx_equals_raw_position",
+   "seconds": 0.0,
+   "metric": "43706 / 469498 claims in 1813 records",
+   "threshold": "0 (documentation issue: idx is the rank among non-empty items)",
+   "detail": "by field {'procedure': 21258, 'capability': 11416, 'equipment': 11032}",
+   "examples": [
+    "001316e5:equi:8: raw position 9",
+    "00197d6a:proc:6: raw position 7",
+    "0020c82a:equi:0: raw position 1",
+    "005c7c7e:proc:0: raw position 1",
+    "0078496c:capa:13: raw position 14"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "kept_text_untrimmed_unicode_space",
+   "seconds": 0.3,
+   "metric": "0 / 469498",
+   "threshold": "0",
+   "detail": "cosmetic: such texts never equal a Python .strip() of the same item",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "split_records_dropped",
+   "seconds": 0.0,
+   "metric": "30 facility records dropped; 88 fragment rows; about 1499 sentence items lost",
+   "threshold": "0 records lost",
+   "detail": "upstream CSV breakage carried into the Marketplace table; recoverable by stitching fragments",
+   "examples": [
+    "12d987ef-1ff8-4025-bf5d-8870f2083a90",
+    "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5",
+    "22142a37-a47a-4a9a-bc80-f5981361f000",
+    "287913e3-162c-45d5-873a-eada15f8591b",
+    "3e951c62-51b0-459e-972c-2e1790618894"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "duplicate_uid_rows_identical",
+   "seconds": 0.1,
+   "metric": "0 of 11 duplicated ids differ",
+   "threshold": "0",
+   "detail": "11 extra rows dropped by first-row dedup; dedup order is arbitrary, so copies must be identical",
+   "examples": [
+    "08344cdb-f455-4c22-8d31-a0a8e849124b",
+    "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+    "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+    "9264b21d-4aea-460a-9c77-613407df8439",
+    "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "claim_id_unique_and_format",
+   "seconds": 0.1,
+   "metric": "format mismatches 0, duplicate claim_ids 0, uid8 prefix collisions 0",
+   "threshold": "0",
+   "detail": "claim_id = uid8:field4:idx must be unique; an 8-hex prefix collision would merge two records' ids",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "dup_in_record_recomputed",
+   "seconds": 0.6,
+   "metric": "0 / 469498 disagree; 27528 echoes",
+   "threshold": "0",
+   "detail": "first copy (procedure, capability, equipment, description order) kept, later ones flagged",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "description_split_fragments",
+   "seconds": 0.1,
+   "metric": "1815 / 18388 description sentences end at an abbreviation or are 3 chars or fewer",
+   "threshold": "< 1% of description sentences",
+   "detail": "abbreviation ends 1678, very short 431; split rule ([.!?])\\s+",
+   "examples": [
+    "0001f41e:desc:1: 'It was a dream nurtured by a Retina fellow of Dr.'",
+    "0001f41e:desc:3: 'This fellow is none other than Dr.'",
+    "00052555:desc:1: 'The clinic is visited by general surgeons Dr.'",
+    "00052555:desc:2: 'Ranvijay Kumar, Dr.'",
+    "00052555:desc:3: 'Madhu Priya and Dr.'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "array_truncated_at_50",
+   "seconds": 0.3,
+   "metric": "2078 / 9959 records have a 50-item array",
+   "threshold": "informational",
+   "detail": "per field {'procedure': 1124, 'equipment': 185, 'capability': 1714}; not a claims bug, but 'not found' must never read as 'not offered'",
+   "examples": [],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "attribution_columns_consistent",
+   "seconds": 0.0,
+   "metric": "0 / 469498 labels contradict their detector columns",
+   "threshold": "0",
+   "detail": "own without self name 0; unanchored with self name 0; unanchored that still list a foreign or sibling name 0 (detector put them in a credential/relation context); label set ok=True",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "dps_sentence_rows_match_claims",
+   "seconds": 0.5,
+   "metric": "0 inconsistencies over 469498 claims",
+   "threshold": "0",
+   "detail": "{\"claims_without_dp\": 0, \"dp_without_claim\": 0, \"dp_dup\": 0, \"text_differs\": 0, \"uid_differs\": 0, \"field_differs\": 0, \"attribution_differs\": 0, \"rule_differs\": 0, \"dp_id_format\": 0}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "app_facts_claim_text",
+   "seconds": 1.5,
+   "metric": "0 unknown ids, 0 field/text/flag mismatches over 44968",
+   "threshold": "0",
+   "detail": "the app shows these quotes verbatim",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "planner_cites_nonoffer_sentences",
+   "seconds": 0.1,
+   "metric": "29 (capability, claim) citations over 28 kb-cued sentences; 48164 citations in all",
+   "threshold": "0",
+   "detail": "the planner shows these as evidence the facility has the capability; read in full: {'nonoffer': 21, 'offer': 7, 'unclear': 1} (nonoffer = the citation is wrong, offer = cue false alarm)",
+   "examples": [
+    "blood_transfusion <- 28726757:capa:23: plans to launch a blood bank",
+    "blood_transfusion <- 51c1ed79:capa:8: blood bank not available",
+    "blood_transfusion <- 7795f9f8:capa:16: blood bank not available at the hospital",
+    "blood_transfusion <- f7e56a1a:proc:14: extractor meta text: not listed in the content",
+    "ct_scan <- 001316e5:proc:5: SonoCT is an ultrasound mode, not CT"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "claims",
+   "check": "lexicon_matches_reproduce_from_json",
+   "seconds": 68.8,
+   "metric": "0 pair differences; file 64670 pairs / 58004 sentences (TAXONOMY.md states 64670 / 58004)",
+   "threshold": "0",
+   "detail": "only from lexicon.json 0, only in parquet 0",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "lexicon_matches_join_claims",
+   "seconds": 0.0,
+   "metric": "0 inconsistencies over 64670 pairs",
+   "threshold": "0",
+   "detail": "{\"unknown_claim\": 0, \"dup_pairs\": 0, \"unique_id_differs\": 0, \"field_differs\": 0, \"attribution_differs\": 0, \"kind_differs\": 0, \"dup_in_record_differs\": 0}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "lexicon_nonoffer_cue_reproduce",
+   "seconds": 1.2,
+   "metric": "nonoffer_cue 0, negation_extra 0 differ over 64670",
+   "threshold": "0",
+   "detail": "reapplied from lexicon.json shared_cues.nonoffer and services.*.negation_extra",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "claims_nonoffer_vs_kb_cue",
+   "seconds": 0.1,
+   "metric": "116 / 172 kb-cued service sentences have claims.nonoffer = False",
+   "threshold": "0",
+   "detail": "claims.nonoffer True on 57 rows, on untagged rows 0; consumers of claims.nonoffer (app/facts/build.py, planner/data_v1.py) miss these non-offers",
+   "examples": [
+    "001316e5:proc:5",
+    "001316e5:equi:4",
+    "02331520:equi:13",
+    "05773700:capa:40",
+    "0ad45bb1:desc:0"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "specialty_map_covers_raw_values",
+   "seconds": 0.3,
+   "metric": "raw values 2932, map rows 2933; missing 0, not in raw 1, dup keys 0, n_facilities wrong 0, unknown service ids 0, unknown prereq ids 0",
+   "threshold": "0",
+   "detail": "every raw specialties string maps exactly once to a known id; facility counts over the 9,959 usable records",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "specialty_weights_consistent",
+   "seconds": 0.0,
+   "metric": "1346 rows; weight out of [0,1] 0, unknown value 0, unknown service 0, dup 0, pair not in map 0",
+   "threshold": "0",
+   "detail": "columns ['specialty', 'service', 'kind', 'k_text_positive', 'n_facilities', 'pooled_rate', 'weight', 'k_fit_half']",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "attribution_handread",
+   "seconds": 0.1,
+   "metric": "{\"ambiguous\": [16, 20, [0.584, 0.919]], \"other_facility\": [15, 20, [0.531, 0.888]], \"own_anchored\": [19, 20, [0.764, 0.991]], \"unanchored\": [20, 20, [0.839, 1.0]]}",
+   "threshold": "other_facility precision >= 0.70; unanchored >= 0.90",
+   "detail": "{\"per\": {\"ambiguous\": {\"n\": 20, \"correct\": 16, \"precision\": 0.8, \"wilson\": [0.584, 0.919], \"verdicts\": {\"other\": 14, \"own\": 4, \"unclear\": 2}}, \"other_facility\": {\"n\": 20, \"correct\": 15, \"precision\": 0.75, \"wilson\": [0.531, 0.888], \"verdicts\": {\"other\": 15, \"own\": 5}}, \"own_anchored\": {\"n\": 20, \"correct\": 19, \"precision\": 0.95, \"wilson\": [0.764, 0.991], \"verdicts\": {\"own\": 19, \"other\": 1}}, \"unanchored\": {\"n\": 20, \"correct\": 20, \"precision\": 1.0, \"wilson\": [0.839, 1.0], \"verdicts\": {\"own\": 20}}}, \"recall\": {\"other_facility_only\": 0.558, \"other_or_ambiguous\": 0.882, \"est_other_sentences\": 127...",
+   "examples": [
+    "cd0cdb98:capa:23 [ambiguous->own] own corporate parent; relation context is about this facility",
+    "e9c707b0:desc:0 [ambiguous->own] own founding vision; other cities named only as where patients used to go",
+    "454b7120:capa:22 [ambiguous->own] this centre offers fellowships affiliated to a university",
+    "229a9ce3:capa:39 [ambiguous->own] visiting surgeons operate at this hospital (TGMC = record)",
+    "4b992a3a:capa:31 [other_facility->own] Pondicherry = Puducherry, own city; foreign name is the website Watchdoq"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "lexicon_precision_handread",
+   "seconds": 0.0,
+   "metric": "37/40 = 0.925 Wilson (0.801, 0.974)",
+   "threshold": ">= 0.90",
+   "detail": "random matched (sentence, service) pairs, all 37 services, seed 9102; prior: TAXONOMY v1.1 new-5 95/100 (0.888-0.978), reviewer 37/40; verdicts {'correct': 37, 'wrong': 3}",
+   "examples": [
+    "14166899:capa:18 icu: a critical care team at an Ayurveda college hospital, no unit named",
+    "0d715cf7:capa:6 ct_scan: \"CT Hospital\" is a hospital name in a staff panel list",
+    "ce701b25:proc:11 ultrasound: dental 3D (CBCT) scan, not ultrasound"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "lexicon_recall_handread",
+   "seconds": 0.0,
+   "metric": "misses 2/40 unmatched sentences (Wilson 0.014-0.165); sentence-pair recall about 0.744 (0.468-0.912)",
+   "threshold": "recall >= 0.80",
+   "detail": "random unmatched sentences, seed 9103; unmatched pool 411494; no prior recall estimate existed (REVIEW.md 'Not run')",
+   "examples": [
+    "c15da265:equi:15 should be emergency_24x7: borderline: names an Emergency Hospital building within the complex",
+    "c5c18921:proc:14 should be psychiatric_care: treats personality disorders: psychiatric treatment, no psychiatr* word"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "specialty_map_handread",
+   "seconds": 0.0,
+   "metric": "39/40 = 0.975 Wilson (0.871, 0.996)",
+   "threshold": ">= 0.90",
+   "detail": "facility-mention-weighted sample of (record, specialties value), seed 9104; label and prereq_for both judged; prior: fresh v1.1 service-labelled 39/40 (0.871-0.996), reviewer random 80/80 after fixes",
+   "examples": [
+    "spineNeurosurgery -> neurosurgery (prereq ): v1.1 defines neurosurgery as brain surgery incl. head injury with spine as an attribute; spine values are too_general with prereq_for, but spineNeurosurgery (687 facilities) maps straight to the service"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "nonoffer_positives_handread",
+   "seconds": 0.0,
+   "metric": "29/30 positives really state an offer; Wilson (0.833, 0.994)",
+   "threshold": ">= 0.90",
+   "detail": "random kb positives (no cue, not other_facility, not staff/directory), seed 9105; verdicts {'offer': 29, 'wrong_service': 1}; prior: REPORT claims-03 v2 cues 34/40, handcheck D 14/15",
+   "examples": [
+    "cd8b64e1:equi:1 mri: QMRT is a magnetic resonance therapy device, not an MRI scanner; no negation missed"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "claims",
+   "check": "nonoffer_broad_scan",
+   "seconds": 0.4,
+   "metric": "317 / 63370 positive pairs carry a broad cue word",
+   "threshold": "informational (upper bound)",
+   "detail": "top words {'no': 81, 'visiting': 30, 'without': 29, 'referral': 29, 'closed': 25, 'not': 18, 'on-call': 14, 'temporary': 12, 'nearby': 11, 'on call': 11, 'monthly': 11, 'referenced': 7}; see nonoffer_30 hand read for the true rate",
+   "examples": [
+    "00fd1dbd:proc:1",
+    "00fd1dbd:proc:20",
+    "00fd1dbd:proc:30",
+    "02331520:desc:12",
+    "02987e8e:proc:14"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "other_facility_own_place",
+   "seconds": 0.1,
+   "metric": "126 / 9506 other_facility sentences",
+   "threshold": "0",
+   "detail": "in 52 records; list in out/other_facility_own_place_alias.csv",
+   "examples": [
+    "001f21d5:capa:3",
+    "04b0ff52:capa:10",
+    "04b0ff52:capa:27",
+    "05f2409f:capa:0",
+    "05f2409f:capa:1"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "negation_cue_nonsurgical",
+   "seconds": 0.0,
+   "metric": "17 / 47 negation-cued pairs",
+   "threshold": "0",
+   "detail": "by service {'de_addiction': 4, 'cath_lab_angioplasty': 3, 'neurosurgery': 3, 'orthopaedic_trauma_surgery': 2, 'cataract_surgery': 1, 'stemi_thrombolysis': 1, 'palliative_care': 1, 'radiotherapy': 1, 'burn_care': 1}",
+   "examples": [
+    "0ad45bb1:desc:0",
+    "0eee91dc:capa:24",
+    "1f58d11b:desc:1",
+    "39d34a57:proc:44",
+    "444fb0a8:proc:15"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "mri_magnetic_resonance_therapy",
+   "seconds": 0.0,
+   "metric": "10 mri pairs; 3 facilities have MRI only through these",
+   "threshold": "0",
+   "detail": "all 3 are in app/facts pairs.mri graded moderate (G_mod, score about 0.8)",
+   "examples": [
+    "abe799fb",
+    "cd8b64e1",
+    "e7795a4f"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "claims",
+   "check": "ultrasound_3d_scan_only",
+   "seconds": 0.1,
+   "metric": "81 / 101 are not ultrasound (dental intraoral/CBCT, eye OCT, orthotics); 38 facilities have ultrasound only through them",
+   "threshold": "0",
+   "detail": "precision of the 3D-scan alternative 18/101; kb lexicon.json ultrasound include",
+   "examples": [
+    "00154d81:equi:2",
+    "00cde61f:capa:32",
+    "00cde61f:equi:3",
+    "0207488f:proc:4",
+    "039a1b36:proc:5"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "spine_neurosurgery_only",
+   "seconds": 0.1,
+   "metric": "265 / 687 spineNeurosurgery facilities",
+   "threshold": "0",
+   "detail": "label=neurosurgery; evidence weight [0.4166] damps it in the model; coverage 'any' counts them as neurosurgery",
+   "examples": [
+    "0020c82a",
+    "00a95ae5",
+    "02085f20",
+    "02f048fa",
+    "04747dd8"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "claims",
+   "check": "v2_claim_id_contract",
+   "seconds": 0.0,
+   "metric": "gated: set RUN_V2=1 once derived/v2 is final",
+   "threshold": "0 unknown claim ids",
+   "detail": "",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "integrity",
+   "check": "raw_hashes_unchanged",
+   "seconds": 0.0,
+   "metric": "6/6 match",
+   "threshold": "all match",
+   "detail": "sha256 of data/raw/* vs derived/v1 MANIFEST raw_input_sha256",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "raw_manifest_aggregates",
+   "seconds": 0.1,
+   "metric": "345/345 checks reproduce",
+   "threshold": "all reproduce",
+   "detail": "data/raw/MANIFEST.json warehouse values recomputed locally",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "raw_live_warehouse",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "live == local",
+   "detail": "sql.sh failed 3 times",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "v1_manifest_rows_bytes",
+   "seconds": 0.1,
+   "metric": "20/20 match",
+   "threshold": "rows and bytes equal; every file listed",
+   "detail": "MANIFEST tables + csv_copies vs disk",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "v1_canonical_copies",
+   "seconds": 0.0,
+   "metric": "9/9 copies identical; 0 sources moved",
+   "threshold": "copy == manifest == source",
+   "detail": "sha256 of derived/v1 copies and cleaning/ sources",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "v1_inputs_not_stale",
+   "seconds": 0.0,
+   "metric": "30/30 unchanged",
+   "threshold": "all unchanged",
+   "detail": "an input or script changed after the build means the build is not reproducible from the tree as it stands",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "v1_build_stats",
+   "seconds": 0.1,
+   "metric": "0 mismatches",
+   "threshold": "0",
+   "detail": "build_stats.json s1 and s6 counts vs tables",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "documented_row_counts",
+   "seconds": 0.0,
+   "metric": "33/33 match",
+   "threshold": "all match",
+   "detail": "row counts stated in README/VF_DETAILS/WEB_EVIDENCE/TAXONOMY/crawl_stats vs disk",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "schema_profile",
+   "seconds": 25.5,
+   "metric": "77 tables, 1265 columns; 91 other files",
+   "threshold": "every JSON parses",
+   "detail": "outputs/schema_profile.csv, outputs/json_inventory.csv",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "null_encodings",
+   "seconds": 0.0,
+   "metric": "8 key/enum columns carry string nulls (230 cells)",
+   "threshold": "0 outside verbatim text and JSON columns",
+   "detail": "38 columns use '' for missing (4431780 cells); full list outputs/null_encodings.csv",
+   "examples": [
+    "kb/opendata/vf_candidates.parquet.vf_type: 105 null strings, 0 empty containers of 17662",
+    "kb/opendata/vf_opendata_match.parquet.vf_type: 105 null strings, 0 empty containers of 17662",
+    "derived/v1/grades.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799",
+    "derived/v1/grades_v1.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799",
+    "derived/v1/place_gazetteer.parquet.name: 1 null strings, 0 empty containers of 147345"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "primary_keys",
+   "seconds": 1.1,
+   "metric": "51/52 keys unique and non-null",
+   "threshold": "all",
+   "detail": "outputs/primary_keys.csv",
+   "examples": [
+    "kb/opendata/vf_opendata_facts.parquet (unique_id+source+source_id+field+value): 1 duplicate keys, 0 null keys of 6001; e.g. ['dda3a4d5-9b8c-45cb-9d67-49f5c68ae415|osm|node/6994541474|speciality|bone and joints']"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "integrity",
+   "check": "exact_duplicate_rows",
+   "seconds": 1.2,
+   "metric": "1 tables with duplicates",
+   "threshold": "0",
+   "detail": "77 tables scanned; outputs/exact_duplicates.csv",
+   "examples": [
+    "kb/opendata/vf_opendata_facts.parquet: 1 exact duplicate rows of 6001"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "csv_copies_match_parquet",
+   "seconds": 0.0,
+   "metric": "0 differing columns",
+   "threshold": "0",
+   "detail": "facility_trust, source_classes, source_domains",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "usable_set_definition",
+   "seconds": 0.1,
+   "metric": "9959 usable of 10088 raw; 11 duplicated ids, 0 differ",
+   "threshold": "duplicates identical; per-record tables == usable set",
+   "detail": "rule: UUID unique_id and source == 'kie' (9970 rows), keep first per id",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "unique_id_fk",
+   "seconds": 0.8,
+   "metric": "40/40 id columns fully resolve",
+   "threshold": "every id in raw and usable",
+   "detail": "outputs/unique_id_fk.csv",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "uid8_prefix_unique",
+   "seconds": 0.0,
+   "metric": "0 colliding prefixes of 9959",
+   "threshold": "0",
+   "detail": "uid8 = unique_id[:8] over the usable set",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "claim_id_format",
+   "seconds": 0.6,
+   "metric": "0 malformed, 0 disagree, 0 (record, field) groups with idx gaps",
+   "threshold": "0",
+   "detail": "469498 claims; fields {'capability': 231465, 'procedure': 163647, 'equipment': 55998, 'description': 18388}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "claim_id_fk",
+   "seconds": 1.8,
+   "metric": "19/20 sources resolve; 0 with text drift",
+   "threshold": "all resolve, own record, text equal",
+   "detail": "outputs/claim_id_fk.csv (packs: app_packs_integrity)",
+   "examples": [
+    "app facts.pairs evidence: 73 ids cite another record, e.g. [('09913236:capa:0', '90e433dc-662f-40e6-83cf-b657d79b5eda'), ('09913236:capa:6', '90e433dc-662f-40e6-83cf-b657d79b5eda')]"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "integrity",
+   "check": "dp_id_format",
+   "seconds": 0.8,
+   "metric": "0 bad dp_ids; 0 issues",
+   "threshold": "0",
+   "detail": "518191 data points",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "dps_copies_raw_values",
+   "seconds": 0.1,
+   "metric": "0 mismatches",
+   "threshold": "0",
+   "detail": "existence, phone, email, location (5 dp) and service_claim originals vs raw / grades",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "grades_vs_dps",
+   "seconds": 0.1,
+   "metric": "0 inconsistencies",
+   "threshold": "0",
+   "detail": "10799 graded pairs; facility_trust counts recomputed from claims/grades/dps",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "evidence_rules_vs_dps",
+   "seconds": 0.0,
+   "metric": "0 mismatches",
+   "threshold": "0",
+   "detail": "20 rules",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "gold_keys_and_fk",
+   "seconds": 0.1,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "176 pairs ({'test': 88, 'dev': 88}); 331 label rows; 158 e2e pairs",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "gold_split_leakage",
+   "seconds": 0.0,
+   "metric": "0 cross-split links",
+   "threshold": "0",
+   "detail": "links from splits.json group, facility_groups dup_group_id, possible_same_site, co_located_with",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "gold_merge_reproduces",
+   "seconds": 0.0,
+   "metric": "0 merge mismatches; 141 TEST-verified points published",
+   "threshold": "0 mismatches; TEST verdicts not in model inputs",
+   "detail": "141 data points carry a TEST gold verdict in score/status ({'location': 56, 'existence': 56, 'service_claim': 29}); score_model holds the pre-override value. 0 conflict verdicts",
+   "examples": [
+    "loc:04bae564-9f3f-4b55-8854-3bfd587793a8",
+    "loc:08d4967a-b02f-4373-aace-2db8f64b0e27",
+    "loc:09c73691-739e-4b31-88ba-2d31c89f7af3",
+    "loc:0b88e73f-787e-45c4-bcd3-ec8b27a53c74"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "taxonomy_domains",
+   "seconds": 0.2,
+   "metric": "0 issues; 10 spec keys map to 2+ labels (1971 records); 4 of them disagree on a real service (9 records)",
+   "threshold": "0",
+   "detail": "36 services + 1 candidate; 2933 specialty values; derived/v1/specialties joins to the map only through the lowercased key",
+   "examples": [
+    "spec key 'anxiety' maps to ['out_of_scope', 'psychiatric_care'] via ['Anxiety', 'anxiety']",
+    "spec key 'cardiovascularandthoracicsurgery' maps to ['cardiac_surgery', 'out_of_scope'] via ['cardiovascularAndThoracicSurgery', 'cardioVascularAndThoracicSurgery']",
+    "spec key 'depression' maps to ['out_of_scope', 'psychiatric_care'] via ['Depression', 'depression']",
+    "spec key 'gynaeoncology' maps to ['out_of_scope', 'surgical_oncology'] via ['Gynaeoncology', 'Gynae Oncology', 'gynaeOncology', 'gynaeoncology']",
+    "spec key 'icl' maps to ['not_a_service', 'out_of_scope'] via ['ICL', 'icl']"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "vf_details_fk",
+   "seconds": 0.9,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "42036 facts, 26046 facility rows; 0 (record, type, attribute) keys have facts but no facility row; llm facts 18, llm kept 18",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "web_evidence_fk",
+   "seconds": 2.3,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "153160 service rows, 84731 fact rows, 30517 page identity rows",
+   "examples": [
+    "web llm_hours: 1 cand_key not in hour_candidates (0 kept): ['data/crawl/pages/68908ad91c7ef7a35ae5.json.gz|text|197']"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "crawl_fk",
+   "seconds": 0.3,
+   "metric": "0 issues, 0 notes",
+   "threshold": "0",
+   "detail": "9405 targets, 31075 page attempts, 28106 stored files, 28106 on disk",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "opendata_fk",
+   "seconds": 1.9,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "not_in_vf {'osm': 133640, 'wikidata': 13440} vs source tables {'osm': 136396, 'wikidata': 14286}; accepted matches 2997",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "source_tables_fk",
+   "seconds": 0.8,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "158444 urls, 10951 domains, 16 classes, 6492 page checks",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "facility_groups",
+   "seconds": 0.0,
+   "metric": "0 issues, 0 one-way links",
+   "threshold": "0",
+   "detail": "75 groups over 152 records",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "pathways_refs",
+   "seconds": 0.0,
+   "metric": "0 issues",
+   "threshold": "0",
+   "detail": "7 pathways, 26 capabilities; unused by any stage: ['ventilator']",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "app_hashes_and_sizes",
+   "seconds": 0.1,
+   "metric": "0 mismatches",
+   "threshold": "0",
+   "detail": "facts.sha 3143a2a68738; 36 packs",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "app_facts_integrity",
+   "seconds": 0.4,
+   "metric": "17 issues, 14 pair value mismatches",
+   "threshold": "0",
+   "detail": "9947 facilities (77 without PIN), 7980 pairs, 44968 claims, 19484 PINs",
+   "examples": [
+    "pairs.burn_care e93a7ae0-8d8f-49d1-9536-e2a2c0759a10: ['strong', 'G_strong', 'verified_true', 0.97, 0.9, 0.995, 0.9091, 0.9023] != dps ['moderate', 'G_mod', 'unverified', 0.8114, 0.5439, 0.9395, 0.7857, 0.8114]",
+    "pairs.cardiac_surgery: 33af2594-ec2f-4268-a1a6-9cb47b04d798 has no service_claim",
+    "pairs.cardiac_surgery 46d54262-3059-4e7f-9e14-543b5f37bfa3: ['strong', 'G_strong', 'unverified', 0.9203, 0.6587, 0.9857, 0.9091, 0.9203] != dps ['strong', 'G_strong', 'unverified', 0.9013, 0.6108, 0.9815, 0.9091, 0.9013]",
+    "pairs.cardiac_surgery eb189131-b650-4be9-abc1-d4cd5bf6b90c: ['tag_only', 'G_tag', 'unverified', 0.3112, 0.0554, 0.7768, 0.3333, 0.3112] != dps ['tag_only', 'G_tag', 'unverified', 0.3061, 0.0428, 0.8131, 0.3333, 0.3061]",
+    "pairs.cardiac_surgery: f44c2605-94ec-4e5a-a262-5ee33da0a974 has no service_claim"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "integrity",
+   "check": "app_packs_integrity",
+   "seconds": 2.5,
+   "metric": "74 issues; 0 quotes without claim id",
+   "threshold": "0",
+   "detail": "{'packs': 36, 'fac': 6799, 'ev': 11481, 'score_mismatch': 25, 'likely_mismatch': 10, 'pins': 19711, 'pins_blank_district': 227}",
+   "examples": [
+    "andaman_and_nicobar_islands: quote claim e93a7ae0:=b2db2916:capa:31 unresolved",
+    "andaman_and_nicobar_islands: quote claim e93a7ae0:=b2db2916:capa:32 unresolved",
+    "arunachal_pradesh: quote claim e93a7ae0:=b2db2916:capa:31 unresolved",
+    "arunachal_pradesh: quote claim e93a7ae0:=b2db2916:capa:32 unresolved",
+    "assam: quote claim 42864584:=373ab7bd:proc:13 unresolved"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "integrity",
+   "check": "planner_integrity",
+   "seconds": 1.2,
+   "metric": "0 issues, 2 notes",
+   "threshold": "0",
+   "detail": "9959 facilities, 26 capabilities, 19711 PINs",
+   "examples": [
+    "12 planner facilities are not in facts.json ({'exclude_review': 12}); 5 carry capability evidence, e.g. ['3701980c-4699-4a84-a9f1-024939ba0e34', '4d62cb1d-4dba-49bc-9169-7d13bf7cb151', '885c79f6-9f32-4878-8384-5a90259cfae4']",
+    "planner capabilities include pairs the packs exclude: {('emergency_24x7', 'attributed_elsewhere'): 7, ('emergency_24x7', 'counter_evidence'): 5, ('icu', 'attributed_elsewhere'): 4, ('icu', 'counter_evidence'): 1, ('burn_unit', 'attributed_elsewhere'): 1, ('burn_unit', 'counter_evidence'): 1, ('ha..."
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "exclude_review_not_shipped",
+   "seconds": 0.1,
+   "metric": "8 leaks of 12 excluded records",
+   "threshold": "0",
+   "detail": "exclude_review reasons: {'Name indicates an animal-care facility.': 12, 'Location fields disagree and nothing settles which is right.': 1, 'Location is approximate (postcode centre or a corrected point).': 2, 'No phone or website that belongs only to this facility.': 2}",
+   "examples": [
+    "planner capability emergency_24x7: 885c79f6 'SKS Veterinary Hospital' p=0.7643",
+    "planner capability ecg: 3701980c 'Pet Care Pathology Lab & Diagnostic Centre' p=0.7828",
+    "planner capability blood_transfusion: 8b8ee908 'Prime Animal Care Hospital - Delhi NCR' p=0.7149",
+    "planner capability orthopaedics: 885c79f6 'SKS Veterinary Hospital' p=0.7828",
+    "planner capability laboratory: 3701980c 'Pet Care Pathology Lab & Diagnostic Centre' p=0.7828"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "integrity",
+   "check": "lat_lon_bounds",
+   "seconds": 0.0,
+   "metric": "0 strict failures, 1 reported columns",
+   "threshold": "lat 6.0-37.5, lon 68.0-97.5",
+   "detail": "outputs/lat_lon_bounds.csv",
+   "examples": [
+    "derived/v1/facility_location.parquet raw_lat/raw_lon: 6 outside India (0 at 0,0), 0 half-null of 9959; e.g. ['364dae5c-b868-450a-9e4e-e6705852c229', '515fb95f-d589-418f-b510-d8bf7438f884', '7c6e6ca4-d07f-4613-a926-47d5ae7a2afe']"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "probabilities",
+   "seconds": 0.1,
+   "metric": "76 columns checked, 0 issues",
+   "threshold": "[0, 1]; lo <= point <= hi",
+   "detail": "outputs/probabilities.csv",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "counts_nonneg",
+   "seconds": 0.1,
+   "metric": "191 columns, 0 with negatives, 0 with fractional counts",
+   "threshold": ">= 0",
+   "detail": "",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "dates_and_years",
+   "seconds": 0.1,
+   "metric": "0 fail, 1 notes",
+   "threshold": "parseable, 1700-2026, not after 2026-11-21",
+   "detail": "4761 raw yearEstablished values; year median 2005.0",
+   "examples": [
+    "raw yearEstablished: 5 of 4761 non-null values have no year, e.g. ['0', '7', '0']"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "enums",
+   "seconds": 0.5,
+   "metric": "31 enum columns, 0 with undocumented values",
+   "threshold": "documented sets only",
+   "detail": "outputs/enum_values.csv",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "location_fk",
+   "seconds": 0.1,
+   "metric": "0 issues, 2 notes",
+   "threshold": "0",
+   "detail": "9959 records; 77 without PIN, 25 without an NFHS key ({nan: 13, 'no_nfhs_row': 12})",
+   "examples": [
+    "7 facility PINs not in pin_gazetteer, e.g. [('13594579-5b83-48ec-8c81-4b21ad0a6881', 112001), ('231f141f-cc05-42a9-949a-accf4bab933c', 430115), ('3b7c281e-3946-4cb2-8520-5c29e4c38e6b', 359009)]",
+    "52 records with district_state != state_final"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "v2_contract",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: derived/v2 is in flux (exists: False); set INTEGRITY_CHECK_V2=1 to run",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "integrity",
+   "check": "web_quotes_in_pages",
+   "seconds": 3.7,
+   "metric": "0 rows not found on their page, 0 segments not at seg_start",
+   "threshold": "0",
+   "detail": "{'web_services_rows': 153160, 'web_services_no_pages_row': 0, 'web_services_path_differs_from_pages': 0, 'web_services_final_url_differs_from_pages': 0, 'web_services_fetched_at_differs_from_pages': 0, 'web_details_rows': 41191, 'web_details_no_pages_row': 0, 'web_details_path_differs_from_pages': 0, 'web_details_final_url_differs_from_pages': 0, 'web_details_fetched_at_differs_from_pages': 0, 'web_hours_rows': 43540, 'web_hours_no_pages_row': 0, 'web_hours_path_differs_from_pages': 0, 'web_hours_final_url_differs_from_pages': 0, 'web_hours_fetched_at_differs_from_pages': 0, 'identity_quote...",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "copied_columns",
+   "seconds": 0.1,
+   "metric": "18/18 copied columns equal",
+   "threshold": "all",
+   "detail": "names and facility type vs raw; claim attributes vs claims.parquet",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "integrity",
+   "check": "source_url_repeats",
+   "seconds": 0.0,
+   "metric": "5652 repeated (record, url) rows of 158444 in 1525 of 9959 records",
+   "threshold": "0",
+   "detail": "domains most affected: {'facebook.com': 193, 'redcliffelabs.com': 161, 'agilusdiagnostics.com': 141}",
+   "examples": [
+    "ed6652f3-7d23-4789-8050-1dab7dca6238: 46 repeats",
+    "20397ed5-ac41-41f4-89cb-1f8aafa9bb34: 45 repeats",
+    "58a4d0b7-5b03-4b7f-965b-6e260b2c0918: 42 repeats"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "label_schema",
+   "seconds": 0.0,
+   "metric": "0 bad of 1324 enum fields in 331 records",
+   "threshold": "0",
+   "detail": "15 label files; enums exists/location yes|no|unclear, service confirmed|contradicted|no_info, confidence high|medium|low",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "duplicate_label_records",
+   "seconds": 0.0,
+   "metric": "0 duplicate or orphaned overlap records",
+   "threshold": "0",
+   "detail": "331 records; 301 primary; overlap labels 30 vs overlap_v2.json 30; e2e not_run 33",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "label_coverage",
+   "seconds": 0.0,
+   "metric": "0 coverage defects",
+   "threshold": "0",
+   "detail": "labelled/sampled per set {'e2e': {'sum': 125, 'size': 158}, 'v1': {'sum': 36, 'size': 36}, 'v2': {'sum': 140, 'size': 140}}; e2e not_run 33",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "unique_ids_usable",
+   "seconds": 0.1,
+   "metric": "0 not usable, 4 non-canonical, of 334 pairs",
+   "threshold": "0 not usable",
+   "detail": "usable = present in derived/v1/facility_location (9,959); by set: Counter({'e2e': 3, 'v2': 1}); list in out/unusable_ids.csv",
+   "examples": [
+    "v2:v2_burn_care_strong_1 b2db2916-a5db-42ab-87f4-5f9581695f4e (non-canonical duplicate member)",
+    "e2e:e2e_061 3f0d836c-9e5b-4e24-add9-c217bcf684df (non-canonical duplicate member)",
+    "e2e:e2e_082 2b5d4240-8105-4e60-adb7-01f8cee3a622 (non-canonical duplicate member)",
+    "e2e:e2e_147 b2db2916-a5db-42ab-87f4-5f9581695f4e (non-canonical duplicate member)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "pair_metadata_matches_raw",
+   "seconds": 0.0,
+   "metric": "0 mismatches of 334",
+   "threshold": "0",
+   "detail": "name compared after lowercasing and stripping punctuation; PIN as string",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "live_table_ids",
+   "seconds": 0.0,
+   "metric": "317 of 317 ids found live",
+   "threshold": "all present",
+   "detail": "SELECT unique_id ... WHERE unique_id IN (gold ids)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "services_in_taxonomy",
+   "seconds": 0.0,
+   "metric": "0 unmapped; 1 gold ids that map to different taxonomy services via the taxonomy alias vs derived/v1 s2_gold SERVICE_MAP",
+   "threshold": "0 / 0",
+   "detail": "gold services ['burn_care', 'cardiac_surgery', 'dialysis', 'emergency_csection', 'mri', 'nicu', 'trauma_emergency']; divergent: {'trauma_emergency': ('trauma_care', 'emergency_24x7')} (taxonomy says trauma_emergency is an alias of trauma_care; s2_gold maps it to the claims key 'trauma', an alias of emergency_24x7)",
+   "examples": [
+    "trauma_emergency: taxonomy=trauma_care derived_v1=emergency_24x7"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "trauma_label_semantics",
+   "seconds": 0.0,
+   "metric": "2 of 7 trauma_emergency confirmations cite no trauma, accident or injury term",
+   "threshold": "0",
+   "detail": "these confirm emergency_24x7, not trauma_care; label meaning depends on which taxonomy id the consumer maps trauma_emergency to",
+   "examples": [
+    "e2e_003: 24x7 Emergency Unit - Always ready to receive and stabilize patients.",
+    "v2_trauma_emergency_strong_3: Emergency Department"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "overlap_conflicts",
+   "seconds": 0.0,
+   "metric": "0 informative conflicts on 30 double-labelled pairs; service kappa 0.382 (agreement 0.700)",
+   "threshold": "0 conflicts",
+   "detail": "{'service': {'agree': 21, 'one_informative': 9}, 'exists': {'agree': 21, 'one_informative': 9}, 'location': {'agree': 20, 'one_informative': 10}}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "same_facility_service_across_sets",
+   "seconds": 0.0,
+   "metric": "0 (facility, service) keys under 2+ pair_ids; 0 with conflicting verdicts",
+   "threshold": "0 conflicts",
+   "detail": "e2e pairs re-label gold facilities; a gold TEST facility relabelled in the e2e pool is also a leak if e2e labels are used for tuning (out/same_facility_service.csv)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "same_facility_conflicting_exists_location",
+   "seconds": 0.0,
+   "metric": "0 records with disagreeing exists/location verdicts",
+   "threshold": "0",
+   "detail": "primary labels across v1, v2, e2e",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "split_leakage_unique_id",
+   "seconds": 0.0,
+   "metric": "0 unique_ids and 0 frozen groups in both splits",
+   "threshold": "0",
+   "detail": "176 unique_ids, 176 frozen groups (grp_strong)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "split_leakage_groups",
+   "seconds": 0.0,
+   "metric": "{'splits_json:model_lg': 1, 'splits_json:canon': 0, 'v1_as_dev:model_lg': 2, 'v1_as_dev:canon': 0}",
+   "threshold": "0 groups spanning dev and test",
+   "detail": "model_lg = model/proto/fusion features_facility.leakage_group_id (grp_strong + phone/domain + chain + source_content_id); canon = derived/v1 facility_groups dup_group_id + possible_same_site + co_located_with. fit.py drops dev rows in test leakage groups; derived/v1 s4/s5 does not",
+   "examples": [
+    "[splits_json/model_lg] v2_cardiac_surgery_suspect_5=test; v2_burn_care_weak_5=dev",
+    "[v1_as_dev/model_lg] v2_cardiac_surgery_suspect_5=test; v2_burn_care_weak_5=dev",
+    "[v1_as_dev/model_lg] trauma_emergency_strong_1=dev; v2_nicu_suspect_5=test"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "v1_split_contract",
+   "seconds": 0.0,
+   "metric": "17 of 36 v1 pairs marked test; 41 of 141 derived/v1 test gold points come from them",
+   "threshold": "0 design-read pairs in a held-out test",
+   "detail": "derived/v1 evaluation.json test points by type from v1 pairs {'existence': 15, 'location': 14, 'service_claim': 12} of {'location': 56, 'existence': 56, 'service_claim': 29}; model/proto treats all v1 as dev",
+   "examples": [
+    "dialysis_strong_1 (af99e7c6)",
+    "dialysis_suspect_2 (08c8f9bb)",
+    "emergency_csection_strong_1 (22f6c258)",
+    "emergency_csection_strong_2 (ae20b125)",
+    "emergency_csection_weak_2 (5853b359)"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "labels",
+   "check": "e2e_vs_gold_test",
+   "seconds": 0.0,
+   "metric": "4 e2e pairs on a v2 test facility, 7 more in a test leakage group, of 158",
+   "threshold": "0 if e2e labels ever feed model selection",
+   "detail": "harmless while e2e labels are only scored; a leak if they enter dev or calibration",
+   "examples": [
+    "e2e_016 f75d5250 nicu",
+    "e2e_062 51179ca4 mri",
+    "e2e_127 7f0a880d emergency_csection",
+    "e2e_147 b2db2916 nicu",
+    "e2e_043 e93a7ae0 burn_care"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "never_searched_vs_no_info",
+   "seconds": 0.0,
+   "metric": "213 no_info primary labels: 106 never searched by the URL rule; rule disagrees with notes on 12 (5 searched-without-URL, 7 URL-but-stopped); gold_pairs has no searched flag and 56 of its 114 no_info rows were never searched (dev 26, test 30)",
+   "threshold": "a searched flag on every no_info row",
+   "detail": "no_info mixes 'searched, found nothing' with 'never searched'",
+   "examples": [
+    "no URL, searched: nicu_weak_2: The record's website returned 404. Two searches found no Ananya Hospital in Kash",
+    "no URL, searched: e2e_013: Searches for Bharati Hospital Chandrapur returned only Bharati Hospital Pune (Bh",
+    "no URL, searched: e2e_039: No hospital of this name found in Sikar (closest: Amit Neuro Brain and Spine Car",
+    "no URL, searched: v2_mri_suspect_3: vijayadiagnostic.com returned 403. Record PIN 518501 maps to Nandyal district pe",
+    "no URL, searched: v2_emergency_csection_suspect_4: Two searches found no Taj Hospital in Chennai or Arumbakkam (PIN 600106); record"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "labels",
+   "check": "verdicts_without_web_evidence",
+   "seconds": 0.0,
+   "metric": "14 service verdicts with no URL (13 name-only) by set {'e2e': 13, 'v2_primary': 1}; 10 location verdicts with no URL (10 from the local PIN directory); 0 exists verdicts with no URL; 0 v2/e2e confirmations with an empty quote",
+   "threshold": "0 service verdicts without a URL",
+   "detail": "name-only contradictions restate the scope feature the model already uses (circular); PIN-directory location verdicts restate the dataset's own PIN (out/verdicts_without_evidence.csv)",
+   "examples": [
+    "e2e_046=contradicted: No listing found for Smile Kraft Dental Clinic in Palamu. Dental clini",
+    "e2e_085=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental c",
+    "e2e_091=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental h",
+    "e2e_109=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; maternit",
+    "e2e_118=contradicted: not web-checked: shared WebSearch budget exhausted mid-batch; dental c"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "labels",
+   "check": "contradicted_semantics",
+   "seconds": 0.0,
+   "metric": "5 of 26 contradicted labels rest on misattribution; 2 of them give no evidence the service is absent",
+   "threshold": "0",
+   "detail": "misattribution is a location/attribution fact; as a service y=0 it teaches the model that a real hospital lacks a service nobody checked",
+   "examples": [
+    "v2_emergency_csection_suspect_1: Record PIN 201001 is Ghaziabad, UP in the India Post directory, not Lucknow. The claim text itself attributes ",
+    "v2_dialysis_suspect_2: Two searches found no Randeep Hospital in Talwandi Sabo or Punjab. The dialysis claim names a NephroPlus centr"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "evidence_urls_wellformed",
+   "seconds": 0.0,
+   "metric": "10 of 308 URLs malformed (space or no scheme)",
+   "threshold": "0",
+   "detail": "spaces must be %20-encoded for a re-fetch",
+   "examples": [
+    "e2e_043: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2023-1126_5th Edition - RA, SA, Focus & Scope Correction.pdf",
+    "e2e_002: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2022-1051_5th Edition.pdf",
+    "e2e_011: https://portal.nabh.co/Documents/AccreditedList/AYUSH Hospitals/AH-2018-0038..pdf",
+    "e2e_048: https://portal.nabh.co/Documents/AccreditedList/Hospitals/H-2021-0824_5th Edition.pdf",
+    "v2_trauma_emergency_weak_3: https://portal.nabh.co/Documents/AccreditedList/SHCO/SHCO-2024-1105_3rd Edition_Scope Correction.pdf"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "gold_pairs_matches_labels",
+   "seconds": 0.0,
+   "metric": "0 cell diffs over 176 rows x 11 cols; 0 stale input hashes; 0 label inputs not hashed in MANIFEST",
+   "threshold": "0 / 0 / 0",
+   "detail": "rebuilt with s2_gold rules from current files; unhashed: []",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "labels",
+   "check": "gold_pairs_vs_model_loader",
+   "seconds": 0.0,
+   "metric": "20 fields where derived/v1 and the model read different verdicts for the same pair (of 176 pairs)",
+   "threshold": "0",
+   "detail": "two consumers of the same labels disagree; dev q_ev and test metrics in derived/v1 use the merged value",
+   "examples": [
+    "v2_dialysis_weak_3 [dev] service_verdict: gold_pairs=confirmed model=no_info",
+    "v2_dialysis_weak_3 [dev] location_ok: gold_pairs=yes model=unclear",
+    "v2_dialysis_no_mention_1 [dev] location_ok: gold_pairs=yes model=unclear",
+    "v2_emergency_csection_weak_5 [test] service_verdict: gold_pairs=confirmed model=no_info",
+    "v2_nicu_strong_3 [dev] service_verdict: gold_pairs=confirmed model=no_info"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "gold_attach_to_datapoints",
+   "seconds": 0.1,
+   "metric": "6 of 62 informative service verdicts reach no service_claim data point; 0 split mismatches",
+   "threshold": "0 / 0",
+   "detail": "missing by stratum/verdict {('no_mention', 'confirmed'): 5, ('no_mention', 'contradicted'): 1}: unclaimed services (no grade row) are invisible to evaluation.json, so it measures claim precision only",
+   "examples": [
+    "v2_dialysis_no_mention_1 [dev] confirmed",
+    "v2_dialysis_no_mention_3 [test] confirmed",
+    "v2_emergency_csection_no_mention_4 [dev] confirmed",
+    "v2_nicu_no_mention_4 [test] confirmed",
+    "v2_mri_no_mention_4 [test] contradicted"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "derived_v2_gold_contract",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "derived/v2 has no gold table yet; contract: one row per pair_id, service in the 36 taxonomy ids, label_status in {checked, unchecked}, unchecked never used as y=0, v1 pairs not in test, no leakage group in both splits",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "labels",
+   "check": "url_recheck",
+   "seconds": 0.0,
+   "metric": "verdict agreement 22/25 = 0.88 [95% Wilson 0.7, 0.958]; pages reachable 25/30; quote found 12/15 [(0.548, 0.93)]",
+   "threshold": "Wilson lower bound >= 0.8",
+   "detail": "30 labels, seed fixed, v2 TEST excluded; 5 not judgeable (no page reachable)",
+   "examples": [
+    "emergency_csection_strong_1 label=confirmed -> no: pages show O&G DNB training and a 2012 BEmOC (basic emergency obstetric care excludes caesarean) course; no page names caesarean; verdict is inferred from hospital size so no_info fits the rubric",
+    "v2_burn_care_suspect_1 label=contradicted -> no: homepage lists General Surgery and no burns unit but nothing says burn care is absent; contradicted here means the claim text names another facility (rubric) not that the service is absent",
+    "v2_emergency_csection_strong_5 label=contradicted -> no: own site blocked by robots; the one reachable page (aggregator) lists Cesarean Delivery; nothing supports absence; labeller notes it could be no_info"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "raw_sha256",
+   "seconds": 0.0,
+   "metric": "6/6 files match",
+   "threshold": "all match, no extra files",
+   "detail": "recomputed sha256 of data/raw vs derived/v1/MANIFEST.json raw_input_sha256; extra files: []; data/raw/MANIFEST.json itself records hashes: False",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "raw_manifest_recompute",
+   "seconds": 0.1,
+   "metric": "345/345 manifest checks reproduce",
+   "threshold": "all 345",
+   "detail": "row counts, non-null counts, sum(length) per string column and round(sum, 3) per numeric column recomputed in DuckDB from data/raw",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "live_aggregates",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "0 mismatches",
+   "detail": "warehouse query failed: warehouse query failed after 3 tries: blocked by run_all.py --skip-network",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "live_content_fingerprint",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "0 mismatches",
+   "detail": "warehouse query failed: warehouse query failed after 3 tries: blocked by run_all.py --skip-network",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "live_schema",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "identical",
+   "detail": "warehouse query failed: warehouse query failed after 3 tries: blocked by run_all.py --skip-network",
+   "examples": [],
+   "status": "not_run",
+   "reported_status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "raw_record_identity",
+   "seconds": 0.2,
+   "metric": "10088 rows, 9970 well-formed, 9959 ids, 9959 distinct rows",
+   "threshold": "10088 / 9970 / 9959 / 9959, no id with two different rows",
+   "detail": "11 well-formed rows are byte-identical duplicates; ids with conflicting content: 0",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "derived_manifest_matches_files",
+   "seconds": 0.0,
+   "metric": "0 mismatched, 0 unlisted",
+   "threshold": "0 / 0",
+   "detail": "derived/v1 MANIFEST rows and bytes vs files on disk (MANIFEST records no output hashes, so a same-size edit would not show; the rebuild check covers content)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "derived_inputs_unchanged",
+   "seconds": 0.0,
+   "metric": "28/28 inputs match",
+   "threshold": "all",
+   "detail": "current sha256 of every non-raw input (audit code, gold labels, hand checks, cleaning tables) vs the hashes recorded at build time",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "derived_scripts_unchanged",
+   "seconds": 0.0,
+   "metric": "11/11 scripts match",
+   "threshold": "all",
+   "detail": "pipelines/source_scoring scripts now vs script_sha256 at build time",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "derived_copies_identical",
+   "seconds": 0.0,
+   "metric": "9/9 identical",
+   "threshold": "all",
+   "detail": "derived/v1 copy vs its cleaning/ source, by sha256",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "selfcheck",
+   "seconds": 2.0,
+   "metric": "selfcheck ok: 518191 data points, 10951 domains, 17 tables",
+   "threshold": "exit 0",
+   "detail": "pipelines/source_scoring/selfcheck.py on the published derived/v1 (read-only)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "rebuild_matches_derived",
+   "seconds": 28.4,
+   "metric": "14/23 byte-identical; 0 real diffs; 8 float-ulp only",
+   "threshold": "no real diffs; float diffs <= 1e-12",
+   "detail": "MANIFEST.json differs only in script_sha256 (patched ss_common.py) and table bytes; all string and integer cells are equal",
+   "examples": [
+    "data_point_scores.parquet (max float diff 8.3e-16)",
+    "facility_trust.csv",
+    "facility_trust.parquet (max float diff 1.3e-15)",
+    "source_classes.csv",
+    "source_classes.parquet (max float diff 5.7e-14)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "rebuild_deterministic_with_fixed_hashseed",
+   "seconds": 59.1,
+   "metric": "0 files differ",
+   "threshold": "0",
+   "detail": "PYTHONHASHSEED=0 twice; without a fixed seed the float tables differ run to run at 1e-16..2e-13 because pipelines/source_scoring/s5_fit.py:90 iterates `set(sup) | set(nos)`",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "exports_rebuild",
+   "seconds": 23.9,
+   "metric": "planner equal, facts sha 3143a2a68738, packs 36/36 byte-identical",
+   "threshold": "all equal",
+   "detail": "pack differences are quote choices among equal-length quotes (set order, app/packs/build_packs.py:122); first diffs: {}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "exports_deterministic_fixed_hashseed",
+   "seconds": 46.0,
+   "metric": "0 files differ",
+   "threshold": "0",
+   "detail": "packs byte-compared; facts compared after dropping built_at (facts.json.gz bytes also carry the gzip mtime, app/facts/build.py:178 gzip.compress without mtime=0)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "exports_strict_json",
+   "seconds": 0.1,
+   "metric": "1/38 files have NaN/Infinity",
+   "threshold": "0",
+   "detail": "strict parse (parse_constant raises). planner/data_v1.py:77 puts pandas NaN districts into the doc; app/itinerary.py:53 then calls x.isupper() on the float NaN for a stop at one of these facilities",
+   "examples": [
+    "planner/out/planner_v1.json.gz",
+    "planner_v1.json.gz facilities.district: 13 NaN, ids ['12ebca41-d6cd-4a95-98ca-22c943741a8b', '18a0b6a3-8792-43ef-8753-47548e4aab02', '3b7c281e-3946-4cb2-8520-5c29e4c38e6b']"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "lineage",
+   "check": "static_abs_paths",
+   "seconds": 0.1,
+   "metric": "84 lines in 64 files",
+   "threshold": "0",
+   "detail": "hard-coded /Users/karthikvattem/... paths: a clone elsewhere or a Databricks repo (/Workspace/...) cannot run these unchanged. Full list: out/static_scan.csv",
+   "examples": [
+    "cleaning/claims/build_claims.py:17",
+    "cleaning/claims/build_claims.py:18",
+    "cleaning/claims/build_claims.py:19",
+    "cleaning/claims/evaluate.py:13",
+    "cleaning/claims/evaluate.py:14"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "lineage",
+   "check": "static_venv_pins",
+   "seconds": 0.0,
+   "metric": "6 lines in 5 files",
+   "threshold": "0",
+   "detail": "interpreter pinned to a local venv (no requirements file for the data pipelines)",
+   "examples": [
+    "cleaning/claims/run_all.sh:5",
+    "cleaning/geo_identity/run_all.sh:8",
+    "pipelines/source_scoring/run_all.sh:10",
+    "pipelines/source_scoring/run_all.sh:11",
+    "kb/vf_details/report_numbers.py:1"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "static_network",
+   "seconds": 0.0,
+   "metric": "19 lines in 4 files",
+   "threshold": "0",
+   "detail": "live web fetches: kb/crawl, kb/opendata/fetch_wikidata.py, pipelines s3_pagecheck.py (opt-in, FETCH=1)",
+   "examples": [
+    "pipelines/source_scoring/s3_pagecheck.py:31",
+    "pipelines/source_scoring/s3_pagecheck.py:33",
+    "pipelines/source_scoring/s3_pagecheck.py:115",
+    "pipelines/source_scoring/s3_pagecheck.py:117",
+    "pipelines/source_scoring/s3_pagecheck.py:225"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "static_warehouse_llm",
+   "seconds": 0.0,
+   "metric": "7 lines in 3 files",
+   "threshold": "0",
+   "detail": "Databricks SQL / ai_query calls; results are cached (out/llm_labels.json, llm_hours.parquet), so a rebuild is reproducible only while those caches are present",
+   "examples": [
+    "kb/taxonomy/build_specialty_map.py:153",
+    "kb/taxonomy/build_specialty_map.py:158",
+    "kb/taxonomy/build_specialty_map.py:182",
+    "kb/vf_details/llm_hours.py:64",
+    "kb/vf_details/llm_hours.py:67"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "static_unseeded_random",
+   "seconds": 0.0,
+   "metric": "0 lines in 0 files",
+   "threshold": "0",
+   "detail": "random draws with no seed on the line (all .sample() calls found carry random_state)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "lineage",
+   "check": "static_hash_order",
+   "seconds": 0.0,
+   "metric": "5 lines in 5 files",
+   "threshold": "0",
+   "detail": "set iteration; two are confirmed output-changing (s5_fit.py:90 float ulps, build_packs.py:122 quote choice), the others feed counters or assertions only",
+   "examples": [
+    "pipelines/source_scoring/s5_fit.py:90",
+    "kb/web_evidence/compare_dataset.py:83",
+    "kb/web_evidence/qa/scan.py:260",
+    "app/facts/build.py:86",
+    "app/packs/build_packs.py:277"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "static_shell",
+   "seconds": 0.0,
+   "metric": "3 lines in 2 files",
+   "threshold": "0",
+   "detail": "#!/bin/zsh run_all scripts (Makefile calls them with zsh, not installed on Databricks clusters) and one swallowed self-check",
+   "examples": [
+    "cleaning/geo_identity/run_all.sh:1",
+    "cleaning/geo_identity/run_all.sh:9",
+    "pipelines/source_scoring/run_all.sh:1"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "rebuild_inputs_in_repo",
+   "seconds": 0.0,
+   "metric": "13/33 inputs git-ignored",
+   "threshold": "0",
+   "detail": "derived/v1 is committed so the app and notebook run, but `make derived` on a clone needs data/raw (re-export from the Marketplace with data/snapshot_scripts/export.py) and the cleaning parquet outputs, which are ignored by `*.parquet`",
+   "examples": [
+    "data/raw/facilities.parquet",
+    "data/raw/india_post_pincode_directory.parquet",
+    "data/raw/nfhs_5_district_health_indicators.parquet",
+    "cleaning/geo_identity/facility_location.parquet",
+    "cleaning/geo_identity/record_trust.parquet"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "lineage",
+   "check": "makefile_python",
+   "seconds": 0.0,
+   "metric": ".venv-app/bin/python",
+   "threshold": "default PY exists",
+   "detail": "Makefile default interpreter for app-data/test/notebook; run_all.sh scripts ignore it and use .venv",
+   "examples": [
+    "Makefile:2 PY ?= .venv-app/bin/python (not present on this machine)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "location_table_integrity",
+   "seconds": 0.2,
+   "metric": "0 violations",
+   "threshold": "0 violations",
+   "detail": "{\"rows_not_9959\": 0, \"dup_ids\": 0, \"ids_not_in_raw\": 0, \"name_not_verbatim\": 0, \"address_city_not_verbatim\": 0, \"address_stateOrRegion_not_verbatim\": 0, \"raw_lat_changed\": 0, \"raw_lon_changed\": 0, \"pin_not_parsed_from_raw\": 0, \"chosen_point_missing\": 0, \"chosen_point_outside_india_box\": 0, \"bad_loc_src\": 0, \"bad_loc_conf\": 0, \"radius_not_positive\": 0, \"state_final_missing\": 0}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "chosen_point_provenance",
+   "seconds": 0.0,
+   "metric": "0 mismatches",
+   "threshold": "0",
+   "detail": "listing_coordinates rows equal raw: 8788/8788; postcode_centre rows equal pin_gazetteer point: 868/868; conflict rows keeping raw coords as alt: 1165/1165",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "raw_to_pin_distance_rederived",
+   "seconds": 0.0,
+   "metric": "1367 of 9869 raw points > 50 km from PIN centre",
+   "threshold": "recomputed distances equal stored within 10 m and counts equal s2_stats",
+   "detail": "n=9869 (6 outside India box, 84 without a PIN point); quantiles p50/p75/p90/p95/p99 km = [1.9, 6.7, 122.9, 260.1, 512.7]; >10 km 2085, >25 km 1612, >50 km 1367 (13.9%), >100 km 1101, >500 km 105. Max abs diff vs stored raw_coords_to_pin_km 0.0032 km; s2_stats says [1367, 9869].",
+   "examples": [
+    "00a441f9-f65d-4250-a1f9-a068164cba74",
+    "019bb317-b4e2-42c3-8548-661888a5ded8",
+    "01b20470-c820-4564-9cf8-69d162803ba2",
+    "02677523-f32c-421a-8d36-adadba9cbf8f",
+    "05d4a465-dc3f-41b3-b435-cc76c0d42553"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "pin_gazetteer_vs_polygon_and_lgd",
+   "seconds": 1.3,
+   "metric": "22 PINs / 28 facilities",
+   "threshold": "0 facility PINs > 25 km from both their polygon and their LGD districts",
+   "detail": "22 of 2502 facility PINs with both references are > 25 km from both (any one reference: polygon 69, LGD 24). They carry 28 facilities; 16 are placed on the wrong PIN point (loc_src postcode_centre), e.g. ['0b3d5090-2525-48f1-8969-6ef4947f9ca5', '1dbb2f3d-e4c6-4fcb-9e95-a02eab39e091', '21a2f3a1-d780-40ae-bce1-0fb0fd6612e5']. By gazetteer src: {'pin_median': 17, 'district_median': 4, 'prefix3_median': 1}.",
+   "examples": [
+    "PIN 283205 (FIROZABAD, src district_median): 303 km from its polygon, 283 km outside its LGD districts, 1 facilities",
+    "PIN 494001 (RAIPUR, src district_median): 226 km from its polygon, 180 km outside its LGD districts, 2 facilities",
+    "PIN 733134 (DINAJPUR UTTAR, src pin_median): 149 km from its polygon, 92 km outside its LGD districts, 2 facilities",
+    "PIN 822115 (PALAMU, src pin_median): 148 km from its polygon, 74 km outside its LGD districts, 1 facilities",
+    "PIN 491443 (RAJNANDGAON, src pin_median): 111 km from its polygon, 96 km outside its LGD districts, 1 facilities"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "chosen_point_vs_own_pin_polygon",
+   "seconds": 0.1,
+   "metric": "415 of 9596 chosen points > 50 km from own PIN polygon (raw: 1273)",
+   "threshold": "high-confidence points within 10 km of their PIN polygon",
+   "detail": "PIN polygon available for 9596. Distance to own PIN polygon, raw -> chosen: inside 5920 -> 6651; > 10 km 1698 -> 855; > 50 km 1273 -> 415. Chosen > 50 km by loc_src: {'address_city_centre': 218, 'listing_coordinates': 172, 'postcode_centre': 25}. High-confidence points > 10 km outside their own PIN polygon: 28.",
+   "examples": [
+    "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+    "10f3985d-a8fc-4e9a-9835-da54218060ad",
+    "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+    "181acde8-8007-4612-b3b1-b737b28d134d",
+    "1961618c-d50e-42ea-9a80-3adb07a21443"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "high_conf_far_from_pin_centre",
+   "seconds": 0.0,
+   "metric": "164 high records > 10 km from PIN centre",
+   "threshold": "high confidence only when coords are within 10 km of a precise PIN point",
+   "detail": "164 of 7762 high-confidence records (radius shown 1.0 km) have coordinates > 10 km from the PIN centre; 53 > 20 km, 15 > 40 km. 106 high records have a PIN point that is only a 3-digit-prefix median (radius 50 km), so 'agreement' there means within 50 km. Root cause: s2_facility_location.py choose(): `if d <= max(10.0, r.p_radius)` returns conf='high', radius=1.0.",
+   "examples": [
+    "02a3b541-de4e-42d8-95e0-c6dbc700f5dc",
+    "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+    "19302dcf-d303-48a9-bb40-1d68e9b04a89",
+    "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+    "3437e5aa-101e-4a91-9543-e1a4e6907291"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "chosen_vs_stated_city",
+   "seconds": 1.1,
+   "metric": "217 of 8306 chosen points > 50 km from stated city district",
+   "threshold": "no high-confidence point > 50 km from its stated city",
+   "detail": "City resolves to <= 2 LGD districts for 8306 of 9959. Point > 50 km outside the stated city's district: raw 974 -> chosen 217; > 10 km: raw 1203 -> chosen 369. Chosen > 50 km by loc_conf: {'disputed': 159, 'high': 23, 'medium': 21, 'low': 14}. 23 are 'high'; hand review of those: 19 are real city-vs-(PIN+coords) conflicts the s2 'city_points_elsewhere' rule missed, 4 are this check's false alarms (Gorantla, Khanpur, Sheikhpura are also localities; Mahe polygon).",
+   "examples": [
+    "0020c82a-2608-406f-9298-779bdd657681 Srp Hospital (city Aranthangi, PIN 636003, district SALEM)",
+    "078259b4-57f0-4bb3-aff4-126869c8c2e9 NETRA Eye Clinic (city Mumbai, PIN 422001, district NASHIK)",
+    "0914c599-783f-4e13-a05b-6cd3b06f3afc North Kashmir Nursing Home & Hospital (city Handwara, PIN 193221, district KUPWARA)",
+    "14979420-8be6-4880-bcdf-05347f2aca33 Vatsalya Clinic (city Ambarnath, PIN 412207, district PUNE)",
+    "1653a41f-075d-49c8-9f6a-f35b71f8ab57 Sardar Patel Hospital (city Vadodara, PIN 396445, district NAVSARI)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "state_final_vs_point_and_district",
+   "seconds": 0.2,
+   "metric": "49 records",
+   "threshold": "state_final agrees with the state holding the point and district",
+   "detail": "state_final (shown in app/facts and planner) differs from district_state for 52 records; for 49 the chosen point also lies in district_state per the LGD polygon (32 high confidence). Top pairs {('ANDHRA PRADESH', 'TELANGANA'): 21, ('DELHI', 'UTTAR PRADESH'): 3, ('CHANDIGARH', 'PUNJAB'): 2, ('UTTAR PRADESH', 'MADHYA PRADESH'): 2}. Root cause: s2_facility_location.py `state_final = state_final_stated.fillna(p_state)` always prefers the typed state, including the pre-2014 'Andhra Pradesh' for Hyderabad.",
+   "examples": [
+    "076633ac-580a-42b0-8bb6-94828bd6ccfe Indira IVF Chandigarh (Chandigarh): state_final PUNJAB, point and district in CHANDIGARH",
+    "0afa0b00-0807-4d1d-9eec-d620eb199be0 Bhaskara hospital (Hyderabad): state_final ANDHRA PRADESH, point and district in TELANGANA",
+    "0cf3edb4-cd74-4395-839d-4f1a99f783a7 Woodlands Hospital (Hyderabad): state_final ANDHRA PRADESH, point and district in TELANGANA",
+    "0d9c1629-aa77-4b85-b2e3-e8173ff26e2c Narayan Hospital And Trauma Centre (Rudrapur): state_final UTTARAKHAND, point and district in UTTAR PRADESH",
+    "0f8375e1-a47c-4959-94c5-313e0e2512a1 City Hospital (Rajgarh): state_final HIMACHAL PRADESH, point and district in CHHATTISGARH"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "moved_sample_30",
+   "seconds": 0.0,
+   "metric": "right 24/30 = 0.80 (95% Wilson 0.627-0.905)",
+   "threshold": "Wilson lower bound >= 0.70",
+   "detail": "Population: 1171 records whose ranking point is > 25 km from the raw coordinates (s7 says 1171). Judged from address lines, city, PIN and description: right 24, wrong 1, unclear 5. Unclear rows are records whose text names two towns. Wrong: ['Thiru Nagar and Pandiyan Nagar are Madurai localities where the raw point sits; PIN 641008 (Coimbatore) chosen'].",
+   "examples": [
+    "c50d0b3e-8615-4166-9579-6708be64ef66",
+    "15d98412-dbb0-487e-b9f8-1916f98232ac",
+    "279fa2c2-e4ef-4a9a-9285-888887133057",
+    "76a3a7f6-d5f5-4dd8-a6c9-1fa614928e79",
+    "90003975-1c3c-43ba-9c26-610b29adbcab"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "district_coverage",
+   "seconds": 0.0,
+   "metric": "9946/9959 assigned",
+   "threshold": "every record has a district, or district_src 'none' when it has none",
+   "detail": "district assigned for 9946 of 9959. All 13 missing rows still carry district_src '['map_point']' and state {'MAHARASHTRA': 6, 'GUJARAT': 4, 'TELANGANA': 2, 'MADHYA PRADESH': 1}: the nearest reference PIN point has no district (pin_gazetteer src prefix3 / missing). s2 sets district_src before checking that the looked-up district is non-null. nfhs_how for them: {'null': 13}.",
+   "examples": [
+    "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+    "18a0b6a3-8792-43ef-8753-47548e4aab02",
+    "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+    "5106028d-191f-4a51-a596-05d8b41e857b",
+    "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "district_vs_lgd_exhaustive",
+   "seconds": 0.2,
+   "metric": "9802/9946 agree with LGD",
+   "threshold": "assigned district matches LGD polygon or PIN district set",
+   "detail": "Of 9946 assigned districts: agree with the LGD polygon holding the chosen point 9372, with the LGD districts of the PIN 7832 (PIN in LGD for 8476), with either 9802. Neither: 144, mostly post-2011 splits and renames that India Post names still use (Chittoor->Tirupati, East Godavari->Kakinada) and Delhi/Hyderabad/Kolkata boundary edges. Real error: PIN 799001 (Agartala) carries district 'Nirmal' (a Telangana district) from the India Post directory, so 6 Agartala facilities show district Nirmal, TRIPURA. Top neither pairs {('CHITTOOR', 'Tirupati'): 17, ('EAST GODAVARI', 'Kakinada'): 8, ('EAST...",
+   "examples": [
+    "2f829ae1-e706-42ea-88ca-7a07b588c9fc",
+    "40f9f8de-b064-4b43-b30f-64f88f104494",
+    "43ff0012-b765-4574-9543-a217b58d412e",
+    "5ad204a8-139e-4ef7-a583-74a5d60d55f9",
+    "82f67036-f403-477d-8822-e2813f949ae5"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "district_sample_30",
+   "seconds": 0.0,
+   "metric": "correct 29/30 = 0.97 (95% Wilson 0.833-0.994)",
+   "threshold": "Wilson lower bound >= 0.80",
+   "detail": "Random 30 of the 9,946 assigned districts, judged against LGD archive PIN-village / urban-body districts, LGD polygons and the address text. Wrong: ['Address Shivaji Nagar Satpur and city say Nashik; PIN 401303 and coordinates say Palghar; record flagged disputed']",
+   "examples": [
+    "3a49afc3-4dbf-4ae2-8565-07b72e822d7e"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "nfhs_join",
+   "seconds": 0.0,
+   "metric": "9934/9959 joined",
+   "threshold": "every key exists in NFHS-5",
+   "detail": "NFHS key present for 9934 of 9959; every key exists in the raw NFHS-5 table: True. How: {'exact': 9460, 'fuzzy': 295, 'parent_table': 173, 'null': 13, 'no_nfhs_row': 12, 'spatial_parent': 6}. The two documented gaps hold in the raw table: no Purba Barddhaman row, Mizoram has a 'Chandel' row: True. 'Maharastra' is the raw NFHS spelling, not a join error.",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "external_district_tables_consistency",
+   "seconds": 0.0,
+   "metric": "289 (IDP NFHS map) and 289 (LGD polygon join) of 9959 disagree with derived/v1 district",
+   "threshold": "external join tables keyed on the canonical v1 district",
+   "detail": "data/external/idp-nfhs-district/facility_idp_district.csv and lgd_district_polygons/facility_lgd_district.parquet were built from the older audit district assignment (raw coordinates), so their district and code_best differ from derived/v1 facility_location.district for about 2.8% of records (e.g. VADODARA vs SURAT). Anything that joins HMIS or NFHS codes through these tables uses a different district than the app shows.",
+   "examples": [
+    "001a220c-c718-42bb-afe3-a37a1ddbf575",
+    "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+    "009bd786-fb16-42c9-a48d-c0e05ecfd267",
+    "00fd1dbd-dc4d-47ea-9ffa-68ddf7e5d13f",
+    "01826eff-1dc6-4b9f-8dcd-cab7336eb688"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "match_osm_opendata",
+   "seconds": 0.0,
+   "metric": "precision 17/20 = 0.85 (95% Wilson 0.64-0.948); missed 1/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 2791; sample 20: yes 14, likely 3, uncertain 1, no 2. README: kb/opendata/OPENDATA.md: high 17/20 validation (0.64-0.95); medium 7/10 pooled (Wilson 0.64-0.948); intervals overlap: True. Rejected: 10 drawn from 2142 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: ['AllCure SuperSpeciality vs Jogeshwari Hospital: only the place word is shared', 'Aasha Children Hospital Porbandar vs Aastha Children Hospital Surat: VF p...",
+   "examples": [
+    "99d8aef2-7c02-45cb-b47a-9e2928de8512",
+    "c9519ac0-4b34-41f4-b562-cd65b2059527",
+    "9223b026-cbca-4d6d-8b5e-3ef3aa795764",
+    "751ecc82-b1c1-4bf2-97a4-fd41a5d2e8aa"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "match_wikidata_opendata",
+   "seconds": 0.0,
+   "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 1/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 206; sample 20: yes 18, likely 2, uncertain 0, no 0. README: kb/opendata/OPENDATA.md: pooled with OSM, high 17/20 validation (Wilson 0.64-0.948); intervals overlap: True. Rejected: 10 drawn from 200 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: []. Missed: ['Asirvatham Speciality Hospital Rajaji St vs Arthur Asirvatham Hospital, 91 m: missed match']",
+   "examples": [
+    "e6bad3d8-feea-430a-9b13-78d6d7c4b6d5"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "match_hot_osm",
+   "seconds": 0.0,
+   "metric": "precision 18/20 = 0.90 (95% Wilson 0.699-0.972); missed 1/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 3263; sample 20: yes 14, likely 4, uncertain 1, no 1. README: external/hotosm README: 15/20 correct or likely (75%) (Wilson 0.531-0.888); intervals overlap: True. Rejected: 10 drawn from 1854 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 0 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: ['VF ESI Anantapur (description Pedda Waltair); OSM ESI Hospital Tirupati matched only through a copied geocode', 'generic ESI Hospital; VF city Asansol, PIN and coordinates Hooghl...",
+   "examples": [
+    "df1f03c7-c970-40e7-9a35-4f294f5a3aaf",
+    "51d9cc1b-7639-46d2-87f4-65cc038d2673",
+    "a2424d67-963b-4570-8c5c-08761c417153"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "match_nabh",
+   "seconds": 8.7,
+   "metric": "precision 18/20 = 0.90 (95% Wilson 0.699-0.972); missed 3/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 2061; sample 20: yes 15, likely 3, uncertain 1, no 1. README: external/nabh_accredited README: 39/40 (97.5%) (Wilson 0.871-0.996); intervals overlap: True. Rejected: 10 drawn from 2845 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 3, uncertain 1 (miss rate 3/10, Wilson 0.108-0.603). Wrong or uncertain accepted: ['Positron Hospital Suncity Sector 35 vs Rohtak Cancer Care Hospital Delhi Road; different addresses', 'VF R K Hospital Farrukhabad (Awas Vikas) vs NABH R K Hospital Tajganj Agra; matched...",
+   "examples": [
+    "6d98f93e-2e8a-4c9d-9b78-b3a194b032f9",
+    "7ad4a537-79c5-4ad0-9b53-bc4ebe0365bf",
+    "b7161769-235e-493d-92fc-b56aa3a0d271",
+    "7346f35c-499c-42c6-b2eb-9e82cbe31b3a",
+    "b86d8aa2-09a8-476c-9765-3ddc3ecebade"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "match_eraktkosh",
+   "seconds": 1.8,
+   "metric": "precision 19/20 = 0.95 (95% Wilson 0.764-0.991); missed 4/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 388; sample 20: yes 19, likely 0, uncertain 1, no 0. README: external/eraktkosh README: 16 correct + 2 likely + 2 uncertain of 20 (80% strict, 90% with likely) (Wilson 0.699-0.972); intervals overlap: True. Rejected: 10 drawn from 486 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 4, uncertain 1 (miss rate 4/10, Wilson 0.168-0.687). Wrong or uncertain accepted: ['Verma Union Hospital vs VF Verma Hospital Pardeshipura (PIN 474009 is Gwalior)']. Missed: ['Medical College Hospital Gandhi Nagar Kotta...",
+   "examples": [
+    "3678db60-d22b-4a38-9148-aa66aba6d060",
+    "a9077716-04f1-44c5-9ad7-801c68d74978",
+    "481aafee-f67e-441c-80c0-995902a6ff98",
+    "79abc4f1-1f13-40d0-89a3-738fe020089e",
+    "7ae37791-7094-498f-a9bd-66fe1d3e8066"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "location",
+   "check": "match_laqshya",
+   "seconds": 2.5,
+   "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 0/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 66; sample 20: yes 20, likely 0, uncertain 0, no 0. README: external/laqshya_master README: 17 correct, 3 plausible, 0 wrong of 20 (Wilson 0.839-1.0); intervals overlap: True. Rejected: 10 drawn from 233 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 0, uncertain 0 (miss rate 0/10, Wilson 0.0-0.278). Wrong or uncertain accepted: []. Missed: []",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "match_nmc",
+   "seconds": 1.9,
+   "metric": "precision 20/20 = 1.00 (95% Wilson 0.839-1.0); missed 1/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 81; sample 20: yes 19, likely 1, uncertain 0, no 0. README: external/nmc_colleges README: 19/20 clean, 1 right name on a mislocated VF record (Wilson 0.764-0.991); intervals overlap: True. Rejected: 10 drawn from 281 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 1, uncertain 1 (miss rate 1/10, Wilson 0.018-0.404). Wrong or uncertain accepted: []. Missed: ['Sukh Sagar Hospital Mukunwara Chargawan is the Sukh Sagar Medical College campus: missed']",
+   "examples": [
+    "10f3907d-3484-43fd-9171-906d0ba9bebf"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "match_mohfw_trauma",
+   "seconds": 0.0,
+   "metric": "precision 19/20 = 0.95 (95% Wilson 0.764-0.991); missed 0/10 rejected",
+   "threshold": "precision Wilson lower bound >= 0.75 and <= 2 of 10 rejected pairs are misses",
+   "detail": "Accepted population 20; sample 20: yes 18, likely 1, uncertain 0, no 1 (the sample is the whole accepted set, so this is exact). README: external/mohfw_trauma_196 README: 19/20 (all 20 accepted) (Wilson 0.764-0.991); intervals overlap: True. Rejected: 10 drawn from 37 refused best candidates with name score >= 70 (>= 85 for regenerated list candidates); judged same facility (missed match) 0, uncertain 0 (miss rate 0/10, Wilson 0.0-0.278). Wrong or uncertain accepted: ['VF Civil Hospital merges Tezpur (Mahabhairab), Bongaigaon and Dhemaji; README already marks it wrong']. Missed: [] Recall n...",
+   "examples": [
+    "2b4c984c-2c3b-4667-9d90-b3a9c5b74053"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "match_pmndp_goa",
+   "seconds": 0.0,
+   "metric": "accepted 1/1 correct; rejected 7/7 correct",
+   "threshold": "all 8 Goa rows judged",
+   "detail": "Goa list only (8 rows, the other states are counts). Accepted Goa Medical College = VF dda3e7e4 (same PIN 403202). For the 7 refused rows no VF record in Goa (35 records) names Hospicio, Canacona, Navelim, Balli, Valpoi or Asilo, so the refusals are right. README 1/1 precision confirmed; its 'recall 1/8' is coverage of VF, not matcher recall.",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "match_counts_vs_readme",
+   "seconds": 0.2,
+   "metric": "21/21 counts reproduce",
+   "threshold": "every stated count reproduces",
+   "detail": "mismatches {}; match rows whose VF id is not in the 9,959 cleaned records (11 byte-duplicate raw rows): {'hot_uids_outside_9959': 118}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "location",
+   "check": "v2_location_contract",
+   "seconds": 0.3,
+   "metric": "4 v2 tables with unique_id checked",
+   "threshold": "ids, points and districts equal v1",
+   "detail": "claim_atoms.parquet: 0 ids not in v1; facility_attributes.parquet: 0 ids not in v1; facility_features.parquet: 0 ids not in v1, 0 points differ from v1 loc; witnesses.parquet: 0 ids not in v1",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "secrets_tracked",
+   "seconds": 131.5,
+   "metric": "0 project credentials; 33 third-party key strings in 5 saved pages",
+   "threshold": "0 credentials in any tracked file or export",
+   "detail": "Scanned 2083 files (2041 tracked + 42 exports) for 12 token patterns and credential file names. Third-party hits by kind: {'google_api_key': 31, 'jwt': 1, 'assigned_secret': 1}; own hits by kind: {}. The Google keys are the public browser keys Google embeds in its own developer pages, saved here as research copies; they are not project secrets, but GitHub secret scanning flags them.",
+   "examples": [
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html: google_api_key AIzaSyAP-jjE...",
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html: google_api_key AIzaSyB6xiKG...",
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html: google_api_key AIzaSyAQk0fB...",
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html: google_api_key AIzaSyCCxcqd...",
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html: google_api_key AIzaSyBLEMok..."
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "secrets_history",
+   "seconds": 10.2,
+   "metric": "0 project credentials, 0 credential files ever committed; 33 third-party key strings in history",
+   "threshold": "0",
+   "detail": "Scanned added lines of 59 commits and 2047 paths ever committed.",
+   "examples": [
+    "89cc209c app_design/feasibility/accessibility/sources/android_a11y_apps.html google_api_key",
+    "89cc209c app_design/feasibility/accessibility/sources/android_a11y_apps.html google_api_key",
+    "89cc209c app_design/feasibility/accessibility/sources/android_a11y_apps.html google_api_key",
+    "89cc209c app_design/feasibility/accessibility/sources/android_a11y_apps.html google_api_key",
+    "89cc209c app_design/feasibility/accessibility/sources/android_a11y_apps.html google_api_key"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "user_identity",
+   "seconds": 0.7,
+   "metric": "0 files with the user's email; 280 files with the /Users/<name> home path (406 mentions, 263 would ship publicly or in the app)",
+   "threshold": "0 files with the user's email; 0 home paths in shipped files",
+   "detail": "Commit metadata (not file content) carries author emails: <user email> x15, ****39***@users.noreply.github.com x24, *****85***@users.noreply.github.com x13, aa***@outlook.com x2, aa***@gmail.com x5. The option-B copy is one fresh commit by public-copy@localhost, so it drops these.",
+   "examples": [
+    "model/v2/assemble/build_stdout.txt (home path x12, public_copy)",
+    "audit/scale/q2_contradictions.py (home path x5, public_copy)",
+    "cleaning/claims/measure.py (home path x5, public_copy)",
+    "external/eraktkosh_blood_centres/README.md (home path x5, public_copy)",
+    "cleaning/claims/build_claims.py (home path x4, public_copy)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "emails",
+   "seconds": 17.0,
+   "metric": "8082 distinct emails ({'organisational': 2716, 'placeholder': 3, 'webmail': 5363}); webmail: 5363 distinct in 6 files, 61 next to a doctor name/degree, 22 not in the provided table",
+   "threshold": "0 personal (webmail) addresses outside the provided table; 0 in shipped files",
+   "detail": "Webmail addresses are mostly single-doctor clinics' published contacts copied from the provided table (email column), so they are personal data of named individuals; the ones 'not in the provided table' are cleaned forms of provided values (record_trust.emails_clean). Shipped (public copy or app export): 0 distinct in 0 files. Top files: {'derived/v1/record_trust.parquet': np.int64(5358), 'derived/v1/data_point_scores.parquet': np.int64(5341), 'derived/v1/claims.parquet': np.int64(20), 'app_design/feasibility/accessibility/sources/talkback.html': np.int64(2), 'audit/identity/out_q3.txt': np...",
+   "examples": [
+    "app_design/feasibility/accessibility/sources/talkback.html: as***@gmail.com (doctor ctx=False, private_only)",
+    "audit/identity/out_q3.txt: pu***@gmail.com (doctor ctx=False, private_only)",
+    "derived/v1/claims.parquet: dr***@gmail.com (doctor ctx=False, private_only)",
+    "derived/v1/data_point_scores.parquet: dr***@gmail.com (doctor ctx=False, private_only)",
+    "derived/v1/record_trust.parquet: in***@gmail.com (doctor ctx=False, private_only)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "doctor_mobiles_text",
+   "seconds": 18.1,
+   "metric": "1926 distinct mobiles next to a doctor name/degree in 21 files; 90 distinct in 3 shipped files",
+   "threshold": "0 doctor-attached mobiles in shipped files (public copy or app export)",
+   "detail": "Files by distinct numbers: {'app_design/feasibility/accessibility/apps/static/pack.json': np.int64(1659), 'audit/identity/out/existence_signals.csv': np.int64(875), 'audit/identity/out/shared_phones.csv': np.int64(87), 'app_design/feasibility/offline/out/pack_bihar_pin_denorm.json': np.int64(75), 'app_design/feasibility/offline/out/pack_bihar_grid10km_norm.json': np.int64(74), 'app_design/feasibility/offline/out/pack_bihar_grid10km_denorm.json': np.int64(67), 'app_design/feasibility/offline/out/pack_bihar_pin_norm.json': np.int64(64), 'app_design/feasibility/offline/out/referral_bihar.html'...",
+   "examples": [
+    "app_design/feasibility/offline/out/sms_reply_samples.json: ...5746 |  before going:\\n1) Dr. Global Healthcare & Diabetes Centre +********5746 conf 27% \\\"Dialysis facility\\\"\\n2) R. B. Memori",
+    "audit/identity/out/shared_phones.csv: ...3039 | mbai; Gwalior; Karnal; Navi Mumbai; Visakhapatnam; Nashik,********3039,16,14,16,Dr Krish Vaidya's ICure Heart Clinic; As",
+    "app/facts/out/facts.json.gz: ...0363 | 41\":[\"capability\",\"24-hour emergency heart attack helpline (+*********0363)\",false,\"unanchored\"],\"436c7e0a:capa:42\":[\"ca"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "doctor_mobiles_exports",
+   "seconds": 0.1,
+   "metric": "facts.json: 380 personal-likely + 173 other doctor-named records show a mobile, of 9947 facilities (7452 show any mobile); packs: 155 doctor-named rows with a mobile (48 without an institution word) across 36 states; planner phone fields: []",
+   "threshold": "0 personal-likely doctor mobiles shown unless the number is on the facility's own site",
+   "detail": "308 of the 380 personal-likely records have an own website where the number could be confirmed as published. Numbers come from the provided table's phone fields (publicly listed), but for a one-doctor clinic the number is the doctor's own mobile.",
+   "examples": [
+    "013d88ce Dr. The Heart and Internal Medicine Clin ...1837 (own site=True)",
+    "02456893 Dr Smile Dental Clinic - D-36, Sri Krish ...9009 (own site=True)",
+    "0280c810 Dr Shaik Althaf's Dental Care Grace Buil ...0031 (own site=True)",
+    "0281c925 Dr Dees Path Labs ...8787 (own site=True)",
+    "02cab6b1 Dr.Hardik's Superspeciality Dental Care  ...6449 (own site=True)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "patient_like",
+   "seconds": 105.9,
+   "metric": "0 non-synthetic matches in 0 files ({}); 11 synthetic test values",
+   "threshold": "0 patient-identifying details in shipped files",
+   "detail": "Matches need a human read: most are facility marketing text in the provided table ('Mr X, 45 years, underwent ...' testimonials). Vision test images are synthetic (make_images.py: 'All text is invented; no real patient'), audio is macOS `say` (asr_bench.py), and the three external photos are Wikimedia Commons (CC BY-SA 3.0 x2, public domain).",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "provided_contacts_public_copy",
+   "seconds": 1.3,
+   "metric": "25 option-B files carry provided phone numbers (1967 numbers); 38 app exports do (expected: the app shows them)",
+   "threshold": "0 provided phone numbers in the option-B public copy",
+   "detail": "tools/data_audit.py keys only on record ids, sentence ids and coordinates, so a file of phones plus facility names with no ids passes as 'public'.",
+   "examples": [
+    "audit/identity/verify/v_shared_phones.csv: 918 numbers",
+    "audit/identity/out/shared_phones.csv: 916 numbers",
+    "audit/identity/labels/shared_phones_hand.md: 40 numbers",
+    "model/proto/decision/worked_examples.txt: 19 numbers",
+    "audit/identity/out_q3b.txt: 11 numbers"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "provided_names_public_copy",
+   "seconds": 5.4,
+   "metric": "11 option-B files name >=20 provided facilities; 183 name >=1",
+   "threshold": "0 option-B files listing >=20 provided facility names (a few quoted examples are fine)",
+   "detail": "DATA_AUDIT.md calls this its known gap (facility names in prose). Counts distinct names of >=3 tokens; generic names shared by many records count once.",
+   "examples": [
+    "audit/identity/out/shared_phones.csv: 938 names",
+    "audit/identity/out/shared_domains.csv: 425 names",
+    "viz/journeys/data/plans_best.csv: 389 names",
+    "audit/scale/verify/v3_beds_examples.json: 238 names",
+    "model/proto/evidence/sentence_blind.txt: 158 names"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "restricted_list_copies",
+   "seconds": 109.0,
+   "metric": "0 files hold >=50% of a restricted list; 6 files hold >=20 entries (1 of them shipped); 65 files mention >=1 entry",
+   "threshold": "no file holds >=50% of NABH/NMC/trauma; no shipped file holds >=20 entries",
+   "detail": "List sizes {'nabh': '21615 (1528 names also in the provided table, not counted)', 'nmc': '839 (125 names also in the provided table, not counted)', 'trauma': '196 (22 names also in the provided table, not counted)'}. An entry counts when its accreditation no. / NMC college code appears, or its full name (>=3 tokens) appears and that name is not also a provided-record name (so a provided facility's own name never counts). Per-facility facts with citations are allowed.",
+   "examples": [
+    "derived/v2/facility_attributes.parquet: nabh 1744/21615 (private_only)",
+    "derived/v2/witnesses.parquet: nabh 1031/21615 (private_only)",
+    "model/v2/labels/out/pu_labels.parquet: nabh 984/21615 (private_only)",
+    "planner/out/planner_v1.json.gz: nabh 131/21615 (export)",
+    "derived/v2/witnesses.parquet: nmc 26/839 (private_only)"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "crawled_page_bodies",
+   "seconds": 172.9,
+   "metric": "2 files carry >=50 crawled-page sentences (0 shipped); 7 files carry >=1; index has 345,546 crawl-only sentences",
+   "threshold": ">=50 verbatim crawl sentences in one file = a page-body copy; 0 such files shipped",
+   "detail": "Sentence = >=80 chars, case and whitespace folded. Sentences also present in the provided table are removed first, so quoting the provided dataset does not count. Short quote-verified snippets (web_evidence, source_page_checks) are expected below the threshold. Positive control: 00006337a463826df9a0.json.gz scores 49 of 49 sentences",
+   "examples": [
+    "derived/v2/witnesses.parquet: 8776 of 23222 (private_only)",
+    "derived/v2/facility_attributes.parquet: 92 of 2162 (private_only)",
+    "kb/web_evidence/out/llm_hours_raw.json: 16 of 432 (public_copy)",
+    "kb/web_evidence/out/selfcheck_round2.csv: 3 of 59 (private_only)",
+    "kb/web_evidence/qa/out/sample.csv: 2 of 194 (private_only)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "third_party_pages",
+   "seconds": 0.1,
+   "metric": "70 saved third-party pages/files (10.0 MB); 27 full pages kept by the option-B copy, 11 of them under all-rights-reserved or vendor terms",
+   "threshold": "0 full copies of all-rights-reserved pages in the public copy",
+   "detail": "These are research evidence copies (app_design/feasibility/*/sources|probes). Licence by origin: {\"Google page, CC BY 4.0 text / Google ToS; embeds Google API keys\": 6, \"industry report page, all rights reserved\": 2, \"W3C document, W3C Document License (copy allowed with notice)\": 3, \"framework docs page, vendor copyright\": 5, \"MDN, CC BY-SA 2.5\": 4, \"ACM / Microsoft Research / Semantic Scholar page, all rights reserved or API terms\": 7, \"Wikipedia text, CC BY-SA 4.0 (attribution + share-alike)\": 8, \"ride-hailing vendor page, all rights reserved\": 17, \"unknown, all rights reserved assumed\":...",
+   "examples": [
+    "app_design/feasibility/actions/sources/android_intents_common.html (660 KB, Google page, CC BY 4.0 text / Google ToS)",
+    "app_design/feasibility/accessibility/sources/cable_data_pricing.html (383 KB, industry report page, all rights reserve)",
+    "app_design/feasibility/accessibility/sources/android_a11y_apps.html (284 KB, Google page, CC BY 4.0 text / Google ToS)",
+    "app_design/feasibility/accessibility/sources/android_go.html (262 KB, Google page, CC BY 4.0 text / Google ToS)",
+    "app_design/feasibility/actions/sources/developers.olacabs.com_docs_deep-linking.html (97 KB, ride-hailing vendor page, all rights res)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "large_files",
+   "seconds": 0.0,
+   "metric": "0 files >=50 MB, 7 >=5 MB, 36 >=1 MB; tracked total 198.2 MB",
+   "threshold": "GitHub warns at 50 MB and rejects 100 MB; 5 MB is this audit's review line",
+   "detail": "The >=5 MB files are the derived/v1 tables (provided-data derivatives, private repo only).",
+   "examples": [
+    "derived/v2/witnesses.parquet 18.5 MB (private_only)",
+    "derived/v1/claims.parquet 14.8 MB (private_only)",
+    "derived/v1/data_point_scores.parquet 14.2 MB (private_only)",
+    "derived/v1/source_domains.csv 6.5 MB (private_only)",
+    "derived/v1/facility_trust.csv 5.5 MB (private_only)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "large_blobs_history",
+   "seconds": 0.1,
+   "metric": "2400 blobs, 236 MB uncompressed; largest 18.5 MB; 12 blobs at paths no longer tracked (0 >=1 MB)",
+   "threshold": "no blob >=50 MB; files removed from HEAD still sit in history",
+   "detail": "History is why option B builds a fresh single-commit copy instead of flipping visibility.",
+   "examples": [
+    "derived/v2/witnesses.parquet 18.5 MB",
+    "derived/v1/claims.parquet 14.8 MB",
+    "derived/v1/data_point_scores.parquet 14.2 MB"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "public_filter",
+   "seconds": 0.0,
+   "metric": "DATA_AUDIT.md counts 1463 tracked files, git has 2041; 120 files the filter now excludes are missing from tools/public_exclude.txt",
+   "threshold": "exclude list regenerated after the last commit",
+   "detail": "tools/public_copy.sh reruns tools/data_audit.py before copying, so the stale list is fixed at build time; the committed DATA_AUDIT.md is out of date. The filter only looks for record ids, sentence ids and coordinates: it does not look for phones, emails, secrets, list names or third-party pages (see the other checks' 'public_copy' rows). 0 non-parquet files are over its 8 MB read cap.",
+   "examples": [
+    "app/checks/screens/data_stories-light.png",
+    "app/checks/screens/describe_confirm-light.png",
+    "app/checks/screens/describe_danger-light.png",
+    "app/checks/screens/note_consent-light.png",
+    "app/tests/test_validation_fixes.py"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "export_bundle",
+   "seconds": 0.1,
+   "metric": "how.json links https://github.com/LordKarV/databricksdatathon/blob/dev/ (repo not run); facts.json carries 44,968 provided sentences (2.6 M chars) and 9,538 phone numbers; 25 untracked non-export files in build/deploy_bundle",
+   "threshold": "links in the shipped app resolve for judges; bundle = tracked code + documented exports",
+   "detail": "network part skipped (--skip-network). The exports are provided-dataset rows shown inside the event's own Databricks workspace app, which DATA_AUDIT.md option A treats as in scope of the Marketplace consumer terms; they must not be committed (they are .gitignored).",
+   "examples": [
+    "https://github.com/LordKarV/databricksdatathon/blob/dev/",
+    "app/stories/out/stories.json",
+    "app/stories/out/charts/claims_s3_funnel_1.svg",
+    "app/stories/out/charts/trust_s6_cleaning_1.svg",
+    "app/stories/out/charts/model_s2_llm_1.svg"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "privacy_licence",
+   "check": "other_branches",
+   "seconds": 1.2,
+   "metric": "36 text files on other branch tips; 18 carry record ids, 0 carry secrets/provided phones/webmail",
+   "threshold": "0 secrets; provided rows only in files the public filter would exclude",
+   "detail": "Branch tips change while teammates work; rerun before any publish.",
+   "examples": [
+    "dev:model/gold/v3/dev_labels.json ids=300 phones=0",
+    "dev:model/gold/v3/dev_sample.json ids=300 phones=0",
+    "dev:model/gold/v3/test_sample.json ids=150 phones=0",
+    "main:audit/merge/handcheck/q1_precision.tsv ids=30 phones=0",
+    "main:audit/merge/handcheck/q1_precision_dev.tsv ids=30 phones=0"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "raw_row_classes",
+   "seconds": 0.1,
+   "metric": "rows=10088 classes={'well_formed': 9970, 'fragment': 88, 'truncated': 30}",
+   "threshold": "10,088 rows; classes equal PROFILE.json row_integrity",
+   "detail": "PROFILE.json says {'well_formed': 9970, 'fragment': 88, 'truncated': 30}. Rule: well_formed = UUID unique_id and source='kie' (audit/geo/geo_common.py:82 load_facilities).",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "raw_hash_unchanged",
+   "seconds": 0.0,
+   "metric": "6/6 files match",
+   "threshold": "all match",
+   "detail": "sha256 of data/raw files vs derived/v1/MANIFEST.json raw_input_sha256",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "live_table_counts",
+   "seconds": 0.0,
+   "metric": "n/a",
+   "threshold": "10088/9970/30/9959",
+   "detail": "sql.sh failed 3 times",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "record_loss",
+   "check": "uuid_rule_equivalence",
+   "seconds": 0.0,
+   "metric": "0 rows differ",
+   "threshold": "0",
+   "detail": "audit/geo/geo_common.py:85 (prefix) vs cleaning/claims/build_claims.py:21 (full UUID)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "raw_duplicates_lossless",
+   "seconds": 0.1,
+   "metric": "11 ids x 2 rows; 0 not identical",
+   "threshold": "11 ids, all identical",
+   "detail": "9,970 well-formed -> 9,959 usable. Documented: REPORT.md F7/ID1, cleaning/geo_identity/common.py:22. By state: {'KERALA': 2, 'MAHARASHTRA': 2, 'TAMIL NADU': 2, 'HIMACHAL PRADESH': 1, 'KARNATAKA': 1, 'WEST BENGAL': 1, 'GUJARAT': 1, 'RAJASTHAN': 1}",
+   "examples": [
+    "08344cdb-f455-4c22-8d31-a0a8e849124b",
+    "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+    "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+    "9264b21d-4aea-460a-9c77-613407df8439",
+    "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "raw_truncated_real_facilities",
+   "seconds": 0.0,
+   "metric": "30/10088 rows (30 named facilities) dropped",
+   "threshold": "0 real facilities lost without a listed reason",
+   "detail": "30 truncated rows, 30 with a name, 30 with every column after description null, 0 also present as a usable row. Types: {'hospital': 16, 'clinic': 12, 'dentist': 2}; states: {'Uttar Pradesh': 6, 'Tamil Nadu': 4, 'Telangana': 3, 'Karnataka': 3, 'Punjab': 2, 'Gujarat': 2, 'Haryana': 2, 'Bihar': 2, 'Odisha': 1, 'Uttarakhand': 1, 'Ncr-delhi': 1, 'Madhya Pradesh': 1, 'West Bengal': 1, 'Chhattisgarh': 1}; focus states: {'Uttar Pradesh': 6, 'Bihar': 2, 'Odisha': 1}. PROFILE.json and REPORT.md document the rule (row integrity class 'truncated') but no document lists these 30 as lost facilities or sa...",
+   "examples": [
+    "ac3a8441-1659-485f-9ea7-ae4e78856d70 Sri Sai Lions Netralaya (Patna, Bihar)",
+    "acbf875b-eec6-4a26-af54-55660a244378 Green Dental Care (Patna, Bihar)",
+    "12d987ef-1ff8-4025-bf5d-8870f2083a90 Bharati Fertility Center (Mandaveli, Tamil Nadu)",
+    "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5 Ajanta Hospital & Ivf Centre (Lucknow, Uttar Pradesh)",
+    "22142a37-a47a-4a9a-bc80-f5981361f000 The Velvet Skin Centre \u2013 Dermatologist in Lucknow, Hair & Skin Clinic (Lucknow, Uttar Pradesh)"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "fragment_rows_carry_no_facility",
+   "seconds": 0.0,
+   "metric": "88 fragments; 0 usable UUIDs, 0 truncated UUIDs inside; 30 fragments hold a coordinates object",
+   "threshold": "0 facility payload in fragments",
+   "detail": "Fragments hold the tail of the 30 truncated rows (specialties, coordinates, source_urls shifted into name/address columns). They are correctly excluded, but they are the only copy of those 30 facilities' coordinates and service lists.",
+   "examples": [],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "v1_per_facility_tables",
+   "seconds": 0.1,
+   "metric": "5/5 exact",
+   "threshold": "9,959 rows = usable set",
+   "detail": "facility_location.parquet: rows=9959 dup=0 missing=0 extra=0; record_trust.parquet: rows=9959 dup=0 missing=0 extra=0; facility_groups.parquet: rows=9959 dup=0 missing=0 extra=0; facility_trust.parquet: rows=9959 dup=0 missing=0 extra=0; facility_trust.csv: rows=9959 set_equal=True",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "v1_child_tables_fk",
+   "seconds": 0.5,
+   "metric": "0 orphan ids",
+   "threshold": "0",
+   "detail": "claims.parquet: 9959 facilities, 0 orphans; specialties.parquet: 9959 facilities, 0 orphans; grades.parquet: 4694 facilities, 0 orphans; grades_v1.parquet: 4694 facilities, 0 orphans; data_point_scores.parquet: 9959 facilities, 0 orphans; source_urls.parquet: 9959 facilities, 0 orphans; source_page_checks.parquet: 344 facilities, 0 orphans; gold_pairs.parquet: 176 facilities, 0 orphans",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "v1_copies_match_sources",
+   "seconds": 0.0,
+   "metric": "8/8 identical",
+   "threshold": "all identical",
+   "detail": "facility_location.parquet: same as cleaning/geo_identity/facility_location.parquet; manifest ok; record_trust.parquet: same as cleaning/geo_identity/record_trust.parquet; manifest ok; facility_groups.parquet: same as cleaning/geo_identity/facility_groups.parquet; manifest ok; pin_gazetteer.parquet: same as cleaning/geo_identity/pin_gazetteer.parquet; manifest ok; place_gazetteer.parquet: same as cleaning/geo_identity/place_gazetteer.parquet; manifest ok; claims.parquet: same as cleaning/claims/out/claims.parquet; manifest ok; specialties.parquet: same as cleaning/claims/out/specialties.parq...",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "claims_reproduce_from_raw",
+   "seconds": 0.4,
+   "metric": "raw items=469498 v1 claims=469498 missing=0 extra=0 text_diff=0",
+   "threshold": "0 / 0 / 0",
+   "detail": "By field (raw): {'capability': 231465, 'procedure': 163647, 'equipment': 55998, 'description': 18388}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "claims_key_integrity",
+   "seconds": 0.1,
+   "metric": "dup=0 bad_format=0 uid8_collisions=0",
+   "threshold": "0 / 0 / 0",
+   "detail": "claim ids and pack uid8 keys rely on the first 8 hex chars being unique over 9,959 records",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "claims_invalid_json_dropped",
+   "seconds": 0.1,
+   "metric": "0 field values dropped",
+   "threshold": "0",
+   "detail": "by field: Counter(); root cause cleaning/claims/build_claims.py:35 (where json_valid(j) and json_type(j)='ARRAY')",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "facilities_without_claims",
+   "seconds": 0.3,
+   "metric": "0/9959 have no claims; 0 unexplained",
+   "threshold": "unexplained = 0",
+   "detail": "Facilities with no claim cannot get any service pair, so they never appear in packs or as a service candidate in facts (they remain in facts.fac). Explained = every raw text field empty. Breakdown: {'state': {}, 'ftype': {}, 'operator': {}}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "specialties_dup_inflation",
+   "seconds": 0.3,
+   "metric": "rows=117964 missing=0 extra=0 n_raw_wrong=165 (11 facilities, all duplicated ids: True)",
+   "threshold": "0 / 0 / 0",
+   "detail": "Root cause: cleaning/claims/build_claims.py:51 SPEC_SQL reads raw without the row_number() dedupe used by EXPLODE_SQL, so n_raw is doubled for duplicated rows. The empty-string spec (non-alpha value) is also kept as its own row.",
+   "examples": [
+    "08344cdb-f455-4c22-8d31-a0a8e849124b",
+    "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+    "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+    "9264b21d-4aea-460a-9c77-613407df8439",
+    "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "grades_keys",
+   "seconds": 0.0,
+   "metric": "rows=10799 dup=0 v1dup=0 keys_equal=True",
+   "threshold": "unique, equal",
+   "detail": "4694 facilities with >= 1 graded service; services {'trauma': 3580, 'icu': 2786, 'dialysis': 1050, 'cardiac_surgery': 973, 'mri': 952, 'nicu': 746, 'csection': 448, 'burns': 264}",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "dps_composition",
+   "seconds": 0.7,
+   "metric": "rows=518191 by type={'claim_attribution': 469498, 'service_claim': 10799, 'location': 9959, 'existence': 9959, 'phone': 9464, 'email': 8512}",
+   "threshold": "expected {'claim_attribution': 469498, 'service_claim': 10799, 'location': 9959, 'existence': 9959, 'phone': 9464, 'email': 8512}",
+   "detail": "dp_id dups=0; sentences==claims True; service==grades True; dup per record {'location': 0, 'existence': 0, 'phone': 0, 'email': 0}. 495 records have no phone point because raw officialPhone is null or 'null' (pipelines/source_scoring/s4_datapoints.py:108); 1447 have no email point (s4:112).",
+   "examples": [
+    "0035ebd7-6492-4691-a871-8640af2d3158",
+    "0068f9fe-8453-48e0-aeb0-88c27ede37dc",
+    "008f8550-efd3-4da5-bab2-66b6254cf24b"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "source_urls_vs_raw",
+   "seconds": 0.1,
+   "metric": "rows=158444 expected=158444 differing=0; same URL repeated in a record: 5652 rows in 1525 records",
+   "threshold": "0 differing; 0 repeated",
+   "detail": "11298 null items in raw arrays dropped (documented by jlist). 0 records have no source URL; 0 unparseable arrays. Repeats are not deduplicated by pipelines/source_scoring/s1_sources.py:21, so w_sd (README 'Attribution weights') counts a repeated URL twice. Repeated rows by class: {'official': 2519, 'health_aggregator': 793, 'other_health_site': 745, 'other': 292, 'social': 274}",
+   "examples": [
+    "0007a104-2bd7-412d-8ffd-7161e703dbc2",
+    "00154d81-ce6b-4c73-a49b-4bd3c20580f7",
+    "0020c82a-2608-406f-9298-779bdd657681"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "facility_trust_counts_consistent",
+   "seconds": 0.0,
+   "metric": "0 n_sentences and 0 n_service_claims mismatches",
+   "threshold": "0",
+   "detail": "",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "location_and_state_coverage",
+   "seconds": 0.0,
+   "metric": "no point=0 no state=0 no district=13",
+   "threshold": "0 / 0 / 0",
+   "detail": "Records without a district cannot get NFHS context or district grouping: {'MAHARASHTRA': 6, 'GUJARAT': 4, 'TELANGANA': 2, 'MADHYA PRADESH': 1}",
+   "examples": [
+    "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+    "18a0b6a3-8792-43ef-8753-47548e4aab02",
+    "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+    "5106028d-191f-4a51-a596-05d8b41e857b",
+    "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "dup_groups_consistent",
+   "seconds": 0.0,
+   "metric": "75 groups, 77 non-canonical records, 0 inconsistent groups",
+   "threshold": "0",
+   "detail": "9,959 records = 9,882 distinct facilities after duplicate groups; downstream exports keep all 9,959 (see check pack_duplicate_facilities_in_lists).",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "kb_fk_integrity",
+   "seconds": 0.4,
+   "metric": "15/15 clean",
+   "threshold": "0 orphans, 0 duplicate keys",
+   "detail": "targets.parquet: rows=9405 facilities=8015 orphans=0 dup_key=0; sites.parquet: rows=9405 facilities=8015 orphans=0 dup_key=0; pages.parquet: rows=31075 facilities=6744 orphans=0; site_identity.parquet: rows=6770 facilities=5881 orphans=0 dup_key=0; page_identity.parquet: rows=30517 facilities=5881 orphans=0 dup_key=0; web_service_summary.parquet: rows=20886 facilities=3698 orphans=0 dup_key=0; web_facility_details.parquet: rows=17908 facilities=4222 orphans=0 dup_key=0; web_details.parquet: rows=41191 facilities=3308 orphans=0 dup_key=0; web_hours.parquet: rows=43540 facilities=3969 orphans...",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "kb_claim_refs",
+   "seconds": 0.1,
+   "metric": "0 bad refs",
+   "threshold": "0",
+   "detail": "lexicon_matches.parquet: 64670 refs, 0 missing claim, 0 other record; facts.parquet: 35447 refs, 0 missing claim, 0 other record",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "crawl_target_coverage",
+   "seconds": 0.1,
+   "metric": "with target 8015/9959 (README 8,015); covered 5721 (0.574); focus {'BIHAR': 0.546, 'UTTAR PRADESH': 0.519, 'JHARKHAND': 0.439, 'ODISHA': 0.521, 'ASSAM': 0.504}",
+   "threshold": "README counts reproduce; focus states within 5 points of national share",
+   "detail": "coverage_by_state.csv mismatches (csv, recomputed): {}. Focus states below national-5pt: ['UTTAR PRADESH', 'JHARKHAND', 'ODISHA', 'ASSAM']. No-target records by state: {'MAHARASHTRA': 298, 'UTTAR PRADESH': 219, 'GUJARAT': 217, 'TAMIL NADU': 143, 'WEST BENGAL': 111, 'KARNATAKA': 100, 'PUNJAB': 93, 'HARYANA': 89}",
+   "examples": [
+    "005c7c7e-b401-4ad4-8565-a8b7e18f6840",
+    "0068f9fe-8453-48e0-aeb0-88c27ede37dc",
+    "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+    "008f8550-efd3-4da5-bab2-66b6254cf24b",
+    "009489cf-5e1a-4c5d-90d9-55dbaeeedc51"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "web_evidence_reach",
+   "seconds": 0.3,
+   "metric": "3698 records in web_service_summary, 3664 with a positive service; 0 not crawled",
+   "threshold": "0 outside crawl",
+   "detail": "share with web-positive evidence, focus states {'BIHAR': np.float64(0.392), 'UTTAR PRADESH': np.float64(0.34), 'JHARKHAND': np.float64(0.242), 'ODISHA': np.float64(0.319), 'ASSAM': np.float64(0.345)}; national 0.368",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "opendata_fanout",
+   "seconds": 0.0,
+   "metric": "0 (record, source) with >1 object; 44 objects shared by >1 record (35 explained by one duplicate group)",
+   "threshold": "0 unexplained",
+   "detail": "2844 records carry open-data facts; facts by match_tier {'high': 5553, 'medium': 448}",
+   "examples": [
+    "osm:node/13511670283",
+    "osm:node/2696699678"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "specialty_map_coverage",
+   "seconds": 0.0,
+   "metric": "0 of 2476 distinct specs unmapped (0 rows, 0 facilities)",
+   "threshold": "0",
+   "detail": "map rows 2933; unmapped specialties give no evidence weight downstream",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "pathways_services_exist",
+   "seconds": 0.0,
+   "metric": "6 existing caps, 0 unknown service",
+   "threshold": "0",
+   "detail": "graded services: ['burns', 'cardiac_surgery', 'csection', 'dialysis', 'icu', 'mri', 'nicu', 'trauma']",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "facts_facilities",
+   "seconds": 0.1,
+   "metric": "9947 facilities; dropped 12 {'exclude_review': 12}; dup 0; extra 0",
+   "threshold": "drops all documented",
+   "detail": "app/facts/build.py:64-65 drops rows with no ranking point and trust_level == exclude_review (cleaning/geo_identity/s5_trust.py:142: veterinary). Dropped: {'state': {'GUJARAT': 2, 'KARNATAKA': 2, 'WEST BENGAL': 1, 'PUNJAB': 1, 'ANDHRA PRADESH': 1, 'TAMIL NADU': 1, 'UTTAR PRADESH': 1, 'KERALA': 1}, 'ftype': {'hospital': 8, 'clinic': 3, 'null': 1}, 'operator': {'private': 8, 'public': 3, 'null': 1}}",
+   "examples": [
+    "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+    "3701980c-4699-4a84-a9f1-024939ba0e34",
+    "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+    "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+    "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "facts_pairs_complete",
+   "seconds": 8.7,
+   "metric": "7980 pairs; missing 45; extra 13; duplicate 0",
+   "threshold": "0 / 0 / 0",
+   "detail": "By service: {'burn_care': 262, 'cardiac_surgery': 967, 'dialysis': 1047, 'emergency_csection': 447, 'mri': 948, 'nicu': 744, 'trauma_emergency': 3565}; 1 app-service pairs of the 12 exclude_review records are dropped with them; icu pairs are dropped (no app tile).",
+   "examples": [
+    "09913236-77e2-414b-89d3-4943588527a6:nicu",
+    "0b125248-fa02-4a43-ac2e-3f466ede4768:cardiac_surgery",
+    "daa8ef27-895d-4873-aef6-4087b174bf3f:trauma",
+    "90e433dc-662f-40e6-83cf-b657d79b5eda:trauma",
+    "e93a7ae0-8d8f-49d1-9536-e2a2c0759a10:nicu"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "record_loss",
+   "check": "facts_cited_claims_present",
+   "seconds": 0.2,
+   "metric": "13829 pair cites, 42386 planner cites; missing 0 / 0; not in claims 0",
+   "threshold": "0",
+   "detail": "facts.claims is built from pair cites plus planner cites (app/facts/build.py:176)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "pack_index_and_pins",
+   "seconds": 0.1,
+   "metric": "36 packs for 36 states; sha mismatch 0; PIN set mismatch 0",
+   "threshold": "0",
+   "detail": "2 gazetteer PINs have no state and are in no pack",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "pack_facility_membership",
+   "seconds": 0.1,
+   "metric": "4234 distinct facilities in packs; exclude_review shown 0; ambiguous uid8 0; not a candidate 1; candidates never shown 146 of 4379",
+   "threshold": "0 ambiguous, 0 non-candidates, 0 exclude_review",
+   "detail": "build_packs.py:66-67 does not apply the trust_level != exclude_review filter that facts/build.py:65 applies, so the offline pack can show a record the online app hides. Shown but not in facts: 0. Candidates never in any top-3 list are by design (nearest-3 per PIN).",
+   "examples": [
+    "8bc216dd-b1af-4584-8169-2022bd939c6c"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "record_loss",
+   "check": "pack_duplicate_facilities_in_lists",
+   "seconds": 0.2,
+   "metric": "73/29883 distinct lists repeat a duplicate group; 199 (PIN, service) answers affected",
+   "threshold": "0",
+   "detail": "Root cause: build_packs.py:118 top_lists ranks records, not facility_groups.dup_group_id (derived/v1 facility_groups). Affected answers by state (top): {'UTTAR PRADESH': 104, 'MAHARASHTRA': 41, 'MADHYA PRADESH': 14, 'TAMIL NADU': 12, 'KERALA': 9, 'PUNJAB': 6, 'GUJARAT': 4, 'HARYANA': 4}",
+   "examples": [
+    "chhattisgarh list 467: 16d73dc5, 198ec9ea, 019bb317, 7f0a880d",
+    "chhattisgarh list 469: 16d73dc5, 019bb317, 198ec9ea, 64b04955",
+    "gujarat list 1425: 001316e5, 35dc2cd9, 6843bf09, 4c94dfcb",
+    "gujarat list 1428: 35dc2cd9, 6843bf09, 001316e5, 4c94dfcb",
+    "gujarat list 1438: 30dde763, 001316e5, 35dc2cd9, 4c94dfcb"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "pack_state_coverage",
+   "seconds": 0.3,
+   "metric": "national share of PINs >50 km from nearest candidate: {'burn_care': 0.58, 'cardiac_surgery': 0.36, 'dialysis': 0.294, 'emergency_csection': 0.485, 'mri': 0.345, 'nicu': 0.352, 'trauma_emergency': 0.123}; PINs with none: 0",
+   "threshold": "focus state within 10 points of national per service",
+   "detail": "focus states: {'BIHAR': {'burn_care': 0.731, 'cardiac_surgery': 0.529, 'dialysis': 0.287, 'emergency_csection': 0.436, 'mri': 0.387, 'nicu': 0.276, 'trauma_emergency': 0.035}, 'UTTAR PRADESH': {'burn_care': 0.436, 'cardiac_surgery': 0.367, 'dialysis': 0.253, 'emergency_csection': 0.4, 'mri': 0.398, 'nicu': 0.339, 'trauma_emergency': 0.103}, 'JHARKHAND': {'burn_care': 0.356, 'cardiac_surgery': 0.253, 'dialysis': 0.281, 'emergency_csection': 0.397, 'mri': 0.402, 'nicu': 0.302, 'trauma_emergency': 0.121}, 'ODISHA': {'burn_care': 0.836, 'cardiac_surgery': 0.632, 'dialysis': 0.62, 'emergency_cse...",
+   "examples": [
+    "BIHAR/burn_care",
+    "BIHAR/cardiac_surgery",
+    "ODISHA/burn_care",
+    "ODISHA/cardiac_surgery",
+    "ODISHA/dialysis"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "planner_facilities",
+   "seconds": 0.0,
+   "metric": "9959 facilities (missing 0, extra 0, dup 0); 12 exclude_review records kept; 8 capability entries point at them",
+   "threshold": "same filters as facts (no exclude_review)",
+   "detail": "planner/data_v1.py:63-66 drops only rows without a point, not exclude_review (facts/build.py:65 does). Capability entries on exclude_review records: {'emergency_24x7': 1, 'ecg': 1, 'blood_transfusion': 1, 'orthopaedics': 1, 'laboratory': 4}. Duplicate facility indexes per capability: {}",
+   "examples": [
+    "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+    "3701980c-4699-4a84-a9f1-024939ba0e34",
+    "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+    "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+    "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "planner_vs_pack_exclusions",
+   "seconds": 0.4,
+   "metric": "41 planner capability entries are pairs the packs drop",
+   "threshold": "0 (same exclusions in every export)",
+   "detail": "by capability: {'emergency_24x7': 13, 'icu': 5, 'burn_unit': 2, 'haemodialysis_unit': 9, 'comprehensive_emoc': 7, 'nicu': 5}. They carry low p (e.g. 0.03 for verified_false), so they rarely win a plan, but the exports disagree on which facilities are candidates.",
+   "examples": [
+    "17c02c25-710e-4e30-a313-82df5b9d3572 emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2626",
+    "1df3d3c4-c4d3-446d-a687-9d5841a57d84 emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2435",
+    "2d16d221-b3e8-4517-bab4-28fe6805e99e emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2553",
+    "4d6c620f-08f8-4fa6-bb4c-c005cdaba895 emergency_24x7 grade=counter_evidence status=unverified p=0.1594",
+    "5c0d519d-c4ed-42c1-b4b0-a6e3d754c17b emergency_24x7 grade=counter_evidence status=unverified p=0.1353"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "pack_quotes_cited",
+   "seconds": 0.1,
+   "metric": "16541 quote uses; empty id 0; id/text mismatch 80",
+   "threshold": "0",
+   "detail": "",
+   "examples": [
+    "andaman_and_nicobar_islands:e93a7ae0:=b2db2916:capa:31 text mismatch",
+    "andaman_and_nicobar_islands:e93a7ae0:=b2db2916:capa:32 text mismatch",
+    "arunachal_pradesh:e93a7ae0:=b2db2916:capa:31 text mismatch",
+    "arunachal_pradesh:e93a7ae0:=b2db2916:capa:32 text mismatch",
+    "assam:42864584:=373ab7bd:proc:13 text mismatch"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "record_loss",
+   "check": "pin_coverage_vs_india_post",
+   "seconds": 0.9,
+   "metric": "19586 India Post PINs; missing from gazetteer 0, packs 2, facts.pins 102",
+   "threshold": "0",
+   "detail": "gazetteer PINs without state or centroid (in no pack): [900056, 900099]; without district 227 (dropped from facts.pins by app/facts/build.py:149 dropna(district), kept in packs with district ''). India Post PINs missing from facts.pins by state: {'NA': 100, 'UTTAR PRADESH': 1, 'WEST BENGAL': 1}",
+   "examples": [
+    "121999",
+    "122998",
+    "122999"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "missed_duplicate_candidates",
+   "seconds": 1.0,
+   "metric": "12 candidate pairs",
+   "threshold": "0",
+   "detail": "Same-name records within 300 m outside any facility_groups link. Some are separate units of one campus (dental vs general), some are true duplicates (both appear as separate options). Also see opendata_fanout: OSM objects matched to two records that facility_groups keeps apart.",
+   "examples": [
+    "00361ecc 'Gunam Hospital - Hosur' ~ 8295bdfd 'Gunam Super Speciality Hospital'",
+    "07f22851 'Om Dental Clinic' ~ 9ce89c30 'Om Children and Dental Hospital'",
+    "139e2eb4 'Yash Hospital' ~ a4a146a0 'Yash Orthopedic Hospital - Kalol'",
+    "27071ec4 'Shiromany Dental Care' ~ 6994432c 'Shiromany Hospital'",
+    "428a24a9 'Akshar Pulmo Care, Bopal, Ahmedabad' ~ 62665a19 'Bopal Multispeciality Hospital'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "record_loss",
+   "check": "v2_contract",
+   "seconds": 0.0,
+   "metric": "file absent",
+   "threshold": "exists",
+   "detail": "/Users/karthikvattem/projects/datathon/derived/v2/facility_service_scores.parquet not published yet; contract ready",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "record_loss",
+   "check": "gold_splits_fk",
+   "seconds": 0.0,
+   "metric": "176 pairs; orphans 0; dup pair_id 0",
+   "threshold": "0",
+   "detail": "v3 test files not opened",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "trace_table",
+   "seconds": 0.7,
+   "metric": "29 layer/table rows traced; 0 with orphans",
+   "threshold": "0 orphans",
+   "detail": "out/trace.csv. facilities.parquet: 10088 rows / 9959 fac; usable (dedup): 9959 rows / 9959 fac; facility_location.parquet: 9959 rows / 9959 fac; record_trust.parquet: 9959 rows / 9959 fac; facility_groups.parquet: 9959 rows / 9959 fac; facility_trust.parquet: 9959 rows / 9959 fac; claims.parquet: 469498 rows / 9959 fac; specialties.parquet: 117964 rows / 9959 fac; grades.parquet: 10799 rows / 4694 fac; data_point_scores.parquet: 518191 rows / 9959 fac; source_urls.parquet: 158444 rows / 9959 fac; source_page_checks.parquet: 6492 rows / 344 fac; gold_pairs.parquet: 176 rows / 176 fac; crawl/...",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "record_loss",
+   "check": "state_coverage_table",
+   "seconds": 0.1,
+   "metric": "below half national: ['BIHAR', 'ODISHA']; national 6.84 records and 3.00 app-service facilities per million",
+   "threshold": "focus states at least half the national density",
+   "detail": "focus states: {'BIHAR': {'usable': 260, 'facts_with_any_app_service': 131, 'in_any_pack': 129, 'pop_m': 132.61, 'usable_per_m': 1.96, 'app_service_fac_per_m': 0.99}, 'UTTAR PRADESH': {'usable': 948, 'facts_with_any_app_service': 453, 'in_any_pack': 443, 'pop_m': 248.43, 'usable_per_m': 3.82, 'app_service_fac_per_m': 1.82}, 'JHARKHAND': {'usable': 157, 'facts_with_any_app_service': 65, 'in_any_pack': 62, 'pop_m': 41.95, 'usable_per_m': 3.74, 'app_service_fac_per_m': 1.55}, 'ODISHA': {'usable': 119, 'facts_with_any_app_service': 51, 'in_any_pack': 51, 'pop_m': 49.12, 'usable_per_m': 2.42, 'ap...",
+   "examples": [
+    "BIHAR: 1.96/M",
+    "UTTAR PRADESH: 3.82/M",
+    "JHARKHAND: 3.74/M",
+    "ODISHA: 2.42/M",
+    "ASSAM: 3.44/M"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_fact_quotes_verbatim",
+   "seconds": 3.2,
+   "metric": "{\"rows\": 237891, \"quote_not_in_field\": 0, \"segment_not_at_offset\": 0, \"quote_not_in_segment\": 0, \"match_not_in_segment\": 0}",
+   "threshold": "0 failures",
+   "detail": "237891 rows over web_services, web_hours, web_details re-checked against 28106 gz files",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_identity_quotes_verbatim",
+   "seconds": 0.2,
+   "metric": "{\"quotes\": 79963, \"not_substring\": 0, \"cited_url_not_stored\": 0}",
+   "threshold": "0 failures",
+   "detail": "page_identity and site_identity name, PIN and locality quotes",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_provenance",
+   "seconds": 0.8,
+   "metric": "{\"rows\": 237891, \"final_url\": 0, \"target_id\": 7383, \"fetched_at\": 9599, \"path_hash\": 0, \"unexplained_meta\": 0, \"page_rows\": 28909, \"files_shared_by_2plus_page_rows\": 715, \"text_hash_mismatch\": 0}",
+   "threshold": "0 hard mismatches (final_url, path hash, text hash, unexplained meta)",
+   "detail": "row final_url / target_id / fetched_at against the gz file; target_id/fetched_at differences on shared files are the row's own fetch metadata (the file holds the other fetch of the same URL, same text hash)",
+   "examples": [
+    "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: target_id row='sampurna.care' file='sampurnadiagnostics.com'",
+    "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: fetched_at row='2026-11-21T19:52:03+00:00' file='2026-11-21T19:52:10+00:00'",
+    "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: target_id row='sampurna.care' file='sampurnadiagnostics.com'",
+    "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: fetched_at row='2026-11-21T19:52:03+00:00' file='2026-11-21T19:52:10+00:00'",
+    "web_services 1f08b2ae-c50f-423f-a6fa-ce40a723f592 data/crawl/pages/01dd2158f2fa16ae7172.json.gz: fetched_at row='2026-11-21T19:35:12+00:00' file='2026-11-21T19:35:17+00:00'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_identity_quote_semantics",
+   "seconds": 0.1,
+   "metric": "{\"pin_quotes\": 3606, \"pin_quote_without_record_pin\": 0, \"locality_quotes\": 5333, \"locality_quote_without_city_or_district\": 0}",
+   "threshold": "0",
+   "detail": "site_identity evidence quotes contain the record's own PIN / place",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_attributable_contract",
+   "seconds": 0.1,
+   "metric": "{\"web_services\": {\"attributable\": 125052, \"violations\": 0}, \"web_hours\": {\"attributable\": 39239, \"violations\": 0}, \"web_details\": {\"attributable\": 35228, \"violations\": 0}, \"site_identity\": {\"rows\": 6770, \"violations\": 0}}",
+   "threshold": "0 violations",
+   "detail": "README contract for `attributable`",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_service_summary_consistency",
+   "seconds": 1.0,
+   "metric": "{\"pairs\": 20886, \"positive_pairs\": 20218, \"best_quote_not_a_positive_row\": 0, \"web_positive_mismatch\": 0, \"strong_mismatch\": 0, \"n_pages_positive_mismatch\": 0}",
+   "threshold": "0",
+   "detail": "summary vs web_services recount (page_id distinct)",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "web_facility_value_supported",
+   "seconds": 0.0,
+   "metric": "{\"usable_facility_facts\": 17548, \"best_fact_id_missing\": 0, \"best_quote_differs_from_cited_row\": 0, \"unique_id_differs\": 0, \"value_differs_from_cited_row\": 1128, \"share\": 0.0643, \"top_attributes\": {\"opd_hours:general\": 624, \"ambulance:ambulance_service\": 168, \"free_or_government:free_care\": 68, \"...",
+   "threshold": "0 (a shown value should be supported by the quote shown next to it)",
+   "detail": "facility-level value_text/value_num vs the row whose quote is cited (best_fact_id)",
+   "examples": [
+    "c8064e6a-4033-4ca0-b103-ee08dea6289f opd_hours:general shown=('fri 13:00-19:00', nan) cited_row=('mon-thu 09:00-19:00', nan) quote='Monday to Thursday \u2013 9am to 7pm'",
+    "41b1837b-8344-43cb-a455-f89e4e308d64 opd_hours:general shown=('days? 17:00-20:00', nan) cited_row=('mon-sat 09:00-13:00', nan) quote='Monday - Saturday: 9AM \u2013 1PM'",
+    "87a87835-1ca4-4542-8e17-5e9e231f43ae opd_hours:general shown=('days? 08:00-13:00; days? 14:00-19:00', nan) cited_row=('mon-sat 08:00-18:00', nan) quote='Email :\\nWorking Hours : Mon \u2013 Sat (8:00 a.m. to 6:'",
+    "05773700-259f-4ce2-a83b-ea95c662ec1d ambulance:ambulance_service shown=('als', nan) cited_row=(nan, nan) quote='Ambulance'",
+    "24263813-ac1d-4885-ab4f-55346a558a7a ambulance:ambulance_service shown=(nan, 5.0) cited_row=(nan, nan) quote='Ambulance Services at Nagaland, Dibrugarh and Guwa'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "vf_facility_value_supported",
+   "seconds": 0.0,
+   "metric": "{\"usable_facility_facts\": 25773, \"best_fact_id_missing\": 0, \"best_quote_differs_from_cited_row\": 0, \"unique_id_differs\": 0, \"value_differs_from_cited_row\": 442, \"share\": 0.0171, \"top_attributes\": {\"staffing:doctors\": 117, \"unit_beds:total\": 115, \"free_or_government:free_care\": 51, \"ambulance:ambu...",
+   "threshold": "0 (a shown value should be supported by the quote shown next to it)",
+   "detail": "facility-level value_text/value_num vs the row whose quote is cited (best_fact_id)",
+   "examples": [
+    "852bc3d1-7ea6-435a-9660-3b3dff53cf3b staffing:doctors shown=('doctors', 12.0) cited_row=('doctors', 3.0) quote='Staff includes 3 doctors'",
+    "f4ff91f0-a26c-4722-9174-7fa952e8cced staffing:specialty_doctors shown=('surgeons', 7.0) cited_row=('surgeons', 2.0) quote='Has 2 surgeons'",
+    "a1175a29-0c8e-494d-95c7-80beb235afc3 unit_beds:total shown=(nan, 1200.0) cited_row=(nan, 500.0) quote='500'",
+    "13d9cab6-f853-4659-bd61-50c67ad14325 staffing:doctors shown=('doctors', 15.0) cited_row=('doctors', 5.0) quote='Has 5 doctors on staff'",
+    "ce7235e6-330a-4a60-98d7-384530668660 equipment_count:operation_theatres shown=(nan, 4.0) cited_row=(nan, 1.0) quote='Has 1 modular operating theatre'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "vf_quotes_verbatim",
+   "seconds": 1.4,
+   "metric": "{\"facts\": 42036, \"text_facts\": 35447, \"quote_not_in_source_text\": 0, \"match_not_in_quote\": 0, \"claim_id_not_found\": 0, \"source_text_differs_from_claim\": 0, \"unique_id_or_field_differs\": 0, \"claim_not_in_raw_field\": 0, \"typed_fact_value_mismatch\": 0, \"typed_facts_checked\": 6100}",
+   "threshold": "0 failures",
+   "detail": "quote -> source_text -> derived/v1/claims.text -> data/raw field",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "vf_handcheck_reproducible",
+   "seconds": 0.2,
+   "metric": "{\"labelled\": 50, \"fact_id_gone\": 3, \"changed_since_label\": 0}",
+   "threshold": "0 gone",
+   "detail": "fact_ids gone are the post-handcheck fixes (README: specialty doctors, free_with_package)",
+   "examples": [
+    "f14cec09:capa:30:staffing:doctors:0",
+    "831fc382:capa:15:staffing:doctors:0",
+    "9a5cb946:capa:7:free_or_government:free_care:0"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "ids_and_domains",
+   "seconds": 0.2,
+   "metric": "{\"web_hours_dup_fact_id\": 0, \"web_details_dup_fact_id\": 0, \"facts_dup_fact_id\": 0, \"web_services_dup_key\": 0, \"service_id_outside_taxonomy\": 0, \"web_hours_bad_status\": 0, \"web_hours_bad_polarity\": 0, \"web_hours_nonpositive_usable_count\": 0, \"web_details_bad_status\": 0, \"web_details_bad_polarity\":...",
+   "threshold": "0",
+   "detail": "unique keys, enum domains, positive counts, clock times",
+   "examples": [
+    "web_hours 664cc819:034dc375bdcd:c333:opd_hours:general:0 days? 08:00-33:00 <- 'Opening Hours : 08:00AM to 21:00PM'",
+    "web_hours 8b5d6123:04c7caa5570f:t360:opd_hours:general:0 mon-sat 90:00-19:00 <- 'Monday \u2013 Saturday\\n90:00 AM - 07:00 PM'",
+    "facts 4c469752:capa:7:opd_hours:opd:0 mon-sat 09:00-14:00; mon-sat 29:00-21:00 <- 'Offers outpatient consultation services Mon-Sat 09'",
+    "web_facility_details 664cc819-2cde-427b-82e6-27089502ec90 general days? 08:00-33:00"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "quote_redaction",
+   "seconds": 1.5,
+   "metric": "{\"web_services\": {\"distinct_quotes\": 65059, \"with_phone\": 9, \"with_email\": 0}, \"web_hours\": {\"distinct_quotes\": 19487, \"with_phone\": 27, \"with_email\": 0}, \"web_details\": {\"distinct_quotes\": 18060, \"with_phone\": 13, \"with_email\": 0}}",
+   "threshold": "0 unredacted contacts",
+   "detail": "regex: Indian mobile (10 digits from 6-9, optional +91) or STD landline with separator; email",
+   "examples": [
+    "web_services: '0416 - 2254463 (Emergency Department)'",
+    "web_services: 'Emergency/Casualty 02261452140 (24 hours)'",
+    "web_hours: 'Emergency/Casualty 02261452140 (24 hours)'",
+    "web_hours: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'",
+    "web_details: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "service_error_patterns",
+   "seconds": 0.8,
+   "metric": "{\"positive_pairs\": 20218, \"chrome_text_menu_footer\": {\"rows\": 41818, \"pairs_any\": 7430, \"pairs_only\": 1363, \"pairs_only_share\": 0.0674}, \"template_quote_on_10plus_sites\": {\"rows\": 20457, \"pairs_any\": 5365, \"pairs_only\": 1454, \"pairs_only_share\": 0.0719}, \"doctor_bio_cue\": {\"rows\": 1346, \"pairs_an...",
+   "threshold": "pairs resting only on a pattern <= 2% each",
+   "detail": "positive & attributable web_services rows; 'pairs_only' = every positive row of the pair has the pattern",
+   "examples": [
+    "template: 'Neurosurgery' on 301 sites",
+    "template: 'Critical Care' on 237 sites",
+    "template: 'Dialysis' on 185 sites",
+    "soon: b2521960-19fd-4432-8d80-f739496ea5d5 ct_scan 'COMING SOON - GASTROENTEROLOGY & CT SCAN'",
+    "soon: 3fc1cb91-b14c-4dd0-b488-7f0d97a9c28d chemotherapy 'Dr. Amit Agarwal, (MEDICAL ONCOLOGIST)Principal Director & Head of the'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "hours_error_patterns",
+   "seconds": 0.2,
+   "metric": "{\"usable_emergency_24x7_rows\": 6679, \"emergency_rows_with_phone_cue\": 1106, \"records_with_emergency_24x7\": 1433, \"records_whose_every_emergency_row_has_phone_cue\": 114, \"usable_facility_24x7_rows\": 7036, \"facility_24x7_naming_a_unit\": 619, \"facility_24x7_bare_line\": 2361, \"usable_hour_rows_from_c...",
+   "threshold": "emergency rows with a phone cue <= 5%",
+   "detail": "phone cue regex: \\bcall\\b|helpline|help line|hotline|phone|\\[phone\\]|contact|whatsapp|appointment|enquir|booking|toll[- ]?free|customer care|support",
+   "examples": [
+    "301abaa6-e559-4c1f-ab18-57c7916a7a74 emergency: '- 24/7 Emergency Support'",
+    "7bee457c-c297-4c3b-9315-18dd7b019c89 emergency: 'With specialized departments and emergency services available round-the-clock, w'",
+    "c455ae67-f9cb-472c-9ab9-9795841395f2 emergency: 'Kasare Hospital has treated over 83,000 patients since 2014, follows NABH-standa'",
+    "82fa7e19-25eb-432c-a64a-5eff221845a5 facility: 'AMBULANCE (24/7)'",
+    "58d41201-9bcd-483f-9084-7294d962f20d facility: 'Lab: 24/7'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "vf_error_patterns",
+   "seconds": 0.1,
+   "metric": "{\"usable_text_facts\": 34691, \"emergency_24x7\": 4334, \"emergency_with_phone_cue\": 90, \"coming_soon_cue\": 0, \"doctor_bio_cue_non_staffing\": 6, \"attribution_other_or_ambiguous\": 469, \"attribution_counts\": {\"unanchored\": 32326, \"own_anchored\": 1896, \"ambiguous\": 469}}",
+   "threshold": "phone-cue emergency <= 5%, coming-soon <= 1%",
+   "detail": "usable text facts in kb/vf_details/out/facts.parquet",
+   "examples": [
+    "050479fe:capa:0:hours_24x7:emergency:0: '24x7 emergency imaging support'",
+    "0d5b1a36:capa:25:hours_24x7:emergency:0: 'Provides 24-hour emergency booking'",
+    "53f5e718:capa:3:blood_centre:blood_bank:0: 'Baramulla DH has implemented 14 support services including HIS (OPD/IPD/Pharmacy'"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "sample_web_services",
+   "seconds": 0.0,
+   "metric": "{\"k\": 38, \"n\": 60, \"p\": 0.633, \"wilson95\": [0.507, 0.744], \"population_weighted_p\": 0.691, \"by_stratum\": {\"svc_confirm_strong\": \"14/15 (0.702, 0.988) N=8724\", \"svc_confirm_weak\": \"11/15 (0.48, 0.891) N=1873\", \"svc_webonly_strong\": \"8/15 (0.301, 0.752) N=5971\", \"svc_webonly_weak\": \"5/15 (0.152, 0....",
+   "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+   "detail": "intervals overlap QA: True",
+   "examples": [
+    "item 5 svc_confirm_strong 98e15e38-0990-4543-849a-f1a4c91729b3 chemotherapy: explanatory_or_wrong_sense",
+    "item 19 svc_confirm_weak 8df9ef6c-9ee6-41e9-a7c0-b52f45290f06 cardiac_surgery: chain_or_other_branch_page",
+    "item 21 svc_confirm_weak 1aeb5527-feb0-4466-b541-a2672b165be7 tb_care: explanatory_or_wrong_sense",
+    "item 25 svc_confirm_weak 5e012489-51d0-4230-8820-5e1d3ee68667 emergency_24x7: chain_or_other_branch_page",
+    "item 27 svc_confirm_weak f2272f70-8ff4-4122-a74f-5e566258e31e mri: address_or_landmark"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "sample_web_hours",
+   "seconds": 0.0,
+   "metric": "{\"k\": 21, \"n\": 30, \"p\": 0.7, \"wilson95\": [0.521, 0.833], \"population_weighted_p\": 0.724, \"by_stratum\": {\"hrs_emergency_24x7\": \"9/10 (0.596, 0.982) N=1423\", \"hrs_llm\": \"3/5 (0.231, 0.882) N=43\", \"hrs_opd_regex\": \"5/10 (0.237, 0.763) N=2544\", \"hrs_other\": \"4/5 (0.376, 0.964) N=4279\"}, \"reported_qa\"...",
+   "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+   "detail": "intervals overlap QA: True",
+   "examples": [
+    "item 66 hrs_emergency_24x7 3d2af64f-3024-4db5-b048-0fc7e42a7174 hours_24x7:emergency: same_name_elsewhere",
+    "item 71 hrs_opd_regex 1de52da4-786c-4a63-8fb9-03a938a1cf13 opd_hours:general: value_mismatch_or_days",
+    "item 75 hrs_opd_regex 5150641e-d3b9-47b3-a41f-b5be9c73b0bb opd_hours:general: form_or_menu_text",
+    "item 78 hrs_opd_regex 4fa53721-29e5-4254-865a-a2c0a623146d opd_hours:general: value_mismatch_or_days",
+    "item 79 hrs_opd_regex 7f542f26-f893-4313-9c17-c9576f2c00a2 opd_hours:general: value_mismatch_or_days"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "web_facts",
+   "check": "sample_web_details",
+   "seconds": 0.0,
+   "metric": "{\"k\": 22, \"n\": 30, \"p\": 0.733, \"wilson95\": [0.556, 0.858], \"population_weighted_p\": 0.586, \"by_stratum\": {\"det_accreditation\": \"3/6 (0.188, 0.812) N=955\", \"det_ambulance\": \"4/4 (0.51, 1.0) N=1044\", \"det_beds\": \"6/6 (0.61, 1.0) N=1125\", \"det_blood_centre\": \"4/4 (0.51, 1.0) N=424\", \"det_empanelment...",
+   "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+   "detail": "intervals overlap QA: True",
+   "examples": [
+    "item 97 det_accreditation 43805537-0db7-45b5-b57e-7bde43b53779 accreditation:NABH: form_or_menu_text",
+    "item 98 det_accreditation aa07dc77-d6d2-4be0-94cb-078724248add accreditation:NABH: explanatory_or_wrong_sense",
+    "item 102 det_accreditation 71cc9b3c-85ed-4c98-93cd-5936abda4f56 accreditation:NABH: doctor_bio_or_job_title",
+    "item 106 det_empanelment b43315f5-dffd-4628-af31-75c869a60a48 empanelment:pmjay: doctor_bio_or_job_title",
+    "item 108 det_empanelment ae51b5b8-0c57-42bc-990e-aa19955bdd5f empanelment:private_insurance: lexicon_false_hit"
+   ],
+   "status": "fail"
+  },
+  {
+   "area": "web_facts",
+   "check": "sample_site_identity",
+   "seconds": 0.0,
+   "metric": "{\"k\": 23, \"n\": 30, \"p\": 0.767, \"wilson95\": [0.591, 0.882], \"population_weighted_p\": 0.855, \"by_stratum\": {\"id_acc_high\": \"9/10 (0.596, 0.982) N=4851\", \"id_acc_medium\": \"1/5 (0.036, 0.624) N=312\", \"id_rej_low\": \"8/10 (0.49, 0.943) N=861\", \"id_rej_none\": \"5/5 (0.566, 1.0) N=231\"}, \"reported_qa\": \"2...",
+   "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+   "detail": "intervals overlap QA: True",
+   "examples": [
+    "item 123 id_acc_high cb71f5b5-0944-4cb2-9532-a1da8afbca93 continentalhealthfoundation.com: related_org_site",
+    "item 131 id_acc_medium 36e95944-27bc-4f1d-9524-688aaa62b309 stjosephhospital.com: same_name_elsewhere",
+    "item 132 id_acc_medium 57072b5a-7d29-4b65-9003-5d9bd54583cd srisakthihospital.in: unverifiable_title_only",
+    "item 134 id_acc_medium c8bcef99-310d-48c6-9f57-bbd0997407eb patilhospital.com: same_name_elsewhere",
+    "item 135 id_acc_medium 0c7720cd-ea61-4ea5-b667-67e008f402ef sriramhospital.co.in: same_name_elsewhere"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "sample_vf_details",
+   "seconds": 0.0,
+   "metric": "{\"k\": 37, \"n\": 40, \"p\": 0.925, \"wilson95\": [0.801, 0.974], \"population_weighted_p\": 0.899, \"by_stratum\": {\"vf_accreditation\": \"4/4 (0.51, 1.0) N=3305\", \"vf_ambulance\": \"3/3 (0.438, 1.0) N=1968\", \"vf_blood_centre\": \"3/3 (0.438, 1.0) N=1327\", \"vf_empanelment\": \"5/5 (0.566, 1.0) N=6061\", \"vf_equipme...",
+   "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+   "detail": "intervals overlap QA: True",
+   "examples": [
+    "item 152 vf_hours_24x7 4de58800-16e9-495f-8592-6b82fa40dbba hours_24x7:emergency: phone_support_as_emergency",
+    "item 169 vf_staffing 0290ddb8-9d7f-4b84-8e5d-535c16abb464 staffing:doctors: chain_total",
+    "item 171 vf_staffing 13d353ff-aaef-4c09-887e-32fe3f661e26 staffing:staff_total: headcount_band"
+   ],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "site_liveness",
+   "seconds": 0.0,
+   "metric": "{\"sites\": 20, \"judged\": 20, \"agree\": 20, \"wilson95\": [0.839, 1.0], \"not_fetched\": 0, \"by_stored_class\": {\"dns_fail\": \"4/4\", \"hijacked_spam\": \"1/1\", \"http_4xx\": \"2/2\", \"ok\": \"7/7\", \"ok_thin\": \"2/2\", \"parked_or_for_sale\": \"1/1\", \"robots_disallow\": \"1/1\", \"suspended_or_expired\": \"1/1\", \"timeout\": \"1...",
+   "threshold": "agreement >= 0.85",
+   "detail": "fresh fetch, robots.txt respected, 1 req/s per domain; drift since crawl counts as disagreement",
+   "examples": [],
+   "status": "pass"
+  },
+  {
+   "area": "web_facts",
+   "check": "model_feature_exposure",
+   "seconds": 0.1,
+   "metric": "{\"e_web_service_pairs\": 20218, \"of_which_weak\": 5444, \"weak_single_page\": 4257, \"attributable_records\": 4866, \"records_attributable_only_via_medium_identity\": 240, \"e_web_24x7_emergency_records\": 1287, \"records_whose_every_row_has_phone_cue\": 102, \"e_web_nabh_claim_records\": 684, \"nabh_pre_accred...",
+   "threshold": "informational",
+   "detail": "e_web_service counts weak pairs (sample precision 5/15 web-only weak); e_identity_conf takes max confidence over all targets including medium",
+   "examples": [
+    "weak 1-page pair 8f9516f1-d959-4aa2-a259-4d3a4137a623 high_risk_pregnancy: 'Infertility, IVF & High-Risk Obstetrics'",
+    "weak 1-page pair 1186d459-ad5b-4462-b100-7146cf31dad9 mri: \"- delivered a lecture on 'MRI of Muscle pathologies'. Conduc\"",
+    "weak 1-page pair 6deea35e-ac66-4f30-83e2-6288751cafda chemotherapy: 'Medical Oncology'",
+    "pre-accreditation NABH 9fa3cee3-90f6-4dd0-87bc-c828206f72d7: 'NABH Pre-Accreditation (Entry Level)'",
+    "pre-accreditation NABH ede71837-e6a0-4daf-a676-a203df78ebd3: '- NABH pre-accredited for patient safety and quality of care'"
+   ],
+   "status": "warn"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_keys_unique",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_coverage",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_excluded_not_scored",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_probabilities",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_logit_identity",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_evidence_ids_resolve",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_bands",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_not_observable_zero",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_operator",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_model_version",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_witness_quotes",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  },
+  {
+   "area": "contracts_v2",
+   "check": "v2_restricted_lists",
+   "seconds": 0.0,
+   "metric": "not run",
+   "threshold": "contract holds",
+   "detail": "skipped: /Users/karthikvattem/projects/datathon/derived/v2 has no facility_service_scores.parquet, model_card.json yet (#11 has not published)",
+   "examples": [],
+   "status": "not_run"
+  }
+ ]
+}

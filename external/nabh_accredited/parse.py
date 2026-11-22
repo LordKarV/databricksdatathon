@@ -77,7 +77,12 @@ def main(data_dir: str) -> None:
     spec = []
     for d in sorted((base / "raw").glob("spec_*")):
         code = d.name[len("spec_"):]
-        for p in sorted(d.glob("page_*.json.gz")):
+        pages = sorted(d.glob("page_*.json.gz"))
+        want = json.loads(gzip.decompress(pages[0].read_bytes()))["pagination"]["total_pages"] if pages else 0
+        if not pages or len(pages) < want:
+            print(f"skip {code}: {len(pages)}/{want} pages (incomplete)")
+            continue
+        for p in pages:
             spec += [{"acc_no": r["acc_no"], "name": r["name"], "address": r["address"], "spec_code": code}
                      for r in parse_page(p)]
     if spec:

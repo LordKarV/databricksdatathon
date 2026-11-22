@@ -1,0 +1,51 @@
+{
+ "core_tag_diff_vs_claims_parquet": {
+  "burn_care": {
+   "only_claims_parquet": 1,
+   "only_kb": 0,
+   "both": 401
+  },
+  "cardiac_surgery": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 1953
+  },
+  "dialysis": {
+   "only_claims_parquet": 15,
+   "only_kb": 6,
+   "both": 3064
+  },
+  "emergency_24x7": {
+   "only_claims_parquet": 2237,
+   "only_kb": 265,
+   "both": 6636
+  },
+  "emergency_csection": {
+   "only_claims_parquet": 6,
+   "only_kb": 0,
+   "both": 691
+  },
+  "icu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 5965
+  },
+  "mri": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 3135
+  },
+  "nicu": {
+   "only_claims_parquet": 0,
+   "only_kb": 0,
+   "both": 1555
+  }
+ },
+ "claims": 469498,
+ "matched_sentence_service_pairs": 64670,
+ "sentences_with_any_match": 58004,
+ "services_in_taxonomy": 36,
+ "candidates_not_included": [
+  "palliative_care"
+ ]
+}

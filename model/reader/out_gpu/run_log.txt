@@ -1,0 +1,648 @@
++ -m model.reader.train --name bge-small --backbone BAAI/bge-small-en-v1.5 --epochs 3 --bs 128 --lr 3e-05 --eps 0.05 --max_len 192 --seed 7 --checkpoint_every 500 --eval_bs 512 --log_every 100 --max_cells 4915200
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3643.53it/s]
+[bge-small] ep 0 step 100/2907 loss 0.6174 13s 984 ex/s
+[bge-small] ep 0 step 200/2907 loss 0.4028 27s 962 ex/s
+[bge-small] ep 0 step 300/2907 loss 0.3316 40s 972 ex/s
+[bge-small] ep 0 step 400/2907 loss 0.3079 52s 981 ex/s
+[bge-small] ep 0 step 500/2907 loss 0.2839 65s 978 ex/s
+[bge-small] ep 0 step 600/2907 loss 0.2719 79s 976 ex/s
+[bge-small] ep 0 step 700/2907 loss 0.2680 93s 968 ex/s
+[bge-small] ep 0 step 800/2907 loss 0.2718 106s 969 ex/s
+[bge-small] ep 0 step 900/2907 loss 0.2675 119s 970 ex/s
+[bge-small] {"loss": 0.2692699637578182, "about_auroc": 0.9861689163498099, "about_ap": 0.991717306458398, "about_acc": 0.9423076923076923, "offers_auroc": 0.9923240486246647, "offers_ap": 0.991914090328909, "offers_acc": 0.9575115656196738, "epoch": 0, "train_loss_ema": 0.2618884008847347, "seconds": 134}
+[bge-small] ep 1 step 1000/2907 loss 0.2598 140s 917 ex/s
+[bge-small] ep 1 step 1100/2907 loss 0.2446 154s 913 ex/s
+[bge-small] ep 1 step 1200/2907 loss 0.2535 167s 918 ex/s
+[bge-small] ep 1 step 1300/2907 loss 0.2515 181s 922 ex/s
+[bge-small] ep 1 step 1400/2907 loss 0.2503 194s 925 ex/s
+[bge-small] ep 1 step 1500/2907 loss 0.2525 207s 929 ex/s
+[bge-small] ep 1 step 1600/2907 loss 0.2406 221s 926 ex/s
+[bge-small] ep 1 step 1700/2907 loss 0.2352 234s 932 ex/s
+[bge-small] ep 1 step 1800/2907 loss 0.2360 247s 934 ex/s
+[bge-small] ep 1 step 1900/2907 loss 0.2420 260s 934 ex/s
+[bge-small] {"loss": 0.25239177568769555, "about_auroc": 0.988895294676806, "about_ap": 0.99346878847435, "about_acc": 0.9476744186046512, "offers_auroc": 0.9956392184576418, "offers_ap": 0.9942542012117291, "offers_acc": 0.9732164597029462, "epoch": 1, "train_loss_ema": 0.2399829984673724, "seconds": 272}
+[bge-small] ep 2 step 2000/2907 loss 0.2342 281s 910 ex/s
+[bge-small] ep 2 step 2100/2907 loss 0.2305 296s 908 ex/s
+[bge-small] ep 2 step 2200/2907 loss 0.2365 310s 909 ex/s
+[bge-small] ep 2 step 2300/2907 loss 0.2271 322s 914 ex/s
+[bge-small] ep 2 step 2400/2907 loss 0.2261 334s 919 ex/s
+[bge-small] ep 2 step 2500/2907 loss 0.2308 348s 921 ex/s
+[bge-small] ep 2 step 2600/2907 loss 0.2304 362s 920 ex/s
+[bge-small] ep 2 step 2700/2907 loss 0.2316 375s 921 ex/s
+[bge-small] ep 2 step 2800/2907 loss 0.2274 389s 922 ex/s
+[bge-small] ep 2 step 2900/2907 loss 0.2259 402s 924 ex/s
+[bge-small] {"loss": 0.24787520112042755, "about_auroc": 0.9892921102661596, "about_ap": 0.9936758424095179, "about_acc": 0.9515503875968992, "offers_auroc": 0.9958778478416046, "offers_ap": 0.9943792666112707, "offers_acc": 0.9758948137326515, "epoch": 2, "train_loss_ema": 0.22660340346661126, "seconds": 409}
+[bge-small] done {"backbone": "BAAI/bge-small-en-v1.5", "name": "bge-small", "max_len": 192, "temperature": [0.7986561400301272, 0.6570736813058782], "best_epoch": 2, "params": 33360770, "model_version": "reader-bge-small-v1", "val": {"loss": 0.24787520112042755, "about_auroc": 0.9892921102661596, "about_ap": 0.9936758424095179, "about_acc": 0.9515503875968992, "offers_auroc": 0.9958778478416046, "offers_ap": 0.9943792666112707, "offers_acc": 0.9758948137326515, "epoch": 2, "train_loss_ema": 0.22660340346661126}, "train_seconds": 409, "device": "cuda", "train_examples": 123947, "batch_size": 128, "micro_batch_size": 128}
++ -m model.reader.train --name me5-small --backbone intfloat/multilingual-e5-small --epochs 3 --bs 128 --lr 3e-05 --eps 0.05 --max_len 192 --seed 7 --checkpoint_every 500 --eval_bs 512 --log_every 100 --max_cells 4915200
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3824.78it/s]
+[me5-small] ep 0 step 100/2907 loss 0.6309 14s 928 ex/s
+[me5-small] ep 0 step 200/2907 loss 0.4317 28s 905 ex/s
+[me5-small] ep 0 step 300/2907 loss 0.3540 42s 913 ex/s
+[me5-small] ep 0 step 400/2907 loss 0.3255 56s 917 ex/s
+[me5-small] ep 0 step 500/2907 loss 0.2975 70s 918 ex/s
+[me5-small] ep 0 step 600/2907 loss 0.2846 86s 895 ex/s
+[me5-small] ep 0 step 700/2907 loss 0.2745 100s 892 ex/s
+[me5-small] ep 0 step 800/2907 loss 0.2785 114s 895 ex/s
+[me5-small] ep 0 step 900/2907 loss 0.2736 129s 896 ex/s
+[me5-small] {"loss": 0.26634526206409936, "about_auroc": 0.9883513307984791, "about_ap": 0.9922540437553138, "about_acc": 0.9521466905187835, "offers_auroc": 0.9875107605548296, "offers_ap": 0.9873563732552706, "offers_acc": 0.9522766009252496, "epoch": 0, "train_loss_ema": 0.2690734149188611, "seconds": 144}
+[me5-small] ep 1 step 1000/2907 loss 0.2649 154s 830 ex/s
+[me5-small] ep 1 step 1100/2907 loss 0.2508 173s 813 ex/s
+[me5-small] ep 1 step 1200/2907 loss 0.2554 187s 820 ex/s
+[me5-small] ep 1 step 1300/2907 loss 0.2548 202s 825 ex/s
+[me5-small] ep 1 step 1400/2907 loss 0.2531 216s 831 ex/s
+[me5-small] ep 1 step 1500/2907 loss 0.2543 230s 837 ex/s
+[me5-small] ep 1 step 1600/2907 loss 0.2443 248s 824 ex/s
+[me5-small] ep 1 step 1700/2907 loss 0.2377 262s 831 ex/s
+[me5-small] ep 1 step 1800/2907 loss 0.2404 276s 836 ex/s
+[me5-small] ep 1 step 1900/2907 loss 0.2462 290s 838 ex/s
+[me5-small] {"loss": 0.2539723144279576, "about_auroc": 0.9899233840304182, "about_ap": 0.9938539680281048, "about_acc": 0.9560226595110316, "offers_auroc": 0.9928899115203744, "offers_ap": 0.9924878194022573, "offers_acc": 0.9644509374239104, "epoch": 1, "train_loss_ema": 0.24351623936770753, "seconds": 302}
+[me5-small] ep 2 step 2000/2907 loss 0.2376 316s 809 ex/s
+[me5-small] ep 2 step 2100/2907 loss 0.2301 335s 801 ex/s
+[me5-small] ep 2 step 2200/2907 loss 0.2401 350s 804 ex/s
+[me5-small] ep 2 step 2300/2907 loss 0.2292 363s 811 ex/s
+[me5-small] ep 2 step 2400/2907 loss 0.2284 377s 816 ex/s
+[me5-small] ep 2 step 2500/2907 loss 0.2317 391s 819 ex/s
+[me5-small] ep 2 step 2600/2907 loss 0.2320 409s 814 ex/s
+[me5-small] ep 2 step 2700/2907 loss 0.2317 423s 817 ex/s
+[me5-small] ep 2 step 2800/2907 loss 0.2333 438s 819 ex/s
+[me5-small] ep 2 step 2900/2907 loss 0.2307 452s 822 ex/s
+[me5-small] {"loss": 0.24971263808066205, "about_auroc": 0.9907551330798479, "about_ap": 0.9944872901747419, "about_acc": 0.956917113893858, "offers_auroc": 0.9938091534081614, "offers_ap": 0.9932367798759443, "offers_acc": 0.9688336985634283, "epoch": 2, "train_loss_ema": 0.23088492652768033, "seconds": 458}
+[me5-small] done {"backbone": "intfloat/multilingual-e5-small", "name": "me5-small", "max_len": 192, "temperature": [0.7386888262992556, 0.7104154162669611], "best_epoch": 2, "params": 117654530, "model_version": "reader-me5-small-v1", "val": {"loss": 0.24971263808066205, "about_auroc": 0.9907551330798479, "about_ap": 0.9944872901747419, "about_acc": 0.956917113893858, "offers_auroc": 0.9938091534081614, "offers_ap": 0.9932367798759443, "offers_acc": 0.9688336985634283, "epoch": 2, "train_loss_ema": 0.23088492652768033}, "train_seconds": 460, "device": "cuda", "train_examples": 123947, "batch_size": 128, "micro_batch_size": 128}
++ model/reader/evaluate.py
+{
+ "eval_rows": 564,
+ "rules": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.795,
+   "accuracy_ci95": [
+    0.739,
+    0.842
+   ],
+   "class_0": {
+    "tp": 29,
+    "fp": 16,
+    "fn": 32,
+    "precision": 0.644,
+    "precision_ci95": [
+     0.498,
+     0.768
+    ],
+    "recall": 0.475,
+    "recall_ci95": [
+     0.355,
+     0.598
+    ],
+    "f1": 0.547
+   },
+   "class_1": {
+    "tp": 157,
+    "fp": 32,
+    "fn": 16,
+    "precision": 0.831,
+    "precision_ci95": [
+     0.771,
+     0.877
+    ],
+    "recall": 0.908,
+    "recall_ci95": [
+     0.855,
+     0.942
+    ],
+    "f1": 0.867
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.964,
+   "accuracy_ci95": [
+    0.938,
+    0.979
+   ],
+   "class_0": {
+    "tp": 38,
+    "fp": 1,
+    "fn": 11,
+    "precision": 0.974,
+    "precision_ci95": [
+     0.868,
+     0.995
+    ],
+    "recall": 0.776,
+    "recall_ci95": [
+     0.641,
+     0.87
+    ],
+    "f1": 0.864
+   },
+   "class_1": {
+    "tp": 280,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.962,
+    "precision_ci95": [
+     0.934,
+     0.979
+    ],
+    "recall": 0.996,
+    "recall_ci95": [
+     0.98,
+     0.999
+    ],
+    "f1": 0.979
+   }
+  }
+ }
+}
++ model/reader/evaluate.py --run bge-small
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3734.56it/s]
+{
+ "eval_rows": 564,
+ "rules": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.795,
+   "accuracy_ci95": [
+    0.739,
+    0.842
+   ],
+   "class_0": {
+    "tp": 29,
+    "fp": 16,
+    "fn": 32,
+    "precision": 0.644,
+    "precision_ci95": [
+     0.498,
+     0.768
+    ],
+    "recall": 0.475,
+    "recall_ci95": [
+     0.355,
+     0.598
+    ],
+    "f1": 0.547
+   },
+   "class_1": {
+    "tp": 157,
+    "fp": 32,
+    "fn": 16,
+    "precision": 0.831,
+    "precision_ci95": [
+     0.771,
+     0.877
+    ],
+    "recall": 0.908,
+    "recall_ci95": [
+     0.855,
+     0.942
+    ],
+    "f1": 0.867
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.964,
+   "accuracy_ci95": [
+    0.938,
+    0.979
+   ],
+   "class_0": {
+    "tp": 38,
+    "fp": 1,
+    "fn": 11,
+    "precision": 0.974,
+    "precision_ci95": [
+     0.868,
+     0.995
+    ],
+    "recall": 0.776,
+    "recall_ci95": [
+     0.641,
+     0.87
+    ],
+    "f1": 0.864
+   },
+   "class_1": {
+    "tp": 280,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.962,
+    "precision_ci95": [
+     0.934,
+     0.979
+    ],
+    "recall": 0.996,
+    "recall_ci95": [
+     0.98,
+     0.999
+    ],
+    "f1": 0.979
+   }
+  }
+ },
+ "reader": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.786,
+   "accuracy_ci95": [
+    0.729,
+    0.834
+   ],
+   "class_0": {
+    "tp": 37,
+    "fp": 26,
+    "fn": 24,
+    "precision": 0.587,
+    "precision_ci95": [
+     0.464,
+     0.7
+    ],
+    "recall": 0.607,
+    "recall_ci95": [
+     0.481,
+     0.719
+    ],
+    "f1": 0.597
+   },
+   "class_1": {
+    "tp": 147,
+    "fp": 24,
+    "fn": 26,
+    "precision": 0.86,
+    "precision_ci95": [
+     0.8,
+     0.904
+    ],
+    "recall": 0.85,
+    "recall_ci95": [
+     0.789,
+     0.895
+    ],
+    "f1": 0.855
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.809,
+   "accuracy_ci95": [
+    0.763,
+    0.848
+   ],
+   "class_0": {
+    "tp": 26,
+    "fp": 40,
+    "fn": 23,
+    "precision": 0.394,
+    "precision_ci95": [
+     0.285,
+     0.515
+    ],
+    "recall": 0.531,
+    "recall_ci95": [
+     0.394,
+     0.663
+    ],
+    "f1": 0.452
+   },
+   "class_1": {
+    "tp": 241,
+    "fp": 23,
+    "fn": 40,
+    "precision": 0.913,
+    "precision_ci95": [
+     0.873,
+     0.941
+    ],
+    "recall": 0.858,
+    "recall_ci95": [
+     0.812,
+     0.894
+    ],
+    "f1": 0.884
+   }
+  }
+ },
+ "reader_vs_rules": {
+  "about_this": {
+   "class_0": {
+    "f1_reader_minus_rules": 0.05,
+    "ci95": [
+     -0.065,
+     0.17
+    ],
+    "share_of_resamples_reader_better": 0.798
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.012,
+    "ci95": [
+     -0.049,
+     0.023
+    ],
+    "share_of_resamples_reader_better": 0.24
+   },
+   "accuracy_reader_minus_rules": -0.009
+  },
+  "offers": {
+   "class_0": {
+    "f1_reader_minus_rules": -0.412,
+    "ci95": [
+     -0.551,
+     -0.285
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.095,
+    "ci95": [
+     -0.124,
+     -0.07
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "accuracy_reader_minus_rules": -0.155
+  }
+ },
+ "disagreements_on_eval": {
+  "about_this": {
+   "n": 44,
+   "reader_right": 21,
+   "rules_right": 23
+  },
+  "offers": {
+   "n": 61,
+   "reader_right": 5,
+   "rules_right": 56
+  }
+ }
+}
++ model/reader/evaluate.py --run me5-small
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 4157.24it/s]
+{
+ "eval_rows": 564,
+ "rules": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.795,
+   "accuracy_ci95": [
+    0.739,
+    0.842
+   ],
+   "class_0": {
+    "tp": 29,
+    "fp": 16,
+    "fn": 32,
+    "precision": 0.644,
+    "precision_ci95": [
+     0.498,
+     0.768
+    ],
+    "recall": 0.475,
+    "recall_ci95": [
+     0.355,
+     0.598
+    ],
+    "f1": 0.547
+   },
+   "class_1": {
+    "tp": 157,
+    "fp": 32,
+    "fn": 16,
+    "precision": 0.831,
+    "precision_ci95": [
+     0.771,
+     0.877
+    ],
+    "recall": 0.908,
+    "recall_ci95": [
+     0.855,
+     0.942
+    ],
+    "f1": 0.867
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.964,
+   "accuracy_ci95": [
+    0.938,
+    0.979
+   ],
+   "class_0": {
+    "tp": 38,
+    "fp": 1,
+    "fn": 11,
+    "precision": 0.974,
+    "precision_ci95": [
+     0.868,
+     0.995
+    ],
+    "recall": 0.776,
+    "recall_ci95": [
+     0.641,
+     0.87
+    ],
+    "f1": 0.864
+   },
+   "class_1": {
+    "tp": 280,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.962,
+    "precision_ci95": [
+     0.934,
+     0.979
+    ],
+    "recall": 0.996,
+    "recall_ci95": [
+     0.98,
+     0.999
+    ],
+    "f1": 0.979
+   }
+  }
+ },
+ "reader": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.731,
+   "accuracy_ci95": [
+    0.671,
+    0.784
+   ],
+   "class_0": {
+    "tp": 34,
+    "fp": 36,
+    "fn": 27,
+    "precision": 0.486,
+    "precision_ci95": [
+     0.372,
+     0.6
+    ],
+    "recall": 0.557,
+    "recall_ci95": [
+     0.433,
+     0.675
+    ],
+    "f1": 0.519
+   },
+   "class_1": {
+    "tp": 137,
+    "fp": 27,
+    "fn": 36,
+    "precision": 0.835,
+    "precision_ci95": [
+     0.771,
+     0.884
+    ],
+    "recall": 0.792,
+    "recall_ci95": [
+     0.725,
+     0.846
+    ],
+    "f1": 0.813
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.77,
+   "accuracy_ci95": [
+    0.721,
+    0.812
+   ],
+   "class_0": {
+    "tp": 19,
+    "fp": 46,
+    "fn": 30,
+    "precision": 0.292,
+    "precision_ci95": [
+     0.196,
+     0.412
+    ],
+    "recall": 0.388,
+    "recall_ci95": [
+     0.264,
+     0.528
+    ],
+    "f1": 0.333
+   },
+   "class_1": {
+    "tp": 235,
+    "fp": 30,
+    "fn": 46,
+    "precision": 0.887,
+    "precision_ci95": [
+     0.843,
+     0.92
+    ],
+    "recall": 0.836,
+    "recall_ci95": [
+     0.789,
+     0.875
+    ],
+    "f1": 0.861
+   }
+  }
+ },
+ "reader_vs_rules": {
+  "about_this": {
+   "class_0": {
+    "f1_reader_minus_rules": -0.028,
+    "ci95": [
+     -0.14,
+     0.091
+    ],
+    "share_of_resamples_reader_better": 0.316
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.054,
+    "ci95": [
+     -0.09,
+     -0.019
+    ],
+    "share_of_resamples_reader_better": 0.002
+   },
+   "accuracy_reader_minus_rules": -0.064
+  },
+  "offers": {
+   "class_0": {
+    "f1_reader_minus_rules": -0.531,
+    "ci95": [
+     -0.665,
+     -0.392
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.118,
+    "ci95": [
+     -0.15,
+     -0.09
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "accuracy_reader_minus_rules": -0.194
+  }
+ },
+ "disagreements_on_eval": {
+  "about_this": {
+   "n": 43,
+   "reader_right": 14,
+   "rules_right": 29
+  },
+  "offers": {
+   "n": 74,
+   "reader_right": 5,
+   "rules_right": 69
+  }
+ }
+}
+chosen backbone: bge-small (lowest validation loss 0.2479)
++ model/reader/score.py --run bge-small
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3947.66it/s]
+{
+ "model_version": "reader-bge-small-v1",
+ "rows": 537431,
+ "claim_rows": 469498,
+ "service_rows": 67933,
+ "seconds_predict": 280,
+ "seconds_total": 453,
+ "device": "cuda",
+ "rows_with_tokens": 93332,
+ "file_mb": 5.3,
+ "about_this": {
+  "rules_other_facility": 9506,
+  "reader_below_0.5": 25399,
+  "both": 8844
+ },
+ "offers": {
+  "rules_offer": 63620,
+  "reader_at_least_0.5": 63301,
+  "both": 62692
+ },
+ "disagreement_counts": "{('about_this', 'rules_0_reader_1'): 662, ('about_this', 'rules_1_reader_0'): 16555, ('offers', 'rules_0_reader_1'): 609, ('offers', 'rules_1_reader_0'): 928}"
+}
+wrote model/reader/out/metrics_gpu_remaining.json
+about_this: detecting label 0. rules P 0.644 R 0.475 F1 0.547 | reader P 0.587 R 0.607 F1 0.597 | F1 difference 0.05 CI [-0.065, 0.17]
+offers: detecting label 0. rules P 0.974 R 0.776 F1 0.864 | reader P 0.394 R 0.531 F1 0.452 | F1 difference -0.412 CI [-0.551, -0.285]
