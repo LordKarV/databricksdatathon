@@ -60,6 +60,7 @@ SHELL_FILES: dict[str, str] = {
     "community.js": "text/javascript; charset=utf-8",
     "translate.js": "text/javascript; charset=utf-8",
     "route.js": "text/javascript; charset=utf-8",
+    "map.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
     # ICON-1: home-screen icons. Served here only; not in the sw.js SHELL, so they never weigh on first paint.
     "icon.svg": "image/svg+xml",

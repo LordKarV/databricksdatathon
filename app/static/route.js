@@ -30,14 +30,14 @@ function stopHtml(r, g, P) {
   const stages = g.ks.map(k => {
     const s = r.stops[k], S = `${P}.stops.${k}`;
     return `<li><strong>${E(S + '.purpose_word', s.purpose_word)}</strong>.
-      ${th('route.p', {p: N(S + '.p', s.p.toFixed(2))})}
+      ${th('route.p', {p: S100(S + '.p', s.p)})}
       ${s.dwell_minutes != null ? th('route.stay', {d: F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}) : ''}
-      ${th('route.weakest', {cap: E(S + '.weakest_capability', s.weakest_capability), p: N(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2))})}
+      ${th('route.weakest', {cap: E(S + '.weakest_capability', s.weakest_capability), p: S100(S + '.weakest_capability_p', s.weakest_capability_p)})}
       ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
       <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
         ${evidenceHtml(s, S)}</details>
       ${s.fallback ? `<p class="note">${th('route.fallback', {name: `<span lang="en">${F(S + '.fallback.name', s.fallback.name)}</span>`,
-        eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: N(S + '.fallback.p', s.fallback.p.toFixed(2))})}</p>` : ''}
+        eta: N(S + '.fallback.eta_minutes', s.fallback.eta_minutes), p: S100(S + '.fallback.p', s.fallback.p)})}</p>` : ''}
       ${s.note ? `<p class="note">${E(S + '.note', s.note)}</p>` : ''}
       ${s.flags.map((f, j) => `<p class="note">${E(`${S}.flags.${j}`, f)}</p>`).join('')}</li>`;
   }).join('');
@@ -53,8 +53,8 @@ function routePlanHtml(r, P) {
   return `<p>${E(P + '.type_word', r.type_word)}.</p>
     <ol class="stops-full">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>${th('route.totals', {min: N(P + '.totals.minutes_to_definitive', t.minutes_to_definitive),
-      low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: N(P + '.totals.p_first_care', t.p_first_care.toFixed(2)),
-      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p><p class="note">${th('route.totals_assume')}</p>` : ''}
+      low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: S100(P + '.totals.p_first_care', t.p_first_care),
+      treated: S100(P + '.totals.p_treated', t.p_treated)})}</p><p class="note">${th('route.totals_assume')}</p>` : ''}
     ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
     ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}
