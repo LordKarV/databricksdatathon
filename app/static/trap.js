@@ -16,7 +16,7 @@
     llm_answer: {en: 'Its answer: {key} {value}, confidence {c}.', hi: 'इसका जवाब: {key} {value}, confidence {c}।'},
     llm_quote: {en: 'The sentence it quoted (field {field}):', hi: 'इसने जो वाक्य उद्धृत किया (फ़ील्ड {field}):'},
     own: {en: "The record's {label} sentence in field {field}:", hi: 'फ़ील्ड {field} में {label} के बारे में रिकॉर्ड का वाक्य:'},
-    app_h: {en: 'What Saathi does', hi: 'साथी क्या करता है'},
+    app_h: {en: 'What Bharosa does', hi: 'भरोसा क्या करता है'},
     band: {en: 'For {label}, the app rates this record {band}, quoting these sentences from it:',
       hi: '{label} के लिए ऐप इस रिकॉर्ड को "{band}" बताता है, और उसके ये वाक्य उद्धृत करता है:'},
     where: {en: 'Its location check (record city {city}):', hi: 'इसकी जगह की जाँच (रिकॉर्ड में शहर {city}):'},
