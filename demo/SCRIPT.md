@@ -33,7 +33,7 @@ Bharosa checks, and passes that record over."
 
 **1:08 to 1:30 | The model**
 [ON SCREEN: card 1, "Why this place?", the ledger.]
-"Our model is a calibrated statistical scorecard, the kind of model clinical risk scores use. Each row is a
+"At the heart of Bharosa is our statistical model: a calibrated scorecard, the same kind of statistical model behind clinical risk scores. Each row is a
 witness: the hospital's own sentence, whether that sentence is really about it, its website, and the public lists
 we joined. It also checks what the care needs: trauma needs surgery or orthopaedics, so a children's clinic two
 minutes away is passed over, with the reason. The rows add up; a fitted calibration turns them into a
