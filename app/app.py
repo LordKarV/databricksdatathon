@@ -1,8 +1,6 @@
-"""Referral Saathi app skeleton (issue #5).
+"""Referral Saathi app: FastAPI serving one HTML page, a service worker and the JSON API.
 
-FastAPI serving one plain HTML page, a service worker and stub JSON. No model and no
-Databricks reads yet: /api/recommend returns placeholder data in the shape the lead will
-fill from the model (see stub_data.py and README.md).
+Answers come from model v2 through facts/engine.py (built by facts/build.py); see README.md.
 """
 from __future__ import annotations
 
