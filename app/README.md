@@ -40,10 +40,18 @@ results (Quick depth), abstention (S3x), why / how / call-ahead (S4, S5, S6 on o
 ```
 
 `service` is one of `emergency_csection, nicu, trauma_emergency, burn_care, dialysis, mri, cardiac_surgery`;
-`source` is `gps | last_fix | pin | district | manual`; `depth` is `quick | compare | area`. The point goes in the
+`source` is `gps | last_fix | pin | district | place | manual`; `depth` is `quick | compare | area`. The point goes in the
 body because query strings can land in proxy logs we do not control. The server rounds lat/lon to 0.01 degree
 before use. Unknown keys, unknown fields and points outside India return 422.
 `GET /api/recommend?<same fields>` is a dev alias for curl checks; the page never calls it.
+
+`POST /api/place` with `{"q": "Bahraich"}` turns a typed place into a point for Change location (#121 bug 5): a
+6-digit PIN or a district from the PIN table in `facts.json.gz` (district centre = mean of its PIN centroids, the
+same rule as offline), or a town or post office name from `facts/out/places.json.gz` (`derived/v1`
+`place_gazetteer`, written by `facts/build.py`). No external geocoder. `"Name, State"` narrows to one state. It
+returns `{"matches": [{"lat", "lon", "label", "kind": "pin | district | town | post_office", "state"}]}`, at most
+six, one per state (town, else district centre, else post office), or 404 with `"matches": []`. Offline the page
+falls back to the saved pack (PINs and districts of saved states) and says so when nothing is saved.
 
 Response:
 
@@ -78,6 +86,7 @@ Response:
                "reason_code", "reason", "basis": [{"code", "field", "value"}]}],          // #86
   "what_would_change": null | {"kind": "confirm_nearer | first_says_no", "facility_id", "name",
                                "first_name", "minutes_vs_first"},
+  "first_is_nearest": true,                                                             // #121
   "time_window": {"window_min", "first_outside"},
   "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
   "meta": {"stub": false, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
@@ -111,6 +120,12 @@ Body `{service, lat, lon}` (0.01 deg). Every number below comes from model v2 th
 The page reads only these fields. `travel` is one row of `geo/travel.py` (#7, PR #13) passed through unchanged;
 the stub calls `geo.travel.estimate` (measured factor and percentile range, no OSRM call) and falls back to
 straight-line x 1.35 only if `geo/` is not importable.
+
+`area.district` is the district the nearest PIN point lies in (#121, validation C4). `facts/build.py` takes it
+from the LGD office join in `data/external/lgd_district_polygons/pin_lgd_district.parquet` and writes
+`app/facts/out/pin_districts.json` (outside `facts.json` and its hash). That file is git-ignored local data, not
+part of `derived/v1`: **a fresh clone, or a rebuild without it, falls back to the old answer**, the district each
+PIN is filed under. Then (25.6, 85.95) reads Darbhanga instead of Begusarai, and the build log says so.
 
 ## Not done here
 
@@ -259,8 +274,15 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
             vs_direct: {text, what_would_change|null, direct_p_objective, plan_p_objective,
                         direct_p_first_care, plan_p_first_care}|null}],
    stop_1_note: text|null,   (why route 1's first stop is not the options list's first choice)
+   fallback: {ask, text}|absent,   (emergency, route stop 1 not option 1 and not led: see below)
    meta: {origin_state, terrain, plans_considered}}
   ```
+- **One answer above the fold (#121, #126).** In an emergency whose route starts elsewhere than option 1,
+  `itinerary.lead_with_route` rebuilds the options with the route's first stop as option 1 when that stop
+  is within the time window or no farther than option 1. The card says why (`route_reason`), the former
+  first says what it lacks, and `stop_1_note` is dropped. Otherwise a far hospital never displaces a near
+  first call. Option 1 keeps "Call first" with `fallback.ask`, `fallback.text` frames the route ("If they
+  cannot treat: ..."), and the route card moves below the options.
 - **Results screen.** A "Suggested route" card shows route 1 as numbered stops. Stages at the same hospital
   (dialysis: assessment, fistula, sessions) nest under it. The other routes sit in expandable sections.
 - **Slip.** The slip and the WhatsApp text list route 1's stops, with phone and arrival range.
@@ -547,6 +569,8 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   `basis` names the field behind each clause. The tests check it against the engine and the payload.
   - `what_would_change`: the nearer Not verified listing that a "yes" on the phone would move to first place. It is
     re-ranked with the confirmed-pair score. Otherwise: "if option 1 cannot take the patient, call option 2".
+  - `first_is_nearest`: no listing in reach is nearer than option 1. The section then says "The first choice is
+    already the nearest listing that offers it", so the rows below read as farther places, not nearer ones.
   - `time_window.first_outside`: when option 1 misses the window (60 min for emergencies), the answer's first line
     says so ("The best-evidenced option is about 104 min away; that misses the 60-min window for this care"). It
     shows 108 (and 102 for mothers and newborns) and `public_option`: the nearest hospital the public standard

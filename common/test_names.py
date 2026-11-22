@@ -20,6 +20,13 @@ from common.names import display_name
     ("Dr. S Memorial Radio- Diagnostic Center", "Dr. S Memorial Radio- Diagnostic Center"),
     ("Sub Divisional Hospital Pusa", "Sub Divisional Hospital Pusa"),
     ("Branch - 2M&M Ortho Multispeciality Hospitals", "Branch - 2M&M Ortho Multispeciality Hospitals"),
+    # a possessive the source title-cased is shown in lower case; an all-caps name keeps its case
+    ("Pawar'S Clinic", "Pawar's Clinic"),
+    ("Dr Swathi'S Children Clinic - Nallagandla, Hyderabad", "Dr Swathi's Children Clinic - Nallagandla, Hyderabad"),
+    ("Amma Children\u2019S Hospital", "Amma Children\u2019s Hospital"),
+    ("SAMAL'S ADVANCED DENTAL CARE", "SAMAL'S ADVANCED DENTAL CARE"),
+    ("Samved IVF & WOMEN'S Hospital", "Samved IVF & WOMEN'S Hospital"),
+    ("Pawar'S", "Pawar's"),
     (None, None),
 ])
 def test_display_name(raw, shown):

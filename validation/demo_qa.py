@@ -4,11 +4,12 @@
 
 Prints counts and examples for: unredacted doctor names in shown quotes, citations flagged as a page about another
 place, options and route stops whose facility type cannot offer the service (common/typefit.py, #117: eye, dental,
-AYUSH, IVF ...), and first options outside the time window. Names with a specialty word that the rule keeps as a
+AYUSH, IVF ...), first options outside the time window, and raw internal keys in printed fields (a claim id, a
+derived/ path, a snake_case or capability key, "Pawar'S"; #121). Names with a specialty word that the rule keeps as a
 general facility ("City Hospital and Dental Care") are listed apart, for a human to read.
 Also (#118): a shown option's first quote, the one its card shows, is never flagged as a page about another place.
-Exit code 1 when a doctor name, an other-place citation, an other-place first quote or a type that cannot offer the
-service is shown; the rest are for a human to read.
+Exit code 1 when a doctor name, an other-place citation, an other-place first quote, a raw key or a type that cannot
+offer the service is shown; the rest are for a human to read.
 """
 import collections
 import re
@@ -49,12 +50,24 @@ def check_name(kind: str, row: tuple, fid: str | None, name: str, service: str |
         issues[f"specialty word, kept as a general facility ({kind})"].append(row)
 
 
+# #121: what a family must never read. Claim ids stay in the page as hidden marks (app.js claimHtml), not in these fields.
+RAW_KEY = re.compile(r"\b[0-9a-f]{8}:[a-z]+:\d+\b|derived/|\b[a-z0-9]+(?:_[a-z0-9]+)+\b|[a-z]['\u2019]S\b")
+RAW_CAPS = {k.replace("_", " ") for k, w in itinerary.CAPABILITY_WORDS.items() if k.replace("_", " ") != w}
+
+
+def raw_keys(place, s, where, texts):
+    for t in texts:
+        if isinstance(t, str) and (RAW_KEY.search(t) or t in RAW_CAPS):
+            issues["raw key on screen"].append((place, s, where, t[:80]))
+
+
 issues = collections.defaultdict(list)
 n_first = 0  # shown options with at least one quote: the first-quote check's denominator
 for place, (la, lo) in PTS.items():
     for s in SERVICES:
         p = itinerary.attach(e.plan(s, la, lo, 40, "gps"), e)
         for k, o in enumerate(p["options"]):
+            raw_keys(place, s, f"option {k + 1}", [o["name"], *(c["label"] for c in o["contributions"])])
             if o["evidence"]:
                 n_first += 1
                 first = o["evidence"][0]
@@ -71,6 +84,8 @@ for place, (la, lo) in PTS.items():
         it = p.get("itinerary") or {}
         for r in it.get("plans", []):
             for st in r["stops"]:
+                raw_keys(place, s, f"route {r['rank']}", [st.get("name"), st.get("weakest_capability"),
+                                                          st.get("purpose_word")])
                 check_name("route stop", (place, s, r["rank"], st.get("name", "")), st.get("facility_id"),
                            st.get("name", ""), None)
                 for ev in st.get("evidence", []):
@@ -83,8 +98,8 @@ for place, (la, lo) in PTS.items():
             row = (place, s, first, tw["window_min"], bool(p.get("public_option")))
             issues["first option outside window"].append(row)
 for k in ("unredacted name", "unredacted name in route", "other-place source (flagged)",
-          "first quote flagged other-place", "mismatched specialty option", "mismatched specialty route stop",
-          "specialty word, kept as a general facility (option)",
+          "first quote flagged other-place", "raw key on screen", "mismatched specialty option",
+          "mismatched specialty route stop", "specialty word, kept as a general facility (option)",
           "specialty word, kept as a general facility (route stop)", "first option outside window"):
     of = f" of {n_first} shown options with a quote" if k == "first quote flagged other-place" else ""
     print(f"== {k}: {len(issues[k])}{of}")
@@ -92,4 +107,5 @@ for k in ("unredacted name", "unredacted name in route", "other-place source (fl
         print("  ", x)
 sys.exit(1 if issues["unredacted name"] or issues["unredacted name in route"]
          or issues["other-place source (flagged)"] or issues["first quote flagged other-place"]
-         or issues["mismatched specialty option"] or issues["mismatched specialty route stop"] else 0)
+         or issues["raw key on screen"] or issues["mismatched specialty option"]
+         or issues["mismatched specialty route stop"] else 0)
