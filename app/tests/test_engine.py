@@ -139,9 +139,9 @@ def test_route_rides_along_in_budget(name):
     assert it["pathway"] and (it["plans"] or it["abstain"])
     assert "stub" not in it["meta"]
     opts = r.json()["options"]
-    if it["plans"] and opts:  # route stop 1 is the list's first choice, or one plain line says why (#86)
+    if it["plans"] and opts:  # route stop 1 is the list's first choice, or the route is framed as the fallback (#126)
         same = it["plans"][0]["stops"][0]["facility_id"] == opts[0]["facility_id"]
-        assert same or (it["stop_1_note"] and opts[0]["name"] in it["stop_1_note"])
+        assert same or it["fallback"]["text"].startswith("If they cannot treat: ")
     for plan in it["plans"]:
         assert plan["stops"][-1]["purpose"] in ("definitive", "recurring")
         for st in plan["stops"]:
@@ -151,12 +151,80 @@ def test_route_rides_along_in_budget(name):
                 assert e["quote"] == redact_names(text) and not nonoffer and attribution != "other_facility"
 
 
+def _post(s: str, la: float, lo: float) -> dict:
+    return client.post("/api/plan", json={"service": s, "lat": la, "lon": lo, "accuracy_m": 40}).json()
+
+
 @needs_planner
-def test_route_does_not_change_the_options():
-    plain = ENGINE.plan("trauma_emergency", 25.15, 83.68, 40, "gps")
-    routed = client.post("/api/plan", json={"service": "trauma_emergency", "lat": 25.15, "lon": 83.68,
-                                            "accuracy_m": 40}).json()
-    assert [o["facility_id"] for o in routed["options"]] == [o["facility_id"] for o in plain["options"]]
+def test_route_changes_the_options_only_by_leading_with_its_first_stop():
+    plain = [o["facility_id"] for o in ENGINE.plan("trauma_emergency", 25.6, 85.14, 40, "gps")["options"]]
+    routed = _post("trauma_emergency", 25.6, 85.14)
+    ids = [o["facility_id"] for o in routed["options"]]
+    assert ids[0] == routed["itinerary"]["plans"][0]["stops"][0]["facility_id"]
+    rest = [i for i in plain if i in ids[1:]]
+    assert ids[1:1 + len(rest)] == rest  # the others keep their order
+
+
+# #126: a route stop beyond the window and farther than card 1 never displaces it; the route becomes the fallback
+FAR_ROUTES = {"banda_trauma": ("trauma_emergency", 25.48, 80.33, "Ask: do you take accident patients now?"),
+              "banda_csection": ("emergency_csection", 25.48, 80.33, "Ask: can you do an emergency C-section now?")}
+
+
+@needs_planner
+@pytest.mark.parametrize("name", FAR_ROUTES)
+def test_far_route_stop_leaves_card_1_and_is_the_fallback(name):
+    s, la, lo, ask = FAR_ROUTES[name]
+    plain = ENGINE.plan(s, la, lo, 40, "gps")["options"]
+    p = _post(s, la, lo)
+    o, it = p["options"], p["itinerary"]
+    assert [x["facility_id"] for x in o] == [x["facility_id"] for x in plain] and o[0]["call_first"]
+    stop = it["plans"][0]["stops"][0]
+    assert stop["facility_id"] != o[0]["facility_id"] and not any(x.get("route_reason") for x in o)
+    assert it["fallback"]["ask"] == ask and it["stop_1_note"] is None
+    assert it["fallback"]["text"].startswith("If they cannot treat: ") and stop["name"] in it["fallback"]["text"]
+
+
+# #121: in an emergency with a route, card 1 is the route's first stop and says why; the former first says what it lacks
+LEADS = {"patna_trauma": ("trauma_emergency", 25.6, 85.14, "Medifino Hospital"),
+         "bahraich_csection": ("emergency_csection", 27.57, 81.6, "Krishna Medical Centre")}
+
+
+@needs_planner
+@pytest.mark.parametrize("name", LEADS)
+def test_emergency_card_1_is_the_route_first_stop_with_its_reason(name):
+    s, la, lo, before = LEADS[name]
+    assert ENGINE.plan(s, la, lo, 40, "gps")["options"][0]["name"] == before  # what the engine alone ranks first
+    p = _post(s, la, lo)
+    o, it = p["options"], p["itinerary"]
+    assert o[0]["facility_id"] == it["plans"][0]["stops"][0]["facility_id"] and o[0]["call_first"]
+    assert o[0]["route_reason"] == o[0]["why_first_text"]
+    assert o[0]["route_reason"].startswith("First: it has evidence of ") and before in o[0]["route_reason"]
+    old = next(x for x in o if x["name"] == before)
+    assert old["rank"] == 2 and not old["call_first"] and "no evidence of" in old["route_reason"]
+    assert [x["rank"] for x in o] == list(range(1, len(o) + 1)) and it["stop_1_note"] is None
+    assert p["what_would_change"]["first_name"] == o[0]["name"]  # "if the first says no" follows the new order
+    assert all(w["facility_id"] != o[0]["facility_id"] for w in p["why_not"])
+    assert "first_stop" not in it
+
+
+@needs_planner
+def test_route_that_already_agrees_and_planned_care_are_unchanged():
+    for s, la, lo in (("trauma_emergency", 25.6, 85.95), ("dialysis", 24.79, 85.0)):  # Pusa trauma; Gaya dialysis
+        plain = ENGINE.plan(s, la, lo, 40, "gps")["options"]
+        p = _post(s, la, lo)
+        assert [o["facility_id"] for o in p["options"]] == [o["facility_id"] for o in plain]
+        assert not any(o.get("route_reason") for o in p["options"])
+    p = _post("trauma_emergency", 25.6, 85.95)
+    assert p["options"][0]["facility_id"] == p["itinerary"]["plans"][0]["stops"][0]["facility_id"]
+
+
+@pytest.mark.skipif(ENGINE is None or ENGINE.pin_where == list(zip(ENGINE.pins["district"], ENGINE.pins["state"])),
+                    reason="pin_districts.json not built (needs data/external/lgd_district_polygons)")
+def test_area_names_the_district_the_point_lies_in():
+    # (25.6, 85.95), the Pusa demo point, lies in Begusarai (LGD district and PIN 851128 polygons); the nearest PIN
+    # centre is 847428, a Darbhanga PIN placed there (validation C4).
+    a = client.post("/api/area", json={"service": "emergency_csection", "lat": 25.6, "lon": 85.95}).json()
+    assert a["area"]["district"] == "Begusarai"
 
 
 def test_no_route_without_a_pathway_or_a_planner(monkeypatch):

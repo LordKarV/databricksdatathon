@@ -57,7 +57,7 @@ STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
-    "Access now": "area.summary.access_now",
+    "Access now: a Likely listing in reach": "area.summary.access_now",
     "If calls confirm the listings": "area.summary.access_if_confirmed",
     "Calls could close": "area.summary.calls_could_close",
     "No public evidence of care": "area.summary.no_public_evidence",
