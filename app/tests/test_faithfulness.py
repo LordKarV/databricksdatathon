@@ -15,6 +15,11 @@ data-k="<kind>". This test then checks:
   call-ahead screens (state.spoken, from static/speech.js) lists the payload path of every value it uses; each
   equals its field and is in the spoken text, and no other digit is spoken except 108 and 102.
 
+Field reports (community/field.py): the real plans go through apply_field as /api/plan does. One extra payload
+carries fixed reports, and test_field_report_lines_equal_the_aggregates recounts them here: every count and "N days
+ago" on a field line equals the reports. The family journey card (journey.js) is downloaded from the slip screen
+for every option in both languages: each marked name, phone and number equals the plan, and no other digit is on it.
+
 Payloads: three real plans from derived/v1 (#42; when app/facts/out is built) plus the stub fixtures.
 Set FAITH_PLANS=<dir> to run against a directory of plan JSON files (for example
 the model export from #11): no test changes needed.
@@ -30,7 +35,7 @@ import subprocess
 import sys
 import time
 import urllib.request
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -100,6 +105,7 @@ def load_payloads() -> list[tuple[str, dict]]:
         return [(f.stem, json.loads(f.read_text())) for f in files]
     out = []
     # Real rows (#42): the three release queries from derived/v1, with their real area plans.
+    from community import field
     from facts.engine import Engine
     from itinerary import attach
     eng = Engine.load()
@@ -107,12 +113,46 @@ def load_payloads() -> list[tuple[str, dict]]:
         for name, (svc, lat, lon) in REAL_QUERIES.items():
             plan = attach(eng.plan(svc, lat, lon, 40, "gps"), eng)  # with the planner's route (#47) when built
             plan["area_plan"] = eng.area(svc, lat, lon)
+            # As /api/plan answers when the warehouse is down: no field term, the plain note.
+            plan = {**field.apply_field(plan, {}, FIELD_NOW), "field_reports": {"read": False, "note": field.NOT_READ}}
             out.append((f"real-{name}", plan))
+        plan = attach(eng.plan("dialysis", 26.6, 85.48, 40, "gps"), eng)
+        plan = {**field.apply_field(plan, field_aggregates(plan), FIELD_NOW), "field_reports": {"read": True, "note": None}}
+        out.append(("real-sitamarhi_dialysis-field", plan))
     for svc in sorted(SERVICES):
         for name, (lat, lon) in {"sitamarhi": (26.6, 85.48), "pune": (18.52, 73.86)}.items():
             plan = recommend_stub(svc, lat, lon, 40, "gps")
             plan["area_plan"] = area_stub(svc, lat, lon)
             out.append((f"stub-{svc}-{name}", plan))
+    return out
+
+
+# ---------- field reports fed to apply_field (fixed; the test recounts them) ----------
+FIELD_NOW = datetime.now(UTC)
+# (option index, reporter key or None, kind, outcome, reason, days ago)
+FIELD_REPORTS = (
+    (0, "a" * 16, "visit", "accepted", None, 4), (0, "b" * 16, "visit", "accepted", None, 12),
+    (0, "c" * 16, "call", "yes", None, 20), (0, "c" * 16, "call", "no", "service_not_here", 40),
+    (0, None, "visit", "accepted", None, 1),  # no reporter key: never counts
+    # Disagreement on the Likely option 3: it stays above the Likely line, so it stays on the plan (a lowered
+    # Not verified option can drop out of the top 3 now that reports re-rank).
+    (2, "d" * 16, "visit", "turned_away", "no_bed", 1), (2, "e" * 16, "visit", "turned_away", "no_bed", 3),
+    (2, "a" * 16, "visit", "turned_away", "service_not_here", 5), (2, "f" * 16, "call", "no", "equipment_absent", 8),
+    (1, "a" * 16, "call", "yes", None, 2),  # one reporter: a line, no score change
+)
+
+
+FIELD_FIDS: dict[int, str] = {}  # option index in the plan before the reports -> facility; reports can re-rank
+
+
+def field_aggregates(plan: dict) -> dict:
+    out: dict = {}
+    for i, key, kind, outcome, reason, days in FIELD_REPORTS:
+        if i < len(plan["options"]):
+            fid = FIELD_FIDS.setdefault(i, plan["options"][i]["facility_id"])
+            out.setdefault((fid, "dialysis"), []).append({
+                "facility_id": fid, "service_id": "dialysis", "reporter_key": key, "kind": kind, "outcome": outcome,
+                "reason": reason, "created_at": FIELD_NOW - timedelta(days=days, hours=2)})
     return out
 
 
@@ -333,6 +373,36 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
     return errs
 
 
+CARD_TEMPLATE_NUMBERS = {"108", "102", "24", "7", "1", "16"}  # 108/102 lines, "24x7", Hindi stop list, map zoom
+
+
+def check_card(name: str, payload: dict, card: str, report: dict) -> list[str]:
+    """The family journey card: every marked value equals the plan, every tel: is 108, 102 or a plan phone, and no
+    other digit is on it (Safety 13: no confidence numbers, no patient data)."""
+    import html as htmllib
+    errs = []
+    marks = re.findall(r'<span data-f="([^"]+)"[^>]*>(.*?)</span>', card, flags=re.DOTALL)
+    if not marks:
+        errs.append(f"{name}: no marked values")
+    for path, shown in marks:
+        try:
+            stored = resolve(payload, path)
+        except (KeyError, IndexError, ValueError, TypeError):
+            errs.append(f"{name}: {path} not in payload")
+            continue
+        if htmllib.unescape(shown) != str(stored):
+            errs.append(f"{name}: {path} shown {shown!r}, stored {stored!r}")
+    report["values_checked"] += len(marks)
+    rows = list(payload["options"]) + [s for r in (payload.get("itinerary") or {}).get("plans") or [] for s in r["stops"]]
+    phones = {r["phone"]["e164"] for r in rows if r.get("phone") and r["phone"].get("e164")}
+    errs += [f"{name}: tel:{t} is not in the plan" for t in re.findall(r'href="tel:([^"]+)"', card)
+             if t not in phones | {"108", "102"}]
+    rest = re.sub(r"<(script|style)\b.*?</\1>", " ", card, flags=re.DOTALL)
+    rest = re.sub(r"<span data-(?:f|device)\b[^>]*>.*?</span>", " ", rest, flags=re.DOTALL)
+    rest = htmllib.unescape(re.sub(r"<[^>]+>", " ", rest))
+    errs += [f"{name}: unmarked number {d!r} on the card" for d in set(re.findall(r"\d+", rest)) - CARD_TEMPLATE_NUMBERS]
+
+
 # ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
 PUBLIC_LABEL = "by public standard, not verified"
 WINDOW_LINE = "The best-evidenced option is about"
@@ -444,6 +514,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                               timezone_id="Asia/Kolkata", locale="en-IN",
                               permissions=["geolocation"], service_workers="block")
     page = ctx.new_page()
+    page.add_init_script("Object.defineProperty(Navigator.prototype, 'canShare', {value: undefined})")
     page.route("**/api/plan", lambda r: r.fulfill(status=200, content_type="application/json",
                                                   body=json.dumps(payload)))
     page.add_init_script(
@@ -514,6 +585,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 got = page.evaluate(COLLECT_JS)
                 errs += check_screen(f"slip/{o['rank']}/{lang}", payload, got, report)
                 errs += check_quotes(f"slip/{o['rank']}/{lang}", payload, got["items"], claims, report)
+                with page.expect_download() as dl:  # Web Share is off in this context, so the card downloads
+                    page.locator("#slip-card").click()
+                card = Path(dl.value.path()).read_text(encoding="utf-8")
+                errs += check_card(f"card/{o['rank']}/{lang}", payload, card, report)
                 if lang == "hi":
                     page.locator("[data-slip-lang=en]").click()  # reset for the next option
             page.evaluate("h => { location.hash = h; }", "#/plan")
@@ -648,3 +723,97 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"
     assert not check_screen("route", payload, got, {"values_checked": 0})
+
+
+# ---------- field reports: every count and "days ago" on a field line equals the reports fed in ----------
+FIELD = [(n, p) for n, p in PAYLOADS if n.endswith("-field")]
+NOT_OFFERED = ("service_not_here", "equipment_absent", "referred_elsewhere_for_this_service")
+TEMPORARY = ("no_bed", "doctor_absent", "machine_down", "asked_to_pay", "closed_now")
+
+
+def ago(days: float) -> str:
+    return "today" if int(days) == 0 else f"{int(days)} day{'s' if int(days) > 1 else ''} ago"
+
+
+def expected_field(fid: str) -> tuple[str | None, list[tuple[int, str]]]:
+    """(summary line counts, [(n, note reason)]) recounted from FIELD_REPORTS by the rules in the README."""
+    rows = [(k, kind, out, rsn, d) for i, k, kind, out, rsn, d in FIELD_REPORTS
+            if k and d <= 90 and FIELD_FIDS.get(i) == fid]
+    latest: dict = {}
+    for k, kind, out, rsn, d in rows:
+        what = ("accepted" if (kind, out) == ("visit", "accepted") else "phone_yes" if (kind, out) == ("call", "yes")
+                else rsn if out in ("no", "turned_away") and rsn in NOT_OFFERED else None)
+        if what and (k not in latest or d < latest[k][1]):
+            latest[k] = (what, d)
+    line = None
+    if latest:
+        n = len(latest)
+        parts = []
+        counts = {w: sum(1 for x, _ in latest.values() if x == w) for w in ("accepted", "phone_yes", *NOT_OFFERED)}
+        if counts["accepted"]:
+            parts.append(f"{counts['accepted']} accepted")
+        if counts["phone_yes"]:
+            parts.append(f"{counts['phone_yes']} said yes on the phone")
+        parts += [f"{counts[r]} said" for r in NOT_OFFERED if counts[r]]
+        who = "1 health worker" if n == 1 else f"{n} health workers"
+        line = (f"Reports from {who} in the last 90 days: ", parts, f"; latest {ago(min(d for _, d in latest.values()))}.")
+    notes = []
+    for rsn in TEMPORARY:
+        ks = {k: d for k, _, _, r, d in sorted(rows, key=lambda x: -x[4]) if r == rsn and d <= 7}
+        if ks:
+            notes.append((len(ks), ago(min(ks.values()))))
+    return line, notes
+
+
+@pytest.mark.skipif(not FIELD, reason="app/facts/out not built: no field-report payload")
+def test_field_report_lines_equal_the_aggregates(base_url, browser):
+    _, payload = FIELD[0]
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+    page = ctx.new_page()
+    page.route("**/api/plan", json_reply(payload))
+    page.add_init_script(
+        "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+        " source: 'gps', t: Date.now(), label: null}))")
+    errs, seen = [], 0
+    try:
+        page.goto(base_url + "/#/")
+        page.locator("[data-svc=dialysis]").first.click()
+        page.wait_for_selector("article.card")
+        screens = [("plan", page.evaluate(COLLECT_JS))]
+        for o in payload["options"]:
+            page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
+            page.wait_for_selector("#how")
+            screens.append((f"why/{o['rank']}", page.evaluate(COLLECT_JS)))
+    finally:
+        ctx.close()
+    for screen, got in screens:
+        shown = {it["path"]: it["text"] for it in got["items"] if ".field." in it["path"]}
+        for i, o in enumerate(payload["options"]):
+            if screen.startswith("why/") and screen != f"why/{o['rank']}":
+                continue
+            line, notes = expected_field(o["facility_id"])
+            f = o.get("field")
+            if line is None and not notes:
+                errs += [f"{screen}: option {i} has field lines without reports"] if f else []
+                continue
+            texts = [shown.get(f"options.{i}.field.lines.{j}.en", "") for j in range(len(f["lines"]))]
+            head, parts, tail = line
+            first = texts[0].removeprefix("Simulated for the demo: ")
+            if not (first.startswith(head) and first.endswith(tail) and all(x in first for x in parts)):
+                errs.append(f"{screen}: option {i} line {first!r}, expected {head}{parts}{tail}")
+            nshown = [shown.get(f"options.{i}.field.notes.{j}.en", "") for j in range(len(f["notes"]))]
+            for (n, when), text in zip(notes, nshown, strict=True):
+                want = f"{n} report{'s' if n > 1 else ''} of "
+                if not (text.startswith(want) and f"latest {when}." in text):
+                    errs.append(f"{screen}: option {i} note {text!r}, expected {n} reports, latest {when}")
+            # The Hindi line carries the same numbers as the English one.
+            for j in range(len(f["lines"])):
+                en = shown.get(f"options.{i}.field.lines.{j}.en", "")
+                hi = shown.get(f"options.{i}.field.lines.{j}.hi", "")
+                if sorted(re.findall(r"\d+", en)) != sorted(re.findall(r"\d+", hi)):
+                    errs.append(f"{screen}: option {i} line {j}: Hindi numbers differ from English")
+            seen += 1
+    disagree = [o for o in payload["options"] if (o.get("field") or {}).get("disagree")]
+    assert disagree and all(o["call_first"] and o["band"] != "unlikely" for o in disagree)
+    assert seen >= 3, f"field lines checked on only {seen} cards"
+    assert not errs, "\n".join(errs[:40])

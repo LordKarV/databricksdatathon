@@ -9,11 +9,15 @@ from __future__ import annotations
 import functools
 import json
 import math
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, Literal
 
 import outcomes
-from facts.engine import Engine
+from community import field
+from community import pulse as area_pulse
+from community.reporter import reporter_key
+from facts.engine import RADIUS_KM, Engine
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
@@ -21,7 +25,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from inputs import understand
 from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
-from services import SERVICES
+from services import SERVICES, haversine_km
 from verify.check import Checker
 from voice import transcribe as voice
 
@@ -49,6 +53,9 @@ SHELL_FILES: dict[str, str] = {
     "speech_templates.json": "application/json; charset=utf-8",
     "lexicon.json": "application/json; charset=utf-8",
     "stories.js": "text/javascript; charset=utf-8",
+    "pulse.js": "text/javascript; charset=utf-8",
+    "journey.js": "text/javascript; charset=utf-8",
+    "community.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
 }
 
@@ -109,6 +116,10 @@ def _plan(req: PlanRequest) -> dict:
     acc = None if req.accuracy_m is None else round(req.accuracy_m)
     eng = _need_engine()
     plan = attach(eng.plan(req.service, round(req.lat, 2), round(req.lon, 2), acc, req.source), eng)
+    # Field reports (community/field.py): never waits on the warehouse; without them the plan is unchanged plus a note.
+    # With them the options are re-ranked and re-worded from the adjusted scores.
+    plan = field.apply_field(plan, field.aggregates(wait=False), datetime.now(UTC), eng)
+    plan["field_reports"] = field.status()
     plan["query"]["depth"] = req.depth
     return plan
 
@@ -206,23 +217,30 @@ class OutcomeRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     outcome_id: str = Field(pattern=outcomes.UUID, description="random UUID from the page; a retry writes once")
-    facility_id: str = Field(max_length=64)
+    facility_id: str = Field(min_length=1, max_length=64)
     service_id: str = Field(max_length=40)
-    outcome: Literal["yes", "no", "no_answer"]
-    said_at_ms: int = Field(ge=0, le=4_102_444_800_000)  # before 2100
+    outcome: Literal["yes", "no", "no_answer", "accepted", "turned_away"]
+    said_at_ms: int = Field(ge=0, le=4_102_444_800_000, description="ms since 1970; before 2100")
     lat: float = Field(ge=6.0, le=37.5, description="rounded to 0.01 degree by the page; only the district is kept")
     lon: float = Field(ge=68.0, le=97.5)
+    # Field reports (community/field.py): fixed enums only, never free text; outcomes.check_report pairs them.
+    kind: Literal["call", "visit"] = "call"
+    reason: Literal[outcomes.REASONS] | None = None
+    wait_bucket: Literal[outcomes.WAIT_BUCKETS] | None = None
 
 
 @app.post("/api/outcome")
-def outcome(req: OutcomeRequest) -> JSONResponse:
-    """What the facility said on the phone (#65). No patient data: ids, the answer, a district, a time."""
+def outcome(req: OutcomeRequest, request: Request) -> JSONResponse:
+    """A phone outcome (#65) or a visit outcome. No patient data: ids, the answer, a district, a time, and a keyed
+    hash of the signed-in health worker (never the user itself)."""
     eng = _need_engine()
     try:
         out = outcomes.record(eng, req.outcome_id, req.facility_id, req.service_id, req.outcome, req.said_at_ms,
-                              req.lat, req.lon)
+                              req.lat, req.lon, req.kind, req.reason, req.wait_bucket, reporter_key(request.headers))
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
+    except outcomes.RateLimited as e:
+        return JSONResponse({"ok": False, "error": str(e)}, status_code=429)
     except outcomes.OutcomeError as e:
         return JSONResponse({"ok": False, "error": str(e)}, status_code=503)
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
@@ -233,6 +251,21 @@ def outcomes_summary() -> JSONResponse:
     """Live count for "How this works": outcomes recorded and how many contradicted the band shown."""
     try:
         out = outcomes.summary(_need_engine())
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/pulse")
+def pulse(district: Annotated[str | None, Query(max_length=60)] = None,
+          service: Annotated[str | None, Query(max_length=40)] = None,
+          lat: Annotated[float | None, Query(ge=6.0, le=37.5)] = None,
+          lon: Annotated[float | None, Query(ge=68.0, le=97.5)] = None) -> JSONResponse:
+    """Area pulse for coordinators and planners: k-anonymous district counts from logged reports only."""
+    try:
+        out = area_pulse.pulse(_need_engine(), district, service, lat, lon)
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
     except outcomes.OutcomeError as e:
         return JSONResponse({"error": str(e)}, status_code=503)
     return JSONResponse(out, headers={"Cache-Control": "no-store"})
@@ -295,7 +328,9 @@ def pack_version() -> JSONResponse:
     idx = _pack_index()
     if idx is None:
         return JSONResponse({"error": "no packs built"}, 404, headers={"Cache-Control": "no-cache"})
-    return JSONResponse(idx, headers={"Cache-Control": "no-cache"})
+    # The facility points (index.json "pts") are for /api/pack/locate only; the phone never needs them.
+    packs = {k: {f: v for f, v in m.items() if f != "pts"} for k, m in idx["packs"].items()}
+    return JSONResponse({**idx, "packs": packs}, headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/api/pack/{slug}")
@@ -344,9 +379,27 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
     k = math.cos(math.radians(lat))
     i = min(range(len(lats)), key=lambda j: (lats[j] - lat) ** 2 + ((lons[j] - lon) * k) ** 2)
     slug, state = states[sidx[i]]
-    if slug not in (_pack_index() or {"packs": {}})["packs"]:
+    idx = _pack_index() or {"packs": {}}
+    if slug not in idx["packs"]:
         return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
-    return JSONResponse({"slug": slug, "state": state})
+    return JSONResponse({"slug": slug, "state": state,
+                         "packs": [{"slug": slug, "state": state}] + _near_packs(idx, slug, lat, lon)})
+
+
+def _near_packs(idx: dict, home: str, lat: float, lon: float) -> list[dict]:
+    """Other built packs with a facility of their state within the search radius (care crosses state lines).
+
+    index.json keeps each state's facility points in 0.1 degree; nearest packs first.
+    """
+    scale = idx.get("pts_scale", 10)
+    near = []
+    for s, m in idx["packs"].items():
+        if s == home or not m.get("pts"):
+            continue
+        d = min(haversine_km(lat, lon, a / scale, b / scale) for a, b in m["pts"])
+        if d <= RADIUS_KM:
+            near.append((d, {"slug": s, "state": m["state"]}))
+    return [x for _, x in sorted(near, key=lambda t: t[0])]
 
 
 @app.get("/{name}")

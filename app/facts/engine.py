@@ -302,10 +302,15 @@ class Engine:
             out.append("no concerns found in its record")
         return out or ["no own website or phone in our data"]
 
-    def option(self, rank: int, pr: Pair, service: str, lat: float, lon: float, trav: dict) -> dict:
+    def _scored(self, fid: str, service: str, scores: dict | None) -> tuple:
+        """score(), or the caller's replacement for this facility (community/field.py's field-adjusted score)."""
+        return (scores or {}).get(fid) or self.score(fid, service)
+
+    def option(self, rank: int, pr: Pair, service: str, lat: float, lon: float, trav: dict,
+               scores: dict | None = None) -> dict:
         i, label = pr.fi, SERVICES[service]["label_en"]
         fid = self._f("id", i)
-        band, p, lo, hi, contrib, ev = self.score(fid, service)
+        band, p, lo, hi, contrib, ev = self._scored(fid, service, scores)
         rule = self.rules.get(pr.rule, {"n": 0, "k_confirmed": 0, "k_contradicted": 0})
         url = self._f("url", i)
         evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url or "",
@@ -338,13 +343,14 @@ class Engine:
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},
         }
 
-    def _ranked(self, service: str, lat: float, lon: float, state: str | None = None) -> tuple[list, list]:
+    def _ranked(self, service: str, lat: float, lon: float, state: str | None = None,
+                scores: dict | None = None) -> tuple[list, list]:
         """(pool, unlikely): [(utility, minutes, pair, travel, band)] sorted best first / nearest first."""
         scale = TIME_SCALE[SERVICES[service]["profile"]]
         pool, unlikely = [], []
         state = state or self.origin_state(lat, lon)
         for _, pr in self._near(service, lat, lon):
-            band, p, *_, ev = self.score(self._f("id", pr.fi), service)
+            band, p, *_, ev = self._scored(self._f("id", pr.fi), service, scores)
             if not ev and band != "unlikely":
                 continue  # every recommendation cites facility text (#85): a pair with no usable quote is not offered
             tr = self._travel(lat, lon, pr.fi, state)
@@ -383,15 +389,18 @@ class Engine:
                 "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
 
     # ---------- /api/plan ----------
-    def plan(self, service: str, lat: float, lon: float, accuracy_m: float | None, source: str) -> dict:
+    def plan(self, service: str, lat: float, lon: float, accuracy_m: float | None, source: str,
+             scores: dict | None = None) -> dict:
+        """scores: {facility_id: score() tuple} replacing score() for those facilities, so the ranking, the
+        abstention and every sentence below are built from the same p and band the card shows."""
         info, label = SERVICES[service], SERVICES[service]["label_en"]
-        pool, unlikely = self._ranked(service, lat, lon)
+        pool, unlikely = self._ranked(service, lat, lon, scores=scores)
         chosen = pool[:N_OPTIONS]
         # Never hide a confirmed listing in reach: if none made the top slots, it takes the last one.
         best_likely = next((r for r in pool if r[4] == "likely"), None)
         if best_likely and best_likely not in chosen:
             chosen = chosen[: N_OPTIONS - 1] + [best_likely]
-        options = [self.option(k + 1, r[2], service, lat, lon, r[3]) for k, r in enumerate(chosen)]
+        options = [self.option(k + 1, r[2], service, lat, lon, r[3], scores) for k, r in enumerate(chosen)]
         if len(options) > 1:
             nearest = min(range(len(chosen)), key=lambda k: chosen[k][1])
             if nearest != 0:
