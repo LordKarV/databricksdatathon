@@ -50,7 +50,8 @@ function pickLang() {
   const old = (load('voice') || {}).lang;  // UI1 kept a read-aloud language; it becomes the app language once
   return old === 'hi' || old === 'en' ? old : null;
 }
-function phoneLang() { return (navigator.language || '').toLowerCase().startsWith('hi') ? 'hi' : 'en'; }
+// hi or any -IN locale (#140 3f)
+function phoneLang() { const l = (navigator.language || '').toLowerCase(); return l.startsWith('hi') || l.endsWith('-in') ? 'hi' : 'en'; }
 
 // Engine text (band reasons, why-not reasons, call-ahead questions, route words) is English in the payload. In Hindi
 // the reviewed template from hi.json "engine" is shown, marked data-k="template" with the payload path; a sentence
@@ -144,12 +145,40 @@ function renderBar() {
 }
 
 // ---------- location ----------
+// GPS or typed coordinates in words (#140 3f), from /api/place/near; a typed place keeps its own words.
+const NEAR_SOURCES = ['gps', 'last_fix', 'manual'];
+const coordText = loc => `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`;
+function nearHtml(n) {
+  const en = x => `<span lang="en">${esc(x)}</span>`;
+  return n.place ? th('home.near', {place: en(n.place), district: en(n.district), pin: esc(n.pin)})
+    : th('home.near_district', {district: en(n.district), pin: esc(n.pin)});
+}
+function fixTime(t) {
+  return new Date(t).toLocaleTimeString(locale(), {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'});
+}
 function locLine(loc) {
   if (!loc) return th('loc.none');
   const src = {gps: ts('loc.gps', {m: loc.accuracy_m ?? '?'}), last_fix: ts('loc.last_fix'), manual: ts('loc.manual'),
     pin: ts('loc.pin'), district: ts('loc.district'), place: ts('loc.place')}[loc.source] || loc.source;
-  if (loc.label && ['pin', 'district', 'place'].includes(loc.source)) return `<span lang="en">${esc(loc.label)}</span>, ${timeStr(loc.t)}`;
-  return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
+  if (loc.near) {
+    return `${nearHtml(loc.near)}${th('punct.stop')} ${esc(src)}, ${fixTime(loc.t)} <span class="coords">${coordText(loc)}</span>`;
+  }
+  if (loc.label && ['pin', 'district', 'place'].includes(loc.source)) return `<span lang="en">${esc(loc.label)}</span>, ${fixTime(loc.t)}`;
+  return `${esc(loc.label || coordText(loc))}. ${esc(src)}, ${fixTime(loc.t)}`;
+}
+async function fetchNear() {
+  const l = state.loc;
+  if (!l || l.near || !NEAR_SOURCES.includes(l.source) || !navigator.onLine) return;
+  try {
+    const r = await fetch('/api/place/near', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2)}), redirect: 'manual', signal: AbortSignal.timeout(8000)});
+    const n = r.ok ? await r.json() : null;
+    if (!n || !n.district || state.loc !== l) return;
+    l.near = {place: n.place || null, district: n.district, pin: n.pin};
+    save('loc', l);
+    const el = $('#where-line');
+    if (el) el.innerHTML = locLine(l);
+  } catch { /* offline: coordinates stay */ }
 }
 function getGps(onDone) {
   if (!('geolocation' in navigator)) { onDone(ts('gps.none')); return; }
@@ -238,7 +267,7 @@ function saveOfflinePack() {
 // ---------- chooser (first launch) ----------
 function chooserScreen() {
   const pre = state.lang || phoneLang();
-  const order = pre === 'hi' ? ['hi', 'en'] : ['en', 'hi'];
+  const order = LANGS;  // Hindi first (#140 3f)
   const S = l => I18N[l] || {};
   return `<div class="chooser">
     <svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><path d="M5 14h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -268,7 +297,7 @@ function home() {
   const tiles = SERVICES.map(s => `<button type="button" class="tile${s.profile === 'emergency' || s.profile === 'urgent' ? ' emergency' : ''}"
       data-svc="${s.key}" aria-pressed="${state.service === s.key}">${icon(s.key)}<span>${esc(s.label)}</span></button>`).join('');
   const where = state.loc
-    ? `<a class="where" href="#/change">${icon('pin')}<span class="where-text"><b data-device>${locLine(state.loc)}</b></span>
+    ? `<a class="where" href="#/change">${icon('pin')}<span class="where-text"><b data-device id="where-line">${locLine(state.loc)}</b></span>
         <span class="where-change">${th('home.change')}</span></a>
        <button type="button" class="btn btn-block" id="regps">${th('home.update_gps')}</button>`
     : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
@@ -280,7 +309,8 @@ function home() {
   const boxes = Array.from({length: N_DANGER}, (_, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
       ${state.danger.has(i) ? 'checked' : ''}> ${th('danger.' + i)}</label>`).join('');
   return `<h1 class="visually-hidden" tabindex="-1">${th('home.h')}</h1>
-    <div class="sos-row"><p>${th('home.sos')}</p><a class="btn btn-hazard" href="tel:108">${icon('phone')} 108</a></div>
+    <div class="sos-home"><div class="sos-row"><p>${th('home.sos')}</p><a class="btn btn-hazard" href="tel:108">${icon('phone')} 108</a></div>
+      <div class="sos-row"><p>${th('home.sos_102')}</p><a class="btn btn-hazard" href="tel:102">${icon('phone')} 102</a></div></div>
     ${state.msg ? `<p class="panel" role="alert">${esc(state.msg)}</p>` : ''}
     <section class="section" aria-labelledby="h-where"><h2 id="h-where">${th('home.where')}</h2><div class="stack-sm">${where}</div></section>
     <section class="section" aria-labelledby="h-need"><h2 id="h-need">${th('home.need_h')}</h2>
@@ -297,6 +327,7 @@ function home() {
     <p class="note section">${savedLine()}</p>`;
 }
 function bindHome() {
+  fetchNear();
   $('#gps')?.addEventListener('click', () => { location.hash = '#/gps'; });
   $('#regps')?.addEventListener('click', () => { location.hash = '#/gps'; });
   document.querySelectorAll('[data-svc]').forEach(b => b.addEventListener('click', () => pickService(b.dataset.svc)));

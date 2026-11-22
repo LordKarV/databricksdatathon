@@ -139,6 +139,8 @@ table { border-collapse: collapse; width: 100%; }
 .sos-row { display: flex; align-items: center; gap: var(--sp3); padding: var(--sp2) var(--sp2) var(--sp2) var(--sp4);
   background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hazard); border-radius: var(--r2); }
 .sos-row p { flex: 1 1 auto; font-weight: 600; margin: 0; }
+.sos-home { display: grid; gap: var(--sp2); }
+.sos-home .btn-hazard { min-width: 5.5rem; }
 .window-miss { border-left: 4px solid var(--hazard); }
 
 /* ---------- home ---------- */
@@ -147,6 +149,7 @@ table { border-collapse: collapse; width: 100%; }
 .where .i { color: var(--go-text); }
 .where-text { flex: 1 1 auto; min-width: 0; }
 .where-text b { font-weight: 600; font-size: var(--s16); }
+.where-text .coords, .coords { display: block; color: var(--muted); font-weight: 500; font-size: var(--s14); }
 .where-change { font-weight: 600; text-decoration: underline; }
 .search-label { font-weight: 500; color: var(--muted); font-size: var(--s16); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); gap: var(--sp2); margin: var(--sp3) 0; }
