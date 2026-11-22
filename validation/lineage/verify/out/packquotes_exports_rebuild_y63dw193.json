@@ -1,0 +1,158 @@
+{
+ "pairs": 11505,
+ "quotes_shown": 16563,
+ "pairs_quote_changed": 130,
+ "pairs_quote_set_changed": 46,
+ "pairs_score_changed": 0,
+ "packs_with_change": [
+  "andaman_and_nicobar_islands.json",
+  "andhra_pradesh.json",
+  "assam.json",
+  "bihar.json",
+  "chandigarh.json",
+  "chhattisgarh.json",
+  "delhi.json",
+  "goa.json",
+  "gujarat.json",
+  "haryana.json",
+  "himachal_pradesh.json",
+  "jharkhand.json",
+  "karnataka.json",
+  "kerala.json",
+  "lakshadweep.json",
+  "madhya_pradesh.json",
+  "maharashtra.json",
+  "odisha.json",
+  "puducherry.json",
+  "punjab.json",
+  "rajasthan.json",
+  "tamil_nadu.json",
+  "telangana.json",
+  "the_dadra_and_nagar_haveli_and_daman_and_diu.json",
+  "uttar_pradesh.json",
+  "uttarakhand.json",
+  "west_bengal.json"
+ ],
+ "examples": [
+  [
+   "andaman_and_nicobar_islands.json",
+   [
+    "2723785d",
+    "mri"
+   ],
+   [
+    "3T MRI",
+    "MRI 3T system"
+   ],
+   [
+    "3T MRI",
+    "3T MRI system"
+   ]
+  ],
+  [
+   "andaman_and_nicobar_islands.json",
+   [
+    "66812208",
+    "cardiac_surgery"
+   ],
+   [
+    "Valve repair and replacement surgeries",
+    "Twin Modular Operating Theatres with 13-bed Cardiothoracic ICU"
+   ],
+   [
+    "Valve repair and replacement surgeries",
+    "Beating-heart coronary artery bypass grafting (CABG) surgeries"
+   ]
+  ],
+  [
+   "andaman_and_nicobar_islands.json",
+   [
+    "ae20b125",
+    "emergency_csection"
+   ],
+   [
+    "Caesarean section deliveries around 50 per month",
+    "Performs around 50 caesarean section deliveries per month"
+   ],
+   [
+    "Caesarean section deliveries around 50 per month",
+    "Performs caesarean section deliveries; about 50 per month"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "0a661398",
+    "nicu"
+   ],
+   [
+    "Intensive Care Unit and Neonatal ICU",
+    "Neonatal Intensive Care Unit provides Open Care System with Radiant warmers, Phototherapy, Monitors, Pulse Oximeter, Ventilator, and Incubator"
+   ],
+   [
+    "Intensive Care Unit and Neonatal ICU",
+    "Neonatal ICU equipment including Open Care System, Radiant warmers, Phototherapy units, Monitors, Pulse Oximeters, Ventilators, and Incubators"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "dc652285",
+    "mri"
+   ],
+   [
+    "Offers MRI imaging",
+    "MRI scanning services"
+   ],
+   [
+    "Offers MRI imaging",
+    "Offers 4D MRI imaging"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "2723785d",
+    "mri"
+   ],
+   [
+    "3T MRI",
+    "MRI 3T system"
+   ],
+   [
+    "3T MRI",
+    "3T MRI system"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "66812208",
+    "cardiac_surgery"
+   ],
+   [
+    "Valve repair and replacement surgeries",
+    "Twin Modular Operating Theatres with 13-bed Cardiothoracic ICU"
+   ],
+   [
+    "Valve repair and replacement surgeries",
+    "Beating-heart coronary artery bypass grafting (CABG) surgeries"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "ae20b125",
+    "emergency_csection"
+   ],
+   [
+    "Caesarean section deliveries around 50 per month",
+    "Performs around 50 caesarean section deliveries per month"
+   ],
+   [
+    "Caesarean section deliveries around 50 per month",
+    "Performs caesarean section deliveries; about 50 per month"
+   ]
+  ]
+ ]
+}

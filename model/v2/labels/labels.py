@@ -1,8 +1,10 @@
 """Training labels for Witness Ledger v2: gold DEV labels, positive-unlabeled list labels, c estimates, cross-fit plan.
 
 Reads derived/v2 (assemble step), model/gold (v1 and v2 pairs, all DEV under MODEL_SPEC 3.1 change 5), the e2e
-benchmark labels, model/gold/v3/dev_labels.json if present (never any other v3 file), and the external list matches
-through model/v2/assemble/external.x_lists (same matches, thresholds and scopes as the features).
+benchmark labels, model/gold/v3/dev_labels.json, the TEST facility ids in model/gold/v3/test_sample.json (ids only;
+TEST labels are never opened), and the external list matches through model/v2/assemble/external.x_lists.
+Every TEST facility and every facility in its leakage group is dropped from every output table (asserted).
+Old v1/v2/e2e trauma labels are emergency_24x7 labels; trauma_care gold labels come from v3 DEV only.
 Writes parquet under out/ and out/stats.json. Run: /Users/karthikvattem/projects/datathon/.venv-viz/bin/python labels.py
 """
 from __future__ import annotations
@@ -26,7 +28,9 @@ import external as XT  # noqa: E402  (list matches and scopes, reused unchanged)
 
 G = ROOT / "model/gold"
 V1 = ROOT / "audit/ground_truth"
-V3_DEV = G / "v3/dev_labels.json"   # the only v3 file this script may open
+V3_DEV = G / "v3/dev_labels.json"
+V3_TEST_IDS = G / "v3/test_sample.json"  # pair ids and facility ids only; never open any TEST label file
+OLD_TRAUMA = {"trauma_emergency", "trauma_care"}  # pre-v3 rubric asked about 24x7 emergency care, not a trauma unit
 LIST_SITES = r"nabh\.co|nmc\.org\.in|nhsrc|eraktkosh|mohfw\.gov\.in|pmndp"
 MIN_POS_FOR_C = 10                  # positives in scope needed before a c estimate is used
 C_PRIOR = (0.5, 0.1, 0.9)           # documented fallback when no anchor reaches MIN_POS_FOR_C
@@ -60,23 +64,24 @@ def load_gold() -> pd.DataFrame:
              for p in json.load(open(ROOT / "model/proto/decision/e2e_pairs_to_label.json"))}
     labs = _results(sorted(glob.glob(str(G / "labels_p*.json")))) + _results([str(V1 / f"web_{i}.json") for i in (1, 2, 3)]) \
         + _results(sorted(glob.glob(str(G / "labels_e*.json"))))
-    if V3_DEV.exists():  # teammate's extra DEV labels; same result schema expected, fail loudly otherwise
-        v3 = json.load(open(V3_DEV))
-        v3 = v3["results"] if isinstance(v3, dict) else v3
-        for r in v3:
-            for k in ("pair_id", "unique_id", "service", "exists", "location_ok"):
-                if k not in r:
-                    raise KeyError(f"v3 dev label missing {k}: {r.get('pair_id')}")
-            meta[r["pair_id"]] = dict(unique_id=r["unique_id"], service=r["service"], stratum=r.get("stratum", "v3"), version="v3_dev")
-        labs += [r | {"batch": "v3_dev"} for r in v3]
+    v3 = json.load(open(V3_DEV))["results"]  # v3 schema: service_id = taxonomy id, service = verdict
+    for r in v3:
+        for k in ("pair_id", "unique_id", "service_id", "service", "exists", "location_ok", "inclusion_prob"):
+            if k not in r:
+                raise KeyError(f"v3 dev label missing {k}: {r.get('pair_id')}")
+        assert 0 < r["inclusion_prob"] <= 1, r["pair_id"]
+        meta[r["pair_id"]] = dict(unique_id=r["unique_id"], service=r["service_id"], stratum=r["stratum"], version="v3_dev",
+                                  inclusion_prob=r["inclusion_prob"])
+    labs += [r | {"batch": f"v3_dev_{r['batch']}"} for r in v3]
     second = {r["pair_id"]: r for r in _results(sorted(glob.glob(str(G / "labels_o*.json"))))}
+    second |= {r["pair_id"]: r["second_label"] for r in v3 if "second_label" in r}
     pools = json.load(open(G / "sample_v2_stats.json"))["pool_sizes"]
     split_orig = {p["pair_id"]: p["split"] for p in json.load(open(G / "splits.json"))["pairs"]}
     rows = []
     for r in labs:
         m = meta[r["pair_id"]]
         svc_raw = m["service"]
-        svc = A.ALIASES.get(svc_raw, svc_raw)
+        svc = "emergency_24x7" if (svc_raw in OLD_TRAUMA and m["version"] != "v3_dev") else A.ALIASES.get(svc_raw, svc_raw)
         assert svc in A.SERVICES, svc
         urls = r.get("evidence_urls") or []
         loc = r.get("location_ok", r.get("location_matches"))
@@ -94,6 +99,8 @@ def load_gold() -> pd.DataFrame:
             n_evidence_urls=len(urls), searched=searched, evidence_urls=json.dumps(urls),
             gold_cites_list=bool(re.search(LIST_SITES, " ".join(urls))),
             y_S=y_s,
+            # headline target: confirmed 1, contradicted 0, no_info missing (y_S above is the MODEL_SPEC 3.2 sensitivity)
+            y_S_cc={"confirmed": 1.0, "contradicted": 0.0}.get(s, np.nan),
             # y_L: yes 1, no 0; unclear is not evidence of a wrong place, so missing
             y_L={"yes": 1.0, "no": 0.0}.get(loc, np.nan),
             # y_E mirrors the y_S rule (prototype fit.existence_rows): yes 1; no, or searched and unclear, 0
@@ -101,7 +108,7 @@ def load_gold() -> pd.DataFrame:
             y_E_strict={"yes": 1.0, "no": 0.0}.get(r["exists"], np.nan),
             second_service=o["service"] if o else None, second_exists=o["exists"] if o else None,
             second_location=o.get("location_ok") if o else None,
-            pi=5.0 / pool if (pool and m["version"] in ("v1", "v2")) else np.nan))
+            pi=m["inclusion_prob"] if m["version"] == "v3_dev" else (5.0 / pool if (pool and m["version"] in ("v1", "v2")) else np.nan)))
     d = pd.DataFrame(rows)
     d["ipw"] = 1.0 / d.pi
     d["_r"] = d.version.map(VERSION_RANK)
@@ -286,17 +293,46 @@ def check_columns(plan: pd.DataFrame) -> None:
     assert not missing, f"plan names columns that are not in facility_features: {missing}"
 
 
+def test_blocked(fac: pd.DataFrame) -> pd.DataFrame:
+    """Every v3 TEST facility plus every facility sharing its leakage group: none of them may appear in a training table."""
+    test_ids = {p["unique_id"] for p in json.load(open(V3_TEST_IDS))}
+    assert test_ids <= set(fac.unique_id), "TEST facility missing from derived/v2"
+    groups = set(fac.leakage_group_id[fac.unique_id.isin(test_ids)])
+    b = fac[fac.leakage_group_id.isin(groups)][["unique_id", "leakage_group_id"]].copy()
+    b["is_test_facility"] = b.unique_id.isin(test_ids)
+    return b
+
+
+def drop_blocked(t: pd.DataFrame, blocked: pd.DataFrame, name: str, removed: dict) -> pd.DataFrame:
+    keep = ~t.unique_id.isin(blocked.unique_id) & ~t.leakage_group_id.isin(blocked.leakage_group_id)
+    removed[name] = dict(rows=int((~keep).sum()), facilities=int(t.unique_id[~keep].nunique()))
+    out = t[keep].reset_index(drop=True)
+    assert not out.unique_id.isin(blocked.unique_id).any(), f"{name}: TEST facility overlap"
+    assert not out.leakage_group_id.isin(blocked.leakage_group_id).any(), f"{name}: TEST leakage group overlap"
+    return out
+
+
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     fac, ff = facility_frame()
+    blocked = test_blocked(fac)
+    removed: dict = {}
     gold = load_gold().merge(fac, on="unique_id", how="left")
     assert gold.leakage_group_id.notna().all(), "gold facility missing from derived/v2"
+    gold = drop_blocked(gold, blocked, "gold_dev_pairs", removed)
+    # the drop is by facility, so each surviving (facility, service) still has exactly one primary row
+    assert not gold.duplicated(["unique_id", "service", "pair_id"]).any() and gold.primary.sum() == len(gold.drop_duplicates(["unique_id", "service"]))
     # MODEL_SPEC 3.2 target rule
     assert gold[(gold.label_service == "no_info") & ~gold.searched].y_S.isna().all()
     assert (gold[gold.label_service == "contradicted"].y_S == 0).all() and (gold[gold.label_service == "confirmed"].y_S == 1).all()
     assert (gold[(gold.label_service == "no_info") & gold.searched].y_S == 0).all()
-    gfac = facility_gold(gold, fac)
-    pu = pu_labels(fac)
+    assert gold[gold.service == "trauma_care"].version.eq("v3_dev").all(), "trauma_care gold must come from v3 only"
+    assert not gold[gold.version != "v3_dev"].service.eq("trauma_care").any()
+    gfac = drop_blocked(facility_gold(gold, fac), blocked, "gold_dev_facility", removed)
+    pu = drop_blocked(pu_labels(fac), blocked, "pu_labels", removed)
+    for k in range(5):  # cross-fit plan: a leakage group sits in one fold in every table
+        assert not set(gold.leakage_group_id[gold.fold5 == k]) & set(pu.leakage_group_id[pu.fold5 != k])
+    assert (gold.fold5 == gold.leakage_group_id.map(fold5)).all() and (pu.fold5 == pu.leakage_group_id.map(fold5)).all()
     c = c_estimates(pu, gold, ff)
     plan = crossfit_plan(gold)
     check_columns(plan)
@@ -305,9 +341,22 @@ def main() -> None:
     pu.to_parquet(OUT / "pu_labels.parquet", index=False)
     c.to_parquet(OUT / "c_estimates.parquet", index=False)
     plan.to_parquet(OUT / "crossfit_plan.parquet", index=False)
+    blocked.to_parquet(OUT / "test_blocked_facilities.parquet", index=False)
     pr = gold[gold.primary]
+    op = pd.read_parquet(A.OUT / "facility_attributes.parquet", columns=["unique_id", "operator"]).drop_duplicates("unique_id")
+    pr_op = pr.merge(op, on="unique_id", how="left").fillna({"operator": "unknown"})
+    cnt = lambda col: dict(pos=lambda x: int((x == 1).sum()), neg=lambda x: int((x == 0).sum()), missing=lambda x: int(x.isna().sum()))  # noqa: E731
+    kish = lambda w: float(w.sum() ** 2 / (w ** 2).sum()) if len(w) else 0.0  # noqa: E731
+    v3d = pr[(pr.version == "v3_dev") & pr.y_S_cc.notna()]
     stats = dict(
-        v3_dev_present=V3_DEV.exists(),
+        test_exclusion=dict(test_facilities=int(blocked.is_test_facility.sum()), test_groups=int(blocked.leakage_group_id.nunique()),
+                            blocked_facilities=len(blocked), removed=removed),
+        y_S_cc=pr.groupby("service").y_S_cc.agg(**cnt("y_S_cc")).to_dict("index"),
+        y_S_cc_by_operator=pr_op.groupby("operator").y_S_cc.agg(**cnt("y_S_cc")).to_dict("index"),
+        y_S_by_operator=pr_op.groupby("operator").y_S.agg(**cnt("y_S")).to_dict("index"),
+        y_S_cc_by_version=pr.groupby("version").y_S_cc.agg(**cnt("y_S_cc")).to_dict("index"),
+        v3_cc_kish_n_eff=dict(n=len(v3d), n_eff=round(kish(v3d.ipw), 1),
+                              by_service={s: dict(n=len(h), n_eff=round(kish(h.ipw), 1)) for s, h in v3d.groupby("service")}),
         gold_rows=len(gold), gold_primary=len(pr), by_version=gold.version.value_counts().to_dict(),
         dup_conflicts=int(gold[gold.primary].dup_conflict.sum()),
         gold_cites_list=int(pr.gold_cites_list.sum()),

@@ -1,0 +1,16 @@
+[
+ {
+  "name": "v_crawl_shingles",
+  "status": "warn",
+  "metric": "1307 files scanned; 26 share crawl-only 12-word shingles; max in a public/export file 3745",
+  "threshold": ">=500 crawl-only shingles (about 50 sentences) in a shipped file = a page-body copy",
+  "detail": "Skipped derived/v1/claims.parquet and data_point_scores.parquet.",
+  "examples": [
+   "derived/v1/source_page_checks.parquet (provided): 5094 of 94660",
+   "kb/web_evidence/out/llm_hours_raw.json (public): 3745 of 29334",
+   "kb/web_evidence/qa/out/sample.csv (provided): 862 of 8371",
+   "kb/web_evidence/qa/out/sample_scored.csv (provided): 862 of 9355",
+   "kb/web_evidence/out/selfcheck_round2.csv (provided): 472 of 2123"
+  ]
+ }
+]

@@ -1,0 +1,26 @@
+{
+ "scratch": "/var/folders/6c/0ntj4yfx54b5_ppvydcmgrrh0000gn/T/exports_rebuild_rlmm03x_",
+ "planner": {
+  "equal_except_build_time": true,
+  "first_diff": ".facilities.district[845]: 'nan' vs 'nan'"
+ },
+ "facts": {
+  "equal_except_build_time": true,
+  "first_diff": null,
+  "facts_sha_ref": "3143a2a68738",
+  "facts_sha_new": "3143a2a68738",
+  "meta_scores": "interim: derived/v1 data_point_scores (likely only when verified true)"
+ },
+ "packs": {
+  "n_ref": 36,
+  "n_new": 36,
+  "same_names": true,
+  "index_sha_mismatch": [],
+  "rebuilt_bytes_differ": [],
+  "first_diffs": {},
+  "other_files_identical": {
+   "pin_index.json": true
+  },
+  "unlisted_ref_files": []
+ }
+}

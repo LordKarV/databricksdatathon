@@ -1,0 +1,30 @@
+layer,table,rows,facilities,orphans,usable_missing,note
+0 raw,facilities.parquet,10088,9959,118,0,"10,088 rows: 9,970 well-formed, 30 truncated, 88 fragments"
+0 raw,usable (dedup),9959,9959,0,0,"minus 118 malformed, minus 11 duplicate rows"
+1 derived/v1,facility_location.parquet,9959,9959,0,0,
+1 derived/v1,record_trust.parquet,9959,9959,0,0,
+1 derived/v1,facility_groups.parquet,9959,9959,0,0,
+1 derived/v1,facility_trust.parquet,9959,9959,0,0,
+1 derived/v1,claims.parquet,469498,9959,0,0,
+1 derived/v1,specialties.parquet,117964,9959,0,0,
+1 derived/v1,grades.parquet,10799,4694,0,5265,
+1 derived/v1,data_point_scores.parquet,518191,9959,0,0,
+1 derived/v1,source_urls.parquet,158444,9959,0,0,
+1 derived/v1,source_page_checks.parquet,6492,344,0,9615,
+1 derived/v1,gold_pairs.parquet,176,176,0,9783,
+2 kb,crawl/targets.parquet,9405,8015,0,1944,
+2 kb,crawl/sites.parquet,9405,8015,0,1944,
+2 kb,crawl/pages.parquet,31075,6744,0,3215,
+2 kb,web_evidence/out/site_identity.parquet,6770,5881,0,4078,
+2 kb,web_evidence/out/web_service_summary.parquet,20886,3698,0,6261,
+2 kb,web_evidence/out/web_details.parquet,41191,3308,0,6651,
+2 kb,vf_details/out/facts.parquet,42036,7501,0,2458,
+2 kb,vf_details/out/facility_details.parquet,26046,7501,0,2458,
+2 kb,opendata/vf_opendata_match.parquet,17662,9956,0,3,
+2 kb,opendata/vf_opendata_facts.parquet,6001,2844,0,7115,
+2 kb,taxonomy/out/lexicon_matches.parquet,64670,6038,0,3921,
+3 app,facts.fac,9947,9947,0,12,minus 12 exclude_review
+3 app,facts.pairs,8012,4393,0,5566,7 app services
+3 app,"packs (all states, union)",6815,4252,0,5707,facility rows summed over packs; nearest-3 per PIN only
+4 planner,planner_v1 facilities,9959,9959,0,0,
+4 planner,planner_v1 capability entries,26491,6807,0,3152,

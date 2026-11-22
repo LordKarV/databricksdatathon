@@ -1,0 +1,90 @@
+[
+ {
+  "name": "hours_error_patterns",
+  "status": "warn",
+  "metric": {
+   "usable_emergency_24x7_rows": 6679,
+   "emergency_rows_with_phone_cue": 1106,
+   "records_with_emergency_24x7": 1433,
+   "records_whose_every_emergency_row_has_phone_cue": 114,
+   "usable_facility_24x7_rows": 7036,
+   "facility_24x7_naming_a_unit": 619,
+   "facility_24x7_bare_line": 2361,
+   "usable_hour_rows_from_chrome_text": 16860,
+   "usable_hour_rows": 38515
+  },
+  "threshold": "emergency rows with a phone cue <= 5%",
+  "detail": "phone cue regex: \\bcall\\b|helpline|help line|hotline|phone|\\[phone\\]|contact|whatsapp|appointment|enquir|booking|toll[- ]?free|customer care|support",
+  "examples": [
+   "301abaa6-e559-4c1f-ab18-57c7916a7a74 emergency: '- 24/7 Emergency Support'",
+   "7bee457c-c297-4c3b-9315-18dd7b019c89 emergency: 'With specialized departments and emergency services available round-the-clock, w'",
+   "c455ae67-f9cb-472c-9ab9-9795841395f2 emergency: 'Kasare Hospital has treated over 83,000 patients since 2014, follows NABH-standa'",
+   "82fa7e19-25eb-432c-a64a-5eff221845a5 facility: 'AMBULANCE (24/7)'",
+   "58d41201-9bcd-483f-9084-7294d962f20d facility: 'Lab: 24/7'"
+  ]
+ },
+ {
+  "name": "ids_and_domains",
+  "status": "warn",
+  "metric": {
+   "web_hours_dup_fact_id": 0,
+   "web_details_dup_fact_id": 0,
+   "facts_dup_fact_id": 0,
+   "web_services_dup_key": 0,
+   "service_id_outside_taxonomy": 0,
+   "web_hours_bad_status": 0,
+   "web_hours_bad_polarity": 0,
+   "web_hours_nonpositive_usable_count": 0,
+   "web_details_bad_status": 0,
+   "web_details_bad_polarity": 0,
+   "web_details_nonpositive_usable_count": 0,
+   "facts_bad_status": 0,
+   "facts_bad_polarity": 0,
+   "facts_nonpositive_usable_count": 0,
+   "web_hours_invalid_clock_rows": 107,
+   "web_hours_invalid_clock_usable": 104,
+   "facts_invalid_clock_rows": 1,
+   "facts_invalid_clock_usable": 0,
+   "web_facility_details_invalid_clock_facility_values": 16,
+   "facility_details_invalid_clock_facility_values": 0
+  },
+  "threshold": "0",
+  "detail": "unique keys, enum domains, positive counts, clock times",
+  "examples": [
+   "web_hours 664cc819:034dc375bdcd:c333:opd_hours:general:0 days? 08:00-33:00 <- 'Opening Hours : 08:00AM to 21:00PM'",
+   "web_hours 8b5d6123:04c7caa5570f:t360:opd_hours:general:0 mon-sat 90:00-19:00 <- 'Monday \u2013 Saturday\\n90:00 AM - 07:00 PM'",
+   "facts 4c469752:capa:7:opd_hours:opd:0 mon-sat 09:00-14:00; mon-sat 29:00-21:00 <- 'Offers outpatient consultation services Mon-Sat 09'",
+   "web_facility_details 664cc819-2cde-427b-82e6-27089502ec90 general days? 08:00-33:00"
+  ]
+ },
+ {
+  "name": "quote_redaction",
+  "status": "warn",
+  "metric": {
+   "web_services": {
+    "distinct_quotes": 65059,
+    "with_phone": 9,
+    "with_email": 0
+   },
+   "web_hours": {
+    "distinct_quotes": 19487,
+    "with_phone": 27,
+    "with_email": 0
+   },
+   "web_details": {
+    "distinct_quotes": 18060,
+    "with_phone": 13,
+    "with_email": 0
+   }
+  },
+  "threshold": "0 unredacted contacts",
+  "detail": "regex: Indian mobile (10 digits from 6-9, optional +91) or STD landline with separator; email",
+  "examples": [
+   "web_services: '0416 - 2254463 (Emergency Department)'",
+   "web_services: 'Emergency/Casualty 02261452140 (24 hours)'",
+   "web_hours: 'Emergency/Casualty 02261452140 (24 hours)'",
+   "web_hours: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'",
+   "web_details: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'"
+  ]
+ }
+]

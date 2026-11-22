@@ -1,56 +1,230 @@
 {
- "v3_dev_present": false,
- "gold_rows": 301,
- "gold_primary": 301,
+ "test_exclusion": {
+  "test_facilities": 150,
+  "test_groups": 150,
+  "blocked_facilities": 209,
+  "removed": {
+   "gold_dev_pairs": {
+    "rows": 0,
+    "facilities": 0
+   },
+   "gold_dev_facility": {
+    "rows": 0,
+    "facilities": 0
+   },
+   "pu_labels": {
+    "rows": 1237,
+    "facilities": 197
+   }
+  }
+ },
+ "y_S_cc": {
+  "burn_care": {
+   "pos": 15,
+   "neg": 7,
+   "missing": 50
+  },
+  "cardiac_surgery": {
+   "pos": 26,
+   "neg": 12,
+   "missing": 39
+  },
+  "dialysis": {
+   "pos": 28,
+   "neg": 4,
+   "missing": 47
+  },
+  "emergency_24x7": {
+   "pos": 18,
+   "neg": 8,
+   "missing": 55
+  },
+  "emergency_csection": {
+   "pos": 20,
+   "neg": 7,
+   "missing": 55
+  },
+  "mri": {
+   "pos": 16,
+   "neg": 5,
+   "missing": 47
+  },
+  "nicu": {
+   "pos": 21,
+   "neg": 4,
+   "missing": 55
+  },
+  "stemi_thrombolysis": {
+   "pos": 14,
+   "neg": 2,
+   "missing": 8
+  },
+  "trauma_care": {
+   "pos": 10,
+   "neg": 4,
+   "missing": 20
+  }
+ },
+ "y_S_cc_by_operator": {
+  "private": {
+   "pos": 137,
+   "neg": 49,
+   "missing": 291
+  },
+  "public": {
+   "pos": 28,
+   "neg": 3,
+   "missing": 45
+  },
+  "unknown": {
+   "pos": 3,
+   "neg": 1,
+   "missing": 40
+  }
+ },
+ "y_S_by_operator": {
+  "private": {
+   "pos": 137,
+   "neg": 242,
+   "missing": 98
+  },
+  "public": {
+   "pos": 28,
+   "neg": 30,
+   "missing": 18
+  },
+  "unknown": {
+   "pos": 3,
+   "neg": 30,
+   "missing": 11
+  }
+ },
+ "y_S_cc_by_version": {
+  "e2e": {
+   "pos": 15,
+   "neg": 15,
+   "missing": 91
+  },
+  "v1": {
+   "pos": 15,
+   "neg": 7,
+   "missing": 14
+  },
+  "v2": {
+   "pos": 31,
+   "neg": 4,
+   "missing": 105
+  },
+  "v3_dev": {
+   "pos": 107,
+   "neg": 27,
+   "missing": 166
+  }
+ },
+ "v3_cc_kish_n_eff": {
+  "n": 134,
+  "n_eff": 43.2,
+  "by_service": {
+   "burn_care": {
+    "n": 15,
+    "n_eff": 10.5
+   },
+   "cardiac_surgery": {
+    "n": 20,
+    "n_eff": 11.5
+   },
+   "dialysis": {
+    "n": 15,
+    "n_eff": 6.7
+   },
+   "emergency_24x7": {
+    "n": 16,
+    "n_eff": 5.9
+   },
+   "emergency_csection": {
+    "n": 11,
+    "n_eff": 7.7
+   },
+   "mri": {
+    "n": 13,
+    "n_eff": 6.3
+   },
+   "nicu": {
+    "n": 14,
+    "n_eff": 7.8
+   },
+   "stemi_thrombolysis": {
+    "n": 16,
+    "n_eff": 9.6
+   },
+   "trauma_care": {
+    "n": 14,
+    "n_eff": 8.1
+   }
+  }
+ },
+ "gold_rows": 601,
+ "gold_primary": 597,
  "by_version": {
+  "v3_dev": 300,
   "v2": 140,
   "e2e": 125,
   "v1": 36
  },
  "dup_conflicts": 0,
- "gold_cites_list": 9,
+ "gold_cites_list": 13,
  "y_S": {
   "burn_care": {
-   "pos": 5,
-   "neg": 12,
-   "missing": 22
+   "pos": 15,
+   "neg": 34,
+   "missing": 23
   },
   "cardiac_surgery": {
-   "pos": 13,
-   "neg": 17,
-   "missing": 13
+   "pos": 26,
+   "neg": 37,
+   "missing": 14
   },
   "dialysis": {
-   "pos": 14,
-   "neg": 25,
-   "missing": 6
+   "pos": 28,
+   "neg": 43,
+   "missing": 8
+  },
+  "emergency_24x7": {
+   "pos": 18,
+   "neg": 37,
+   "missing": 26
   },
   "emergency_csection": {
-   "pos": 9,
-   "neg": 30,
+   "pos": 20,
+   "neg": 53,
    "missing": 9
   },
   "mri": {
-   "pos": 6,
-   "neg": 12,
-   "missing": 15
+   "pos": 16,
+   "neg": 32,
+   "missing": 20
   },
   "nicu": {
-   "pos": 8,
-   "neg": 22,
-   "missing": 16
+   "pos": 21,
+   "neg": 34,
+   "missing": 25
+  },
+  "stemi_thrombolysis": {
+   "pos": 14,
+   "neg": 10,
+   "missing": 0
   },
   "trauma_care": {
-   "pos": 7,
-   "neg": 15,
-   "missing": 25
+   "pos": 10,
+   "neg": 22,
+   "missing": 2
   }
  },
  "y_S_by_version": {
   "e2e": {
-   "pos": 16,
-   "neg": 62,
-   "missing": 47
+   "pos": 15,
+   "neg": 61,
+   "missing": 45
   },
   "v1": {
    "pos": 15,
@@ -61,12 +235,17 @@
    "pos": 31,
    "neg": 51,
    "missing": 58
+  },
+  "v3_dev": {
+   "pos": 107,
+   "neg": 170,
+   "missing": 23
   }
  },
- "fac_rows": 346,
+ "fac_rows": 630,
  "fac_by_src": {
-  "gold_dev": 290,
-  "geo_hand_check": 30,
+  "gold_dev": 575,
+  "geo_hand_check": 29,
   "cleaning_hand_check": 26
  },
  "y_L": {
@@ -76,25 +255,25 @@
    "missing": 0
   },
   "geo_hand_check": {
-   "pos": 28,
+   "pos": 27,
    "neg": 2,
    "missing": 0
   },
   "gold_dev": {
-   "pos": 131,
-   "neg": 31,
-   "missing": 128
+   "pos": 354,
+   "neg": 34,
+   "missing": 187
   }
  },
  "y_E": {
-  "1.0": 163,
-  "NaN": 117,
-  "0.0": 10
+  "1.0": 394,
+  "NaN": 134,
+  "0.0": 47
  },
  "y_E_strict": {
-  "1.0": 163,
-  "NaN": 127
+  "1.0": 394,
+  "NaN": 181
  },
- "gold_groups": 274,
+ "gold_groups": 524,
  "gold_states": 33
 }

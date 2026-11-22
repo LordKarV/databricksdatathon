@@ -1,0 +1,34 @@
+[pass   ] app_facts_claim_text: 0 unknown ids, 0 field/text/flag mismatches over 44968
+[warn   ] array_truncated_at_50: 2078 / 9959 records have a 50-item array
+[pass   ] attribution_columns_consistent: 0 / 469498 labels contradict their detector columns
+[pass   ] attribution_handread: {"ambiguous": [16, 20, [0.584, 0.919]], "other_facility": [15, 20, [0.531, 0.888]], "own_anchored": [19, 20, [0.764, 0.991]], "unanchored": [20, 20, [0.839, 1.0]]}
+[pass   ] claim_id_unique_and_format: format mismatches 0, duplicate claim_ids 0, uid8 prefix collisions 0
+[pass   ] claims_file_is_cleaning_copy: sha256 equal=True; manifest rows 469498 vs 469498
+[warn   ] claims_nonoffer_vs_kb_cue: 116 / 172 kb-cued service sentences have claims.nonoffer = False
+[pass   ] claims_substring_of_raw_field: 0 / 469498
+[pass   ] claims_verbatim_at_index: 0 / 469498 claims not verbatim at stated field and index
+[warn   ] description_split_fragments: 1815 / 18388 description sentences end at an abbreviation or are 3 chars or fewer
+[pass   ] dps_sentence_rows_match_claims: 0 inconsistencies over 469498 claims
+[pass   ] dup_in_record_recomputed: 0 / 469498 disagree; 27528 echoes
+[pass   ] duplicate_uid_rows_identical: 0 of 11 duplicated ids differ
+[warn   ] idx_equals_raw_position: 43706 / 469498 claims in 1813 records
+[pass   ] kept_text_untrimmed_unicode_space: 0 / 469498
+[pass   ] lexicon_matches_join_claims: 0 inconsistencies over 64670 pairs
+[pass   ] lexicon_matches_reproduce_from_json: 0 pair differences; file 64670 pairs / 58004 sentences (TAXONOMY.md states 64670 / 58004)
+[pass   ] lexicon_nonoffer_cue_reproduce: nonoffer_cue 0, negation_extra 0 differ over 64670
+[pass   ] lexicon_precision_handread: 37/40 = 0.925 Wilson (0.801, 0.974)
+[warn   ] lexicon_recall_handread: misses 2/40 unmatched sentences (Wilson 0.014-0.165); sentence-pair recall about 0.744 (0.468-0.912)
+[fail   ] mri_magnetic_resonance_therapy: 10 mri pairs; 3 facilities have MRI only through these
+[warn   ] negation_cue_nonsurgical: 17 / 47 negation-cued pairs
+[warn   ] nonoffer_broad_scan: 317 / 63370 positive pairs carry a broad cue word
+[pass   ] nonoffer_positives_handread: 29/30 positives really state an offer; Wilson (0.833, 0.994)
+[warn   ] other_facility_own_place: 126 / 9506 other_facility sentences
+[fail   ] planner_cites_nonoffer_sentences: 29 (capability, claim) citations over 28 kb-cued sentences; 48164 citations in all
+[pass   ] raw_items_represented_once: misses 0, extras 0, duplicate keys 0; expected 469498, claims 469498
+[pass   ] specialty_map_covers_raw_values: raw values 2932, map rows 2933; missing 0, not in raw 1, dup keys 0, n_facilities wrong 0, unknown service ids 0, unknown prereq ids 0
+[pass   ] specialty_map_handread: 39/40 = 0.975 Wilson (0.871, 0.996)
+[pass   ] specialty_weights_consistent: 1346 rows; weight out of [0,1] 0, unknown value 0, unknown service 0, dup 0, pair not in map 0
+[warn   ] spine_neurosurgery_only: 265 / 687 spineNeurosurgery facilities
+[warn   ] split_records_dropped: 30 facility records dropped; 88 fragment rows; about 1499 sentence items lost
+[warn   ] ultrasound_3d_scan_only: 81 / 101 are not ultrasound (dental intraoral/CBCT, eye OCT, orthotics); 38 facilities have ultrasound only through them
+[not_run] v2_claim_id_contract: gated: set RUN_V2=1 once derived/v2 is final

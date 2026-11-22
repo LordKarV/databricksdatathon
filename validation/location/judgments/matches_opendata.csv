@@ -1,0 +1,61 @@
+source,kind,unique_id,cand_name,verdict,note
+osm,accepted,9d67abc9-4dd2-4909-b011-0fdfe36a74e9,Aruna Memorial Hospital,yes,same name and place
+osm,accepted,43c512a6-2fd4-4e4a-acaf-2ca603b45cbe,Usha Mission Hospital,yes,same name and place
+osm,accepted,f9a2d9ba-4193-4e25-afb9-07dc5776f226,Gautham Hospital,yes,same name and place
+osm,accepted,c0fa9d6f-281d-4d65-9572-ed07d08f9172,IRIS HOSPITAL,yes,same name and place
+osm,accepted,6382feb6-79d9-43e4-92fd-5609c30ef481,"Kokilaben Dhirubhai Ambani Hospital, Mumbai",yes,same name and place
+osm,accepted,99d8aef2-7c02-45cb-b47a-9e2928de8512,Jogeshwari Hospital,no,AllCure SuperSpeciality vs Jogeshwari Hospital: only the place word is shared
+osm,accepted,71ad5a83-befd-42bc-9b19-f6491d96c499,Valiyakulangara,likely,"OSM feature named only Valiyakulangara, health tag, 650 m, same town"
+osm,accepted,db3ac286-a478-4d11-b675-6e6e0eb2b306,Implant's Better Sight Centre Pvt Ltd,yes,same name and place
+osm,accepted,3a985485-77ad-4147-8f52-7edeb262c8f2,Hirachand Munot Memorial Criticare Hospital,yes,same name and place
+osm,accepted,d1c8a637-1344-4576-99b2-8644f28c427c,Mediscope Hospital Private Limited,yes,same name and place
+osm,accepted,0ed24ab4-f9fb-4553-9993-db1919bd5905,Calcutta Lions Netra Niketan,yes,same name and place
+osm,accepted,0cc934ba-0f36-48c6-b03b-9b7c012a412e,kishore dental care,likely,"same name, same city, 1.9 km"
+osm,accepted,ec959ed6-bcc4-4168-879a-98fb5961b0a0,Berry Hospital,yes,same name and place
+osm,accepted,a28d6a39-dffe-4e78-8018-f20cb1f744dd,Ganga Orthocare Hospital,yes,same name and place
+osm,accepted,8a522979-8cd7-4b38-8048-6beddc7afc39,PanjabRao Deshmukh Medical College and Hospital,yes,same name and place
+osm,accepted,c9519ac0-4b34-41f4-b562-cd65b2059527,Aastha Children Hospital,no,Aasha Children Hospital Porbandar vs Aastha Children Hospital Surat: VF point is a copied Surat geocode
+osm,accepted,a9aa94d6-fa47-4ec9-8274-08e96a390a73,RNR's Dental Clinic,yes,same name and place
+osm,accepted,9223b026-cbca-4d6d-8b5e-3ef3aa795764,Bhandari Hospital,uncertain,"Bhandari Hospital Vijay Nagar vs OSM Bhandari Hospital addr Pardesipura, 1.8 km"
+osm,accepted,b49d6498-7c51-4544-9328-5e68807aee14,Belle Vue Clinic,likely,"same institution; VF address is the Salt Lake site, OSM the Brahmachari St site"
+osm,accepted,59b8cacd-7eb6-4b05-ab04-92ef33dcb282,Chandulal Chandrakar Hospital,yes,same name and place
+osm,rejected,f9139402-d36c-4e9a-820c-8a9582d094fe,Medical College and Hospital,different,different facility or generic name
+osm,rejected,9c485e35-89e6-4977-8c4a-629fbe34cafa,Skin Clinic,different,different facility or generic name
+osm,rejected,2dccd2d1-a1e2-443f-91b8-34452bb60e69,Sadar Hospital Muzaffarpur,different,different facility or generic name
+osm,rejected,74b2711c-2c96-4256-b45c-0a418ca0ad49,hospital,different,different facility or generic name
+osm,rejected,3e30ae7c-9747-4be7-b3ef-234578dbc481,Dental Clinic,different,different facility or generic name
+osm,rejected,f8268457-b338-4eff-a70d-96d58f24d2d0,Sunflower Womens Endo Infertility and Hospital Pvt. Ltd.,different,different facility or generic name
+osm,rejected,9beed3eb-b0e6-4399-99a9-39a5033e1c14,RUDRA DENTAL CLINIC,different,different facility or generic name
+osm,rejected,2f7b3bd7-eb47-4499-855b-d2e4a5fd7140,Dental Clinic,different,different facility or generic name
+osm,rejected,6f7bd0c4-2d30-4a7f-a2c0-f29b18ff8443,Sanjivani Hospital & ICCU Centre,different,different facility or generic name
+osm,rejected,751ecc82-b1c1-4bf2-97a4-fd41a5d2e8aa,Gabberia State General Hospital,same,"Gabberia State General Hospital both sides, 4.2 km; VF PIN 711322 vs OSM 711302: missed match"
+wikidata,accepted,b572ed14-25bb-4cdb-9da1-497ea512e5c5,Krishna Rajendra Hospital,yes,same name and place
+wikidata,accepted,ef6a5fa9-0ed0-4ead-af23-4cee7f1c315c,"All India Institute of Medical Sciences, Nagpur",yes,same name and place
+wikidata,accepted,0c5a8e83-7fb3-4dbc-bb60-b8a6bf5cf7cb,"All India Institute of Medical Sciences, Kalyani",yes,same name and place
+wikidata,accepted,4ad9fa87-4e18-40c6-ac4d-24dd633794a0,J L Rohatgi Memorial Eye Hospital,likely,"J L Rohatgi Hospital vs J L Rohatgi Memorial Eye Hospital, same road and PIN"
+wikidata,accepted,d2726883-b75f-4292-93ad-7b88fc74e311,Indira Gandhi Institute of Medical Sciences,yes,same name and place
+wikidata,accepted,18a0b6a3-8792-43ef-8753-47548e4aab02,Jyotirmay Eye Clinic,yes,same name and place
+wikidata,accepted,36c25453-bf54-4757-b29f-26983dc1a5f8,Westfort Hospital,yes,same name and place
+wikidata,accepted,69201515-916a-4304-aeef-e700f8603083,Batra Hospital and Medical Research Centre,yes,same name and place
+wikidata,accepted,fe51288d-92fa-4ea5-9113-06ced4150bc6,Noble Hospital,yes,same name and place
+wikidata,accepted,dc74854c-c4a1-48fc-aa67-003f8035748e,Amrik Hospital,yes,same name and place
+wikidata,accepted,9c5537f1-5c81-4c7d-a7c9-12d606778780,Kharagpur Sub-divisional Hospital,yes,same name and place
+wikidata,accepted,171e49ec-ba4b-449a-97d0-f2dfcbe1fa76,Lady Dufferin Victoria Hospital,yes,same name and place
+wikidata,accepted,f2fdc0d8-6e38-4275-a1e0-e81acfb479ed,Mangla Hospital and Research Center,yes,same name and place
+wikidata,accepted,87d1fee8-13d0-4b80-a0d5-4b7105d85425,Habra State General Hospital,yes,same name and place
+wikidata,accepted,26532e12-8fa3-4343-94b7-3012f8ed88bc,Nelivigi Eye Hospital and Surgical Centre,yes,same name and place
+wikidata,accepted,22400e36-922a-4ebe-a751-4203b6d716c4,Calcutta Pavlov Hospital,yes,same name and place
+wikidata,accepted,1fc510fc-efab-432b-90a2-31d1a1d99df4,Victoria Hospital,yes,same name and place
+wikidata,accepted,001f21d5-3cb9-4ae5-b05c-46bc85fed8c3,Kirloskar Hospital,yes,same name and place
+wikidata,accepted,b49d6498-7c51-4544-9328-5e68807aee14,"Belle Vue Clinic, Kolkata",likely,"same institution, different site address"
+wikidata,accepted,cac5afcc-759e-49e4-aa2f-5f5885cf3e0c,Shushrusha's Suman Ramesh Tulsiani Hospital,yes,same name and place
+wikidata,rejected,a7623350-260b-46a0-9020-d2492cf32d80,Bhopal Memorial Hospital & Research Centre,different,different facility or generic name
+wikidata,rejected,9463669e-e157-4da3-adfe-f27437fc6fda,"CRIUM, Hyderabad",different,different facility or generic name
+wikidata,rejected,0a77c719-b39a-423f-821e-16a965dd95fb,St.Theresa's Hospital,different,different facility or generic name
+wikidata,rejected,da6c6926-c8db-4e83-a331-130120934724,Ahmedabad Civil Hospital,different,different facility or generic name
+wikidata,rejected,e6bad3d8-feea-430a-9b13-78d6d7c4b6d5,Arthur Asirvatham Hospital,same,"Asirvatham Speciality Hospital Rajaji St vs Arthur Asirvatham Hospital, 91 m: missed match"
+wikidata,rejected,7df67343-efd3-4b99-93c8-3b189e08a8e0,KLE Society Hospital,different,different facility or generic name
+wikidata,rejected,8da5f77a-9abb-41ac-adc1-4ea82b0e405b,"Healing Hands Clinic - Jubilee Hills, Hyderabad",different,different facility or generic name
+wikidata,rejected,96ac71e2-54f5-4231-bf2f-eddc51808fb8,Ahmedabad Civil Hospital,different,different facility or generic name
+wikidata,rejected,a49dc58d-6ddb-423c-8575-426c9657fca4,Nethradhama Superspeciality Eye Hospital,different,different facility or generic name
+wikidata,rejected,6a103032-f5a4-4a5b-ae63-b30d4c9e30fe,Healing Hands Clinic - Chhatrapati Sambhajinagar,different,different facility or generic name

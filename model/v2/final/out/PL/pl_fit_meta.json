@@ -1,0 +1,56 @@
+{
+ "n_labelled": 443,
+ "n_neg": 40,
+ "by_src": {
+  "size": {
+   "cleaning_hand_check": 26,
+   "geo_hand_check": 29,
+   "gold_dev": 388
+  },
+  "sum": {
+   "cleaning_hand_check": 22,
+   "geo_hand_check": 27,
+   "gold_dev": 354
+  }
+ },
+ "terms": [
+  "vote_coords",
+  "vote_pin",
+  "vote_city",
+  "vote_name_place",
+  "vote_state",
+  "vote_text_pin",
+  "vote_map_link",
+  "b_city_points_elsewhere",
+  "b_copied_geocode",
+  "coords_look_wrong",
+  "pin_looks_wrong",
+  "a_quarantine_share",
+  "p1_src",
+  "f_osm_conflict",
+  "f_osm_match",
+  "d_nabh_listed"
+ ],
+ "terms_noselection": [
+  "vote_coords",
+  "vote_pin",
+  "vote_city",
+  "vote_name_place",
+  "vote_state",
+  "vote_text_pin",
+  "vote_map_link",
+  "b_city_points_elsewhere",
+  "b_copied_geocode",
+  "coords_look_wrong",
+  "pin_looks_wrong",
+  "a_quarantine_share",
+  "p1_src"
+ ],
+ "sign_violations": 0,
+ "p_e": {
+  "fitted": false,
+  "n_labelled": 441,
+  "n_neg": 47,
+  "rule": "fit only with >= 15 negatives (MODEL_SPEC 3.3)"
+ }
+}

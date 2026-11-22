@@ -1,0 +1,181 @@
+source,kind,unique_id,cand_name,verdict,note
+hot,accepted,0bbacaa8-071a-473f-84a9-e3b5ef12208c,S A Catherine Booth Hospital,yes,same name and place
+hot,accepted,ca8b7af8-1b2c-4a7f-9885-8b2854440ce1,Huma Specialists Hospital and Research Centre Pvt Ltd,yes,same name and place
+hot,accepted,47ac2f5c-5e82-4ea4-8efd-bb2345a50570,Rishi Ayurveda Hospital,yes,VF address Ernakulam South Kochi matches the OSM point; VF city field Erattupetta is wrong
+hot,accepted,d32b615a-4bce-4cd3-9616-1c7581f879df,"Meenakshi Hospital, Ghaziabad",yes,same name and place
+hot,accepted,df1f03c7-c970-40e7-9a35-4f294f5a3aaf,ESI Hospital,no,VF ESI Anantapur (description Pedda Waltair); OSM ESI Hospital Tirupati matched only through a copied geocode
+hot,accepted,7183b0fb-482f-425c-8d0d-bc7859922728,Sevasadan Lifeline Superspeciality Hospital,yes,same name and place
+hot,accepted,a2d0d233-1d13-4236-9882-b682edd1f382,Samadhan Nursing Home,yes,same name and place
+hot,accepted,b9a61290-fbd4-4451-9e20-97bf2629acb2,Smile Centre India,yes,same name and place
+hot,accepted,b462fd83-817e-4852-82b6-addc68ebd086,Orchid Dental Clinic,likely,"same name and town, 2 km"
+hot,accepted,f14cec09-86d6-4264-a26a-0e74b6a524a1,"Amrita Hospital, Kochi",yes,same name and place
+hot,accepted,9b663dda-60a4-4413-a721-cf6e29786b34,Saksham Hospital,yes,same name and place
+hot,accepted,122e5b2a-fd79-461f-bf22-b82016f9340c,"Sarvodaya Hospital, Faridabad",yes,same name and place
+hot,accepted,37a8c54b-1bf5-4a9e-bec6-10098736ab78,Killol Children Hospital,likely,"same name, Morbi both sides; VF PIN conflict"
+hot,accepted,29285bf8-a876-48b3-936f-d1b48b82f949,seva sadan,likely,"Nagarmal Modi Seva Sadan vs OSM seva sadan, 32 m"
+hot,accepted,0b76e711-fcd9-421c-b088-b4e99ccdcb71,Shree Parshvanath Jain Hospital and Research Centre,yes,same name and place
+hot,accepted,4a235f61-c369-4ff8-823d-732585cb9cc1,"Arokya Hospital, Pallapatty",likely,"Arokya Hospital Salem, 1.3 km"
+hot,accepted,51d9cc1b-7639-46d2-87f4-65cc038d2673,ESI Hospital,uncertain,"generic ESI Hospital; VF city Asansol, PIN and coordinates Hooghly"
+hot,accepted,fa6249ad-63f4-43be-ba98-be8c63a65b1e,KINS Hospital,yes,same name and place
+hot,accepted,66fa0a84-292b-4950-b149-28c16e0f6120,Ashirvad Orthopaedic Hospital,yes,same name and place
+hot,accepted,718b6bf3-6050-48ee-825d-047fdf59603d,National Institute of TB and Respiratory Diseases,yes,same name and place
+hot,rejected,a2424d67-963b-4570-8c5c-08761c417153,"Kvg Hospial,Sullia",same,"KVG Medical College and Hospital Sullia vs OSM Kvg Hospial Sullia (typo), 113 m: missed"
+hot,rejected,c7b3b7d6-81f5-4c5d-b903-4c0e4ba686db,Super Speciality Hospital,different,different or generic name
+hot,rejected,b17cc40e-842c-483e-adce-0346fca2ae33,Eye Hospital,different,different or generic name
+hot,rejected,ad8b9665-4fc1-4834-bead-7564291877b5,Eye Hospital,different,different or generic name
+hot,rejected,a7e47d7f-611e-4b61-a88d-89afbf13ed04,Dental clinic,different,different or generic name
+hot,rejected,97523b49-a7a6-4233-b08c-9ef082e29c1a,Dr. Sculpt Aesthetic Clinic,different,different or generic name
+hot,rejected,b96b3ac5-f4a0-4f4f-acc2-296ffefe9d93,Tarakeswar Rural Hospital,different,different or generic name
+hot,rejected,1d114e7f-407a-4d9a-b0a1-d88a44815c5d,JP Hospital,different,VF JP Hospital is on the Zirakpur VIP Road; OSM JP Hospital is in Balachaur
+hot,rejected,8f5b7f15-e5df-4e16-8064-59fb1227f5d0,Mangal's Nursing Home -Bangalore,different,different or generic name
+hot,rejected,1a0be478-d798-499b-bf1a-d055c15387ff,Dr. Shah Homoeopathic Clinic,different,different or generic name
+nabh,accepted,d943ddb0-1cb3-4361-af96-9207da9cb6d1,Rabindranath Tagore International Institute of Cardiac Sciences (Unit of Narayana Hrudayalaya Ltd.),yes,"same name, PIN and address"
+nabh,accepted,5df215f5-81cb-4525-826b-ddbe9ff54eee,Camry Hospitals Private Limited,yes,"same name, PIN and address"
+nabh,accepted,6d98f93e-2e8a-4c9d-9b78-b3a194b032f9,Rohtak Cancer Care Hospital and Research Centre (Earlier Certificate issued in the Name of Rohtak Cancer Care Hospital),uncertain,Positron Hospital Suncity Sector 35 vs Rohtak Cancer Care Hospital Delhi Road; different addresses
+nabh,accepted,6fe9aaff-cd7c-4c5e-8dda-6967db51097c,Maiya Multispeciality Hospital LLP,yes,"same name, PIN and address"
+nabh,accepted,bac8c391-0f05-4370-819c-9b8d15570ef2,Shri Bhavani Multispecialty Hospital & Research Institute,yes,"same name, PIN and address"
+nabh,accepted,63d71e61-ea95-4751-a6a2-9aadc9d4799b,Supreme Speciality Hospitals,yes,"same name, PIN and address"
+nabh,accepted,1c5736bd-1224-4d0b-86ae-291c5079e92b,Sangha Eye Hospital,yes,"same name, PIN and address"
+nabh,accepted,4c499380-294d-49e4-a947-cf82b335a4e6,Sathya Kidney Centre & Super Speciality Hospitals,yes,"same name, PIN and address"
+nabh,accepted,b2c62ca5-0cb0-4b1f-b3c9-fc08af06b0c5,Dr. Agarwals Health Care Ltd.,likely,"Dr Agarwals Cuttack branch, same PIN"
+nabh,accepted,fa93aa0d-a544-4657-b40e-35c5972d204c,Holy Basil Mediclinic,likely,"Holy Basil Hospital vs Holy Basil Mediclinic Kharar, 40 m"
+nabh,accepted,99dcfec0-73c3-4159-a7a6-b9f9aef2a99b,Bhagwan Mahavir Medica Super Speciality Hospital,yes,"same name, PIN and address"
+nabh,accepted,5da0ead4-0183-4d40-99d6-5ba91a6d5006,Scudder Memorial Hospital,yes,"same name, PIN and address"
+nabh,accepted,51242946-deb5-463e-9e78-e7fbb291d087,American Oncology Institute,yes,"same name, PIN and address"
+nabh,accepted,6138c044-6fdd-42e1-a1c9-a95e3c691a95,Sir Ivan Stedeford Hospital,yes,"same name, PIN and address"
+nabh,accepted,404af51a-ac38-4d7c-b405-2f0361f0f3c4,Vivekanand Hospital,yes,"VF address Mehdawal Road Baghauli is Khalilabad, as NABH says; VF city Agra and PIN Moradabad are wrong"
+nabh,accepted,44f168e0-b71e-409e-8264-25f5e9d508df,Manipal Hospitals,yes,"same name, PIN and address"
+nabh,accepted,67e9fca2-c996-4e7a-9af3-8a139a05479a,"R Yadav Surgical and Rekha Eye Hospital, Opp. Govt. Girls School, Circular Road",yes,"same name, PIN and address"
+nabh,accepted,8ff52f1a-da58-4e2f-b339-b02f1fe92e07,Russh Super Speciality Hospital,yes,"same name, PIN and address"
+nabh,accepted,6873b168-2b1f-4585-b3d4-1dc6be4bf537,Poly Eye Hospital,likely,"same name and PIN, NABH geocode 6 km off"
+nabh,accepted,7ad4a537-79c5-4ad0-9b53-bc4ebe0365bf,R K Hospital,no,VF R K Hospital Farrukhabad (Awas Vikas) vs NABH R K Hospital Tajganj Agra; matched through VF coordinates that sit in Agra
+trauma,accepted,463597f9-4ceb-4e49-a7c6-2b6265b99ab7,"District Hospital, Churachandpur",yes,same institution
+trauma,accepted,14e13612-bac5-4e8f-82d4-167385402203,Chengalpattu Govt. Medical College & Hospital,likely,college attached hospital
+trauma,accepted,2b4c984c-2c3b-4667-9d90-b3a9c5b74053,"Civil Hospital, Bogaigaon",no,"VF Civil Hospital merges Tezpur (Mahabhairab), Bongaigaon and Dhemaji; README already marks it wrong"
+trauma,accepted,92dd37f1-293c-4b0b-bcb3-91cf8aa3e951,"SCB Medical College, Cuttack",yes,same institution
+trauma,accepted,e0fcd8ad-b818-4cef-975d-afdfd2e6d413,"Government Medical College & Hospital, Thiruvananthapuram",yes,same institution
+trauma,accepted,b69b988a-1179-44df-8349-e0d632ebfb83,"Darbhanga Medical College Hospital, Dharbhanga",yes,same institution
+trauma,accepted,2280b7ec-694c-4886-b58f-2c524818d2bf,"Regional Institute of Medical Sciences, Imphal",yes,same institution
+trauma,accepted,611ce272-c782-4276-9e90-848e5ab6e9e8,Agartala Govt. Medical College,yes,same institution
+trauma,accepted,bbf46f87-47c0-4be1-a0ea-808e6f889df5,"General Hospital, Ernakulam",yes,same institution
+trauma,accepted,81b069d5-fd79-49e8-a520-2731f8c77504,"GMCH, Kanyakumari",yes,same institution
+trauma,accepted,88e98821-511f-4a17-84dd-c8207b9fb108,"MKCG Medical College, Behrampur",yes,same institution
+trauma,accepted,3e53d5f8-9956-4d3e-b18b-c6140c903cbe,"North Bengal Medical College & Hospital, Siliguri",yes,same institution
+trauma,accepted,50ce83e9-a967-4274-90b7-c3cd4d56fd17,District Hospital Champhai,yes,same institution
+trauma,accepted,d4225cd0-ff43-48a3-9d6c-eedef66ffa82,Murshidabad Medical College,yes,same institution
+trauma,accepted,ff9a75d2-54fb-4673-be01-e3e7f8af08c5,"District Hospital, Satara",yes,same institution
+trauma,accepted,17615adf-fb9e-4fc2-b7a2-7fc24f008ebf,"GMCH, Tirunelveli",yes,same institution
+trauma,accepted,a9b56d47-b5d7-43d4-9d16-7dcb73775bc1,"Medical College & Hospital, Silchar",yes,same institution
+trauma,accepted,dda3e7e4-0be7-4aff-be1a-0b7125edade9,"Govt. Medical College, Goa",yes,same institution
+trauma,accepted,146e1e13-adeb-4c28-9145-29e5b8c9e931,"Burdwan Medical College & Hospital, Burdwan",yes,same institution
+trauma,accepted,e668390c-1439-4108-8586-bc822bea3147,"Govt. General Hospital & Medical College, Kurnool",yes,same institution
+trauma,rejected,7be2e66e-2784-4768-9da6-70eb861256d9,"District Hospital, Belgaum",different,best VF candidate is a different facility
+trauma,rejected,f2af3ec4-f9cc-443a-89d9-3c194d8fa7e6,"BR Ambedkar Memorial Hospital, Raipur",different,best VF candidate is a different facility
+trauma,rejected,66c6a664-c965-4f87-b6d5-a13e60972328,"District Hospital , Rajahmundry, East Godavari",different,best VF candidate is a different facility
+trauma,rejected,05746699-9803-437b-a9c6-043ad0a1e514,"Government Hospital, Baran",different,best VF candidate is a different facility
+trauma,rejected,6e1ec8d6-b1a6-495a-bcca-00c67014d3b4,"General Hospital, Valsad",different,best VF candidate is a different facility
+trauma,rejected,a8366948-ee37-4b9c-8b54-cda0cad4a3b1,"District Hospital, Jalandhar",different,best VF candidate is a different facility
+trauma,rejected,aee4f51b-2464-483e-90f0-a9417f4b296c,District Hospital Palakkad,different,best VF candidate is a different facility
+trauma,rejected,7795f9f8-b472-4979-9ec0-58077b0662ed,"Govt. Medical College Hospital, Kozhikode",different,best VF candidate is a different facility
+trauma,rejected,417fdbac-7c4e-4bd2-a324-16d1683438b0,"Govt. Rajaji Hospital Medical College, Madurai",different,best VF candidate is a different facility
+trauma,rejected,58cef0c9-c1b3-4997-aabd-60d90fc94550,"New Medical College Hospital, Kota",different,best VF candidate is a different facility
+eraktkosh,accepted,0c5a8e83-7fb3-4dbc-bb60-b8a6bf5cf7cb,"Blood Center,Aiims,Kalyani",yes,hospital blood centre of the same hospital
+eraktkosh,accepted,3678db60-d22b-4a38-9148-aa66aba6d060,"Verma Union Hospital, Blood Centre, Indore",uncertain,Verma Union Hospital vs VF Verma Hospital Pardeshipura (PIN 474009 is Gwalior)
+eraktkosh,accepted,ce78597f-1dd1-46c3-b636-caa302b59f0b,Holy Spirit Hospital Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,206f00b3-3470-4cbd-a054-23425e7b50b5,Sree Uthradom Thirunal Hospital,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,e407b1a1-cb0d-4c7b-b883-47c50e72b31a,Patel Hospital Pvt. Ltd. Blood Centre Jalandhar,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,5284bfac-1e73-45f2-bb21-0c14578803df,"Central Blood Bank , Institute of Preventive Medicine",yes,hospital blood centre of the same hospital
+eraktkosh,accepted,54650c18-9cd5-4714-80ca-f67c6f173e4d,Oxford Hospital Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,314219b2-80a4-486b-b19e-b205d4eb9e22,Jubilee Memorial Hospital Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,f4b8714b-f61c-4445-8064-1df53506d713,Guru Nanak Mission Hospital,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,b9b3816e-2a7c-4419-9efd-3996138edd0f,Vydehi Institute of Medical Science Research Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,c57fbffb-29af-4533-9ea3-6a3fb73715cb,Sum Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,8730b604-9d6b-4f10-94a4-366f72e6843f,Amandeep Medicity Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,e2ea28ba-5ae2-4d6e-9173-92140c92401e,Nehru Memorial Techno Global Hospital Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,082c1e59-7d97-4dec-ba8b-0c3d4ce4bb43,Holy Cross Hospital,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,ff94cd5d-23f5-4f69-bac5-d5521a74400b,Satyam Hospital Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,f394b533-d102-4576-9436-699784681973,North Western Railway Hospital,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,c826aa92-5af9-4291-bc48-a327e1d152b1,Sri Satya Sai Institute Of Higher Medical Sciences Blood Centre,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,5ede313a-b50d-4a60-b896-0bbfe4a4c930,M/S. Cims Hospital Pvt.Ltd.,yes,hospital blood centre of the same hospital
+eraktkosh,accepted,541e2f77-a9ce-41e2-ae7a-908d5a0272b3,"BSU Bethany Hospital, Shillong",yes,hospital blood centre of the same hospital
+eraktkosh,accepted,00e877a0-930f-49f2-8cd9-f2c55c11c9cb,"Greater Kailash Hospitals Pvt Ltd., Indore",yes,hospital blood centre of the same hospital
+eraktkosh,rejected,a9077716-04f1-44c5-9ad7-801c68d74978,Medical College Hospital Gandhi Nagar Kottayam,same,"Medical College Hospital Gandhi Nagar Kottayam, 250 m: missed"
+eraktkosh,rejected,481aafee-f67e-441c-80c0-995902a6ff98,Pt.Jlnmc And Hospital Blood Centre Chamba District Chamba,same,"Pt JLN Medical College Chamba blood centre = Government Medical College Chamba, 450 m: missed"
+eraktkosh,rejected,4b0a57d1-7379-401d-b969-d491ade40c77,Blood Centre M/S Jodhpur Blood Centre,different,different facility
+eraktkosh,rejected,34aea2cc-26a4-4edb-a623-80e372ae0ae7,MGM Healthcare Private Limited Blood Centre Adyar,different,MGM Healthcare Adyar site vs Aminjikarai / Anna Nagar site
+eraktkosh,rejected,852860e5-54cc-4a0a-8dd7-b61217334fdc,Sunrise Blood Centre,uncertain,Sunrise Blood Centre in Sunrise Multispeciality Hospital vs Sunrise IVF at the same point
+eraktkosh,rejected,8c5b8737-c7d8-46aa-81ec-fc94475f9363,"Blood Centre, Apollo Hospitals Guwahati",different,different facility
+eraktkosh,rejected,79abc4f1-1f13-40d0-89a3-738fe020089e,Chandrakona Rh Bsu,same,"Chandrakona RH BSU = Chandrakona Rural Hospital, 1 m: missed"
+eraktkosh,rejected,7ae37791-7094-498f-a9bd-66fe1d3e8066,Vyas Blood Centre Super Speciality Hospital,same,Vyas Blood Centre at Vyas Medicity = Vyas Medicity hospital: missed
+eraktkosh,rejected,05506c2e-4f1d-49aa-8350-84b385c199b1,"Aurobindo Blood Centre Saims Hospital, Indore",different,different facility
+eraktkosh,rejected,0dbaf5db-1cb6-4ba5-97e7-dd50de449a43,Military Hospital Jaipur Blood Centre,different,VF record is Shalby Hospital Jaipur; list entry is Military Hospital
+laqshya,accepted,73aa5a82-8247-4f4d-83d6-f0b512c279d4,Sub Divisional Hospital Benipur Darbhanga,yes,same public facility and district
+laqshya,accepted,417fdbac-7c4e-4bd2-a324-16d1683438b0,Theni Medical College & hospital,yes,same public facility and district
+laqshya,accepted,03a3d9b9-aad9-4e81-8ffd-da893417c758,SDH Athani,yes,same public facility and district
+laqshya,accepted,50ce83e9-a967-4274-90b7-c3cd4d56fd17,Champhai District Hospital,yes,same public facility and district
+laqshya,accepted,bbf46f87-47c0-4be1-a0ea-808e6f889df5,General Hospital Ernakulum,yes,same public facility and district
+laqshya,accepted,b4acba2b-8fe3-4eb7-a8a9-6571f6615327,SSG Hospital,yes,same public facility and district
+laqshya,accepted,ff9a75d2-54fb-4673-be01-e3e7f8af08c5,DH Satara,yes,same public facility and district
+laqshya,accepted,6c1f7f5b-4f5f-410e-a748-a1ca0a500625,DH Bellary,yes,same public facility and district
+laqshya,accepted,864e6f25-4a7c-40a7-bc20-62b1d619e957,Sivagangai Medical College & Hospital,yes,same public facility and district
+laqshya,accepted,463597f9-4ceb-4e49-a7c6-2b6265b99ab7,DH Churachandpur,yes,same public facility and district
+laqshya,accepted,c8aa3363-35eb-4c70-ae7a-0a86307f49c2,SDH Durgapur,yes,same public facility and district
+laqshya,accepted,3603f591-274c-4f01-a807-5ae2d71c7fe4,Diamond Harbour Government Medical College,yes,same public facility and district
+laqshya,accepted,6cd599ab-b8bd-4104-b01f-be37bff75feb,DISTRICT COMBINED HOSPITAL HAPUR,yes,same public facility and district
+laqshya,accepted,03a3d9b9-aad9-4e81-8ffd-da893417c758,Taluk Hospital Athani,yes,same public facility and district
+laqshya,accepted,81b069d5-fd79-49e8-a520-2731f8c77504,Govt Kanyakumari Medical College & Hospital,yes,same public facility and district
+laqshya,accepted,b0895453-2f59-447a-aecc-343da3294e5b,DH Ujjain,yes,same public facility and district
+laqshya,accepted,a1175a29-0c8e-494d-95c7-80beb235afc3,Niloufer Hospital,yes,same public facility and district
+laqshya,accepted,1f84bdca-6d7d-4064-bea1-8f487fbf67a4,Rajendra Institute of Medical Sciences,yes,same public facility and district
+laqshya,accepted,dda3e7e4-0be7-4aff-be1a-0b7125edade9,Goa Medical College Hospital,yes,same public facility and district
+laqshya,accepted,864e6f25-4a7c-40a7-bc20-62b1d619e957,Sivagangai Medical College & Hospital,yes,same public facility and district
+laqshya,rejected,61c0dd8a-2353-48f5-b1b2-50d87bbf2d20,IPGMER & SSKM Hospital Kolkata,different,different facility; only the district word is shared
+laqshya,rejected,4d1bc806-9acf-4b77-aff6-e9af252c9d15,DH Mavelikkara Alappuzha,different,different facility; only the district word is shared
+laqshya,rejected,b94c3b56-febe-41cc-9219-3ba755fe2d4c,Ramgarh Sadar Hospital Ramgarh,different,different facility; only the district word is shared
+laqshya,rejected,0a1d1cd7-95ec-4320-b669-3acfb4bf3901,Civil Hospital-22 Chandigarh,different,different facility; only the district word is shared
+laqshya,rejected,7fa87636-fa2a-47fe-8240-c676b11d0599,Manihari SDH Katihar,different,different facility; only the district word is shared
+laqshya,rejected,17615adf-fb9e-4fc2-b7a2-7fc24f008ebf,NANGUNERI Tirunelveli,different,different facility; only the district word is shared
+laqshya,rejected,73817413-78e2-4663-940b-c328f3594923,DH Ahmednagar Ahmednagar,different,different facility; only the district word is shared
+laqshya,rejected,5c3a7919-203f-4455-a4cb-d9b64c7cdfea,Bankura Sammilani Medical College & Hospital Bankura,different,different facility; only the district word is shared
+laqshya,rejected,1eb6ddc6-aec1-4e37-8e0b-52eee2fb983e,Ram Sagar Misra Hospital Lucknow,different,different facility; only the district word is shared
+laqshya,rejected,91b1e99f-195c-4826-9c25-a2b48b5a9f33,KIMS Hubli Dharwad,different,different facility; only the district word is shared
+nmc,accepted,0f99a172-6e05-4ae3-9ed9-98675dc5603b,SKS Hospital Medical College & Research Centre,yes,same college
+nmc,accepted,4616c935-ae1b-4d40-ae5a-3d6c31a90206,"Government Medical College, Chandrapur",yes,same college
+nmc,accepted,3f0d836c-9e5b-4e24-add9-c217bcf684df,"Dr. Panjabrao Alias Bhausaheb Deshmukh Memorial Medical College, Amravati",yes,same college
+nmc,accepted,3ad12409-c708-4acf-badd-4e25d6f2f1d5,"R.V.M. Institute of Medical Sciences and Research Centre, Siddipet",yes,unique name; VF city Hyderabad is the nearest city
+nmc,accepted,047c54d5-0ecb-4353-9e5c-e39c6bbf59ea,"Netaji Subhas Medical College & Hospital, Amhara, Bihta, Patna",yes,same college
+nmc,accepted,eac16a4a-5a75-4524-9abe-98e8397128d3,"Raiganj Government Medical College & Hospital, Raiganj",yes,same college
+nmc,accepted,bedbd19c-9b59-4c7e-b0b9-cbeb9e1276db,"Shri B M Patil Medical College, Hospital & Research Centre, Vijayapura (Bijapur",yes,same college
+nmc,accepted,a96c189f-783b-4d8c-95cf-abbc2e5cc8a6,"Sher-I-Kashmir Instt. Of Medical Sciences, Srinagar",yes,same college
+nmc,accepted,a9b56d47-b5d7-43d4-9d16-7dcb73775bc1,"Silchar Medical College, Silchar",yes,same college
+nmc,accepted,b21455f1-ba4a-4d99-a632-96c72d097bf6,"Hi-Tech Medical College & Hospital, Bhubaneswar",likely,"name says Bhubaneswar; VF PIN 769004 is Rourkela, where a second Hi-Tech college exists"
+nmc,accepted,7330d09f-44c7-4c9b-ad66-df64173537aa,"Mahatma Gandhi Medical College & Research Institute, Pondicherry",yes,same college
+nmc,accepted,83e6bce6-4fea-4d64-b059-cf4a052ba00d,"Rohilkhand Medical College & Hospital, Bareilly",yes,same college
+nmc,accepted,4355ff16-208f-4240-9198-f8c51ee58d34,"K S Hegde Medical Academy, Mangalore",yes,same college
+nmc,accepted,363f396b-0357-47e0-a9aa-a831bdd74531,Shree Narayan Medical Institute and Hospital,yes,same college
+nmc,accepted,d2726883-b75f-4292-93ad-7b88fc74e311,"Indira Gandhi Institute of Medical Sciences, Sheikhpura, Patna",yes,same college
+nmc,accepted,dda3e7e4-0be7-4aff-be1a-0b7125edade9,"Goa Medical College, Panaji",yes,same college
+nmc,accepted,2cbfa0f8-9049-4161-a8b4-9b4a9f9fb2ea,"Sri Manakula Vinayagar Medical College & Hospital, Pondicherry",yes,same college
+nmc,accepted,d1fe6343-2b77-455e-bbe6-20a2a163d573,Jalpaiguri Government Medical College,yes,same college
+nmc,accepted,b5a57699-76c4-4ba4-9936-713c233e752a,"King George Medical University, Lucknow",yes,same college
+nmc,accepted,e0fcd8ad-b818-4cef-975d-afdfd2e6d413,"Medical College, Thiruvananthapuram",yes,same college
+nmc,rejected,00425067-c535-46f4-a7fa-9625cceef1f2,"Government Medical College, Surat",different,different institution
+nmc,rejected,10f3907d-3484-43fd-9171-906d0ba9bebf,"Sukh Sagar Medical College & Hospital, Jabalpur",same,Sukh Sagar Hospital Mukunwara Chargawan is the Sukh Sagar Medical College campus: missed
+nmc,rejected,da010ed6-f0b3-4490-a2e0-d885701e2229,"Chirayu Medical College and Hospital, Bairagarh, Bhopal",different,different institution
+nmc,rejected,6508ae47-60a9-442e-ab88-c063d1b3e49a,Prince Medical College & Hospital,different,different institution
+nmc,rejected,0548e4f4-cfd5-4822-ac49-10ec1ee8eb25,"Government Medical College, Washim",different,different institution
+nmc,rejected,657e1afd-f8f0-4b4d-b298-79f140a1d248,"K.D. Medical College Hospital & Research Centre, Mathura",different,different institution
+nmc,rejected,eac16a4a-5a75-4524-9abe-98e8397128d3,RANIGANJ INSTITUTE OF MEDICAL SCIENCE,different,different institution
+nmc,rejected,b65f8c7c-48e8-431f-854e-64f64656d67a,"Prasad Medical College & Hospital, Unnao",different,different institution
+nmc,rejected,6f404bd4-565c-4d00-9489-f0b007cf766f,Kiran Medical College,uncertain,"Kiran Medical College (Olpad) vs Kiran Hospital Surat: same trust, different site"
+nmc,rejected,2723785d-90a3-4239-8843-abdd36e60c80,"NRI Institute of Medical Sciences, Visakhapatnam",different,different institution
+nabh,rejected,94acaff7-7eb6-4fbd-9067-fcdbb0223ec3,KRISHNA HOSPITAL,uncertain,"Krishna IVF Clinic sits inside Krishna Hospital, same address"
+nabh,rejected,b7161769-235e-493d-92fc-b56aa3a0d271,"Aastha Multispeciality Hospital, National Highway 3",same,"Aastha Multispeciality Hospital, same point; VF already matched to another NABH row (2017-1113)"
+nabh,rejected,2f1c2343-fc8e-411e-ad21-a098ecc12858,Ansh IVF and Womens Hospital,different,different facility
+nabh,rejected,3c720c51-d653-4dd0-acfb-1a566976f31e,Shah Hospital,different,different facility
+nabh,rejected,7346f35c-499c-42c6-b2eb-9e82cbe31b3a,Vijay Marie Hospital and Edu. Society,same,Vijay Marie Hospital Khairatabad; VF point 6 km off; VF has no NABH match: missed
+nabh,rejected,2e5f00b6-d707-4743-b9a7-c94e4e6d0202,Yenepoya Ethics Committee - 1,different,"NABH row is an ethics committee, not a facility"
+nabh,rejected,b86d8aa2-09a8-476c-9765-3ddc3ecebade,"Ayushman Hospital & Health Services, Elephanta Lame, Sector- 10, Dwarka",same,Ayushman Hospital Dwarka Sector 10; VF matched only to the imaging-centre row
+nabh,rejected,8080e7b2-b85d-463a-8e8f-ad6b7412a12e,Chhatarpur Hospital and Research Center,different,different facility
+nabh,rejected,d8a5b63a-baf5-42af-8d43-0b35e5fd8cc0,"Apollo Hospitals, Seshadripuram",different,different facility
+nabh,rejected,e6a597e7-7a41-47c0-ac0b-877daf3e7fce,"Vinayak Dental Clinic, B-10, Tajpur Road, Badarpur Border",different,different facility

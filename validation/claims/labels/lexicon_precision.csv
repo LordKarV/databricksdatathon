@@ -1,0 +1,41 @@
+claim_id,service,verdict,note
+4727d4e8:proc:1,chemotherapy,correct,
+39fac026:proc:21,cath_lab_angioplasty,correct,
+4133ceda:equi:3,radiotherapy,correct,
+21f7fd27:proc:8,institutional_delivery,correct,
+7b8d93cc:capa:46,neurosurgery,correct,tag right; sentence is other_facility
+883225d1:capa:4,dialysis,correct,
+b3b4b4dc:proc:43,dialysis,correct,
+dde2a395:capa:16,ultrasound,correct,
+b9bc3e88:desc:0,mri,correct,
+57f31693:proc:11,ct_scan,correct,
+ccf397a7:capa:6,emergency_24x7,correct,
+8e2224ab:proc:24,cataract_surgery,correct,correct service; staff-style sentence tagged specific
+b8b85168:equi:2,mri,correct,
+52bb8240:proc:13,ultrasound,correct,
+11c896a3:proc:2,cataract_surgery,correct,
+6af06390:proc:6,mri,correct,
+712fef10:capa:6,emergency_24x7,correct,
+e1959fe3:capa:12,psychiatric_care,correct,
+4b97cd57:proc:7,palliative_care,correct,
+00361ecc:capa:17,icu,correct,
+66bf8448:capa:21,ultrasound,correct,
+b56b1f0d:equi:14,mri,correct,
+14166899:capa:18,icu,wrong,"a critical care team at an Ayurveda college hospital, no unit named"
+780e8b7b:proc:11,cataract_surgery,correct,
+6f87ded9:equi:7,ultrasound,correct,
+0d715cf7:capa:6,ct_scan,wrong,"""CT Hospital"" is a hospital name in a staff panel list"
+ce701b25:proc:11,ultrasound,wrong,"dental 3D (CBCT) scan, not ultrasound"
+a45f41f7:proc:21,anti_rabies,correct,animal bite treatment read as anti-rabies
+4d6863dc:equi:0,icu,correct,
+2b62a07d:capa:30,psychiatric_care,correct,
+5aaac470:equi:3,ultrasound,correct,
+408a3128:capa:39,cath_lab_angioplasty,correct,
+8f965242:proc:9,neurosurgery,correct,
+43314551:capa:15,tb_care,correct,
+5f6eb7d7:proc:19,mri,correct,
+13b5c176:capa:9,surgical_oncology,correct,
+88d5226a:desc:0,ultrasound,correct,
+6fbda6ad:capa:10,palliative_care,correct,
+32c2b016:capa:7,emergency_24x7,correct,
+b0e2b9d2:capa:43,emergency_24x7,correct,department list keeps Emergency Medicine by design
