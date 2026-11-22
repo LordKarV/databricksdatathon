@@ -223,7 +223,7 @@ def test_jabalpur_nicu_family_line_follows_model_band():
 
 
 def test_pusa_why_not_miracare_leads_with_likely_but_farther():
-    p = _post("trauma_emergency", 25.6, 85.95)
+    p = ENGINE.plan("trauma_emergency", 25.6, 85.95, 40, "gps")  # the engine's order: the route now leads with Miracare
     assert p["options"][0]["band"] != "likely"
     w = next(x for x in p["why_not"] if x["name"] == "Miracare Hospital")
     n = w["minutes_vs_first"]
@@ -282,9 +282,10 @@ def test_route_changes_the_options_only_by_leading_with_its_first_stop():
     assert ids[1:1 + len(rest)] == rest  # the others keep their order
 
 
-# #126: a route stop beyond the window and farther than card 1 never displaces it; the route becomes the fallback
-FAR_ROUTES = {"banda_trauma": ("trauma_emergency", 25.48, 80.33, "Ask: do you take accident patients now?"),
-              "banda_csection": ("emergency_csection", 25.48, 80.33, "Ask: can you do an emergency C-section now?")}
+# #126: a route stop beyond the window and farther than card 1 never displaces it; the route becomes the fallback.
+# North-east of Banda: at Banda itself the only route went to a facility whose map point is in doubt, so none is left.
+FAR_ROUTES = {"banda_ne_trauma": ("trauma_emergency", 25.8, 80.6, "Ask: do you take accident patients now?"),
+              "banda_ne_csection": ("emergency_csection", 25.8, 80.6, "Ask: can you do an emergency C-section now?")}
 
 
 @needs_planner
@@ -328,12 +329,12 @@ def test_emergency_card_1_is_the_route_first_stop_with_its_reason(name):
 
 @needs_planner
 def test_route_that_already_agrees_and_planned_care_are_unchanged():
-    for s, la, lo in (("trauma_emergency", 25.6, 85.95), ("dialysis", 24.79, 85.0)):  # Pusa trauma; Gaya dialysis
+    for s, la, lo in (("trauma_emergency", 24.79, 85.0), ("dialysis", 24.79, 85.0)):  # Gaya trauma; Gaya dialysis
         plain = ENGINE.plan(s, la, lo, 40, "gps")["options"]
         p = _post(s, la, lo)
         assert [o["facility_id"] for o in p["options"]] == [o["facility_id"] for o in plain]
         assert not any(o.get("route_reason") for o in p["options"])
-    p = _post("trauma_emergency", 25.6, 85.95)
+    p = _post("trauma_emergency", 24.79, 85.0)
     assert p["options"][0]["facility_id"] == p["itinerary"]["plans"][0]["stops"][0]["facility_id"]
 
 
@@ -577,7 +578,7 @@ def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
 def test_location_doubt_widens_travel_to_the_pin_centre():
     from facts.engine import LOC_DOUBT
 
-    o = _post("trauma_emergency", 25.6, 85.95)["options"][0]  # Pusa
+    o = next(x for x in _post("trauma_emergency", 25.6, 85.95)["options"] if x["name"] == "Sub Divisional Hospital Pusa")
     t = o["travel"]
     assert o["location_doubt"] is True and t["high"] >= 41
     assert set(t["alt"]) == {"minutes", "low", "high", "from"} and t["alt"]["from"] == "pin_centre"

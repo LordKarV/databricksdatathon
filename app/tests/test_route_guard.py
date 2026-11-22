@@ -45,6 +45,15 @@ def test_gaya_csection_shows_no_spine_quote_as_obstetric_evidence():
         assert s1["note"] == "No line in its listing names basic emergency obstetric care; ask on the phone."
 
 
+def test_gaya_csection_route_has_no_stop_with_location_doubt():
+    # Typed "Gaya town": the route went on to SDH Pusa, whose map point is 39 km from Pusa (#147 LOC_COORDS_FAR).
+    p = itinerary.attach(ENGINE.plan("emergency_csection", 24.79, 84.99, None, "place"), ENGINE)
+    assert p["itinerary"]["plans"]
+    for r in p["itinerary"]["plans"]:
+        for s in r["stops"]:
+            assert not ENGINE._doubt(ENGINE.fid[s["facility_id"]]), (r["rank"], s["name"])
+
+
 def test_gaya_trauma_hero_keeps_its_one_stop_route():
     p = post("trauma_emergency", 24.79, 85.0)
     r, o = route(p), p["options"][0]
@@ -63,13 +72,13 @@ def test_runner_up_miracare_keeps_its_route():
 
 
 def test_sheohar_csection_stop_1_quotes_its_own_listing():
-    # Harsh Hospital lacks blood evidence, so the Pusa route stays (rule 1 reading above). Before #140 stop 1 showed
-    # no quote; the engine's caesarean quotes for it now stand in.
+    # Harsh Hospital (map point in doubt) and SDH Pusa are no route stops, so the route starts at Mishra Hospital
+    # and leads the cards (#121); its stop 1 quotes must still name obstetric care.
     p = post("emergency_csection", 26.51, 85.29)
     s1 = route(p)["stops"][0]
-    assert s1["name"] == "Harsh Hospital" == p["options"][0]["name"]
+    assert s1["name"] == "Mishra Hospital Test Tube Baby Centre" == p["options"][0]["name"]
     assert s1["evidence"] and all(itinerary.stage_pattern(("basic_emoc",)).search(e["quote"]) for e in s1["evidence"])
-    assert route(p)["vs_direct"]["direct_minutes"] == 114
+    assert route(p)["vs_direct"]["direct_minutes"] == 156
 
 
 def test_lucknow_burns_stop_1_off_the_list_has_a_note():

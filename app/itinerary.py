@@ -258,6 +258,8 @@ def stop_1_note(route: dict, first_option: dict | None, first_stop: dict | None 
     if s["facility_id"] == first_option["facility_id"]:
         return None
     y = first_option["name"]
+    if first_option.get("location_doubt"):  # left out of the planner's facilities (itinerary below)
+        return f"The route starts at {s['name']}: the map point of the best option {y} may be wrong, so the route does not use it."
     if first_stop and first_stop["facility_id"] == first_option["facility_id"]:
         if not first_stop["in_data"]:
             return f"The route starts at {s['name']}: the best option {y} is not in the route planner's data."
@@ -365,10 +367,16 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float, first_option: d
     svc = _planner()
     if svc is None or svc.pathway_for(service) is None:
         return None
-    try:
-        out = svc.plan_for_service(service, lat, lon, first_stop=(first_option or {}).get("facility_id"))
-    except RuntimeError:  # planner/out not built on this server
+    st = svc.store()
+    if st is None:  # planner/out not built on this server
         return None
+    # A facility whose map point is in doubt (#147: a doubtful loc_rule or town_far) is never a route stop: the
+    # route's minutes rest on that point. The planner re-plans around it rather than the route being dropped.
+    sure = [f for f in st.facilities() if not (f["id"] in eng.fid and eng._doubt(eng.fid[f["id"]]))]
+    fid1 = (first_option or {}).get("facility_id")
+    out = svc.plan_for_service(service, lat, lon, facilities=sure, first_stop=fid1)
+    if first_option and first_option.get("location_doubt"):  # card 1 is not in `sure`: rule 1 still needs its stages
+        out["first_stop"] = svc.plan_for_service(service, lat, lon, first_stop=fid1).get("first_stop")
     pw = svc.pathways()[out["pathway"]]
     meta = out.get("meta") or {}
     options, dropped = guard(out["options"], first_option, out.get("first_stop"))
