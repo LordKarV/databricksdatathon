@@ -299,9 +299,9 @@ One Databricks App: FastAPI serving server-rendered HTML with no client framewor
   | Dash (bare) | 1,502,548 | 49.86 | 3 |
   | Gradio (bare) | 1,015,442 | 34.79 | 3 |
 
-  An ASHA on 2G gets an answer in under a second. Chat and Genie were rejected because they need typing, cannot guarantee the citation layout, and put an LLM in the trust seat.
+  An ASHA on 2G gets an answer in under a second. Chat and Genie were rejected for the ASHA's screen because they need typing, cannot guarantee the citation layout, and put an LLM in the trust seat. Planners, who do type, got both later on the same tables: the Genie space in `databricks/genie/` and the AI/BI dashboard in `databricks/dashboard/` (section 5.5).
 - **Verified capability.** Warehouse, ai_query, strict JSON output and 8 chat endpoints were all probed and work. FastAPI ships pre-installed in the App runtime (documented). Not yet verified: App deploy, App reads from Unity Catalog, App calls to an endpoint, App writes. That makes a hello-world App the first hour of work.
-- **Flexibility.** One backend serves the phone page, the planner page and a JSON API. A WhatsApp bot, IVR or a better grader can plug in behind the same card contract. A new service is one lexicon row plus a prerequisite list. Genie or a dashboard can sit on the same tables later.
+- **Flexibility.** One backend serves the phone page, the planner page and a JSON API. A WhatsApp bot, IVR or a better grader can plug in behind the same card contract. A new service is one lexicon row plus a prerequisite list. A Genie space and a dashboard now sit on the same tables (section 5.5).
 - **Caveat.** The 2G numbers come from a local server. Through Databricks Apps every viewer must sign in to the workspace, so an ASHA cannot use the hosted demo today. We present 2G as "built for public hosting" and measure the deployed URL once on Friday.
 
 ### 4.3 User workflow
@@ -418,9 +418,12 @@ FastAPI in 1 of the 3 allowed Apps. It reads the tables once at start-up through
 - **LLM use 2, offline, gated, not run:** ai_query attribution on the 242 ambiguous or other-facility service sentences. A row survives only if its claim_id exists and its quote is an exact substring after whitespace folding. It may only lower a grade, and is labelled "model-assessed". Enable it only if it beats the rules on the 40 labelled sentences.
 - **Not used:** Vector Search or RAG (the problem is attribution, not retrieval), GPU, Lakebase (only as a stretch for the ledger), Agent Bricks, live routing (outbound internet is restricted).
 
-### 5.5 Genie space or dashboard
+### 5.5 Genie space and dashboard
 
-Stretch only, after the App is stable: a Genie space over facility, grades, card and nfhs_context for planners' ad hoc questions. It is cut first.
+Planned as a stretch and built once the App was stable, both for district planners and both over `workspace.referral_saathi`:
+
+- Genie space "Referral Saathi planner": `databricks/genie/space.py` holds the tables, instructions, example SQL and benchmark questions, and `databricks/genie/GENIE.md` has the benchmark accuracy.
+- AI/BI dashboard "Referral Saathi: district planner": `databricks/dashboard/build_dashboard.py` builds it, and `databricks/dashboard/DASHBOARD.md` lists its pages and query tests.
 
 ---
 

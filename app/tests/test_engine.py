@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import random
+import re
 import sys
 import time
 from pathlib import Path
@@ -164,6 +165,54 @@ def test_nearer_first_but_a_confirmed_listing_in_reach_is_never_hidden():
                 assert p["abstain"] is not None
 
 
+# ---------- #140 2d: engine wording ----------
+def test_km_words_never_says_zero_km():
+    from facts.engine import km_words
+
+    assert [km_words(k) for k in (0.0, 0.4, 0.99, 1.0, 1.4, 187.9)] == [
+        "less than 1 km away", "less than 1 km away", "less than 1 km away", "about 1 km away", "about 1 km away",
+        "about 188 km away"]
+
+
+def test_gaya_hero_family_line_says_less_than_1_km():
+    o = _post("trauma_emergency", 24.79, 85.0)["options"][0]  # the D1 hero: Barkat, about 0.5 km
+    assert o["name"] == "Dr. A Barkat Multispeciality Hospital" and o["travel"]["km"] < 1
+    assert o["say_to_family"]["en"] == ("This hospital's listing says it offers accident and injury care. "
+                                        "It is less than 1 km away. We will phone before going.")
+    for p in plans().values():
+        for x in p["options"]:
+            assert not re.search(r"\b0 km|\d\.\d+ km|kilometres", x["say_to_family"]["en"]), x["say_to_family"]
+
+
+def test_jabalpur_nicu_family_line_follows_model_band():
+    from facts.engine import SAY, km_words
+
+    o = _post("nicu", 23.18, 79.95)["options"]
+    label = SERVICES["nicu"]["label_en"]
+    nst = next(x for x in o if x["model_band"] == "NO_SERVICE_TEXT")
+    assert nst["say_to_family"]["en"] == SAY["NO_SERVICE_TEXT"].format(label=label)
+    assert "says it offers" not in nst["say_to_family"]["en"] and "km" not in nst["say_to_family"]["en"]
+    lik = next(x for x in o if x["model_band"] == "LIKELY")
+    assert lik["say_to_family"]["en"] == SAY["likely"].format(label=label, dist=km_words(lik["travel"]["km"]))
+
+
+def test_pusa_why_not_miracare_leads_with_likely_but_farther():
+    p = _post("trauma_emergency", 25.6, 85.95)
+    assert p["options"][0]["band"] != "likely"
+    w = next(x for x in p["why_not"] if x["name"] == "Miracare Hospital")
+    n = w["minutes_vs_first"]
+    assert w["band"] == "likely" and n > 0 and w["reason_code"] == "farther" and w["basis"][0]["value"] == n
+    assert w["reason"].startswith(f"It is rated Likely, but it is {n} min farther. In an emergency we phone the "
+                                  "nearest plausible place first and go on if they say no.")
+    assert ";" not in w["reason"]
+
+
+def test_likely_but_farther_lead_is_emergency_only():
+    for s, la, lo in [("nicu", 23.18, 79.95), ("dialysis", 25.6, 85.1), ("mri", 25.6, 85.1)]:
+        assert SERVICES[s]["profile"] != "emergency"
+        assert not any(w["reason"].startswith("It is rated Likely") for w in _post(s, la, lo)["why_not"]), s
+
+
 # ---------- multi-stop route (#47) ----------
 ROUTED = itinerary.itinerary(ENGINE, "trauma_emergency", 25.15, 83.68) if ENGINE else None
 needs_planner = pytest.mark.skipif(ROUTED is None, reason="planner/out not built (planner/export_v2.py)")
@@ -178,7 +227,7 @@ def test_route_rides_along_in_budget(name):
     ms = (time.perf_counter() - t) * 1000
     it = r.json()["itinerary"]
     assert r.status_code == 200 and ms < 500 and in_budget(r), (ms, len(r.content))
-    assert it["pathway"] and (it["plans"] or it["abstain"])
+    assert it["pathway"] and (it["plans"] or it["abstain"] or it["itinerary_note"])
     assert "stub" not in it["meta"]
     opts = r.json()["options"]
     if it["plans"] and opts:  # route stop 1 is the list's first choice, or the route is framed as the fallback (#126)
@@ -222,7 +271,9 @@ def test_far_route_stop_leaves_card_1_and_is_the_fallback(name):
     assert [x["facility_id"] for x in o] == [x["facility_id"] for x in plain] and o[0]["call_first"]
     stop = it["plans"][0]["stops"][0]
     assert stop["facility_id"] != o[0]["facility_id"] and not any(x.get("route_reason") for x in o)
-    assert it["fallback"]["ask"] == ask and it["stop_1_note"] is None
+    # #140 WS2 2c rule 4: the note stays exactly when stop 1 is not on the options list
+    listed = stop["facility_id"] in {x["facility_id"] for x in o}
+    assert it["fallback"]["ask"] == ask and (it["stop_1_note"] is None) == listed
     assert it["fallback"]["text"].startswith("If they cannot treat: ") and stop["name"] in it["fallback"]["text"]
 
 
@@ -359,6 +410,26 @@ def test_nearest_plausible_ties_have_no_bucket_edge():
     assert [r[2] for r in nearest_plausible([(0.7, 60, "in"), (0.9, 63, "out")], 60)] == ["in", "out"]
 
 
+def test_uncapped_p_breaks_an_equal_capped_tie():
+    """#140 2a: inside the 5-minute tie, rows capped at the same rank_p go by their uncapped p, then nearer first."""
+    from facts.engine import nearest_plausible
+
+    rows = [(0.5, 2, None, None, "not_verified", 0.56, "clinic"), (0.5, 2.4, None, None, "not_verified", 0.98, "hosp")]
+    assert [r[6] for r in nearest_plausible(rows)] == ["hosp", "clinic"]
+    rows = [(0.5, 2, None, None, "not_verified", 0.7, "near"), (0.5, 3, None, None, "not_verified", 0.7, "far")]
+    assert [r[6] for r in nearest_plausible(rows)] == ["near", "far"]
+
+
+def test_gaya_trauma_children_clinic_is_not_an_option():
+    """#140 2a: Baibhav Shishu Care (a children's clinic, p 0.56) led Arsh Superspeciality (p 0.98) as option 2 at
+    Gaya because both NO_SERVICE_TEXT scores were capped at the Likely threshold and the clinic was nearer."""
+    pool, _ = ENGINE._ranked("trauma_emergency", 24.79, 85.0)
+    assert all(len(r) == 6 and r[5] >= r[0] for r in pool)  # the uncapped p rides along and is never below rank_p
+    names = [o["name"] for o in ENGINE.plan("trauma_emergency", 24.79, 85.0, 40, "gps")["options"]]
+    assert names[:2] == ["Dr. A Barkat Multispeciality Hospital", "Arsh Superspeciality Hospital"]
+    assert "Baibhav Shishu Care" not in names
+
+
 def test_toll_free_numbers_are_dialable():
     from facts.build import e164
 
@@ -473,3 +544,43 @@ def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
     assert not any("best option" in (x.get("route_reason") or "") for x in o[1:])
     patna = _post("trauma_emergency", 25.6, 85.14)["options"]  # the former first is farther: no "Nearer" line
     assert not any((x.get("route_reason") or "").startswith("Nearer") for x in patna)
+
+
+def test_every_list_and_osm_row_cites_its_source():
+    """WS4 4a: every official-list (X) or OpenStreetMap (O) ledger row with points carries at least one cite with a
+    link, over every served pair; points are unchanged (the ledger test above still sums them to p)."""
+    missing = []
+    for s, rows in ENGINE.pairs.items():
+        for pr in rows:
+            for c in ENGINE._ledger(pr):
+                if c["family"] in ("X", "O") and c["points"] and not any(ct["url"] for ct in c["cites"]):
+                    missing.append((ENGINE.fac["id"][pr.fi], s, c["label"]))
+    assert not missing, missing[:5]
+
+
+def test_nabh_cites_say_which_kind_of_entry():
+    """Gaya dialysis option 1 (Arsh) is a CGHS/ECHS empanelment on NABH's portal, not accreditation; Patna dialysis
+    option 1 (Satyavrat) holds an entry-level certificate. The "Official lists" entry says the same."""
+    cases = [((24.79, 85.0), "Arsh", "CGHS/ECHS empanelment listed on NABH's portal; not accreditation"),
+             ((25.6, 85.14), "Satyavrat", "NABH entry-level certificate PESHCO-2023-7525")]
+    for (la, lo), name, want in cases:
+        o = ENGINE.plan("dialysis", la, lo, 40, "gps")["options"][0]
+        assert name in o["name"]
+        texts = [ct["text"] for c in o["contributions"] for ct in c.get("cites", [])]
+        assert texts and all(want in t for t in texts if "NABH" in t), texts
+        assert not any("full accreditation" in t for t in texts)
+        nabh = [x for x in o["public_lists"] if x["list"] == "nabh"]
+        assert nabh and want in nabh[0]["text"] and nabh[0]["url"]
+
+
+def test_restricted_lists_are_only_shown_per_facility():
+    """The cite table holds only rows a served pair's ledger cites (never a whole NABH, NMC or MoHFW list), and an
+    option shows only the cites of its own ledger rows."""
+    cited = {c for rows in ENGINE.pairs.values() for pr in rows for row in pr.ledger or [] for c in row[3]}
+    assert set(ENGINE.cites) == cited
+    assert sum("NABH" in (v[2] or "") for v in ENGINE.cites.values()) < 1000  # the NABH list has about 21,600 entries
+    p = ENGINE.plan("dialysis", 24.79, 85.0, 40, "gps")
+    for o in p["options"]:
+        pr = ENGINE.index["dialysis"][ENGINE.fid[o["facility_id"]]]
+        own = {c for row in pr.ledger for c in row[3]}
+        assert {ct["id"] for c in o["contributions"] for ct in c.get("cites", [])} <= own

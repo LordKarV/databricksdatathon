@@ -211,28 +211,38 @@ now a test fixture only).
 - **Measured locally:** start-up to first response 0.31 s, process RSS 108 MB. Plan requests take 1.5-2.6 ms
   and area requests 12-20 ms (p50 over HTTP).
 - **Candidates:** pairs the claims lexicon found (`grades` + `data_point_scores`) within 150 km straight line.
-  The nearest 40 get a `geo/travel.py` estimate. Ranking is p x exp(-minutes / scale), where the scale is
-  45 / 60 / 120 / 240 min by urgency, for every band: a confirmed listing far away does not outrank a nearer one
-  by default, but the best Likely option in reach always takes the last slot if it did not make the list.
+  The nearest 40 get a `geo/travel.py` estimate. A pair with no usable quote is never offered (#85). The order
+  depends on the service's profile (`facts/engine.py`):
+  - Emergency (trauma, emergency C-section, burns): nearest plausible place first (#92). Distance leads, and p
+    only chooses among places within 5 min of the nearest one left, nearer first on equal p; a tie never crosses
+    the 60-minute window. A NO_SERVICE_TEXT pair ranks as if its p were at most the Likely threshold. With a route,
+    `itinerary.lead_with_route` puts the route's first stop first when it is inside the window or no farther than
+    option 1 (#121).
+  - Urgent, scheduled and planned care: p x exp(-minutes / scale), the scale 60 / 120 / 240 min by urgency, for
+    every band, so a confirmed listing far away does not outrank a nearer one by default. Leading options that tie
+    (same band, shown p within 0.05, travel within 10 min) can be reordered by health-worker reports, for
+    scheduled and planned care only (#86, #116).
+  - In every profile the best Likely option in reach takes the last slot if it did not make the list.
 - **Scores:** everything model-like is in `Engine.score(facility_id, service_id) -> (band, p, lo, hi,
   contributions, evidence_ids)`.
-  - Interim: Likely only for pairs verified true by a second source. Unlikely when verified false or graded
-    attributed-elsewhere / counter-evidence; such pairs are never offered as options. Everything else is Not
-    verified.
-  - p, lo and hi are `data_point_scores` score / score_lo / score_hi. The contributions split that stored score
-    in log-odds x 10 (evidence rule, then sources, then the second-source check), so the total maps back to p.
-  - When `derived/v2/facility_service_scores.parquet` exists, `build.py` exports its band / p / lo / hi and
-    `score()` uses them. The contributions are then the model's own ledger: base plus each non-zero term, with
-    plain English and Hindi words from `facts/ledger_terms.py`, in tenths of a point on the same 10-per-logit scale,
-    rounded by largest remainder so they sum to 10 x logit(p) to the tenth. A term's quotes are the claims it cites
-    that are also app claims (v1 claim id, same sentence); specialty items, list ids and website pages are not
-    quoted.
+  - Model v2 (`derived/v2/facility_service_scores.parquet`, exported by `build.py`) gives band, p, lo and hi.
+    Its four bands become the app's three: LIKELY is Likely, CALL_FIRST and NO_SERVICE_TEXT are Not verified,
+    UNLIKELY is Unlikely (Unlikely pairs are never offered as options). lo and hi are the score bin's track record.
+  - The contributions are the model's own ledger: base plus each non-zero term, with plain English and Hindi words
+    from `facts/ledger_terms.py`, in tenths of a point on the same 10-per-logit scale, rounded by largest remainder
+    so they sum to 10 x logit(p) to the tenth. A term's quotes are the claims it cites that are also app claims
+    (v1 claim id, same sentence); specialty items, list ids and website pages are not quoted.
+  - Field reports (`community/field.py`) add one more named term, "Field reports", when at least 2 distinct
+    health workers have reported on the pair. It can lower a band, never raise one.
+  - Without the v2 export the engine falls back to the interim rule: Likely only for pairs verified true by a
+    second source, Unlikely when verified false or graded attributed-elsewhere or counter-evidence, Not verified
+    otherwise.
 - **Evidence:** verbatim `claims.text` with claim ids, at most 3. Sentences with a non-offer cue or attributed
   to another facility are left out; the latter are shown as "Ignored: ..." flags.
 - **Flags and checks:** flags come from `record_trust.trust_reasons` (already plain English) and the grade's
   risk columns. `where_check` comes from the location rule, and `track_record` from the evidence rule's
   hand-check and gold-dev counts.
-- **Abstention:** when no option is Likely (the common case until the model publishes), the response abstains
+- **Abstention:** when no option is Likely, the response abstains
   and lists the Not verified options to call. The outside option is the nearest district hospital or medical
   college by name, within 150 km.
 - **Known gaps:**

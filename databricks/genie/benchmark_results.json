@@ -1,0 +1,392 @@
+{
+ "space_id": "01f1e60264ac19f98063e082b625c2df",
+ "runs": [
+  {
+   "eval_run_id": "01f1e6463ee51718b27bd75fd04fb54e",
+   "note": "first deploy of the benchmarks",
+   "num_questions": 12,
+   "num_correct": 9,
+   "num_needs_review": 1,
+   "results": [
+    {
+     "question": "Which Bihar districts have zero facility records?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.dtname, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.records\nFROM workspace.referral_saathi.geo_district d\nWHERE d.stname = 'BIHAR' AND d.records = 0\nORDER BY d.pop DESC"
+    },
+    {
+     "question": "Which district in Odisha with no confirmed dialysis facility has the largest population?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.nfhs_district, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis, d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Odisha' AND d.n_corr = 0\nORDER BY d.pop DESC\nLIMIT 1"
+    },
+    {
+     "question": "How many facilities in Maharashtra hold a LaQshya certificate that is still valid?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT COUNT(DISTINCT l.unique_id) AS facilities_valid\nFROM workspace.referral_saathi.facility_list_facts l\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id\nWHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' AND g.stname = 'MAHARASHTRA'"
+    },
+    {
+     "question": "Cite the claim ids behind the dialysis claim of Ford Hospital And Research Center in Patna.",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH cited AS (\n  SELECT gr.unique_id, gr.grade,\n    EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) AS e\n  FROM workspace.referral_saathi.grades gr\n  WHERE gr.service = 'dialysis')\nSELECT g.name, cited.grade, cited.e.claim_id AS claim_id, cited.e.field AS field, cited.e.text AS claim_text,\n  c.attribution\nFROM cited\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = cited.unique_id\nLEFT JOIN workspace.referral_saathi.claims c ON c.claim_id = cited.e.claim_id\nWHERE g.dtname = 'Patna' AND g.name = 'Ford Hospital And Research Center'\nORDER BY CASE cited.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 ELSE 3 END"
+    },
+    {
+     "question": "Is there dialysis care in Madhubani district of Bihar?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.nfhs_district, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis, d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Bihar' AND d.nfhs_district = 'Madhubani'"
+    },
+    {
+     "question": "How many districts in Uttar Pradesh have no confirmed dialysis facility, and how many people live in them?",
+     "assessment": "NEEDS_REVIEW",
+     "reasons": [
+      "LLM_JUDGE_FORMATTING_ERROR"
+     ],
+     "genie_sql": "SELECT COUNT(*) AS n_districts, ROUND(try_divide(SUM(pop),1e6), 2) AS pop_millions\nFROM workspace.referral_saathi.geo_dialysis_district\nWHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0"
+    },
+    {
+     "question": "Which three states have the most facilities on the e-RaktKosh blood bank list?",
+     "assessment": "BAD",
+     "reasons": [
+      "RESULT_MISSING_COLUMNS",
+      "LLM_JUDGE_MISSING_OR_INCORRECT_FILTER"
+     ],
+     "genie_sql": "WITH ranked_states AS (\n  SELECT geo_facility.stname, COUNT(*) AS n_facilities,\n    RANK() OVER (ORDER BY COUNT(*) DESC) AS rank\n  FROM workspace.referral_saathi.facility_list_facts\n  JOIN workspace.referral_saathi.geo_facility ON geo_facility.unique_id = facility_list_facts.unique_id\n  WHERE facility_list_facts.list_slug = 'eraktkosh'\n    AND facility_list_facts.service = 'blood_bank'\n    AND geo_facility.stname IS NOT NULL\n  GROUP BY geo_facility.stname\n)\nSELECT stname, n_facilities\nFROM ranked_states\nWHERE rank <= 3\nORDER BY n_facilities DESC, stname ASC"
+    },
+    {
+     "question": "How many facilities in Bihar does model v2 band Likely for dialysis?",
+     "assessment": "BAD",
+     "reasons": [
+      "RESULT_EXTRA_ROWS",
+      "LLM_JUDGE_INCOMPLETE_OR_PARTIAL_OUTPUT"
+     ],
+     "genie_sql": "SELECT a.operator, COUNT(*) AS n_likely\nFROM workspace.referral_saathi.facility_service_scores_v2 s\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\nJOIN workspace.referral_saathi.facility_attributes_v2 a ON a.unique_id = s.unique_id\nWHERE g.stname = 'BIHAR' AND s.band = 'LIKELY' AND s.service_id = 'dialysis'\nGROUP BY a.operator\nORDER BY a.operator"
+    },
+    {
+     "question": "In Kerala, how many facility records claim emergency C-section, and how many of those are confirmed by a second source?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT COUNT(*) AS n_csection_claimed, SUM(CASE WHEN g.csection_corroborated THEN 1 ELSE 0 END) AS n_csection_confirmed\nFROM workspace.referral_saathi.geo_facility g\nWHERE g.stname = 'KERALA' AND g.csection_claimed"
+    },
+    {
+     "question": "Among states with at least 100 trauma or emergency claims, which has the lowest share confirmed by a second source?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH state_confirmed AS (\n  SELECT g.stname, COUNT(*) AS n_trauma_claims,\n    SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END) AS n_confirmed,\n    ROUND(try_divide(100 * SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END),COUNT(*)), 1) AS pct_confirmed\n  FROM workspace.referral_saathi.geo_facility g\n  WHERE g.trauma_claimed\n  GROUP BY g.stname\n  HAVING COUNT(*) >= 100\n)\nSELECT stname, n_trauma_claims, n_confirmed, pct_confirmed\nFROM (\n  SELECT *, RANK() OVER (ORDER BY pct_confirmed ASC) AS rnk\n  FROM state_confirmed\n)\nWHERE rnk = 1"
+    },
+    {
+     "question": "Which hospital near Lucknow can handle an emergency C-section?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Lucknow' AND stname = 'UTTAR PRADESH'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'emergency_csection' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'), x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+    },
+    {
+     "question": "Where can a patient get dialysis near Jaipur?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Jaipur' AND stname = 'RAJASTHAN'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'dialysis' AND s.band IN ('LIKELY', 'CALL_FIRST')\n),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50\n)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+    }
+   ]
+  },
+  {
+   "eval_run_id": "01f1e646eac711e6b10f1231c5c37539",
+   "note": "after rewording the app instruction",
+   "num_questions": 12,
+   "num_correct": 10,
+   "num_needs_review": 1,
+   "results": [
+    {
+     "question": "Which Bihar districts have zero facility records?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.dtname, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.records\nFROM workspace.referral_saathi.geo_district d\nWHERE d.stname = 'BIHAR' AND d.records = 0\nORDER BY d.pop DESC"
+    },
+    {
+     "question": "Which district in Odisha with no confirmed dialysis facility has the largest population?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.nfhs_district, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis, d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Odisha' AND d.n_corr = 0\nORDER BY d.pop DESC\nLIMIT 1"
+    },
+    {
+     "question": "How many facilities in Maharashtra hold a LaQshya certificate that is still valid?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT COUNT(DISTINCT l.unique_id) AS facilities_with_valid_laqshya\nFROM workspace.referral_saathi.facility_list_facts l\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id\nWHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' AND g.stname = 'MAHARASHTRA'"
+    },
+    {
+     "question": "Cite the claim ids behind the dialysis claim of Ford Hospital And Research Center in Patna.",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH cited AS (\n  SELECT gr.unique_id, gr.grade,\n    EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) AS e\n  FROM workspace.referral_saathi.grades gr WHERE gr.service = 'dialysis')\nSELECT g.name, cited.grade, cited.e.claim_id AS claim_id, cited.e.field AS field, cited.e.text AS claim_text,\n  c.attribution\nFROM cited\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = cited.unique_id\nLEFT JOIN workspace.referral_saathi.claims c ON c.claim_id = cited.e.claim_id\nWHERE g.name ILIKE '%Ford Hospital And Research Center%' AND g.dtname = 'Patna'\nORDER BY CASE cited.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 ELSE 3 END, g.name"
+    },
+    {
+     "question": "Is there dialysis care in Madhubani district of Bihar?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT d.nfhs_district, d.nfhs_state, ROUND(try_divide(d.pop,1e6), 2) AS pop_millions, d.n_claim AS facilities_claiming_dialysis, d.n_corr AS facilities_confirmed_dialysis, ROUND(100 * d.share60, 1) AS pct_people_within_60_min_confirmed, d.hot\nFROM workspace.referral_saathi.geo_dialysis_district d\nWHERE d.nfhs_state = 'Bihar' AND d.nfhs_district = 'Madhubani'"
+    },
+    {
+     "question": "How many districts in Uttar Pradesh have no confirmed dialysis facility, and how many people live in them?",
+     "assessment": "NEEDS_REVIEW",
+     "reasons": [
+      "LLM_JUDGE_OTHER"
+     ],
+     "genie_sql": "SELECT COUNT(*) AS n_districts_no_confirmed_dialysis, ROUND(try_divide(SUM(pop),1e6), 2) AS pop_millions\nFROM workspace.referral_saathi.geo_dialysis_district\nWHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0;"
+    },
+    {
+     "question": "Which three states have the most facilities on the e-RaktKosh blood bank list?",
+     "assessment": "BAD",
+     "reasons": [
+      "RESULT_MISSING_COLUMNS",
+      "LLM_JUDGE_INCORRECT_METRIC_CALCULATION"
+     ],
+     "genie_sql": "WITH ranked_states AS (\n  SELECT g.stname, COUNT(*) AS n_facilities,\n    RANK() OVER (ORDER BY COUNT(*) DESC) AS rnk\n  FROM `workspace`.`referral_saathi`.`facility_list_facts` l\n  JOIN `workspace`.`referral_saathi`.`geo_facility` g ON l.`unique_id` = g.`unique_id`\n  WHERE l.`list_slug` = 'eraktkosh' AND g.stname IS NOT NULL\n  GROUP BY g.stname\n)\nSELECT stname, n_facilities\nFROM ranked_states\nWHERE rnk <= 3\nORDER BY n_facilities DESC, stname"
+    },
+    {
+     "question": "How many facilities in Bihar does model v2 band Likely for dialysis?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT COUNT(*) AS n_likely\nFROM workspace.referral_saathi.facility_service_scores_v2 s\nJOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\nWHERE g.stname = 'BIHAR' AND s.band = 'LIKELY' AND s.service_id = 'dialysis'"
+    },
+    {
+     "question": "In Kerala, how many facility records claim emergency C-section, and how many of those are confirmed by a second source?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "SELECT COUNT(*) AS n_csection_claimed, SUM(CASE WHEN g.csection_corroborated THEN 1 ELSE 0 END) AS n_csection_confirmed\nFROM workspace.referral_saathi.geo_facility g\nWHERE g.stname = 'KERALA' AND g.csection_claimed"
+    },
+    {
+     "question": "Among states with at least 100 trauma or emergency claims, which has the lowest share confirmed by a second source?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH state_confirmed AS (\n  SELECT g.stname, COUNT(*) AS n_trauma_claims,\n    SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END) AS n_confirmed,\n    ROUND(try_divide(100 * SUM(CASE WHEN g.trauma_corroborated THEN 1 ELSE 0 END),COUNT(*)), 1) AS pct_confirmed\n  FROM workspace.referral_saathi.geo_facility g\n  WHERE g.trauma_claimed\n  GROUP BY g.stname\n  HAVING COUNT(*) >= 100\n)\nSELECT stname, n_trauma_claims, n_confirmed, pct_confirmed\nFROM (\n  SELECT *, RANK() OVER (ORDER BY pct_confirmed ASC) AS rnk\n  FROM state_confirmed\n)\nWHERE rnk = 1"
+    },
+    {
+     "question": "Which hospital near Lucknow can handle an emergency C-section?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Lucknow' AND stname = 'UTTAR PRADESH'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'emergency_csection' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'), x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+    },
+    {
+     "question": "Where can a patient get dialysis near Jaipur?",
+     "assessment": "GOOD",
+     "reasons": null,
+     "genie_sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Jaipur' AND stname = 'RAJASTHAN'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'dialysis' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+    }
+   ]
+  }
+ ],
+ "brief_questions_conversation_api": {
+  "Where can a patient get dialysis near Jaipur?": {
+   "columns": [
+    "name",
+    "district",
+    "band",
+    "p_s",
+    "km_straight_line",
+    "claim_ids",
+    "claim_text"
+   ],
+   "rows": [
+    [
+     "Deep Hospital and Research Centre, Jhotwara, Jaipur",
+     "Jaipur",
+     "LIKELY",
+     "0.59",
+     "2.6",
+     "4a89be71:proc:13",
+     "Dialysis"
+    ],
+    [
+     "SCR Hospital",
+     "Jaipur",
+     "LIKELY",
+     "0.67",
+     "2.6",
+     "4105a305:desc:2, 4105a305:proc:1",
+     "The hospital located in Vaishali Nagar has all the facilities like General Medicine, General and Laparoscopic Surgery, Trauma and Orthopedics, Gynecology and Obstetrics, Child and Pediatric Diseases, Ear Nose Throat, Skin Diseases, Dental Diseases, Anesthesia, Ultrasound / Sonology, Physiotherapy, Dialysis, Laboratory and Pharmacy."
+    ],
+    [
+     "Garg Child Hospital",
+     "Jaipur",
+     "LIKELY",
+     "0.65",
+     "2.7",
+     "e7ecf080:capa:21, e7ecf080:proc:28, e7ecf080:proc:29, e7ecf080:proc:30, e7ecf080:proc:31",
+     "Pediatric Nephrology"
+    ],
+    [
+     "NAV Imperial Hospital and Research Centre",
+     "Jaipur",
+     "LIKELY",
+     "0.52",
+     "3.5",
+     "5ce209a2:capa:15, 5ce209a2:equi:2",
+     "Experienced team of nephrologists, surgeons, and anesthesiologists"
+    ],
+    [
+     "Vaishali Hospital & Surgical Research Center Jaipur",
+     "Jaipur",
+     "LIKELY",
+     "0.93",
+     "3.5",
+     "8d8994a9:capa:5, 8d8994a9:proc:5",
+     "On-site dialysis facility"
+    ],
+    [
+     "Surya Hospitals Jaipur",
+     "Jaipur",
+     "LIKELY",
+     "0.92",
+     "4.6",
+     "a618961b:capa:32, a618961b:proc:25",
+     "Pediatric Super Specialities program with subspecialties such as Developmental & Behavioral Pediatrics, Paediatric General Surgery, Paediatric Nephrology, Pediatric Neurology, Paediatric Neurosurgery, Paediatric Orthopedic, Hematology & BMT, Paediatric Oncology, Paediatric ENT, Paediatric Ophthalmology, Paediatric Gastroenterology, Paediatric Kidney Transplant, Paediatric Pulmonology, Pediatric Cardiology, Paediatric Endocrinology, Paediatric Dermatology, Paediatric Dialysis"
+    ],
+    [
+     "KKS Urology And General Hospital",
+     "Jaipur",
+     "LIKELY",
+     "0.92",
+     "4.9",
+     "6b7ca246:capa:17",
+     "Offers Nephrology & Dialysis as a specialty"
+    ],
+    [
+     "Soni Hospital",
+     "Jaipur",
+     "LIKELY",
+     "0.97",
+     "5.1",
+     "ebb4d2d3:capa:36, ebb4d2d3:capa:44, ebb4d2d3:equi:12, ebb4d2d3:equi:15, ebb4d2d3:equi:9, ebb4d2d3:proc:14, ebb4d2d3:proc:16, ebb4d2d3:proc:5",
+     "Dialysis center performing over 400 dialysis cases per month"
+    ],
+    [
+     "Indus Jaipur Hospital",
+     "Jaipur",
+     "LIKELY",
+     "0.77",
+     "5.4",
+     "1272bf33:capa:17, 1272bf33:proc:15",
+     "Specialties include Andrology, Bariatrics, Cardiology, Dentistry, Diabetology, Endocrinology, ENT, Gastroenterology, Hepatology, Internal Medicine, Laparoscopic Surgery, Nephrology"
+    ],
+    [
+     "Monilek Hospital and Research Center",
+     "Jaipur",
+     "LIKELY",
+     "0.96",
+     "7.2",
+     "acdc2105:capa:16, acdc2105:equi:2",
+     "Specialist services include Cardiologist, Dentist, Dermatologist, Gastroenterologist, Neurology, Nephrology, Orthopaedics, Gynecologist, Pediatric Cardiologist, Dermatology/Cosmetology"
+    ]
+   ],
+   "text": "You want to find facilities near Jaipur district that are likely or recommended to offer dialysis services, ranked by confidence and distance.\nThere are **10 facilities** within 50 km straight-line distance of Jaipur with public evidence and a \"LIKELY\" model score for providing dialysis. Each facility is supported by specific claim_ids as evidence, and the model score (p_s) reflects the strength of the evidence, but does not rank public facilities. Examples include:\n- **Deep Hospital and Research Centre, Jhotwara, Jaipur** (2.6 km, p_s 0.59, claim_ids: 4a89be71:proc:13)\n- **SCR Hospital** (2.6 km, p_s 0.67, claim_ids: 4105a305:desc:2, 4105a305:proc:1)\n- **Garg Child Hospital** (2.7 km, p_s 0.65, claim_ids: e7ecf080:capa:21, e7ecf080:proc:28, e7ecf080:proc:29, e7ecf080:proc:30, e7ecf080:proc:31)\n- **NAV Imperial Hospital and Research Centre** (3.5 km, p_s 0.52, claim_ids: 5ce209a2:capa:15, 5ce209a2:equi:2)\n- **Vaishali Hospital & Surgical Research Center Jaipur** (3.5 km, p_s 0.93, claim_ids: 8d8994a9:capa:5, 8d8994a9:proc:5)\n\nAll facilities are in Jaipur district and the evidence is based on claims, not verified facts.\n",
+   "sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Jaipur' AND stname = 'RAJASTHAN'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'dialysis' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+  },
+  "Which hospital near Lucknow can handle an emergency C-section?": {
+   "columns": [
+    "name",
+    "district",
+    "band",
+    "p_s",
+    "km_straight_line",
+    "claim_ids",
+    "claim_text"
+   ],
+   "rows": [
+    [
+     "BNK Hospital",
+     "Lucknow",
+     "LIKELY",
+     "0.82",
+     "4.0",
+     "d93e5058:equi:0, d93e5058:proc:2",
+     "Modular Operation Theatre"
+    ],
+    [
+     "Fatima Hospital",
+     "Lucknow",
+     "LIKELY",
+     "0.88",
+     "4.4",
+     "8b1f6969:proc:2, 8b1f6969:proc:7",
+     "Performs cesarean births"
+    ],
+    [
+     "Pawar'S Clinic",
+     "Lucknow",
+     "LIKELY",
+     "0.91",
+     "5.8",
+     "5c9f7e5b:proc:0, 5c9f7e5b:proc:5",
+     "Provides obstetrics and gynecology services"
+    ],
+    [
+     "Elite Hospital",
+     "Lucknow",
+     "LIKELY",
+     "0.89",
+     "6.4",
+     "2935d335:capa:26, 2935d335:proc:21, 2935d335:proc:4",
+     "Cesarean delivery services"
+    ],
+    [
+     "Krishna Medical Centre",
+     "Lucknow",
+     "LIKELY",
+     "0.95",
+     "6.4",
+     "c80ad4c1:capa:18, c80ad4c1:equi:28, c80ad4c1:proc:17, c80ad4c1:proc:6",
+     "Obstetrics and gynaecology services including ANC, normal delivery, C-section and high-risk pregnancy care"
+    ],
+    [
+     "Nova Hospital",
+     "Lucknow",
+     "LIKELY",
+     "0.75",
+     "7.2",
+     "907f5a8b:capa:11, 907f5a8b:equi:2, 907f5a8b:proc:2, 907f5a8b:proc:5",
+     "Centre of Excellence includes Department of Obstetrics & Gynecology."
+    ],
+    [
+     "Wellsun Medicity Hospital",
+     "Lucknow",
+     "LIKELY",
+     "0.97",
+     "7.9",
+     "43d0e338:equi:0, 43d0e338:proc:10",
+     "Modular operation theatres"
+    ],
+    [
+     "Aiman Nursing Home",
+     "Lucknow",
+     "LIKELY",
+     "0.88",
+     "8.2",
+     "adfecbb0:capa:17, adfecbb0:capa:28, adfecbb0:capa:9, adfecbb0:equi:0, adfecbb0:proc:18, adfecbb0:proc:30, adfecbb0:proc:7",
+     "Normal delivery and Caesarean service"
+    ],
+    [
+     "St.Joseph Hospital Lucknow",
+     "Lucknow",
+     "LIKELY",
+     "0.81",
+     "8.3",
+     "1980afa5:capa:28, 1980afa5:equi:2, 1980afa5:proc:23",
+     "St. Joseph Hospital had a Senior Registrar in Obstetrics and Gynecology on staff (historical)."
+    ],
+    [
+     "City Hospital",
+     "Lucknow",
+     "CALL_FIRST",
+     "0.85",
+     "1.7",
+     "a2a3c136:capa:42, a2a3c136:capa:9, a2a3c136:proc:38",
+     "Obstetric delivery including normal and cesarean deliveries"
+    ]
+   ],
+   "text": "You want to see hospitals near Lucknow that are likely or can handle an emergency C-section, ranked by likelihood and distance.\nThere are **10 hospitals** within 50 km straight line distance from Lucknow with public evidence suggesting they can handle an emergency C-section, based on model scores and claims. All are supported by facility-level claims, with evidence levels marked as **LIKELY** or **CALL_FIRST**; the strongest scores are for Krishna Medical Centre (claim_ids: c80ad4c1:capa:18, c80ad4c1:equi:28, c80ad4c1:proc:17, c80ad4c1:proc:6), Wellsun Medicity Hospital (claim_ids: 43d0e338:equi:0, 43d0e338:proc:10), and Elite Hospital (claim_ids: 2935d335:capa:26, 2935d335:proc:21, 2935d335:proc:4). \n\nSome of the top hospitals and their claim_ids are:\n- **Krishna Medical Centre** (6.4 km, p_s 0.95, claim_ids: c80ad4c1:capa:18, c80ad4c1:equi:28, c80ad4c1:proc:17, c80ad4c1:proc:6)\n- **Wellsun Medicity Hospital** (7.9 km, p_s 0.97, claim_ids: 43d0e338:equi:0, 43d0e338:proc:10)\n- **Elite Hospital** (6.4 km, p_s 0.89, claim_ids: 2935d335:capa:26, 2935d335:proc:21, 2935d335:proc:4)\n- **Fatima Hospital** (4.4 km, p_s 0.88, claim_ids: 8b1f6969:proc:2, 8b1f6969:proc:7)\n- **City Hospital** (1.7 km, p_s 0.85, claim_ids: a2a3c136:capa:42, a2a3c136:capa:9, a2a3c136:proc:38)\n\nAll evidence is based on claims, not verified facts, and the model score cannot rank public facilities.\n",
+   "sql": "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Lucknow' AND stname = 'UTTAR PRADESH'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(try_divide(RADIANS(g.loc_lat - c.lat),2)), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(try_divide(RADIANS(g.loc_lon - c.lon),2)), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'emergency_csection' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'), x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+  }
+ }
+}

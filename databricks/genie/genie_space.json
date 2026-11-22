@@ -247,7 +247,14 @@
      },
      {
       "column_name": "contributions",
-      "exclude": true
+      "description": [
+       "JSON array of score parts; each has evidence_ids, the claim ids behind the band. Parse with FROM_JSON(contributions, 'array<struct<evidence_ids:array<string>>>') and join claims.claim_id for the sentence."
+      ],
+      "synonyms": [
+       "claim ids",
+       "evidence",
+       "citations"
+      ]
      },
      {
       "column_name": "hi",
@@ -476,11 +483,15 @@
     "column_configs": [
      {
       "column_name": "cx",
-      "exclude": true
+      "description": [
+       "Longitude of the district centre. 'Near <city>' means within 50 km of its district's centre."
+      ]
      },
      {
       "column_name": "cy",
-      "exclude": true
+      "description": [
+       "Latitude of the district centre. 'Near <city>' means within 50 km of its district's centre."
+      ]
      },
      {
       "column_name": "dtname",
@@ -968,7 +979,7 @@
    {
     "id": "1cb251ec0d568de6a929b520c4aed8d1",
     "content": [
-     "## PURPOSE\n- District planners asking where facilities show public evidence of a service and how strong it is.\n- Every row is a claim from the Virtue Foundation records (88% private), not a verified fact.\n\n## DISAMBIGUATION\n- \"Confirmed\", \"corroborated\" or \"second source\" means the *_corroborated flags in geo_facility or n_corr in geo_dialysis_district. \"Claims\" means *_claimed or grades rows.\n- \"Trauma\" in geo_facility and grades means trauma or 24x7 emergency.\n- \"Near X\" with no radius: 50 km straight line from the facility point; say so.\n- geo_facility and geo_district states are UPPER CASE (BIHAR); NFHS tables use title case (Bihar).\n\n## DATA QUALITY NOTES\n- NABH rows are facility-level (service null): a NABH listing confirms the facility, not a service.\n- citation_url of '#' or 'Not Found' means no usable link.\n- operatorTypeId uses the string 'null' for unknown owner.\n\n## MODEL V2 SCORES\n- \"Likely offers\", band, score or P_S mean facility_service_scores_v2; get state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p. Never show p for NO_SERVICE_TEXT. lo/hi are the score bin's track record, not an interval around p.\n- Owner means facility_attributes_v2.operator. The score has no demonstrated ranking ability for public facilities: say so when ranking them.\n\n## CONSTRAINTS\n- Never rank or recommend facilities on dataset claims alone. Order by evidence level first (official list or confirmed, then grade strong, moderate, weak, tag_only), then distance, and show the level.\n- Never say a place has \"no care\" or \"no facility\". Say \"no public evidence in this dataset\" and give n.\n\n## Instructions you must follow when providing summaries\n- Always state n (facilities, claims or districts) and the evidence level behind each number.\n- When naming a facility-service claim, cite claim_ids from grades.cite_evidence, and citation_url for list facts.\n- Give percentages to one decimal with numerator and denominator."
+     "## PURPOSE\n- Planners ask where facilities show public evidence of a service and how strong it is.\n- Every row is a claim from the Virtue Foundation records (88% private), not a verified fact.\n- Your km are straight line. Travel time and call-ahead come from the Referral Saathi app, which in an emergency calls the nearest plausible place first; say so for a patient.\n\n## DISAMBIGUATION\n- \"Confirmed\", \"corroborated\" or \"second source\" means the *_corroborated flags in geo_facility or n_corr in geo_dialysis_district. \"Claims\" means *_claimed or grades rows.\n- \"Trauma\" in geo_facility and grades means trauma or 24x7 emergency.\n- \"Near X\" with no radius: 50 km straight line from the centre of district X (geo_district cx, cy); say so.\n- geo_facility and geo_district states are UPPER CASE; NFHS tables title case.\n\n## DATA QUALITY NOTES\n- NABH rows are facility-level (service null): they confirm the facility, not a service.\n- citation_url '#' or 'Not Found' means no usable link.\n\n## MODEL V2 SCORES\n- \"Likely\", \"can handle\", band, score or P_S mean facility_service_scores_v2; state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p or km. Never show p for NO_SERVICE_TEXT. lo/hi are a score bin's track record, not an interval.\n- Owner is facility_attributes_v2.operator. The score cannot rank public facilities: say so.\n\n## CONSTRAINTS\n- Never rank facilities on claims alone. Order by evidence level (model band, or official list or confirmed, then grade), then distance, and show the level.\n- Never say a place has \"no care\" or \"no facility\". Say \"no public evidence in this dataset\" and give n.\n\n## Instructions you must follow when providing summaries\n- Always state n (facilities, claims or districts) and the evidence level behind each number.\n- Cite claim_ids for every facility named (grades.cite_evidence or v2 contributions), and citation_url for list facts.\n- Percentages to one decimal, with numerator and denominator."
     ]
    }
   ],
@@ -1067,6 +1078,18 @@
     ],
     "usage_guidance": [
      "Official list counts by state: count distinct facilities, a facility has one row per certified department."
+    ]
+   },
+   {
+    "id": "cc6e6d548a62a77d47a6237251bb226d",
+    "question": [
+     "Which facilities near Patna are likely to have an ICU?"
+    ],
+    "sql": [
+     "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Patna' AND stname = 'BIHAR'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(RADIANS(g.loc_lat - c.lat) / 2), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(RADIANS(g.loc_lon - c.lon) / 2), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'icu' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+    ],
+    "usage_guidance": [
+     "Service near a place: model v2 band (LIKELY, then CALL_FIRST), then straight-line km from the district centre in geo_district; cite claim ids from contributions with the claim text. Say the app adds travel time and call-ahead."
     ]
    },
    {
@@ -1252,6 +1275,178 @@
     "sql": [
      "`geo_facility`.`unique_id` = `web_service_summary`.`unique_id`",
      "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_MANY--"
+    ]
+   }
+  ]
+ },
+ "benchmarks": {
+  "questions": [
+   {
+    "id": "007d01e98e1cd7b0159d8b7cef905f08",
+    "question": [
+     "Where can a patient get dialysis near Jaipur?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Jaipur' AND stname = 'RAJASTHAN'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(RADIANS(g.loc_lat - c.lat) / 2), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(RADIANS(g.loc_lon - c.lon) / 2), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'dialysis' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "28f14c8a9ea6f292c57d67948474f00f",
+    "question": [
+     "Which hospital near Lucknow can handle an emergency C-section?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "WITH c AS (SELECT cy AS lat, cx AS lon FROM workspace.referral_saathi.geo_district WHERE dtname = 'Lucknow' AND stname = 'UTTAR PRADESH'),\nnear AS (\n  SELECT g.unique_id, g.name, g.dtname, s.band, s.p, s.contributions, 2 * 6371 * ASIN(SQRT(POWER(SIN(RADIANS(g.loc_lat - c.lat) / 2), 2) + COS(RADIANS(c.lat)) * COS(RADIANS(g.loc_lat)) * POWER(SIN(RADIANS(g.loc_lon - c.lon) / 2), 2))) AS km\n  FROM workspace.referral_saathi.facility_service_scores_v2 s\n  JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id\n  CROSS JOIN c\n  WHERE s.service_id = 'emergency_csection' AND s.band IN ('LIKELY', 'CALL_FIRST')),\nev AS (\n  SELECT n.unique_id,\n    EXPLODE(FLATTEN(TRANSFORM(FROM_JSON(n.contributions, 'array<struct<evidence_ids:array<string>>>'),\n                              x -> x.evidence_ids))) AS claim_id\n  FROM near n WHERE n.km <= 50)\nSELECT n.name, n.dtname AS district, n.band, ROUND(n.p, 2) AS p_s, ROUND(n.km, 1) AS km_straight_line,\n  ARRAY_JOIN(ARRAY_SORT(COLLECT_SET(cl.claim_id)), ', ') AS claim_ids, MIN_BY(cl.text, cl.claim_id) AS claim_text\nFROM near n\nLEFT JOIN ev e ON e.unique_id = n.unique_id\nLEFT JOIN workspace.referral_saathi.claims cl ON cl.claim_id = e.claim_id AND cl.attribution <> 'other_facility'\nWHERE n.km <= 50\nGROUP BY n.unique_id, n.name, n.dtname, n.band, n.p, n.km\nORDER BY CASE n.band WHEN 'LIKELY' THEN 1 ELSE 2 END, n.km\nLIMIT 10"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "50be378602ad9692104e016ea207259a",
+    "question": [
+     "Among states with at least 100 trauma or emergency claims, which has the lowest share confirmed by a second source?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT stname, COUNT(*) AS n_claims, ROUND(100 * AVG(CASE WHEN trauma_corroborated THEN 1 ELSE 0 END), 1) AS pct_confirmed FROM workspace.referral_saathi.geo_facility WHERE trauma_claimed GROUP BY stname HAVING COUNT(*) >= 100 ORDER BY pct_confirmed LIMIT 1"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "51816a4b03b19ec4a40fb78f4ab68184",
+    "question": [
+     "In Kerala, how many facility records claim emergency C-section, and how many of those are confirmed by a second source?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT SUM(CASE WHEN csection_claimed THEN 1 ELSE 0 END) AS claimed, SUM(CASE WHEN csection_claimed AND csection_corroborated THEN 1 ELSE 0 END) AS confirmed FROM workspace.referral_saathi.geo_facility WHERE stname = 'KERALA'"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "5b2cff7424a5423abf618ea7438ab7f0",
+    "question": [
+     "How many facilities in Bihar does model v2 band Likely for dialysis?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT COUNT(*) AS facilities FROM workspace.referral_saathi.facility_service_scores_v2 s JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id WHERE s.service_id = 'dialysis' AND s.band = 'LIKELY' AND g.stname = 'BIHAR'"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "6f79b6600a2ae238d0d0aa0c73785f30",
+    "question": [
+     "Which three states have the most facilities on the e-RaktKosh blood bank list?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT g.stname, COUNT(DISTINCT l.unique_id) AS facilities FROM workspace.referral_saathi.facility_list_facts l JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id WHERE l.list_slug = 'eraktkosh' GROUP BY g.stname ORDER BY facilities DESC LIMIT 3"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "86f3e4a80ae1fda426f112235723bb50",
+    "question": [
+     "How many districts in Uttar Pradesh have no confirmed dialysis facility, and how many people live in them?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT COUNT(*) AS districts, ROUND(SUM(pop) / 1e6, 1) AS pop_millions FROM workspace.referral_saathi.geo_dialysis_district WHERE nfhs_state = 'Uttar Pradesh' AND n_corr = 0"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "bac918f71a7fddf1c1fa94c90b4239f9",
+    "question": [
+     "Is there dialysis care in Madhubani district of Bihar?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT n_claim, n_corr FROM workspace.referral_saathi.geo_dialysis_district WHERE nfhs_state = 'Bihar' AND nfhs_district = 'Madhubani'"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "c051fe0273158ff06f7858fea011cf3e",
+    "question": [
+     "Cite the claim ids behind the dialysis claim of Ford Hospital And Research Center in Patna."
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT e.claim_id FROM (SELECT EXPLODE(FROM_JSON(gr.cite_evidence, 'array<struct<claim_id:string,field:string,text:string>>')) e FROM workspace.referral_saathi.grades gr JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = gr.unique_id WHERE gr.service = 'dialysis' AND g.name = 'Ford Hospital And Research Center' AND g.dtname = 'Patna')"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "dced523c22e0803ae5c4384c90e0c3fc",
+    "question": [
+     "How many facilities in Maharashtra hold a LaQshya certificate that is still valid?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT COUNT(DISTINCT l.unique_id) AS facilities FROM workspace.referral_saathi.facility_list_facts l JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = l.unique_id WHERE l.list_slug = 'laqshya' AND l.status = 'certified, valid' AND g.stname = 'MAHARASHTRA'"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "dfc29696187967553668e46645af78b6",
+    "question": [
+     "Which district in Odisha with no confirmed dialysis facility has the largest population?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT nfhs_district, ROUND(pop / 1e6, 2) AS pop_millions, n_claim, n_corr FROM workspace.referral_saathi.geo_dialysis_district WHERE lower(nfhs_state) = 'odisha' AND n_corr = 0 ORDER BY pop DESC LIMIT 1"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "e7529cac9f6268c265aa478448d9bd94",
+    "question": [
+     "Which Bihar districts have zero facility records?"
+    ],
+    "answer": [
+     {
+      "format": "SQL",
+      "content": [
+       "SELECT dtname FROM workspace.referral_saathi.geo_district WHERE stname = 'BIHAR' AND records = 0 ORDER BY dtname"
+      ]
+     }
     ]
    }
   ]
