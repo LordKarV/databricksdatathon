@@ -355,6 +355,10 @@ def check_spoken(name: str, payload: dict, spoken: dict, only: int | None, repor
 
 def spoken_on(page) -> dict:
     assert page.locator("#speak").count() == 1, "no Read aloud button"
+    # The Hindi / English toggle changes speech only, and its visible label says so (#121 bug 8).
+    label = page.locator("#say-lang-h").inner_text()
+    assert "speech only" in label and "screen stays in English" in label, label
+    assert page.get_by_role("group", name=label).locator("[data-say-lang]").count() == 2
     return page.wait_for_function(SPOKEN_JS).json_value()
 
 
