@@ -40,26 +40,23 @@ Kannada, Malayalam, Bengali, Marathi, Gujarati and Urdu.
 
 ## What runs on Databricks
 
-The workspace resources were created under the project's earlier name, Referral Saathi, and keep it: the app,
-the catalog schema, the dashboard and the Genie agent.
-
-- **The App** (Databricks Apps, `referral-saathi`, deployed by `tools/deploy/deploy.sh`). Typed requests the
+- **The App** (Databricks Apps, deployed by `tools/deploy/deploy.sh`). Typed requests the
   offline lexicon cannot place go to Llama 3.3 70B (`databricks-meta-llama-3-3-70b-instruct`), which also
   translates quotes. A photo of a referral note is read by Llama 4 Maverick (`databricks-llama-4-maverick`). Both
   are called through model serving, and a model's answer is kept only when its deciding phrase appears word for
   word in the input (`app/inputs/understand.py`). Speech goes through faster-whisper small on the App's own CPU:
   2.1 to 3.0 s per clip, 3 of 3 test clips parsed to the right service (`submission/measured_on_databricks.json`).
-- **Unity Catalog:** schema `workspace.referral_saathi`, 62 tables, including the model v2 scores
+- **Unity Catalog:** one schema, 62 tables, including the model v2 scores
   (`facility_service_scores_v2`, 358,092 rows). The six v1 prototype tables are kept and commented SUPERSEDED.
   Which tables rebuild from this repo and which need unpublished inputs: `databricks/README.md`.
-- **AI/BI dashboard** "Referral Saathi: district planner": five pages for district planners, built and tested by
+- **AI/BI dashboard** for district planners: five pages for district planners, built and tested by
   `databricks/dashboard/build_dashboard.py` (`databricks/dashboard/DASHBOARD.md`).
-- **Genie agent** "Referral Saathi planner": the planners' questions in plain English over the same tables, with
+- **Genie agent** for planners: the planners' questions in plain English over the same tables, with
   instructions, 13 example queries and a 12-question benchmark. Native benchmark, 12 questions: 9 of 12, then
   10 of 12 on the live space (two runs,
   [`databricks/genie/benchmark_results.json`](databricks/genie/benchmark_results.json)); two of the 12 share an
   example's SQL shape (`databricks/genie/GENIE.md`). It answers the brief's "Where can a patient get dialysis near Jaipur?" with claim ids.
-- **Notebooks** on serverless: `submission/bharosa.ipynb` (also kept as `referral_saathi.ipynb`, the name the deployed job runs), `submission/02_simulation.ipynb` and
+- **Notebooks** on serverless: `submission/bharosa.ipynb`, `submission/02_simulation.ipynb` and
   `submission/00_rebuild_derived.ipynb`. All three ran on Databricks serverless on 2026-11-22: run ids 796897435272535,
   418325743233710 and 245706239328385 ([release runs](submission/README.md#release-runs-2026-11-22-ran-on-databricks-serverless)).
 - **A GPU run:** the evidence reader's last two backbones trained on a serverless A10G (Databricks AI Runtime),
@@ -149,6 +146,51 @@ upstream cleaning steps; see `derived/v1/README.md`.
 | `submission/` | The notebook and its builder |
 | `demo/` | Storyboard, narration script and the Playwright capture for the video |
 | `tools/` | Deploy script, data audit, public-copy script |
+
+## The statistical model
+
+Bharosa scores every facility-service pair (358,092 of them) with a **calibrated scorecard**, the same family of
+statistical model as clinical risk scores. It reads **witnesses**: named pieces of evidence about one facility and
+one service.
+
+**1. Witness points.** Each witness $k$ contributes $w_k\,x_k(f,s)$ points for facility $f$ and service $s$. A
+witness that its source cannot observe (a public hospital with no website, a facility outside a list's coverage)
+has $x_k = 0$, so missing evidence never counts against a facility.
+
+| Witness family | What it reads | Why it is in the model |
+|---|---|---|
+| Own text | the facility's own sentences about the service, more points for more and stronger lines | the primary claim, weighted by how specifically the listing states it |
+| Prerequisites | the listing names what the care needs (operating theatre, ICU, blood bank, cath lab) | care without its prerequisites is not credible |
+| Dedicated unit | a named unit for the service | a unit implies staff and equipment |
+| Website | the facility's own website states the service (our crawl) | independent of the scraped record, so it survives merged-record contamination |
+| Public lists | NABH, NMC, e-RaktKosh, LaQshya, MoHFW trauma, dialysis lists | official verification from outside the dataset |
+| OpenStreetMap, IPHS | mapped tags; what a public facility of its level is meant to offer | coverage for public hospitals that do not advertise online |
+| Facility type and level | clinic, sub-divisional or district hospital | what a facility of that kind can plausibly do |
+| Contamination | the evidence comes from a merged or low-trust record | 25% of records carry another hospital's text |
+| Negation, scope | "not offered", or only a narrower mention | keeps a denial or a partial sentence from counting as the service |
+
+**2. Score and calibration.** The points add up to a score, and a fitted logistic calibration (Platt scaling)
+turns the score into a probability:
+
+$$S(f,s) = \sum_k w_k\,x_k(f,s), \qquad P_S(f,s) = \frac{1}{1 + e^{-(a\,S(f,s) + c)}}, \quad a = 0.502,\ c = 1.498$$
+
+$a$ and $c$ are fitted on the 221 decided development pairs (`derived/v2/model_card.json`).
+
+**3. Three heads, one band.** Location ($P_L$: is the map point right) and existence ($P_E$: is the facility
+real and operating) are scored by their own heads. A pair is rated **Likely** only when all three agree:
+
+$$\text{Likely} \iff p \ge 0.369,\quad P_L \ge 0.7,\quad P_E \ge 0.7$$
+
+The Likely threshold is the lowest score whose out-of-fold precision is at least 0.85; 102 of 120 development
+Likely pairs confirmed. Unlikely is $p \le 0.2$.
+
+**4. Explanations by construction.** The app shows $100\,p$ as the evidence score out of 100, and the Why page
+lists every term $w_k x_k$ with its quote or list entry, so the score is a sum the user can audit row by row.
+
+**5. Selection and validation.** Candidates ranged from the expert scorecard to fully fitted models and three
+transformer readers. The rule, fixed before fitting, ships the least-fitted candidate unless a more-fitted one
+lowers grouped five-fold out-of-fold log loss by one paired cluster standard error. The selected model was frozen,
+its hash published, and only then tested on a sealed set (Results below).
 
 ## Results
 
