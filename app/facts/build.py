@@ -520,7 +520,7 @@ def sealed_test_record(card_path: Path | None = None, results_path: Path = TEST_
             "public_n": pub["n"], "model_version": res["model_version"],
             "predictions_sha256": res["test_predictions_sha256"], "labels_sha256": labels_full,
             "opened": log["opened"], "source": rel(results_path), "log": rel(OPENING_LOG),
-            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/dev/{rel(OPENING_LOG)}"}
+            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/main/{rel(OPENING_LOG)}"}
 
 
 def rules() -> dict[str, dict]:

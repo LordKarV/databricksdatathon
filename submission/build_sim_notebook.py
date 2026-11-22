@@ -94,6 +94,8 @@ if ON_DATABRICKS:
     SEEDS = int(dbutils.widgets.get("seeds"))  # noqa: F821
     CASES = int(dbutils.widgets.get("cases_per_seed"))  # noqa: F821
     OUT = Path("/Volumes/workspace/referral_saathi/uploads/sim")
+    spark.sql("CREATE SCHEMA IF NOT EXISTS workspace.referral_saathi")  # noqa: F821 (idempotent on a fresh workspace)
+    spark.sql("CREATE VOLUME IF NOT EXISTS workspace.referral_saathi.uploads")  # noqa: F821
 else:  # the environment can change the run size
     SEEDS = int(os.environ.get("SIM_SEEDS", "20"))
     CASES = int(os.environ.get("SIM_CASES", "200"))  # per state x service x seed
