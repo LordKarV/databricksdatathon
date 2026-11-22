@@ -419,19 +419,8 @@ function planScreen() {
         ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
       <p class="small muted">This describes our data, not the facility.</p></details>` : '');
   }
-  state.speak = {en: planSpeech(p)};
+  state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
   return head + toggle + RSInput.speakHtml() + body + foot;
-}
-// Read aloud (#64): the one-line answer, built from the same payload fields the cards show.
-function planSpeech(p) {
-  const [a, b] = p.options;
-  const line = o => `${o.name}, ${o.band_word}, about ${o.travel.low} to ${o.travel.high} minutes by road.`;
-  const parts = [];
-  if (p.abstain) parts.push(p.abstain.text);
-  if (a) parts.push(`Call first: ${line(a)}`);
-  if (b) parts.push(`Backup: ${line(b)}`);
-  if (isEmergency()) parts.unshift('Call 108 first.');
-  return parts.join(' ');
 }
 
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
@@ -594,10 +583,10 @@ function whyScreen(rank) {
     : '<p class="card">No dialable number in our data for this listing.</p>';
   const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
   const split = o.track_record && o.track_record.split === 'test' ? 'final test' : 'dev, not final test';
+  state.speak = {danger: isEmergency(), only: p.options.indexOf(o)};  // this option, its reason and its questions
   return `<a class="btn" href="#/plan">&larr; Plan</a>
     <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
-    ${(state.speak = {en: o.say_to_family.en, hi: o.say_to_family.hi}) && RSInput.speakHtml()}
     <h2>From its own listing</h2>
     ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
@@ -630,6 +619,7 @@ function whyScreen(rank) {
 
     <h2 id="call" tabindex="-1">Call ahead</h2>
     ${isEmergency() ? '<p><strong>Call 108 first. Do not wait for this call to send the patient.</strong></p>' : ''}
+    ${RSInput.speakHtml()}
     ${phone}
     <ol class="script">
       <li>"Is this ${F(P + '.name', o.name)}, ${F(P + '.town', o.town)}?"</li>
@@ -861,7 +851,7 @@ function render() {
   if (h1 && !h.endsWith('#call')) h1.focus({preventScroll: false});
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
   bind();
-  if ($('#speak')) RSInput.bindSpeak(state.speak || {});
+  if ($('#speak')) RSInput.bindSpeak(state.speak);
 }
 window.addEventListener('hashchange', () => {
   if (location.hash === '#/' || location.hash === '#/change') {

@@ -10,7 +10,10 @@ data-k="<kind>". This test then checks:
 - no unmarked digit is on screen, apart from fixed template text (108, 102, 112, 24x7, "in 10 listings") and
   device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
-  its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text.
+  its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
+- read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
+  call-ahead screens (state.spoken, from static/speech.js) lists the payload path of every value it uses; each
+  equals its field and is in the spoken text, and no other digit is spoken except 108 and 102.
 
 Payloads: three real plans from derived/v1 (#42; when app/facts/out is built) plus the stub fixtures.
 Set FAITH_PLANS=<dir> to run against a directory of plan JSON files (for example
@@ -238,6 +241,51 @@ def check_item(payload: dict, it: dict) -> str | None:
     return None if ok else f"{path} ({kind}): shown {shown!r}, stored {repr(stored)[:120]}"
 
 
+SPOKEN_JS = """() => typeof state !== 'undefined' && state.spoken"""
+
+
+def num_str(v: Any) -> str:
+    return str(int(v)) if float(v).is_integer() else str(v)
+
+
+def check_spoken(name: str, payload: dict, spoken: dict, only: int | None, report: dict) -> list[str]:
+    """Read-aloud text (both languages) against the payload: the spoken twin of check_item and stray_digits."""
+    errs = []
+    for lang in ("hi", "en"):
+        text, fields, tag = spoken[lang]["text"], spoken[lang]["fields"], f"{name}/speech-{lang}"
+        if not text.strip():
+            errs.append(f"{tag}: nothing to read aloud")
+        rest = text
+        for f in sorted(fields, key=lambda f: -len(str(f["value"]))):
+            path, kind, val = f["path"], f["kind"], f["value"]
+            try:
+                src = resolve(payload, path)
+            except (KeyError, IndexError, ValueError, TypeError):
+                errs.append(f"{tag}: {path} not in payload")
+                continue
+            if kind == "num":
+                ok = float(src) == float(val) and num_str(val) in text
+            elif kind == "part":
+                ok = val in src and val in text
+            else:
+                ok = src == val and (kind not in ("text", "template") or val in text or kind == "template")
+            if kind in ("text", "part"):
+                rest = rest.replace(val, " ")
+            if not ok:
+                errs.append(f"{tag}: {path} ({kind}) spoken {val!r}, stored {repr(src)[:120]}")
+            if only is not None and not path.startswith((f"options.{only}.", "emergency_numbers.", "abstain.", "query.")):
+                errs.append(f"{tag}: {path} is not about option {only}")
+            report["values_checked"] += 1
+        allowed = {num_str(f["value"]) for f in fields if f["kind"] == "num"} | {"108", "102"}
+        errs += [f"{tag}: unmarked number {d!r} spoken" for d in re.findall(r"\d+", rest) if d not in allowed]
+    return errs
+
+
+def spoken_on(page) -> dict:
+    assert page.locator("#speak").count() == 1, "no Read aloud button"
+    return page.wait_for_function(SPOKEN_JS).json_value()
+
+
 def stray_digits(rest: str) -> list[str]:
     for pat in STATIC_PHRASES:
         rest = re.sub(pat, " ", rest)
@@ -295,6 +343,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         page.wait_for_selector("article.card")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
+        errs += check_spoken("plan", payload, spoken_on(page), None, report)
         opts = payload["options"]
         far = (opts and opts[0]["band"] != "likely" and any(o["band"] == "likely" for o in opts)
                and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
@@ -308,6 +357,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             got = page.evaluate(COLLECT_JS)
             errs += check_screen(f"why/{o['rank']}", payload, got, report)
             errs += check_quotes(f"why/{o['rank']}", payload, got["items"], claims, report)
+            spoken = spoken_on(page)
+            errs += check_spoken(f"why/{o['rank']}", payload, spoken, i, report)
+            if f"options.{i}.name" not in {f["path"] for f in spoken["en"]["fields"]}:
+                errs.append(f"why/{o['rank']}: read aloud does not name this option")
             shown = {it["path"] for it in got["items"]}
             for j in range(len(o["evidence"])):
                 if f"options.{i}.evidence.{j}.quote" not in shown:

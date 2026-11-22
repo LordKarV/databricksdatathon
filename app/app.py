@@ -22,6 +22,7 @@ from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
 from services import SERVICES
 from verify.check import Checker
+from voice import transcribe as voice
 
 LocationSource = Literal["gps", "last_fix", "pin", "district", "manual"]
 Depth = Literal["quick", "compare", "area"]
@@ -42,6 +43,9 @@ SHELL_FILES: dict[str, str] = {
     "slip.js": "text/javascript; charset=utf-8",
     "how.js": "text/javascript; charset=utf-8",
     "input.js": "text/javascript; charset=utf-8",
+    "voice.js": "text/javascript; charset=utf-8",
+    "speech.js": "text/javascript; charset=utf-8",
+    "speech_templates.json": "application/json; charset=utf-8",
     "lexicon.json": "application/json; charset=utf-8",
     "stories.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
@@ -171,6 +175,23 @@ class NoteRequest(BaseModel):
 def read_note(req: NoteRequest) -> JSONResponse:
     """Referral-note photo -> detected text and a guarded suggestion (#64). The image is not stored or logged."""
     return JSONResponse(understand.read_note(req.image), headers={"Cache-Control": "no-store"})
+
+
+class TranscribeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    audio: str = Field(description="data:audio/<webm|ogg|mp4|wav>;base64,... from MediaRecorder, up to 30 s and 2 MB")
+    lang: Literal["hi", "en"] = Field(description="chosen by the user; forced, never auto-detected")
+
+
+@app.post("/api/transcribe")
+def transcribe(req: TranscribeRequest) -> JSONResponse:
+    """Speech -> text on this server (faster-whisper small). The audio and the text are never stored or logged."""
+    no_store = {"Cache-Control": "no-store"}
+    try:
+        return JSONResponse(voice.transcribe(req.audio, req.lang), headers=no_store)
+    except voice.Rejected as e:
+        return JSONResponse({"error": e.message}, status_code=e.status, headers=no_store)
 
 
 class OutcomeRequest(BaseModel):

@@ -2,7 +2,7 @@
 // (a stopped Databricks App answers with a proxy error page, not a network error). Redirects pass
 // through so an expired session can sign in again. API calls are never cached here, except the
 // offline state packs, which are stored on request (message 'cache-pack') in IndexedDB (spec, #32).
-const CACHE = 'rs-shell-v10';
+const CACHE = 'rs-shell-v11';
 const OLD_PACKS = 'rs-packs-v1';  // Cache Storage before #32; moved to IndexedDB on activate
 
 // ---------- pack store: IndexedDB 'rs-packs', object store 'packs', {slug, body, sha256, built, saved_at} ----------
@@ -48,7 +48,7 @@ function packResponse(rec) {
     'X-Pack-Built': rec.built || ''}});
 }
 const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/how.js', '/stories.js', '/input.js',
-  '/lexicon.json', '/manifest.webmanifest'];
+  '/lexicon.json', '/manifest.webmanifest', '/voice.js', '/speech.js', '/speech_templates.json'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));

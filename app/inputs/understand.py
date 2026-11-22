@@ -16,9 +16,11 @@ from __future__ import annotations
 import json
 import os
 import re
+import unicodedata
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeout
+from difflib import SequenceMatcher
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -89,6 +91,30 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.casefold()).strip()
 
 
+# Devanagari spellings speech-to-text and typists swap (feasibility/voice_language/out/asr_small.json: खुन for
+# खून, हदी for हड्डी, तुट for टूट, भार for बार, उलता for उल्टा): nukta, nasal marks and virama dropped, long and
+# short vowels merged, aspirated and retroflex consonants folded onto the plain dental ones. Dropping the anusvara
+# makes सांस and सास (mother-in-law) one word; that errs towards the danger card, the safe side.
+_DEVA = str.maketrans({
+    "\u093c": None, "\u0901": None, "\u0902": None, "\u094d": None,
+    "ी": "ि", "ू": "ु", "ै": "े", "ौ": "ो", "ॉ": "ो", "ॅ": "े", "ई": "इ", "ऊ": "उ", "ऐ": "ए", "औ": "ओ", "ऑ": "ओ",
+    "ख": "क", "घ": "ग", "छ": "च", "झ": "ज", "थ": "त", "ध": "द", "फ": "प", "भ": "ब",
+    "ट": "त", "ठ": "त", "ड": "द", "ढ": "द", "ण": "न", "श": "स", "ष": "स",
+})
+# Hinglish spellings: khoon/khun, saaf/saf, zehar/jahar, chhed/ched, bachcha/baccha/bacha (repeats collapse below).
+_LATIN = (("chch", "ch"), ("cch", "ch"), ("ee", "i"), ("oo", "u"), ("ph", "f"), ("w", "v"), ("z", "j"), ("q", "k"))
+_PUNCT = re.compile(r"[\u0964\u0965]|[^\w\s'\u0900-\u097f]")
+
+
+def fold(s: str) -> str:
+    """norm() plus the spelling folds above, used on both the input and the lexicon before matching."""
+    t = unicodedata.normalize("NFD", s.casefold()).translate(_DEVA)
+    for a, b in _LATIN:
+        t = t.replace(a, b)
+    t = re.sub(r"([^\s\d])\1+", r"\1", _PUNCT.sub(" ", t))
+    return re.sub(r"\s+", " ", t).strip()
+
+
 def _pattern(phrase: str) -> re.Pattern[str]:
     # Latin-script phrases match on word edges ("chot" must not fire inside "chota"); Devanagari as a substring.
     edge = r"(?<![a-z0-9])" if phrase[:1].isascii() else ""
@@ -96,13 +122,73 @@ def _pattern(phrase: str) -> re.Pattern[str]:
     return re.compile(edge + re.escape(phrase) + end)
 
 
+# Fuzzy match, only when no exact (folded) phrase matched: difflib's ratio on token windows with the spaces
+# removed, so a split or joined word ("माको" for "माँ को") still lines up. Devanagari phrases of 5 or more letters
+# only: speech-to-text misspells Devanagari, while romanised phrases sit next to everyday words ("ja gaye" against
+# "jal gaye" scores 0.92, "jana" against "jalna" 0.89). FUZZY_MIN_RATIO: on the 120 utterances in
+# tests/test_hindi_lexicon.py, 0.82 raises 2 false danger cards and 0.90 loses 2 hits; 0.86 is mid-plateau.
+FUZZY_MIN_RATIO, FUZZY_MIN_LEN = 0.86, 5
+
+
+def fuzzy_ratio(a: str, b: str) -> float:
+    return SequenceMatcher(None, a, b, autojunk=False).ratio()
+
+
+Phrase = tuple[str, re.Pattern[str], str, int]  # folded phrase, pattern, phrase without spaces, word count
+
+
+def _phrases(words: list[str]) -> list[Phrase]:
+    folded = sorted({fold(w) for w in words if fold(w)}, key=len, reverse=True)
+    return [(p, _pattern(p), p.replace(" ", ""), p.count(" ") + 1) for p in folded]
+
+
 @lru_cache(maxsize=1)
-def lexicon() -> dict[str, list[tuple[str, re.Pattern[str]]]]:
-    doc = json.loads(LEXICON.read_text())["services"]
-    return {k: [(p, _pattern(p)) for p in sorted(v, key=len, reverse=True)] for k, v in doc.items()}
+def _doc() -> dict[str, Any]:
+    return json.loads(LEXICON.read_text())
 
 
-DANGER_PATTERNS = [(w, _pattern(norm(w))) for w in DANGER]
+@lru_cache(maxsize=1)
+def lexicon() -> dict[str, list[Phrase]]:
+    return {k: _phrases(v) for k, v in _doc()["services"].items()}
+
+
+@lru_cache(maxsize=1)
+def danger_phrases() -> list[Phrase]:
+    return _phrases(DANGER + _doc().get("danger", []))  # the lexicon adds the Hindi danger words
+
+
+def _words(text: str) -> tuple[list[str], list[str]]:
+    """The input's words (for quoting back) and their folded forms, aligned."""
+    pairs = [(w, fold(w)) for w in _PUNCT.sub(" ", text).split()]
+    pairs = [(w, f) for w, f in pairs if f]
+    return [w for w, _ in pairs], [f for _, f in pairs]
+
+
+def _best(words: list[str], folded: list[str], phrases: list[Phrase], fuzzy: bool) -> str | None:
+    """The input's own words for the longest exact phrase, else (fuzzy) for the closest window above the bar."""
+    t = " ".join(folded)
+    for _, pat, _, _ in phrases:
+        m = pat.search(t)
+        if m:
+            i, j = t.count(" ", 0, m.start()), t.count(" ", 0, max(m.end() - 1, m.start())) + 1
+            return " ".join(words[i:j])
+    if not fuzzy:
+        return None
+    best, span = FUZZY_MIN_RATIO, None
+    for _, _, flat, n in phrases:
+        if len(flat) < FUZZY_MIN_LEN or flat.isascii():
+            continue
+        sm = SequenceMatcher(None, autojunk=False)
+        sm.set_seq2(flat)
+        for k in {max(n - 1, 1), n, n + 1}:
+            for i in range(len(folded) - k + 1):
+                w = "".join(folded[i:i + k])
+                if 2 * min(len(w), len(flat)) < best * (len(w) + len(flat)):
+                    continue  # the ratio cannot reach the bar
+                sm.set_seq1(w)
+                if sm.quick_ratio() >= best and (r := sm.ratio()) >= best:
+                    best, span = r, " ".join(words[i:i + k])
+    return span
 
 
 def find_phrase(text: str, phrase: str) -> str | None:
@@ -113,23 +199,17 @@ def find_phrase(text: str, phrase: str) -> str | None:
 
 
 def danger_hit(text: str) -> str | None:
-    t = norm(text)
-    for w, pat in DANGER_PATTERNS:
-        if pat.search(t):
-            return find_phrase(text, norm(w)) or w
-    return None
+    words, folded = _words(text)
+    return _best(words, folded, danger_phrases(), fuzzy=True)
 
 
-def lexicon_hits(text: str) -> dict[str, str]:
-    """service -> the longest lexicon phrase found in the text."""
-    t = norm(text)
-    out = {}
-    for svc, phrases in lexicon().items():
-        for p, pat in phrases:
-            if pat.search(t):
-                out[svc] = p
-                break
-    return out
+def lexicon_hits(text: str, fuzzy: bool = True) -> dict[str, str]:
+    """service -> the input's words that matched: exact folded phrases first; fuzzy only when none matched."""
+    words, folded = _words(text)
+    out = {svc: s for svc, ph in lexicon().items() if (s := _best(words, folded, ph, fuzzy=False))}
+    if out or not fuzzy:
+        return out
+    return {svc: s for svc, ph in lexicon().items() if (s := _best(words, folded, ph, fuzzy=True))}
 
 
 # ---------- serving endpoints ----------
@@ -214,7 +294,7 @@ def parse_text(text: str) -> dict[str, Any]:
 def note_services(text: str) -> set[str]:
     """Services the lexicon and the clinical terms find in the detected text, ignoring instruction-like lines."""
     clean = "\n".join(ln for ln in text.splitlines() if not INJECTION.search(ln))
-    found = set(lexicon_hits(clean))
+    found = set(lexicon_hits(clean, fuzzy=False))  # the photo guard wants exact agreement
     found |= {s for s, pat in NOTE_TERMS.items() if re.search(pat, clean, re.IGNORECASE)}
     return found
 
