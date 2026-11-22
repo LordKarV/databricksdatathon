@@ -10,8 +10,8 @@ really offers the care; sending everyone to the best hospital ignores whether th
 Referral Saathi weighs evidence, travel time and the care's time window, and when the right hospital is too far it
 plans a stop to stabilise first. For example, after a road accident near Pusa, Bihar, going straight to Patna takes
 about 84 minutes and misses the 60-minute window, so the app sends the patient first to a hospital about 34
-minutes away, with the number to call and the question to ask. *Illustration: the route planner still runs on
-interim scores; these numbers will be re-run on the frozen model (#63).*
+minutes away, with the number to call and the question to ask. *These numbers come from the route planner on
+model v2 (the hospital direct is Rajeshwar Hospital, Patna; the first stop is Miracare Hospital).*
 
 ![Results screen on a phone](app/checks/screens/results_dialysis-light.png)
 
