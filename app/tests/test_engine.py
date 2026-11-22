@@ -142,6 +142,32 @@ def test_area_from_real_rows():
     assert all(c["facility_id"] in ENGINE.fid for c in a["ten_calls"]) and len(a["ten_calls"]) <= 10
 
 
+def test_area_headline_agrees_with_the_gap_list():
+    """#167 review: over 280 cases (40 districts x 7 services, with Agra, Giridih, Datia and Araria, where the
+    headline said "No call can add a PIN area" over a gap list saying "A phone call can settle it"), the headline
+    kind follows from the gap list's own counts, and "Calls could close" is the gap list's not_confirmed."""
+    first = {}
+    for j in range(len(ENGINE.pins["pin"])):
+        first.setdefault(ENGINE.pin_where[j], j)
+    seen = sorted(first)
+    named = [k for k in seen if k[0] in {"AGRA", "GIRIDIH", "DATIA", "ARARIA"}][:4]
+    picks = named + random.Random(167).sample([k for k in seen if k not in named], 40 - len(named))
+    bad = []
+    for key in picks:
+        j = first[key]
+        for s in SERVICES:
+            a = ENGINE.area(s, ENGINE.pins["lat"][j], ENGINE.pins["lon"][j])
+            h, g, n = a["headline"], a["gap"], a["summary"]["n_pins"]
+            want = ("if_confirms" if g["not_confirmed"] else "all_covered" if n and g["covered"] == n
+                    else "none_in_window")
+            ok = (h["kind"] == want and h["now"] == g["covered"] and h["n"] == n
+                  and round(a["summary"]["calls_could_close"] * n) == g["not_confirmed"]
+                  and (want != "if_confirms" or h["k"] - h["now"] == a["ten_calls"][0]["areas"]))
+            if not ok:
+                bad.append((a["area"]["district"], s, h["kind"], g["not_confirmed"]))
+    assert len(picks) * len(SERVICES) == 280 and not bad, bad
+
+
 def test_503_when_data_not_built(monkeypatch):
     monkeypatch.setattr(app_module, "_engine", lambda: None)
     assert client.post("/api/plan", json={"service": "mri", "lat": 20, "lon": 78}).status_code == 503
