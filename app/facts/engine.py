@@ -16,6 +16,7 @@ from pathlib import Path
 
 from services import BAND_WORDS, SERVICES, emergency_numbers, haversine_km, travel
 
+from facts.ledger_terms import nabh_text
 from facts.redact import redact_names
 
 # New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
@@ -25,6 +26,13 @@ STRINGS = {
                    "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
     "need_named": {"en": "its listing names it, but not whether it is free today",
                    "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+    # Route guard (#140 WS2 2c, app/itinerary.py). hi: None until WS2 2e adds the engine table rows to hi.json.
+    "route_dropped": {"en": "Go straight to {name}; it is nearer than any other place with evidence for every stage.",
+                      "hi": None},
+    "stop_no_line": {"en": "No line in its listing names {need}; ask on the phone.", "hi": None},
+    "stop_1_unlisted": {"en": "The route starts at {name}, which is not in the options list: no listing near here "
+                              "names this service itself, so each stop is chosen on the evidence for its own stage.",
+                        "hi": None},
     "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
@@ -99,7 +107,8 @@ def nearest_plausible(rows: list, window: float = math.inf) -> list:
 
 def expected_in_window(rows: list[tuple[float, float]], window: float, call_min: float = CALL_MIN) -> float:
     """Chance of care within the window when the options are called in order and the first "yes" is visited:
-    rows are (p, minutes); the k-th call ends at k x call_min. p is the per-call chance of a "yes" that holds."""
+    rows are (p, minutes); the k-th call ends at k x call_min. p is the model's chance that a decisive web check
+    confirms the service, not the chance of a "yes" on the phone, so this treats one as a stand-in for the other."""
     e, miss = 0.0, 1.0
     for k, (p, minutes) in enumerate(rows, 1):
         if k * call_min + minutes <= window:
@@ -169,6 +178,22 @@ NEED_WORDS = {k: re.compile(v, re.I) for k, v in {
 }.items()}
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
+# "Say this to the family" by the model's band (#140 2d). A NO_SERVICE_TEXT listing never "says it offers" the care,
+# whatever band field reports give it. New English strings for the hi.json engine table (2e).
+SAY = {
+    "likely": "This hospital's listing says it offers {label}. It is {dist}. We will phone before going.",
+    "mentions": "This hospital's listing mentions {label}, but we have not confirmed it. It is {dist}. "
+                "We will phone before going.",
+    "NO_SERVICE_TEXT": "Its listing has no line of its own about {label} (it names it only in a list). "
+                       "We will phone to ask before going.",
+}
+LIKELY_FARTHER = ("It is rated Likely, but it is {n} min farther. In an emergency we phone the nearest plausible "
+                  "place first and go on if they say no")
+
+
+def km_words(km: float) -> str:
+    """'less than 1 km away' under 1 km (never '0 km'), else 'about N km away' in whole km."""
+    return "less than 1 km away" if km < 1 else f"about {round(km)} km away"
 PUBLIC_LABEL = "by public standard, not verified"
 PUBLIC_LEVEL = {"phc": "primary health centre", "chc": "community health centre", "sdh": "sub-divisional hospital",
                 "dh": "district hospital", "mc": "medical college hospital"}
@@ -212,6 +237,7 @@ class Pair:
     listings: int = 1  # duplicate listings of this site merged into it (#78); the score is the best member's
     ledger: list | None = None  # derived/v2 terms: [[term, tenths of a point, [claim ids]], ...], base first
     not_observed: str = ""  # families derived/v2 cannot see for this pair, e.g. "WO" (facts/ledger_terms.py)
+    lists: list | None = None  # derived/v2 ON_A_PUBLIC_LIST overlays: [[list, date], ...] (WS4 4a)
 
 
 class Engine:
@@ -233,6 +259,8 @@ class Engine:
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         words = facts.get("ledger", {})  # older exports: no ledger, one "model score" row
         self.terms, self.not_observed = words.get("terms", {}), words.get("not_observed", {})
+        self.cites, self.list_names = words.get("cites", {}), words.get("lists", {})
+        self.fac.setdefault("nabh", [None] * len(self.fac["id"]))
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
         # The score a pair gets once a second source confirms it (the gold override): used for "what would change".
@@ -284,12 +312,32 @@ class Engine:
         """The model's named terms on the app's scale (10 points per logit unit), base first. The build spreads the
         rounding so the points sum to round(10 x logit(p), 1). A row's quotes are the app claims its term cites."""
         rows = []
-        for term, tenths, cids in pr.ledger:
+        for term, tenths, cids, *rest in pr.ledger:
             family, en, hi = self.terms[term]
             rows.append({"label": en, "label_hi": hi, "family": family, "points": tenths / 10,
                          "quotes": [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1]}
-                                    for c in cids if c in self.claims]})
+                                    for c in cids if c in self.claims],
+                         "cites": [self._cite(c) for c in (rest[0] if rest else []) if c in self.cites]})
         return rows
+
+    def _cite(self, cid: str) -> dict:
+        """One official-list or OpenStreetMap row a ledger term rests on (facts/build.py cites()), with its link."""
+        text, url, source, fetched, tier, k, n = self.cites[cid]
+        return {"id": cid, "text": text, "url": url, "source": source, "fetched_date": fetched, "tier": tier,
+                "precision_k": k, "precision_n": n}
+
+    def _public_lists(self, pr: Pair, i: int) -> list[dict]:
+        """The official lists derived/v2 found this facility on, for one "Official lists" line. A NABH entry says
+        which kind it is (facts/ledger_terms.py NABH_TIER): a CGHS/ECHS empanelment is not accreditation."""
+        out = []
+        for key, date in pr.lists or []:
+            row = {"list": key, "name": self.list_names.get(key, key), "fetched_date": date}
+            nabh = self._f("nabh", i)
+            if key == "nabh" and nabh:
+                tier, acc, url = nabh
+                row |= {"tier": tier, "id": acc, "url": url, "text": nabh_text(tier, acc)}
+            out.append(row)
+        return out
 
     def _not_observed(self, pr: Pair) -> list[dict]:
         """Families the model cannot see for this pair: they add no points, so they are named, not scored."""
@@ -472,6 +520,12 @@ class Engine:
         """score(), or the caller's replacement for this facility (community/field.py's field-adjusted score)."""
         return (scores or {}).get(fid) or self.score(fid, service)
 
+    def say_to_family(self, pr: Pair, band: str, label: str, km: float) -> str:
+        """The family sentence by model_band, then by the shown band (field reports can lower a Likely card)."""
+        if self.model_band(pr) == "NO_SERVICE_TEXT":
+            return SAY["NO_SERVICE_TEXT"].format(label=label)
+        return SAY["likely" if band == "likely" else "mentions"].format(label=label, dist=km_words(km))
+
     def option(self, rank: int, pr: Pair, service: str, lat: float, lon: float, trav: dict,
                scores: dict | None = None) -> dict:
         i, label = pr.fi, SERVICES[service]["label_en"]
@@ -481,10 +535,7 @@ class Engine:
         url = self.cited_url(i)
         evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url,
                      "flags": self.quote_flags(c, i)} for c in ev]
-        say = (f"This hospital's listing says it offers {label}. It is about {round(trav['km'])} kilometres away. "
-               "We will phone before going.") if band == "likely" else (
-               f"This hospital's listing mentions {label}, but we have not confirmed it. It is about "
-               f"{round(trav['km'])} kilometres away. We will phone before going.")
+        say = self.say_to_family(pr, band, label, trav["km"])
         return {
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
@@ -502,6 +553,7 @@ class Engine:
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
             "not_observed": self._not_observed(pr),
+            "public_lists": self._public_lists(pr, i),
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
             "track_record": self._track(p, rule),
@@ -623,7 +675,7 @@ class Engine:
             "time_window": {"window_min": window, "first_outside": first_outside},
             "rank_rule": {"code": "nearest_plausible" if nearest_first else "evidence_and_time",
                           "text": RANK_RULE["nearest_plausible" if nearest_first else "evidence_and_time"],
-                          # model p as the chance each call ends in care; CALL_MIN per call is an assumption
+                          # model p (web-check confirm chance) stands in for a "yes" per call; CALL_MIN per call is assumed
                           "expected_in_window": expected_in_window([(o["p"], o["travel"]["minutes"]) for o in options],
                                                                    window) if nearest_first else None},
             "public_option": public if first_outside else None,
@@ -668,6 +720,11 @@ class Engine:
         if minutes > window >= top[1]:  # the first choice is inside the window and this one is not
             out.append(("outside_window", "It is beyond the time window for this care",
                         {"field": "travel.minutes", "value": minutes, "window_min": window}))
+        elif (minutes > top[1] and band == "likely" and top[4] != "likely"
+              and SERVICES[service]["profile"] in NEAREST_FIRST):
+            # #140 2d: say why a Likely place is not first under the nearest-plausible rule, before anything else
+            out.insert(0, ("farther", LIKELY_FARTHER.format(n=minutes - top[1]),
+                           {"field": "minutes_vs_first", "value": minutes - top[1]}))
         elif minutes > top[1]:
             out.append(("farther", "It is farther away than the first choice",
                         {"field": "minutes_vs_first", "value": minutes - top[1]}))
@@ -695,7 +752,9 @@ class Engine:
     def _why_not_reason(self, service: str, r: tuple, top: tuple) -> tuple[str, str, list[dict]]:
         """(code, one plain sentence of at most two clauses, basis per clause)."""
         cl = self._why_not_clauses(service, r, top)[:2]
-        text = cl[0][1] + "".join(f"; {c[1][0].lower()}{c[1][1:]}" for c in cl[1:])
+        # A lead of two sentences takes the next clause as a third sentence, not after a semicolon
+        join = (lambda t: f". {t}") if ". " in cl[0][1] else (lambda t: f"; {t[0].lower()}{t[1:]}")
+        text = cl[0][1] + "".join(join(c[1]) for c in cl[1:])
         return cl[0][0], text, [{"code": c[0], **c[2]} for c in cl]
 
     def _why_not(self, service: str, chosen: list, cands: list, options: list) -> tuple[list[dict], dict | None]:
@@ -746,8 +805,10 @@ class Engine:
         pins = self.pins
         k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
         district, state = self.pin_where[k]  # the district the nearest PIN point lies in, not the one it is filed under
-        all_idx = sorted((j for j in range(len(pins["pin"])) if self.pin_where[j] == (district, state)),
-                         key=lambda j: pins["pin"][j])
+        # PINs the gazetteer files under no district (facts/build.py fill_districts) are not counted as the district's
+        guessed = pins.get("district_from") or [""] * len(pins["pin"])
+        all_idx = sorted((j for j in range(len(pins["pin"]))
+                          if self.pin_where[j] == (district, state) and not guessed[j]), key=lambda j: pins["pin"][j])
         idx = all_idx[:max_pins]
         window = WINDOW[info["profile"]]
         rows, gains, n_now, n_conf = [], {}, 0, 0

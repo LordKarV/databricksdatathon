@@ -17,6 +17,7 @@ app-data:  ## build the app's run-time exports from derived/v1, in deploy order
 	$(PY) app/packs/build_packs.py
 	$(PY) app/howto/build.py
 	$(PY) app/stories/build.py
+	$(PY) app/verify/build_sites.py
 
 test:  ## run the app, planner and travel test suites
 	cd app && ../$(PY) -m pytest tests -q
