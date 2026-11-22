@@ -624,12 +624,58 @@ else:
 ''')
 
 md("""
+**What the TEST does and does not show.** The lead number is the Likely band: how often a Likely answer was
+confirmed. AUROC says how well the score orders options within a list. Two checks read the same TEST labels
+(`model/gold/v3/test_eval/independence.json`, written by `independence.py`, read-only on the frozen predictions):
+- **Independence.** When the facility's own website states the service, the model's website witness and the web
+  check read the same page, so agreement there is expected. The split shows how the score does without it.
+- **Bands, exists and Unlikely.** Each band's verdicts, the existence head (TEST has no "does not exist" label, so
+  the DEV rule counts "unclear after a search" as a negative), and Unlikely by its two routes: a low score, or the
+  c2 rule (text names another facility and no unit of its own).
+""")
+
+code('''
+ind = json.loads((ROOT / "model/gold/v3/test_eval/independence.json").read_text())
+assert ind["test_predictions_sha256"] == sealed_sha and ind["overall"]["auroc"] == te["headline_decided"]["auroc"]
+
+
+def auc_txt(m):
+    return "undefined (no contradicted pair)" if m["auroc"] is None else \
+        f"{m['auroc']:.3f} [{m['auroc_ci95'][0]:.3f}, {m['auroc_ci95'][1]:.3f}]"
+
+
+display(pd.DataFrame(ind["bands"]).assign(**{"confirmed of decided": lambda d: d.confirmed_of_decided.map(
+    lambda w: f"{w['k']} of {w['n']}" if w["n"] else "-")}).set_index("band")[
+    ["pairs", "confirmed", "contradicted", "no_info", "no_info_share", "confirmed of decided"]])
+w = ind["by_website_family"]
+print(f"Own website states the service (W > 0): {w['W_gt_0']['confirmed']} of {w['W_gt_0']['n']} confirmed. "
+      f"Website silent or absent (W <= 0): {w['W_le_0']['n']} pairs, AUROC {auc_txt(w['W_le_0'])}.")
+for k, m in ind["by_label_evidence_source"].items():
+    if isinstance(m, dict) and m["n"] >= 5:
+        print(f"Label evidence from {k.replace('_', ' ')}: {m['n']} pairs, AUROC {auc_txt(m)}")
+b = ind["band_as_score"]
+print(f"The band as a score: AUROC {auc_txt(b['band_ordinal'])}; LIKELY against the rest {auc_txt(b['likely_vs_rest'])}")
+print("Services with no contradicted TEST pair:", ", ".join(ind["services_with_0_test_negatives"]))
+ex = ind["existence_head"]
+print(f"Exists: labels {ex['counts']}; with the DEV rule, AUROC {auc_txt(ex['y_E_rule'])}")
+for split, r in ind["unlikely_by_route"].items():
+    if split != "t_U":
+        print(f"{split} Unlikely right (contradicted): p <= {ind['unlikely_by_route']['t_U']} route "
+              f"{r['p_route']['k']} of {r['p_route']['n']}, c2 route {r['c2_route']['k']} of {r['c2_route']['n']}"
+              + (" (DEV is the fit set)" if split == "DEV" else ""))
+labels = {k: json.loads((ROOT / f"model/gold/v3/{k}_labels.json").read_text())["report"]["overlap"]
+          for k in ("dev", "test")}
+print(f"Label agreement (Cohen's kappa on the verdict): DEV {labels['dev']['kappa_service']}, TEST "
+      f"{labels['test']['kappa_service']}; TEST confirmed-vs-contradicted disagreements: "
+      f"{sum(v for k, v in labels['test']['confusion'].items() if set(k.split('|')) == {'confirmed', 'contradicted'})}")
+''')
+
+md("""
 **A negative result: the reader.** We fine-tuned a small transformer to read each sentence and say whether it is
 about this facility and whether it offers the service. We trained MiniLM on the lead's Mac, and bge-small and
-multilingual-e5 on a Databricks GPU. On the hand-labelled sentences none beats the rules where it
-would have to (the F1 on the class that matters, label 0, with the paired bootstrap interval of the difference
-above zero), and on "offers" every reader is far worse. So the model keeps the rules and the reader slot has
-weight 0.
+multilingual-e5 on a Databricks GPU. On "is this sentence about this facility", two readers score a little
+above the rules, but no interval of the difference (the F1 on label 0, paired bootstrap) is above zero, so no gain
+is shown. On "offers" every reader is far worse. So the model keeps the rules and the reader slot has weight 0.
 """)
 
 code('''
