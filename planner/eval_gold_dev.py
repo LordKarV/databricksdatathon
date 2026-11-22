@@ -23,6 +23,7 @@ Run: .venv/bin/python planner/eval_gold_dev.py      (after planner/export_v1.py)
 """
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -35,7 +36,8 @@ from planner.core import MIN_P, SCHEDULED_MIN_P, hav_km, stage_p  # noqa: E402
 from planner.implied import with_implications  # noqa: E402
 from planner.service import pathways, plan_for_service, store  # noqa: E402
 
-OUT = Path(__file__).resolve().parent / "out_eval"
+DATA_ROOT = Path(os.environ.get("DATATHON_ROOT") or ROOT)       # where derived/v1 lives
+OUT = Path(os.environ.get("PLANNER_EVAL_OUT") or Path(__file__).resolve().parent / "out_eval")
 # service names in gold_pairs.parquet -> app service ids with a pathway
 GOLD_TO_APP = {"dialysis": "dialysis", "csection": "emergency_csection", "nicu": "nicu", "trauma": "trauma_emergency",
                "burns": "burn_care"}
@@ -96,12 +98,12 @@ def main():
     st = store()
     if st is None:
         sys.exit("planner data not built: run planner/export_v1.py")
-    gold = pd.read_parquet(ROOT / "derived/v1/gold_pairs.parquet",
+    gold = pd.read_parquet(DATA_ROOT / "derived/v1/gold_pairs.parquet",
                            columns=["pair_id", "unique_id", "service", "stratum", "split", "service_verdict"])
     gold = gold[(gold.split == "dev") & gold.service.isin(GOLD_TO_APP)].reset_index(drop=True)   # TEST never used
     verdict = {(r.unique_id, r.service): r.service_verdict for r in gold.itertuples()}
     fac = {f["id"]: f for f in st.facilities()}
-    grades = pd.read_parquet(ROOT / "derived/v1/grades.parquet", columns=["unique_id", "service"])
+    grades = pd.read_parquet(DATA_ROOT / "derived/v1/grades.parquet", columns=["unique_id", "service"])
     mention = {s: [fac[u] for u in g.unique_id.unique() if u in fac] for s, g in grades.groupby("service")}
 
     def run(implications):
@@ -149,7 +151,7 @@ def main():
                              for g in [[r for r in rows if r["pathway"] == p]]},
               "confirmed_but_not_picked": missed_summary(rows),
               "rows": rows}
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "gold_dev.json").write_text(json.dumps(result, indent=1))
 
     def line(name, s):
@@ -171,6 +173,7 @@ def main():
             print("  " + line("planner BEFORE", block["planner_without_implications"]))
         print("  " + line("planner", block["planner"]))
         print("  " + line("nearest mention", block["nearest_mention"]))
+    return result
 
 
 if __name__ == "__main__":

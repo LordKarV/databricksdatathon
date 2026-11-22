@@ -26,6 +26,7 @@ result = plan((26.45, 85.95), pathway, facilities, capability_p, travel_fn=None,
 | `service.py` | `plan_for_service(service, lat, lon)`: the one call the app makes |
 | `implied.py` | Wrapper around any `capability_p`: implied capabilities and blood from the blood-centre list |
 | `eval_gold_dev.py`, `EVAL_GOLD_DEV.md` | The planner against the gold DEV labels, before and after |
+| `eval_gold_dev_notebook.py` | The same evaluation as a Databricks-format notebook (local path run; Unity Catalog path not run) |
 | `app_contract.py` | `to_options(result)`: shapes plans for the app's `/api/plan` options |
 | `__main__.py` | CLI that prints a plan for a coordinate (`--json`, `--osrm`, `--elapsed`) |
 | `test_planner.py` | 26 tests with hand-built fixtures: `.venv/bin/python -m pytest planner/test_planner.py -q` |
@@ -39,6 +40,9 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
 #  "instructions": [...], "considered": {...}, "assumptions": {...}, "meta": {"stub": True, ...}}
 ```
 
+- `DATATHON_ROOT` moves the data root (where `derived/v1` and `data/external` live), `PLANNER_OUT` the
+  export folder and `PLANNER_EVAL_OUT` the evaluation output, for machines where the code folder is
+  read-only.
 - Build the data once: `.venv/bin/python planner/export_v1.py` (about 0.9 MB, git-ignored). At run time
   nothing but the standard library is imported. Measured on this machine with system Python and no
   pandas installed: 0.1 s for the first call including the load, then 8 to 22 ms per plan.

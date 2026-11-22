@@ -11,11 +11,12 @@ nothing else changes. The file is written by planner/export_v1.py.
 """
 import gzip
 import json
+import os
 from pathlib import Path
 
 from .core import hav_km
 
-OUT = Path(__file__).resolve().parent / "out" / "planner_v1.json.gz"
+OUT = Path(os.environ.get("PLANNER_OUT") or Path(__file__).resolve().parent / "out") / "planner_v1.json.gz"
 
 
 class Store:
