@@ -738,6 +738,13 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
+        # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
+        # "inside the limit" while another check (for example definitive care) is not met.
+        checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []
+        if checks:
+            miss = page.evaluate("() => { const w = document.querySelector('#main .route > .window'); return w ? w.classList.contains('miss') : null; }")
+            if miss != any(not c["met"] for c in checks):
+                errs.append(f"plan: route line shows miss={miss}, but checks are {[c['met'] for c in checks]}")
         errs += check_spoken("plan", payload, spoken_on(page), None, report)
         opts = payload["options"]
         far = (opts and opts[0]["band"] != "likely" and any(o["band"] == "likely" for o in opts)

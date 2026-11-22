@@ -355,8 +355,8 @@
     "gzip": 6455
    },
    "/app.js": {
-    "raw": 94426,
-    "gzip": 29263
+    "raw": 94985,
+    "gzip": 29490
    },
    "/input.js": {
     "raw": 15543,
@@ -367,8 +367,8 @@
     "gzip": 136
    },
    "/i18n/en.json": {
-    "raw": 25615,
-    "gzip": 8621
+    "raw": 25675,
+    "gzip": 8638
    },
    "/fonts/barlow-500.woff2": {
     "raw": 8524,
@@ -379,12 +379,12 @@
     "gzip": 8651
    }
   },
-  "gzip_total": 67675,
+  "gzip_total": 67919,
   "budget_gzip": 75000,
   "budget_requests": 8
  },
  "hindi_extra": {
-  "/i18n/hi.json": 15788,
+  "/i18n/hi.json": 16038,
   "/fonts/hind-500-deva.woff2": 35665,
   "/fonts/hind-600-deva.woff2": 35013
  }

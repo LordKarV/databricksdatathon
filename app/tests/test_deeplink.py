@@ -66,7 +66,7 @@ def page(browser):
     pg = ctx.new_page()
     pg.errors = []
     pg.on("pageerror", lambda e: pg.errors.append(str(e)))
-    pg.add_init_script(LOC + "localStorage.setItem('rs.lang', '\"en\"');")  # UI2 asks for a language on first launch
+    pg.add_init_script(LOC + ";localStorage.setItem('rs.lang', '\"en\"');")  # UI2 asks for a language on first launch
     yield pg
     ctx.close()
 

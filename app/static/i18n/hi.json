@@ -463,6 +463,8 @@
  "why.largest": "सबसे बड़ी पंक्तियाँ: {rows}।",
  "why.call_to_ask": "फ़ोन करके पूछें।",
  "err.search_again": "फिर से खोजें",
+ "place.outside_india": "फ़ोन की लोकेशन भारत से बाहर दिख रही है। पिन कोड, ज़िला या कस्बे का नाम लिखें।",
+ "place.too_coarse": "फ़ोन की लोकेशन बहुत अंदाज़न है। पिन कोड, ज़िला या कस्बे का नाम लिखें।",
  "engine": {
   "_about": "Exact English engine text, or a template with {slots}, to Hindi. {label} stands for query.service_label (English on the left, Hindi on the right); other slots copy the payload's own words. A reason joined with '; ' is translated clause by clause. Text not here is shown in English with lang=en.",
   "listing evidence not strong enough to rate it Likely": "लिस्टिंग में इतना सबूत नहीं कि संभावना ज़्यादा कहें",

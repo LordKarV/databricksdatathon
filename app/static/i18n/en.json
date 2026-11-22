@@ -462,5 +462,7 @@
  "why.no_text_other": "{band}: no line in its listing describes {label} as its own service, so it is not rated Likely. It is still plausible: the model scores it {p} from the rest of its record (How we decided, below).",
  "why.largest": "Largest rows: {rows}.",
  "why.call_to_ask": "Call to ask.",
- "err.search_again": "Search again"
+ "err.search_again": "Search again",
+ "place.outside_india": "Your phone's location looks outside India. Type a PIN, district or town.",
+ "place.too_coarse": "Your phone's location is too rough to use. Type a PIN, district or town."
 }

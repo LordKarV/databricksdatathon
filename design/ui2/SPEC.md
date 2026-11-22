@@ -252,6 +252,10 @@ namespace and source:
 - [x] Errors and offline say what to do next ("Emergency? Call 108 now. ... tap Try again.").
 - [ ] Not yet checked: TalkBack on a real Android phone, a Hindi native-speaker read of hi.json, sunlight test.
 
+- [x] A missed time-window check is never shown as met: the answer's route line shows the first missed check
+      in red (`window_checks.find(w => !w.met)`), and the faithfulness test checks it.
+- [x] a11y_check covers the chooser, Hindi screens, Settings and 150 % text: 80 states, 0 violations.
+
 ## 7. Information architecture and screens
 
 Routes (hash, as today): `#/lang` (new), `#/`, `#/plan`, `#/why/<rank>` (Why page; `#call` anchor kept),
@@ -290,11 +294,13 @@ Chooser                      Home                          Emergency answer (Pus
 ```
 
 The planned answer (Patna dialysis) is the same without the 108 bar, with a green edge (Likely), and "Steps for
-this care" (assessment, fistula, regular sessions) in place of the strip. The Why page order: back link, name and
-band, listing quotes (labelled, translate button in Hindi), say this to the family, ask on the phone (Call, the
-questions with their reasons, the four outcome buttons), track record, why not the nearest (plus what would change
-it), how we decided (ledger), checks on this listing (real, map point, warnings, field reports), next steps (slip,
-family card, map, website check). Settings: language, text size with a sample line, voice (read aloud, speak to
+this care" (assessment, fistula, regular sessions) in place of the strip. The Why page order (as built): back link, name and
+band, listing quotes (labelled, translate button in Hindi), How we decided (the #132 witness ledger: one row per
+term with its label, or label_hi in Hindi, signed points in mono, the row's quotes in a details element, a total row
+mapped to p, and the muted "Counts neither for nor against" line), say this to the family, ask on the phone (Call, the
+questions with their reasons, the four outcome buttons), how sure and track record (with field reports), why not
+the nearest (plus what would change it; on option 1's page), checks on this listing (real, map point, warnings),
+the website check, next steps (slip, map). Settings: language, text size with a sample line, voice (read aloud, speak to
 search), screen colour, saved data. Offline: 108 bar, the notice and what to do, Try again, the nearest saved
 option by straight-line km with its Call button, the next two, and the data age.
 

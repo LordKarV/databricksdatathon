@@ -338,7 +338,7 @@ function changeScreen() {
       <label for="place">${th('place.label')}</label>
       <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
       <p id="place-help" class="note">${th('place.help')}</p>
-      <p id="place-err" class="err" role="alert"></p>
+      <p id="place-err" class="err" role="alert">${state.placeMsg ? esc(state.placeMsg) : ''}</p>
       <div id="place-choices"></div>
       <button type="submit" class="btn btn-ink btn-block">${th('place.use')}</button>
     </form>
@@ -394,6 +394,7 @@ async function packHit(v) {
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
+  if (state.placeMsg) { state.placeMsg = ''; $('#place').focus(); }  // #134: straight to typing the place
   districtPicker();
   $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -671,8 +672,11 @@ function checkHtml(c, C, full) {
 // Route strip (design/ui2/SPEC.md): one lane against the clock; each arrival a capsule from eta_low to eta_high; the
 // window a rule with the time past it hatched; the line draws once and the first stop pulses. aria-hidden: the stop
 // list under it is the accessible version and carries the marked numbers.
+// A missed check comes first (safety): the strip and the line under it never show a green "inside the limit" while
+// another check (for example definitive care) is not met.
+const keyCheck = r => r.window_checks.find(w => !w.met) || r.window_checks[0];
 function stripHtml(r) {
-  const c = r.window_checks[0];
+  const c = keyCheck(r);
   if (!c) return '';
   const lanes = stopGroups(r.stops).map(g => r.stops[g.ks[0]]);
   const span = 1.1 * Math.max(c.limit_minutes, ...lanes.map(s => s.eta_high));
@@ -697,7 +701,7 @@ function routeHtml(p) {
     ${it.stop_1_note ? `<p class="note">${E('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
   if (it.abstain) return `<section class="section" aria-labelledby="h-route">${head}<p class="panel"><strong>${E('itinerary.abstain', it.abstain)}</strong></p></section>`;
   if (!it.plans.length) return '';
-  const r = it.plans[0], P = 'itinerary.plans.0', c = r.window_checks[0];
+  const r = it.plans[0], P = 'itinerary.plans.0', c = keyCheck(r), ci = r.window_checks.indexOf(c);
   const compact = stopGroups(r.stops).map(g => {
     const s = r.stops[g.ks[0]], S = `${P}.stops.${g.ks[0]}`;
     return `<li><b lang="en">${F(S + '.name', s.name)}</b><span>${g.ks.map(k => E(`${P}.stops.${k}.purpose_word`, r.stops[k].purpose_word)).join(', ')}${c
@@ -708,7 +712,7 @@ function routeHtml(p) {
   const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
   return `<section class="section" aria-labelledby="h-route">${head}
     <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
-      ${c ? checkHtml(c, `${P}.window_checks.0`, false) : ''}${legend}
+      ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}${legend}
       <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
 }
 
@@ -930,6 +934,21 @@ function bindArea() {
   if (s && s.profile && state.loc && !state.area) loadArea();
 }
 
+// /api/plan 422 with a location code (#134, BE-T2): say what is wrong in the app language (the server's text, or ours)
+// and open Change location with the box focused. Never the generic "could not make a plan" for these.
+const LOCATION_CODES = {location_outside_india: 'place.outside_india', location_too_coarse: 'place.too_coarse'};
+async function badLocation(r) {
+  let body = null;
+  try { body = await r.clone().json(); } catch { return false; }
+  const key = body && LOCATION_CODES[body.code];
+  if (!key) return false;
+  const l = state.lang === 'hi' ? 'hi' : 'en';
+  const pick = x => (x && typeof x === 'object' ? x[l] : null);
+  state.placeMsg = pick(body.text) || pick(body.message) || (typeof body[l] === 'string' ? body[l] : null) || ts(key);
+  announce(state.placeMsg);
+  location.hash = '#/change';
+  return true;
+}
 async function bindPlan() {
   $('#retry')?.addEventListener('click', () => { state.plan = null; render(); });
   if (state.plan && state.plan.offline) {
@@ -963,6 +982,8 @@ async function bindPlan() {
       await offlinePlan(ts('off.signed_out'));
     } else if (r.status >= 500) {
       await offlinePlan(ts('off.server_down'));
+    } else if (r.status === 422 && await badLocation(r)) {
+      return;  // #134: the phone's point is outside India or too rough; typing the place is the way on
     } else if (!r.ok) {
       state.plan = {error: ts('err.plan', {code: r.status})};
       announce(state.plan.error);
@@ -1005,6 +1026,10 @@ function whyScreen(rank) {
         <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p></header>
 
     <section class="section" aria-labelledby="h-q"><h2 id="h-q">${th('why.quotes_h')}</h2>${noTextCaptionHtml(o, p.query)}${quotes}</section>
+    <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
+      ${ledgerHtml(o, P, p.query)}
+      <p class="note">${th('why.model', {hash: F('meta.model_hash', p.meta.model_hash), id: F(P + '.facility_id', o.facility_id)})}</p></section>
+
     <section class="section" aria-labelledby="h-fam"><h2 id="h-fam">${th('why.family_h')}</h2>
       <p class="panel">${E(P + '.say_to_family.en', o.say_to_family.en)}</p></section>
 
@@ -1035,10 +1060,6 @@ function whyScreen(rank) {
       ${tieHtml(p, o)}</section>
 
     ${i === 0 ? whyNotHtml(p) : ''}
-
-    <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
-      ${ledgerHtml(o, P, p.query)}
-      <p class="note">${th('why.model', {hash: F('meta.model_hash', p.meta.model_hash), id: F(P + '.facility_id', o.facility_id)})}</p></section>
 
     <section class="section" aria-labelledby="h-chk"><h2 id="h-chk">${th('why.checks_h')}</h2><dl class="facts">
       <div><dt>${th('why.real')}</dt><dd>${o.is_real.map((x, j) => E(`${P}.is_real.${j}`, x)).join('; ')}</dd></div>
