@@ -73,13 +73,21 @@ def test_stage_probability_is_product_with_best_of_any_group():
     assert (weak, weak_p) == ("icu", 0.7)
 
 
-def test_near_definitive_goes_direct_and_no_stop_is_considered():
-    f = [fac("near_d", 40), fac("clinic", 10)]
-    r = core.plan(O, pathway(gate=60), f, caps({"near_d": FULL, "clinic": {"first_aid": 0.95}}), travel_60)
-    assert [p["type"] for p in r["plans"]] == ["direct"]
-    assert r["plans"][0]["stops"][0]["facility_id"] == "near_d"
-    assert r["plans"][0]["stops"][0]["eta_minutes"] == 40
-    assert r["considered"]["plans"] == 1          # the gate kept every stop plan out
+def test_near_definitive_still_stops_at_the_nearest_first_care():
+    # #92: stop 1 is the nearest first care even when definitive care is within the gate; the gate still keeps
+    # every other stop plan out, and the sentence says why the stop helps
+    f = [fac("near_d", 40), fac("clinic", 10), fac("other", 20, km_east=5)]
+    table = {"near_d": FULL, "clinic": {"first_aid": 0.95}, "other": {"first_aid": 0.95}}
+    r = core.plan(O, pathway(gate=60), f, caps(table), travel_60)
+    best = r["plans"][0]
+    assert [s["facility_id"] for s in best["stops"]] == ["clinic", "near_d"]
+    assert best["stops"][1]["eta_minutes"] == 10 + 30 + 30
+    assert all(p["stops"][0]["facility_id"] != "other" for p in r["plans"])
+    assert best["vs_direct"]["text"] == ("Going straight to NEAR_D takes 40 min, within the 60-minute window; "
+                                         "stopping first at CLINIC gives first care 30 min sooner, in about 10 min.")
+    # with no first-care stop, the nearest definitive facility is the route
+    r = core.plan(O, pathway(gate=60), f[:1], caps(table), travel_60)
+    assert [p["type"] for p in r["plans"]] == ["direct"] and r["considered"]["plans"] == 1
 
 
 def test_far_definitive_adds_a_stop_and_explains_it():
@@ -373,20 +381,21 @@ def test_callers_first_choice_is_stop_1_when_it_can_give_first_care():
                                "missing_first_care": [["first_aid"]], "missing_definitive": [["blood", "icu"]]}
 
 
-def test_stop_when_direct_is_within_the_window_says_why_or_goes():
-    # direct to near_d (50 min) is within the 60-minute window; the clinic gives first care sooner, and the route
-    # goes on to sure_d, which has stronger evidence, so the sentence says both
+def test_definitive_care_is_nearest_first_and_p_does_not_buy_minutes():
+    # #92: near_d (50 min, p 0.27) is the definitive facility over sure_d (70 min, p 1.0), direct and after the stop
     f = [fac("near_d", 50), fac("clinic", 10), fac("sure_d", 70, km_east=5)]
     table = {"near_d": {"surgery": 0.3, "blood": 0.9}, "sure_d": {"surgery": 1.0, "blood": 1.0},
              "clinic": {"first_aid": 0.9}}
-    r = core.plan(O, pathway(gate=60), f, caps(table), travel_60)
-    best = r["plans"][0]
-    assert [s["facility_id"] for s in best["stops"]] == ["clinic", "sure_d"]
-    eta = best["stops"][1]["eta_minutes"]
-    assert best["vs_direct"]["text"] == (
-        "Going straight to NEAR_D takes 50 min, within the 60-minute window; stopping first at CLINIC gives first "
-        f"care 40 min sooner, in about 10 min, and the route then goes on to SURE_D (about {eta} min), which has "
-        "stronger evidence than NEAR_D for definitive care.")
+    best = core.plan(O, pathway(gate=60), f, caps(table), travel_60)["plans"][0]
+    assert [s["facility_id"] for s in best["stops"]] == ["clinic", "near_d"]
+    assert best["vs_direct"]["direct_facility_id"] == "near_d"
+    # nothing within the window: the nearest beyond it, and the sentence says the window is missed
+    f = [fac("far_d", 100), fac("farther_sure", 120), fac("clinic", 20)]
+    table = {"far_d": {"surgery": 0.3, "blood": 0.9}, "farther_sure": FULL, "clinic": {"first_aid": 0.9}}
+    best = core.plan(O, pathway(gate=60), f, caps(table), travel_60)["plans"][0]
+    assert [s["facility_id"] for s in best["stops"]] == ["clinic", "far_d"]
+    assert best["vs_direct"]["text"] == ("Going straight to FAR_D takes 100 min and misses the 60-minute window; "
+                                         "stopping first at CLINIC gives first care in about 20 min.")
     # a stop that reaches first care no sooner than going direct inside the window is not offered
     f = [fac("near_d", 50), fac("clinic", 55, km_east=5), fac("far_d", 100)]
     table = {"near_d": {"surgery": 0.3, "blood": 0.9}, "far_d": FULL, "clinic": {"first_aid": 0.95}}

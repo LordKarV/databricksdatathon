@@ -35,8 +35,11 @@ Method
   Stop 1 (#92): the nearest plausible first-care stop leads, p is only a filter and a tie-break. The
   caller's first choice (first_stop, the app's options list #1) is stop 1 when it can give first care,
   that is deliver the first stage or the definitive one; otherwise the nearest place that can, by
-  travel minutes. With a first stage, that place is the stop on the way to every far definitive
-  candidate (no corridor), and the objective picks the definitive facility. When the rule above
+  travel minutes. With a first stage, that place is the stop on the way to every definitive
+  candidate (no gate, no corridor). Definitive care is nearest first too: the plan that reaches a
+  plausible definitive facility within the window soonest, else the soonest beyond it; the objective
+  only orders plans that arrive in the same minute. The best direct plan, the one the sentence
+  compares with, is chosen the same way. When the rule above
   drops every plan through it, the plan with the nearest first stop leads (a direct plan's first stop
   is its definitive facility). The result's first_stop says whether the caller's choice could give
   first care and what it lacks.
@@ -53,7 +56,7 @@ Constants below are planner assumptions, not guideline values; they are echoed i
 Standard library only.
 """
 import math
-from itertools import product
+from itertools import groupby, product
 
 TURNAWAY_MINUTES = 15       # time lost at a facility that cannot deliver the stage
 FAIL_PENALTY_MINUTES = 120  # extra cost of ending untreated, for ordering only
@@ -273,6 +276,8 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed, fi
                 "missing_first_care": _missing(first_stop, stages[0], capability_p) if known else [],
                 "missing_definitive": _missing(first_stop, definitive, capability_p) if known else []}
     cand_d = sorted(all_d, key=lambda c: (c["km"] + 5.0) / c["p"])[:N_DEFINITIVE]
+    # the nearest plausible ones too: definitive care is nearest first (#92), p does not buy minutes
+    cand_d += [c for c in sorted(all_d, key=lambda c: c["km"])[:N_DEFINITIVE] if c not in cand_d]
     if a_def is not None and a_def not in cand_d:
         cand_d.append(a_def)
     if not cand_d:
@@ -315,7 +320,7 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed, fi
 
     if stab and gate is not None:
         far = [(c, r) for c, r in zip(cand_d, rows_od) if r["minutes"] > gate]
-        if far:
+        if far or a_stab is not None:
             cand_s = sorted(all_s, key=lambda c: (c["km"] + 5.0) / c["p"])[:N_STABILISE]
             if a_stab is not None and a_stab not in cand_s:
                 cand_s.append(a_stab)
@@ -323,8 +328,8 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed, fi
             dwell = stab["dwell_minutes"]["typical"]
             for c_s, row_s in zip(cand_s, rows_os):
                 is_a = c_s is a_stab  # stop 1 by rule: on the way or not, it is where first care is nearest
-                usable = [(c, r) for c, r in far if c["f"]["id"] != c_s["f"]["id"] and (is_a or (
-                          c_s["km"] < c["km"] and
+                usable = [(c, r) for c, r in (zip(cand_d, rows_od) if is_a else far) if c["f"]["id"] != c_s["f"]["id"]
+                          and (is_a or (c_s["km"] < c["km"] and
                           c_s["km"] + hav_km(_pt(c_s["f"]), _pt(c["f"])) <= DETOUR_FACTOR * c["km"] + DETOUR_SLACK_KM))]
                 if not usable:
                     continue
@@ -381,8 +386,30 @@ def _beats_direct(p, best_direct, t1, elapsed):
     return better or (same and p["p_first_care"] >= best_direct["p_first_care"] + MARGIN)
 
 
+def _def_window(p, ctx):
+    """Deadline for reaching definitive care on this plan: the definitive window (moved by an after-stabilise rule),
+    else for a direct plan the first-care window, since arriving there is first care. None: no deadline."""
+    if p.get("_t2_with_stop") is not None:
+        return p["_t2_with_stop"]
+    if ctx["t2"] is not None:
+        return ctx["t2"]
+    return ctx["t1"] if p["type"] == "direct" else None
+
+
+def _nearest_first(plans, ctx, elapsed):
+    """Emergency order (#92): plans that reach definitive care within the window first, then by minutes to it; plans
+    equally near (same minute) are ordered by _order, so p only breaks ties, with the same MARGIN."""
+    def key(p):
+        w, eta = _def_window(p, ctx), p["stops"][-1]["eta_minutes"]
+        return (w is not None and eta + elapsed > w, eta)
+    out = []
+    for _, group in groupby(sorted(plans, key=key), key=key):
+        out += _order(list(group))
+    return out
+
+
 def _finish_emergency(plans, ctx, pathway, elapsed):
-    directs = _order([p for p in plans if p["type"] == "direct"])
+    directs = _nearest_first([p for p in plans if p["type"] == "direct"], ctx, elapsed)
     best_direct = directs[0] if directs else None
     kept, dropped = list(directs), 0
     for p in plans:
@@ -392,9 +419,9 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
             kept.append(p)
         else:
             dropped += 1
-    kept = _order(kept)
-    # stop 1 by rule (#92): the best plan through the anchor when it survived the rule above, else the best plan
-    # with the nearest first stop (a direct plan's first stop is its definitive facility)
+    kept = _nearest_first(kept, ctx, elapsed)
+    # stop 1 by rule (#92): the plan through the anchor with the nearest definitive care when it survived the rule
+    # above, else the plan with the nearest first stop (a direct plan's first stop is its definitive facility)
     lead = next((p for p in kept if p.get("_anchor")), None)
     if lead is None:
         nearest = min(p["stops"][0]["eta_minutes"] for p in kept)
@@ -478,10 +505,10 @@ def _vs_direct_text(p, best_direct, t1, elapsed, same_d=None, lead=True):
 def _why_other(p, d, same_d, lead):
     """Why a stop plan's definitive facility is not the direct one (d), in words that hold for this plan. Only the
     lead plan was ranked above same_d; an alternative just names the other hospital."""
-    if p["stops"][-1]["p"] > d["p"]:
-        return f"which has stronger evidence than {d['name']} for definitive care"
     if same_d is not None and same_d["stops"][-1]["eta_minutes"] > p["stops"][-1]["eta_minutes"]:
         return f"which is quicker to reach from {p['stops'][0]['name']} than {d['name']}"
+    if p["stops"][-1]["p"] > d["p"]:
+        return f"which has stronger evidence than {d['name']} for definitive care"
     if lead and same_d is not None:
         return f"which the route rates higher than {d['name']} for definitive care"
     return f"rather than {d['name']}"
