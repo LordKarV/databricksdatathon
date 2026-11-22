@@ -180,8 +180,8 @@
       ? '<span class="band band-likely"><span aria-hidden="true">&#10004;</span> LIKELY</span>'
       : '<span class="band band-not_verified"><span aria-hidden="true">?</span> NOT VERIFIED: call to confirm</span>';
     const tel = telHref(x.tel);
-    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote>"${esc(q.text)}"
-        ${q.claim_id ? `<span class="tag">${esc(q.claim_id)}</span>` : ''}</blockquote>`).join('')
+    const quotes = x.quotes.length ? x.quotes.map(q => `<blockquote${q.claim_id ? ` data-claim="${esc(q.claim_id)}"` : ''}>"${esc(q.text)}"</blockquote>`)
+      .join('')
       : `<p class="small">Our data has no own sentence about ${esc(label)} for this listing.</p>`;
     const sms = 'sms:?body=' + encodeURIComponent(`${label}: ${x.name}. ${x.km_straight} km straight line. ` +
       `${tel ? 'Phone ' + tel.slice(4) + '. ' : ''}Call before going. Emergency 108.`);

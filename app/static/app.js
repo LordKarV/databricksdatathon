@@ -332,9 +332,12 @@ function quoteFlagsHtml(e, P) {
       `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
   }).join('');
 }
+// A quote's claim id stays in the page (marked, for the evidence ledger and the faithfulness test) but is not printed:
+// "61731339:proc:3" means nothing to a family (#121).
+function claimHtml(path, id) { return `<span hidden>${F(path, id)}</span>`; }
 function quoteHtml(e, P) {
   return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>${quoteFlagsHtml(e, P)}`;
+    `${claimHtml(P + '.claim_id', e.claim_id)}${quoteFlagsHtml(e, P)}`;
 }
 // "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
 // engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
@@ -477,7 +480,7 @@ function stopHtml(r, g, P) {
       ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
       <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
         ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-          <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
+          ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
           ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
           : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
       </details>

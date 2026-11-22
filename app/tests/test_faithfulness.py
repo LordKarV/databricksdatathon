@@ -11,6 +11,7 @@ data-k="<kind>". This test then checks:
   "in 10 listings") and device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
+- the claim id is a hidden mark, never printed, and no derived/ path is printed (#121);
 - read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
   call-ahead screens (state.spoken, from static/speech.js) lists the payload path of every value it uses; each
   equals its field and is in the spoken text, and no other digit is spoken except 108 and 102.
@@ -392,6 +393,15 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
     return errs
 
 
+def raw_key_errs(name: str, payload: dict, text: str) -> list[str]:
+    """#121: the visible text (inner_text skips hidden marks) shows no claim id and no derived/ path."""
+    ids = {e["claim_id"] for o in payload["options"] for e in o["evidence"] if e.get("claim_id")}
+    ids |= {e["claim_id"] for r in (payload.get("itinerary") or {}).get("plans") or [] for s in r["stops"]
+            for e in s.get("evidence") or [] if e.get("claim_id")}
+    errs = [f"{name}: claim id {c} printed" for c in sorted(ids) if c in text]
+    return errs + ([f"{name}: a derived/ path printed"] if "derived/" in text else [])
+
+
 CARD_TEMPLATE_NUMBERS = {"108", "102", "24", "7", "1", "16"}  # 108/102 lines, "24x7", Hindi stop list, map zoom
 
 
@@ -639,6 +649,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
+        errs += raw_key_errs("plan", payload, text)
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]
@@ -659,6 +670,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             got = page.evaluate(COLLECT_JS)
             errs += check_screen(f"why/{o['rank']}", payload, got, report)
             errs += check_quotes(f"why/{o['rank']}", payload, got["items"], claims, report)
+            errs += raw_key_errs(f"why/{o['rank']}", payload, page.inner_text("#main"))
             spoken = spoken_on(page)
             errs += check_spoken(f"why/{o['rank']}", payload, spoken, i, report)
             if f"options.{i}.name" not in {f["path"] for f in spoken["en"]["fields"]}:
@@ -697,6 +709,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 got = page.evaluate(COLLECT_JS)
                 errs += check_screen(f"slip/{o['rank']}/{lang}", payload, got, report)
                 errs += check_quotes(f"slip/{o['rank']}/{lang}", payload, got["items"], claims, report)
+                errs += raw_key_errs(f"slip/{o['rank']}/{lang}", payload, page.inner_text("#main"))
                 with page.expect_download() as dl:  # Web Share is off in this context, so the card downloads
                     page.locator("#slip-card").click()
                 card = Path(dl.value.path()).read_text(encoding="utf-8")

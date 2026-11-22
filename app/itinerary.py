@@ -23,7 +23,7 @@ PURPOSE = {"stabilise": "First care: stabilise", "definitive": "Definitive care"
 TYPE = {"direct": "Go straight there", "one_stop": "Stop for first care, then go on",
         "two_stop": "Two stops, then go on", "single_site": "One hospital for every stage",
         "two_sites": "Two places, each for its stage", "three_sites": "Three places, each for its stage"}
-# kb/pathways capability tags of the app's emergency pathways, in plain words for stop_1_note
+# kb/pathways capability tags, in plain words for stop_1_note and a stop's "Least sure" line (#121: no raw keys)
 CAPABILITY_WORDS = {
     "emergency_24x7": "24x7 emergency care", "general_surgery_ot": "an operating theatre",
     "blood_transfusion": "blood transfusion", "ct_scan": "a CT scanner", "icu": "an ICU",
@@ -32,7 +32,16 @@ CAPABILITY_WORDS = {
     "plastic_surgery": "plastic surgery", "basic_emoc": "basic emergency obstetric care",
     "comprehensive_emoc": "emergency caesarean section", "neonatal_stabilisation": "newborn stabilisation",
     "sncu": "a special newborn care unit", "nicu": "a newborn intensive care unit",
+    "ecg": "an ECG", "thrombolysis": "clot-dissolving drugs for a heart attack", "pci_cath_lab": "a cath lab",
+    "anti_snake_venom": "anti-snake venom", "ventilator": "a ventilator", "nephrology": "a kidney specialist",
+    "laboratory": "a laboratory", "vascular_access_surgery": "fistula surgery for dialysis",
+    "haemodialysis_unit": "a dialysis unit",
 }
+
+
+def capability_words(cap: object) -> str:
+    """A kb/pathways capability tag in plain words; an unknown tag with its underscores as spaces."""
+    return CAPABILITY_WORDS.get(str(cap), str(cap).replace("_", " "))
 
 
 ROUTE_DOWN = "The suggested route could not be built just now. The options below do not depend on it."
@@ -74,7 +83,7 @@ def _stop(eng: Engine, s: dict, question: str | None) -> dict:
         "place": place(s.get("town"), s.get("district")),
         "purpose": s["purpose"], "purpose_word": PURPOSE.get(s["purpose"], s["purpose"]),
         "eta_low": s["eta_low"], "eta_high": s["eta_high"], "dwell_minutes": s["dwell_minutes"],
-        "p": s["p"], "weakest_capability": str(s["weakest_capability"]).replace("_", " "),
+        "p": s["p"], "weakest_capability": capability_words(s["weakest_capability"]),
         "weakest_capability_p": s["weakest_capability_p"], "question": question,
         "evidence": _quotes(eng, s["evidence_ids"]), "n_evidence": len(s["evidence_ids"]),
         "phone": eng._phone(i) if i is not None else None,
@@ -112,7 +121,7 @@ def _plan(eng: Engine, rank: int, o: dict) -> dict:
 
 
 def _lacks(groups: list[list[str]]) -> str:
-    words = [CAPABILITY_WORDS.get(c, c.replace("_", " ")) for g in groups for c in g]
+    words = [capability_words(c) for g in groups for c in g]
     return words[0] if len(words) == 1 else f"{', '.join(words[:-1])} or {words[-1]}"
 
 

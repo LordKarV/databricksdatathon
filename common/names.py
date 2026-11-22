@@ -7,7 +7,8 @@ The name is cut at the first comma or spaced dash whose remainder holds a 6-digi
 Near, Nr, Opp, Sector, Plot) or a house number (746/1, No. 12, Shop No 1, or a part that starts with a number,
 2nd included). A remainder with none of them stays, so "X Hospital & Research Centre, Patna" is unchanged. Only
 the shown name changes: the raw name stays in derived/ and in the website check, where it is matched and cited.
-Standard library only.
+A possessive the source title-cased ("Pawar'S Clinic") is shown as "Pawar's Clinic"; an all-caps name ("SAMAL'S")
+keeps its case. Standard library only.
 """
 import re
 
@@ -20,14 +21,17 @@ _ADDRESS = re.compile(
     r"|^\s*\d+(?:st|nd|rd|th)?\b",                             # remainder starts with a number (not 24x7, 3T MRI)
     re.IGNORECASE)
 MIN_LEN = 3  # never cut a name down to almost nothing
+_POSSESSIVE = re.compile(r"(?<=[a-z])(['\u2019])S\b")  # Pawar'S -> Pawar's; SAMAL'S has no lowercase before it
 
 
 def display_name(raw):
-    """raw without its address tail; raw itself when nothing is cut or it is not a string."""
+    """raw without its address tail and with its possessive in lower case; raw itself when it is not a string."""
     if not isinstance(raw, str):
         return raw
+    shown = raw
     for m in _SEP.finditer(raw):
         if _ADDRESS.search(raw[m.end():]):
             head = raw[:m.start()].rstrip(" ,-\u2013\u2014")
-            return head if len(head) >= MIN_LEN else raw
-    return raw
+            shown = head if len(head) >= MIN_LEN else raw
+            break
+    return _POSSESSIVE.sub(r"\1s", shown)
