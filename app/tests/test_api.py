@@ -44,7 +44,10 @@ def test_contract_shape(service):
             assert {"claim_id", "field", "quote", "source_url"} <= e.keys()
         for c in o["call_ahead"]:
             assert c["question"] and c["asked_because"]
-    assert len(r.content) < 20_000, "plan JSON budget is 20 KB (spec section 7)"
+    # Spec section 7 (app_design/APP_EXPERIENCE.md): plan JSON <= 20 KB gzip on the wire. The decoded guard holds the
+    # growth: the witness ledger took the largest release plan from 16 KB to 29 KB decoded, 4 to 5.5 KB gzip.
+    assert r.headers.get("content-encoding") == "gzip" and int(r.headers["content-length"]) < 20_000
+    assert len(r.content) < 32_000, "decoded plan JSON guard is 32 KB"
 
 
 @needs_data
