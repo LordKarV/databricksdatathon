@@ -39,6 +39,9 @@ tells the same story as the notebook, in plain words.
 
 ## What runs on Databricks
 
+The workspace resources were created under the project's earlier name, Referral Saathi, and keep it: the app,
+the catalog schema, the dashboard and the Genie agent.
+
 - **The App** (Databricks Apps, `referral-saathi`, deployed by `tools/deploy/deploy.sh`). Typed requests the
   offline lexicon cannot place go to Llama 3.3 70B (`databricks-meta-llama-3-3-70b-instruct`), which also
   translates quotes. A photo of a referral note is read by Llama 4 Maverick (`databricks-llama-4-maverick`). Both
