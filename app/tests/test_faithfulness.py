@@ -259,6 +259,10 @@ def within_precision(shown: str, stored: float) -> bool:
     return abs(number(shown) - float(stored)) <= 0.5 * 10 ** -decimals(shown.strip().replace(",", "")) + 1e-9
 
 
+def quote_numbers(s: str) -> list[str]:
+    return re.findall(r"[0-9]+", re.sub(r"(?<=[0-9]),(?=[0-9])", "", s))  # 5,000 and 5000 are one number
+
+
 def check_item(payload: dict, it: dict) -> str | None:
     """None if the shown value is faithful, else a message."""
     path, kind, shown = it["path"], it["kind"], it["text"]
@@ -295,6 +299,10 @@ def check_item(payload: dict, it: dict) -> str | None:
             bool(m) and int(m[1]) == abs(stored) and (m[2] == "closer") == (stored < 0) and stored != 0)
     elif kind == "met":
         ok = shown == ("met" if stored is True else "not met" if stored is False else None)
+    elif kind == "part":  # a name or number restored into a translated quote: copied verbatim from the quote
+        ok = re.sub(r"\s+", " ", shown).strip() in re.sub(r"\s+", " ", str(stored))
+    elif kind == "term":  # a clinical term in its fixed Hindi rendering: any number in it is one of the quote's
+        ok = set(quote_numbers(shown)) <= set(quote_numbers(str(stored)))
     elif kind == "mapsurl":
         m = re.search(r"destination=(-?[\d.]+),(-?[\d.]+)", shown)
         ok = bool(m) and math.isclose(float(m[1]), stored["lat"]) and math.isclose(float(m[2]), stored["lon"])
@@ -365,7 +373,7 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
     errs = []
     shown = {it["path"] for it in items}
     for it in items:
-        if not it["path"].endswith(".quote"):
+        if not it["path"].endswith(".quote") or it["kind"] != "text":  # "part"/"term": pieces of a translation
             continue
         base = it["path"][: -len(".quote")]
         if base + ".claim_id" not in shown:
@@ -738,6 +746,51 @@ def test_how_page_every_number_is_from_how_json(base_url, browser):
             errs.append(f"how: link {href} is not a file in this repo")
     print(f"how: {report}, {len(links)} source links")
     assert not errs, "\n".join(errs[:40])
+
+
+# ---------- translated quote: every number in the Hindi text is the quote's own ----------
+TRANSLATABLE = [(n, p, i, j) for n, p in PAYLOADS for i, o in enumerate(p.get("options") or [])
+                for j, e in enumerate(o.get("evidence") or []) if re.search(r"[0-9]", e["quote"])][:1]
+
+
+@pytest.mark.skipif(not TRANSLATABLE, reason="no payload with a quote that has a number")
+def test_translated_quote_shows_only_the_quotes_numbers(base_url, browser):
+    """Tap "हिंदी में पढ़ें" on a quote with numbers; /api/translate is answered by the server's own protect and
+    restore code with a fake model reply. Every marked piece must match the quote, every number in the Hindi text
+    must be one of the quote's, and the original quote is still shown verbatim above it."""
+    from inputs import translate as tr
+
+    name, payload, i, j = TRANSLATABLE[0]
+    quote = payload["options"][i]["evidence"][j]["quote"]
+    _, spans = tr.protect(quote)
+    fake = " ".join(f"⟦{k}⟧ हिंदी" for k in range(1, len(spans) + 1)) or "हिंदी"  # the model's words have no digits
+    body = json.dumps({"available": True, "hindi": tr.restore(fake, spans),
+                       "parts": tr.restore_parts(fake, spans, quote)}, ensure_ascii=False)
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+    page = ctx.new_page()
+    page.route("**/api/plan", json_reply(payload))
+    page.route("**/api/translate", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.add_init_script(
+        "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+        " source: 'gps', t: Date.now(), label: null}))")
+    P = f"options.{i}.evidence.{j}.quote"
+    try:
+        page.goto(base_url + "/#/")
+        page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+        page.wait_for_selector("article.card")
+        page.evaluate("h => { location.hash = h; }", f"#/why/{payload['options'][i]['rank']}")
+        box = page.locator("blockquote", has=page.locator(f'[data-f="{P}"][data-k="text"]'))
+        box.locator(".tr-btn").click()
+        box.locator(".tr-text").wait_for()
+        got = page.evaluate(COLLECT_JS)
+        hindi = box.locator(".tr-text").inner_text()
+        original = box.locator(f'[data-f="{P}"][data-k="text"]').inner_text()
+    finally:
+        ctx.close()
+    errs = check_screen(f"{name}/translated", payload, got, {"values_checked": 0})
+    assert not errs, "\n".join(errs[:20])
+    assert quote_numbers(hindi) and set(quote_numbers(hindi)) <= set(quote_numbers(quote)), (hindi, quote)
+    assert original == re.sub(r"\s+", " ", quote).strip()
 
 
 # ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
