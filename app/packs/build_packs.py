@@ -31,6 +31,7 @@ import gzip
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -38,6 +39,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 DERIVED = ROOT / "derived" / "v1"
+sys.path.insert(0, str(ROOT / "app"))
+from facts.eligibility import eligible, groups, representatives  # noqa: E402, RUF100
+
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
 
@@ -66,8 +70,10 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Returns facilities, candidate (facility, service) evidence rows, and PINs."""
     loc = pd.read_parquet(DERIVED / "facility_location.parquet",
                           columns=["unique_id", "name", "loc_lat", "loc_lon", "loc_conf"])
-    trust = pd.read_parquet(DERIVED / "record_trust.parquet", columns=["unique_id", "display_phones", "trust_flags"])
-    fac = loc.merge(trust, on="unique_id", how="left").dropna(subset=["loc_lat", "loc_lon"])
+    trust = pd.read_parquet(DERIVED / "record_trust.parquet",
+                            columns=["unique_id", "display_phones", "trust_flags", "trust_level"])
+    fac = loc.merge(trust, on="unique_id", how="left")
+    fac = fac[eligible(fac)]  # same rule as the facts engine (#78): no excluded or unplaced records
     # Facility switchboard only: the record's own first phone, never a chain helpline. A phone the cleaning
     # step marked as a directory number is kept but flagged so the card can say so.
     fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if p is not None and len(p) else "")
@@ -80,6 +86,7 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
               & ~dps.grade.isin(EXCLUDED_GRADES) & (dps.status != "verified_false")].copy()
     svc["service"] = svc.service.map(SERVICE_MAP)
     svc = svc[svc.unique_id.isin(fac.unique_id)]
+    svc = svc[representatives(svc, groups(DERIVED))]  # one option per real facility (#78)
     svc = apply_bands(svc.reset_index(drop=True), MODEL_SCORES)
 
     # Sentence text -> claim id, so every quote cites the claim it came from.
@@ -119,7 +126,8 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
 
 def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
     """The two shortest distinct cited sentences as (text, claim_id suffix after uid8)."""
-    parts = sorted({p.strip() for p in (joined or "").split(" || ") if p.strip()}, key=len)[:2]
+    # (length, text): ties between equal-length sentences break the same way on every build (#78)
+    parts = sorted({p.strip() for p in (joined or "").split(" || ") if p.strip()}, key=lambda t: (len(t), t))[:2]
     out = []
     for t in parts:
         c = cid.get((uid, t), "")

@@ -14,6 +14,7 @@ import gzip
 import hashlib
 import json
 import re
+import sys
 import time
 from collections import Counter
 from pathlib import Path
@@ -21,6 +22,10 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT / "app") not in sys.path:
+    sys.path.insert(0, str(ROOT / "app"))
+from facts.eligibility import eligible, groups, representatives  # noqa: E402, RUF100
+
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
 PLANNER = ROOT / "planner" / "out" / "planner_v1.json.gz"  # its cited claims ride along, so route stops show quotes
@@ -61,8 +66,7 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     ft = pd.read_parquet(V1 / "facility_trust.parquet", columns=[
         "unique_id", "existence_score", "location_score", "location_reason_codes", "drivers"])
     f = loc.merge(tr, on="unique_id").merge(ft, on="unique_id")
-    f = f.dropna(subset=["loc_lat", "loc_lon"])
-    f = f[f.trust_level != "exclude_review"].reset_index(drop=True)
+    f = f[eligible(f)].reset_index(drop=True)
     phones = [str(p[0]) if p is not None and len(p) else "" for p in f.display_phones]
     shared = Counter(str(x) for p in tr.display_phones if p is not None for x in set(p))
     f["phone_raw"] = phones
@@ -93,6 +97,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
            *pre_cols, *risk_cols]]
     m = dps.merge(g, on=["unique_id", "service"], how="inner")
     m = m[m.service.isin(V1_TO_APP) & m.unique_id.isin(fidx)]
+    m = m[representatives(m, groups())]  # one option per real facility (#78)
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
         v2["service"] = v2.service_id.map(lambda s: SERVICE_MAP.get(s, s))
