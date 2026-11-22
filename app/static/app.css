@@ -49,6 +49,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/* focus() and anchors stop below the sticky top bar and the 108 strip (2 lines in Hindi) */
+html { scroll-padding-top: calc(var(--bar-h) + 4.25rem); }
 /* The fixed bottom navigation never covers content: the body reserves its height plus the safe-area inset. */
 body {
   margin: 0; background: var(--bg); color: var(--text); overflow-wrap: break-word;

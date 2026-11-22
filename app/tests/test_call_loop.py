@@ -212,3 +212,68 @@ def test_said_yes_offers_the_slip(browser, base_url):
         page.locator(f"#call-loop a[href='#/slip/{PLAN['options'][0]['rank']}']").wait_for()
     finally:
         ctx.close()
+
+
+# #185 review: on a short phone the focused Call next (or the end state's 108/102) must not land under the sticky
+# top bar or 108 strip. Real Gaya C-section data at 320x568 gives a page tall enough for focus() to leave the
+# button at the viewport top, behind the header; tm-AA2026 found it with the bar tapped at scrollY 1220.
+SEEN_JS = """sel => [...document.querySelectorAll(sel)].map(el => { const r = el.getBoundingClientRect();
+  if (r.top < 0 || r.bottom > innerHeight) return false;
+  const t = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  return !!t && (t === el || el.contains(t)); })"""
+BAR_OFFSETS_JS = """async () => { const ys = [];
+  for (let y = 0; y < document.documentElement.scrollHeight; y += 20) {
+    window.scrollTo({top: y, behavior: 'instant'});
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const bar = document.querySelector('#call-bar:not([hidden])');
+    if (bar && document.querySelector('#main .call-main').getBoundingClientRect().bottom <= 0) ys.push(scrollY);
+  }
+  return ys; }"""
+
+
+def gaya_csection(browser, base_url, lang):
+    ctx = browser.new_context(viewport={"width": 320, "height": 568}, service_workers="block", is_mobile=True)
+    page = ctx.new_page()
+    page.route("**/api/outcome", lambda r: r.fulfill(status=200, content_type="application/json", body="{}"))
+    page.add_init_script(NO_DIAL + f"localStorage.setItem('rs.lang', '\"{lang}\"');"
+                         "localStorage.setItem('rs.loc', JSON.stringify({lat: 24.79, lon: 84.99, accuracy_m: 40,"
+                         " source: 'gps', t: Date.now(), label: null}))")
+    page.goto(base_url + "/#/")
+    page.locator("[data-svc=emergency_csection]").first.click()
+    page.wait_for_selector("#main .readout, #main [role=alert], #main .offline-note")
+    if not page.locator("#main .call-main").count():
+        ctx.close()
+        pytest.skip("no answer with a phone here (app/facts/out not built?)")
+    page.wait_for_function("typeof routeHtml === 'function'")
+    page.wait_for_timeout(100)
+    return ctx, page
+
+
+@pytest.mark.parametrize("lang", ["en", "hi"])
+def test_focused_call_after_each_outcome_is_not_under_the_sticky_header(browser, base_url, lang):
+    ctx, page = gaya_csection(browser, base_url, lang)
+    ys = page.evaluate(BAR_OFFSETS_JS)
+    ctx.close()
+    assert ys, "the fixed Call bar never showed with the card's Call off screen"
+    for y in sorted({ys[0], ys[-1]}):
+        ctx, page = gaya_csection(browser, base_url, lang)
+        try:
+            page.evaluate("y => window.scrollTo({top: y, behavior: 'instant'})", y)
+            page.wait_for_selector("#call-bar:not([hidden])")
+            page.locator("#call-bar a").click()
+            for step in range(8):
+                page.evaluate(BACK)
+                page.locator("#call-loop [data-call-out=none]").click()
+                page.wait_for_timeout(100)
+                if page.locator("#call-next-btn").count():
+                    assert page.evaluate("() => document.activeElement.id") == "call-next-btn"
+                    assert page.evaluate(SEEN_JS, "#call-next-btn") == [True], f"Call next hidden (bar at {y}, step {step})"
+                    page.locator("#call-next-btn").click()
+                    continue
+                seen = page.evaluate(SEEN_JS, "#call-loop .sos-inline a")
+                assert seen and all(seen), f"end state 108/102 not all on screen (bar at {y}): {seen}"
+                break
+            else:
+                raise AssertionError("the call loop never reached its end state")
+        finally:
+            ctx.close()
