@@ -65,7 +65,7 @@ def test_endpoints_serve_the_page_data_and_only_listed_charts(built):
     for bad in ("nope.svg", "..%2Fstories.json", "stories.json", "%2e%2e%2f%2e%2e%2fapp.py"):
         assert client.get(f"/api/stories/chart/{bad}").status_code == 404
     assert client.get("/stories.js").status_code == 200
-    assert "#/stories" in client.get("/").text
+    assert "#/stories" in client.get("/app.js").text  # UI2: linked from the How it works tab
 
 
 def test_page_data_missing_is_a_clear_503(tmp_path, monkeypatch):

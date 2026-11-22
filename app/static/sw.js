@@ -2,7 +2,7 @@
 // (a stopped Databricks App answers with a proxy error page, not a network error). Redirects pass
 // through so an expired session can sign in again. API calls are never cached here, except the
 // offline state packs, which are stored on request (message 'cache-pack') in IndexedDB (spec, #32).
-const CACHE = 'rs-shell-v31';
+const CACHE = 'rs-shell-v32';
 const OLD_PACKS = 'rs-packs-v1';  // Cache Storage before #32; moved to IndexedDB on activate
 
 // ---------- pack store: IndexedDB 'rs-packs', object store 'packs', {slug, body, sha256, built, saved_at} ----------
@@ -50,7 +50,9 @@ function packResponse(rec) {
 }
 const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/how.js', '/stories.js', '/input.js',
   '/lexicon.json', '/manifest.webmanifest', '/voice.js', '/speech.js', '/speech_templates.json',
-  '/community.js', '/journey.js', '/pulse.js', '/translate.js'];
+  '/community.js', '/journey.js', '/pulse.js', '/translate.js', '/i18n/en.json', '/i18n/hi.json',
+  '/fonts/barlow-500.woff2', '/fonts/barlow-600.woff2', '/fonts/barlow-condensed-600.woff2',
+  '/fonts/plex-mono-500-digits.woff2', '/fonts/hind-500-deva.woff2', '/fonts/hind-600-deva.woff2'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));

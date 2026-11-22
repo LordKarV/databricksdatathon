@@ -60,9 +60,10 @@
   const KEEP_N = 5;
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-  /** English, then Hindi in its own span (the app's pattern for bilingual labels). */
-  const both = k => `${esc(T[k][0])} <span lang="hi">${esc(T[k][1])}</span>`;
-  const say = k => `${T[k][0]} ${T[k][1]}`;  // for announcements
+  /** One language on screen: the app language (state.lang in app.js). */
+  const L = () => (typeof state !== 'undefined' && state.lang === 'hi' ? 1 : 0);
+  const say = k => T[k][L()];
+  const both = k => esc(say(k));
 
   function load(k) { try { return JSON.parse(localStorage.getItem('rs.' + k)); } catch { return null; } }
   function save(k, v) { try { localStorage.setItem('rs.' + k, JSON.stringify(v)); } catch { /* private mode */ } }
@@ -110,13 +111,12 @@
     return keys.map(k => `<label class="check"><input type="radio" name="${name}" value="${esc(k)}">
       ${label(k)}</label>`).join('');
   }
-  function day(t) { return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'}); }
+  function day(t) { return new Date(t).toLocaleDateString(L() ? 'hi-IN' : 'en-IN', {day: 'numeric', month: 'short'}); }
   function reportHtml(list) {
     if (!list.length) return `<h1 tabindex="-1">${both('title')}</h1><p class="card">${both('none')}</p>
       <a class="btn btn-block" href="#/">${both('home')}</a>`;
     const which = list.map(r => `<label class="check"><input type="radio" name="ref" value="${esc(r.id)}"
-      ${r.reported ? 'disabled' : ''}><span><strong>${esc(r.name)}</strong>, ${esc(r.service_en)}
-      ${r.service_hi ? `<span lang="hi">${esc(r.service_hi)}</span>` : ''}.
+      ${r.reported ? 'disabled' : ''}><span><strong>${esc(r.name)}</strong>, ${esc(L() && r.service_hi ? r.service_hi : r.service_en)}.
       <span class="small">${both('slipMade')} ${esc(day(r.at))}${r.reported ? `. ${both('reported')}` : ''}</span></span></label>`).join('');
     return `<h1 tabindex="-1">${both('title')}</h1>
       <form id="visit-form" novalidate>

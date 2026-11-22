@@ -57,13 +57,14 @@ def test_original_quote_stays_verbatim_above_the_translation(base_url):
         page.route("**/api/plan", lambda r: r.fulfill(status=200, content_type="application/json",
                                                       body=json.dumps(plan)))
         page.route("**/api/translate", translate)
-        page.add_init_script("localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808,"
+        page.add_init_script("localStorage.setItem('rs.lang', '\"hi\"');"  # UI2: translate is on Hindi screens
+                             "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808,"
                              " accuracy_m: 40, source: 'gps', t: Date.now(), label: null}))")
         page.goto(base_url + "/#/")
         page.locator("[data-svc=dialysis]").first.click()
         page.wait_for_selector("article.card")
         page.evaluate("location.hash = '#/why/1'")
-        btn = page.get_by_role("button", name="हिंदी में पढ़ें").first
+        btn = page.get_by_role("button", name="हिन्दी में पढ़ें").first
         btn.wait_for()
         btn.click()
         page.locator(".tr-text").first.wait_for()
@@ -77,5 +78,6 @@ def test_original_quote_stays_verbatim_above_the_translation(base_url):
     ev = plan["options"][0]["evidence"]
     assert [g["quote"] for g in got] == [e["quote"] for e in ev]  # every quote still verbatim
     assert sum(g["translated"] for g in got) == 1 and all(g["above"] for g in got)
-    assert LABEL_HI in got[0]["label"] and "The original English above is the evidence." in got[0]["label"]
+    # UI2: the Hindi screen labels the machine translation in Hindi only (one language on screen)
+    assert LABEL_HI in got[0]["label"] and "The original English above is the evidence." not in got[0]["label"]
     assert sent == [{"claim_id": ev[0]["claim_id"]}]  # the claim id only, never text
