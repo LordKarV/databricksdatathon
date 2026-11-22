@@ -31,9 +31,11 @@ Method
   window the factor is just P(delivered).
   A stop plan is dropped unless it beats the best direct plan by MARGIN on (1), or matches it on
   (1) and beats it by MARGIN on (2).
-- Scheduled pathways (objective fewest_trips): one facility per stage; fewest distinct sites
-  first, then least travel over PLANNING_WEEKS (one return trip per one-off stage, per_week
-  return trips for the recurring stage). Up to 2 stops before the recurring site.
+- Scheduled pathways (objective fewest_trips): one facility per stage; least travel over
+  PLANNING_WEEKS first (one return trip per one-off stage, per_week return trips for the recurring
+  stage), then fewer distinct sites. Up to 2 stops before the recurring site. Every plan makes the
+  same number of trips, so "fewest trips" comes down to the travel they cost; ranking by sites
+  first sent patients past a near dialysis unit to a far hospital that had everything.
 
 All times are minutes from now. elapsed_minutes (time already passed since the pathway's clock
 started) is added when checking windows.
@@ -98,6 +100,23 @@ def stage_p(facility_id, stage, capability_p):
     return p, evidence, weakest[0], weakest[1]
 
 
+def stage_notes(facility_id, stage, capability_p):
+    """How each capability of the stage was reached when it was not the record's own text: implied
+    by another capability, or taken from a list. Empty unless capability_p has an explain()."""
+    explain = getattr(capability_p, "explain", None)
+    if explain is None:
+        return []
+    caps = list(stage["requires_all"])
+    for group in stage["requires_any"]:
+        caps.append(max(group, key=lambda c: capability_p(facility_id, c)[0]))
+    out = []
+    for cap in caps:
+        note = explain(facility_id, cap)
+        if note:
+            out.append({"capability": cap, **note})
+    return out
+
+
 def gate_minutes(pathway):
     """Threshold of the pathway's add_stop_only_if rule, or None when it has none."""
     for r in pathway["rules"]:
@@ -122,7 +141,8 @@ def _candidates(origin, stage, facilities, capability_p, min_p):
             continue
         p, ev, weak, weak_p = stage_p(f["id"], stage, capability_p)
         if p >= min_p:
-            out.append({"f": f, "km": km, "p": p, "evidence_ids": ev, "weakest": weak, "weakest_p": weak_p})
+            out.append({"f": f, "km": km, "p": p, "evidence_ids": ev, "weakest": weak, "weakest_p": weak_p,
+                        "notes": stage_notes(f["id"], stage, capability_p)})
     return out
 
 
@@ -134,7 +154,8 @@ def _stop(c, stage, purpose, eta, low, high, dwell, leg, fallback=None):
          "eta_minutes": round(eta), "eta_low": round(low), "eta_high": round(high),
          "dwell_minutes": dwell, "p": round(c["p"], 4),
          "weakest_capability": c["weakest"], "weakest_capability_p": round(c["weakest_p"], 4),
-         "evidence_ids": c["evidence_ids"], "leg": leg, "flags": list(f.get("flags") or [])}
+         "evidence_ids": c["evidence_ids"], "capability_notes": c.get("notes", []), "leg": leg,
+         "flags": list(f.get("flags") or [])}
     if fallback is not None:
         s["fallback_if_turned_away"] = fallback
     return s
@@ -393,13 +414,9 @@ def _scheduled(origin, pathway, facilities, capability_p, travel_fn):
             burden += 2 * rows[c["f"]["id"]]["minutes"] * trips
             p *= c["p"]
         plans.append((sites, burden, -p, combo))
-    plans.sort(key=lambda x: x[:3])
-    out, seen = [], set()
-    for sites, burden, neg_p, combo in plans:
-        sig = tuple(c["f"]["id"] for c in combo)
-        if sig in seen or any(o["_last"] == sig[-1] and o["_sites"] == sites for o in out):
-            continue
-        seen.add(sig)
+    # least travel over the planning weeks first (the session trips dominate), then fewer sites
+    plans.sort(key=lambda x: (x[1], x[0], x[2]))
+    def build(sites, burden, neg_p, combo):
         stops = []
         for st, c in zip(stages, combo):
             r = rows[c["f"]["id"]]
@@ -410,13 +427,26 @@ def _scheduled(origin, pathway, facilities, capability_p, travel_fn):
             if st.get("window"):
                 s["wait_before_next_stage_minutes"] = st["window"]["minutes"]
             stops.append(s)
-        out.append({"type": {1: "single_site", 2: "two_sites"}.get(sites, "three_sites"), "stops": stops,
-                    "totals": {"distinct_sites": sites, "stops_before_recurring": sites - 1,
-                               "travel_minutes_over_planning_weeks": round(burden), "planning_weeks": PLANNING_WEEKS,
-                               "one_way_minutes_to_recurring_site": stops[-1]["eta_minutes"], "p_all_stages": round(-neg_p, 4)},
-                    "window_checks": [], "vs_direct": None, "_last": sig[-1], "_sites": sites})
+        return {"type": {1: "single_site", 2: "two_sites"}.get(sites, "three_sites"), "stops": stops,
+                "totals": {"distinct_sites": sites, "stops_before_recurring": sites - 1,
+                           "travel_minutes_over_planning_weeks": round(burden), "planning_weeks": PLANNING_WEEKS,
+                           "one_way_minutes_to_recurring_site": stops[-1]["eta_minutes"], "p_all_stages": round(-neg_p, 4)},
+                "window_checks": [], "vs_direct": None, "_last": combo[-1]["f"]["id"], "_sites": sites}
+
+    out, seen = [], set()
+    for sites, burden, neg_p, combo in plans:
+        sig = tuple(c["f"]["id"] for c in combo)
+        if sig in seen or any(o["_last"] == sig[-1] and o["_sites"] == sites for o in out):
+            continue
+        seen.add(sig)
+        out.append(build(sites, burden, neg_p, combo))
         if len(out) == 3:
             break
+    # the best one-site plan is always shown, as the thing a multi-site plan is compared with
+    if not any(o["_sites"] == 1 for o in out):
+        one = next((x for x in plans if x[0] == 1), None)
+        if one is not None:
+            out = out[:2] + [build(*one)]
     single = next((o for o in out if o["totals"]["distinct_sites"] == 1), None)
     for o in out:
         if single is not None and o is not single:

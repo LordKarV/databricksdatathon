@@ -28,6 +28,7 @@ class Store:
                                                           f["district"], f["state"], f["flags"])]
         pins = doc.get("pins") or {}
         self._pins = [(la, lo, pins["states"][s]) for la, lo, s in zip(pins.get("lat", []), pins.get("lon", []), pins.get("s", []))]
+        self._blood = doc.get("blood")
         self._caps = {cap: {f["id"][i]: (p, e) for i, p, e in zip(c["i"], c["p"], c["e"])}
                       for cap, c in doc["capabilities"].items()}
 
@@ -47,6 +48,22 @@ class Store:
             raise KeyError(f"unknown capability {capability!r}")
         p, ids = self._caps[capability].get(facility_id, (self.no_mention_p, []))
         return p, list(ids)
+
+    def blood_facts(self):
+        """List facts for blood (planner/implied.py), or None when the export has none."""
+        b = self._blood
+        if not b:
+            return None
+        by_id = {f["id"]: f for f in self._fac}
+        centres = list(zip(b["centres"]["lat"], b["centres"]["lon"], b["centres"]["name"]))
+
+        def nearest(fid):
+            f = by_id.get(fid)
+            if f is None or not centres:
+                return None
+            km, name = min((hav_km((f["lat"], f["lon"]), (la, lo)), n) for la, lo, n in centres)
+            return km, name
+        return {"matched": b["matched"], "nearest": nearest}
 
     def state_near(self, origin):
         """State of the nearest PIN centroid. Near a state border this can be the neighbouring state."""

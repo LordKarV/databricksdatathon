@@ -16,6 +16,12 @@ Arguments
                    PIN index. It selects the hill-road travel constants in geo.travel. When it is
                    not given the state of the nearest PIN centroid is used, or of the nearest
                    facility when facilities are passed in. The state used is returned in meta.
+    implications   True (default) wraps capability_p with planner.implied.with_implications: a strongly
+                   evidenced capability lends a discounted probability to the ones it implies, and
+                   blood comes from the blood-centre list when list facts are available. Applied
+                   to a capability_p you pass in as well. Stops then carry capability_notes.
+    blood          optional list facts for blood (see planner/implied.py). Default: taken from the
+                   planner export when it was built with the e-RaktKosh outputs present.
     travel_fn      optional travel_fn(origin, destinations) -> geo.travel rows. Default: the
                    geo.travel estimate with no network calls, for that state. A travel_fn you pass
                    must apply the state itself.
@@ -27,6 +33,7 @@ from pathlib import Path
 
 from .app_contract import to_options
 from .core import default_travel_fn, plan
+from .implied import with_implications
 from .store import Store, state_of_nearest
 
 PATHWAYS_PATH = Path(__file__).resolve().parent.parent / "kb" / "pathways" / "care_pathways.json"
@@ -68,7 +75,7 @@ def pathway_for(service):
 
 
 def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, facilities=None, travel_fn=None,
-                     state=None):
+                     state=None, implications=True, blood=None):
     pid = pathway_for(service)
     if pid is None:
         return {"pathway": None}
@@ -80,6 +87,10 @@ def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, fa
     facilities = facilities if facilities is not None else st.facilities()
     stub = capability_p is None
     capability_p = capability_p or st.capability_p
+    if blood is None and st is not None:
+        blood = st.blood_facts()
+    if implications:
+        capability_p = with_implications(capability_p, blood=blood)
     origin = (float(lat), float(lon))
     state_source = "caller"
     if state is None:
@@ -94,5 +105,5 @@ def plan_for_service(service, lat, lon, elapsed_minutes=0, capability_p=None, fa
             "options": to_options(result, stub=stub), "abstain": result["abstain"],
             "thresholds": result.get("thresholds"), "instructions": result["instructions"],
             "considered": result.get("considered"), "assumptions": result["assumptions"],
-            "meta": {"stub": stub, "origin_state": state, "origin_state_source": state_source,
+            "meta": {"stub": stub, "implications": capability_p.describe() if implications else None, "origin_state": state, "origin_state_source": state_source,
                      "terrain": _terrain(state), "planner_data": st.meta if (st is not None and stub) else None}}
