@@ -891,9 +891,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             for m, f in enumerate(o0["evidence"][j].get("flags", [])):
                 if f"options.0.evidence.{j}.flags.{m}.text" not in plan_shown:
                     errs.append(f"plan: receipt quote's warning {m} not shown")
-        why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
-        if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
-            errs.append("plan: no marked 'Why first' line on the readout")
+        # #140 overload review: the card keeps only a specific why-first (the farther Likely option, or planned care's
+        # top ledger rows); the general rank rule moved to the Why page, so an unmarked line must not appear either.
+        if page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first')].some(e => !e.querySelector('[data-f]'))"):
+            errs.append("plan: an unmarked 'Why first' line on the readout")
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []

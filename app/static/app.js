@@ -689,7 +689,8 @@ function sureHtml(o, P) {
   const key = o.model_band === 'NO_SERVICE_TEXT' ? 'no_text' : o.band;
   const cls = o.band === 'likely' ? 'sure-ok' : o.band === 'unlikely' ? 'sure-no' : 'sure-nv';
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
-  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
+  // Likely: the kicker already says "Call first", so no second line (#140 overload review)
+  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' || key === 'likely' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
 // WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
 // when the engine has it, the time from the PIN centre (travel.alt), so the worker asks the way on the call.
@@ -744,7 +745,7 @@ function whyFirstHtml(p, o, P) {
       .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
     if (top.length) return `<p class="why-first">${th('ans.why_first.rows', {rows: top.join('; ')})}</p>`;
   }
-  return rule.text ? `<p class="why-first">${th('ans.why_first.rule', {rule: E('rank_rule.text', rule.text)})}</p>` : '';
+  return '';  // the general rank rule is the same sentence on every answer: it is on the Why page, not the card (#140)
 }
 function answerPanel(p, o, i, describedBy = '') {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
@@ -762,8 +763,7 @@ function answerPanel(p, o, i, describedBy = '') {
     ${sureHtml(o, P)}
     ${receiptHtml(p, o, P)}
     ${i === 0 ? whyFirstHtml(p, o, P) : ''}
-    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>
-      <p class="note call-note">${th('call.number_note')}</p>`
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     ${askLineHtml(o, P)}
     ${i ? '' : `<div id="call-loop">${window.RSCommunity?.callLoopHtml(p) || ''}</div>`}
@@ -1124,7 +1124,7 @@ function whyScreen(rank) {
       <p>${bandHtml(o, P)}</p><p class="note"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
       <p>${th('why.distance', {km: N(P + '.travel.km', o.travel.km), low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}
         <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p>
-      ${tel ? `<a class="btn btn-go btn-block" href="${tel}">${icon('phone')} ${th('ans.call')}</a>` : ''}</header>
+      ${tel ? `<a class="btn btn-go btn-block" href="${tel}">${icon('phone')} ${th('ans.call')}</a><p class="note call-note">${th('call.number_note')}</p>` : ''}</header>
 
     <section class="section" aria-labelledby="h-q"><h2 id="h-q">${th('why.quotes_h')}</h2>${noTextCaptionHtml(o, p.query)}${quotes}</section>
     <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>

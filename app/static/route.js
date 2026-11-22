@@ -112,9 +112,9 @@ function routeHtml(p) {
     <li><span class="sw sw-range"></span>${th('route.legend_range')}</li><li><span class="sw sw-late"></span>${th('route.legend_late')}</li></ul>` : '';
   const details = it.plans.map((x, k) => `<h3>${th('route.n', {n: N(`itinerary.plans.${k}.rank`, x.rank)})}</h3>${routePlanHtml(x, `itinerary.plans.${k}`)}`).join('');
   return `<section class="section" aria-labelledby="h-route">${head}
-    <div class="panel route">${stripHtml(r)}<ol class="stops">${compact}</ol>
+    <div class="panel route">${stripHtml(r)}
       ${c ? checkHtml(c, `${P}.window_checks.${ci}`, false) : ''}
-      ${r.vs_direct && r.vs_direct.text ? `<p class="vs-direct-main">${E(P + '.vs_direct.text', r.vs_direct.text)}</p>` : ''}${legend}
-      <details class="route-details"><summary>${th('route.details')}</summary>${details}</details></div></section>`;
+      ${r.vs_direct && r.vs_direct.text ? `<p class="vs-direct-main">${E(P + '.vs_direct.text', r.vs_direct.text)}</p>` : ''}
+      <details class="route-details"><summary>${th('route.details')}</summary><ol class="stops">${compact}</ol>${legend}${details}</details></div></section>`;
 }
 
