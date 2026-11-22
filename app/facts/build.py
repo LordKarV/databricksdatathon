@@ -89,6 +89,16 @@ NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturo
 
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
 FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
+# Town vs map point (#140 2b, #117): the listed town (address_city, found in place_gazetteer within the record's state)
+# more than TOWN_FAR_KM from the map point flags "town and map point disagree"; such a facility is never emergency
+# option 1. Only gazetteer cities are used: post-office names repeat across a state (a "Chinchwad" office near
+# Kolhapur flagged Chinchwad, Pune). A town not found, or spread wider than TOWN_SPREAD_KM, is not judged.
+TOWN_FAR_KM = 100
+TOWN_SPREAD_KM = 25
+# Hand-checked location disputes (#117, #140): flagged whatever the gazetteer rule finds.
+LOC_DISPUTED = {
+    "7e420f3f-0cc7-4b8e-811d-7cb54fe1505b": "Sharda Hospital: address Greater Noida, map point in Chandauli",
+}
 SITE_CLASSES = {"official", "official_like"}  # a cited URL of these classes is the listed website (kb/crawl targets)
 # BE-001 (#136): a site the crawl could not read is "unchecked", which says nothing against the facility; only positive
 # evidence against the site makes it "unreliable". Neither is ever cited as a source.
@@ -144,6 +154,21 @@ def e164(raw: str) -> str | None:
     return None
 
 
+def town_far(f: pd.DataFrame) -> list[bool]:
+    """Per record: its listed town is more than TOWN_FAR_KM from its map point, or it is in LOC_DISPUTED."""
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "spread_km", "kind"])
+    g = g[(g.kind == "city") & (g.spread_km <= TOWN_SPREAD_KM)].dropna(subset=["lat", "lon"])
+    towns: dict[tuple[str, str], list[tuple[float, float]]] = {}
+    for st, n, la, lo in zip(g.state, g.name, g.lat, g.lon, strict=True):
+        towns.setdefault((st, n), []).append((la, lo))
+    out = []
+    for u, city, st, la, lo in zip(f.unique_id, f.address_city, f.state_final, f.loc_lat, f.loc_lon, strict=True):
+        key = (str(st).upper(), " ".join(str(city).lower().split()))
+        pts = towns.get(key) if isinstance(city, str) and pd.notna(la) and pd.notna(lo) else None
+        out.append(u in LOC_DISPUTED or bool(pts) and min(haversine(la, lo, a, b) for a, b in pts) > TOWN_FAR_KM)
+    return out
+
+
 def col(series: pd.Series, nd: int | None = None) -> list:
     if nd is not None:
         return [None if pd.isna(x) else round(float(x), nd) for x in series]
@@ -174,6 +199,9 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["phone_shared"] = [shared.get(p, 0) if p else 0 for p in phones]
     f["loc_rule"] = f.location_reason_codes.fillna("").str.split("|").map(
         lambda codes: next((c for c in codes if c.startswith("LOC_")), ""))
+    f["town_far"] = town_far(f)
+    print(f"facts.town_far: {int(f.town_far.sum())} records whose listed town is more than {TOWN_FAR_KM} km from "
+          f"the map point ({len(LOC_DISPUTED)} hand-checked)")
 
     urls = pd.read_parquet(V1 / "source_urls.parquet",
                            columns=["unique_id", "url", "source_class", "domain_reliability", "url_kind"])
@@ -775,7 +803,7 @@ def main() -> None:
         "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
-                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
+                "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5), "town_far": [bool(x) for x in f.town_far],
                 "p_e": col(f.existence_score, 3), "p_l": col(f.location_score, 3), "loc_rule": list(f.loc_rule),
                 "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw), "phone_shared": list(f.phone_shared),
                 "flags": [as_list(x) for x in f.trust_flags],
