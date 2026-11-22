@@ -391,6 +391,22 @@ function fieldHtml(o, P) {
     ${f.lines.map((x, j) => both(x, `${P}.field.lines.${j}`)).join('')}
     ${f.notes.map((x, j) => both(x, `${P}.field.notes.${j}`)).join('')}</div>`;
 }
+// Tie-break from health-worker reports (#86): one named row on the why page of each tied option; cards add nothing.
+function tieHtml(p, o) {
+  const t = p.tie_break, T = 'tie_break';
+  if (!t || !t.options.some(x => x.facility_id === o.facility_id)) return '';
+  const each = t.options.map((x, j) => {
+    const i = p.options.findIndex(y => y.facility_id === x.facility_id), Q = `${T}.options.${j}`;
+    return `${F(`options.${i}.rank`, p.options[i].rank, 'num')}. ${F(`options.${i}.name`, p.options[i].name)}: ` +
+      (x.net === null ? `fewer than ${F(T + '.min_reporters', t.min_reporters, 'num')} health workers, not counted`
+        : `${F(Q + '.net', x.net.toFixed(2), 'num')} from ${F(Q + '.n_reporters', x.n_reporters, 'num')} health workers`);
+  }).join('; ');
+  return `<table class="tie-break"><caption>Order among tied options</caption><tbody><tr>
+    <th scope="row">${F(T + '.label', t.label)}</th><td>After field reports these are in the same band, with chances
+    within ${F(T + '.p_within', t.p_within.toFixed(2), 'num')} and travel within ${F(T + '.minutes_within', t.minutes_within, 'num')} min,
+    so reports set their order: accepted, plus phone yes at half weight, minus "does not offer"; recent reports count
+    more. ${each}.</td></tr></tbody></table>`;
+}
 const RECENT = () => (load('recent') || []).filter(r => r && !r.reported && Date.now() - r.at < 7 * 864e5);
 // Lead's rule on #42: when the nearest verified option is far and nearer ones are not verified, say so up front.
 function farVerifiedNote(p) {
@@ -800,6 +816,7 @@ function whyScreen(rank) {
     ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
     ${fieldHtml(o, P)}
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
+    ${tieHtml(p, o)}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
       (${F(P + '.travel.label', o.travel.label)}).</p>
     <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">Directions in Google Maps</a>
