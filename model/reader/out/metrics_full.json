@@ -1,0 +1,404 @@
+{
+ "config": "full",
+ "config_file": "model/reader/configs/full.yaml",
+ "settings": {
+  "name": "full",
+  "backbones": [
+   {
+    "name": "minilm-l12",
+    "backbone": "microsoft/MiniLM-L12-H384-uncased"
+   },
+   {
+    "name": "bge-small",
+    "backbone": "BAAI/bge-small-en-v1.5"
+   },
+   {
+    "name": "me5-small",
+    "backbone": "intfloat/multilingual-e5-small"
+   }
+  ],
+  "epochs": 3,
+  "bs": 128,
+  "max_len": 192,
+  "lr": 3e-05,
+  "eps": 0.05,
+  "seed": 7,
+  "checkpoint_every": 500,
+  "eval_bs": 512,
+  "log_every": 100,
+  "max_cells": 4915200
+ },
+ "hardware": {
+  "platform": "macOS-27.2.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.12.11",
+  "torch": "2.15.0",
+  "mps": true,
+  "cpu_count": 18,
+  "cpu": "Apple M5 Pro",
+  "memory_gb": 48
+ },
+ "chosen": "minilm-l12",
+ "failed_backbones": {
+  "bge-small": {
+   "backbone": "BAAI/bge-small-en-v1.5",
+   "returncode": 1,
+   "note": "training did not finish; run the same command again to resume, or remove this backbone"
+  },
+  "me5-small": {
+   "backbone": "intfloat/multilingual-e5-small",
+   "returncode": 1,
+   "note": "training did not finish; run the same command again to resume, or remove this backbone"
+  }
+ },
+ "chosen_by": "lowest validation loss on the facility-grouped validation split (weak labels)",
+ "runs": {
+  "minilm-l12": {
+   "backbone": "microsoft/MiniLM-L12-H384-uncased",
+   "params": 33360770,
+   "train_seconds": 7571,
+   "best_epoch": 2,
+   "validation": {
+    "loss": 0.26177399883894487,
+    "about_auroc": 0.9879286121673003,
+    "about_ap": 0.9930191399019496,
+    "about_acc": 0.9423076923076923,
+    "offers_auroc": 0.9944418621747823,
+    "offers_ap": 0.9943152415330067,
+    "offers_acc": 0.9662770878987095,
+    "epoch": 2,
+    "train_loss_ema": 0.2344390589730108
+   },
+   "temperature": [
+    0.8304413913138577,
+    0.7104154162669611
+   ],
+   "hand_labels": {
+    "about_this": {
+     "reader": {
+      "n": 234,
+      "positives": 173,
+      "negatives": 61,
+      "accuracy": 0.769,
+      "accuracy_ci95": [
+       0.711,
+       0.819
+      ],
+      "class_0": {
+       "tp": 37,
+       "fp": 30,
+       "fn": 24,
+       "precision": 0.552,
+       "precision_ci95": [
+        0.434,
+        0.665
+       ],
+       "recall": 0.607,
+       "recall_ci95": [
+        0.481,
+        0.719
+       ],
+       "f1": 0.578
+      },
+      "class_1": {
+       "tp": 143,
+       "fp": 24,
+       "fn": 30,
+       "precision": 0.856,
+       "precision_ci95": [
+        0.795,
+        0.901
+       ],
+       "recall": 0.827,
+       "recall_ci95": [
+        0.763,
+        0.876
+       ],
+       "f1": 0.841
+      }
+     },
+     "reader_vs_rules": {
+      "class_0": {
+       "f1_reader_minus_rules": 0.031,
+       "ci95": [
+        -0.077,
+        0.139
+       ],
+       "share_of_resamples_reader_better": 0.713
+      },
+      "class_1": {
+       "f1_reader_minus_rules": -0.026,
+       "ci95": [
+        -0.062,
+        0.009
+       ],
+       "share_of_resamples_reader_better": 0.071
+      },
+      "accuracy_reader_minus_rules": -0.026
+     },
+     "calibration": {
+      "bins": [
+       {
+        "bin": "0.0-0.2",
+        "n": 61,
+        "mean_p": 0.053,
+        "observed": 0.41
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 5,
+        "mean_p": 0.289,
+        "observed": 1.0
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 6,
+        "mean_p": 0.536,
+        "observed": 0.5
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 9,
+        "mean_p": 0.684,
+        "observed": 0.667
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 153,
+        "mean_p": 0.96,
+        "observed": 0.876
+       }
+      ],
+      "ece": 0.165,
+      "brier": 0.195
+     },
+     "disagreements_on_eval": {
+      "n": 40,
+      "reader_right": 17,
+      "rules_right": 23
+     }
+    },
+    "offers": {
+     "reader": {
+      "n": 330,
+      "positives": 281,
+      "negatives": 49,
+      "accuracy": 0.779,
+      "accuracy_ci95": [
+       0.731,
+       0.82
+      ],
+      "class_0": {
+       "tp": 20,
+       "fp": 44,
+       "fn": 29,
+       "precision": 0.312,
+       "precision_ci95": [
+        0.212,
+        0.434
+       ],
+       "recall": 0.408,
+       "recall_ci95": [
+        0.282,
+        0.548
+       ],
+       "f1": 0.354
+      },
+      "class_1": {
+       "tp": 237,
+       "fp": 29,
+       "fn": 44,
+       "precision": 0.891,
+       "precision_ci95": [
+        0.848,
+        0.923
+       ],
+       "recall": 0.843,
+       "recall_ci95": [
+        0.796,
+        0.881
+       ],
+       "f1": 0.867
+      }
+     },
+     "reader_vs_rules": {
+      "class_0": {
+       "f1_reader_minus_rules": -0.51,
+       "ci95": [
+        -0.653,
+        -0.375
+       ],
+       "share_of_resamples_reader_better": 0.0
+      },
+      "class_1": {
+       "f1_reader_minus_rules": -0.112,
+       "ci95": [
+        -0.144,
+        -0.085
+       ],
+       "share_of_resamples_reader_better": 0.0
+      },
+      "accuracy_reader_minus_rules": -0.185
+     },
+     "calibration": {
+      "bins": [
+       {
+        "bin": "0.0-0.2",
+        "n": 47,
+        "mean_p": 0.05,
+        "observed": 0.766
+       },
+       {
+        "bin": "0.2-0.4",
+        "n": 13,
+        "mean_p": 0.299,
+        "observed": 0.462
+       },
+       {
+        "bin": "0.4-0.6",
+        "n": 5,
+        "mean_p": 0.462,
+        "observed": 0.4
+       },
+       {
+        "bin": "0.6-0.8",
+        "n": 8,
+        "mean_p": 0.721,
+        "observed": 0.75
+       },
+       {
+        "bin": "0.8-1.0",
+        "n": 257,
+        "mean_p": 0.972,
+        "observed": 0.899
+       }
+      ],
+      "ece": 0.167,
+      "brier": 0.191
+     },
+     "disagreements_on_eval": {
+      "n": 71,
+      "reader_right": 5,
+      "rules_right": 66
+     }
+    }
+   }
+  }
+ },
+ "rules_on_hand_labels": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.795,
+   "accuracy_ci95": [
+    0.739,
+    0.842
+   ],
+   "class_0": {
+    "tp": 29,
+    "fp": 16,
+    "fn": 32,
+    "precision": 0.644,
+    "precision_ci95": [
+     0.498,
+     0.768
+    ],
+    "recall": 0.475,
+    "recall_ci95": [
+     0.355,
+     0.598
+    ],
+    "f1": 0.547
+   },
+   "class_1": {
+    "tp": 157,
+    "fp": 32,
+    "fn": 16,
+    "precision": 0.831,
+    "precision_ci95": [
+     0.771,
+     0.877
+    ],
+    "recall": 0.908,
+    "recall_ci95": [
+     0.855,
+     0.942
+    ],
+    "f1": 0.867
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.964,
+   "accuracy_ci95": [
+    0.938,
+    0.979
+   ],
+   "class_0": {
+    "tp": 38,
+    "fp": 1,
+    "fn": 11,
+    "precision": 0.974,
+    "precision_ci95": [
+     0.868,
+     0.995
+    ],
+    "recall": 0.776,
+    "recall_ci95": [
+     0.641,
+     0.87
+    ],
+    "f1": 0.864
+   },
+   "class_1": {
+    "tp": 280,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.962,
+    "precision_ci95": [
+     0.934,
+     0.979
+    ],
+    "recall": 0.996,
+    "recall_ci95": [
+     0.98,
+     0.999
+    ],
+    "f1": 0.979
+   }
+  }
+ },
+ "eval_rows": 564,
+ "scoring": {
+  "model_version": "reader-minilm-l12-v1",
+  "rows": 537431,
+  "claim_rows": 469498,
+  "service_rows": 67933,
+  "seconds_predict": 1545,
+  "seconds_total": 2443,
+  "device": "mps",
+  "rows_with_tokens": 95002,
+  "file_mb": 5.4,
+  "about_this": {
+   "rules_other_facility": 9506,
+   "reader_below_0.5": 27069,
+   "both": 8902
+  },
+  "offers": {
+   "rules_offer": 63620,
+   "reader_at_least_0.5": 63248,
+   "both": 62427
+  },
+  "disagreement_counts": "{('about_this', 'rules_0_reader_1'): 604, ('about_this', 'rules_1_reader_0'): 18167, ('offers', 'rules_0_reader_1'): 821, ('offers', 'rules_1_reader_0'): 1193}"
+ },
+ "timings_seconds": {
+  "train_minilm-l12": 7588,
+  "train_bge-small": 51,
+  "train_me5-small": 50,
+  "score": 2445
+ },
+ "total_seconds": 10272
+}
