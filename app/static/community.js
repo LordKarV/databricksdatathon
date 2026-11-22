@@ -50,6 +50,10 @@
     doctor_absent: ['Doctor not there', '\u0921\u0949\u0915\u094d\u091f\u0930 \u092e\u094c\u091c\u0942\u0926 \u0928\u0939\u0940\u0902'],
     machine_down: ['Machine not working', '\u092e\u0936\u0940\u0928 \u0916\u0930\u093e\u092c'],
     asked_to_pay: ['Asked to pay', '\u092a\u0948\u0938\u0947 \u092e\u093e\u0901\u0917\u0947'],
+    callHow: ['How did the call to {name} go?', '{name} \u0915\u094b \u0915\u093f\u092f\u093e \u092b\u093c\u094b\u0928 \u0915\u0948\u0938\u093e \u0930\u0939\u093e?'],
+    callNext: ['Call next: {name}, {min} min, {band}', '\u0905\u092c \u092f\u0939\u093e\u0901 \u092b\u093c\u094b\u0928 \u0915\u0930\u0947\u0902: {name}, {min} \u092e\u093f\u0928\u091f, {band}'],
+    callYes: ['{name} said yes. Make the slip for the family.', '{name} \u0928\u0947 \u0939\u093e\u0901 \u0915\u0939\u093e\u0964 \u092a\u0930\u093f\u0935\u093e\u0930 \u0915\u0947 \u0932\u093f\u090f \u092a\u0930\u094d\u091a\u0940 \u092c\u0928\u093e\u090f\u0901\u0964'],
+    callNone: ['No more options with a phone number. Call the ambulance now.', '\u092b\u093c\u094b\u0928 \u0928\u0902\u092c\u0930 \u0935\u093e\u0932\u093e \u0915\u094b\u0908 \u0914\u0930 \u0935\u093f\u0915\u0932\u094d\u092a \u0928\u0939\u0940\u0902 \u092c\u091a\u093e\u0964 \u0905\u092d\u0940 \u090f\u092e\u094d\u092c\u0941\u0932\u0947\u0902\u0938 \u092c\u0941\u0932\u093e\u090f\u0901\u0964'],
     closed_now: ['Closed now', '\u0905\u092d\u0940 \u092c\u0902\u0926'],
   };
   // Same lists as outcomes.py (REASONS_NOT_OFFERED, REASONS_TEMPORARY, WAIT_BUCKETS); the server rejects others.
@@ -74,8 +78,8 @@
   function dropPending() { pending = null; }
   function reasonButtons(keys) { return keys.map(k => `<button type="button" data-reason="${k}">${both(k)}</button>`).join(''); }
   /** Shows the optional reason buttons in el; send(reason or null) is called once: on a tap, on Skip, or when the
-   *  page changes (sendPending). Replaces an earlier unsent "no". */
-  function askReason(el, send, announce) {
+   *  page changes (sendPending). Replaces an earlier unsent "no". opts.focus false leaves focus where it is. */
+  function askReason(el, send, announce, opts = {}) {
     pending = send;
     el.innerHTML = `<fieldset class="card reason-step"><legend>${both('reasonQ')}</legend>
       <p class="small"><strong>${both('notOffered')}</strong></p><div class="row">${reasonButtons(NOT_OFFERED)}</div>
@@ -89,7 +93,99 @@
       el.innerHTML = `<p class="small">${both(k)}</p>`;
       announce(say(k));
     }));
-    el.querySelector('[data-reason]').focus();
+    if (opts.focus !== false) el.querySelector('[data-reason]').focus();  // the call loop keeps focus on Call next
+  }
+
+  // ---------- call loop on the answer screen (#140 3d) ----------
+  // Loaded on the first tel: tap or outcome tap there (app.js), so none of it is on the critical path. Page helpers
+  // (th, ts, F, N, E, bandHtml, telOf, sosHtml, has102, travelHtml, icon, announce, queueOutcome, state) are
+  // app.js globals. state.call: {plan, rank, stage: 'dialing' | 'outcome' | 'next' | 'end' | 'yes'}, tied to its
+  // plan. "Said no", "No answer" or "Wrong number" moves to the next option with a number; after the last, 108
+  // (102) and the nearest public hospital. Outcomes go through queueOutcome; a "no" gets the reason step.
+  const CALL_OUTCOMES = ['yes', 'no', 'none', 'wrong'];
+  // a call-loop sentence: HTML with marked values (html) or plain text for #status
+  const line = (k, v, html) => (html ? both(k) : say(k)).replace(/\{(\w+)\}/g, (m, n) => (n in v ? v[n] : m));
+  const nameF = (P, o) => `<span lang="en">${F(P + '.name', o.name)}</span>`;
+  function nextWithPhone(p, o) { return p.options.slice(p.options.indexOf(o) + 1).find(x => telOf(x)) || null; }
+  function callStep(p, o, said) {
+    if (said === 'yes') return {plan: p, rank: o.rank, stage: 'yes'};
+    const next = nextWithPhone(p, o);
+    return next ? {plan: p, rank: next.rank, stage: 'next'} : {plan: p, rank: o.rank, stage: 'end'};
+  }
+  function callLoopHtml(p) {
+    const c = state.call;
+    if (!c || c.plan !== p || c.stage === 'dialing') return '';
+    const i = p.options.findIndex(x => x.rank === c.rank), o = p.options[i], P = `options.${i}`;
+    if (!o) return '';
+    if (c.stage === 'outcome') {
+      return `<div class="call-loop" role="group" aria-labelledby="call-how"><p id="call-how"><strong>${line('callHow', {name: nameF(P, o)}, 1)}</strong></p>
+        <div class="outcomes">${CALL_OUTCOMES.map(k => `<button type="button" class="btn" data-call-out="${k}">${th('why.out.' + k)}</button>`).join('')}</div></div>`;
+    }
+    if (c.stage === 'yes') {
+      return `<div class="call-loop"><p><strong>${line('callYes', {name: nameF(P, o)}, 1)}</strong></p>
+        <a class="btn btn-block" href="#/slip/${o.rank}">${th('why.slip')}</a></div>`;
+    }
+    if (c.stage === 'next') {
+      return `<div class="call-loop call-next"><p><strong>${line('callNext', {name: nameF(P, o), min: N(P + '.travel.minutes', o.travel.minutes),
+        band: bandHtml(o, P)}, 1)}</strong></p>
+        <div class="pair"><a class="btn btn-go" id="call-next-btn" href="${telOf(o)}">${icon('phone')} ${th('ans.call')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a>
+          <a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
+        <div id="call-reason"></div></div>`;
+    }
+    const po = p.public_option;
+    return `<div class="call-loop call-end"><p><strong>${both('callNone')}</strong></p>
+      <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
+      ${po ? `<p>${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+        ${travelHtml(po.travel, 'public_option.travel')}.</p>` : ''}
+      <div id="call-reason"></div></div>`;
+  }
+  function showCallLoop() { const el = document.getElementById('call-loop'); if (el) el.innerHTML = callLoopHtml(state.plan); }
+  /** The phone is back from the dialler: the four outcomes for the option just called. */
+  function callBack() {
+    const c = state.call;
+    if (!c || c.stage !== 'dialing' || c.plan !== state.plan || location.hash !== '#/plan') return;
+    c.stage = 'outcome';
+    showCallLoop();
+    announce(line('callHow', {name: state.plan.options.find(x => x.rank === c.rank).name}));
+    document.querySelector('#call-loop [data-call-out]')?.focus();
+  }
+  function callOutcome(said) {
+    const c = state.call, p = state.plan;
+    const o = c && c.plan === p && p.options.find(x => x.rank === c.rank);
+    if (!o) return;
+    const at = Date.now();
+    (state.outcomes ||= {})[o.rank] = {said, at};  // the slip and Compare show it
+    dropPending();
+    if (said !== 'no') queueOutcome(o, said, at);
+    state.call = callStep(p, o, said);
+    showCallLoop();
+    if (said === 'no') askReason(document.getElementById('call-reason'), r => queueOutcome(o, said, at, r ? {reason: r} : {}), announce, {focus: false});
+    const n = p.options.find(x => x.rank === state.call.rank);
+    if (state.call.stage === 'next') {
+      document.getElementById('call-next-btn').focus();
+      announce(line('callNext', {name: n.name, min: n.travel.minutes, band: ts('band.' + n.band)}));
+    } else if (state.call.stage === 'end') {
+      document.querySelector('#call-loop .sos-inline a')?.focus();
+      announce(say('callNone'));
+    } else {
+      announce(line('callYes', {name: n.name}));
+    }
+  }
+  /** app.js: a tap on a tel: link or an outcome button on the answer screen. */
+  function onCall(t) {
+    const out = t.closest('[data-call-out]');
+    if (out) { callOutcome(out.dataset.callOut); return; }
+    const p = state.plan, href = t.closest('a[href^="tel:"]').getAttribute('href');
+    const o = p && p.options && p.options.find(x => telOf(x) === href);
+    if (o) state.call = {plan: p, rank: o.rank, stage: 'dialing'};  // 108 and 102 match no option
+  }
+  /** The Why page's outcome buttons: back on the answer screen, the loop continues from that answer. */
+  function callAfter(p, o, said) { if (p && o) state.call = callStep(p, o, said); }
+  if (root.document) {
+    root.document.addEventListener('visibilitychange', () => { if (root.document.visibilityState === 'visible') callBack(); });
+    root.document.head.appendChild(Object.assign(root.document.createElement('style'), {textContent:
+      '.call-loop{margin-top:var(--sp3);padding-top:var(--sp3);border-top:1px solid var(--line)}'
+      + '.call-loop .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}'}));
   }
 
   // ---------- recent referrals and the visit report ----------
@@ -166,5 +262,6 @@
   }
 
   root.RSCommunity = {askReason, sendPending, dropPending, remember, recent, bindReport, say, both,
+    callLoopHtml, onCall, callAfter,
     lists: {NOT_OFFERED, TEMPORARY, WAITS}};
 })(typeof window !== 'undefined' ? window : globalThis);

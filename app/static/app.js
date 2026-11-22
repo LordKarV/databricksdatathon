@@ -50,7 +50,6 @@ function pickLang() {
   const old = (load('voice') || {}).lang;  // UI1 kept a read-aloud language; it becomes the app language once
   return old === 'hi' || old === 'en' ? old : null;
 }
-// hi or any -IN locale (#140 3f)
 function phoneLang() { const l = (navigator.language || '').toLowerCase(); return l.startsWith('hi') || l.endsWith('-in') ? 'hi' : 'en'; }
 
 // Engine text (band reasons, why-not reasons, call-ahead questions, route words) is English in the payload. In Hindi
@@ -145,13 +144,10 @@ function renderBar() {
 }
 
 // ---------- location ----------
-// GPS or typed coordinates in words (#140 3f), from /api/place/near; a typed place keeps its own words.
-const NEAR_SOURCES = ['gps', 'last_fix', 'manual'];
 const coordText = loc => `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`;
 function nearHtml(n) {
   const en = x => `<span lang="en">${esc(x)}</span>`;
-  return n.place ? th('home.near', {place: en(n.place), district: en(n.district), pin: esc(n.pin)})
-    : th('home.near_district', {district: en(n.district), pin: esc(n.pin)});
+  return th(n.place ? 'home.near' : 'home.near_district', {place: en(n.place), district: en(n.district), pin: esc(n.pin)});
 }
 function fixTime(t) {
   return new Date(t).toLocaleTimeString(locale(), {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'});
@@ -168,17 +164,17 @@ function locLine(loc) {
 }
 async function fetchNear() {
   const l = state.loc;
-  if (!l || l.near || !NEAR_SOURCES.includes(l.source) || !navigator.onLine) return;
+  if (!l || l.near || !['gps', 'last_fix', 'manual'].includes(l.source)) return;
   try {
     const r = await fetch('/api/place/near', {method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({lat: +l.lat.toFixed(2), lon: +l.lon.toFixed(2)}), redirect: 'manual', signal: AbortSignal.timeout(8000)});
-    const n = r.ok ? await r.json() : null;
+      body: JSON.stringify({lat: l.lat, lon: l.lon}), signal: AbortSignal.timeout(8000)});
+    const n = r.ok && await r.json();
     if (!n || !n.district || state.loc !== l) return;
-    l.near = {place: n.place || null, district: n.district, pin: n.pin};
+    l.near = n;
     save('loc', l);
     const el = $('#where-line');
     if (el) el.innerHTML = locLine(l);
-  } catch { /* offline: coordinates stay */ }
+  } catch {}
 }
 function getGps(onDone) {
   if (!('geolocation' in navigator)) { onDone(ts('gps.none')); return; }
@@ -760,10 +756,16 @@ function answerPanel(p, o, i, describedBy = '') {
     ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>
       <p class="note call-note">${th('call.number_note')}</p>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
+    ${askLineHtml(o, P)}
+    ${i ? '' : `<div id="call-loop">${window.RSCommunity?.callLoopHtml(p) || ''}</div>`}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
     <p id="speak-note" class="note" aria-live="polite"></p>
   </article>`;
 }
+const askLineHtml = (o, P) => (o.call_ahead.length ? `<p class="note ask-line"><strong>${th('call.ask')}</strong> ${E(P + '.call_ahead.0.question', o.call_ahead[0].question)}</p>` : '');
+document.addEventListener('click', e => {
+  if (location.hash === '#/plan' && e.target.closest('a[href^="tel:"],[data-call-out]')) loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.onCall(e.target)).catch(() => {});
+});
 function nextRows(p, from) {
   const rows = p.options.slice(from).map((o, j) => {
     const i = j + from, P = `options.${i}`, tel = telOf(o);
@@ -1268,6 +1270,7 @@ function bindWhy() {
     const at = Date.now(), said = b.dataset.outcome;
     document.querySelectorAll('[data-outcome]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     (state.outcomes ||= {})[rank] = {said, at};  // for the slip (#24)
+    window.RSCommunity?.callAfter(state.plan, o, said);
     window.RSCommunity?.dropPending();  // a corrected tap replaces an unsent "no"
     $('#reason-step').innerHTML = '';
     if (said === 'no' && o && window.RSCommunity) {
