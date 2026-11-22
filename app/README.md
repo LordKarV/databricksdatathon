@@ -613,6 +613,11 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   - care gap: listings in the window claim it but none is confirmed, or every listing is beyond the window;
   - data gap: no listing within 150 km claims it, so we cannot tell.
 
+  A listing "claims it" when its own text describes the care or it is Likely; a specialty tag alone is no claim, as
+  for the options. "Not confirmed" counts exactly the PINs a call can add (a claim in the window whose listed town
+  agrees with its map point; the row names that listing as its call first), so the headline, "Calls could close"
+  and the ten calls agree with the list (#167).
+
   The page states the PIN sample (the first 40 PINs by number). Where a PIN has no option with public evidence, its
   row names the nearest public-standard hospital (`pins[].public`). Where the district shows a gap, the screen lists
   the district's public-standard hospitals (`gap.public_standard`, at most 5). Both are labelled "by public standard,
