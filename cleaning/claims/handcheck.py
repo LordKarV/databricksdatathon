@@ -5,7 +5,8 @@ import pandas as pd
 
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "out")
-MERGE = "/Users/karthikvattem/projects/datathon/audit/merge/out"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(D, "../..")))
+MERGE = os.path.join(_ROOT, "audit/merge/out")
 SEED = 7
 
 

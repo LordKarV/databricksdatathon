@@ -99,6 +99,31 @@ def describe_danger(page: Page) -> None:
     page.get_by_text("Call 108 now.").wait_for()
 
 
+def voice_confirm(page: Page) -> None:
+    """Voice support: a Hindi transcript (as /api/transcribe returns it) reaches the spoken Yes / No question."""
+    home_located(page)
+    go(page, "#/describe")
+    page.locator("#voice [data-mic]").wait_for()
+    page.evaluate("RSInput.heard('\u092e\u0930\u0940\u091c\u093c \u0915\u094b \u0921\u093e\u092f\u0932\u093f"
+                  "\u0938\u093f\u0938 \u091a\u093e\u0939\u093f\u090f', 'hi')")
+    page.locator("[data-voice-no]").wait_for()
+
+
+def voice_recording(page: Page) -> None:
+    """Speak tapped: red recording state with countdown (fake microphone, see main())."""
+    home_located(page)
+    page.context.grant_permissions(["geolocation", "microphone"], origin=BASE)
+    go(page, "#/describe")
+    page.locator("#voice [data-mic]").click()
+    page.locator("#voice [data-mic][aria-pressed=true]").wait_for()
+
+
+def read_aloud_hindi(page: Page) -> None:
+    plan_for("Dialysis")(page)
+    page.locator("[data-say-lang=hi]").click()
+    page.locator("[data-say-lang=hi][aria-pressed=true]").wait_for()
+
+
 def note_consent(page: Page) -> None:
     home_located(page)
     go(page, "#/note")
@@ -269,6 +294,9 @@ STATES: dict[str, Callable[[Page], None]] = {
     "search": search,
     "describe_confirm": describe,
     "describe_danger": describe_danger,
+    "voice_confirm_hindi": voice_confirm,
+    "voice_recording": voice_recording,
+    "read_aloud_hindi": read_aloud_hindi,
     "note_consent": note_consent,
     "change_location_error": change_error,
     "results_dialysis": plan_for("Dialysis"),
@@ -299,7 +327,8 @@ def main() -> int:
             "requests": len(weight), "files": {p: {"raw": r, "gzip": g} for p, (r, g) in weight.items()},
             "gzip_total": sum(g for _, g in weight.values()), "budget_gzip": 50_000, "budget_requests": 5}
         with sync_playwright() as pw:
-            browser = pw.chromium.launch()
+            # Fake microphone for the voice_recording state (no real audio is captured).
+            browser = pw.chromium.launch(args=["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"])
             for scheme in ["light", "dark"]:
                 for name, steps in STATES.items():
                     ctx = browser.new_context(viewport=VIEWPORT, geolocation=SITAMARHI, permissions=[],

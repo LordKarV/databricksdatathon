@@ -264,23 +264,88 @@ async function districtPicker() {
 // kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+// Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return 'Listings like this: not checked yet';
   if (tr.n < 10) return `Listings like this: too few checks yet (${F(P + '.n', tr.n, 'num')} checked)`;
-  return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
-    `(${F(P + '.n', tr.n, 'num')} checked)`;
+  if (tr.k_no_info === null || tr.k_no_info === undefined) {
+    return `About ${F(P, Math.round(10 * tr.k_confirmed / tr.n), 'tenths')} in 10 listings like this checked out ` +
+      `(${F(P + '.n', tr.n, 'num')} checked with a clear answer; checks that found nothing were not counted)`;
+  }
+  return `Of ${F(P + '.n', tr.n, 'num')} listings like this (${F(P + '.basis', tr.basis)}) we checked: ` +
+    `${F(P + '.k_confirmed', tr.k_confirmed, 'num')} ` +
+    `confirmed, ${F(P + '.k_contradicted', tr.k_contradicted, 'num')} contradicted, ` +
+    `${F(P + '.k_no_info', tr.k_no_info, 'num')} with no information either way`;
 }
 function travelHtml(t, P) {
   return `${F(P + '.km', Math.round(t.km), 'num')} km, about ${F(P + '.low', t.low, 'num')}-` +
     `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
 }
 function bandHtml(o, P) {
-  const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+  // derived/v2 sub-bands of "Not verified": the listing describes the service but nothing confirms it (CALL FIRST),
+  // or the listing has no sentence about the service at all (NO SERVICE TEXT; its p is not shown as a chance)
+  const word = o.model_band === 'NO_SERVICE_TEXT' ? 'NO SERVICE TEXT: call to ask' :
+    o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
+  const path = o.model_band === 'NO_SERVICE_TEXT' ? `${P}.model_band` : `${P}.band`;
+  return `<span class="band band-${o.band}" data-f="${path}" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+}
+// Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
+function quoteFlagsHtml(e, P) {
+  return (e.flags || []).map((f, j) => {
+    const Q = `${P}.flags.${j}`;
+    return `<span class="audit${f.weak ? ' audit-weak' : ''}"><span aria-hidden="true">&#9888;</span> ${F(Q + '.text', f.text)}` +
+      `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
+  }).join('');
 }
 function quoteHtml(e, P) {
   return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>`;
+    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>${quoteFlagsHtml(e, P)}`;
+}
+// "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
+// engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
+function deltaHtml(path, v) {
+  return F(path, v === 0 ? 'about the same time' : `${Math.abs(v)} min ${v < 0 ? 'closer' : 'farther'}`, 'delta');
+}
+function changeHtml(p) {
+  const c = p.what_would_change;
+  if (!c) return '';
+  const L = F('query.service_label.en', p.query.service_label.en);
+  const d = deltaHtml('what_would_change.minutes_vs_first', c.minutes_vs_first);
+  const line = c.kind === 'confirm_nearer'
+    ? `If ${F('what_would_change.name', c.name)} confirms on the phone that it offers ${L}, it becomes the first choice (${d}).`
+    : `If ${F('what_would_change.first_name', c.first_name)} cannot take the patient, call ${F('what_would_change.name', c.name)} next (${d}).`;
+  return `<p><strong>What would change this answer:</strong> ${line}</p>`;
+}
+// The answer's first line when option 1 misses the service's time window (#86, lead's decision on the issue): say so,
+// show 108/102, and the nearest hospital the public standard expects to offer the care, never as verified.
+function windowHtml(p) {
+  const w = p.time_window;
+  if (!w || !w.first_outside || !p.options.length) return '';
+  const s = svc(p.query.service);
+  const show102 = s && (s.key === 'emergency_csection' || s.key === 'nicu');
+  const po = p.public_option;
+  return `<section class="card window-miss" aria-label="Time window">
+    <p><strong>The best-evidenced option is about ${F('options.0.travel.minutes', p.options[0].travel.minutes, 'num')} min away;
+      that misses the ${F('time_window.window_min', w.window_min, 'num')}-min window for this care.</strong></p>
+    <div class="bar-108 compact"><a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108 ambulance</a>
+      ${show102 ? '<a href="tel:102"><span aria-hidden="true">&#9742;</span>&nbsp;Call 102 (mother and baby)</a>' : ''}</div>
+    ${po ? `<p>Nearest public hospital: <strong>${F('public_option.name', po.name)}</strong>
+      (${F('public_option.label', po.label)}). ${travelHtml(po.travel, 'public_option.travel')}.</p>`
+      : '<p>No hospital in our data nearby is one the public standard expects to offer this care.</p>'}
+  </section>`;
+}
+function whyNotHtml(p) {
+  const rows = p.why_not || [];
+  if (!rows.length && !p.what_would_change) return '';
+  const items = rows.map((w, k) => {
+    const W = `why_not.${k}`;
+    const where = w.minutes_vs_first != null ? ` (${deltaHtml(W + '.minutes_vs_first', w.minutes_vs_first)})` : '';
+    return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
+      ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
+  }).join('');
+  return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
+    ${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {
   const P = `options.${i}`;
@@ -377,7 +442,7 @@ function routePlanHtml(r, P) {
 }
 function routeHtml(p) {
   const it = p.itinerary;
-  if (!it) return '';
+  if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2>Suggested route</h2>
     <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
       estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
@@ -410,36 +475,24 @@ function planScreen() {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
       ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
-      ${oo ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
+      ${whyNotHtml(p)}
+      ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
+        ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + (p.why_not.length ? `<details><summary>Why not the nearer ones?</summary>
-      ${p.why_not.map((w, k) => `<p><strong>${F(`why_not.${k}.name`, w.name)}</strong>,
-        ${F(`why_not.${k}.travel.km`, Math.round(w.travel.km), 'num')} km: ${F(`why_not.${k}.reason`, w.reason)}</p>`).join('')}
-      <p class="small muted">This describes our data, not the facility.</p></details>` : '');
+    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
   }
-  state.speak = {en: planSpeech(p)};
-  return head + toggle + RSInput.speakHtml() + body + foot;
-}
-// Read aloud (#64): the one-line answer, built from the same payload fields the cards show.
-function planSpeech(p) {
-  const [a, b] = p.options;
-  const line = o => `${o.name}, ${o.band_word}, about ${o.travel.low} to ${o.travel.high} minutes by road.`;
-  const parts = [];
-  if (p.abstain) parts.push(p.abstain.text);
-  if (a) parts.push(`Call first: ${line(a)}`);
-  if (b) parts.push(`Backup: ${line(b)}`);
-  if (isEmergency()) parts.unshift('Call 108 first.');
-  return parts.join(' ');
+  state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
+  return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;
 }
 
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
   ['Band', (o, P) => bandHtml(o, P)],
-  ['Offers (range)', (o, P) => `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
+  ['Offers (range)', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
-  ['Exists / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
+  ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
   ['Quote', (o, P) => o.evidence.length ? quoteHtml(o.evidence[0], P + '.evidence.0') : 'none in our data'],
   ['Warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => F(`${P}.flags.${j}`, f)).join('; ') : 'none'],
@@ -476,6 +529,36 @@ function compareHtml(p) {
 }
 
 // ---------- Area depth (S11 standing plan, S12 ten calls); data from POST /api/area ----------
+// Data gap vs care gap (#86): "no listing claims it" means we cannot tell; "claimed but not confirmed / far" is care.
+function gapHtml(a) {
+  const g = a.gap;
+  if (!g) return '';
+  const G = k => F('area.gap.' + k, g[k], 'num');
+  const W = F('area.area.window_min', a.area.window_min, 'num');
+  const L = F('area.query.service_label.en', a.query.service_label.en);
+  return `<h3>Data gap or care gap?</h3>
+    <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
+      ${G('district_confirmed')} of them confirmed by a second source.</p>
+    <ul class="gap">
+      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a confirmed option within ${W} min.</li>
+      <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
+        say they offer it, none confirmed. A phone call can settle it.</li>
+      <li><strong>Care gap, too far:</strong> ${G('far')} PIN areas: every listing that claims it is more than ${W} min away.</li>
+      <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
+        We cannot tell whether care exists there.</li>
+    </ul>
+    <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>
+    ${publicHtml(a)}`;
+}
+// Where the area shows no public evidence, name the hospitals the public standard expects to offer acute care (#86).
+function publicHtml(a) {
+  const ps = a.gap.public_standard;
+  if (!ps || !(a.summary.n_without_option > 0 || a.summary.no_public_evidence > 0)) return '';
+  if (!ps.length) return '<p>No hospital in this district in our data is one the public standard expects to offer it.</p>';
+  return `<p>Hospitals in ${F('area.area.district', a.area.district)} the public standard expects to offer it:</p>
+    <ul class="gap">${ps.map((h, k) => `<li>${F(`area.gap.public_standard.${k}.name`, h.name)}
+      (${F(`area.gap.public_standard.${k}.label`, h.label)})</li>`).join('')}</ul>`;
+}
 function areaHtml(a) {
   if (!a || a.loading) return '<p>Loading the area plan...</p>';
   if (a.error) return `<p class="card" role="alert">${esc(a.error)}</p>`;
@@ -490,7 +573,9 @@ function areaHtml(a) {
           <td>${F(R + '.call_first', r.call_first)}</td></tr>`
       : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
           No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
-          nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km</td></tr>`;
+          ${r.nearest_km != null ? `nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km` : 'none with its own sentence in our data'}${r.public ? `.<br>Public hospital:
+          ${F(R + '.public.name', r.public.name)} (${F(R + '.public.label', r.public.label)}),
+          ${F(R + '.public.km', r.public.km, 'num')} km` : ''}</td></tr>`;
   }).join('');
   const calls = a.ten_calls.map((c, i) => {
     const C = `area.ten_calls.${i}`;
@@ -514,6 +599,7 @@ function areaHtml(a) {
       <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
     </tbody></table>
     <p>${F('area.caveat', a.caveat)}</p>
+    ${gapHtml(a)}
     <table><caption>Plan per PIN area</caption>
       <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
       <tbody>${rows}</tbody></table>
@@ -594,10 +680,10 @@ function whyScreen(rank) {
     : '<p class="card">No dialable number in our data for this listing.</p>';
   const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
   const split = o.track_record && o.track_record.split === 'test' ? 'final test' : 'dev, not final test';
+  state.speak = {danger: isEmergency(), only: p.options.indexOf(o)};  // this option, its reason and its questions
   return `<a class="btn" href="#/plan">&larr; Plan</a>
     <h1 tabindex="-1">${F(P + '.name', o.name)} ${bandHtml(o, P)}</h1>
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
-    ${(state.speak = {en: o.say_to_family.en, hi: o.say_to_family.hi}) && RSInput.speakHtml()}
     <h2>From its own listing</h2>
     ${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
       <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
@@ -609,8 +695,10 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, range
-      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}).
+    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
+    ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
+    : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
+      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min
@@ -630,6 +718,7 @@ function whyScreen(rank) {
 
     <h2 id="call" tabindex="-1">Call ahead</h2>
     ${isEmergency() ? '<p><strong>Call 108 first. Do not wait for this call to send the patient.</strong></p>' : ''}
+    ${RSInput.speakHtml()}
     ${phone}
     <ol class="script">
       <li>"Is this ${F(P + '.name', o.name)}, ${F(P + '.town', o.town)}?"</li>
@@ -861,7 +950,7 @@ function render() {
   if (h1 && !h.endsWith('#call')) h1.focus({preventScroll: false});
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
   bind();
-  if ($('#speak')) RSInput.bindSpeak(state.speak || {});
+  if ($('#speak')) RSInput.bindSpeak(state.speak);
 }
 window.addEventListener('hashchange', () => {
   if (location.hash === '#/' || location.hash === '#/change') {

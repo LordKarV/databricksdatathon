@@ -6,11 +6,13 @@ on a Pune record) is evidence the claim was copied from another facility's page.
 Only cross-STATE mismatches are flagged: same-state neighbours are common and legitimate
 (referral networks, branch lists), so they are not counted.
 """
-import re
+import os, re
 from collections import defaultdict
 import duckdb
 
-R = "/Users/karthikvattem/projects/datathon/data/raw/"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+R = os.path.join(_DATA, "raw") + "/"
 STOP = {"north", "south", "east", "west", "central", "rural", "urban", "district", "city", "new", "nagar", "road",
         "medical", "hospital", "general", "civil"}
 ALIASES = {  # common names not equal to an India Post district name

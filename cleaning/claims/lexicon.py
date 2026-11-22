@@ -5,9 +5,9 @@ verifier's fixes as new dicts (the audit module is not modified). Every pattern 
 pattern without DuckDB/RE2-only syntax; Java regex (Spark `rlike`, `regexp_extract`) accepts the
 same constructs (\\b, lookahead, lookbehind), with case-insensitivity written as a leading (?i).
 """
-import re, sys
+import os, re, sys
 
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/claims")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../audit/claims"))
 import services as base  # noqa: E402
 
 I = re.I

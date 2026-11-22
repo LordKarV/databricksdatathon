@@ -1,0 +1,52 @@
+{
+  "_about": "Fixed read-aloud templates (voice support). Slots in braces are filled only from the plan payload by static/speech.js; no model writes spoken text. Hindi is a draft until native-speaker review (#10). Facility names, quotes and payload text stay in their original script.",
+  "en": {
+    "call_108": "Call {number} now. The ambulance is free.",
+    "call_102": "Pregnant women and babies: call {number}, it is free. No answer? Call 108.",
+    "abstain_some": "{text}",
+    "abstain_none": "{text}",
+    "first": "First choice: {name}, about {low} to {high} minutes away, {band}.",
+    "reason": "Its listing says: \"{quote}\"",
+    "backup": "Backup: {name}, about {low} to {high} minutes away, {band}.",
+    "this": "{name}, about {low} to {high} minutes away, {band}.",
+    "route_first": "Suggested route: first {name}, {purpose}, about {low} to {high} minutes from the start.",
+    "route_next": "Then {name}, {purpose}, about {low} to {high} minutes from the start.",
+    "ask": "Ask on the phone: {questions}",
+    "band": {"likely": "likely", "not_verified": "not verified, call first", "unlikely": "unlikely"},
+    "purpose": {},
+    "questions": [],
+    "no_hindi_voice": "No Hindi voice on this phone. Reading in English.",
+    "cannot_speak": "This phone cannot read aloud."
+  },
+  "hi": {
+    "call_108": "अभी {number} पर फ़ोन करें। एम्बुलेंस मुफ़्त है।",
+    "call_102": "गर्भवती महिला या नवजात शिशु के लिए {number} पर फ़ोन करें, यह मुफ़्त है। जवाब न मिले तो 108 पर फ़ोन करें।",
+    "abstain_some": "हम पक्का नहीं कह सकते कि पास का कोई अस्पताल यह इलाज करता है। नीचे के अस्पतालों की लिस्टिंग में यह लिखा है, जाने से पहले फ़ोन करके पक्का करें।",
+    "abstain_none": "हम पक्का नहीं कह सकते कि पास का कोई अस्पताल यह इलाज करता है। हमारे डेटा में पास का कोई अस्पताल यह इलाज नहीं बताता।",
+    "first": "सबसे पहले: {name}, लगभग {low} से {high} मिनट दूर, {band}।",
+    "reason": "इसकी लिस्टिंग में लिखा है: \"{quote}\"",
+    "backup": "दूसरा विकल्प: {name}, लगभग {low} से {high} मिनट दूर, {band}।",
+    "this": "{name}, लगभग {low} से {high} मिनट दूर, {band}।",
+    "route_first": "सुझाया रास्ता: पहले {name} पर {purpose}, शुरू से लगभग {low} से {high} मिनट।",
+    "route_next": "फिर {name} पर {purpose}, शुरू से लगभग {low} से {high} मिनट।",
+    "ask": "फ़ोन पर पूछें: {questions}",
+    "band": {"likely": "संभावना है", "not_verified": "पहले फोन करके पूछें", "unlikely": "संभावना कम"},
+    "purpose": {
+      "stabilise": "पहला इलाज, हालत संभालना",
+      "definitive": "पूरा इलाज",
+      "assess": "जाँच",
+      "access": "डायलिसिस के लिए फ़िस्टुला या लाइन",
+      "recurring": "नियमित डायलिसिस"
+    },
+    "questions": [
+      ["Can you do {label} today?", "क्या आज यहाँ {label} का इलाज हो सकता है?"],
+      ["Do you do {label} here yourselves, or send patients elsewhere?", "क्या आप {label} का इलाज खुद यहीं करते हैं, या मरीज़ को कहीं और भेजते हैं?"],
+      ["Do you have {need} on site?", "क्या आपके यहाँ {need} है?"],
+      ["Is this the branch in this town, or another branch?", "क्या यह इसी शहर की शाखा है, या कोई दूसरी शाखा?"],
+      ["Is this number the hospital itself?", "क्या यह नंबर खुद अस्पताल का है?"],
+      ["What does it cost? Is PM-JAY accepted?", "खर्च कितना होगा? क्या PM-JAY, यानी आयुष्मान कार्ड, चलता है?"]
+    ],
+    "no_hindi_voice": "इस फ़ोन में हिंदी आवाज़ नहीं है। अंग्रेज़ी में पढ़ रहे हैं।",
+    "cannot_speak": "यह फ़ोन पढ़कर नहीं सुना सकता।"
+  }
+}

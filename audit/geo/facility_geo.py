@@ -6,13 +6,14 @@ Needs pin_centroids.parquet (run pin_centroids.py first).
 Run: .venv/bin/python audit/geo/facility_geo.py
 """
 import json
+import os
 import sys
 
 import numpy as np
 import pandas as pd
 from rapidfuzz import fuzz
 
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/geo")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from geo_common import (CITY_ALIAS, GEO, PIN_DIR, STATE_ALIAS, ZONE, hav_km, load_facilities, nearest,
                         norm, office_base, parse_pin)
 

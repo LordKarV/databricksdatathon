@@ -34,7 +34,9 @@ def test_contract_shape(service):
     for o in j["options"]:
         assert OPTION_KEYS <= o.keys()
         assert o["band"] in {"likely", "not_verified", "unlikely"}
-        assert o["p_lo"] <= o["p"] <= o["p_hi"]
+        assert 0 <= o["p_lo"] <= o["p_hi"] <= 1
+        if o["range_kind"] == "interval":  # v2's lo-hi is the score bin's record, which p need not lie inside
+            assert o["p_lo"] <= o["p"] <= o["p_hi"]
         assert o["travel"]["method"] in {"osrm", "haversine_factor"}
         assert o["travel"]["low"] <= o["travel"]["minutes"] <= o["travel"]["high"]
         assert {"km", "method", "cached", "factor", "kmh", "terrain", "label"} <= o["travel"].keys()
@@ -47,7 +49,7 @@ def test_contract_shape(service):
 
 @needs_data
 def test_abstention_shape():
-    j = get(service="emergency_csection", lat=20.2, lon=78.4).json()
+    j = get(service="nicu", lat=19.9, lon=83.17).json()  # Kalahandi: no confirmed NICU in reach on v2
     assert j["abstain"]["text"]
     assert all(o["band"] != "likely" for o in j["options"])
     assert {n["number"] for n in j["emergency_numbers"]} == {"108", "102"}
@@ -115,3 +117,18 @@ def test_stub_travel_comes_from_geo_module():
     o = get(service="dialysis", lat=26.5951, lon=85.4808).json()["options"][0]
     assert o["travel"] == estimate((26.6, 85.48), (o["lat"], o["lon"]))
     assert "40 km/h" not in o["travel"]["label"]
+
+
+@pytest.mark.parametrize("path,body", [
+    ("/api/plan", '{"service": "dialysis", "lat": NaN, "lon": 85.1}'),
+    ("/api/plan", '{"service": "dialysis", "lat": 25.6, "lon": 85.1, "accuracy_m": 1e400}'),
+    ("/api/plan", '{"service": "dialysis", "lat": 25.6, "lon": 85.1, "accuracy_m": 1e9}'),
+    ("/api/area", '{"service": "dialysis", "lat": Infinity, "lon": 85.1}'),
+    ("/api/pack/locate", '{"lat": 25.6, "lon": NaN}'),
+    ("/api/outcome", ('{"outcome_id": "00000000-0000-4000-8000-000000000000", "facility_id": "x", "service_id": "y",'
+                      ' "outcome": "yes", "said_at_ms": 99999999999999999999, "lat": 25.6, "lon": 85.1}')),
+])
+def test_non_finite_or_huge_numbers_are_422(path, body):
+    # #85: these returned 500 before; every request model forbids NaN/inf and bounds its numbers
+    r = client.post(path, content=body, headers={"Content-Type": "application/json"})
+    assert r.status_code == 422

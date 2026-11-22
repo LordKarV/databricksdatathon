@@ -48,9 +48,10 @@ def main() -> None:
     assert d.reliability.between(0, 1).all() and (d.ci05 <= d.reliability).all() and (d.reliability <= d.ci95).all()
     for name, t in man["tables"].items():
         assert t["bytes"] < 50 * 1024 * 1024 and pq_rows(OUT / name) == t["rows"], name
-    # 7. Goal 3 stayed within its bounds
-    pc = pd.read_parquet(OUT / "source_page_checks.parquet")
-    assert pc.url.nunique() <= 400 and (pc.snippet.fillna("").str.len() <= 160).all()
+    # 7. Goal 3 stayed within its bounds (absent in a FETCH=0 build)
+    if (OUT / "source_page_checks.parquet").exists():
+        pc = pd.read_parquet(OUT / "source_page_checks.parquet")
+        assert pc.url.nunique() <= 400 and (pc.snippet.fillna("").str.len() <= 160).all()
     print(f"selfcheck ok: {len(dp)} data points, {len(d)} domains, {len(man['tables'])} tables")
 
 

@@ -1,0 +1,23 @@
+# The two backbones the full run could not download (network down on the Mac), trained on one
+# NVIDIA A10 (24 GB) through Databricks AI Runtime. Same data, epochs, batch size, lr, label
+# smoothing, seed and max_len as full.yaml, so the results compare directly with minilm-l12 there.
+# python -m model.reader.run --config model/reader/configs/gpu_remaining.yaml
+#
+# Device: run.py has no device setting; the workload sets READER_DEVICE=cuda (common.pick_device).
+name: gpu_remaining
+backbones:
+  - {name: bge-small, backbone: BAAI/bge-small-en-v1.5}               # 33M, English, trained for sentence matching
+  - {name: me5-small, backbone: intfloat/multilingual-e5-small}       # 118M, multilingual (Hindi and transliterated names)
+epochs: 3
+bs: 128
+max_len: 192
+lr: 3.0e-5
+eps: 0.05             # label smoothing for the weak labels
+seed: 7
+checkpoint_every: 500
+eval_bs: 512
+log_every: 100
+# Memory guard, rows x padded_length^2 per chunk. A full batch is 128 x 192^2 = 4718592, so this
+# keeps each batch in one chunk; a 384-wide 12-layer encoder at that size uses well under 24 GB.
+# train.py halves the chunk if CUDA still reports out of memory, so the results do not depend on it.
+max_cells: 4915200

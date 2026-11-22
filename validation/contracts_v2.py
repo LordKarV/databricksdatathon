@@ -4,11 +4,14 @@ The contract (what the app, the packs and the notebook rely on):
 
 derived/v2/facility_service_scores.parquet, one row per (unique_id, service_id):
   unique_id, service_id   key; service_id is one of the 36 kb/taxonomy/services.json ids
-  p, lo, hi               service probability and interval, all in [0, 1], lo <= p <= hi
+  p, lo, hi               all in [0, 1], lo <= hi. lo/hi are the Wilson 95% interval of the observed confirmed rate
+                          among decided DEV pairs in p's score bin (model_card.json calibration_by_score_bin), so
+                          every row of a bin carries that bin's lo/hi and p need not lie inside it
   p_location, p_exists    location and existence heads, in [0, 1]
-  band                    likely | not_verified | unlikely (app/packs/build_packs.py rejects anything else)
-  base, logit             base + sum(contributions.points) == logit to 1e-9; sigmoid(logit) == p is reported
-  contributions           list<struct<term, points, evidence_ids: list<string>[, observability]>>, or the same
+  band                    LIKELY | CALL_FIRST | NO_SERVICE_TEXT | UNLIKELY (consumer mapping: derived/v2/README.md)
+  base                    base + sum(contributions.points) / (20 / ln 2) == logit(p) to 1e-9 (MODEL_SPEC 5.4;
+                          the shipped logit is logit(p), so no separate logit column)
+  contributions           JSON string: list of {label, family, points, evidence_ids, card_phrase}, or the same
                           rows in a long table derived/v2/contributions.parquet keyed by (unique_id, service_id)
   operator                public | private | unknown
   model_version, as_of    non-null; one model_version, equal to model_card.json's
@@ -16,7 +19,10 @@ derived/v2/model_card.json: model_version and band thresholds under "band_thresh
   for example {"likely": {"p": 0.7, "p_location": 0.7, "p_exists": 0.7}, "unlikely": {"p": 0.2}};
   flat t_L / t_U keys are read as the p thresholds. Only necessary conditions are tested (likely needs
   every likely threshold met; unlikely needs p <= the unlikely threshold unless band_reason says another rule
-  decided), because the band rule also uses evidence counts the table may not carry.
+  decided or the row carries the c2 term, the C = 2 rule of MODEL_SPEC 3.4), because the band rule also uses
+  evidence counts the table may not carry.
+  A contribution is not_observable when it says so, or when every witness of its (unique_id, service, family)
+  is not_observable; such a contribution must be 0.
 derived/v2/witnesses.parquet: witness_id unique; observability present | absent | not_observable;
   sampled quotes are verbatim in their source; restricted lists (NABH, NMC, MoHFW trauma) appear only as
   per-facility facts.
@@ -42,17 +48,17 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import pyarrow.compute as pc
 import pyarrow.parquet as pq
 
 ROOT = Path("/Users/karthikvattem/projects/datathon")
 V1 = ROOT / "derived/v1"
 SEED = 20261121
 QUOTE_SAMPLE_PER_SOURCE = 40
-BANDS = {"likely", "not_verified", "unlikely"}
+BANDS = {"LIKELY", "CALL_FIRST", "NO_SERVICE_TEXT", "UNLIKELY"}
 OPERATORS = {"public", "private", "unknown"}
 OBSERVABILITY = {"present", "absent", "not_observable"}
 TOL = 1e-9
+PTS = 20.0 / math.log(2.0)  # points per logit unit on the card
 # restricted licences: per-facility facts only (source_key in witnesses -> list file, name column)
 RESTRICTED = {"nabh": (ROOT / "data/external/nabh_accredited/nabh_hco.parquet", "name"),
               "nmc": (ROOT / "data/external/nmc_colleges/nmc_colleges.parquet", "college_name"),
@@ -123,14 +129,16 @@ def contributions() -> pd.DataFrame:
     """Long form: one row per (unique_id, service_id, term) with points and evidence_ids."""
     d, s = v2_dir(), scores()
     if "contributions" in s.columns:
-        t = pq.read_table(d / "facility_service_scores.parquet", columns=["unique_id", "service_id", "contributions"])
-        col = t.column("contributions").combine_chunks()
-        flat = pc.list_flatten(col)
-        parent = pc.list_parent_indices(col).to_numpy()
-        long = flat.to_pandas() if hasattr(flat, "to_pandas") else pd.Series(flat.to_pylist())
-        long = pd.DataFrame(list(long)) if not isinstance(long, pd.DataFrame) else long
-        return long.assign(unique_id=t.column("unique_id").to_numpy()[parent],
-                           service_id=t.column("service_id").to_numpy()[parent])
+        cols = {k: [] for k in ("unique_id", "service_id", "term", "family", "points", "evidence_ids")}
+        for u, v, js in zip(s.unique_id, s.service_id, s.contributions):
+            for it in json.loads(js):
+                cols["unique_id"].append(u)
+                cols["service_id"].append(v)
+                cols["term"].append(it.get("label"))
+                cols["family"].append(it.get("family"))
+                cols["points"].append(float(it["points"]))
+                cols["evidence_ids"].append(list(it.get("evidence_ids") or []))
+        return pd.DataFrame(cols)
     p = d / "contributions.parquet"
     if not p.is_file():
         raise NotReady("no contributions column in facility_service_scores and no contributions.parquet")
@@ -162,6 +170,8 @@ def guarded(fn):
             return fn()
         except NotReady as e:
             return result(fn.__name__[6:], "not_run", "not run", "contract holds", f"skipped: {e}")
+        except Exception as e:  # a crash is a broken contract, and must not stop the checks after it
+            return result(fn.__name__[6:], "fail", f"crashed: {type(e).__name__}", "contract holds", str(e)[:300])
     return run
 
 
@@ -225,37 +235,46 @@ def check_v2_probabilities() -> dict:
         if m.any():
             bad[c] = int(m.sum())
             ex += [f"{r.unique_id}:{r.service_id} {c}={getattr(r, c)}" for r in s[m].head(2).itertuples()]
-    order = (s.lo > s.p + TOL) | (s.p > s.hi + TOL)
+    order = s.lo > s.hi + TOL
     if order.any():
-        bad["lo<=p<=hi"] = int(order.sum())
-        ex += [f"{r.unique_id}:{r.service_id} lo={r.lo} p={r.p} hi={r.hi}" for r in s[order].head(2).itertuples()]
+        bad["lo<=hi"] = int(order.sum())
+        ex += [f"{r.unique_id}:{r.service_id} lo={r.lo} hi={r.hi}" for r in s[order].head(2).itertuples()]
+    bins = sorted(card().get("calibration_by_score_bin") or [], key=lambda r: r["p_min"])
+    if not bins:
+        bad["no calibration_by_score_bin in model_card.json"] = len(s)
+    else:  # bin b holds p_min[b] <= p < p_min[b + 1], as the export assigns it
+        b = np.digitize(s.p.to_numpy(), [r["p_min"] for r in bins] + [np.inf]) - 1
+        w = np.array([r["wilson95"] for r in bins], float)[b.clip(0, len(bins) - 1)]
+        off = (b < 0) | (b >= len(bins)) | ~(np.abs(s.lo.to_numpy() - w[:, 0]) <= TOL) | ~(np.abs(s.hi.to_numpy() - w[:, 1]) <= TOL)
+        if off.any():
+            bad["lo/hi != own score bin"] = int(off.sum())
+            ex += [f"{r.unique_id}:{r.service_id} p={r.p} lo={r.lo} hi={r.hi}" for r in s[off].head(2).itertuples()]
     return result("v2_probabilities", "fail" if bad else "pass", f"{sum(bad.values())} bad cells {bad}",
-                  "0 null or outside [0,1]; lo <= p <= hi", f"{len(s)} rows x {cols}", ex)
+                  "0 null or outside [0,1]; lo <= hi; lo/hi = the row's score-bin Wilson 95% in model_card.json",
+                  f"{len(s)} rows x {cols}; {len(bins)} score bins; p outside [lo, hi] on "
+                  f"{int(((s.p < s.lo) | (s.p > s.hi)).sum())} rows (allowed: lo/hi describe the bin)", ex)
 
 
 @guarded
 def check_v2_logit_identity() -> dict:
     s = scores()
-    miss = need(["base", "logit"])
+    miss = need(["base", "p"])
     if miss:
         return result("v2_logit_identity", "fail", f"missing {miss}", "present", str(list(s.columns)))
     c = contributions()
     if "points" not in c.columns:
         return result("v2_logit_identity", "fail", "contributions have no points", "points present", str(list(c.columns)))
     tot = c.groupby(["unique_id", "service_id"]).points.sum().rename("sum_points")
-    m = s[["unique_id", "service_id", "base", "logit", "p"]].merge(tot.reset_index(), how="left",
-                                                                    on=["unique_id", "service_id"])
+    m = s[["unique_id", "service_id", "base", "p"]].merge(tot.reset_index(), how="left", on=["unique_id", "service_id"])
     m["sum_points"] = m.sum_points.fillna(0.0)
-    err = (m.base + m.sum_points - m.logit).abs()
+    m["logit"] = np.log(m.p) - np.log1p(-m.p)
+    err = (m.base + m.sum_points / PTS - m.logit).abs()
     off = m[~(err <= TOL)]
-    sig = (1 / (1 + np.exp(-m.logit)) - m.p).abs()
-    n_sig = int((~(sig <= TOL)).sum())
-    st = "fail" if len(off) else "warn" if n_sig else "pass"
-    return result("v2_logit_identity", st, f"{len(off)} of {len(m)} rows off by > {TOL}; max {err.max():.2e}",
-                  f"|base + sum(points) - logit| <= {TOL}",
-                  f"{len(c)} contribution rows; sigmoid(logit) differs from p by > {TOL} on {n_sig} rows "
-                  f"(max {sig.max():.2e}; warn only, p may be calibrated after the logit)",
-                  [f"{r.unique_id}:{r.service_id} base {r.base} + {r.sum_points} != {r.logit}" for r in off.head(5).itertuples()])
+    return result("v2_logit_identity", "fail" if len(off) else "pass",
+                  f"{len(off)} of {len(m)} rows off by > {TOL}; max {err.max():.2e}",
+                  f"|base + sum(points) / (20 / ln 2) - logit(p)| <= {TOL}", f"{len(c)} contribution rows",
+                  [f"{r.unique_id}:{r.service_id} base {r.base} + {r.sum_points} pts != logit {r.logit}"
+                   for r in off.head(5).itertuples()])
 
 
 def _id_lists(c: pd.DataFrame) -> pd.Series | None:
@@ -326,39 +345,48 @@ def check_v2_bands() -> dict:
         if col not in s.columns:
             ex.append(f"threshold column {col} not in table")
             continue
-        m = (s.band == "likely") & ~(s[col] >= t - TOL)
+        m = (s.band == "LIKELY") & ~(s[col] >= t - TOL)
         bad += int(m.sum())
-        ex += [f"likely with {col}={getattr(r, col)} < {t}: {r.unique_id}:{r.service_id}" for r in s[m].head(2).itertuples()]
+        ex += [f"LIKELY with {col}={getattr(r, col)} < {t}: {r.unique_id}:{r.service_id}" for r in s[m].head(2).itertuples()]
+    n_c2 = 0
     if "p" in unl and "p" in s.columns:
-        m = (s.band == "unlikely") & ~(s.p <= unl["p"] + TOL)
+        m = (s.band == "UNLIKELY") & ~(s.p <= unl["p"] + TOL)
         if "band_reason" in s.columns:  # another documented rule (e.g. counter-evidence) may decide unlikely
             m &= s.band_reason.fillna("").str.contains(r"\bp\b|p_s|threshold", case=False, regex=True) | s.band_reason.isna()
+        if m.any():  # the C = 2 rule (MODEL_SPEC 3.4) shows as the c2 term in the row's contributions
+            c = contributions()
+            c2 = pd.MultiIndex.from_frame(c.loc[c.term == "c2", ["unique_id", "service_id"]])
+            by_c2 = m & pd.MultiIndex.from_frame(s[["unique_id", "service_id"]]).isin(c2)
+            n_c2, m = int(by_c2.sum()), m & ~by_c2
         bad += int(m.sum())
-        ex += [f"unlikely with p={r.p} > {unl['p']}: {r.unique_id}:{r.service_id}" for r in s[m].head(2).itertuples()]
+        ex += [f"UNLIKELY with p={r.p} > {unl['p']}: {r.unique_id}:{r.service_id}" for r in s[m].head(2).itertuples()]
     st = "fail" if bad or unknown else "pass"
     return result("v2_bands", st, f"{bad} rows break a threshold; unknown bands {unknown}",
-                  f"likely: all of {lik} met; unlikely: p <= {unl.get('p')}",
-                  f"band counts {s.band.value_counts(dropna=False).to_dict()}; necessary conditions only", ex)
+                  f"LIKELY: all of {lik} met; UNLIKELY: p <= {unl.get('p')} or the c2 term",
+                  f"band counts {s.band.value_counts(dropna=False).to_dict()}; {n_c2} UNLIKELY by the c2 rule; "
+                  "necessary conditions only", ex)
 
 
 @guarded
 def check_v2_not_observable_zero() -> dict:
     c = contributions()
+    w = witnesses()
+    n_nob = "-"
     if "observability" in c.columns:
         m = c.observability == "not_observable"
+    elif "family" in c.columns:
+        ws = w[w.service != "*"]
+        nob = ws.observability.eq("not_observable").groupby([ws.unique_id, ws.service, ws.family]).all()
+        n_nob = int(nob.sum())
+        m = pd.MultiIndex.from_frame(c[["unique_id", "service_id", "family"]]).isin(nob.index[nob.to_numpy()])
     else:
-        ids = _id_lists(c)
-        w = witnesses()
-        if ids is None:
-            return result("v2_not_observable_zero", "fail", "no observability or evidence ids", "present", "")
-        nob = frozenset(w.witness_id[w.observability == "not_observable"])
-        m = ids.map(lambda v: v is not None and len(v) > 0 and all(x in nob for x in v))
+        return result("v2_not_observable_zero", "fail", "no observability or family", "present", str(list(c.columns)))
     hit = c[m & (c.points != 0)]
-    w = witnesses()
     unk = sorted(set(w.observability.dropna()) - OBSERVABILITY)
     return result("v2_not_observable_zero", "fail" if len(hit) or unk else "pass",
                   f"{len(hit)} of {int(m.sum())} not_observable contributions are non-zero; unknown observability {unk}",
-                  "exactly 0", "a contribution is not_observable when it says so, or when every witness it cites is",
+                  "exactly 0", "a contribution is not_observable when it says so, or when every witness of its "
+                  f"(unique_id, service, family) is; {n_nob} not_observable triples in witnesses",
                   [f"{r.unique_id}:{r.service_id} {getattr(r, 'term', '')} points={r.points}" for r in hit.head(5).itertuples()])
 
 
@@ -536,18 +564,24 @@ def selftest() -> None:
     assert check_v2_keys_unique()["status"] == "not_run", "absent v2 must skip"
     c = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "unique_id", "text"]).iloc[:2]
     uid, cid = c.unique_id.iloc[0], c.claim_id.iloc[0]
-    wit = pd.DataFrame({"unique_id": [uid, uid], "witness_id": ["w1", "w2"], "evidence_id": [cid, None],
-                        "observability": ["present", "not_observable"], "quote": [c.text.iloc[0], None],
-                        "source": ["provided dataset text", None], "source_key": ["vf_text", None], "field": [None, None]})
+    wit = pd.DataFrame({"unique_id": [uid] * 3, "witness_id": ["w1", "w2", "w3"], "evidence_id": [cid, None, None],
+                        "service": ["dialysis", "dialysis", "mri"], "family": ["T", "R", "R"],
+                        "observability": ["present", "not_observable", "not_observable"],
+                        "quote": [c.text.iloc[0], None, None], "source": ["provided dataset text", None, None],
+                        "source_key": ["vf_text", None, None], "field": [None, None, None]})
     wit.to_parquet(tmp / "witnesses.parquet")
+    item = lambda lab, fam, pts, ids: {"label": lab, "family": fam, "points": pts, "evidence_ids": ids}  # noqa: E731
     good = {"unique_id": uid, "service_id": "dialysis", "p": 0.5, "lo": 0.4, "hi": 0.6, "p_location": 0.9, "p_exists": 0.9,
-            "band": "not_verified", "base": -1.0, "logit": 0.0, "operator": "private", "model_version": "m1", "as_of": "2026-11-22",
-            "contributions": [{"term": "T", "points": 1.0, "evidence_ids": [cid]}, {"term": "R", "points": 0.0, "evidence_ids": ["w2"]}]}
-    bad = {**good, "service_id": "mri", "p": 0.95, "hi": 0.9, "band": "likely", "p_location": 0.5, "operator": "ngo",
-           "contributions": [{"term": "T", "points": 0.5, "evidence_ids": ["nope:1"]}, {"term": "R", "points": 0.3, "evidence_ids": ["w2"]}]}
+            "band": "CALL_FIRST", "base": -1.0, "operator": "private", "model_version": "m1", "as_of": "2026-11-22",
+            "contributions": json.dumps([item("t1", "T", PTS, [cid]), item("r_reader", "R", 0.0, ["w2"])])}
+    # bad: lo/hi of the wrong bin (p > hi alone is allowed), points do not add up, an unresolved id, a non-zero
+    # not_observable term, LIKELY with p_location below the gate, an unknown operator
+    bad = {**good, "service_id": "mri", "p": 0.95, "hi": 0.9, "band": "LIKELY", "p_location": 0.5, "operator": "ngo",
+           "contributions": json.dumps([item("t1", "T", 0.5, ["nope:1"]), item("r_reader", "R", 0.3, ["w2"])])}
     pd.DataFrame([good, bad, good]).to_parquet(tmp / "facility_service_scores.parquet")
     (tmp / "model_card.json").write_text(json.dumps({"model_version": "m1", "band_thresholds": {
-        "likely": {"p": 0.7, "p_location": 0.7}, "unlikely": {"p": 0.2}}}))
+        "likely": {"p": 0.7, "p_location": 0.7}, "unlikely": {"p": 0.2}}, "calibration_by_score_bin": [
+        {"p_min": 0.0, "p_max": 0.6, "wilson95": [0.4, 0.6]}, {"p_min": 0.6, "p_max": 1.0, "wilson95": [0.8, 0.9]}]}))
     for f in (scores, card, witnesses, contributions, known_ids):
         f.cache_clear()
     got = {f.__name__[6:]: f()["status"] for f in CHECKS}

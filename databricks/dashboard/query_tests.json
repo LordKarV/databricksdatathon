@@ -3,82 +3,82 @@
   "ds_facility": {
    "state": "SUCCEEDED",
    "rows": 9959,
-   "seconds": 1.7
+   "seconds": 2.0
   },
   "ds_state": {
    "state": "SUCCEEDED",
    "rows": 32,
-   "seconds": 1.5
+   "seconds": 0.9
   },
   "ds_district": {
    "state": "SUCCEEDED",
    "rows": 784,
-   "seconds": 1.1
+   "seconds": 0.8
   },
   "ds_dialysis_district": {
    "state": "SUCCEEDED",
    "rows": 781,
-   "seconds": 1.4
+   "seconds": 0.8
   },
   "ds_csection_district": {
    "state": "SUCCEEDED",
    "rows": 169,
-   "seconds": 1.4
+   "seconds": 0.7
   },
   "ds_dialysis_burden": {
    "state": "SUCCEEDED",
    "rows": 780,
-   "seconds": 1.5
+   "seconds": 0.8
   },
   "ds_settlement": {
    "state": "SUCCEEDED",
    "rows": 9,
-   "seconds": 1.3
+   "seconds": 0.8
   },
   "ds_pmndp": {
    "state": "SUCCEEDED",
    "rows": 36,
-   "seconds": 1.3
+   "seconds": 0.8
   },
   "ds_funnel": {
    "state": "SUCCEEDED",
    "rows": 9244,
-   "seconds": 1.6
+   "seconds": 1.0
   },
   "ds_pairs": {
    "state": "SUCCEEDED",
-   "rows": 69713,
-   "seconds": 1.7
+   "rows": 358092,
+   "seconds": 1.1
   },
   "ds_list_facts": {
    "state": "SUCCEEDED",
    "rows": 3062,
-   "seconds": 2.2
+   "seconds": 0.8
   },
   "ds_plans": {
    "state": "SUCCEEDED",
    "rows": 3150,
-   "seconds": 1.4
+   "seconds": 0.8
   },
   "ds_plans_window": {
    "state": "SUCCEEDED",
    "rows": 21,
-   "seconds": 1.7
+   "seconds": 0.6
   },
   "ds_plans_concentration": {
    "state": "SUCCEEDED",
    "rows": 18,
-   "seconds": 1.4
+   "seconds": 0.7
   },
   "ds_test_metrics": {
    "state": "SUCCEEDED",
    "rows": 14,
-   "seconds": 1.6
+   "seconds": 0.8
   },
   "ds_test_labels": {
    "state": "SUCCEEDED",
    "rows": 4,
-   "seconds": 1.1
+   "seconds": 0.6
   }
  },
  "checks": [
@@ -165,20 +165,36 @@
    ]
   },
   {
-   "check": "ds_pairs bands (spec Unlikely 37108, Unverified 32603, Likely 2)",
+   "check": "ds_pairs v2 bands (derived/v2: Likely 20073, Call first 1671, No service text 242131, Unlikely 94217)",
    "state": "SUCCEEDED",
    "result": [
     [
+     "Call first",
+     "1671"
+    ],
+    [
      "Likely",
-     "2"
+     "20073"
+    ],
+    [
+     "No service text",
+     "242131"
     ],
     [
      "Unlikely",
-     "37108"
-    ],
+     "94217"
+    ]
+   ]
+  },
+  {
+   "check": "ds_pairs v2 contract: rows (358092), exclude_review ids (0), NO_SERVICE_TEXT with P_S (0), operators",
+   "state": "SUCCEEDED",
+   "result": [
     [
-     "Unverified",
-     "32603"
+     "358092",
+     "0",
+     "0",
+     "3"
     ]
    ]
   },
@@ -290,5 +306,5 @@
    ]
   }
  ],
- "run_at": "2026-11-21 18:25:08"
+ "run_at": "2026-11-21 22:01:57"
 }

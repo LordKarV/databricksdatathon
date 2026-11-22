@@ -6,9 +6,11 @@ import duckdb, pandas as pd
 
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "out")
-RAW = "/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"
-AUD = "/Users/karthikvattem/projects/datathon/audit/claims/out"
-MERGE = "/Users/karthikvattem/projects/datathon/audit/merge/out"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(D, "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+RAW = os.path.join(_DATA, "raw/facilities.parquet")
+AUD = os.path.join(_ROOT, "audit/claims/out")
+MERGE = os.path.join(_ROOT, "audit/merge/out")
 UUID = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 
 
@@ -77,7 +79,7 @@ def main():
                            "unanchored_service_claims_in_records_with_quarantined_text": len(llm),
                            "records": int(llm.unique_id.nunique())}
     m["strong_v1_vs_v2"] = {"v1": int((g1.grade == "strong").sum()), "v2": int((g2.grade == "strong").sum())}
-    geo = pd.read_parquet("/Users/karthikvattem/projects/datathon/audit/geo/facility_geo.parquet",
+    geo = pd.read_parquet(os.path.join(_ROOT, "audit/geo/facility_geo.parquet"),
                           columns=["unique_id", "city_match_pin", "city_match_near"]).drop_duplicates("unique_id")
     sg = st2.merge(geo, on="unique_id", how="left")
     m["residual_strong_city_matches_neither_pin_nor_coords"] = {"strong": len(sg), "n": int(((sg.city_match_pin == False) & (sg.city_match_near == False)).sum())}

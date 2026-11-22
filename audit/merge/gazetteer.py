@@ -4,11 +4,13 @@ Sources: india_post_pincode_directory (districts, states, PIN -> district/state)
 facility table's own address_city values (a city enters the lexicon only if >= 3 records
 use it and >= 80% of them sit in one PIN-derived state).
 """
-import re
+import os, re
 from collections import Counter, defaultdict
 import pandas as pd
 
-PIN = "/Users/karthikvattem/projects/datathon/data/raw/india_post_pincode_directory.parquet"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+PIN = os.path.join(_DATA, "raw/india_post_pincode_directory.parquet")
 
 STATE_ALIASES = {
     "orissa": "odisha", "tamilnadu": "tamil nadu", "pondicherry": "puducherry",
