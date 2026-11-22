@@ -549,13 +549,17 @@ function gapHtml(a) {
   const G = k => F('area.gap.' + k, g[k], 'num');
   const W = F('area.area.window_min', a.area.window_min, 'num');
   const L = F('area.query.service_label.en', a.query.service_label.en);
+  const allCare = g.pins_sampled > 0 && g.covered === 0 && g.no_claim === 0;
   return `<h3>Data gap or care gap?</h3>
+    ${allCare ? `<p class="card"><strong>Care gap across the sampled district:</strong> none of the ${G('pins_sampled')}
+      PIN areas has a confirmed option within ${W} min.</p>` : ''}
+    ${emergencyNumbers(a)}
     <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
-      ${G('district_confirmed')} of them confirmed by a second source.</p>
+      ${G('district_confirmed')} of them rated Likely.</p>
     <ul class="gap">
-      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a confirmed option within ${W} min.</li>
+      <li><strong>Covered:</strong> ${G('covered')} PIN areas have a Likely option within ${W} min.</li>
       <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
-        say they offer it, none confirmed. A phone call can settle it.</li>
+        say they offer it, none rated Likely. A phone call can settle it.</li>
       <li><strong>Care gap, too far:</strong> ${G('far')} PIN areas: every listing that claims it is more than ${W} min away.</li>
       <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
         We cannot tell whether care exists there.</li>
@@ -563,11 +567,27 @@ function gapHtml(a) {
     <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>
     ${publicHtml(a)}`;
 }
+// Emergency care with no confirmed option in reach: the area plan says what to do until the gap closes (#86 item 3).
+function emergencyNumbers(a) {
+  const s = svc(a.query.service);
+  if (!s || !(s.profile === 'emergency' || s.profile === 'urgent') || a.summary.n_without_option === 0) return '';
+  const with102 = s.key === 'emergency_csection' || s.key === 'nicu';
+  return `<p><strong>Until then, emergencies here go by ambulance:</strong> <a href="tel:108">108</a> (free)${with102
+    ? ', or <a href="tel:102">102</a> for pregnant women and babies' : ''}.</p>`;
+}
 // Where the area shows no public evidence, name the hospitals the public standard expects to offer acute care (#86).
 function publicHtml(a) {
   const ps = a.gap.public_standard;
   if (!ps || !(a.summary.n_without_option > 0 || a.summary.no_public_evidence > 0)) return '';
-  if (!ps.length) return '<p>No hospital in this district in our data is one the public standard expects to offer it.</p>';
+  if (!ps.length) {
+    const g = a.gap, D = F('area.area.district', a.area.district), pn = g.public_nearest;
+    return `<p>The public standard expects a public hospital for this care in every district. Our data lists none in
+      ${D}: ${F('area.gap.district_listings', g.district_listings, 'num')} listing(s) in the district in all, so check the
+      district's own hospital list before planning.</p>
+      <p>${pn ? `Nearest public hospital in our data: ${F('area.gap.public_nearest.name', pn.name)}
+        (${F('area.gap.public_nearest.label', pn.label)}), ${F('area.gap.public_nearest.km', pn.km, 'num')} km.`
+        : `No public hospital in our data within ${F('area.gap.radius_km', g.radius_km, 'num')} km.`}</p>`;
+  }
   return `<p>Hospitals in ${F('area.area.district', a.area.district)} the public standard expects to offer it:</p>
     <ul class="gap">${ps.map((h, k) => `<li>${F(`area.gap.public_standard.${k}.name`, h.name)}
       (${F(`area.gap.public_standard.${k}.label`, h.label)})</li>`).join('')}</ul>`;

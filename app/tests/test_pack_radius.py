@@ -48,12 +48,7 @@ def out(tmp_path_factory):
         idx[bp.slug(st)] = {"state": st, "gzip_bytes": len(gz), "sha256": "x", "built": "2026-11-21",
                             "pts": bp.state_points(st, FAC, SVC)}
     (d / "index.json").write_text(json.dumps({"v": 1, "pts_scale": bp.PTS_SCALE, "packs": idx}))
-    old = bp.OUT
-    bp.OUT = d
-    try:
-        bp.write_pin_index(PINS)
-    finally:
-        bp.OUT = old
+    bp.write_pin_index(PINS, d)
     return d
 
 

@@ -1,0 +1,3209 @@
+{
+ "about": "Gold v3 web labels (issue #51); rubric and method in model/gold/v3/README.md.",
+ "report": {
+  "split": "test",
+  "pairs": 150,
+  "verdicts": {
+   "no_info": 90,
+   "confirmed": 47,
+   "contradicted": 13
+  },
+  "no_info_rate": 0.6,
+  "by_stratum": {
+   "?": {
+    "no_info": 90,
+    "confirmed": 47,
+    "contradicted": 13
+   }
+  },
+  "by_service": {
+   "burn_care": {
+    "no_info": 12,
+    "confirmed": 4,
+    "contradicted": 2
+   },
+   "cardiac_surgery": {
+    "no_info": 11,
+    "confirmed": 4,
+    "contradicted": 2
+   },
+   "dialysis": {
+    "no_info": 13,
+    "contradicted": 2,
+    "confirmed": 2
+   },
+   "emergency_24x7": {
+    "no_info": 10,
+    "confirmed": 7
+   },
+   "emergency_csection": {
+    "no_info": 11,
+    "confirmed": 7
+   },
+   "mri": {
+    "no_info": 10,
+    "confirmed": 5,
+    "contradicted": 2
+   },
+   "nicu": {
+    "confirmed": 8,
+    "no_info": 9
+   },
+   "stemi_thrombolysis": {
+    "no_info": 8,
+    "confirmed": 3
+   },
+   "trauma_care": {
+    "contradicted": 5,
+    "confirmed": 7,
+    "no_info": 6
+   }
+  },
+  "overlap": {
+   "planned": 38,
+   "double_labelled": 38,
+   "agreement": 0.816,
+   "kappa_service": 0.624,
+   "kappa_decided": 0.598,
+   "found_by_either": 17,
+   "kappa_service_found_by_either": 0.156,
+   "confusion": {
+    "no_info|confirmed": 3,
+    "confirmed|no_info": 4,
+    "no_info|no_info": 21,
+    "confirmed|confirmed": 8,
+    "contradicted|contradicted": 2
+   }
+  },
+  "no_info_rate_by_method": {
+   "search": 0.551,
+   "fetch_only": 0.721
+  },
+  "pairs_by_method": {
+   "search": 107,
+   "fetch_only": 43
+  },
+  "weighted": {
+   "headline_confirmed_of_decided": {
+    "rate": null,
+    "n": 0,
+    "n_eff": 0
+   },
+   "sensitivity_confirmed_of_all": {
+    "rate": null,
+    "n": 0,
+    "n_eff": 0
+   }
+  },
+  "provenance": "agent-labelled, not human-checked",
+  "searches": 175
+ },
+ "results": [
+  {
+   "pair_id": "v3t2_001",
+   "unique_id": "0cbdef30-deff-4a8d-bb9e-47a5d1b43199",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://neelamhospital.com/",
+    "https://neelamhospital.com/our-specialties/department-of-plastic-cosmetic-surgery/"
+   ],
+   "quote": "",
+   "notes": "Own site (Rajpura-Chandigarh highway) lists many specialties incl. plastic surgery, but neither home page nor plastic surgery page mentions burns.",
+   "searches_used": 0,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_002",
+   "unique_id": "13964de0-54a7-4fc2-94b5-95454187017d",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://ochri.com/",
+    "https://ochri.com/plastic-surgery/"
+   ],
+   "quote": "",
+   "notes": "Own site confirms Nagpur hospital with plastic surgery department, but no burn unit or burn care mentioned anywhere read.",
+   "searches_used": 0,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_003",
+   "unique_id": "a32b5dae-30f2-4165-aba1-f53129f5151a",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://sreemanjuhospitals.com/",
+    "https://sreemanjuhospitals.com/plastic-surgery/"
+   ],
+   "quote": "",
+   "notes": "Own site lists Plastic Surgery and emergency but no mention of burns or a burn unit on home or plastic surgery pages; search found nothing facility-specific.",
+   "searches_used": 1,
+   "batch": "T2-A01",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_004",
+   "unique_id": "14e13612-bac5-4e8f-82d4-167385402203",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://cmccpt.ac.in/?p=742",
+    "https://www.dtnext.in/amp/story/news/tamilnadu/kanchi-cracker-unit-mishap-most-patients-suffer-30-burns"
+   ],
+   "quote": "focusing on the six pillars Trauma/Burns/ Poisoning/Stroke/Myocardial Infarction/PREM.",
+   "notes": "Official Govt Chengalpattu Medical College Hospital emergency page lists burns as a pillar with burns MLC census 2021-2023; news reports burn victims admitted there. No dedicated burns ward page found.",
+   "searches_used": 2,
+   "batch": "T2-A01",
+   "method": "search",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_005",
+   "unique_id": "c582b8cc-2fc1-4372-bddc-054b37fefc14",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.mapsofindia.com/thanjavur/health.html",
+    "https://medicaldialogues.in/news/health/hospital-diagnostics/fire-at-maternity-ward-of-thanjavur-government-raja-mirasdar-hospital-147284"
+   ],
+   "quote": "",
+   "notes": "Hospital exists (news on 2025 maternity ward fire). A non-official department list omits burns for Raja Mirasdar while listing Burns at Thanjavur Medical College Hospital; not exhaustive official, so no_info.",
+   "searches_used": 1,
+   "batch": "T2-A01",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_006",
+   "unique_id": "61d762e6-570a-45e7-8425-c03693b2d485",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/bilaspur/vagus-hospital-imlipara-main-road"
+   ],
+   "quote": "",
+   "notes": "Own website returns 403; only directory listings (PM-JAY empanelled, Imlipara Road Bilaspur) found, none mention burns.",
+   "searches_used": 2,
+   "batch": "T2-A01",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_007",
+   "unique_id": "9387e991-ea7c-46a1-afe6-1c16437b637e",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://drmaidhospital.in/"
+   ],
+   "quote": "",
+   "notes": "Own site (Rahata, Ahmednagar) lists plastic surgery, emergency and critical care but no burns mention; search found nothing.",
+   "searches_used": 1,
+   "batch": "T2-A01",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_008",
+   "unique_id": "3d01f6b7-28ae-413b-a8e5-cbcc21b65025",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.freepressjournal.in/amp/bhopal/bhopal-man-succumbs-to-burn-injuries-2"
+   ],
+   "quote": "His kin rushed him to the Kamla Nehru Hospital, where he was undergoing treatment.",
+   "notes": "2023 news shows a burn victim admitted and treated at Kamla Nehru Hospital, Bhopal (GMC campus); burn unit of GMC is also referenced at Hamidia. Burns treated as a service.",
+   "searches_used": 2,
+   "batch": "T2-A01",
+   "method": "search",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_009",
+   "unique_id": "a96c189f-783b-4d8c-95cf-abbc2e5cc8a6",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://skims.ac.in/index.php/archived/6465-press-release-chief-secretary-dedicates-state-of-art-burn-unit-to-the-public-at-skims.html"
+   ],
+   "quote": "commissioned the State of Art Burn Unit at SKIMS and dedicated it to the public.",
+   "notes": "Official SKIMS press release (25 June 2022) on burn unit under Department of Plastic Surgery at SKIMS Soura, Srinagar.",
+   "searches_used": 1,
+   "batch": "T2-A01",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_010",
+   "unique_id": "4f7accc9-521b-4d67-a8b5-a96416ceb649",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://akashdeephospital.com/"
+   ],
+   "quote": "",
+   "notes": "Own site (Majitha Road Bypass, Amritsar) lists emergency/trauma and plastic & reconstructive surgery but no burns mention. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_011",
+   "unique_id": "6fb30f40-a08a-483c-be84-c6b8676c6c80",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://medipulse.in/"
+   ],
+   "quote": "",
+   "notes": "Own site (Jodhpur) lists critical care, emergency and many specialties; no burns mention found. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "high"
+   }
+  },
+  {
+   "pair_id": "v3t2_012",
+   "unique_id": "3c4af8ee-64fb-4f29-899c-5cf11706b93d",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Three searches found no Jivanjyot hospital in Halvad; only similarly named hospitals in Vadodara, Surat and Surendranagar and the Halvad sub-district hospital. Nothing on burn care.",
+   "searches_used": 3,
+   "batch": "T2-A07-relabel-search",
+   "method": "search",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_013",
+   "unique_id": "8dcf50d8-e473-43be-b150-5ca65439631f",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://theprint.in/india/3-newborns-die-in-fire-at-govt-hospital-in-maharashtras-amravati-36-rescued-probe-ordered/3023505/"
+   ],
+   "quote": "fire broke out in the Neonatal Intensive Care Unit (NICU) of the District Women's Hospital here",
+   "notes": "News confirms the District Women's Hospital in Amravati operates (maternity/newborn facility); burned infants were shifted to a super-speciality hospital. A women's hospital is an unrelated specialty for burn care; no burn ward found. Search budget ran out mid-pair.",
+   "searches_used": 1,
+   "batch": "T2-A07-relabel-search",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_014",
+   "unique_id": "d4225cd0-ff43-48a3-9d6c-eedef66ffa82",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.wikipedia.com/wiki/Murshidabad_Medical_College",
+    "https://www.deccanchronicle.com/amp/nation/wb-mla-get-burn-injuries-in-fire-at-home-1992848"
+   ],
+   "quote": "made arrangements to shift Biswas to Murshidabad Medical College and Hospital (MMCH)",
+   "notes": "Government medical college in Berhampore exists. A 2026 news item says a burned MLA was to be shifted to MMCH, but no page states a burn unit; directory mentions do not count.",
+   "searches_used": 4,
+   "batch": "T2-A07-relabel-search",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_015",
+   "unique_id": "33d2eac4-f9fa-4566-be84-9917161d127f",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://tendercarehospital.com/"
+   ],
+   "quote": "",
+   "notes": "Own site (Arera Colony, Bhopal) is a maternity/neonatal/paediatric hospital with cosmetic and Smile Train services; no burns mention. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_016",
+   "unique_id": "53d014ef-3957-4cb9-a2e2-4f534211eb43",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://chaitanyaeyehospital.com/"
+   ],
+   "quote": "",
+   "notes": "Own site shows an eye-only hospital in Vijayawada (Moghalrajpuram address, not Benz Circle); unrelated single-specialty facility. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_017",
+   "unique_id": "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "No website given and no search available; no page reached. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_018",
+   "unique_id": "d26b8c99-b2fa-443a-b9fd-81292068482e",
+   "service_id": "burn_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://mahavirhospital.com/"
+   ],
+   "quote": "An 11-storey super-speciality facility with 4 ultra-modern OTs, a 42-bed ICU with the latest ventilators and monitors, a burns unit, dialysis",
+   "notes": "Shree Mahavir Hospitals, Surat own site describes the Smt. R.B. Shah Trauma Center as having a burns unit; menu lists Plastic Surgery & Burns. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_019",
+   "unique_id": "017a80f7-93b3-4554-a141-c6f2345b7164",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://cmcludhiana.in/"
+   ],
+   "quote": "",
+   "notes": "Given website returns 404 on all paths tried; no other page reachable without search. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_020",
+   "unique_id": "2e5f00b6-d707-4743-b9a7-c94e4e6d0202",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.yenepoya.edu.in/news-details.php?id=1545",
+    "https://www.hospital.yenepoya.edu.in/cardiothorasic-surgery.php"
+   ],
+   "quote": "Minimally Invasive Cardiac Surgery (MICS) Mitral Valve Repair",
+   "notes": "Official Yenepoya news (Apr 2026) reports mitral valve repair at Yenepoya Medical College Hospital, Deralakatte; CT surgery department page cites surgery for congenital and acquired heart abnormalities. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "high"
+   }
+  },
+  {
+   "pair_id": "v3t2_021",
+   "unique_id": "4cb16dbc-b859-4f91-aced-e9eda0d4ccde",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://basaveshwarahospital.com/",
+    "https://basaveshwarahospital.com/cardiology",
+    "https://www.indianahospital.in/branches/chitradurga"
+   ],
+   "quote": "The hospital today is recognized as best cardiac surgery hospital in Chitradurga",
+   "notes": "Own site has cardiology and cath lab; procedures described are angioplasty and pacemakers only. Generic 'cardiac surgery' claim without open-heart/CABG/valve evidence.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_022",
+   "unique_id": "3f439b22-152d-43fe-9bbb-cc1ffd933214",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://ernakulam.nic.in/en/public-utility-category/hospitals/"
+   ],
+   "quote": "",
+   "notes": "No website; district hospitals list pages fetched did not show the facility or services. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_023",
+   "unique_id": "8ab5abe7-8d56-423d-bf85-fbba766b0bb3",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Record is a blood bank at Kharar Civil Hospital, a single-function facility unrelated to cardiac surgery; no page reached to verify. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_024",
+   "unique_id": "7b4b465b-4e30-48ca-abba-b1db245e3967",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://criticarelifelinehospital.com/"
+   ],
+   "quote": "",
+   "notes": "Given domain does not resolve; obvious variants also failed. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_025",
+   "unique_id": "c9768697-c29f-4e63-9deb-6d4cf6ddf0e9",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://suranahospital.in/location/navi-mumbai"
+   ],
+   "quote": "",
+   "notes": "mpcthospital.in redirects to MPCT/Surana Hospital Sanpada page; cardiology lists angioplasty only, no cardiac surgery mention, but list not exhaustive. Search budget exhausted; fetch-only.",
+   "searches_used": 0,
+   "batch": "T2-A01",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_026",
+   "unique_id": "67c3e3f6-dcdd-4e96-8b8e-00c33084c245",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.unmicrc.org/"
+   ],
+   "quote": "minimally invasive aortic valve replacement surgery",
+   "notes": "Official institute site (Civil Hospital campus, Asarwa, Ahmedabad) describes adult cardiac modular OTs, heart transplant and valve/Bentall surgery.",
+   "searches_used": 1,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_027",
+   "unique_id": "b64b2f70-27e2-4efd-950c-f3a1a8c5fa1a",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/belagavi/yash-hospital-critical-care-centre-shastri-nagar"
+   ],
+   "quote": "",
+   "notes": "Only directory listings found (Shahapur, Belagavi); specialties listed omit cardiac surgery but directory is not exhaustive; no own site.",
+   "searches_used": 2,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_028",
+   "unique_id": "e7bfc143-78a0-44b8-80ac-1dc4cada25d6",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://arorahospitals.com/",
+    "https://www.publicservicesmap.in/hospitals/centre/arora-hospital-patiala-punjab-hosp3p100818"
+   ],
+   "quote": "",
+   "notes": "Given website is a placeholder WordPress page; directories show a PM-JAY private hospital on Tehsil Road, Samana, with no cardiac surgery detail.",
+   "searches_used": 1,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_029",
+   "unique_id": "f36ab73d-7b95-4c72-8f6b-3ef10d22b071",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://parvathyhospital.com/specialities/Cardiothoracic-Surgery/2",
+    "https://parvathyhospital.com/"
+   ],
+   "quote": "At Parvathy Multispeciality Hospital, under Parvathy Institute of Cardiac Sciences (PICS)",
+   "notes": "Own site's cardiothoracic surgery page lists CABG and valve surgery under its cardiac institute; Chromepet is the main address but page is undated and does not tie procedures to a specific campus.",
+   "searches_used": 1,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_030",
+   "unique_id": "d16cc7cb-baff-4c78-9971-fe85ec90f0f3",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://telanganatoday.com/gandhi-hospital-team-successfully-performs-complex-mitral-valve-replacement"
+   ],
+   "quote": "the surgical team replaced her diseased native valve with a 27 mm mechanical mitral valve",
+   "notes": "Telangana Today (Nov 2026) reports open-heart mitral valve replacement performed at state-run Gandhi Hospital; also news of heart-lung machine.",
+   "searches_used": 3,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_031",
+   "unique_id": "dec1ac2e-646d-4286-955d-3494a8ed94c6",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://jaipur.visitinrajasthan.com/?p=2891"
+   ],
+   "quote": "It will be the first CTVS department for paediatrics in the state's govt hospitals.",
+   "notes": "News (c. 2025) says JK Lon children's hospital will set up a paediatric CTVS department; no evidence found that surgeries have started.",
+   "searches_used": 2,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_032",
+   "unique_id": "5641a2ec-f087-4445-9ec9-432e4415c55b",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.docindia.org/india/mh/navi-mumbai/cardiology"
+   ],
+   "quote": "",
+   "notes": "Given domain does not resolve; only a truncated doctor-directory mention of a cardiologist's clinic. Search tool budget ran out on the follow-up search.",
+   "searches_used": 1,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_033",
+   "unique_id": "c40a5bb5-d945-4fe9-9c27-9c4cd05d5d0a",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/thane/swami-sarvanand-hospital-kailash-colony"
+   ],
+   "quote": "",
+   "notes": "Given domain does not resolve; directories place it in Ulhasnagar, Thane district, listing no cardiac surgery. Search tool budget ran out on the follow-up search.",
+   "searches_used": 1,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_034",
+   "unique_id": "2feb2607-d956-49ed-a957-85c34d1a61b7",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://lnjp.delhi.gov.in/"
+   ],
+   "quote": "",
+   "notes": "Official Delhi govt LNJP site lists clinical departments (burns, neurosurgery, paediatric surgery etc.) with no CTVS/cardiac surgery; cardiac surgery on the campus is at the separate GB Pant hospital.",
+   "searches_used": 2,
+   "batch": "T2-A02",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_035",
+   "unique_id": "b4acba2b-8fe3-4eb7-a8a9-6571f6615327",
+   "service_id": "cardiac_surgery",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.medicalcollegebaroda.edu.in/"
+   ],
+   "quote": "",
+   "notes": "Medical College Baroda site (SSG Hospital) lists academic departments without CVTS, but the list also omits other super-specialties so it is not exhaustive; no news found. Search budget ran out.",
+   "searches_used": 2,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_036",
+   "unique_id": "3d654d85-255a-4f35-8c80-5d651b58bb7a",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://pmcparbhani.org/"
+   ],
+   "quote": "",
+   "notes": "Own site shows only a bot-verification screen; search found only education directories for the Pedgaon college/RP Hospital with no dialysis mention.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_037",
+   "unique_id": "cd2947f1-64e1-4a85-ba4a-1231895f1382",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://pacificmedical.ac.in/",
+    "https://pacificmedical.ac.in/Departments.aspx",
+    "https://pacificmedical.ac.in/Clinical_Faclities.aspx"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Own site (Girwa, Udaipur) departments and clinical facilities pages do not mention nephrology or dialysis, but the department list is visibly incomplete so not treated as exhaustive.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_038",
+   "unique_id": "da51d69f-e7d8-4986-b94d-49e4f88841e4",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://cmcvellorechittoorcampus.ac.in/",
+    "https://www.cmcvellorechittoorcampus.ac.in/services/"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Campus site's full services list and department list contain no dialysis or nephrology; weak contradiction from omission on official list.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_039",
+   "unique_id": "09571e22-74ba-492d-a6b9-f1a9783af3ab",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.unmicrc.org/",
+    "https://ahmedabad.nic.in/public-utility-category/hospitals/"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Civil Hospital Asarwa campus exists (cited as address of UNMICRC) but no reachable official page on its dialysis service.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_040",
+   "unique_id": "930f3a7a-56fd-4100-9160-3cc455cef68f",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://patiala.nic.in/health/"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. District health page lists CH Rajpura but says nothing about dialysis; no facility site.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_041",
+   "unique_id": "6c51a7fd-e025-4ad5-b923-98fd20c755f9",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://lifecarekarnal.com/",
+    "https://lifecarekarnal.com/our-services/"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Own site describes a medical and maternity hospital whose full services page lists no dialysis; contradiction rests on omission only.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_042",
+   "unique_id": "804cd688-8484-4c54-84ee-3ac6d1d27ab2",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://themedicityrudrapur.com/",
+    "https://www.parkhospital.in/rudrapur/park-hospital-rudrapur"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Given domain 301-redirects to Park Hospital group; its Rudrapur page does not mention The Medicity or dialysis specifically, so identity and service are undetermined.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_043",
+   "unique_id": "a7757509-519c-42f9-a60d-62573825fbb8",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. No website given and no reachable official page without search.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_044",
+   "unique_id": "acde9be7-1859-4c30-a5aa-71f18a4f590e",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://panipat.gov.in/health-department/"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. District health page refers to civil hospitals generically, no mention of dialysis; state NHM site unreachable.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_045",
+   "unique_id": "52bb8240-d5e4-4e6c-a1f4-9a5832d1cf08",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://jeevandanhealth.org/",
+    "https://jeevandanhealth.org/services/24-hrs-dialysis"
+   ],
+   "quote": "Hemodialysis (HD) – Removal of waste and excess fluids using advanced dialysis machines for optimal blood purification.",
+   "notes": "Own site (Bailey Road, Patna, (c) 2026) lists a 24-hour dialysis service with haemodialysis.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_046",
+   "unique_id": "61baba85-3c4f-405d-b345-7a33e51bc608",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://suyoghospitalnagpur.com/",
+    "https://www.suyoghospitalnagpur.com/page/our-branch/5f3d15e784b1a40001cdf112"
+   ],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. Given website is an orthopaedic Suyog Hospital in Nagpur with only Nagpur branches, so it is another facility; nothing found for a Nashik Suyog Hospital.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_047",
+   "unique_id": "0be8a076-706a-439f-b2cd-6a29d85cb41d",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. No website given and no reachable official page without search.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_048",
+   "unique_id": "37fd5d46-e1cb-458e-9a64-9d85dada49ee",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Search tool unavailable (budget exhausted); fetch-only. No website given and no reachable official page without search.",
+   "searches_used": 0,
+   "batch": "T2-A02",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_049",
+   "unique_id": "e008e81e-7f48-420a-8e89-553fae2f3ae7",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://vydehicancercenter.com/",
+    "https://vydehicancercenter.com/about/"
+   ],
+   "quote": "",
+   "notes": "Own site is an oncology centre in Whitefield, Bengaluru; no page mentions dialysis or nephrology, and one search found no dialysis evidence.",
+   "searches_used": 1,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_050",
+   "unique_id": "ec98c6bf-e78b-4cef-a29d-23435a023503",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://suryakiranhospital.com/",
+    "https://suryakiranhospital.com/our_specility/nephrology/"
+   ],
+   "quote": "Hemodialysis and peritoneal dialysis for kidney failure.",
+   "notes": "Own site (Najafgarh, New Delhi) nephrology department page lists haemodialysis among its services.",
+   "searches_used": 1,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_051",
+   "unique_id": "4979a38e-c134-4b51-a4ee-298e43dd9b46",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Two searches found no Government Peripheral Hospital in Periyar Nagar or its dialysis service; only Anna Nagar peripheral hospital dialysis was reported.",
+   "searches_used": 2,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_052",
+   "unique_id": "f191d827-1ae7-4ebe-837b-d4eb49da3cbc",
+   "service_id": "dialysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Generic name; web search tool hit its limit before any result, and no own website was given to fetch.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_053",
+   "unique_id": "646a7cf6-761a-42a2-b5c8-056525333d09",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "dehms.com does not resolve and two searches found no trace of this facility.",
+   "searches_used": 2,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_054",
+   "unique_id": "05746699-9803-437b-a9c6-043ad0a1e514",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://caderaedu.com/college/government-medical-college-dausa?tab=FAQ"
+   ],
+   "quote": "",
+   "notes": "Only an education aggregator states 24x7 emergency at District Hospital Dausa; no official or news source found in 4 searches.",
+   "searches_used": 4,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_055",
+   "unique_id": "09949ebf-b19b-4722-8828-6edee1efca89",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://risingkashmir.com/emergency-obstetric-care-provided-at-sdh-beerwah"
+   ],
+   "quote": "",
+   "notes": "2023 news confirms SDH Beerwah operates and handles emergency obstetric cases (8 a.m.), but no source states round-the-clock emergency.",
+   "searches_used": 2,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_056",
+   "unique_id": "397ead66-5f38-475f-b577-924f9fe53f78",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://thanjavur.nic.in/public-utility-category/hospitals/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); Thanjavur district hospital list does not include Pattukkottai; no other reachable official page.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_057",
+   "unique_id": "c6200f20-c0d2-4849-80d7-16848ae32448",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://ktdhrewa.com/"
+   ],
+   "quote": "Emergency & Trauma: 24/7 Casualty and emergency response services.",
+   "notes": "Hospital's own site lists 24/7 casualty and emergency services.",
+   "searches_used": 0,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_058",
+   "unique_id": "7beba4db-ae34-48b6-a198-ce5ec9831e2d",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://hudahospital.com/",
+    "https://hudahospital.com/casualty-rmo-department/"
+   ],
+   "quote": "offers 24/7 emergency medical care",
+   "notes": "Own site (Haripad, Alappuzha) Casualty/RMO department page states 24/7 emergency care.",
+   "searches_used": 1,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_059",
+   "unique_id": "81bd0276-2d31-4bc3-bc99-1312db4e4faa",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://aarushhospital.com/"
+   ],
+   "quote": "24×7 emergency care with rapid response for accidents, injuries, critical illnesses, and urgent conditions.",
+   "notes": "Own site, Virar East address, states 24x7 emergency and trauma care.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_060",
+   "unique_id": "31a69711-72c6-4a10-a88c-07f292174345",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://burari.delhi.gov.in/",
+    "https://burari.delhi.gov.in/burari/casualty-emergency-services"
+   ],
+   "quote": "round the clock (24 hrs) emergency services are available in this hospital on all days without fail.",
+   "notes": "Official Delhi govt hospital site, address Shankarpura, Burari; casualty page states 24-hour emergency.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "high"
+   }
+  },
+  {
+   "pair_id": "v3t2_061",
+   "unique_id": "d817c0a9-6b9f-46eb-adc5-048c8c0296b7",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://rtrmh.delhi.gov.in/",
+    "https://rtrmh.delhi.gov.in/rtrmh/details-existing-services-rtrm-hospital"
+   ],
+   "quote": "All services except OPD and USG are running round the clock.",
+   "notes": "Official Delhi govt site (Jaffarpur, New Delhi) lists Casualty and Emergency among services and says all except OPD/USG run round the clock.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_062",
+   "unique_id": "10e07bb5-a8c8-4288-be29-925a6a47ef00",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); given domain does not resolve (with or without www).",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_063",
+   "unique_id": "c7f931e9-5cad-4847-a0ae-6f48d93bfbff",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://jeevanrekhahospital.com/emergency/"
+   ],
+   "quote": "Our Emergency Department is operational round the clock.",
+   "notes": "Own site emergency page with Raiganj address states round-the-clock emergency.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_064",
+   "unique_id": "2ab91522-d89c-4c41-b951-817b9d87ad97",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://kollam.nic.in/public-utility-category/%e0%b4%86%e0%b4%b6%e0%b5%81%e0%b4%aa%e0%b4%a4%e0%b5%8d%e0%b4%b0%e0%b4%bf%e0%b4%95%e0%b5%be/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); Kollam district hospital list and DHS Kerala home page do not mention THQH Punalur.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_065",
+   "unique_id": "36c0986a-6c33-4506-965d-684e3a048bc8",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://amethi.nic.in/public-utility-category/hospitals/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); Amethi district site lists only 'District Hospital, Gauriganj' with no emergency details; cannot tie it to the record.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_066",
+   "unique_id": "34d95cb5-3894-4547-a386-deb4610398e4",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://shens.in/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); given domain is a parked Hostinger placeholder; no own site found.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_067",
+   "unique_id": "58ff33e2-7e14-409b-8753-ace4557a15b3",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://spandanahospitals.com/",
+    "https://www.spandanahospitals.com/contact-us/"
+   ],
+   "quote": "24/7 Facilities",
+   "notes": "Own site (Mysore Road, Bengaluru) lists Emergency under its '24/7 Facilities' heading; not an explicit sentence, hence medium.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_068",
+   "unique_id": "c04281fc-b234-4fbb-9d5e-b9e7c21b9450",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); no own website given and no reachable official page identified for Bhagwati Hospital Borivali.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_069",
+   "unique_id": "c0d37a04-d3db-458c-8216-add6a8c68176",
+   "service_id": "emergency_24x7",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "http://www.barc.gov.in/links/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); BARC site pages fetched do not mention BARC Hospital or its emergency service.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_070",
+   "unique_id": "3e665814-3a52-41b4-a135-042fabc3c9ef",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); given domain does not resolve (with or without www).",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_071",
+   "unique_id": "6dcb5489-f55c-455e-aeaf-f8231e7e9ea7",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.sharanyahospital.com/gynaecology.php",
+    "https://www.sharanyahospital.com/ot.php"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); own site (Purba Bardhaman) mentions high-risk pregnancies and modular OT but never caesarean or obstetric surgery.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_072",
+   "unique_id": "ca50d183-6b4e-4634-82b0-b138129a2652",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://pushpanjalihospital.in/",
+    "https://pushpanjalihospital.in/service/gynaecology.html"
+   ],
+   "quote": "",
+   "notes": "Own site (Delhi Gate, Agra) shows a labour room and 350-400 deliveries a year, but never mentions caesarean sections or an obstetric OT.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_073",
+   "unique_id": "417fdbac-7c4e-4bd2-a324-16d1683438b0",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://theni.nic.in/public-utility-category/hospitals/"
+   ],
+   "quote": "",
+   "notes": "Fetch-only (search limit reached); Theni district hospital list does not include the medical college hospital; no other reachable official page.",
+   "searches_used": 0,
+   "batch": "T2-A03",
+   "method": "fetch_only"
+  },
+  {
+   "pair_id": "v3t2_074",
+   "unique_id": "4b14b7e6-ec99-41b5-b59b-924e6aa22ac7",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://risingkashmir.com/pulwama-woman-dies-after-delivering-baby-family-alleges-negligence/",
+    "https://en.wikipedia.org/wiki/District_Hospital_Pulwama"
+   ],
+   "quote": "was operated at DH Pulwama on Saturday night for delivery",
+   "notes": "No official site. Rising Kashmir (July 2023) reports a night-time delivery surgery (LSCS per related coverage) at DH Pulwama; Wikipedia confirms the hospital in Pulwama with 24x7 emergency.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_075",
+   "unique_id": "18539bb7-04de-4d58-9d74-59b8b60b8b0a",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.hexahealth.com/nagpur/hospital/ketkar-maternity-hospital-and-research-institute-sitabuldi",
+    "https://courses.docthub.com/ketkar-hospital-sitabuldi-nagpur-B11276"
+   ],
+   "quote": "",
+   "notes": "Own site ketkarhospital.com returns 403 to fetches. Only directory listings (OT, maternity, Sitabuldi Nagpur) found; these support existence only.",
+   "searches_used": 3,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_076",
+   "unique_id": "c5598920-4152-4fac-95ae-62151f23bbf8",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://currae.com/",
+    "https://currae.com/services-birthing-delivery/"
+   ],
+   "quote": "we also offer a comprehensive range of maternity services, including cesarean section delivery",
+   "notes": "Own site, Ghodbunder Road, Thane West. Birthing page lists cesarean section delivery and round-the-clock operation theatres.",
+   "searches_used": 0,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_077",
+   "unique_id": "17615adf-fb9e-4fc2-b7a2-7fc24f008ebf",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://tirunelveli.nic.in/?p=23991",
+    "https://medicaldialogues.in/news/health/hospital-diagnostics/21-year-old-woman-dies-after-stillbirth-probe-flags-lapses-at-tamil-nadu-hospital-169745"
+   ],
+   "quote": "Obstetrics and Gynecology department",
+   "notes": "District site lists an O&G department at TvMCH (Palayamkottai) but no page found stating caesarean sections; state CEmOC list unreachable. Only older (2016) studies mention deliveries.",
+   "searches_used": 5,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_078",
+   "unique_id": "52e78d9c-3a6d-4792-97e5-4efefdcbf601",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://dharmapurimedicalcollege.in/page/clinical",
+    "https://dmcdpi.ac.in/page/nmc-proforma",
+    "https://dharmapurimedicalcollege.in/page/department"
+   ],
+   "quote": "7. Obstetrics & Gynaecology",
+   "notes": "Own college site lists an O&G service and MS OBG seats, but no page states caesarean or emergency obstetric surgery; news found involved other hospitals.",
+   "searches_used": 4,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "unclear",
+    "location_ok": "unclear",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_079",
+   "unique_id": "72b1bbcd-4cc4-403f-9df8-6a44ac724885",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://satishhospital.com/",
+    "https://www.satishhospital.com/clinical-services/"
+   ],
+   "quote": "I had a cesarean section operation at Satish Nursing Home.",
+   "notes": "Own site (Kachahari Road, Mainpuri, 24X7, emergency line) carries a patient testimonial of a caesarean done there; no dedicated obstetrics page, testimonial undated.",
+   "searches_used": 0,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_080",
+   "unique_id": "a2a3c136-126f-4fc8-a71d-ccbe09e801af",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://cityhospitalmzp.com/",
+    "https://www.bajajfinservhealth.in/hospitals/lucknow/city-hospital-and-trauma-centre-alambagh"
+   ],
+   "quote": "",
+   "notes": "Given site is an empty WordPress placeholder whose domain points to a City Hospital in Mirzapur, not Lucknow. A Lucknow 'City Hospital' appears only in directories, so identity is unresolved.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_081",
+   "unique_id": "22cc2cb0-805f-428e-992e-655e12431a09",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.hexahealth.com/hospitals/insurance/ayushman-bharat-hospitals-list-in-rae-bareli"
+   ],
+   "quote": "",
+   "notes": "Only a directory copy of the PM-JAY list shows a private J N Hospital in Rae Bareli, with no specialties; no own site or official page found.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_082",
+   "unique_id": "3e4ba6fb-61d7-466f-8dff-957632741dd8",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://cdnbbsr.s3waas.gov.in/s3169779d3852b32ce8b1a1724dbf5217d/uploads/2025/01/202501271519201481.pdf"
+   ],
+   "quote": "",
+   "notes": "Kurukshetra district list (2025, per search snippet) shows only a government PHC at Khanpur Kolian with General Medicine; PDF text could not be extracted to verify, and a PHC is unlikely to do C-sections but no page states it.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_083",
+   "unique_id": "61000c87-25e7-49a8-999d-a9a021d7a859",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.thenewsminute.com/amp/story/kerala/kerala-woman-alleges-cotton-left-her-abdomen-after-surgery-govt-hospital-138544"
+   ],
+   "quote": "had undergone a cesarean in the Government Women and Children's Hospital at Thycaud in Thiruvananthapuram on September 4.",
+   "notes": "News Minute (Nov 2020) reports a caesarean at the Govt W&C Hospital, Thycaud; evidence is about 6 years old, at the edge of the recency window.",
+   "searches_used": 3,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_084",
+   "unique_id": "806c465b-4328-47ad-84f3-530d47cee0c7",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://bhagyodaytirth.org/hospital.php",
+    "https://bhagyodaytirth.org/"
+   ],
+   "quote": "Obstetrics and Gynaecology",
+   "notes": "Own site (Khurai Road, Sagar MP) lists an O&G department and emergency services, but no page mentions caesarean or obstetric theatre; only generic directory text found.",
+   "searches_used": 1,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_085",
+   "unique_id": "c1f9b5ac-cf32-43d7-a877-459d724ceb77",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "http://ramabenhospital.in/",
+    "http://ramabenhospital.in/about.html"
+   ],
+   "quote": "Dedicated operating rooms for Endoscopy, IVF and Obstetrics",
+   "notes": "Own site (Rustomwadi Road, Navsari) describes a women's hospital with comprehensive and high-risk obstetric care and dedicated obstetric operating rooms; caesarean not named, site undated.",
+   "searches_used": 1,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_086",
+   "unique_id": "d70319e9-7f81-4339-8760-768a68afaf34",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://jagrutihospital.com/",
+    "https://jagrutihospital.com/treatment.php"
+   ],
+   "quote": "Hospital has full facilities for Normal Delivery, Vaccume Delivery, Cesarean Section, & Complicated Deliveries",
+   "notes": "Own site, Indira Road, Jamnagar; treatment page states caesarean section and complicated deliveries with anaesthetists present.",
+   "searches_used": 0,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_087",
+   "unique_id": "f3b09829-a5ec-4585-8e3e-eee7d8e98ee8",
+   "service_id": "emergency_csection",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://shankarhospital.in/",
+    "https://shankarhospital.in/obstetrics-gynaecology.shtml"
+   ],
+   "quote": "vaginal deliveries, caesarean sections, and pain management options",
+   "notes": "Own site (Vajarahalli, Bengaluru) O&G page lists caesarean sections under Labour & Delivery; home page states 24/7 emergency.",
+   "searches_used": 0,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_088",
+   "unique_id": "0f78f083-cead-442c-b80b-ee418a931815",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://nehaprakashhospital.com/",
+    "https://www.bajajfinservhealth.in/hospitals/bengaluru/neha-prakash-hospital-yelahanka-new-town"
+   ],
+   "quote": "",
+   "notes": "Own site (Yelahanka New Town, Bangalore) lists no imaging; search found only directory listings with no MRI mention.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_089",
+   "unique_id": "9a7c8cd7-5c16-427e-8e14-2a5c4efa1231",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://gangahospital.com/",
+    "https://gangahospital.com/radiology"
+   ],
+   "quote": "Our hospital also utilizes cutting-edge imaging systems like 3T MRI and 16-slice CT scanners for highly accurate diagnostics.",
+   "notes": "Own site (gangahospital.net redirects to .com; Coimbatore, Mettupalayam Road) text in the site's page bundle states a 3T MRI; housing.com profile also lists 3T and 1.5T MRI.",
+   "searches_used": 1,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_090",
+   "unique_id": "d50da60e-c33f-42ff-b49e-84fd2fb47659",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://madhavuniversity.edu.in/homoeopathic.php",
+    "https://madhavuniversity.edu.in/health-facility/"
+   ],
+   "quote": "",
+   "notes": "Own university site describes a 25-bed homoeopathic teaching hospital with X-ray, ECG and pathology reports; MRI never mentioned, but no exhaustive list.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_091",
+   "unique_id": "c6bb3bf2-63a7-4f7f-ab10-901f641c04ce",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.aajtak.in/rajasthan/story/alwar-rajiv-gandhi-hospital-sonography-waiting-pregnant-women-lclcn-strc-2627801-2026-08-22",
+    "https://www.patrika.com/alwar-news/alwar-hospital-news-1-2856043"
+   ],
+   "quote": "",
+   "notes": "Aaj Tak (Aug 2026) confirms the Rajiv Gandhi general hospital in Alwar operates. Only an unattributed 2018 mention of an MRI room at Alwar's general/women's/child hospitals; too old and not specific.",
+   "searches_used": 3,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_092",
+   "unique_id": "fc4f9b86-a3b3-44dd-bf3b-62ab50b78272",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "No page found for a Satellite Government Hospital in Shahpura (Jaipur or Bhilwara); searches returned only private hospitals and directories.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_093",
+   "unique_id": "a0916ed6-e9ea-40e1-b330-871ff5826981",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://vistaimaging.in/"
+   ],
+   "quote": "Vista Imaging's 3.0 Tesla Open Flare MRI delivers high-resolution imaging for sports injuries",
+   "notes": "Own site, Road No. 10, Banjara Hills, Hyderabad; lists a 3.0 Tesla MRI among its services.",
+   "searches_used": 0,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_094",
+   "unique_id": "c30c1517-2647-4f0d-84cb-db96ec12fa71",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://cdcuniverse.com/"
+   ],
+   "quote": "",
+   "notes": "Given domain is parked (redirects to a GoDaddy for-sale page). Search results show only booking-directory listings of MRI tests at a Clinico Diagnostic Centre in Bhandup West, Mumbai, which support existence only.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_095",
+   "unique_id": "1ee7a591-ec3e-4a97-907b-ebb4e04d7447",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.drlogy.com/ayushman-bharat/hospitals/assam/marigaon/morigaon-civil-hospital"
+   ],
+   "quote": "",
+   "notes": "PM-JAY directory lists Morigaon Civil Hospital (College Road, Marigaon) with CT scan but not MRI; no official page or news on MRI found.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_096",
+   "unique_id": "545b67ba-4982-4b51-91ff-d3325a04f368",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.freepressjournal.in/mumbai/mumbai-bmc-to-empanel-private-centres-for-mri-scans-as-kem-nair-hospitals-face-long-delays"
+   ],
+   "quote": "BYL Nair Hospital's MRI machine has been non-functional for nearly two years.",
+   "notes": "Free Press Journal (Nov 2025): the only MRI is non-functional and BMC is empanelling private centres; a new unit is only 'in progress'; no 2026 report of commissioning found.",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_097",
+   "unique_id": "31e8a095-2ba7-4ad2-8df1-44c6b2b26c5e",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "contradicted",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://aayushhospital.in/"
+   ],
+   "quote": "facilities for Sports and Diagnostic modalities like MRI",
+   "notes": "Given site is Aayush Multispecialty Hospital on NH 48, Vapi, not Anklav, so its MRI claim belongs to another facility; no Ayush Hospital found in Anklav (only a CHC and other hospitals).",
+   "searches_used": 2,
+   "batch": "T2-A04",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_098",
+   "unique_id": "54c07666-ff53-4ca6-9758-dc11ddca1c6b",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://lifelineivf.com/",
+    "https://bajajfinservhealth.in/hospitals/pune/lifeline-hospital-bhosari"
+   ],
+   "quote": "",
+   "notes": "The given website is a fertility/IVF centre in Old Panvel, Navi Mumbai, not this facility. Several Lifeline/Life Line hospitals appear in Pune directories, none identifiable as this record and none with MRI evidence.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_099",
+   "unique_id": "1fecf8f2-3de2-4a25-bfda-bc868419c78f",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/varanasi/anant-hospital-balirampur"
+   ],
+   "quote": "Anant Hospital, Rohaniya - DLW Road, Varanasi, Uttar Pradesh - 221105.",
+   "notes": "Directory listing supports existence in Varanasi (100 beds; CT and X-ray listed, MRI not). No official site or government page found that addresses MRI.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_100",
+   "unique_id": "61731339-a1d6-4384-92ee-fce2d11b3338",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Bihar civil-registration reports and a PM-JAY-derived listing (seen in search results; pages unreachable on fetch) show SDH Pusa in Samastipur district. No source mentions MRI there.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_101",
+   "unique_id": "7c9e5c08-c196-4712-b8ed-f61b818646c0",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://bajajfinservhealth.in/hospitals/salem/geeth-ragunath-hospital-gandhi-nagar"
+   ],
+   "quote": "Geeth Ragunath Hospital, No. 2, Gandhi Nagar, Pungavadiputhur, Salem, Tamil Nadu - 636102.",
+   "notes": "Given website does not resolve. Directories place it at Gandhi Nagar, Attur (PIN 636102, Salem district); no MRI listed and no official page found.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_102",
+   "unique_id": "897039c2-24ed-431d-81c0-90469407ddca",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://jivrajhealthcare.org/"
+   ],
+   "quote": "including advanced Cath Labs, MRI, CT Scan, Radiology, and Dialysis Units.",
+   "notes": "Hospital's own site (Vasna, Ahmedabad) lists MRI among its technology in its FAQ.",
+   "searches_used": 0,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_103",
+   "unique_id": "2dc0c78a-d732-4c9b-af06-28a3304a8363",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.sctimst.ac.in/Facilities/Imaging%20services/"
+   ],
+   "quote": "MAGNETIC RESONANCE IMAGING (Siements Avanto 1.5T)",
+   "notes": "Institute's own imaging services page (Thiruvananthapuram) lists an MRI scanner; search results also show its radiology department page listing a new 3T MRI.",
+   "searches_used": 1,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_104",
+   "unique_id": "e144639d-0552-4f50-9382-32a5f7ddc996",
+   "service_id": "mri",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://kgmc.ac.in/2026/02/"
+   ],
+   "quote": "New MRI scan was opened on 25/02/2026.",
+   "notes": "College's own news page reports a new MRI scanner opened in Feb 2026; search results also show its citizen charter listing MRI among hospital services.",
+   "searches_used": 1,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_105",
+   "unique_id": "08344cdb-f455-4c22-8d31-a0a8e849124b",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://moscmm.org/",
+    "https://moscmm.org/departments/neonatology"
+   ],
+   "quote": "A modern state of the art Neonatal Intensive Care Unit was consecrated in March 2004.",
+   "notes": "Hospital's own site (Kolenchery, Ernakulam) describes a NICU accredited Level 3 by the National Neonatology Forum.",
+   "searches_used": 0,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_106",
+   "unique_id": "83156026-793b-47a2-9cd1-14ce24bf4a60",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://psrihospital.com/",
+    "https://psrihospital.com/psri-institute-of-pediatric/",
+    "https://psrihospital.com/specialities/pediatric/"
+   ],
+   "quote": "",
+   "notes": "psri.net redirects to psrihospital.com (Sheikh Sarai II, New Delhi). Home and paediatric pages do not mention a NICU or neonatal care, and searches found no other facility-specific source.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_107",
+   "unique_id": "e0b3c833-62ed-46b9-aa05-115b9c9fb400",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://bhaskarmedicalcollege.edu.in/",
+    "https://www.bhaskarmedicalcollege.edu.in/facilities",
+    "https://www.bhaskarmedicalcollege.edu.in/departments"
+   ],
+   "quote": "Bhaskar Medical College, Yenkepally(V), Moinabad(M), Ranga Reddy(D), Telangana State",
+   "notes": "College site confirms Bhaskar General Hospital at Moinabad with a Paediatrics department, but no NICU/SNCU mention anywhere found.",
+   "searches_used": 2,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_108",
+   "unique_id": "8c505cc4-10f5-4139-8164-0aead4edb58c",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "North Lakhimpur Civil Hospital was amalgamated into Lakhimpur Medical College and Hospital in Jan 2021; the official LMCH paediatrics achievements page (seen in search results, unreachable on fetch) reports monthly SNCU admissions for 2024-25.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_109",
+   "unique_id": "e35182ca-af8c-4549-823d-b01bb3b645a0",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://assets.thehansindia.com/telangana/govt-general-hospital-struggles-patients-bear-the-brunt-of-neglect-941357"
+   ],
+   "quote": "The Government General Hospital (GGH) and Mother and Child Care Hospital in Wanaparthy.",
+   "notes": "Feb 2025 news confirms the GGH with its MCH wing in Wanaparthy. A Siasat report (seen in search results; fetch blocked 403) says a 20-bed SNCU was inaugurated with the 100-bed MCH at Wanaparthy (c.2021); SNCU sits in the MCH wing.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_110",
+   "unique_id": "cce39a61-af9d-46d5-a9a6-03c1ead68768",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://chandigarhchildcare.com/"
+   ],
+   "quote": "The hospital has well equipped Neonatal ICU, Operation Theatres, well-appointed private and VIP rooms.",
+   "notes": "Facility's own site, titled Chandigarh Child Care Centre Kotkapura, states it has a Neonatal ICU.",
+   "searches_used": 0,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_111",
+   "unique_id": "e9f60669-750c-4cf7-bd86-41d6e2c0396b",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://orchidhospital.in.net/",
+    "https://orchidhospital.in.net/Home/About",
+    "https://orchidhospital.in.net/Home/Services"
+   ],
+   "quote": "",
+   "notes": "Own site gives a Chanditala, Dankuni, Hooghly address (77 beds, 24x7 emergency, ICU image) but no mention of neonatal care; search found nothing further.",
+   "searches_used": 1,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_112",
+   "unique_id": "b471650e-b768-4a05-a10c-36742e6b7753",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://ipgmer.gov.in/neonatal"
+   ],
+   "quote": "A satellite unit of Department of Neonatology, IPGMER-SSKM hospital, comprising of SNCU, Neonatal ward and NICU",
+   "notes": "Government medical institute page states its satellite neonatology unit with SNCU and NICU was developed in MR Bangur Hospital in 2011, and lists ongoing follow-up services for its SNCU babies.",
+   "searches_used": 1,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_113",
+   "unique_id": "c3e51c9e-ffa7-4a0f-af8a-caac50dd060b",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Three searches found no page for a Tapan Sinha Memorial Hospital in Kolkata, only unrelated individual listings.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_114",
+   "unique_id": "0832a768-9b0d-4712-aed2-64e8612eba5f",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://sushruthospital.org/"
+   ],
+   "quote": "",
+   "notes": "Given website is Sushrut Hospital & Research Centre in Chembur, Mumbai, a different facility; two searches found no Sushrut Hospital at Deur (Satara).",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_115",
+   "unique_id": "6382feb6-79d9-43e4-92fd-5609c30ef481",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://kokilabenhospital.com/departments/centresofexcellence/childrensheart_hospital_in_mumbai/intensivecarefornewbornbabiesnicu.html"
+   ],
+   "quote": "The Newborn Intensive Care Unit, a Level 3 NICU, at Kokilaben Hospital is a 17-bedded, family-centered",
+   "notes": "Hospital's own site describes a 17-bed Level 3 NICU at the Mumbai hospital.",
+   "searches_used": 1,
+   "batch": "T2-A05",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "high"
+   }
+  },
+  {
+   "pair_id": "v3t2_116",
+   "unique_id": "6cd599ab-b8bd-4104-b01f-be37bff75feb",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Search surfaced a UP NHM 2022-23 Hapur district plan with SNCU staffing lines, but the PDF was unreadable on fetch and does not tie the unit to the district hospital; no other Hapur-specific source found.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_117",
+   "unique_id": "88bdcc68-50cc-4910-87da-9f3ec8ee7052",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Search results (directory, encyclopedia) confirm SMS Hospital in Jaipur, but no page found showing a NICU in SMS Hospital itself; neonatal care in the group appears to sit in the separately attached JK Lon hospital.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_118",
+   "unique_id": "17c02c25-710e-4e30-a313-82df5b9d3572",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "http://www.rainbowhospitals.in/our-centre/guwahati/guwahati"
+   ],
+   "quote": "houses a Level 3 Neonatal Intensive Care Unit (NICU) for critically ill and premature newborns",
+   "notes": "Domain redirects to the operator's page for Pratiksha Rainbow Children's Hospital, VIP Road, Borbari, Guwahati, which describes a Level 3 NICU.",
+   "searches_used": 0,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_119",
+   "unique_id": "6294d745-b996-42ee-9e5c-5558b76b545e",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.practo.com/bangalore/hospital/ekana-hospitals-begur/",
+    "https://www.hexahealth.com/bangalore/hospital/ekana-hospital-begur"
+   ],
+   "quote": "",
+   "notes": "Own site has an expired TLS certificate; directories place a 100-bed Ekana Hospital in Begur, Bengaluru, but give no NICU evidence.",
+   "searches_used": 2,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_120",
+   "unique_id": "2ee91ec2-1e36-4498-a1a5-ef628c7eb9b4",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://nenow.in/north-east-news/assam/assam-mother-newborn-care-unit-inaugurated-at-amch.html"
+   ],
+   "quote": "A new Mother-Newborn Care Unit was inaugurated at the Neonatal Unit of the Department of Paediatrics",
+   "notes": "Sep 2026 news on the AMCH neonatal unit; the college's official paediatrics page (seen in search results, unreachable on fetch) mentions a follow-up clinic for NICU graduates.",
+   "searches_used": 2,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_121",
+   "unique_id": "dd0000de-4ec0-4ab9-8e77-f8e8b7cfc0bf",
+   "service_id": "nicu",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://newswav.com/article/newborn-s-life-saved-after-complex-surgery-at-patiala-s-rajindra-hospital-A2605_JiApPU"
+   ],
+   "quote": "",
+   "notes": "May 2026 news confirms the hospital operates in Patiala and treated a newborn in an intensive care unit, but no source names a NICU or SNCU there.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_122",
+   "unique_id": "b6cb8f49-4d5b-4cdf-bd06-08fac063a5b2",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://nelsonhospitals.com/"
+   ],
+   "quote": "",
+   "notes": "Own site (Nagpur) centres on mother-child care and neurosciences; cardiology appears only under paediatrics, no heart attack treatment mentioned.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_123",
+   "unique_id": "f592e0c7-9d87-4449-98e4-f103abe4f5ac",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://naharhospital.com/"
+   ],
+   "quote": "Chest Pain, Cardiac disorders like Angina, Myocardial Infarction, Cardiac Arrhythmias",
+   "notes": "Own site (Bhinmal, Jalore) lists myocardial infarction among conditions its general physicians treat; no thrombolysis or cath lab detail, so low confidence.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_124",
+   "unique_id": "b9a43164-7b1a-4207-aeb4-d23b0c66cf11",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.medboundtimes.com/amp/story/medicine/mva-govts-stemi-scheme-saves-6000-rural-folks-from-strokes"
+   ],
+   "quote": "",
+   "notes": "A 2022 report on Maharashtra's STEMI hub-and-spoke scheme lists Nashik district case counts but names no facility; nothing found specific to Nashik Civil Hospital.",
+   "searches_used": 3,
+   "batch": "T2-A05",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_125",
+   "unique_id": "c92ffe90-9b22-4936-b367-6379bbe21f4b",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.freepressjournal.in/ujjain/ujjain-50-bedded-general-ward-dedicated-to-public-at-madgav-nagar-hospital"
+   ],
+   "quote": "of Government Civil Hospital Madhav Nagar were inaugurated",
+   "notes": "News (2023) confirms the government civil hospital at Madhav Nagar, Ujjain, with ICU/HDU; no source found on heart-attack thrombolysis.",
+   "searches_used": 3,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_126",
+   "unique_id": "da35ce0b-785e-4140-a6d4-fbe7c0591bb5",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://eparlib.nic.in/bitstream/123456789/716320/1/5325.pdf"
+   ],
+   "quote": "",
+   "notes": "Parliament record and district reports reference the sub-district hospital at Karad, Satara; no facility-specific evidence on STEMI thrombolysis found.",
+   "searches_used": 3,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_127",
+   "unique_id": "4592713c-c63f-4619-9744-c7c0ea5bc4d4",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://mangalprabhu.com/"
+   ],
+   "quote": "",
+   "notes": "Own site confirms Sanpada, Navi Mumbai hospital open 24 hours but no cardiology, cath lab or heart-attack treatment mentioned; searches found nothing more.",
+   "searches_used": 2,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_128",
+   "unique_id": "178ffcf3-a31b-41c9-b56d-ea8d05e60f05",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://srmglobalhospitals.com/",
+    "https://srmglobalhospitals.com/?p=35457"
+   ],
+   "quote": "Rapid response for heart attacks with dedicated emergency teams and cath labs ready 24/7.",
+   "notes": "Own site (Kattankulathur address) cardiology page describes cath labs, angioplasty/PCI and 24/7 heart-attack response.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_129",
+   "unique_id": "4acef48d-40ac-4c04-a996-e64976922acb",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/erode/senthil-multispeciality-hospital-nggo-colony/surgeries"
+   ],
+   "quote": "",
+   "notes": "Given website does not resolve; only directory listings place it in Erode (exists only). No own-site or official evidence on heart-attack treatment.",
+   "searches_used": 3,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_130",
+   "unique_id": "78deec32-1b06-455e-a102-7aa03d1bb712",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://magentaclinic.com/"
+   ],
+   "quote": "",
+   "notes": "Own site shows a Noida multispecialty clinic (ortho, neuro, ENT, gynae, physio, X-ray) with no cardiology; an outpatient clinic, not single-specialty, so no_info rather than contradicted.",
+   "searches_used": 0,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_131",
+   "unique_id": "863c92ec-8035-437c-963f-c03d47daeef8",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [],
+   "quote": "",
+   "notes": "Given domain does not resolve; directory results suggest Rudraksh Superspeciality Care in Matigara, Siliguri is an endocrinology practice, but no facility-specific source on heart-attack care.",
+   "searches_used": 2,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_132",
+   "unique_id": "efc76d32-da5c-4e79-830b-4c91a5b9b37f",
+   "service_id": "stemi_thrombolysis",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://rhythmhospitals.com/services/",
+    "https://rhythmhospitals.com/icu-critical-care/",
+    "https://rhythmhospitals.com/"
+   ],
+   "quote": "Immediate intervention during a cardiac event can be the determining factor between life and death.",
+   "notes": "Own site (Dhantoli, Nagpur) lists coronary angioplasty/PCI, CABG and cardiac critical care ICU; heart-attack treatment implied rather than stated as primary PCI/thrombolysis, hence medium.",
+   "searches_used": 1,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_133",
+   "unique_id": "07903254-e5a9-4db8-a0dd-cf5882067790",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://devshomoeopathy.com/"
+   ],
+   "quote": "Welcome to Devs Homoeopathic Medical College & Hospital",
+   "notes": "Own site shows a homoeopathic teaching hospital (Keesara area, Medchal) with OPD/IPD only, no casualty or emergency; an AYUSH single-system facility unrelated to trauma care.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_134",
+   "unique_id": "0ae5292a-34fc-4da2-8988-60bc5f261999",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://nandha.org/",
+    "https://www.nandhamedicalcollege.org/",
+    "http://hospital.nandhamedicalcollege.org/"
+   ],
+   "quote": "24×7 Available",
+   "notes": "Own hospital site of Nandha Medical College (Erode-Perundurai Road) lists Emergency Medicine department, Emergency Service, 24x7 availability and ambulance; accident cases not named explicitly.",
+   "searches_used": 1,
+   "batch": "T2-A00-reused",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_135",
+   "unique_id": "6e79eb1b-3815-4c77-bee8-e4d3d97ea284",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://hamsahomeopathy.org/",
+    "https://www.hamsahomeopathy.org/hamsa-homeopathy-hospital-research-centre/"
+   ],
+   "quote": "surgery is the last resort and investigations are made when indispensable",
+   "notes": "Own site shows a homeopathy teaching hospital in Siddipet district; no emergency, casualty or trauma service listed, so trauma care is treated as unrelated to this single-system facility.",
+   "searches_used": 0,
+   "batch": "T2-A06",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "contradicted",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_136",
+   "unique_id": "31fa7641-34db-40b4-b24a-c8563c40a23f",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://shmch.delhi.gov.in/en/shmch/about-us",
+    "https://shmch.delhi.gov.in/en/shmch/welcome-brsur-homeopathic-medical-college-hospital-research-centre"
+   ],
+   "quote": "",
+   "notes": "Official Delhi govt site shows a homeopathic teaching hospital (Moti Bagh, New Delhi) with OPD/IPD only; no emergency or trauma service, so trauma care is unrelated to this single-system facility.",
+   "searches_used": 1,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_137",
+   "unique_id": "6231d4b9-d273-4f0f-9d91-7813fe7104e0",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://mdwiki.org/wiki/Dr._Shankarrao_Chavan_Government_Medical_College"
+   ],
+   "quote": "",
+   "notes": "Hospital at Vazirabad, Nanded is referenced (former medical-college attachment; PM-JAY directory listing). Only a directory lists emergency services; no official source on trauma care found.",
+   "searches_used": 3,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_138",
+   "unique_id": "8867cdb5-e383-4c5c-8b3e-a4183aa02dcf",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://www.knocksense.com/kanpur/gsvm-college-in-kanpur-to-house-states-2nd-express-trauma-centre-with-ultra-modern-facilities",
+    "https://www.kanpurwants.com/trending-now/uttar-pradesh-is-setting-the-standard-for-health-care-in-the-future-and-how"
+   ],
+   "quote": "the level-2 trauma centre in the hospital has 20 beds and one operation theatre, which is not sufficient.",
+   "notes": "2021 news describes the existing level-2 trauma centre at GSVM's attached LLR (Hallet) hospital; a Lok Sabha answer seen in search results also lists LLR Hospital & GSVM as Level II (PDF unreachable).",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_139",
+   "unique_id": "0f4491dc-4c44-4f55-923f-da7213598783",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://pinkstarhospital.com/"
+   ],
+   "quote": "Trauma & Emergency Care",
+   "notes": "Own site (Mansarovar Extension, Jaipur) lists trauma and emergency care, 24x7 emergency and orthopaedics.",
+   "searches_used": 0,
+   "batch": "T2-A06",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "confirmed",
+    "confidence": "medium"
+   }
+  },
+  {
+   "pair_id": "v3t2_140",
+   "unique_id": "33af2594-ec2f-4268-a1a6-9cb47b04d798",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.amritahospitals.org/kochi/department/speciality-departments/emergency-medicine",
+    "https://www.amritahospitals.org/kochi"
+   ],
+   "quote": "Trauma Operation Theatre: Functioning 24 x 7 within the department complex.",
+   "notes": "Given domain redirects to the hospital's own site; Kochi Emergency Medicine department lists accident/trauma care and a 24x7 trauma OT.",
+   "searches_used": 0,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_141",
+   "unique_id": "268f6e06-83bf-4878-a995-d0040bd011a1",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://en.bharatpedia.org/wiki/Lokmanya_Tilak_Hospital",
+    "https://ltmgh.com/"
+   ],
+   "quote": "caters to all trauma and disasters from both major highways",
+   "notes": "Own site confirms LTMG (Sion) Hospital, Mumbai but does not describe trauma; encyclopedic page describes its Trauma Care Centre. Undated source, so medium.",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_142",
+   "unique_id": "7b747b2b-b52d-467e-a808-f24dcc0cf257",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.drlogy.com/ayushman-bharat/hospitals/madhya-pradesh/dhar/mahajan-hospital-dhar",
+    "https://esi.in/health/hospitals/madhya-pradesh/dhar/mahajan-hospital"
+   ],
+   "quote": "",
+   "notes": "Only directory/aggregator listings (PM-JAY, insurers) place it in Dhar; no own site or official page describing trauma or emergency services.",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_143",
+   "unique_id": "5c2e91de-2f6d-4334-bd28-530833e7b814",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.bajajfinservhealth.in/hospitals/indore/curewell-hospital-new-palasia"
+   ],
+   "quote": "",
+   "notes": "Given website refused connection; directory listings place it at New Palasia, Indore with orthopaedics, but directories cannot confirm a service.",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_144",
+   "unique_id": "94afefad-b6d1-4a89-936c-3af0b8aa4057",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://www.freepressjournal.in/mumbai/navi-mumbai-news-divine-foundation-transforms-waste-into-vision-funds-cataract-surgeries-for-panvel-seniors",
+    "https://www.centreforsight.net/eye-hospitals-in-india/mumbai/laxmi-eye-hospital-panvel"
+   ],
+   "quote": "free cataract surgeries at Laxmi Charitable Trust, a leading care hospital, Panvel.",
+   "notes": "Given domain fails (TLS cert for another host). The facility is an eye hospital in Panvel (2025 news); an unrelated single-specialty eye facility for trauma care.",
+   "searches_used": 1,
+   "batch": "T2-A06",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "contradicted",
+    "confidence": "high"
+   }
+  },
+  {
+   "pair_id": "v3t2_145",
+   "unique_id": "639f8d21-3b98-40c2-a775-7547359a4d6c",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "contradicted",
+   "confidence": "medium",
+   "evidence_urls": [
+    "https://brkrgac.org/"
+   ],
+   "quote": "There are 14 teaching departments as detailed below:",
+   "notes": "Ayurvedic teaching hospital (Erragadda, Hyderabad; now Telangana, stated state is the pre-2014 name) with only Ayurveda departments and no emergency/trauma service; unrelated single-system facility.",
+   "searches_used": 1,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_146",
+   "unique_id": "87ec4d70-27fd-42e8-9df6-5b9b92805eb9",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "unclear",
+   "location_ok": "unclear",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://myupchar.com/en/hospitals/thrissur/daya-general-hospital-speciality-centre-3736",
+    "https://dayaroyalhospital.com/"
+   ],
+   "quote": "",
+   "notes": "No facility named Daya Surgical Hospital found in Guruvayoor; only Daya hospitals in Thrissur city and Kunnamkulam surfaced, which may or may not be the same entity.",
+   "searches_used": 3,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_147",
+   "unique_id": "25409058-ed72-4c10-b2cf-b6fac4330ced",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://gorakshhospital.com/"
+   ],
+   "quote": "24 Hours Accidental and emergency services",
+   "notes": "Own site (Medical College Road, Gorakhpur) lists 24-hour accident and emergency services plus orthopaedics and neurosurgery.",
+   "searches_used": 0,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_148",
+   "unique_id": "2ddff85e-9595-4a6b-b738-005cf9369bd0",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "confirmed",
+   "confidence": "high",
+   "evidence_urls": [
+    "https://tricolourhospitals.com/",
+    "https://tricolourhospitals.com/trauma-critical-care/index.html"
+   ],
+   "quote": "fully equipped with a dynamic polytrauma team to handle such critical situations.",
+   "notes": "Own site (Vadi Wadi, Vadodara) has a Trauma & Critical Care department with a polytrauma team and a 24x7 emergency line.",
+   "searches_used": 0,
+   "batch": "T2-A06",
+   "method": "search"
+  },
+  {
+   "pair_id": "v3t2_149",
+   "unique_id": "5fa0a267-2ec8-4c39-a5e7-0e3bc8872305",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://esi.in/health/hospitals/uttar-pradesh/bulandshahr/abdullah-hospital"
+   ],
+   "quote": "",
+   "notes": "Only directory listings (PM-JAY, insurers) place it on Delhi Road, Bulandshahr; no own site or official page on trauma or emergency services.",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  },
+  {
+   "pair_id": "v3t2_150",
+   "unique_id": "610e69c7-7fb1-4dc5-9293-bec25c757a14",
+   "service_id": "trauma_care",
+   "stratum": null,
+   "inclusion_prob": null,
+   "exists": "yes",
+   "location_ok": "yes",
+   "service": "no_info",
+   "confidence": "low",
+   "evidence_urls": [
+    "https://www.tribuneindia.com/news/archive/community/ut-adviser-opens-50-bedded-civil-hospital-in-sector-45-180020"
+   ],
+   "quote": "The hospital has an operation theatre, an X-ray room, a labour room and emergency, eye and ENT services.",
+   "notes": "2016 news (older than ~5 years) mentions emergency services at the 50-bed Sector 45 civil hospital, but nothing on trauma or 24-hour accident care.",
+   "searches_used": 2,
+   "batch": "T2-A06",
+   "method": "search",
+   "second_label": {
+    "exists": "yes",
+    "location_ok": "yes",
+    "service": "no_info",
+    "confidence": "low"
+   }
+  }
+ ]
+}

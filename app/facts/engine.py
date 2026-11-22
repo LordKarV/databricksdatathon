@@ -270,7 +270,7 @@ class Engine:
         if band != "likely":
             q = (f"Do you do {label} here yourselves, or send patients elsewhere?" if pr.grade == "tag_only"
                  else f"Can you do {label} today?")
-            qs.append({"question": q, "asked_because": "listing not confirmed by a second source"})
+            qs.append({"question": q, "asked_because": "listing not rated Likely"})
         if pr.missing:
             need = pr.missing[0].replace("_or_", " or ").replace("_", " ")
             qs.append({"question": f"Do you have {need} on site?", "asked_because": "our data does not mention it"})
@@ -326,7 +326,7 @@ class Engine:
             "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav,
             "band": band, "band_word": BAND_WORDS[band],
             "band_reason": None if band == "likely" else (
-                "listing evidence not yet confirmed by a second source" if band == "not_verified"
+                "listing evidence not strong enough to rate it Likely" if band == "not_verified"
                 else RULE_PLAIN.get(pr.rule, "contradicted by a second source")),
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
             # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
@@ -471,7 +471,7 @@ class Engine:
             out.append(("shared_phone", "Its phone number is also listed for other places",
                         {"field": "phone_shared", "value": self._f("phone_shared", i)}))
         if top[4] == "likely" and band == "not_verified":
-            out.append(("not_confirmed", "No second source has confirmed it; the first choice is confirmed",
+            out.append(("not_confirmed", "It is not rated Likely; the first choice is",
                         {"field": "band", "value": band}))
         top_p = self.score(self._f("id", top_pr.fi), service)[1]
         if not out or (minutes <= top[1] and p < top_p):
@@ -593,7 +593,15 @@ class Engine:
         count = {k: sum(r["gap"] == k for r in rows) for k in ("covered", "not_confirmed", "far", "no_claim")}
         public = sorted((self._f("name", i), self._f("id", i)) for i, svcs in enumerate(self.fac["public_standard"])
                         if service in svcs and not self._unlikely(i, service) and self._f("district", i) == district and self._f("state", i) == state)[:5]
+        # A district with almost no listings is first a gap in our data (#86 item 3): say how many there are, and
+        # when none is a public-standard hospital, name the nearest one we have (or none within the radius).
+        listings = sum(self._f("district", i) == district and self._f("state", i) == state
+                       for i in range(len(self.fac["id"])))
+        nearest = None
+        if not public and rows:
+            nearest = self._public_pin(service, sum(r["lat"] for r in rows) / len(rows), sum(r["lon"] for r in rows) / len(rows))
         return {"pins_sampled": len(rows), "pins_in_district": n_total, "radius_km": RADIUS_KM,
+                "district_listings": listings, "public_nearest": nearest,
                 "district_claiming": sum(b != "unlikely" for b in bands),
                 "district_confirmed": sum(b == "likely" for b in bands), **count,
                 # named where the district shows a gap: hospitals the public standard expects to offer acute care
