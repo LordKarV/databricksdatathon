@@ -106,11 +106,12 @@ def recommend_stub(service: str, lat: float, lon: float, accuracy_m: float | Non
                 "text": f"No facility within 150 km has enough public evidence that it does {label}.",
                 "outside_option": {
                     "facility_id": "stub-dh", "name": "Sample District Hospital (sample)", "operator": "public",
+                    "label": "by public standard, not verified",
                     "text": "The public standard says this level should offer it; not verified in our data.",
                     "travel": _travel(lat, lon, lat + 0.25, lon - 0.1)},
             },
             "options": options, "why_not": [], "what_would_change": None,
-            "time_window": {"window_min": 60, "first_outside": False}, "meta": meta,
+            "time_window": {"window_min": 60, "first_outside": False}, "public_option": None, "meta": meta,
         }
 
     options = [
@@ -144,7 +145,8 @@ def recommend_stub(service: str, lat: float, lon: float, accuracy_m: float | Non
         "query": query, "location": location, "as_of": as_of, "profile": profile,
         "emergency_numbers": emergency_numbers_, "abstain": None,
         "options": options, "why_not": why_not, "what_would_change": change,
-        "time_window": {"window_min": 60, "first_outside": options[0]["travel"]["minutes"] > 60}, "meta": meta,
+        "time_window": {"window_min": 60, "first_outside": options[0]["travel"]["minutes"] > 60},
+        "public_option": None, "meta": meta,
     }
 
 
@@ -168,10 +170,14 @@ def area_stub(service: str, lat: float, lon: float) -> dict:
             "call_first": first["name"] if within else None,
             "nearest_km": None if within else round(travel["km"] * 2, 1),
             "gap": "not_confirmed" if within else "far" if k < 5 else "no_claim",
+            "public": None if within else {"facility_id": "stub-dh", "name": "Sample District Hospital (sample)",
+                                           "km": 42.0, "label": "by public standard, not verified"},
         })
     n_without = sum(p["first"] is None for p in pins)
     gap = {"pins_sampled": len(pins), "pins_in_district": len(pins) + 4, "radius_km": 150,
            "district_claiming": 3, "district_confirmed": 0,
+           "public_standard": [{"facility_id": "stub-dh", "name": "Sample District Hospital (sample)",
+                                "label": "by public standard, not verified"}],
            **{g: sum(p["gap"] == g for p in pins) for g in ("covered", "not_confirmed", "far", "no_claim")}}
     return {
         "query": {"service": service, "service_label": {"en": label, "hi": SERVICES[service]["label_hi"]}},

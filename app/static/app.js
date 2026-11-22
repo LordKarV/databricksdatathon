@@ -305,16 +305,27 @@ function changeHtml(p) {
     : `If ${F('what_would_change.first_name', c.first_name)} cannot take the patient, call ${F('what_would_change.name', c.name)} next (${d}).`;
   return `<p><strong>What would change this answer:</strong> ${line}</p>`;
 }
+// The answer's first line when option 1 misses the service's time window (#86, lead's decision on the issue): say so,
+// show 108/102, and the nearest hospital the public standard expects to offer the care, never as verified.
 function windowHtml(p) {
   const w = p.time_window;
   if (!w || !w.first_outside || !p.options.length) return '';
-  return `<p><strong>The first choice is about ${F('options.0.travel.minutes', p.options[0].travel.minutes, 'num')} min away,
-    beyond the ${F('time_window.window_min', w.window_min, 'num')}-min window for this care.</strong>
-    ${isEmergency() ? 'Call 108 now for transport and first aid on the way.' : 'Ask the doctor whether that delay is safe.'}</p>`;
+  const s = svc(p.query.service);
+  const show102 = s && (s.key === 'emergency_csection' || s.key === 'nicu');
+  const po = p.public_option;
+  return `<section class="card window-miss" aria-label="Time window">
+    <p><strong>The best-evidenced option is about ${F('options.0.travel.minutes', p.options[0].travel.minutes, 'num')} min away;
+      that misses the ${F('time_window.window_min', w.window_min, 'num')}-min window for this care.</strong></p>
+    <div class="bar-108 compact"><a href="tel:108"><span aria-hidden="true">&#9742;</span>&nbsp;Call 108 ambulance</a>
+      ${show102 ? '<a href="tel:102"><span aria-hidden="true">&#9742;</span>&nbsp;Call 102 (mother and baby)</a>' : ''}</div>
+    ${po ? `<p>Nearest public hospital: <strong>${F('public_option.name', po.name)}</strong>
+      (${F('public_option.label', po.label)}). ${travelHtml(po.travel, 'public_option.travel')}.</p>`
+      : '<p>No hospital in our data nearby is one the public standard expects to offer this care.</p>'}
+  </section>`;
 }
 function whyNotHtml(p) {
   const rows = p.why_not || [];
-  if (!rows.length && !p.what_would_change && !windowHtml(p)) return '';
+  if (!rows.length && !p.what_would_change) return '';
   const items = rows.map((w, k) => {
     const W = `why_not.${k}`;
     const where = w.minutes_vs_first != null ? ` (${deltaHtml(W + '.minutes_vs_first', w.minutes_vs_first)})` : '';
@@ -322,7 +333,7 @@ function whyNotHtml(p) {
       ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
   }).join('');
   return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
-    ${windowHtml(p)}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    ${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
     <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {
@@ -454,20 +465,24 @@ function planScreen() {
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
       ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
       ${whyNotHtml(p)}
-      ${oo ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
+      ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
+        ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
     body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
   }
   state.speak = {en: planSpeech(p)};
-  return head + toggle + RSInput.speakHtml() + body + foot;
+  return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;
 }
 // Read aloud (#64): the one-line answer, built from the same payload fields the cards show.
 function planSpeech(p) {
   const [a, b] = p.options;
   const line = o => `${o.name}, ${o.band_word}, about ${o.travel.low} to ${o.travel.high} minutes by road.`;
   const parts = [];
+  if (p.time_window && p.time_window.first_outside && a) {
+    parts.push(`The best-evidenced option is about ${a.travel.minutes} minutes away; that misses the ${p.time_window.window_min}-minute window for this care.`);
+  }
   if (p.abstain) parts.push(p.abstain.text);
   if (a) parts.push(`Call first: ${line(a)}`);
   if (b) parts.push(`Backup: ${line(b)}`);
@@ -535,7 +550,17 @@ function gapHtml(a) {
       <li><strong>Data gap:</strong> ${G('no_claim')} PIN areas: no listing in our data within ${G('radius_km')} km claims it.
         We cannot tell whether care exists there.</li>
     </ul>
-    <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>`;
+    <p class="small">PIN sample: the first ${G('pins_sampled')} of ${G('pins_in_district')} PIN areas in the district, by PIN number.</p>
+    ${publicHtml(a)}`;
+}
+// Where the area shows no public evidence, name the hospitals the public standard expects to offer acute care (#86).
+function publicHtml(a) {
+  const ps = a.gap.public_standard;
+  if (!ps || !(a.summary.n_without_option > 0 || a.summary.no_public_evidence > 0)) return '';
+  if (!ps.length) return '<p>No hospital in this district in our data is one the public standard expects to offer it.</p>';
+  return `<p>Hospitals in ${F('area.area.district', a.area.district)} the public standard expects to offer it:</p>
+    <ul class="gap">${ps.map((h, k) => `<li>${F(`area.gap.public_standard.${k}.name`, h.name)}
+      (${F(`area.gap.public_standard.${k}.label`, h.label)})</li>`).join('')}</ul>`;
 }
 function areaHtml(a) {
   if (!a || a.loading) return '<p>Loading the area plan...</p>';
@@ -551,7 +576,9 @@ function areaHtml(a) {
           <td>${F(R + '.call_first', r.call_first)}</td></tr>`
       : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
           No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
-          nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km</td></tr>`;
+          ${r.nearest_km != null ? `nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km` : 'none with its own sentence in our data'}${r.public ? `.<br>Public hospital:
+          ${F(R + '.public.name', r.public.name)} (${F(R + '.public.label', r.public.label)}),
+          ${F(R + '.public.km', r.public.km, 'num')} km` : ''}</td></tr>`;
   }).join('');
   const calls = a.ten_calls.map((c, i) => {
     const C = `area.ten_calls.${i}`;
