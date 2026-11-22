@@ -47,6 +47,7 @@ This notebook is the code and the reasoning behind the app, in plain words first
 2. What is wrong with the data
 3. Cleaning: fixed, flagged, and what cannot be fixed
 4. Sources and external evidence
+   - 4b. What each outside source adds
 5. The knowledge base
 6. The model and an honest evaluation
 7. `recommend(service, location)` with its WHY and HOW, on 3 real queries, including a multi-stop plan
@@ -344,17 +345,6 @@ plt.show()
 ''')
 
 md("""
-We evaluated 14 public lists as independent evidence (accreditation, blood centres, maternity certification,
-OpenStreetMap and others), with a hand check of the match quality and the licence of each for a public demo.
-Restricted lists are used only as per-facility facts and are never printed here.
-""")
-
-code('''
-show_table(how.table("research/DATASETS.md", "Summary", ["Dataset", "Role", "Licence for a public demo",
-                                                        "Hand check"]))
-''')
-
-md("""
 Two offline witnesses add independent text and tags. Neither can run inside Free Edition: the crawl needs
 outbound HTTP for about an hour, and the matching needs large downloads. Their summaries are committed in `kb/`.
 """)
@@ -367,6 +357,35 @@ print(f"Website crawl: {crawl['sites_reachable']:,} of {crawl['sites_attempted']
 cov = osm["coverage"]
 print(f"Open data: {cov['any_match']['n']:,} of {osm['vf_facilities']:,} records matched to OpenStreetMap or "
       f"Wikidata ({cov['any_match']['share_of_vf']:.0%}); opening hours parsed for {cov['hours_parsed']['n']:,}.")
+''')
+
+md("""
+### 4b. What each outside source adds
+
+We evaluated 14 public lists (`research/DATASETS.md`; four were evaluated and not used), with a hand check of the
+match quality and the licence of each. Restricted lists are used only as per-facility facts and are never printed
+here. The lists the model uses are cited witnesses: each adds points to one facility's ledger row, with a link,
+and none ranks facilities by itself. `validation/source_impact.py` removes one source's points from the frozen v2
+scores at a time (no refit) and counts what changes: the pairs it fires on; the LIKELY pairs that would leave LIKELY
+without it, on the service score (`likely_lost`) or through the existence and location gates, which NABH and
+OpenStreetMap also feed (`likely_lost_gates`); the pairs that would fall to the Unlikely threshold (`reach_t_u`); and
+how often the app's first answer changes over 300 seeded PIN centres, with bands held as shipped. The cell reads its
+output, `validation/out/source_impact.csv`.
+""")
+
+code('''
+si = pd.read_csv(ROOT / "validation/out/source_impact.csv")
+top = [c for c in si.columns if c.startswith("top1_changes_")]
+display(si.set_index("source")[["family", "pairs_fired", "likely_pairs", "likely_lost", "likely_lost_gates",
+                                 "reach_t_u", *top]]
+        .rename(columns={c: c.removeprefix("top1_changes_") for c in top}))
+allx = si[si.family == "X+O"].iloc[0]
+share = {c.removeprefix("top1_changes_"): int(allx[c].split(" of ")[0]) / int(allx[c].split(" of ")[1]) for c in top}
+print(f"Without every list and OpenStreetMap row, the first answer changes for {share['dialysis']:.0%} of dialysis "
+      f"and {share['cardiac_surgery']:.0%} of cardiac surgery searches (bands held as shipped). "
+      f"{int(allx.likely_lost)} LIKELY pairs fall below the LIKELY threshold on the service score; through the "
+      f"existence and location gates {int(allx.likely_lost_gates)} would leave LIKELY, and {int(allx.reach_t_u)} "
+      "pairs would fall to the Unlikely threshold.")
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------
