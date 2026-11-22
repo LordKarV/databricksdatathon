@@ -227,3 +227,7 @@ training rows should take its rows from these tables or exclude `test_blocked_fa
 - e2e pairs have no inclusion probability; v1 and v2 pi are the older per-stratum values, not on the v3 frame.
 - trauma_care and stemi_thrombolysis gold exist only in v3 DEV (14 and 16 decided pairs).
 - No Databricks run. Numbers from the earlier builds (v1 labels, the 301-pair build) are history.
+
+## Not in the repository
+
+`out/pu_labels.parquet` (21500 rows, sha256 fd68d7368444f789a84b770349857f72e1db1fd4e52192c5457378903d6c47d3) is built by `labels.py` from the restricted official lists under `data/external/`, which are not redistributed, so the file is not committed. The frozen model v2 does not need it at run time.
