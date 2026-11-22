@@ -35,7 +35,7 @@ named in each entry; they differ between datasets. Hand-check precision is on sm
 
 Status on 2026-11-22: four entries were evaluated and are not used by the model or the app. They are HMIS
 sub-district (rank 13), the NFHS-6 2023-24 provisional columns (rank 4; the app shows NFHS-5), PIN code boundaries
-(rank 3; only the location validation check `validation/location/checks.py` reads it) and NPPMBI burn units
+(rank 3; only the location validation, `validation/location/`, reads it) and NPPMBI burn units
 (section 2). What each used source changes in the scores and in the first answer is in
 `validation/out/source_impact.csv` (`validation/source_impact.py`).
 
