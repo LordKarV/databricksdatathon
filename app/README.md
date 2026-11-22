@@ -268,3 +268,28 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
   The calls use the Databricks SDK pre-installed on Apps. Without the env vars, the lexicon and danger paths still
   work and the model paths say "not available".
 - **Tests.** `app/tests/test_inputs.py` mocks the endpoints.
+
+## Call outcomes: the learning loop (#65)
+
+- **What is recorded.** On the why page, "Said yes", "Said no" and "No answer" are sent to `POST /api/outcome`.
+  "Wrong number" stays on the slip only, because it says nothing about the service. The page sends:
+  - a random `outcome_id`;
+  - the facility and service;
+  - the answer and the tap time;
+  - the location rounded to 0.01 degree.
+- **Offline.** The page queues outcomes in localStorage (the last 50) and flushes them when the phone is back
+  online. A retried flush writes once, because the insert is a `MERGE` on `outcome_id`.
+- **What the server adds and keeps.**
+  - The server keeps only the district of the nearest PIN, never the coordinates.
+  - It fills in the call questions from the engine's templates, so no user text reaches the table.
+  - It adds the model version and the app version (the service worker cache name).
+  - The row is written to `OUTCOMES_TABLE` (default `workspace.referral_saathi.call_outcomes`), through the
+    SQL Statement Execution API on `DATABRICKS_WAREHOUSE_ID` with named parameters.
+  - Without the warehouse env var the endpoint returns 503, and the page keeps the item queued.
+- **Live count.** `GET /api/outcomes/summary` feeds a live section on "How this works", cached for 60 s. It shows
+  outcomes recorded, and how many contradicted the band the app shows today: "Said no" to a Likely, or "Said yes" to
+  an Unlikely.
+- **Notebook.** Section 9b of the submission notebook reads the table and shows how the outcomes would move each
+  evidence family's weight (a Beta update, with today's mean counted as 10 earlier calls). Nothing retrains
+  automatically.
+- **Tests.** `app/tests/test_outcomes.py` mocks the warehouse.

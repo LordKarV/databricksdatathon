@@ -12,6 +12,7 @@ import math
 from pathlib import Path
 from typing import Annotated, Literal
 
+import outcomes
 from facts.engine import Engine
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.gzip import GZipMiddleware
@@ -170,6 +171,42 @@ class NoteRequest(BaseModel):
 def read_note(req: NoteRequest) -> JSONResponse:
     """Referral-note photo -> detected text and a guarded suggestion (#64). The image is not stored or logged."""
     return JSONResponse(understand.read_note(req.image), headers={"Cache-Control": "no-store"})
+
+
+class OutcomeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    outcome_id: str = Field(pattern=outcomes.UUID, description="random UUID from the page; a retry writes once")
+    facility_id: str = Field(max_length=64)
+    service_id: str = Field(max_length=40)
+    outcome: Literal["yes", "no", "no_answer"]
+    said_at_ms: int = Field(ge=0)
+    lat: float = Field(ge=6.0, le=37.5, description="rounded to 0.01 degree by the page; only the district is kept")
+    lon: float = Field(ge=68.0, le=97.5)
+
+
+@app.post("/api/outcome")
+def outcome(req: OutcomeRequest) -> JSONResponse:
+    """What the facility said on the phone (#65). No patient data: ids, the answer, a district, a time."""
+    eng = _need_engine()
+    try:
+        out = outcomes.record(eng, req.outcome_id, req.facility_id, req.service_id, req.outcome, req.said_at_ms,
+                              req.lat, req.lon)
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"ok": False, "error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/outcomes/summary")
+def outcomes_summary() -> JSONResponse:
+    """Live count for "How this works": outcomes recorded and how many contradicted the band shown."""
+    try:
+        out = outcomes.summary(_need_engine())
+    except outcomes.OutcomeError as e:
+        return JSONResponse({"error": str(e)}, status_code=503)
+    return JSONResponse(out, headers={"Cache-Control": "no-store"})
 
 
 HOW = HERE / "howto" / "out" / "how.json"  # built by howto/build.py (git-ignored)
