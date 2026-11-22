@@ -860,7 +860,7 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
+    <h2>How sure</h2><p id="how-sure">${o.model_band === 'NO_SERVICE_TEXT'
     ? noTextSureHtml(o, P, L, p.query)
     : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
       ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}

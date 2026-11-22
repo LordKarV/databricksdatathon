@@ -684,6 +684,9 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
             errs += [f"why/{o['rank']}: {e}" for e in check_ledger(o, i, shown, claims)]
+            sure = re.sub(r"\s+", " ", page.inner_text("#how-sure"))
+            if "()" in sure or re.search(r"(?:^|[:;.]) ?\([+-]", sure):  # a row named without its label
+                errs.append(f"why/{o['rank']}: How sure has an empty label: {sure[:200]!r}")
             errs += [f"why/{o['rank']}: {e}" for e in check_tie_row(payload, o, got["rows"])]
             tr = payload.get("meta", {}).get("test_record")
             if tr and o["band"] == "likely":  # the sealed TEST record sits next to every Likely band (#86)
