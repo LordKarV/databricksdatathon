@@ -1,0 +1,12 @@
+pass    v2_keys_unique: 0 null keys, 0 duplicated keys | 358092 rows
+pass    v2_coverage: 358092/358092 pairs; 0 unknown service ids; 0 ids outside the usable set | usable 9959 minus 12 exclude_review
+pass    v2_excluded_not_scored: 0 of 12 scored | exclude_review (veterinary) records must not be scored (validation INT-01)
+pass    v2_probabilities: 0 bad cells {} | 358092 rows x ['p', 'lo', 'hi', 'p_location', 'p_exists']; 5 score bins; p outside [lo, hi] on 22363 rows (allowed: lo/hi describe the bin)
+pass    v2_logit_identity: 0 of 358092 rows off by > 1e-09; max 2.93e-14 | 901030 contribution rows
+pass    v2_evidence_ids_resolve: 0 of 125171 distinct ids unresolved | 526218 citations; resolve to derived/v1 claims.claim_id, a witnesses witness_id or evidence_id, or a claim_atoms atom_id whose claim_id is in claims
+pass    v2_bands: 0 rows break a threshold; unknown bands [] | band counts {'NO_SERVICE_TEXT': 242131, 'UNLIKELY': 94217, 'LIKELY': 20073, 'CALL_FIRST': 1671}; 125 UNLIKELY by the c2 rule; necessary conditions only
+pass    v2_not_observable_zero: 0 of 0 not_observable contributions are non-zero; unknown observability [] | a contribution is not_observable when it says so, or when every witness of its (unique_id, service, family) is; 1467631 not_observable triples in witnesses
+pass    v2_operator: 0 rows outside ['private', 'public', 'unknown'] | values {'private': 316692, 'unknown': 24624, 'public': 16776}
+pass    v2_model_version: one version eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a | as_of max 2026-11-21
+pass    v2_witness_quotes: 501/501 verbatim (Wilson 95% 0.992-1.000) | seed 20261121, up to 40 per source over 14 sources; 0 misses differ only in whitespace; witness_id unique: True
+pass    v2_restricted_lists: 0 problems | nabh: 7183 rows, 1044 entries of 21615 (4.8%), 0 not on a usable facility; nmc: 1486 rows, 70 entries of 839 (8.3%), 0 not on a usable facility; mohfw_tcf: 20 r

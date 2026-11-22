@@ -1,0 +1,302 @@
+{
+ "fold5|C0_gold": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 8,
+  "likely_k": 3,
+  "likely_precision": 0.375,
+  "likely_wilson": [
+   0.13684428473912286,
+   0.694257607346229
+  ],
+  "t_U": 0.22473875096519175,
+  "t_U_fallback": false,
+  "unlikely_n": 72,
+  "unlikely_npv": 0.9027777777777778,
+  "unlikely_wilson": [
+   0.8126495411763508,
+   0.9521036802876413
+  ],
+  "max_precision_20": 0.5897435897435898
+ },
+ "fold5|C0_gold_noweb": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 7,
+  "likely_k": 4,
+  "likely_precision": 0.5714285714285714,
+  "likely_wilson": [
+   0.25045836275303557,
+   0.8417801460075546
+  ],
+  "t_U": 0.05278901788403533,
+  "t_U_fallback": false,
+  "unlikely_n": 24,
+  "unlikely_npv": 0.9166666666666666,
+  "unlikely_wilson": [
+   0.7415119762950233,
+   0.9768411849122034
+  ],
+  "max_precision_20": 0.5454545454545454
+ },
+ "fold5|C1_platt": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 3,
+  "likely_k": 0,
+  "likely_precision": 0.0,
+  "likely_wilson": [
+   0.0,
+   0.5614970356393196
+  ],
+  "t_U": 0.19972697454319305,
+  "t_U_fallback": false,
+  "unlikely_n": 45,
+  "unlikely_npv": 0.9111111111111111,
+  "unlikely_wilson": [
+   0.7926642454730682,
+   0.9648888835177051
+  ],
+  "max_precision_20": 0.65
+ },
+ "fold5|C1_platt_noweb": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 2,
+  "likely_k": 0,
+  "likely_precision": 0.0,
+  "likely_wilson": [
+   0.0,
+   0.6576197760453506
+  ],
+  "t_U": 0.19195735026847455,
+  "t_U_fallback": false,
+  "unlikely_n": 30,
+  "unlikely_npv": 0.9,
+  "unlikely_wilson": [
+   0.7437891726682571,
+   0.9654001115225814
+  ],
+  "max_precision_20": 0.5714285714285714
+ },
+ "fold5|C1_shift": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 18,
+  "likely_k": 11,
+  "likely_precision": 0.6111111111111112,
+  "likely_wilson": [
+   0.38619041442114627,
+   0.7969475353714572
+  ],
+  "t_U": 0.11783626388704038,
+  "t_U_fallback": false,
+  "unlikely_n": 45,
+  "unlikely_npv": 0.9111111111111111,
+  "unlikely_wilson": [
+   0.7926642454730682,
+   0.9648888835177051
+  ],
+  "max_precision_20": 0.65
+ },
+ "fold5|C1_shift_noweb": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 18,
+  "likely_k": 9,
+  "likely_precision": 0.5,
+  "likely_wilson": [
+   0.2903102136885988,
+   0.7096897863114012
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 81,
+  "unlikely_npv": 0.7777777777777778,
+  "unlikely_wilson": [
+   0.6758471368197176,
+   0.8545539264500772
+  ],
+  "max_precision_20": 0.5806451612903226
+ },
+ "fold5|C3_resid": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 10,
+  "likely_k": 4,
+  "likely_precision": 0.4,
+  "likely_wilson": [
+   0.1681803285264069,
+   0.6873262320788047
+  ],
+  "t_U": 0.13360789314862725,
+  "t_U_fallback": false,
+  "unlikely_n": 51,
+  "unlikely_npv": 0.9019607843137255,
+  "unlikely_wilson": [
+   0.7902176520934117,
+   0.9573919271620244
+  ],
+  "max_precision_20": 0.5714285714285714
+ },
+ "fold5|C3_resid_noweb": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 10,
+  "likely_k": 4,
+  "likely_precision": 0.4,
+  "likely_wilson": [
+   0.1681803285264069,
+   0.6873262320788047
+  ],
+  "t_U": 0.08590594086994094,
+  "t_U_fallback": false,
+  "unlikely_n": 28,
+  "unlikely_npv": 0.9285714285714286,
+  "unlikely_wilson": [
+   0.7735463727026133,
+   0.9801879360635548
+  ],
+  "max_precision_20": 0.5370370370370371
+ },
+ "fold5|base_rate": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 0,
+  "likely_k": 0,
+  "likely_precision": NaN,
+  "likely_wilson": [
+   NaN,
+   NaN
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 0,
+  "unlikely_npv": NaN,
+  "unlikely_wilson": [
+   NaN,
+   NaN
+  ],
+  "max_precision_20": 0.36792452830188677
+ },
+ "fold5|base_rate_noweb": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 0,
+  "likely_k": 0,
+  "likely_precision": NaN,
+  "likely_wilson": [
+   NaN,
+   NaN
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 0,
+  "unlikely_npv": NaN,
+  "unlikely_wilson": [
+   NaN,
+   NaN
+  ],
+  "max_precision_20": 0.36792452830188677
+ },
+ "state|C0_gold": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 9,
+  "likely_k": 5,
+  "likely_precision": 0.5555555555555556,
+  "likely_wilson": [
+   0.26665129180087416,
+   0.8112214802294544
+  ],
+  "t_U": 0.26665074562935537,
+  "t_U_fallback": false,
+  "unlikely_n": 84,
+  "unlikely_npv": 0.9047619047619048,
+  "unlikely_wilson": [
+   0.8231736432641492,
+   0.950948290342297
+  ],
+  "max_precision_20": 0.5789473684210527
+ },
+ "state|C1_platt": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 3,
+  "likely_k": 2,
+  "likely_precision": 0.6666666666666666,
+  "likely_wilson": [
+   0.2076595988078242,
+   0.9385080559790691
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 55,
+  "unlikely_npv": 0.8363636363636363,
+  "unlikely_wilson": [
+   0.717362541533501,
+   0.9114457970673837
+  ],
+  "max_precision_20": 0.5862068965517241
+ },
+ "state|C1_shift": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 15,
+  "likely_k": 10,
+  "likely_precision": 0.6666666666666666,
+  "likely_wilson": [
+   0.4171354755711991,
+   0.8482367565633053
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 78,
+  "unlikely_npv": 0.8076923076923077,
+  "unlikely_wilson": [
+   0.7066518719231,
+   0.8798479370504898
+  ],
+  "max_precision_20": 0.5757575757575758
+ },
+ "state|C3_resid": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 15,
+  "likely_k": 9,
+  "likely_precision": 0.6,
+  "likely_wilson": [
+   0.35746829954344506,
+   0.8017550397372577
+  ],
+  "t_U": 0.2361030026123566,
+  "t_U_fallback": false,
+  "unlikely_n": 81,
+  "unlikely_npv": 0.9012345679012346,
+  "unlikely_wilson": [
+   0.8170349851749912,
+   0.9490998839924907
+  ],
+  "max_precision_20": 0.5882352941176471
+ },
+ "state|base_rate": {
+  "t_L": 0.7,
+  "t_L_fallback": true,
+  "likely_n": 0,
+  "likely_k": 0,
+  "likely_precision": NaN,
+  "likely_wilson": [
+   NaN,
+   NaN
+  ],
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "unlikely_n": 0,
+  "unlikely_npv": NaN,
+  "unlikely_wilson": [
+   NaN,
+   NaN
+  ],
+  "max_precision_20": 0.36792452830188677
+ }
+}
