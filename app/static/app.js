@@ -16,6 +16,16 @@ const SERVICES = [
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
   'Labour with bleeding or baby stuck', 'Chest pain', 'Burn on face or large area'];
 const BAND_ICON = {likely: '\u2714', not_verified: '?', unlikely: '\u2716'};
+// A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
+// Hindi per kb/taxonomy/HINDI_GLOSSARY.md; shown once the app-wide language setting lands.
+const NO_OPTION = {
+  en: {title: 'Search again to see this option',
+    body: 'Options stay only while this page is open. A reloaded page or a shared link does not carry them.',
+    button: 'Search again'},
+  hi: {title: '\u092f\u0939 \u0935\u093f\u0915\u0932\u094d\u092a \u0926\u0947\u0916\u0928\u0947 \u0915\u0947 \u0932\u093f\u090f \u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902',
+    body: '\u0935\u093f\u0915\u0932\u094d\u092a \u0938\u093f\u0930\u094d\u092b\u093c \u0924\u092c \u0924\u0915 \u0930\u0939\u0924\u0947 \u0939\u0948\u0902 \u091c\u092c \u0924\u0915 \u092f\u0939 \u092a\u0947\u091c \u0916\u0941\u0932\u093e \u0939\u0948\u0964 \u092a\u0947\u091c \u0926\u094b\u092c\u093e\u0930\u093e \u0916\u094b\u0932\u0928\u0947 \u092f\u093e \u0936\u0947\u092f\u0930 \u0915\u093f\u090f \u0917\u090f \u0932\u093f\u0902\u0915 \u092e\u0947\u0902 \u0935\u0947 \u0928\u0939\u0940\u0902 \u0906\u0924\u0947\u0964',
+    button: '\u092b\u093f\u0930 \u0938\u0947 \u0916\u094b\u091c\u0947\u0902'},
+};
 
 const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: ''};
 
@@ -799,10 +809,21 @@ async function bindPlan() {
   render();
 }
 
+// The option a #/why or #/slip link names, or null. An offline plan has no options list, so this never throws.
+function planOption(rank) {
+  const p = state.plan;
+  return p && !p.error && Array.isArray(p.options) ? p.options.find(x => x.rank === rank) || null : null;
+}
+function noOptionHtml() {
+  const t = NO_OPTION.en;
+  const back = svc(state.service) && state.loc ? '#/plan' : '#/';  // the saved answer, or the service tiles
+  return `<h1 tabindex="-1">${esc(t.title)}</h1><p>${esc(t.body)}</p>
+    <a class="btn btn-block" href="${back}">${esc(t.button)}</a>`;
+}
 function whyScreen(rank) {
   const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
-  if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const o = planOption(rank);
+  if (!o) return noOptionHtml();
   const P = `options.${p.options.indexOf(o)}`;
   const label = p.query.service_label.en;
   const L = F('query.service_label.en', label);
@@ -909,7 +930,7 @@ async function runVerify(o) {
 }
 function bindWhy() {
   const rank = parseInt(location.hash.split('/')[2], 10);
-  const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
+  const o = planOption(rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   loadScript('/community.js', 'RSCommunity').catch(() => {});  // the reason step; without it a "no" goes alone
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
@@ -962,9 +983,8 @@ window.addEventListener('online', flushOutcomes);
 
 // ---------- referral slip (S8, #24): slip.js loads only on this route ----------
 function slipScreen(rank) {
-  const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
-  if (!o) return `<h1 tabindex="-1">Option not found</h1><a class="btn btn-block" href="#/">Start again</a>`;
+  const o = planOption(rank);
+  if (!o) return noOptionHtml();
   const lang = state.slipLang || 'en';
   return `<a class="btn no-print" href="#/why/${rank}">&larr; Why this</a>
     <h1 tabindex="-1" class="no-print">Referral slip</h1>
@@ -997,7 +1017,7 @@ function loadSlipJs() {
 async function bindSlip() {
   const rank = parseInt(location.hash.split('/')[2], 10);
   const p = state.plan;
-  const o = p && !p.error && p.options.find(x => x.rank === rank);
+  const o = planOption(rank);
   if (!o) return;
   try { await loadSlipJs(); } catch { $('#slip-out').innerHTML = '<p role="alert">Could not load the slip. Check the connection.</p>'; return; }
   const backup = p.options.find(x => x.rank !== rank) || null;
