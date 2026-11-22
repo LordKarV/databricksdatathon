@@ -71,14 +71,16 @@ def tied_prefix(rows: list[tuple[float, float, str]]) -> int:
 def nearest_plausible(rows: list, window: float = math.inf) -> list:
     """Rows (p, minutes, ...) in emergency order: repeatedly the highest p among the rows within TIE_MIN of the
     nearest row left (no fixed buckets, so 102 and 103 minutes are always a tie), nearer first on equal p. A tie
-    never crosses the window: while the nearest row left is inside it, only rows inside it compete."""
+    never crosses the window: while the nearest row left is inside it, only rows inside it compete.
+    Engine pool rows carry the uncapped p sixth: two rows capped at the same rank_p (NO_SERVICE_TEXT) are told
+    apart by it before distance (#140 2a: a children's clinic at p 0.56 led a hospital at 0.98, both capped)."""
     rest, out = sorted(rows, key=lambda r: r[1]), []
     while rest:
         reach = rest[0][1] + TIE_MIN
         if rest[0][1] <= window:
             reach = min(reach, window)
         near = [r for r in rest if r[1] <= reach]
-        best = max(near, key=lambda r: (r[0], -r[1]))
+        best = max(near, key=lambda r: (r[0], r[5] if len(r) > 5 else r[0], -r[1]))
         out.append(best)
         rest.remove(best)
     return out
@@ -475,7 +477,8 @@ class Engine:
 
     def _ranked(self, service: str, lat: float, lon: float, state: str | None = None,
                 scores: dict | None = None) -> tuple[list, list]:
-        """(pool, unlikely): [(utility, minutes, pair, travel, band)] sorted best first / nearest first."""
+        """(pool, unlikely): [(utility, minutes, pair, travel, band, p)] sorted best first / nearest first; p is the
+        uncapped score, which breaks ties between equal capped rank_p in the emergency order."""
         profile = SERVICES[service]["profile"]
         scale = TIME_SCALE[profile]
         pool, unlikely = [], []
@@ -487,7 +490,7 @@ class Engine:
             tr = self._travel(lat, lon, pr.fi, state)
             rp = self.rank_p(pr, p)
             row = (rp if profile in NEAREST_FIRST else rp * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr,
-                   band)
+                   band, p)
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
@@ -611,7 +614,7 @@ class Engine:
         """Every reason that applies, most decisive first: (code, plain clause, basis). The basis names the payload
         or engine field the clause rests on, so tests can check each sentence against data."""
         label = SERVICES[service]["label_en"]
-        _, minutes, pr, _, band = r
+        _, minutes, pr, _, band, _ = r
         i = pr.fi
         _, p, *_, ev = self.score(self._f("id", i), service)
         window = WINDOW[SERVICES[service]["profile"]]
@@ -679,7 +682,7 @@ class Engine:
         scale = TIME_SCALE[profile]
         def first_if_confirmed(r: tuple) -> bool:
             if profile in NEAREST_FIRST:
-                conf = (self.p_confirmed, *r[1:])
+                conf = (self.p_confirmed, *r[1:5], self.p_confirmed)
                 return nearest_plausible([top, conf], WINDOW[profile])[0] is conf
             return self.p_confirmed * math.exp(-r[1] / scale) > top[0]
 
