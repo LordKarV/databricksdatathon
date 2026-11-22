@@ -49,8 +49,10 @@ sys.path.insert(0, str(APP))
 from facts.redact import redact_names  # noqa: E402, RUF100
 from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
+# NO_SERVICE_TEXT (derived/v2 sub-band, from options.N.model_band) names the service (#118): "No line about" is the
+# band's marked part, the label after it is marked query.service_label.en, and ": call to ask" is fixed text.
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
-              "NO_SERVICE_TEXT": "NO SERVICE TEXT: call to ask"}  # derived/v2 sub-band, shown from options.N.model_band
+              "NO_SERVICE_TEXT": "No line about"}
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
@@ -259,6 +261,10 @@ def within_precision(shown: str, stored: float) -> bool:
     return abs(number(shown) - float(stored)) <= 0.5 * 10 ** -decimals(shown.strip().replace(",", "")) + 1e-9
 
 
+def quote_numbers(s: str) -> list[str]:
+    return re.findall(r"[0-9]+", re.sub(r"(?<=[0-9]),(?=[0-9])", "", s))  # 5,000 and 5000 are one number
+
+
 def check_item(payload: dict, it: dict) -> str | None:
     """None if the shown value is faithful, else a message."""
     path, kind, shown = it["path"], it["kind"], it["text"]
@@ -295,6 +301,10 @@ def check_item(payload: dict, it: dict) -> str | None:
             bool(m) and int(m[1]) == abs(stored) and (m[2] == "closer") == (stored < 0) and stored != 0)
     elif kind == "met":
         ok = shown == ("met" if stored is True else "not met" if stored is False else None)
+    elif kind == "part":  # a name or number restored into a translated quote: copied verbatim from the quote
+        ok = re.sub(r"\s+", " ", shown).strip() in re.sub(r"\s+", " ", str(stored))
+    elif kind == "term":  # a clinical term in its fixed Hindi rendering: any number in it is one of the quote's
+        ok = set(quote_numbers(shown)) <= set(quote_numbers(str(stored)))
     elif kind == "mapsurl":
         m = re.search(r"destination=(-?[\d.]+),(-?[\d.]+)", shown)
         ok = bool(m) and math.isclose(float(m[1]), stored["lat"]) and math.isclose(float(m[2]), stored["lon"])
@@ -365,7 +375,7 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
     errs = []
     shown = {it["path"] for it in items}
     for it in items:
-        if not it["path"].endswith(".quote"):
+        if not it["path"].endswith(".quote") or it["kind"] != "text":  # "part"/"term": pieces of a translation
             continue
         base = it["path"][: -len(".quote")]
         if base + ".claim_id" not in shown:
@@ -559,6 +569,21 @@ def test_sealed_test_record_equals_the_results_file():
         assert how == want
 
 
+def check_no_text(payload: dict, text: str) -> list[str]:
+    """A NO SERVICE TEXT option (#118): its chip names the service, and a caption above its quotes says they are not
+    about the service, so general emergency lines do not read as contradicting the chip."""
+    label = payload["query"]["service_label"]["en"]
+    errs = []
+    for o in payload["options"]:
+        if o.get("model_band") != "NO_SERVICE_TEXT":
+            continue
+        if f"No line about {label}: call to ask" not in text:
+            errs.append(f"{o['name']}: NO SERVICE TEXT chip does not name {label!r}")
+        if o["evidence"] and not re.search(rf"\b(?:not|none) about {re.escape(label)}\b", text):
+            errs.append(f"{o['name']}: quotes of a NO SERVICE TEXT option have no caption")
+    return errs
+
+
 def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
     """Tie-break (#86): a tied option's why page has the named row, with the rule and every tied option's value
     marked; an option outside the tie (or a plan without one) has no such row."""
@@ -610,6 +635,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
+        errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]
@@ -738,6 +764,51 @@ def test_how_page_every_number_is_from_how_json(base_url, browser):
             errs.append(f"how: link {href} is not a file in this repo")
     print(f"how: {report}, {len(links)} source links")
     assert not errs, "\n".join(errs[:40])
+
+
+# ---------- translated quote: every number in the Hindi text is the quote's own ----------
+TRANSLATABLE = [(n, p, i, j) for n, p in PAYLOADS for i, o in enumerate(p.get("options") or [])
+                for j, e in enumerate(o.get("evidence") or []) if re.search(r"[0-9]", e["quote"])][:1]
+
+
+@pytest.mark.skipif(not TRANSLATABLE, reason="no payload with a quote that has a number")
+def test_translated_quote_shows_only_the_quotes_numbers(base_url, browser):
+    """Tap "हिंदी में पढ़ें" on a quote with numbers; /api/translate is answered by the server's own protect and
+    restore code with a fake model reply. Every marked piece must match the quote, every number in the Hindi text
+    must be one of the quote's, and the original quote is still shown verbatim above it."""
+    from inputs import translate as tr
+
+    name, payload, i, j = TRANSLATABLE[0]
+    quote = payload["options"][i]["evidence"][j]["quote"]
+    _, spans = tr.protect(quote)
+    fake = " ".join(f"⟦{k}⟧ हिंदी" for k in range(1, len(spans) + 1)) or "हिंदी"  # the model's words have no digits
+    body = json.dumps({"available": True, "hindi": tr.restore(fake, spans),
+                       "parts": tr.restore_parts(fake, spans, quote)}, ensure_ascii=False)
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+    page = ctx.new_page()
+    page.route("**/api/plan", json_reply(payload))
+    page.route("**/api/translate", lambda r: r.fulfill(status=200, content_type="application/json", body=body))
+    page.add_init_script(
+        "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+        " source: 'gps', t: Date.now(), label: null}))")
+    P = f"options.{i}.evidence.{j}.quote"
+    try:
+        page.goto(base_url + "/#/")
+        page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+        page.wait_for_selector("article.card")
+        page.evaluate("h => { location.hash = h; }", f"#/why/{payload['options'][i]['rank']}")
+        box = page.locator("blockquote", has=page.locator(f'[data-f="{P}"][data-k="text"]'))
+        box.locator(".tr-btn").click()
+        box.locator(".tr-text").wait_for()
+        got = page.evaluate(COLLECT_JS)
+        hindi = box.locator(".tr-text").inner_text()
+        original = box.locator(f'[data-f="{P}"][data-k="text"]').inner_text()
+    finally:
+        ctx.close()
+    errs = check_screen(f"{name}/translated", payload, got, {"values_checked": 0})
+    assert not errs, "\n".join(errs[:20])
+    assert quote_numbers(hindi) and set(quote_numbers(hindi)) <= set(quote_numbers(quote)), (hindi, quote)
+    assert original == re.sub(r"\s+", " ", quote).strip()
 
 
 # ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
