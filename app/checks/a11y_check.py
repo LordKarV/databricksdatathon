@@ -83,6 +83,27 @@ def search(page: Page) -> None:
     page.get_by_label("Search a service").fill("kidney")
 
 
+def describe(page: Page) -> None:
+    home_located(page)
+    go(page, "#/describe")
+    page.get_by_label("What does the patient need?").fill("bachcha ulta hai, dard shuru")
+    page.get_by_role("button", name="Find the service").click()
+    page.get_by_role("button", name="Yes, that is right").wait_for()
+
+
+def describe_danger(page: Page) -> None:
+    home_located(page)
+    go(page, "#/describe")
+    page.get_by_label("What does the patient need?").fill("chest pain, heart surgery chahiye")
+    page.get_by_role("button", name="Find the service").click()
+    page.get_by_text("Call 108 now.").wait_for()
+
+
+def note_consent(page: Page) -> None:
+    home_located(page)
+    go(page, "#/note")
+
+
 def change_error(page: Page) -> None:
     go(page, "#/change")
     page.get_by_label("PIN, village, town, district, or 'lat, lon'").fill("843317")
@@ -237,6 +258,9 @@ STATES: dict[str, Callable[[Page], None]] = {
     "start_located": home_located,
     "start_danger_ticked": danger_ticked,
     "search": search,
+    "describe_confirm": describe,
+    "describe_danger": describe_danger,
+    "note_consent": note_consent,
     "change_location_error": change_error,
     "results_dialysis": plan_for("Dialysis"),
     "abstention_csection": plan_for("Emergency C-section"),
