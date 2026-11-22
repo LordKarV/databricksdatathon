@@ -401,6 +401,7 @@ def check_card(name: str, payload: dict, card: str, report: dict) -> list[str]:
     rest = re.sub(r"<span data-(?:f|device)\b[^>]*>.*?</span>", " ", rest, flags=re.DOTALL)
     rest = htmllib.unescape(re.sub(r"<[^>]+>", " ", rest))
     errs += [f"{name}: unmarked number {d!r} on the card" for d in set(re.findall(r"\d+", rest)) - CARD_TEMPLATE_NUMBERS]
+    return errs
 
 
 # ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
