@@ -716,7 +716,7 @@ on the assumed call and turn-away constants, so it is reported as a simulated me
 code('''
 pc = ROOT / "validation/out/policy_compare.csv"
 if not pc.is_file():
-    print("REAL DATA policy comparison: pending (validation/policy_compare.py, #93, is not in this version yet).")
+    print("REAL DATA policy comparison: pending (run validation/policy_compare.py, #93; its CSV is not committed yet).")
     print("It will show, per policy (app, nearest, best on paper) at the demo places: answers, median travel minutes,")
     print("how many first picks are inside the service's time window, how many are LIKELY, and the published DEV")
     print("labels (confirmed or contradicted) where they exist. Real data, not simulated.")
