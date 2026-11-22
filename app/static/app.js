@@ -1368,16 +1368,8 @@ async function bindSlip() {
 // ---------- How this works (#45) and Data stories (#53): long English pages built from the data ----------
 function enOnly() { return state.lang === 'hi' ? `<p class="panel" lang="hi">${th('page.english_only')}</p>` : ''; }
 function howScreen() { return `<h1 tabindex="-1">${th('nav.how')}</h1>${enOnly()}<div id="how-out"><p>${th('page.loading')}</p></div>`; }
-function loadScript(src, name) {
-  if (window[name]) return Promise.resolve();
-  return new Promise((ok, fail) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = ok;
-    s.onerror = fail;
-    document.head.appendChild(s);
-  });
-}
+// One tag per script: a second copy of speech.js loading late would replace RSSpeech with one that has no templates.
+function loadScript(src, name) { return window[name] ? Promise.resolve() : needScripts([src]); }
 async function bindHow() {
   try {
     const [, r] = await Promise.all([loadScript('/how.js', 'RSHow'), fetch('/api/how', {redirect: 'manual'})]);

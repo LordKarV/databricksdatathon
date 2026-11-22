@@ -298,13 +298,16 @@ def area(page: Page) -> None:
 
 
 def call_bar(page: Page) -> None:
-    """A 320x568 phone scrolled until the fixed Call bar shows (#178): axe checks the bar's region and label."""
+    """A 320x568 phone scrolled until the fixed Call bar shows and the card's Call is off screen (#178): axe checks
+    the bar's region and label."""
     page.set_viewport_size({"width": 320, "height": 568})
     plan_for("trauma_emergency")(page)
     for y in range(0, 2000, 40):
         page.evaluate("y => window.scrollTo(0, y)", y)
         page.wait_for_timeout(60)
-        if page.evaluate("!!document.querySelector('#call-bar:not([hidden])')"):
+        # past the card's Call (a half-covered Call is #178 review nit 7), with the bar on screen
+        if page.evaluate("""!!document.querySelector('#call-bar:not([hidden])')
+                            && document.querySelector('#main .call-main').getBoundingClientRect().bottom <= 0"""):
             return
     raise AssertionError("the fixed Call bar never showed at 320x568")
 
