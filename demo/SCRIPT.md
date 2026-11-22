@@ -13,13 +13,15 @@ health worker: whom to call first, and why."
 mic: "[spoken phrase]". "Speech is turned into text on the Databricks App itself; the audio is never stored. It
 asks back, in Hindi, 'trauma care?', and she taps yes. Danger words like heavy bleeding put Call 108 on top."
 
-**0:35 the answer.** "First choice, two backups, and CALL FIRST. Each card says how sure we are, in words, and
-quotes the facility's own listing. Why not the nearest? [Nearest name] is [n] minutes closer, but [reason from
-why_not]."
+**0:35 the answer.** "In an emergency the app says: call the nearest place that plausibly treats this first.
+Here that is the government Sub Divisional Hospital Pusa, 19 minutes away. Its listing does not confirm trauma
+care, and the card says so: call first. If they say no, Miracare, 34 minutes away and Likely, is next. In our
+simulation, this order reached care in time more often than ranking by evidence alone; a 'no' on the phone
+costs five minutes, a wasted trip costs the golden hour."
 
-**0:55 the route.** "Going straight to Rajeshwar Hospital takes 84 minutes and misses the 60-minute window.
-Stopping first at Miracare gives first care in about 34 minutes. And the app says what would change this: a yes
-from Sub Divisional Hospital Pusa on the phone."
+**0:55 the route.** "Going straight to Ganpati Hospital takes 80 minutes and misses the 60-minute window.
+Stopping first at Sub Divisional Hospital Pusa gives first care in about 19 minutes." [Read the route sentence
+off the screen on the day; it is built from the live plan.]
 
 **1:15 why and how.** Open the why page. "Every score is a sum of named pieces of evidence: what the listing
 says, whether its own website agrees, whether it is on an official list, whether its location is in doubt. These
