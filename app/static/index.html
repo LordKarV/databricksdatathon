@@ -2,31 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF">
 <title>Referral Saathi</title>
 <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+<link rel="preload" href="/fonts/barlow-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/barlow-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/app.css">
 <script src="/app.js" defer></script>
 <script src="/input.js" defer></script>
 </head>
 <body>
-<a class="visually-hidden" href="#main">Skip to content</a>
-<header class="top">
-  <span class="brand"><svg viewBox="0 0 30 14" aria-hidden="true"><path d="M3 7h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="4" cy="7" r="3.5" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/><circle cx="26" cy="7" r="4" fill="currentColor"/></svg>Referral Saathi</span>
-  <span class="top-links"><a class="small" href="#/stories">Data stories</a>
-  <a class="small" href="#/pulse">Your area <span lang="hi">(&#2310;&#2346;&#2325;&#2366; &#2325;&#2381;&#2359;&#2375;&#2340;&#2381;&#2352;)</span></a>
-  <a class="small" href="#/how">How this works</a></span>
-</header>
-<aside id="offline" class="offline" aria-label="Connection" hidden>
-  <strong>No internet.</strong> Answers come from the data saved on this phone.
-</aside>
+<a class="visually-hidden skip" id="skip" href="#main">Skip to content</a>
+<header class="top" id="top"></header>
+<aside id="offline" class="offline" aria-label="Connection" hidden></aside>
 <div id="bar108"></div>
 <main id="main" tabindex="-1">
   <h1>Referral Saathi</h1>
   <p>Loading...</p>
   <noscript><p>This page needs JavaScript. In an emergency call <a href="tel:108">108</a>.</p></noscript>
 </main>
+<nav class="nav" id="nav" aria-label="Main"></nav>
 <div id="status" class="visually-hidden" role="status" aria-live="polite"></div>
 </body>
 </html>

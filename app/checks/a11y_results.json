@@ -44,7 +44,7 @@
    "violations": [],
    "horizontal_scroll": false
   },
-  "read_aloud_hindi-light": {
+  "settings-light": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -57,6 +57,10 @@
    "horizontal_scroll": false
   },
   "results_dialysis-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma-light": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -81,10 +85,6 @@
    "horizontal_scroll": false
   },
   "slip_english-light": {
-   "violations": [],
-   "horizontal_scroll": false
-  },
-  "slip_hindi-light": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -128,6 +128,38 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "start_located_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "why_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "settings_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "slip_hindi-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_text150-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_hindi_text150-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "why_text150-light": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "start_first_visit-dark": {
    "violations": [],
    "horizontal_scroll": false
@@ -160,7 +192,7 @@
    "violations": [],
    "horizontal_scroll": false
   },
-  "read_aloud_hindi-dark": {
+  "settings-dark": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -173,6 +205,10 @@
    "horizontal_scroll": false
   },
   "results_dialysis-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma-dark": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -197,10 +233,6 @@
    "horizontal_scroll": false
   },
   "slip_english-dark": {
-   "violations": [],
-   "horizontal_scroll": false
-  },
-  "slip_hindi-dark": {
    "violations": [],
    "horizontal_scroll": false
   },
@@ -244,6 +276,38 @@
    "violations": [],
    "horizontal_scroll": false
   },
+  "start_located_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "why_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "settings_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "slip_hindi-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_text150-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "answer_trauma_hindi_text150-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
+  "why_text150-dark": {
+   "violations": [],
+   "horizontal_scroll": false
+  },
   "offline_reload-light": {
    "violations": [],
    "shell_served_offline": true
@@ -280,27 +344,106 @@
   }
  },
  "critical_path": {
-  "requests": 4,
+  "requests": 8,
   "files": {
    "/": {
-    "raw": 1592,
-    "gzip": 796
+    "raw": 1225,
+    "gzip": 587
    },
    "/app.css": {
-    "raw": 18760,
-    "gzip": 5574
+    "raw": 28022,
+    "gzip": 6844
    },
    "/app.js": {
-    "raw": 78001,
-    "gzip": 24457
+    "raw": 98145,
+    "gzip": 30489
+   },
+   "/input.js": {
+    "raw": 15543,
+    "gzip": 5415
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
+   },
+   "/i18n/en.json": {
+    "raw": 26171,
+    "gzip": 8776
+   },
+   "/fonts/barlow-500.woff2": {
+    "raw": 8524,
+    "gzip": 8547
+   },
+   "/fonts/barlow-600.woff2": {
+    "raw": 8628,
+    "gzip": 8651
    }
   },
-  "gzip_total": 30963,
-  "budget_gzip": 50000,
-  "budget_requests": 5
+  "gzip_total": 69445,
+  "budget_gzip": 75000,
+  "budget_requests": 8
+ },
+ "hindi_extra": {
+  "/i18n/hi.json": 16470,
+  "/fonts/hind-500-deva.woff2": 35665,
+  "/fonts/hind-600-deva.woff2": 35013
+ },
+ "fold": {
+  "call_trauma_emergency_en_360x640": {
+   "ok": true,
+   "top": 479,
+   "bottom": 535,
+   "viewport": 640
+  },
+  "call_dialysis_en_360x640": {
+   "ok": true,
+   "top": 402,
+   "bottom": 458,
+   "viewport": 640
+  },
+  "call_trauma_emergency_hi_360x640": {
+   "ok": true,
+   "top": 546,
+   "bottom": 602,
+   "viewport": 640
+  },
+  "call_dialysis_hi_360x640": {
+   "ok": true,
+   "top": 469,
+   "bottom": 525,
+   "viewport": 640
+  },
+  "call_trauma_emergency_en_320x568": {
+   "ok": true,
+   "top": 479,
+   "bottom": 535,
+   "viewport": 568
+  },
+  "why_ledger_open_en_320": {
+   "ok": true,
+   "horizontal_scroll": false
+  },
+  "call_dialysis_en_320x568": {
+   "ok": true,
+   "top": 402,
+   "bottom": 458,
+   "viewport": 568
+  },
+  "call_trauma_emergency_hi_320x568": {
+   "ok": true,
+   "top": 490,
+   "bottom": 560,
+   "viewport": 568
+  },
+  "why_ledger_open_hi_320": {
+   "ok": true,
+   "horizontal_scroll": false
+  },
+  "call_dialysis_hi_320x568": {
+   "ok": true,
+   "top": 469,
+   "bottom": 539,
+   "viewport": 568
+  }
  }
 }

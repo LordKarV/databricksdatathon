@@ -50,7 +50,9 @@ function packResponse(rec) {
 }
 const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/how.js', '/stories.js', '/input.js',
   '/lexicon.json', '/manifest.webmanifest', '/voice.js', '/speech.js', '/speech_templates.json',
-  '/community.js', '/journey.js', '/pulse.js', '/translate.js'];
+  '/community.js', '/journey.js', '/pulse.js', '/translate.js', '/i18n/en.json', '/i18n/hi.json',
+  '/fonts/barlow-500.woff2', '/fonts/barlow-600.woff2', '/fonts/barlow-condensed-600.woff2',
+  '/fonts/plex-mono-500-digits.woff2', '/fonts/hind-500-deva.woff2', '/fonts/hind-600-deva.woff2'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));
