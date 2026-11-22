@@ -604,7 +604,7 @@ function windowHtml(p) {
   </section>`;
 }
 const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.108_short')}</b></a>${with102
-  ? `<a href="tel:102">${icon('phone')}<b>${th('sos.102_short')}</b></a>` : ''}`;
+  ? ` <a href="tel:102">${icon('phone')}<b>${th('sos.102_short')}</b></a>` : ''}`;
 function windowBelowHtml(p) {
   const w = p.time_window, po = p.public_option;
   if (!w || !w.first_outside || !p.options.length) return '';
