@@ -860,6 +860,9 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         page.goto(base_url + "/#/")
         page.locator(f"[data-svc={payload['query']['service']}]").first.click()
         page.wait_for_selector("article.card")
+        if payload.get("itinerary"):  # the answer renders first; route.js re-renders it with the route
+            page.wait_for_function("typeof routeHtml === 'function'")
+            page.evaluate("() => new Promise(r => setTimeout(r, 50))")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}

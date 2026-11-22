@@ -297,6 +297,21 @@ def area(page: Page) -> None:
     page.locator("#ten-calls").wait_for()
 
 
+def call_bar(page: Page) -> None:
+    """A 320x568 phone scrolled until the fixed Call bar shows and the card's Call is off screen (#178): axe checks
+    the bar's region and label."""
+    page.set_viewport_size({"width": 320, "height": 568})
+    plan_for("trauma_emergency")(page)
+    for y in range(0, 2000, 40):
+        page.evaluate("y => window.scrollTo(0, y)", y)
+        page.wait_for_timeout(60)
+        # past the card's Call (a half-covered Call is #178 review nit 7), with the bar on screen
+        if page.evaluate("""!!document.querySelector('#call-bar:not([hidden])')
+                            && document.querySelector('#main .call-main').getBoundingClientRect().bottom <= 0"""):
+            return
+    raise AssertionError("the fixed Call bar never showed at 320x568")
+
+
 def route_all_open(page: Page) -> None:
     """Multi-stop route (#47) with the other routes expanded."""
     plan_for("trauma_emergency")(page)
@@ -382,6 +397,7 @@ STATES: dict[str, Callable[[Page], None]] = {
     "compare_desk": compare(desk=True),
     "area_trauma": area,
     "route_trauma": route_all_open,
+    "call_bar_320": call_bar,
     "how_this_works": how_page,
     "data_stories": stories_page,
     "reason_step": reason_step,
@@ -490,7 +506,10 @@ def main() -> int:
                     page.wait_for_timeout(200)
                     page.add_style_tag(content=".nav{position:static}")  # a full-page shot shows the bar once, at the end
                     page.evaluate("document.fonts.ready")
-                    page.screenshot(path=str(SCREENS / f"{name}-{scheme}.png"), full_page=True)
+                    # the call-bar state keeps its 320x568 viewport: a full-page shot would hide the fixed bar
+                    page.screenshot(path=str(SCREENS / f"{name}-{scheme}.png"), full_page=name != "call_bar_320")
+                    if name == "call_bar_320":
+                        page.wait_for_function("!!document.querySelector('#call-bar:not([hidden])')")
                     overflow = page.evaluate("document.documentElement.scrollWidth > innerWidth")
                     results["states"][f"{name}-{scheme}"] = {"violations": axe(page), "horizontal_scroll": overflow}
                     ctx.close()
