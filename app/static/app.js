@@ -345,7 +345,8 @@ function pickService(key) {
   if (key === 'other') { location.hash = '#/describe'; return; }
   state.service = key; state.msg = '';
   if (!state.loc) { state.msg = ts('home.where_first'); render(); return; }
-  location.hash = '#/plan';
+  if (location.hash === '#/plan') render();  // same hash: no hashchange would fire
+  else location.hash = '#/plan';
 }
 
 function gpsScreen() {
@@ -1603,6 +1604,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setOnline();
   RSInput.load();
   flushOutcomes();
+  if (location.hash === '#/plan' && !state.plan) history.replaceState(null, '', '#/');  // a reload drops the plan
   render();
   // GPS is the default: refresh silently when permission is already granted (no prompt on load).
   try {
