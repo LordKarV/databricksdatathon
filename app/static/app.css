@@ -268,6 +268,7 @@ ol.script li { margin: 10px 0; }
   body.wide .compare-cards { display: none; }
 }
 .table-scroll { overflow-x: auto; }
+.table-scroll :is(th, td) { padding: 8px 4px; } /* a few px more width at 360 px, so the area tables fit (#121) */
 
 /* ---------- referral slip (S8): one A5 page in print; "Show big" for the family to photograph ---------- */
 .slip { border: 2px solid var(--ink); border-radius: var(--r-field); padding: 12px 16px; margin: 12px 0; background: var(--surface); }
