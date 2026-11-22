@@ -25,6 +25,9 @@ STRINGS = {
                    "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
     "need_named": {"en": "its listing names it, but not whether it is free today",
                    "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+    # #140 2b: the listed town is far from the map point (facts/build.py town_far); never emergency option 1
+    "town_far": {"en": "Town and map point disagree; check the address",
+                 "hi": "शहर और नक्शे की जगह मेल नहीं खाते; पता पक्का करें"},
 }
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
@@ -209,8 +212,10 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place"):  # older exports: no source checks, so no source warnings
+        for k in ("url_kind", "url_place", "town_far"):  # older exports: no source or town checks, no warnings
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
+        self.pin_centre = {int(p): (la, lo) for p, la, lo in zip(self.pins["pin"], self.pins["lat"], self.pins["lon"],
+                                                                 strict=True)}
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
         self.likely_threshold = facts.get("likely_threshold")
@@ -353,8 +358,21 @@ class Engine:
         ops = self.fac.get("operator")  # older facts files have no operator column
         return ops[i] if ops else "unknown"
 
+    def _doubt(self, i: int) -> bool:
+        """The map point may be wrong (#140 2b): a doubtful location rule, or the listed town is far from it."""
+        return self._f("loc_rule", i) in LOC_DOUBT or bool(self._f("town_far", i))
+
     def _travel(self, lat: float, lon: float, i: int, state: str | None = None) -> dict:
-        return travel(lat, lon, self._f("lat", i), self._f("lon", i), state)
+        """Travel to the map point. When the point is in doubt (#140 2b), alt is the same estimate to the facility's
+        PIN centre (pin_gazetteer) and high widens to cover both; minutes, low and the order stay on the map point."""
+        t = dict(travel(lat, lon, self._f("lat", i), self._f("lon", i), state))
+        pin = self._f("pin", i)
+        centre = self.pin_centre.get(pin) if self._doubt(i) and pin is not None else None
+        if centre is not None:
+            a = travel(lat, lon, *centre, state)
+            t["alt"] = {"minutes": a["minutes"], "low": a["low"], "high": a["high"], "from": "pin_centre"}
+            t["high"] = max(t["high"], a["high"])
+        return t
 
     def origin_state(self, lat: float, lon: float) -> str | None:
         """State of the nearest facility: the planner's rule when no state is given, so the cards and the route use
@@ -414,6 +432,8 @@ class Engine:
 
     def _flags(self, pr: Pair, i: int) -> list[str]:
         out = list(self._f("reasons", i))
+        if self._f("town_far", i):
+            out.append(STRINGS["town_far"]["en"])
         out += [RISK_PLAIN[r] for r in pr.risks if r in RISK_PLAIN and RISK_PLAIN[r] not in out]
         ignored = [c for c in pr.evidence if c in self.claims and self.claims[c][3] == "other_facility"][:1]
         out += [f'Ignored: "{self.claims[c][1]}" names another facility' for c in ignored]
@@ -451,7 +471,7 @@ class Engine:
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
             "address": self._address(i), "operator": self._operator(i),
-            "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav,
+            "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav, "location_doubt": self._doubt(i),
             "band": band, "band_word": BAND_WORDS[band],
             "band_reason": None if band == "likely" else (
                 "listing evidence not strong enough to rate it Likely" if band == "not_verified"
@@ -490,10 +510,16 @@ class Engine:
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
-        pool = (nearest_plausible(pool, WINDOW[profile]) if profile in NEAREST_FIRST
+        pool = (self._town_checked_first(nearest_plausible(pool, WINDOW[profile])) if profile in NEAREST_FIRST
                 else sorted(pool, key=lambda r: -r[0]))
         unlikely.sort(key=lambda r: r[1])
         return pool, unlikely
+
+    def _town_checked_first(self, pool: list) -> list:
+        """Emergency order (#140 2b): a facility whose listed town disagrees with its map point is never option 1.
+        The first row without that flag moves to the front; the others keep their order."""
+        k = next((j for j, r in enumerate(pool) if not self._f("town_far", r[2].fi)), 0)
+        return [pool[k], *pool[:k], *pool[k + 1:]] if k else pool
 
     def _public_near(self, service: str, lat: float, lon: float, exclude: frozenset = frozenset()) -> tuple[float, int] | None:
         """(km, index) of the nearest facility the public standard (IPHS 2022) expects to offer this service at its
@@ -721,8 +747,9 @@ class Engine:
             n_now += bool(likely)
             n_conf += bool(within)
             if not likely:
-                for r in within:
-                    gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
+                for r in within:  # a call to a place whose town disagrees with its map point closes nothing (2b)
+                    if not self._f("town_far", r[2].fi):
+                        gains.setdefault(r[2].fi, set()).add(pins["pin"][j])
             first, backup = (within + [None, None])[:2]
             near = min((r for r in pool if r[2].grade in OWN_EVIDENCE), key=lambda r: r[1], default=None)
             # Data gap vs care gap (#86): no listing claims it at all, or listings claim it but none is confirmed
