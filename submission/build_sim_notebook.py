@@ -221,18 +221,23 @@ offers the care first (p only chooses among places within 5 minutes of the neare
 window), with "call first, and if they say no, call the next". Planned care such as dialysis keeps the old order:
 with a longer window, extra travel to a place with stronger evidence pays off, and its answers are unchanged.
 
-The cell reruns the trauma cases with three policies: **app_before_101** (the same engine with the emergency order
-switched back, for that policy only), **app** (as shipped) and nearest_call_first. Each app version minus
-nearest_call_first, in points of patients treated within the window, with a 90% seed-bootstrap interval. The
-change narrows the gap; the "verdict after" column shows the scenarios where the app still trails the nearest
+The cell reruns the same simulated patients with three policies: **app_before_101** (the same engine with the
+emergency order switched back, for that policy only), **app** (as shipped) and nearest_call_first, in every
+scenario, including S3 with the map-point rates recalibrated on the cleaned data (#112). Each app version minus
+nearest_call_first, in points of patients treated within the window, with the runner's 90% seed-bootstrap
+interval. Trauma is the emergency the change is about. Dialysis is the control: its order did not change, so its
+before and after columns must match. The "verdict after" column shows where the app still trails the nearest
 listings called ahead.
 """)
 
 code('''
 from sim.run import compare, verdict
 
-RANK_SEEDS, RANK_CASES = SEEDS, CASES  # trauma only, no sweep: about a minute locally at 20 seeds x 200 cases
-rank = simulate(SCENARIOS, list(range(RANK_SEEDS)), RANK_CASES, STATES, ["trauma_emergency"], OUT / "rank_fix",
+# Run size: at most 20 seeds x 200 cases per state and service, 2 services, 3 policies, no sweep. About 1 minute
+# on a laptop, a few minutes on serverless. The same seeds give the same simulated patients as the run above.
+RANK_SEEDS, RANK_CASES = min(SEEDS, 20), min(CASES, 200)
+RANK_SERVICES = ["trauma_emergency", "dialysis"]  # dialysis: control
+rank = simulate(SCENARIOS, list(range(RANK_SEEDS)), RANK_CASES, STATES, RANK_SERVICES, OUT / "rank_fix",
                 n_boot=500, sweep=False, run_id="rank_fix", verbose=False,
                 policies=["app_before_101", "app", "nearest_call_first"])
 
@@ -241,18 +246,21 @@ def cell(r: pd.Series) -> str:
     return f"{100 * r['diff']:+.1f} [{100 * r.diff_lo:+.1f}, {100 * r.diff_hi:+.1f}]"
 
 
-before = compare(rank["outcomes"], "app_before_101", "nearest_call_first").set_index("scenario")
-after = compare(rank["outcomes"], "app", "nearest_call_first").set_index("scenario")
+keys = ["service", "scenario"]
+before = compare(rank["outcomes"], "app_before_101", "nearest_call_first").set_index(keys)
+after = compare(rank["outcomes"], "app", "nearest_call_first").set_index(keys)
 fix = pd.DataFrame({
     "before #101 (app_before_101)": before.apply(cell, axis=1),
     "after #101 (app)": after.apply(cell, axis=1),
-    "verdict after": [verdict(r.diff_lo, r.diff_hi) for r in after.itertuples()],
-}).reindex(SCENARIOS)
+    "verdict after": after.apply(lambda r: verdict(r.diff_lo, r.diff_hi), axis=1),
+})
 fix["label"] = "SIMULATED"
-print(f"SIMULATED, not field results. Trauma, {STATES}, {RANK_SEEDS} seeds x {RANK_CASES} cases per state, "
+fix = fix.reindex(pd.MultiIndex.from_product([RANK_SERVICES, SCENARIOS], names=keys))
+print(f"SIMULATED, not field results. {STATES}, {RANK_SEEDS} seeds x {RANK_CASES} cases per state and service, "
       f"{rank['seconds']:.0f} s.")
-print("App minus nearest_call_first, treated within 60 min (points), 90% seed-bootstrap interval.")
-print("S0-high and S0-low are simulated base-rate bounds: read them together.")
+print("App minus nearest_call_first, treated in window (points; 60 min trauma, 120 min dialysis), "
+      "90% seed-bootstrap interval.")
+print("Dialysis is the control (order unchanged). S0-high and S0-low are simulated base-rate bounds: read together.")
 with pd.option_context("display.width", 250, "display.max_columns", 20):
     print(fix.to_string())
 ''')
