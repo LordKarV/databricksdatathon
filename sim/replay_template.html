@@ -95,7 +95,7 @@ function render() {
     let from = [c.lat, c.lon];
     for (const e of ev) {
       if (e[1] !== 'travel' || !D.fac[e[2]]) continue;
-      const to = [D.fac[e[2]][1], D.fac[e[2]][2]], t1 = e[3], t0 = t1 - Number(e[4] || 0);
+      const to = [D.fac[e[2]][1], D.fac[e[2]][2]], [t0, t1] = leg(ev, e);
       if (clock >= t1) { route += seg(P, from, to, 1); pos = to; from = to; }
       else if (clock > t0) { const f = (clock - t0) / Math.max(1, t1 - t0); route += seg(P, from, to, f); pos = [from[0] + (to[0] - from[0]) * f, from[1] + (to[1] - from[1]) * f]; break; }
       else break;
@@ -115,10 +115,16 @@ function render() {
     }
     $('m-' + p).innerHTML = marks;
     const cur = past[past.length - 1];
-    const going = ev.find(e => e[1] === 'travel' && e[3] > clock && e[3] - Number(e[4] || 0) <= clock);
+    const going = ev.find(e => { if (e[1] !== 'travel') return false; const [t0, t1] = leg(ev, e); return t1 > clock && t0 <= clock; });
     $('s-' + p).innerHTML = status(c, going || cur, end && end[3] <= clock ? end : null, p);
   }
   if (allDone && !done) { done = true; reveal(); }
+}
+// A trip's [start, end] minutes. sim/execute.py logs travel at departure and arrive at arrival; an older log put
+// the arrival time on travel and the leg's minutes in its outcome.
+function leg(ev, e) {
+  if (e[4] === '' || e[4] == null) { const i = ev.indexOf(e), a = ev.slice(i + 1).find(x => x[1] === 'arrive' && x[2] === e[2]); return [e[3], a ? a[3] : e[3]]; }
+  return [e[3] - Number(e[4]), e[3]];
 }
 function seg(P, a, b, f) {
   const [x1, y1] = P(a[0], a[1]), [x2, y2] = P(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f);

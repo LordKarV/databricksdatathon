@@ -1,22 +1,25 @@
 """Monte Carlo runner for the simulated referral world (issue #92). Every number it writes is SIMULATED.
 
-    .venv-app/bin/python -m sim.run --scenarios S0,S1,S2,S3 --seeds 20 --cases-per-seed 200 \
-        --states BIHAR,"UTTAR PRADESH" --services dialysis,trauma_emergency
+    .venv-app/bin/python -m sim.run --seeds 20 --cases-per-cell 200 --states BIHAR,"UTTAR PRADESH" \
+        --services dialysis,trauma_emergency --sweep
 
-Per seed: one case set (sim.world, else the stub) shared by every policy and scenario; each policy chooses its steps
-once (choices never depend on truth); then each scenario's truth table resolves them (sim.execute, else the stub).
-Writes under --out (default sim/out, git-ignored):
-- truth/<scenario>_<seed>.parquet, events/<run_id>.parquet, cases/<run_id>.parquet;
+Runs on the lead's world, truth and executor (sim/world.py, sim/execute.py) and baselines (sim/policies_baseline.py),
+with the app policies of sim/policies_app.py. Per seed: one case set (world.cases, filtered to the requested states
+and services) shared by every policy and scenario; each policy chooses its steps once (choices never depend on
+truth); then each scenario's truth table (world.truth_table) resolves them through execute.run_case.
+Scenarios: world.SCENARIOS, S0-high and S0-low (the S0 base-rate bounds, always reported together), S1, S2, S3.
+Writes under --out (default sim/out, git-ignored), every parquet with the SIMULATED note in its file metadata:
+- truth/<scenario>_<seed>.parquet, events/<run_id>.parquet, cases/<run_id>.parquet (what sim/replay.py reads);
 - metrics.parquet: one row per policy x scenario x state (and ALL) x service x urgency, each metric with a
   seed-bootstrap 90% interval;
-- sensitivity.parquet (--sweep): app minus nearest_call_first, treated within window, per swept assumption level.
-Policies in the minimum run: app, app_offline, nearest, nearest_call_first, best_on_paper. app_plus_reports and the
-planner route are future work (--with-reports, --include-planner).
+- sensitivity.parquet (--sweep, the default): app minus nearest_call_first, treated within window, with each of
+  world.KNOBS at low and high (the others at mid).
+Policies in the minimum run: app, app_offline, nearest, nearest_call_first, best_on_paper. app_plus_reports is
+future work (--with-reports writes network data only).
 """
 from __future__ import annotations
 
 import argparse
-import importlib
 import time
 from collections.abc import Callable
 from pathlib import Path
@@ -25,70 +28,78 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from sim import _stub_baselines, _stub_execute
+from sim import execute, policies_baseline, world
 from sim.app_adapter import AppAdapter, ensure_built
-from sim.assumptions import DEFAULT, Assumptions, sweep_configs
-from sim.interface import EVENT_COLUMNS, OUT, SCENARIOS, SERVICES, STATES, Case, Step, Truth
-from sim.policies_app import FUTURE, POLICIES
-from sim.truth import build_truth
+from sim.interface import EVENT_COLUMNS, OUT, SERVICES, STATES, TRUTH_COLUMNS, Case
+from sim.policies_app import FUTURE
+from sim.policies_app import POLICIES as APP_POLICIES
 
 LABEL = "SIMULATED - not field results"
+SCENARIOS = world.SCENARIOS
+S0_NOTE = "S0-high and S0-low are bounds (simulated, base-rate bounds): read them together, never one alone"
 METRICS = ("treated_in_window", "median_min_to_care", "wasted_trips_per_case", "calls_per_case", "unsafe_first_stop",
            "gave_up")
 SHARE = ("treated_in_window", "wasted_trips", "calls", "unsafe_first_stop", "gave_up")
 COMPARE = ("app", "nearest_call_first")  # the sweep's comparison (#92 review)
+TRUTH_KNOBS = ("accept_p", "phone_ok", "open_now_p")  # the knobs world.truth_table reads; execute reads wrong_yes
 CI = (5, 95)
+StepDicts = list[dict[str, Any]]
+Chooser = Callable[[dict[str, Any]], StepDicts]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Backends: the real world / executor / baselines when they exist, else the temporary stubs
-def _load(module: str, name: str, fallback: Any) -> tuple[Any, str]:
-    try:
-        mod = importlib.import_module(module)
-    except ModuleNotFoundError as e:
-        if e.name != module:
-            raise
-        print(f"note: {module} not found; using the temporary stand-in in sim/_stub_*.py")
-        return fallback, "stub"
-    if not hasattr(mod, name):
-        raise SystemExit(f"{module} exists but has no {name}: see the contract in sim/interface.py")
-    return getattr(mod, name), module
+# Cases, policies, execution
+def make_cases(seed: int, n: int, states: list[str], services: list[str]) -> pd.DataFrame:
+    """world.cases (n per state x service), filtered to the requested services."""
+    unknown = sorted(set(services) - set(world.SERVICES))
+    if unknown:
+        raise SystemExit(f"services {unknown} are not in sim/world.py SERVICES {list(world.SERVICES)}")
+    c = world.cases(seed, tuple(states), n)
+    return c[c.service.isin(services)].reset_index(drop=True)
 
 
-def backends(include_planner: bool = False) -> dict[str, Any]:
-    gen, world = _load("sim.world", "generate_cases", _stub_execute.generate_cases)
-    run_case, executor = _load("sim.execute", "run_case", _stub_execute.run_case)
-    baselines, bsrc = _load("sim.policies_baseline", "POLICIES", _stub_baselines.POLICIES)
-    make_ctx = None
-    if bsrc != "stub":
-        make_ctx = getattr(importlib.import_module("sim.policies_baseline"), "make_context", None)
-    baselines = {k: v for k, v in baselines.items() if include_planner or "planner" not in k}
-    return {"generate_cases": gen, "run_case": run_case, "baselines": baselines, "make_context": make_ctx,
-            "sources": {"world": world, "executor": executor, "baselines": bsrc}}
+def app_steps(policy: Any, case: dict[str, Any], ctx: dict[str, Any]) -> StepDicts:
+    """An app policy object on a world case: Case(**row) in, the executor's step dicts out."""
+    return [s.as_dict() for s in policy.choose(Case(**case), ctx)]
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-def choose_all(cases: list[Case], policies: dict[str, Any], ctxs: dict[str, dict]) -> dict[str, list[list[Step]]]:
-    """Every policy's steps for every case. Truth is never in a policy's ctx."""
-    for name, ctx in ctxs.items():
-        if any(isinstance(v, Truth) for v in ctx.values()):
-            raise AssertionError(f"policy {name} was handed the truth")
-    return {name: [pol.choose(c, ctxs[name]) for c in cases] for name, pol in policies.items()}
+def assert_no_truth(ctx: Any) -> None:
+    """A policy's ctx must never hold a truth table (or anything with truth columns), at any depth."""
+    hidden = set(TRUTH_COLUMNS) - {"unique_id", "service"}
+    if isinstance(ctx, pd.DataFrame):
+        if hidden & set(ctx.columns):
+            raise AssertionError(f"a policy was handed truth columns {sorted(hidden & set(ctx.columns))}")
+    elif isinstance(ctx, dict):
+        for v in ctx.values():
+            assert_no_truth(v)
 
 
-def execute(cases: list[Case], steps: dict[str, list[list[Step]]], truth: Truth, run_case: Callable,
-            a: Assumptions, run_id: str) -> pd.DataFrame:
-    rows = []
-    for policy, per_case in steps.items():
-        for c, st in zip(cases, per_case, strict=True):
-            for e in run_case(c, st, truth, a):
-                rows.append({"run_id": run_id, "scenario": truth.scenario, "seed": c.seed, "policy": policy,
-                             "case_id": c.case_id, **e})
+def policy_table(app: AppAdapter) -> dict[str, Chooser]:
+    """Every policy in the run as case_dict -> step dicts. App policies see the app; baselines the public listing."""
+    app_ctx = {"app": app}
+    base_ctx = policies_baseline.context()
+    assert_no_truth(app_ctx)
+    assert_no_truth(base_ctx)
+    out: dict[str, Chooser] = {name: (lambda c, p=pol: app_steps(p, c, app_ctx)) for name, pol in APP_POLICIES.items()}
+    out |= {name: (lambda c, f=fn: f(c, base_ctx)) for name, fn in policies_baseline.POLICIES.items()}
+    return out
+
+
+def choose_all(cases: pd.DataFrame, policies: dict[str, Chooser]) -> dict[str, dict[str, StepDicts]]:
+    """policy -> case_id -> steps. Computed once per seed and reused for every scenario and knob level."""
+    recs = cases.to_dict("records")
+    return {name: {c["case_id"]: choose(c) for c in recs} for name, choose in policies.items()}
+
+
+def run_events(cases: pd.DataFrame, steps: dict[str, dict[str, StepDicts]], truth: pd.DataFrame, scenario: str,
+               run_id: str, knobs: dict[str, float], listed: dict[str, tuple[float, float]]) -> pd.DataFrame:
+    """execute.run_case for every policy and case on one truth table (indexed once)."""
+    tix, k = execute.index_truth(truth), {**world.MID, **knobs}
+    recs = cases.to_dict("records")
+    rows = [(run_id, scenario, c["seed"], pol, c["case_id"], *e)
+            for pol, per in steps.items() for c in recs
+            for e in execute.run_case(c, per[c["case_id"]], tix, listed, k)]
     return pd.DataFrame(rows, columns=list(EVENT_COLUMNS))
-
-
-def case_frame(cases: list[Case]) -> pd.DataFrame:
-    return pd.DataFrame([c.__dict__ for c in cases])
 
 
 def outcomes(events: pd.DataFrame, cases: pd.DataFrame, truth: pd.DataFrame) -> pd.DataFrame:
@@ -114,6 +125,14 @@ def outcomes(events: pd.DataFrame, cases: pd.DataFrame, truth: pd.DataFrame) -> 
         out[c] = out[c].fillna(0).astype(int)
     out["gave_up"] = out.gave_up > 0
     out["unsafe_first_stop"] = out.unsafe_first_stop.fillna(False).astype(bool)
+    return out
+
+
+def sweep_configs() -> list[tuple[str, str, dict[str, float]]]:
+    """(knob, level, knobs) for the sweep over world.KNOBS: mid once, then each knob low and high, others at mid."""
+    out = [("all", "mid", dict(world.MID))]
+    for knob, levels in world.KNOBS.items():
+        out += [(knob, lv, {**world.MID, knob: levels[lv]}) for lv in ("low", "high")]
     return out
 
 
@@ -177,55 +196,57 @@ def compare(oc: pd.DataFrame, a: str, b: str, n_boot: int = 500, seed: int = 92)
 # ---------------------------------------------------------------------------------------------------------------------
 def simulate(scenarios: list[str], seeds: list[int], n_cases: int, states: list[str], services: list[str],
              out: Path = OUT, n_boot: int = 500, sweep: bool = True, with_reports: bool = False,
-             include_planner: bool = False, run_id: str | None = None, verbose: bool = True) -> dict[str, Any]:
+             run_id: str | None = None, verbose: bool = True) -> dict[str, Any]:
+    """n_cases is per state x service x seed (world.cases n)."""
     t_start = time.time()
     states = [s.upper() for s in states]
+    scenarios = list(dict.fromkeys(world.S0_ALIAS.get(s, s) for s in scenarios))
+    if bad := sorted(set(scenarios) - set(SCENARIOS)):
+        raise SystemExit(f"unknown scenarios {bad}; sim/world.py has {list(SCENARIOS)}")
     ensure_built(states)
-    be = backends(include_planner)
-    app = AppAdapter()
-    policies = {**POLICIES, **be["baselines"]}
-    ctxs = {name: {"app": app} for name in POLICIES}
-    extra = be["make_context"](states, services) if be["make_context"] else {}
-    ctxs |= {name: {"app": app, **extra} for name in be["baselines"]}
+    policies = policy_table(AppAdapter())
+    listed = execute._listed()
     run_id = run_id or f"min_{len(seeds)}x{n_cases}"
-    for sub in ("truth", "events", "cases"):
-        (out / sub).mkdir(parents=True, exist_ok=True)
+    configs = sweep_configs() if sweep else []
+    mid_key = tuple(world.MID[k] for k in TRUTH_KNOBS)
 
     ev_all, oc_all, case_all, sweep_oc = [], [], [], []
     for seed in seeds:
-        cases = be["generate_cases"](seed, n_cases, states, services, 1)
-        cf = case_frame(cases)
-        case_all.append(cf)
-        steps = choose_all(cases, policies, ctxs)
+        cases = make_cases(seed, n_cases, states, services)
+        case_all.append(cases)
+        steps = choose_all(cases, policies)
+        pair = {k: steps[k] for k in COMPARE}
         for sc in scenarios:
-            tdf = build_truth(sc, seed, tuple(services), DEFAULT)
-            tdf.to_parquet(out / "truth" / f"{sc}_{seed}.parquet", index=False)
-            ev = execute(cases, steps, Truth(tdf, sc, seed), be["run_case"], DEFAULT, run_id)
+            tdf = world.truth_table(sc, seed, world.MID)
+            world.write_parquet(tdf, out / "truth" / f"{sc}_{seed}.parquet")
+            ev = run_events(cases, steps, tdf, sc, run_id, world.MID, listed)
             ev_all.append(ev)
-            oc_all.append(outcomes(ev, cf, tdf.assign(scenario=sc)))
-            if sweep:
-                pair = {k: steps[k] for k in COMPARE if k in steps}
-                for knob, level, a in sweep_configs():
-                    t2 = tdf if level == "mid" else build_truth(sc, seed, tuple(services), a)
-                    ev2 = execute(cases, pair, Truth(t2, sc, seed), be["run_case"], a, run_id)
-                    sweep_oc.append(outcomes(ev2, cf, t2.assign(scenario=sc)).assign(knob=knob, level=level))
+            oc_all.append(outcomes(ev, cases, tdf.assign(scenario=sc)))
+            truths = {mid_key: tdf}  # wrong_yes does not change the truth, so its levels reuse the mid table
+            for knob, level, kn in configs:
+                key = tuple(kn[k] for k in TRUTH_KNOBS)
+                if key not in truths:
+                    truths[key] = world.truth_table(sc, seed, kn)
+                ev2 = run_events(cases, pair, truths[key], sc, run_id, kn, listed)
+                sweep_oc.append(outcomes(ev2, cases, truths[key].assign(scenario=sc)).assign(knob=knob, level=level))
         if verbose:
             print(f"seed {seed} done ({time.time() - t_start:.0f} s)")
 
     events, oc, cases_df = pd.concat(ev_all), pd.concat(oc_all), pd.concat(case_all)
-    events.to_parquet(out / "events" / f"{run_id}.parquet", index=False)
-    cases_df.to_parquet(out / "cases" / f"{run_id}.parquet", index=False)
-    m = metrics(oc, n_boot).assign(run_id=run_id, **{f"src_{k}": v for k, v in be["sources"].items()})
-    m.to_parquet(out / "metrics.parquet", index=False)
-    result: dict[str, Any] = {"metrics": m, "outcomes": oc, "events": events, "cases": cases_df,
-                              "sources": be["sources"], "run_id": run_id}
-    if sweep and sweep_oc:
+    world.write_parquet(events, out / "events" / f"{run_id}.parquet")
+    world.write_parquet(cases_df, out / "cases" / f"{run_id}.parquet")
+    m = metrics(oc, n_boot).assign(run_id=run_id)
+    world.write_parquet(m, out / "metrics.parquet")
+    result: dict[str, Any] = {"metrics": m, "outcomes": oc, "events": events, "cases": cases_df, "run_id": run_id}
+    if sweep_oc:
         so = pd.concat(sweep_oc)
         sens = pd.concat([compare(d, *COMPARE, n_boot).assign(knob=k, level=lv)
                           for (k, lv), d in so.groupby(["knob", "level"])])
+        sens["knob_value"] = [np.nan if k == "all" else world.KNOBS[k][lv]
+                              for k, lv in zip(sens.knob, sens.level, strict=True)]
         sens["app_beats"] = sens.diff_lo > 0
         sens["label"] = LABEL
-        sens.to_parquet(out / "sensitivity.parquet", index=False)
+        world.write_parquet(sens, out / "sensitivity.parquet")
         result["sensitivity"] = sens
     if with_reports:  # future work: network data only, no second wave yet
         from sim.reports import write_network
@@ -275,7 +296,7 @@ def table(m: pd.DataFrame) -> pd.DataFrame:
 
 
 def print_summary(r: dict[str, Any]) -> None:
-    print(f"\n{LABEL}. Sources: {r['sources']}. {r['seconds']:.0f} s.")
+    print(f"\n{LABEL}. World, truth and executor: sim.world, sim.execute. {r['seconds']:.0f} s.\n{S0_NOTE}.")
     with pd.option_context("display.width", 200, "display.max_columns", 20, "display.max_rows", 200):
         print(table(r["metrics"]).to_string(index=False))
         if "sensitivity" in r:
@@ -293,21 +314,21 @@ def main() -> int:
     ap.add_argument("--scenarios", default=",".join(SCENARIOS))
     ap.add_argument("--seeds", type=int, default=3, help="number of seeds (0 .. N-1, plus --seed-start)")
     ap.add_argument("--seed-start", type=int, default=0)
-    ap.add_argument("--cases-per-seed", type=int, default=200)
+    ap.add_argument("--cases-per-cell", "--cases-per-seed", dest="cases", type=int, default=world.CASES_PER_CELL,
+                    help="cases per state x service x seed (world.cases n)")
     ap.add_argument("--states", default=",".join(STATES))
     ap.add_argument("--services", default=",".join(SERVICES))
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--boot", type=int, default=500)
-    ap.add_argument("--no-sweep", action="store_true")
+    ap.add_argument("--sweep", action=argparse.BooleanOptionalAction, default=True,
+                    help="knob sweep over world.KNOBS (default on)")
     ap.add_argument("--with-reports", action="store_true", help="future work: also write network data")
-    ap.add_argument("--include-planner", action="store_true", help="future work: keep a planner-route baseline")
     ap.add_argument("--run-id")
     a = ap.parse_args()
     if a.with_reports:
         print(f"note: {', '.join(FUTURE)} is future work; --with-reports writes network data only")
-    simulate(a.scenarios.split(","), list(range(a.seed_start, a.seed_start + a.seeds)), a.cases_per_seed,
-             a.states.split(","), a.services.split(","), a.out, a.boot, not a.no_sweep, a.with_reports,
-             a.include_planner, a.run_id)
+    simulate(a.scenarios.split(","), list(range(a.seed_start, a.seed_start + a.seeds)), a.cases,
+             a.states.split(","), a.services.split(","), a.out, a.boot, a.sweep, a.with_reports, a.run_id)
     return 0
 
 

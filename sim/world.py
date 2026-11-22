@@ -39,7 +39,10 @@ SERVICES = {
     "trauma_emergency": {"v1": "trauma", "v2": "trauma_care", "urgency": "emergency", "pathway": "major_trauma",
                          "stage": "stabilise", "window_min": None},
 }
-SCENARIOS = ("S0", "S1", "S2", "S3")
+# S0 is reported as two bounds, never one alone (lead, #92): S0-high counts confirmed of decided DEV pairs, S0-low
+# also counts no_info (the labeller found nothing) as not offered. "S0" alone is the S0-high reading.
+SCENARIOS = ("S0-high", "S0-low", "S1", "S2", "S3")
+S0_ALIAS = {"S0": "S0-high"}
 CASES_PER_CELL = 200  # per state x service x seed
 P_HAS_DATA = 0.8  # assumption: share of cases with mobile data
 P_PHONE_SIGNAL = 0.9  # assumption: share of cases where a call can be placed
@@ -121,15 +124,20 @@ def listing(service: str) -> pd.DataFrame:
 
 
 @lru_cache(maxsize=1)
-def _dev() -> pd.DataFrame:
-    """Decided gold v3 DEV pairs (confirmed or contradicted) for the services in scope, with operator."""
+def _dev_all() -> pd.DataFrame:
+    """Every gold v3 DEV pair (confirmed, contradicted or no_info), yes = confirmed, with weight and operator."""
     lab = pd.DataFrame(json.loads(DEV_LABELS.read_text())["results"])
-    lab = lab[lab.service.isin(["confirmed", "contradicted"])].copy()
     lab["yes"] = lab.service.eq("confirmed").astype(float)
     lab["w"] = 1.0 / lab.inclusion_prob
     op = facilities().set_index("unique_id").operator
     lab["operator"] = lab.unique_id.map(op).fillna("unknown")
     return lab
+
+
+def _dev() -> pd.DataFrame:
+    """Decided gold v3 DEV pairs (confirmed or contradicted), with operator."""
+    lab = _dev_all()
+    return lab[lab.service.isin(["confirmed", "contradicted"])]
 
 
 def _shrunk(rate: pd.Series, n: pd.Series, prior: pd.Series | float) -> pd.Series:
@@ -146,11 +154,14 @@ def s2_rates() -> pd.Series:
     return _shrunk(cell["mean"], cell["size"], pooled.reindex(cell.index.get_level_values(1)).to_numpy())
 
 
-@lru_cache(maxsize=1)
-def s0_rates() -> pd.Series:
+@cache
+def s0_rates(bound: str = "high") -> pd.Series:
     """S0 "text says nothing": P(offers) by (gold service id, operator), the DEV frame rate weighted by
-    1 / inclusion_prob, so the same for every facility of that operator whatever its text says."""
-    lab = _dev()
+    1 / inclusion_prob, so the same for every facility of that operator whatever its text says.
+    bound "high": confirmed of decided pairs (no_info left out). "low": no_info counted as not offered."""
+    if bound not in ("high", "low"):
+        raise ValueError(f"bound must be 'high' or 'low', got {bound!r}")
+    lab = _dev() if bound == "high" else _dev_all()
     lab = lab.assign(wy=lab.w * lab.yes)
     svc = lab.groupby("service_id").wy.sum() / lab.groupby("service_id").w.sum()
     g = lab.groupby(["service_id", "operator"])
@@ -171,6 +182,7 @@ def _rate(table: pd.Series, keys: pd.MultiIndex, fallback: float) -> np.ndarray:
 
 def truth_table(scenario: str, seed: int, knobs: dict | None = None) -> pd.DataFrame:
     """The hidden truth: one row per facility x service in scope (TRUTH_COLS). Read only by sim/execute.py."""
+    scenario = S0_ALIAS.get(scenario, scenario)
     if scenario not in SCENARIOS:
         raise ValueError(f"scenario must be one of {SCENARIOS}, got {scenario!r}")
     k = {**MID, **(knobs or {})}
@@ -180,8 +192,9 @@ def truth_table(scenario: str, seed: int, knobs: dict | None = None) -> pd.DataF
         d = _pairs(service)
         u = np.random.default_rng([seed, i]).random((4, len(d)))  # offers, exists, phone, map; shared by scenarios
         gid = SERVICES[service]["v2"]
-        if scenario == "S0":
-            p_off = _rate(s0_rates(), pd.MultiIndex.from_arrays([[gid] * len(d), d.operator]), s0_rates().mean())
+        if scenario.startswith("S0"):
+            r0 = s0_rates(scenario.removeprefix("S0-"))
+            p_off = _rate(r0, pd.MultiIndex.from_arrays([[gid] * len(d), d.operator]), r0.mean())
         elif scenario == "S1":
             p_off = d.p.fillna(0).to_numpy()
         else:

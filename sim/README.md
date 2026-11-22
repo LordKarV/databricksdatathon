@@ -3,128 +3,166 @@
 **Simulated. Not field results.** This folder builds a world in which the true answers are known, sends simulated
 patients through it under several referral policies, and measures what happens. It answers one question: does the
 app get more patients to care in time than sending them to the nearest listing, or to the "best" listing on paper?
-Results appear only in the notebook appendix, `submission/02_simulation.ipynb`, labelled simulated. This README gives
-the method, not results. Nothing here ships in the app runtime.
+Results appear only in the notebook appendix, `submission/02_simulation.ipynb`, labelled simulated (owner's
+decision on #92). This README gives the method, not results. Nothing here ships in the app runtime.
 
-## Honesty rules (from #92)
+Two halves, one system:
+- **World, truth, executor, baselines** (the lead): `world.py`, `execute.py`, `policies_baseline.py`.
+- **App policies, runner, metrics, sweep, notebook, replay** (tm-AA2026): `policies_app.py`, `app_adapter.py`,
+  `run.py`, `replay.py`, `submission/build_sim_notebook.py`.
 
-1. **Policies never see the truth.** They see only what the app or a directory would show. Only the executor and the
-   metrics read the truth tables. `sim/tests/test_policies.py` fails if a policy module imports `sim.truth`, names
-   the truth tables, or is handed a truth object.
+## Run
+
+```bash
+.venv-app/bin/python app/facts/build.py                  # once; run.py builds facts and state packs if missing
+.venv-app/bin/python -m sim.run --seeds 20 --cases-per-cell 200 --sweep   # S0-high, S0-low, S1-S3; Bihar + UP
+.venv-app/bin/python -m sim.replay                       # sim/out/replay.html: one patient, policies side by side
+.venv-app/bin/python -m pytest sim/tests -q
+.venv-app/bin/python submission/build_sim_notebook.py    # writes and runs the appendix notebook
+```
+
+Options of `sim.run`: `--scenarios`, `--states`, `--services` (from `world.SERVICES`), `--cases-per-cell` (patients
+per state x service x seed), `--out`, `--boot`, `--no-sweep`, `--with-reports` (network data only, future work).
+`python -m sim.execute 1 2` is the world half's own smoke run (the three baselines only). Outputs go to `sim/out/`
+(git-ignored); every parquet carries `simulated` in its file metadata. On Databricks the notebook takes seeds and
+cases from widgets and writes to `/Volumes/workspace/referral_saathi/uploads/sim`.
+
+## Honesty rules (#92)
+
+1. **Policies never see the truth.** They see only what the app or a directory would show: the app policies get
+   `AppAdapter` (the shipped engine and state packs), the baselines get `world.listing()` (listed point, state,
+   operator, published v2 p). Only `execute.py` and the metrics read truth. `tests/test_policies.py` fails if a
+   policy module imports the executor, names a truth function, or a policy's ctx holds truth columns.
 2. **More than one truth.** Every result is reported for each scenario. S1 is circular and is never shown alone.
-3. **No TEST labels anywhere** (#51). Only `model/gold/v3/dev_labels.json` is read; a test checks that no module names
-   the TEST files.
-4. **Every output says "simulated":** a `label` column in every table, "SIMULATED" in every printed table and chart.
+   S0 is two bounds, S0-high and S0-low, always reported together, never one alone.
+3. **No TEST labels anywhere** (#51). Only `model/gold/v3/dev_labels.json` is read; tests check that no module
+   names the TEST files.
+4. **Every output says "simulated":** a `label` column in every table, "SIMULATED" in every printed table and
+   chart, and the parquet file metadata.
 5. **Reproducible:** seeded; runs locally and as a Databricks notebook.
 
-## Scenarios (`truth.py`)
+## Scope (latest on #92)
 
-One truth table per scenario and seed, `sim/out/truth/<scenario>_<seed>.parquet`, columns `unique_id, service,
-exists, offers, phone_ok, open_now_p, accept_p, true_lat, true_lon`, one row per facility and app service.
+Bihar and Uttar Pradesh; dialysis (planned) and trauma_emergency (emergency); S0-high, S0-low, S1, S2, S3; at most
+3 places per policy (the app's N_OPTIONS); common random numbers. Cut from the first run: the planner route (still on
+stub scores until #77) and "app + reports" (its reports would come from the simulation's own truth).
 
-| Scenario | P(offers) | Location |
-| --- | --- | --- |
-| S0 "text says nothing" | base rate by service x operator group (public by derived/v2 operator or by name, else private or unknown), from DEV labels; no text feature, no model p | map point |
-| S1 "model is right" | derived/v2 `p` | map point |
-| S2 "from labels" | DEV label rate by service x evidence grade (derived/v1 grades; `none` if unmentioned) x attribution (a sentence naming the service attributed to another facility, derived/v1 claims) | map point |
-| S3 "data as bad as the audit says" | S2, but a pair whose only sentences are attributed elsewhere never offers, and one with its own sentences takes the rate of the same grade without the attribution | records flagged `coords_pin_conflict_gt50km` sit at `alt_lat/alt_lon` (else the PIN centroid) |
+## Cases (`world.cases`)
 
-Rates from labels use decided DEV labels only (confirmed vs contradicted; `no_info` is missing), weighted
-1 / `inclusion_prob` as in `model/gold/v3/merge_labels.py`. **Shrinkage:** a cell's weighted rate `r_c` with Kish
-effective n `n_c` becomes `(n_c r_c + k_cell r_s) / (n_c + k_cell)`, where the service rate `r_s` is itself shrunk
-toward the all-service rate with `k_service`; a cell with no label takes `r_s`. Unmentioned pairs outside the DEV
-`no_mention` frame (not public by name, under 6 services claimed) have no label at all and take an assumed rate.
-`test_truth.py` checks that S2's expected rates reproduce the weighted DEV label rate per service within two
-standard errors.
+`world.cases(seed, states, n)`: n patients per state x service, one row each: `case_id, seed, lat, lon, state,
+district, service, urgency, window_min, t0_min, has_data, has_phone_signal`. Origins are PIN centroids drawn
+uniformly within the state (no population table is in the repo). Windows: trauma 60 min (kb/pathways `major_trauma`
+stabilise); dialysis 120 min (no deadline in kb/pathways, so the app's own window for the scheduled profile).
+`sim.run` filters the rows to the requested services.
 
-All scenarios: `exists` ~ Bernoulli(derived/v1 `facility_trust.existence_score`); `phone_ok` is False with no
-listed phone or a number shared by directories (`record_trust` flag `official_phone_is_directory`, or listed for 3+
-records), else Bernoulli(`phone_ok_p`); `open_now_p` and `accept_p` as below. Every scenario uses the same uniform
-draws per seed, so scenarios differ only in their rates.
+## Scenarios (`world.truth_table`)
 
-**Caveat on S2 and S3 (#92 review):** they come from the DEV labels the v2 model's calibration step was fitted on,
-and S3 penalises other-facility sentences the engine already drops. Both favour the app by construction. S0 is the
-scenario where the app can lose.
+`world.truth_table(scenario, seed, knobs)`: one row per facility x service (all 9,947 v2-scored facilities, so any
+app pick is covered), columns `unique_id, service, exists, offers, phone_ok, open_now_p, accept_p, true_lat,
+true_lon`. `sim.run` writes each to `sim/out/truth/<scenario>_<seed>.parquet`, which the replay reads.
+
+| Scenario | offers | exists | map point |
+| --- | --- | --- | --- |
+| S0-high "text says nothing" | DEV confirmed / (confirmed + contradicted) by service x operator, weighted 1 / inclusion_prob | 0.984 (EXISTS_DEFAULT) | listed |
+| S0-low | the same, with no_info counted as not offered | 0.984 | listed |
+| S1 "model is right" | Bernoulli(v2 p) | Bernoulli(v2 p_exists) | listed |
+| S2 "from labels" | DEV rate by service x stratum (strong / weak / suspect / no_mention, the gold v3 rule) | 0.984 | listed |
+| S3 "data as bad as the audit" | S2, and attributed_elsewhere claims are false | 0.984 | wrong at 1 - q_ev of its LOC rule; truth = alt point |
+
+- **Why S0 is two bounds (lead, #92):** no_info means the labeller found nothing, which is not evidence either way,
+  and the cells are thin (about 15 decided DEV pairs per service). `world.truth_table("S0", ...)` is S0-high.
+- Small cells are pulled towards the pooled rate with 2 pseudo-counts (S2: the stratum over all 9 services; S0:
+  the service).
+- Uniforms are drawn once per seed and shared by the scenarios and knob levels, so scenarios differ only by their
+  rates.
+- **Caveat on S2 and S3 (#92 review):** they come from the DEV labels the v2 model's calibration step was fitted on,
+  and S3 penalises other-facility sentences the engine already drops. Both favour the app by construction. S0 is
+  the scenario where the app can lose.
 
 ## Policies
 
-Every policy tries at most 3 facilities (`N_OPTIONS` in `app/facts/engine.py`), then escalates to 108.
+Every policy returns steps `{facility_id, call_first, note}`, at most 3, tried in order, then 108.
 
 | Policy | What it sees and does |
 | --- | --- |
-| `app` | the product as shipped: `Engine.plan` (derived/v2) with mobile data, the saved state pack without; phones every option first (the app says "We will phone before going" for every option); field reports off |
+| `app` | the product as shipped: `Engine.plan` (derived/v2) with mobile data, the saved state pack without; phones every option first (each option's text ends "We will phone before going"); field reports off |
 | `app_offline` | the state pack only, read as `app/static/pack.js` does (nearest PIN's list, sorted by straight-line km) |
-| `nearest` | the 3 nearest listings naming the service, straight line, no call |
-| `nearest_call_first` | the same, phoning each first: separates the ranking from calling ahead |
-| `best_on_paper` | the 3 highest model p in the patient's state, ignoring distance, no call |
+| `nearest` | the 3 listings naming the service (a derived/v1 claim, the app's own candidate pool) with the shortest travel estimate among the 15 nearest in a straight line; no call |
+| `nearest_call_first` | the same places, phoning each first: separates the ranking from calling ahead |
+| `best_on_paper` | the 3 highest published v2 p in the case's state among the same listings, ignoring distance; no call |
 | `app_plus_reports` | future work: the app re-ranked with a Beta(p k, (1 - p) k) update from field reports (`reports.py`) |
-| planner route | future work, after #77 |
 
-`app_adapter.py` is the thin layer to the shipped app. It caches `Engine.plan` per (origin rounded to 1e-3 degree,
-service), since plans do not depend on truth; `test_policies.py` checks it returns the engine's options unchanged.
+`app_adapter.py` is the thin layer to the shipped app (`app/facts/engine.py`, unchanged). It caches `Engine.plan`
+per (origin rounded to 1e-3 degree, service), since plans do not depend on truth.
+
+## Execution (`execute.py`, the only reader of the truth)
+
+- Call first: no signal is an `outage` and the worker goes anyway. A call costs 5 min. A number that does not reach
+  the facility (`phone_ok` false, or no number listed) is `no_answer`, and the worker goes anyway. An answered call
+  says "yes" when the facility would treat now, else a wrong "yes" at `wrong_yes`; "no" skips the trip.
+- Travel: `geo.travel.estimate` (no network) from the current point to the listed point.
+- Arrival: `not_there` (does not exist, or the true point is over 2 km from the listed one, or unknown), `closed`
+  (`open_now_p`), `no_service`, `refused` (`accept_p`); each costs 15 min, then the next step from there. Else
+  `treated`, outcome `in_window` or `late`.
+- Gives up when the steps run out, or before a step once 240 min (emergency) or 480 min (planned) have passed.
+- Per-visit draws (open, accept, wrong yes) are a hash of (seed, case, facility, purpose): the same patient at the
+  same place gets the same answer under every policy (common random numbers).
+
+`sim.run` calls `execute.run_case` once per case and policy, with the truth indexed once per table; steps are
+computed once per policy and seed and reused for every scenario and knob level.
 
 ## Metrics (`run.py`)
 
 `sim/out/metrics.parquet`, one row per policy x scenario x state (and `ALL`) x service x urgency: treated within the
 window (share), median minutes to care, wasted trips per case, calls per case, unsafe first stop (the first place
 travelled to does not exist or does not offer the service), gave up. Each has a 90% seed-bootstrap interval
-(`_lo`, `_hi`). `sim/out/sensitivity.parquet`: app minus `nearest_call_first`, treated in window, with each swept
-assumption at low and high (others at the middle), and where the verdict changes.
+(`_lo`, `_hi`). Events and cases: `sim/out/{events,cases}/<run_id>.parquet`.
 
-Common random numbers: within a seed every policy and scenario meets the same patients and the same coin flips at
-the same facility for the same patient (a hash of case, facility and purpose).
+`sim/out/sensitivity.parquet`: app minus `nearest_call_first`, treated in window, paired by seed, per scenario and
+service, with each knob of `world.KNOBS` at low and high (the others at mid), and where the verdict changes.
 
-## Run
+## Assumptions
 
-```bash
-.venv-app/bin/python app/facts/build.py                                   # once; run.py builds it if missing
-.venv-app/bin/python -m sim.run --seeds 20 --cases-per-seed 200           # S0-S3, Bihar + UP, dialysis + trauma
-.venv-app/bin/python -m pytest sim/tests -q
-.venv-app/bin/python submission/build_sim_notebook.py                     # writes and runs the appendix notebook
-```
+Every value below is assumed, not measured, unless the basis says otherwise.
 
-Options: `--scenarios`, `--states`, `--services`, `--out`, `--boot`, `--no-sweep`, `--with-reports` (network data:
-`sim/out/network/facility_reports.parquet` and `district_summary.parquet`, future work), `--include-planner`.
-`sim/out/` is git-ignored. On Databricks the notebook takes seeds and cases from widgets and writes to
-`/Volumes/workspace/referral_saathi/uploads/sim`.
+| Name | Value | Where | Basis |
+| --- | --- | --- | --- |
+| `accept_p` | 0.8 (swept 0.6 / 0.95) | `world.KNOBS` | assumption: a facility that offers it takes this patient now |
+| `phone_ok` | 0.5 (swept 0.3 / 0.8), and False with no listed number | `world.KNOBS` | PHONE_UNCHECKED q_ev 0.5 in derived/v1/evidence_rules |
+| `wrong_yes` | 0.15 (swept 0.05 / 0.3) | `world.KNOBS` | assumption: a "yes" on the phone that is wrong |
+| `open_now_p` | 0.9 (swept 0.7 / 0.98) | `world.KNOBS` | assumption: open and staffed on arrival |
+| `P_HAS_DATA`, `P_PHONE_SIGNAL` | 0.8, 0.9 | `world.py` | assumption |
+| `SMOOTH` | 2 pseudo-counts | `world.py` | assumption: shrinkage of thin label cells |
+| `EXISTS_DEFAULT` | 0.984 | derived/v1 evidence_rules | data |
+| `CALL_MIN` | 5 | `execute.py` | assumption |
+| `TURN_AWAY_MIN` | 15 | `execute.py` | planner/core.py's figure |
+| `NOT_THERE_KM` | 2 | `execute.py` | assumption |
+| `GIVE_UP_MIN` | emergency 240, planned 480 | `execute.py` | assumption |
+| `report_k` and report weights | 4; phone yes/no 0.5, arrival 1, closed or refused 0.25 | `assumptions.py` | assumption (future work) |
 
-## Interface for sim/world.py, sim/execute.py, sim/policies_baseline.py
+## Interface
 
-Types live in `interface.py` (`Case`, `Step`, `Truth`, `EVENT_COLUMNS`, the outcome vocabulary). `run.py` uses
-these names when the modules exist, and the temporary stand-ins `_stub_execute.py` and `_stub_baselines.py` (with
-a printed note) when they do not:
+`interface.py` documents the contract as it stands (`Case`, `Step`, the event columns and outcome vocabulary):
 
-- `sim.world.generate_cases(seed, n, states, services, wave=1) -> list[Case]`
-- `sim.execute.run_case(case, steps, truth, a: Assumptions) -> list[dict]` with keys `step, kind, facility_id,
-  t_min, outcome`; `t_min` is minutes since the case started
-- `sim.policies_baseline.POLICIES: dict[str, Policy]`, optional `make_context(states, services) -> dict`
-
-## Assumptions (`assumptions.py`)
-
-Every constant lives in `assumptions.py`. Each is an assumption unless the basis says otherwise.
-
-| Name | Value | Basis |
-| --- | --- | --- |
-| `phone_ok_p` | 0.85 (swept 0.60 / 0.98) | assumption: own listed numbers that reach the facility |
-| `phone_shared_min` | 3 | assumption; the app's shared-number warning threshold |
-| `open_now_p` | 0.95 with a 24x7 claim (derived/v2 `is_24x7`), else 0.60 (swept 0.80/0.40 and 0.99/0.85) | assumption (#92) |
-| `accept_p` | emergency 0.90, planned 0.75 (swept 0.70/0.50 and 0.98/0.95) | assumption |
-| `exists` | Bernoulli(existence_score); 0.90 if missing | data; fallback assumed |
-| `no_mention_outside_frame_p` | 0.05 | assumption: no DEV label covers these pairs |
-| `k_cell`, `k_service` | 4, 4 (effective n) | assumption: Beta shrinkage of thin label cells |
-| `wrong_yes_p` | 0.10 (swept 0.00 / 0.30): P(the phone says yes, given it cannot treat) | assumption |
-| `wrong_no_p` | 0.05: P(the phone says no, given it could treat) | assumption |
-| `call_minutes` | 5 | assumption |
-| `give_up_minutes` | 480 | assumption |
-| treatment window | trauma 60 min (kb/pathways `major_trauma` stabilise, itself assumed); dialysis 120 min (engine `WINDOW` for scheduled care) | stub world |
-| `has_data_p`, `has_signal_p` | 0.80, 0.90 | assumption (stub world only) |
-| `report_k` and report weights | 4; phone yes/no 0.5, arrival 1, closed or refused 0.25 | assumption (future work) |
+- `world.cases(seed, states, n)` rows have exactly the `Case` fields.
+- Baselines: `policies_baseline.POLICIES[name](case_dict, ctx)` with `ctx = policies_baseline.context()`.
+- App policies: `policies_app.POLICIES[name].choose(Case(**case_dict), {"app": AppAdapter()})` returns `Step`s;
+  `run.app_steps` turns them into step dicts.
+- `execute.run_case(case_dict, step_dicts, execute.index_truth(truth), listed, knobs)` returns the event rows;
+  `execute.execute(cases, steps, truth, scenario=, policy=, run_id=, knobs=)` does the same for a whole case table.
+- Event log columns: `run_id, scenario, seed, policy, case_id, step, kind, facility_id, t_min, outcome`; `t_min`
+  is minutes since the case started.
 
 ## Files
 
 | File | Owner | What |
 | --- | --- | --- |
-| `interface.py`, `assumptions.py` | shared | types, contract, every constant |
-| `truth.py`, `policies_app.py`, `app_adapter.py`, `reports.py`, `run.py`, `tests/` | tm-AA2026 | truth, app policies, reports, runner |
-| `world.py`, `execute.py`, `policies_baseline.py` | tm-Art4v or the lead | not yet written |
-| `_stub_execute.py`, `_stub_baselines.py` | temporary | stand-ins until the three above land; delete then |
+| `world.py` | lead | cases, truth per scenario (S0-high/S0-low, S1-S3), listing, knobs |
+| `execute.py` | lead | the step loop, the only reader of the truth |
+| `policies_baseline.py` | lead | nearest, nearest + call first, best on paper |
+| `interface.py` | shared | the contract |
+| `policies_app.py`, `app_adapter.py` | tm-AA2026 | the app as a policy, via the shipped engine and state packs |
+| `run.py` | tm-AA2026 | runner, metrics, seed-bootstrap intervals, knob sweep |
+| `replay.py`, `replay_template.html` | tm-AA2026 | one patient, the policies side by side (local HTML) |
+| `reports.py`, `assumptions.py` | tm-AA2026 | field reports and their constants (future work) |
+| `tests/` | both | world, executor, baselines, policies, runner, replay |

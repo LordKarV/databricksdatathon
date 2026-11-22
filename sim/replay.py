@@ -21,7 +21,9 @@ SHOWN = ["app", "nearest_call_first", "best_on_paper"]  # the default three pane
 LABEL = {"app": "Referral Saathi (as shipped)", "app_offline": "Referral Saathi, offline pack",
          "nearest": "Nearest listing", "nearest_call_first": "Nearest + call first",
          "best_on_paper": "Best on paper (highest score in state)"}
-SCENARIO = {"S0": "S0: listing text says nothing (offers at base rate)",
+SCENARIO = {"S0-high": "S0-high: listing text says nothing, high base rate (a bound; read with S0-low)",
+            "S0-low": "S0-low: listing text says nothing, low base rate (a bound; read with S0-high)",
+            "S0": "S0: listing text says nothing (offers at base rate)",
             "S1": "S1: the model is right (best case for the app)",
             "S2": "S2: from DEV web labels",
             "S3": "S3: data as bad as the audit says"}
@@ -70,13 +72,13 @@ def payload(sim_out: Path, run: str, n: int) -> dict:
             t = pd.read_parquet(path)
             t = t[t.unique_id.isin(fids)]
             truth[scen] = {f"{r.unique_id}|{r.service}": [bool(r.offers), bool(r.phone_ok), bool(r.exists),
-                                                           round(float(r.true_lat), 4), round(float(r.true_lon), 4)]
+                                                           _coord(r.true_lat), _coord(r.true_lon)]
                            for r in t.itertuples()}
     states = sorted(chosen.state.unique())
     pins = pd.read_parquet(ROOT / "derived/v1/pin_gazetteer.parquet", columns=["state", "lat", "lon"]).dropna()
     pins = pins[pins.state.isin(states)]
     steps = {}
-    for (scen, cid, pol), g in ev.sort_values(["step", "t_min"]).groupby(["scenario", "case_id", "policy"]):
+    for (scen, cid, pol), g in ev.groupby(["scenario", "case_id", "policy"], sort=False):  # keeps the log order
         steps.setdefault(f"{scen}|{cid}", {})[pol] = [[int(r.step), r.kind, r.facility_id or "", float(r.t_min),
                                                        str(r.outcome)] for r in g.itertuples()]
     return {
@@ -93,6 +95,11 @@ def payload(sim_out: Path, run: str, n: int) -> dict:
         "pins": [[round(a, 3), round(b, 3)] for a, b in zip(pins.lat, pins.lon, strict=True)],
         "summary": summary(events, cases),
     }
+
+
+def _coord(x: float) -> float | None:
+    """A true point, or None when the facility has no findable point (S3 without an alternative)."""
+    return None if pd.isna(x) else round(float(x), 4)
 
 
 def summary(events: pd.DataFrame, cases: pd.DataFrame) -> dict:

@@ -2,8 +2,8 @@
 
 A report is what a health worker could observe and send back, never the truth itself:
 - phone_yes / phone_no: what the facility said on the phone (it can be wrong);
-- treated, or turned away with the reason the worker saw: not_found (nothing at the map point), no_service (staff
-  say they do not do it), closed, refused.
+- treated, or turned away with the reason the worker saw: not_found (nothing at the map point; the executor's
+  not_there), no_service (staff say they do not do it), closed, refused.
 No-answer calls are reported too, but say nothing about the service.
 
 Status (owner's decision on #92): the "app + reports" policy and these network outputs are future work, left out of
@@ -29,6 +29,7 @@ def observation(kind: str, outcome: str) -> str | None:
     if kind == "treated":
         return "treated"
     if kind == "turned_away":
+        outcome = "not_found" if outcome == "not_there" else outcome
         return outcome if outcome in OBSERVATIONS else None
     return None
 
@@ -62,7 +63,8 @@ def aggregate(reports: pd.DataFrame, a: Assumptions = DEFAULT) -> pd.DataFrame:
 def district_summary(events: pd.DataFrame, cases: pd.DataFrame) -> pd.DataFrame:
     """Per (scenario, policy, state, district, service): cases, treated in window, nothing in reach (no options)."""
     first_treated = events[events.kind == "treated"].groupby(["scenario", "seed", "policy", "case_id"]).t_min.min()
-    none = events[(events.kind == "gave_up") & (events.outcome == "no_options")]
+    # no_options_left at step 0: the policy had no option at all
+    none = events[(events.kind == "gave_up") & (events.outcome == "no_options_left") & (events.step == 0)]
     per = events[["scenario", "seed", "policy", "case_id"]].drop_duplicates().merge(cases.drop(columns="seed"),
                                                                                     on="case_id")
     per = per.join(first_treated, on=["scenario", "seed", "policy", "case_id"])

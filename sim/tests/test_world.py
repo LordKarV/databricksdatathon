@@ -56,11 +56,26 @@ def test_s2_reproduces_the_dev_label_rates():
             assert abs(g.offers.mean() - r) < 4 * (r * (1 - r) / len(g)) ** 0.5 + 0.01, (service, stratum)
 
 
-def test_s0_ignores_the_text():
-    t = _with_strata(world.truth_table("S0", 6), "trauma_emergency")
+@pytest.mark.parametrize("scenario", ["S0-high", "S0-low"])
+def test_s0_ignores_the_text(scenario):
+    t = _with_strata(world.truth_table(scenario, 6), "trauma_emergency")
     priv = t[t.operator == "private"]
     by = priv.groupby("stratum").offers.mean()
     assert abs(by["strong"] - by["no_mention"]) < 0.05
+
+
+def test_s0_bounds():
+    """S0-high is confirmed of decided DEV pairs ("S0" is its alias); S0-low also counts no_info as not offered, so
+    every cell's rate is lower, and the shared uniforms make S0-low offers a subset wherever the rate is lower."""
+    pd.testing.assert_frame_equal(world.truth_table("S0", 6), world.truth_table("S0-high", 6))
+    hi, lo = world.s0_rates("high"), world.s0_rates("low")
+    both = hi.index.intersection(lo.index)
+    assert len(both) and (lo[both] < hi[both]).all()
+    th, tl = world.truth_table("S0-high", 6), world.truth_table("S0-low", 6)
+    assert (th.exists == tl.exists).all() and (th.phone_ok == tl.phone_ok).all()
+    assert tl.offers.mean() < th.offers.mean() and not (tl.offers & ~th.offers).any()
+    with pytest.raises(ValueError):
+        world.s0_rates("mid")
 
 
 def test_s3_breaks_attribution_and_moves_map_points():
