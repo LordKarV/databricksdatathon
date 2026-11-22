@@ -15,7 +15,8 @@ Writes under --out (default sim/out, git-ignored), every parquet with the SIMULA
 - sensitivity.parquet (--sweep, the default): app minus nearest_call_first, treated within window, with each of
   world.KNOBS at low and high (the others at mid).
 Policies in the minimum run: app, app_offline, nearest, nearest_call_first, best_on_paper. app_plus_reports is
-future work (--with-reports writes network data only).
+future work (--with-reports writes network data only). app_before_101 (the emergency order before PR #101) runs only
+when named in --policies.
 """
 from __future__ import annotations
 
@@ -31,7 +32,7 @@ import pandas as pd
 from sim import execute, policies_baseline, world
 from sim.app_adapter import AppAdapter, ensure_built
 from sim.interface import EVENT_COLUMNS, OUT, SERVICES, STATES, TRUTH_COLUMNS, Case
-from sim.policies_app import FUTURE
+from sim.policies_app import DIAGNOSTIC, FUTURE, context
 from sim.policies_app import POLICIES as APP_POLICIES
 
 LABEL = "SIMULATED - not field results"
@@ -74,15 +75,20 @@ def assert_no_truth(ctx: Any) -> None:
             assert_no_truth(v)
 
 
-def policy_table(app: AppAdapter) -> dict[str, Chooser]:
-    """Every policy in the run as case_dict -> step dicts. App policies see the app; baselines the public listing."""
-    app_ctx = {"app": app}
+def policy_table(app: AppAdapter, names: list[str] | None = None) -> dict[str, Chooser]:
+    """Policies as case_dict -> step dicts: the minimum run, or `names` (which may add DIAGNOSTIC ones). App policies
+    see the app; baselines the public listing."""
+    app_ctx = context(app)
     base_ctx = policies_baseline.context()
     assert_no_truth(app_ctx)
     assert_no_truth(base_ctx)
-    out: dict[str, Chooser] = {name: (lambda c, p=pol: app_steps(p, c, app_ctx)) for name, pol in APP_POLICIES.items()}
+    apps = APP_POLICIES | DIAGNOSTIC
+    out: dict[str, Chooser] = {name: (lambda c, p=pol: app_steps(p, c, app_ctx)) for name, pol in apps.items()}
     out |= {name: (lambda c, f=fn: f(c, base_ctx)) for name, fn in policies_baseline.POLICIES.items()}
-    return out
+    names = names or [*APP_POLICIES, *policies_baseline.POLICIES]
+    if bad := sorted(set(names) - set(out)):
+        raise SystemExit(f"unknown policies {bad}; known: {sorted(out)}")
+    return {n: out[n] for n in names}
 
 
 def choose_all(cases: pd.DataFrame, policies: dict[str, Chooser]) -> dict[str, dict[str, StepDicts]]:
@@ -196,15 +202,17 @@ def compare(oc: pd.DataFrame, a: str, b: str, n_boot: int = 500, seed: int = 92)
 # ---------------------------------------------------------------------------------------------------------------------
 def simulate(scenarios: list[str], seeds: list[int], n_cases: int, states: list[str], services: list[str],
              out: Path = OUT, n_boot: int = 500, sweep: bool = True, with_reports: bool = False,
-             run_id: str | None = None, verbose: bool = True) -> dict[str, Any]:
-    """n_cases is per state x service x seed (world.cases n)."""
+             run_id: str | None = None, verbose: bool = True, policies: list[str] | None = None) -> dict[str, Any]:
+    """n_cases is per state x service x seed (world.cases n). policies: default the minimum run."""
     t_start = time.time()
     states = [s.upper() for s in states]
     scenarios = list(dict.fromkeys(world.S0_ALIAS.get(s, s) for s in scenarios))
     if bad := sorted(set(scenarios) - set(SCENARIOS)):
         raise SystemExit(f"unknown scenarios {bad}; sim/world.py has {list(SCENARIOS)}")
     ensure_built(states)
-    policies = policy_table(AppAdapter())
+    if sweep and policies and not set(COMPARE) <= set(policies):
+        raise SystemExit(f"the sweep compares {COMPARE}: include both in policies, or pass sweep=False")
+    choosers = policy_table(AppAdapter(), policies)
     listed = execute._listed()
     run_id = run_id or f"min_{len(seeds)}x{n_cases}"
     configs = sweep_configs() if sweep else []
@@ -214,7 +222,7 @@ def simulate(scenarios: list[str], seeds: list[int], n_cases: int, states: list[
     for seed in seeds:
         cases = make_cases(seed, n_cases, states, services)
         case_all.append(cases)
-        steps = choose_all(cases, policies)
+        steps = choose_all(cases, choosers)
         pair = {k: steps[k] for k in COMPARE}
         for sc in scenarios:
             tdf = world.truth_table(sc, seed, world.MID)
@@ -324,11 +332,13 @@ def main() -> int:
                     help="knob sweep over world.KNOBS (default on)")
     ap.add_argument("--with-reports", action="store_true", help="future work: also write network data")
     ap.add_argument("--run-id")
+    ap.add_argument("--policies", help="comma-separated; default the minimum run (app_before_101 only when named)")
     a = ap.parse_args()
     if a.with_reports:
         print(f"note: {', '.join(FUTURE)} is future work; --with-reports writes network data only")
     simulate(a.scenarios.split(","), list(range(a.seed_start, a.seed_start + a.seeds)), a.cases,
-             a.states.split(","), a.services.split(","), a.out, a.boot, a.sweep, a.with_reports, a.run_id)
+             a.states.split(","), a.services.split(","), a.out, a.boot, a.sweep, a.with_reports, a.run_id,
+             policies=a.policies.split(",") if a.policies else None)
     return 0
 
 

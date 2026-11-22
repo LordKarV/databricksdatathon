@@ -1,7 +1,9 @@
-# Referral Saathi app skeleton
+# Referral Saathi app
 
-FastAPI serving one plain HTML page, a service worker and stub JSON (issue #5). No model and no Databricks reads
-yet: every answer is invented sample data, labelled "(sample)" and `meta.stub = true`.
+FastAPI serving one plain HTML page and a service worker. Answers come from model v2 (`derived/v2`), built into
+`app/facts/out` at deploy time by `facts/build.py` and served by `facts/engine.py` (`meta.stub = false`). On
+Databricks the app also calls the serving endpoints (free text, note photo) and the SQL warehouse (call outcomes).
+The original stub contract (issue #5) survives only as a test fixture in `stub_data.py`.
 
 ## Run locally
 
@@ -19,7 +21,7 @@ Open http://127.0.0.1:8000/. Chrome DevTools > Sensors can fake a GPS point.
 | --- | --- |
 | `app.py` | FastAPI: `/`, shell files (allowlist), `/api/ping`, `POST /api/plan`, dev alias `GET /api/recommend` |
 | `main.py` | Entry point: uvicorn on `DATABRICKS_APP_PORT` (default 8000), access log off |
-| `stub_data.py` | Placeholder responses in the proposed contract shape; the lead replaces `recommend_stub` |
+| `stub_data.py` | The issue #5 stub contract, kept as a test fixture; real answers come from `facts/engine.py` |
 | `app.yaml` | Databricks Apps command: `python main.py` |
 | `static/index.html`, `app.js`, `app.css` | One page, hash routes, no framework |
 | `static/sw.js` | Network first; cached shell on network error or status >= 500; API never cached |
@@ -78,14 +80,13 @@ Response:
                                "first_name", "minutes_vs_first"},
   "time_window": {"window_min", "first_outside"},
   "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
-  "meta": {"stub": true, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
+  "meta": {"stub": false, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
 }
 ```
 
-### `POST /api/area` (Area depth, S11/S12; stub until #11)
+### `POST /api/area` (Area depth, S11/S12)
 
-Body `{service, lat, lon}` (0.01 deg). Every number below is MODEL-supplied (area_metrics and ten-call lists, tier 3);
-the stub returns invented sample values.
+Body `{service, lat, lon}` (0.01 deg). Every number below comes from model v2 through `facts/engine.py` `area()`.
 
 ```
 {
@@ -428,6 +429,16 @@ people. Every report is a fixed choice, and every number it adds is shown with i
   - The plan is rebuilt from the adjusted scores (`Engine.plan(..., scores)`): the ranking, why_first_text,
     why_not, the abstention, say_to_family, the call-ahead questions, the family card and its read-aloud all use
     the adjusted p and band. p_lo and p_hi move by the same logit shift, not by the posterior's own interval.
+- **Tie-break from health-worker reports** (#86; `engine.tied_prefix`, `field._tie_row`).
+  - Only after the Field reports term, only for profiles outside `NEAREST_FIRST` (urgent NICU, scheduled
+    dialysis, planned MRI and heart surgery; never the emergency order).
+  - Tied: the leading options (at most 3) are in the same band, their shown p differ by at most 0.05 and their
+    travel by at most 10 min, for every pair. Only those are reordered; nothing else moves.
+  - Value per option: `field.net`, the term's own recency-weighted counts (accepted + phone yes at half weight -
+    "does not offer"; temporary reasons never count), from the same cached aggregates. Fewer than 2 reporters
+    count 0. Equal values keep the evidence-and-time order.
+  - Shown only on the why page of the tied options, as the row "Tie broken by: health-worker reports" (with
+    "(simulated for the demo)" for demo reports), payload `tie_break`. Cards keep only the field line.
 - **Never waits on the warehouse.** `/api/plan` and `/api/recommend` call
   `field.apply_field(plan, field.aggregates(wait=False), now, eng)`. One `GROUP BY` query is cached for 60 s and
   refreshed in a background thread, because a stopped warehouse can take 30 s to answer. The first answer after

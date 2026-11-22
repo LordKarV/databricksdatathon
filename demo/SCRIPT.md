@@ -17,12 +17,15 @@ human-checked."
 mic: "[spoken phrase]". "Speech becomes text on the Databricks App itself; the audio is never stored. It asks back,
 in Hindi, 'accident or injury?', and she taps yes. Danger words like heavy bleeding put Call 108 on top."
 
-**0:35 the answer.** "First choice and two backups, each saying in words how sure we are. First is Sub Divisional
-Hospital Pusa, about 19 minutes away, marked call first. In an emergency the nearest plausible place comes first.
-If Pusa says no, she calls Miracare, rated Likely, 15 minutes farther."
+**0:35 the answer.** "In an emergency the app says: call the nearest place that plausibly treats this first.
+Here that is the government Sub Divisional Hospital Pusa, 19 minutes away. Its listing does not confirm trauma
+care, and the card says so: call first. If they say no, Miracare, 34 minutes away and Likely, is next. In our
+simulation, this order reached care in time more often than ranking by evidence alone; a 'no' on the phone
+costs five minutes, a wasted trip costs the golden hour."
 
-**0:55 the route.** "Going straight to Ganpati Hospital takes 80 minutes and misses the 60-minute window. Stopping
-first at Pusa gives first care in about 19 minutes."
+**0:55 the route.** "Going straight to Ganpati Hospital takes 80 minutes and misses the 60-minute window.
+Stopping first at Sub Divisional Hospital Pusa gives first care in about 19 minutes." [Read the route sentence
+off the screen on the day; it is built from the live plan.]
 
 **1:10 why and how.** Open Pusa's why page. "Its own sentences and source page, whether its phone is shared,
 whether its map point agrees with its PIN, here a warning, and how often listings like this checked out. Nothing is

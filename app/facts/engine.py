@@ -37,6 +37,24 @@ RANK_RULE = {
 WINDOW = {"emergency": 60, "urgent": 60, "scheduled": 120, "planned": 240}
 OWN_EVIDENCE = {"strong", "moderate"}
 UNLIKELY_GRADES = {"attributed_elsewhere", "counter_evidence"}
+# Tie-break from health-worker reports (#86, lead's rule): leading options in the same band whose shown p differ by
+# at most TIE_P and whose travel differs by at most TIE_TRAVEL_MIN are tied; only those are reordered, and only for
+# profiles outside NEAREST_FIRST (the emergency order is untouched).
+TIE_P, TIE_TRAVEL_MIN = 0.05, 10
+
+
+def tied_prefix(rows: list[tuple[float, float, str]]) -> int:
+    """How many leading rows (p, minutes, band), in rank order, tie with each other; 0 when fewer than two do.
+    Every pair in the group must tie, so the group never chains across a gap larger than the rule allows."""
+    n = 1
+    while n < len(rows):
+        grp = rows[: n + 1]
+        ps, ms = [round(r[0], 2) for r in grp], [r[1] for r in grp]
+        if (len({r[2] for r in grp}) > 1 or max(ps) - min(ps) > TIE_P + 1e-9
+                or max(ms) - min(ms) > TIE_TRAVEL_MIN):
+            break
+        n += 1
+    return n if n > 1 else 0
 
 def nearest_plausible(rows: list, window: float = math.inf) -> list:
     """Rows (p, minutes, ...) in emergency order: repeatedly the highest p among the rows within TIE_MIN of the
@@ -433,11 +451,16 @@ class Engine:
 
     # ---------- /api/plan ----------
     def plan(self, service: str, lat: float, lon: float, accuracy_m: float | None, source: str,
-             scores: dict | None = None) -> dict:
+             scores: dict | None = None, tiebreak: dict[str, float] | None = None) -> dict:
         """scores: {facility_id: score() tuple} replacing score() for those facilities, so the ranking, the
-        abstention and every sentence below are built from the same p and band the card shows."""
+        abstention and every sentence below are built from the same p and band the card shows.
+        tiebreak: {facility_id: value}, higher first, used only among tied leading options (tied_prefix); missing
+        facilities count 0. The payload then gains tie_break when the values told the tied options apart."""
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pool, unlikely = self._ranked(service, lat, lon, scores=scores)
+        tie = None
+        if tiebreak and info["profile"] not in NEAREST_FIRST:
+            pool, tie = self._break_tie(service, pool, scores, tiebreak)
         chosen = pool[:N_OPTIONS]
         # Never hide a confirmed listing in reach: if none made the top slots, it takes the last one.
         best_likely = next((r for r in pool if r[4] == "likely"), None)
@@ -449,7 +472,8 @@ class Engine:
             options[0]["why_first_text"] = RANK_RULE["nearest_plausible"]
         elif len(options) > 1:
             nearest = min(range(len(chosen)), key=lambda k: chosen[k][1])
-            if nearest != 0:
+            # After a tie-break the first need not have the stronger evidence; the sentence is then left out.
+            if nearest != 0 and options[0]["p"] > options[nearest]["p"]:
                 n, o = options[nearest], options[0]
                 options[0]["why_first_text"] = (
                     f"{n['name']} is nearer (about {n['travel']['minutes']} min), but this listing's evidence is "
@@ -480,7 +504,21 @@ class Engine:
                                                                    window) if nearest_first else None},
             "public_option": public if first_outside else None,
             "meta": self._meta(),
+            **({"tie_break": tie} if tie else {}),
         }
+
+    def _break_tie(self, service: str, pool: list, scores: dict | None, tiebreak: dict[str, float]) -> tuple:
+        """(pool with its tied leading options reordered by tiebreak, {facility_ids, moved, rule} or None).
+        Stable: equal values keep the evidence-and-time order. Nothing outside the tied group moves."""
+        head = pool[:N_OPTIONS]
+        fids = [self._f("id", r[2].fi) for r in head]
+        k = tied_prefix([(self._scored(f, service, scores)[1], r[1], r[4]) for f, r in zip(fids, head, strict=True)])
+        if len({tiebreak.get(f, 0.0) for f in fids[:k]}) < 2:  # no tie, or the values cannot tell them apart
+            return pool, None
+        order = sorted(range(k), key=lambda j: -tiebreak.get(fids[j], 0.0))
+        return [pool[j] for j in order] + pool[k:], {
+            "facility_ids": [fids[j] for j in order], "moved": order != list(range(k)),
+            "p_within": TIE_P, "minutes_within": TIE_TRAVEL_MIN}
 
     # ---------- "Why not the nearest?" (#86) ----------
     def _why_not_clauses(self, service: str, r: tuple, top: tuple) -> list[tuple[str, str, dict]]:
