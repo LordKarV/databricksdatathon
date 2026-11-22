@@ -468,8 +468,6 @@ function similarHtml(o, P) {
     ? th('num.similar', {lo: F(P + '.p_lo', pc(o.p_lo), 'pct'), hi: F(P + '.p_hi', pc(o.p_hi), 'pct')})
     : th('num.range', {lo: N(P + '.p_lo', o.p_lo.toFixed(2)), hi: N(P + '.p_hi', o.p_hi.toFixed(2))});
 }
-// A chance shown as a whole percent, capped: never "100%" or "1.00" from a product of model chances (#121).
-const capPct = x => (x > 0.99 ? ts('num.over99') : x < 0.01 ? ts('num.under1') : `${Math.round(100 * x)}%`);
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return th('track.none');
@@ -671,7 +669,7 @@ function routePlanHtml(r, P) {
     <ol class="stops-full">${stopGroups(r.stops).map(g => stopHtml(r, g, P)).join('')}</ol>
     ${t.minutes_to_definitive != null ? `<p>${th('route.totals', {min: N(P + '.totals.minutes_to_definitive', t.minutes_to_definitive),
       low: N(P + '.totals.low', t.low), high: N(P + '.totals.high', t.high), first: N(P + '.totals.p_first_care', t.p_first_care.toFixed(2)),
-      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p>` : ''}
+      treated: N(P + '.totals.p_treated', t.p_treated.toFixed(2))})}</p><p class="note">${th('route.totals_assume')}</p>` : ''}
     ${r.window_checks.map((c, j) => checkHtml(c, `${P}.window_checks.${j}`, true)).join('')}
     ${v ? `<p class="note vs-direct">${E(P + '.vs_direct.text', v.text)}
       ${v.what_would_change ? E(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
@@ -760,7 +758,8 @@ function answerPanel(p, o, i) {
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
     ${sureHtml(o, P)}
-    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>
+      <p class="note call-note">${th('call.number_note')}</p>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
     <p id="speak-note" class="note" aria-live="polite"></p>
@@ -833,13 +832,13 @@ function compareHtml(p) {
   }
   const opts = p.options;
   const P = i => `options.${i}`;
-  // At least one checks out (#121 item 3): capped at "over 99%" and stated with k; assumes independent failures.
-  const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
+  // #140 3e: band counts, not "chance at least one checks out" (a product of model scores that assumed
+  // independent failures). Each number is marked: k counts Likely options, n counts options.
+  const nLikely = opts.filter(o => o.band === 'likely').length;
   const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', ');
-  const which = opts.length > 1 ? th('num.chance_any', {k: F('options', opts.length, 'count')}) : th('num.chance_one');
   const head = `<p class="section">${th(state.patientHere ? 'cmp.here' : 'cmp.elsewhere')}</p>
     <p>${th('cmp.plan', {names})}</p>
-    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} ${th('num.independent')}</p>` : ''}`;
+    ${opts.length ? `<p>${th('cmp.likely_count', {k: F('options', nLikely, 'likely'), n: F('options', opts.length, 'count')})}</p>` : ''}`;
   const table = `<div class="compare-table table-scroll" tabindex="0" role="region" aria-label="${th('cmp.h')}"><table class="ledger"><caption>${th('cmp.caption', {label: labelF(p.query)})}</caption>
     <thead><tr><th scope="col">${th('cmp.row')}</th>${opts.map((o, i) => `<th scope="col">${N(P(i) + '.rank', o.rank)}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
     <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${th(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
