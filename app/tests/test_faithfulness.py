@@ -11,6 +11,7 @@ data-k="<kind>". This test then checks:
   "in 10 listings") and device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
+- the claim id is a hidden mark, never printed, and no derived/ path is printed (#121);
 - read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
   call-ahead screens (state.spoken, from static/speech.js) lists the payload path of every value it uses; each
   equals its field and is in the spoken text, and no other digit is spoken except 108 and 102.
@@ -57,7 +58,7 @@ STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
-    "Access now": "area.summary.access_now",
+    "Access now: a Likely listing in reach": "area.summary.access_now",
     "If calls confirm the listings": "area.summary.access_if_confirmed",
     "Calls could close": "area.summary.calls_could_close",
     "No public evidence of care": "area.summary.no_public_evidence",
@@ -392,6 +393,15 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
     return errs
 
 
+def raw_key_errs(name: str, payload: dict, text: str) -> list[str]:
+    """#121: the visible text (inner_text skips hidden marks) shows no claim id and no derived/ path."""
+    ids = {e["claim_id"] for o in payload["options"] for e in o["evidence"] if e.get("claim_id")}
+    ids |= {e["claim_id"] for r in (payload.get("itinerary") or {}).get("plans") or [] for s in r["stops"]
+            for e in s.get("evidence") or [] if e.get("claim_id")}
+    errs = [f"{name}: claim id {c} printed" for c in sorted(ids) if c in text]
+    return errs + ([f"{name}: a derived/ path printed"] if "derived/" in text else [])
+
+
 CARD_TEMPLATE_NUMBERS = {"108", "102", "24", "7", "1", "16"}  # 108/102 lines, "24x7", Hindi stop list, map zoom
 
 
@@ -426,6 +436,7 @@ def check_card(name: str, payload: dict, card: str, report: dict) -> list[str]:
 # ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
 PUBLIC_LABEL = "by public standard, not verified"
 WINDOW_LINE = "The best-evidenced option is about"
+NEAREST_LINE = "The first choice is already the nearest listing"
 WHY_NOT_CODES = {"contradicted", "no_quote", "weak_quotes", "outside_window", "farther", "missing", "evidence_kind",
                  "location", "shared_phone", "not_confirmed", "weaker"}
 
@@ -459,6 +470,8 @@ def check_why_not(payload: dict, shown: set[str]) -> list[str]:
                 errs.append(f"why_not.{k}: reason {code} does not match its fields {b} / band {w['band']}")
         if w["reason_code"] != w["basis"][0]["code"]:
             errs.append(f"why_not.{k}: reason_code is not the first basis")
+        if payload.get("first_is_nearest") and w["minutes_vs_first"] < 0:
+            errs.append(f"why_not.{k}: nearer than option 1, but first_is_nearest is set")
     c = payload.get("what_would_change")
     if c:
         for f in ("name", "minutes_vs_first"):
@@ -636,6 +649,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
+        errs += raw_key_errs("plan", payload, text)
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]
@@ -645,12 +659,18 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         shown_note = "The nearest verified" in page.inner_text("#main")
         if bool(far) != shown_note:
             errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
+        # #121: "Why not the nearest?" says plainly when option 1 is already the nearest listing
+        said = NEAREST_LINE in text
+        if said != bool(payload.get("first_is_nearest") and opts and (payload.get("why_not")
+                                                                       or payload.get("what_would_change"))):
+            errs.append(f"plan: first-is-nearest line shown={said}, first_is_nearest={payload.get('first_is_nearest')}")
         for i, o in enumerate(payload["options"]):
             page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
             page.wait_for_selector("#how")
             got = page.evaluate(COLLECT_JS)
             errs += check_screen(f"why/{o['rank']}", payload, got, report)
             errs += check_quotes(f"why/{o['rank']}", payload, got["items"], claims, report)
+            errs += raw_key_errs(f"why/{o['rank']}", payload, page.inner_text("#main"))
             spoken = spoken_on(page)
             errs += check_spoken(f"why/{o['rank']}", payload, spoken, i, report)
             if f"options.{i}.name" not in {f["path"] for f in spoken["en"]["fields"]}:
@@ -689,6 +709,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 got = page.evaluate(COLLECT_JS)
                 errs += check_screen(f"slip/{o['rank']}/{lang}", payload, got, report)
                 errs += check_quotes(f"slip/{o['rank']}/{lang}", payload, got["items"], claims, report)
+                errs += raw_key_errs(f"slip/{o['rank']}/{lang}", payload, page.inner_text("#main"))
                 with page.expect_download() as dl:  # Web Share is off in this context, so the card downloads
                     page.locator("#slip-card").click()
                 card = Path(dl.value.path()).read_text(encoding="utf-8")

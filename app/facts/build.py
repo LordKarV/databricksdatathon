@@ -406,6 +406,36 @@ def places() -> dict:
             "lat": col(g.lat, 3), "lon": col(g.lon, 3)}
 
 
+# validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
+# The LGD join (external/lgd_district_polygons/join_test.py) puts every India Post office in its LGD district polygon;
+# the file is git-ignored data, so without it the area view keeps each PIN's own district.
+LGD_PINS = ROOT / "data" / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
+NEAR_DEG = 0.01  # an office this close (lat + lon degrees, about 1 km) stands for the PIN point's own polygon
+
+
+def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
+    """{pin: [district, state]} where a PIN's point lies in another district than the gazetteer files it under: the
+    LGD district of an office within NEAR_DEG of the point, in the gazetteer's spelling (the district most offices
+    of that LGD polygon carry). Only disagreements are kept; a point with no office that close keeps its own."""
+    if not LGD_PINS.is_file():
+        return {}
+    o = pd.read_parquet(LGD_PINS, columns=["pincode", "district", "statename", "latitude", "longitude", "dist_lgd"])
+    o = o.assign(lat=pd.to_numeric(o.latitude, errors="coerce"), lon=pd.to_numeric(o.longitude, errors="coerce"))
+    o = o.dropna(subset=["district", "statename", "lat", "lon", "dist_lgd"])
+    o = o[o.dist_lgd > 0]
+    name = o.groupby("dist_lgd")[["district", "statename"]].agg(lambda c: c.mode()[0])
+    pt = pd.DataFrame({"pincode": p["pin"], "plat": p["lat"], "plon": p["lon"], "own": list(zip(p["district"], p["state"], strict=True))})
+    m = o.merge(pt, on="pincode")
+    m = m.assign(d=(m.lat - m.plat).abs() + (m.lon - m.plon).abs())
+    m = m[m.d <= NEAR_DEG].sort_values("d").drop_duplicates("pincode")
+    out = {}
+    for pin, code, own in zip(m.pincode, m.dist_lgd, m.own, strict=True):
+        where = tuple(name.loc[code])
+        if where != own:
+            out[str(pin)] = list(where)
+    return out
+
+
 def scores_source() -> str:
     """Which scores the app serves, in words a judge reads on the How page and in the build log (#86 item 2)."""
     if not V2.is_file():
@@ -460,6 +490,11 @@ def main() -> None:
     (out / "facts.sha").write_text(facts_hash + "\n")
     pl = places()
     (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
+    # Outside facts.json and its hash: the file comes from git-ignored data, so a derived/v1 rebuild still matches.
+    moved = pin_districts(facts["pins"])
+    (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
+    print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
+          if moved else f"pin districts: {LGD_PINS.relative_to(ROOT)} not found, area view uses each PIN's own district")
     print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
     print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs, "

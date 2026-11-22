@@ -452,9 +452,12 @@ function quoteFlagsHtml(e, P) {
       `${f.place ? `: ${F(Q + '.place', f.place)}` : ''}${f.km != null ? `, ${F(Q + '.km', f.km, 'num')} km away` : ''}</span>`;
   }).join('');
 }
+// A quote's claim id stays in the page (marked, for the evidence ledger and the faithfulness test) but is not printed:
+// "61731339:proc:3" means nothing to a family (#121).
+function claimHtml(path, id) { return `<span hidden>${F(path, id)}</span>`; }
 function quoteHtml(e, P) {
   return `"${F(P + '.quote', e.quote)}" <span class="tag">${F(P + '.field', e.field)}</span>` +
-    ` <span class="tag">${F(P + '.claim_id', e.claim_id)}</span>${quoteFlagsHtml(e, P)}`;
+    `${claimHtml(P + '.claim_id', e.claim_id)}${quoteFlagsHtml(e, P)}`;
 }
 // "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
 // engine, plus the one phone call that would change the answer. Minutes are relative to the first choice.
@@ -498,17 +501,25 @@ function whyNotHtml(p) {
     return `<li><strong>${F(W + '.name', w.name)}</strong>${w.option_rank ? `, option ${F(W + '.option_rank', w.option_rank, 'num')}` : ''}:
       ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
   }).join('');
+  // #121: when option 1 is already the nearest, say so; the rows are then farther places, not nearer alternatives.
+  const nearest = p.first_is_nearest && p.options.length
+    ? `<p class="why-not-nearest">The first choice is already the nearest listing
+      that offers ${F('query.service_label.en', p.query.service_label.en)}.${rows.length ? ' The places below are farther away.' : ''}</p>` : '';
   return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
-    ${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
+    ${nearest}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
     <p class="small muted">This describes our data, not the facility.</p></section>`;
 }
 function card(o, label, i) {
   const P = `options.${i}`;
+  const fb = state.plan.itinerary && state.plan.itinerary.fallback;  // route only if card 1 cannot treat (#126)
   const q = o.evidence[0];
   return `<article class="card" aria-labelledby="opt-${o.rank}">
     ${o.call_first ? '<p class="call-first">Call first</p>' : ''}
     <p>${F(P + '.rank', o.rank, 'num')}. ${bandHtml(o, P)}</p>
     <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
+    ${o.route_reason ? `<p class="small">${F(P + '.route_reason', o.route_reason)}</p>` : ''}
+    ${i === 0 && fb ? `<p class="small"><strong>${F('itinerary.fallback.ask', fb.ask)}</strong></p>
+      <p class="small">${F('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
@@ -589,7 +600,7 @@ function stopHtml(r, g, P) {
       ${s.question ? `<br>Ask: "${F(S + '.question', s.question)}"` : ''}
       <details class="stop-ev"><summary>${F(S + '.n_evidence', s.n_evidence, 'num')} evidence line${s.n_evidence === 1 ? '' : 's'}</summary>
         ${s.evidence.length ? `<ul class="quotes">${s.evidence.map((e, j) => `<li>"${F(`${S}.evidence.${j}.quote`, e.quote)}"
-          <span class="tag">${F(`${S}.evidence.${j}.claim_id`, e.claim_id)}</span></li>`).join('')}</ul>
+          ${claimHtml(`${S}.evidence.${j}.claim_id`, e.claim_id)}</li>`).join('')}</ul>
           ${s.n_evidence > s.evidence.length ? '<p class="small muted">The strongest are quoted; the rest are in the listing.</p>' : ''}`
           : `<p class="small muted">${s.n_evidence ? 'The sentences are not in the data on this server.' : 'No listing sentence in our data for this stop.'}</p>`}
       </details>
@@ -701,17 +712,19 @@ function planScreen() {
   if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
   if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
   let body;
+  // When the route is only the fallback (#126), it goes below the options, not above the fold.
+  const fb = p.itinerary && p.itinerary.fallback, route = fb ? '' : routeHtml(p), after = fb ? routeHtml(p) : '';
   if (p.abstain) {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
-      ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
-      ${whyNotHtml(p)}
+      ${route}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${whyNotHtml(p)}${after}
       ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
+    body = route + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p) + after;
   }
   state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
   return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;
@@ -772,7 +785,7 @@ function gapHtml(a) {
       PIN areas has a confirmed option within ${W} min.</p>` : ''}
     ${emergencyNumbers(a)}
     <p>${G('district_claiming')} listings in ${F('area.area.district', a.area.district)} say they offer ${L};
-      ${G('district_confirmed')} of them rated Likely.</p>
+      ${G('district_confirmed')} of them rated Likely. The PIN areas below also count listings in other districts.</p>
     <ul class="gap">
       <li><strong>Covered:</strong> ${G('covered')} PIN areas have a Likely option within ${W} min.</li>
       <li><strong>Care gap, not confirmed:</strong> ${G('not_confirmed')} PIN areas have listings within ${W} min that
@@ -819,9 +832,8 @@ function areaHtml(a) {
     return r.first
       ? `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td>${F(R + '.first.name', r.first.name)}</td>
           <td>${r.backup ? F(R + '.backup.name', r.backup.name) : 'none'}</td>
-          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td>
-          <td>${F(R + '.call_first', r.call_first)}</td></tr>`
-      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="4"><span aria-hidden="true">&#9888;</span>
+          <td>${F(R + '.travel.low', r.travel.low, 'num')}-${F(R + '.travel.high', r.travel.high, 'num')}</td></tr>`
+      : `<tr><th scope="row">${F(R + '.pin', r.pin, 'num')}</th><td colspan="3"><span aria-hidden="true">&#9888;</span>
           No option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min;
           ${r.nearest_km != null ? `nearest ${F(R + '.nearest_km', r.nearest_km, 'num')} km` : 'none with its own sentence in our data'}${r.public ? `.<br>Public hospital:
           ${F(R + '.public.name', r.public.name)} (${F(R + '.public.label', r.public.label)}),
@@ -842,8 +854,9 @@ function areaHtml(a) {
       ${F('area.summary.n_pins', S.n_pins, 'num')} PIN areas.</p>
     <p><strong>${F('area.summary.n_without_option', S.n_without_option, 'num')} of ${F('area.summary.n_pins', S.n_pins, 'num')}
       PIN areas: no option with public evidence within ${F('area.area.window_min', a.area.window_min, 'num')} min.</strong></p>
-    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the area</caption><tbody>
-      <tr><th scope="row">Access now</th><td class="num">${n('summary.access_now')}</td></tr>
+    <table><caption>Access to ${F('area.query.service_label.en', a.query.service_label.en)}, share of the sampled PIN areas,
+      counting listings in any district within ${F('area.area.window_min', a.area.window_min, 'num')} min</caption><tbody>
+      <tr><th scope="row">Access now: a Likely listing in reach</th><td class="num">${n('summary.access_now')}</td></tr>
       <tr><th scope="row">If calls confirm the listings</th><td class="num">${n('summary.access_if_confirmed')}</td></tr>
       <tr><th scope="row">Calls could close</th><td class="num">${n('summary.calls_could_close')}</td></tr>
       <tr><th scope="row">No public evidence of care</th><td class="num">${n('summary.no_public_evidence')}</td></tr>
@@ -851,12 +864,13 @@ function areaHtml(a) {
     <p>${F('area.caveat', a.caveat)}</p>
     ${gapHtml(a)}
     <div class="table-scroll" tabindex="0" role="region" aria-label="Plan per PIN area"><table><caption>Plan per PIN area</caption>
-      <thead><tr><th scope="col">PIN</th><th scope="col">First choice</th><th scope="col">Backup</th><th scope="col">Minutes</th><th scope="col">Call first</th></tr></thead>
+      <thead><tr><th scope="col">PIN</th><th scope="col">First choice: call first</th><th scope="col">Backup</th><th scope="col">Minutes</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
     <h2 id="ten-calls">Calls that close the most of the gap</h2>
-    <div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
+    ${calls ? `<div class="table-scroll" tabindex="0" role="region" aria-label="Ten calls"><table><caption>Ten calls, most gain first. A yes on the phone is shown, the score does not change.</caption>
       <thead><tr><th scope="col">#</th><th scope="col">Facility</th><th scope="col">Phone</th><th scope="col" class="num">Areas</th><th scope="col" class="num">Access gain</th></tr></thead>
-      <tbody>${calls}</tbody></table></div>
+      <tbody>${calls}</tbody></table></div>`
+      : '<p>No call would close a gap here: every sampled PIN area either has a Likely listing in reach already or has no listing with its own sentence about this care within the time window.</p>'}
     <div class="row"><a class="btn" download="area_plan.csv" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">Download CSV</a>
       <button type="button" id="area-print">Print chart</button></div>
     ${a.meta && a.meta.stub ? '<p class="small muted">Sample area data from a stub; the model export replaces it.</p>' : ''}`;

@@ -261,13 +261,15 @@ def apply_field(plan_payload: dict, aggregates: dict, now: datetime, eng: Any = 
     if not found:
         return plan_payload
     loc = plan_payload["location"]
+    # The route's first stop keeps its lead (itinerary.lead_with_route, #121): it is listed first, so it stays first.
+    lead = {o["facility_id"]: o["route_reason"] for o in plan_payload["options"] if o.get("route_reason")}
     # The tie-break reads the same reports as the term: an option counts only with MIN_REPORTERS (net not None).
     fresh = eng.plan(service, loc["lat"], loc["lon"], loc["accuracy_m"], loc["source"],
                      {fid: scored for fid, (scored, _) in found.items()},
-                     {fid: info["net"] for fid, (_, info) in found.items() if info["net"] is not None})
+                     {fid: info["net"] for fid, (_, info) in found.items() if info["net"] is not None}, lead or None)
     # Every block built from the option order comes from the rebuilt plan (a reorder changes "if the first says no").
-    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "time_window",
-                                                    "rank_rule", "public_option")},
+    out = {**plan_payload, **{k: fresh[k] for k in ("abstain", "why_not", "what_would_change", "first_is_nearest",
+                                                    "time_window", "rank_rule", "public_option")},
            "options": [_annotate(o, (found.get(o["facility_id"]) or (None, None))[1]) for o in fresh["options"]]}
     if fresh.get("tie_break"):
         out["tie_break"] = _tie_row(fresh["tie_break"], fresh["options"], found)
