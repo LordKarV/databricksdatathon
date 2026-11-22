@@ -575,7 +575,15 @@ class Engine:
         count = {k: sum(r["gap"] == k for r in rows) for k in ("covered", "not_confirmed", "far", "no_claim")}
         public = sorted((self._f("name", i), self._f("id", i)) for i, ok in enumerate(self.fac["public_standard"])
                         if ok and self._f("district", i) == district and self._f("state", i) == state)[:5]
+        # A district with almost no listings is first a gap in our data (#86 item 3): say how many there are, and
+        # when none is a public-standard hospital, name the nearest one we have (or none within the radius).
+        listings = sum(self._f("district", i) == district and self._f("state", i) == state
+                       for i in range(len(self.fac["id"])))
+        nearest = None
+        if not public and rows:
+            nearest = self._public_pin(sum(r["lat"] for r in rows) / len(rows), sum(r["lon"] for r in rows) / len(rows))
         return {"pins_sampled": len(rows), "pins_in_district": n_total, "radius_km": RADIUS_KM,
+                "district_listings": listings, "public_nearest": nearest,
                 "district_claiming": sum(b != "unlikely" for b in bands),
                 "district_confirmed": sum(b == "likely" for b in bands), **count,
                 # named where the district shows a gap: hospitals the public standard expects to offer acute care

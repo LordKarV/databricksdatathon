@@ -211,9 +211,9 @@
   "offline_answer_dialysis-light": {
    "violations": [],
    "horizontal_scroll": false,
-   "options": 4,
-   "tel_links": 4,
-   "sms_links": 4
+   "options": 3,
+   "tel_links": 3,
+   "sms_links": 3
   },
   "offline_no_saved_pack-light": {
    "violations": [],
@@ -237,19 +237,19 @@
     "gzip": 593
    },
    "/app.css": {
-    "raw": 7742,
-    "gzip": 2534
+    "raw": 7916,
+    "gzip": 2577
    },
    "/app.js": {
-    "raw": 53387,
-    "gzip": 16466
+    "raw": 62186,
+    "gzip": 19215
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 19729,
+  "gzip_total": 22521,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
