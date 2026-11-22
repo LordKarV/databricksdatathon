@@ -93,6 +93,62 @@ def test_without_places_file_pins_and_districts_still_work():
     assert p.lookup("Bahraich")[0]["kind"] == "district" and p.lookup("Pusa") == []
 
 
+# ---------- old names and near spellings (matrix cluster spelling_variant_not_found) ----------
+VARIANT_GAZ = {"v": 1, "kinds": ["city", "office"], "states": ["HARYANA", "MAHARASHTRA", "UTTAR PRADESH"],
+               "name": ["mumbai", "gurgaon", "saharanpur", "saharanpir", "sitapur"], "s": [1, 0, 2, 2, 2],
+               "k": [0, 0, 0, 1, 0], "lat": [19.07, 28.46, 29.96, 29.9, 27.57],
+               "lon": [72.87, 77.03, 77.55, 77.5, 80.68]}
+
+
+@pytest.fixture
+def variants() -> Places:
+    return Places(PINS, VARIANT_GAZ)
+
+
+def test_exact_names_are_not_touched_by_the_fallbacks(variants):
+    matches, matched_as = variants.resolve("Bahraich")
+    assert matched_as is None and all("matched_as" not in m for m in matches)
+    assert variants.resolve("848125")[1] is None and variants.resolve("999999") == ([], None)
+
+
+@pytest.mark.parametrize("q, name", [("Bombay", "Mumbai"), ("Gurugram", "Gurgaon")])  # either name finds the other
+def test_an_official_rename_finds_the_name_in_our_tables(variants, q, name):
+    [m], matched_as = variants.resolve(q)
+    assert matched_as == {"query": q.lower(), "name": name, "how": "rename"} == m["matched_as"]
+    assert m["label"] == f"{name} town, {m['state']}"
+
+
+def test_a_near_spelling_finds_the_one_close_name(variants):
+    [m], matched_as = variants.resolve("Baharaich")
+    assert m["label"] == "Bahraich district centre, Uttar Pradesh"
+    # "query" is the name as norm() read it: /api/place never echoes the typed text itself
+    assert matched_as == {"query": "baharaich", "name": "Bahraich", "how": "spelling"}
+    assert variants.resolve("Baharaich, Bihar") == ([], None)  # the state filter still applies
+
+
+def test_a_near_miss_between_two_real_places_offers_both_never_one(variants):
+    # 'saharanpar' is one letter from Saharanpur and from Saharanpir (0.9 each): both are offered, neither picked
+    matches, matched_as = variants.resolve("Saharanpar")
+    assert matched_as is None
+    assert sorted(m["matched_as"]["name"] for m in matches) == ["Saharanpir", "Saharanpur"]
+    assert {m["matched_as"]["how"] for m in matches} == {"spelling"}
+
+
+@pytest.mark.parametrize("q", ["Sitapor zz", "Ptna", "Xitapur", "Bmbay", "xqzv plonk"])
+def test_far_short_or_other_first_letter_spellings_find_nothing(variants, q):
+    assert variants.resolve(q) == ([], None)
+
+
+@needs_data
+@pytest.mark.parametrize("q, name, how", [("Bombay", "Mumbai", "rename"), ("Alleppey", "Alappuzha", "rename"),
+                                          ("Baharaich", "Bahraich", "spelling"), ("Calcutta", "Kolkata", "rename")])
+def test_api_says_which_name_it_shows(q, name, how):
+    r = client.post("/api/place", json={"q": q})
+    assert r.status_code == 200 and r.json()["matched_as"] == {"query": q.lower(), "name": name, "how": how}
+    assert q not in r.text
+    assert "matched_as" not in client.post("/api/place", json={"q": name}).json()
+
+
 # ---------- PINs the gazetteer files under no district (matrix cluster pin_missing_from_facts) ----------
 
 def test_fill_districts_takes_the_nearest_pin_of_the_same_state_and_never_invents_one():

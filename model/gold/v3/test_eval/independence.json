@@ -7,9 +7,10 @@
   "contradicted": 13,
   "auroc": 0.819,
   "auroc_ci95": [
-   0.682,
-   0.928
-  ]
+   0.686,
+   0.924
+  ],
+  "ci_source": "results.json headline_decided"
  },
  "by_website_family": {
   "W_gt_0": {
@@ -209,10 +210,11 @@
    "contradicted": 20,
    "auroc": 0.617,
    "auroc_ci95": [
-    0.484,
-    0.749
+    0.481,
+    0.743
    ],
-   "rule": "confirmed = exists yes (1); contradicted = no, or unclear after a search (0); unclear and never searched excluded (model/v2/labels y_E rule)"
+   "rule": "confirmed = exists yes (1); contradicted = no, or unclear after a search (0); unclear and never searched excluded (model/v2/labels y_E rule)",
+   "ci_source": "extras.json existence_head.y_E_rule (evaluate.py)"
   }
  },
  "unlikely_by_route": {
