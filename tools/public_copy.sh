@@ -11,6 +11,8 @@ rm -rf "$OUT" && mkdir -p "$OUT"
 git ls-files | grep -vxF -f <(grep -v '^#' tools/public_exclude.txt) > "$OUT.files"
 rsync -a --files-from="$OUT.files" "$ROOT/" "$OUT/"
 rm "$OUT.files"
+# The rule on #82: no facility-level row, quote, name, phone or restricted-list fact. Fail before committing anything.
+"${PY:-.venv-app/bin/python}" tools/data_audit.py --check "$OUT" || { echo "public copy FAILED the facility check"; exit 1; }
 cd "$OUT"
 git init -q && git add -A && git -c user.name="public copy" -c user.email="public-copy@localhost" \
   commit -q -m "Referral Saathi: code-only public copy (data regenerated from the Marketplace on Databricks)"

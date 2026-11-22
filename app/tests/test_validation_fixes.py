@@ -26,7 +26,6 @@ PACKS = APP / "packs" / "out"
 needs_v1 = pytest.mark.skipif(not (V1 / "facility_groups.parquet").is_file(), reason="derived/v1 not present")
 needs_packs = pytest.mark.skipif(not (PACKS / "index.json").is_file(), reason="packs not built")
 needs_engine = pytest.mark.skipif(app_module._engine() is None, reason="facts not built")
-VET = "885c79f6-9f32-4878-8384-5a90259cfae4"  # SKS Veterinary Hospital, trust_level exclude_review
 
 
 # ---------- the shared rule, on small frames ----------
@@ -121,7 +120,7 @@ def excluded_ids() -> set[str]:
 @needs_packs
 def test_no_excluded_record_in_any_pack():
     excluded = {u[:8] for u in excluded_ids()}
-    assert len(excluded) == 12 and VET[:8] in excluded
+    assert len(excluded) == 12
     for f in PACKS.glob("*.json.gz"):
         _, uid8 = pack_ids(f.name.removesuffix(".json.gz"))
         assert not excluded & set(uid8), f.name
@@ -170,7 +169,7 @@ def test_engine_one_option_per_site_branches_kept_and_merge_stated():
     eng = app_module._engine()
     sites = real_sites()
     merged = set(sites[sites.rep_id != sites.unique_id].unique_id)
-    assert VET not in eng.fid
+    assert not excluded_ids() & set(eng.fid)
     stated = 0
     for svc, rows in eng.pairs.items():
         ids = [eng.fac["id"][p.fi] for p in rows]

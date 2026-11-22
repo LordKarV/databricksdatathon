@@ -11,15 +11,21 @@ a reviewer can check the classes instead of trusting them:
   third_party other external data committed as files (each source's licence is in DATASETS.md);
   image       screenshots and recordings of the app, which show provided facility names;
   review      prose or code that mentions record ids: usually a few quoted examples, to be read by a human;
+  facility_text  any other text file holding a facility name, phone number or claim sentence from the provided data
+              (a dictionary built from derived/v1: the public-copy rule on #82 is "no facility-level row, quote, name,
+              phone or restricted-list fact; only code, docs and aggregate numbers");
   public      none of the above.
 tools/public_exclude.txt lists every non-public file; tools/public_copy.sh leaves them out of the code-only copy.
 """
 from __future__ import annotations
 
 import gzip
+import json
 import re
 import subprocess
+import sys
 from collections import Counter, defaultdict
+from functools import cache
 from pathlib import Path
 
 import pyarrow.parquet as pq
@@ -45,8 +51,97 @@ RULES = [
     ("third_party", "any other data file under external/ (each source's licence: research/DATASETS.md)"),
     ("image", "screenshots or recordings (they show provided facility names)"),
     ("review", "prose or code that mentions a record id or sentence id (usually a quoted example)"),
+    ("facility_text", ("any other file holding a facility name, phone number or claim sentence from the provided "
+                       "data (dictionary from derived/v1; counts only are printed here)")),
     ("public", "everything else: code, docs without record ids, configuration"),
 ]
+
+
+# ---------- the facility dictionary (#82, B1) ----------
+V1 = ROOT / "derived" / "v1"
+SHINGLE = 8  # a claim sentence is matched on any 8 consecutive words
+MAX_FACILITIES = 3  # ... that appear in the claims of at most this many facilities
+GENERIC = {"hospital", "hospitals", "clinic", "clinics", "nursing", "home", "medical", "college", "centre", "center",
+           "care", "multi", "super", "speciality", "specialty", "multispeciality", "multispecialty", "health",
+           "institute", "research", "and", "the", "of", "district", "government", "govt", "civil", "general",
+           "memorial", "trust", "private", "limited", "ltd", "pvt", "india", "maternity", "children", "child",
+           "eye", "dental", "diagnostic", "diagnostics", "heart", "cancer", "city", "new", "sub", "divisional",
+           "community", "primary", "phc", "chc", "dr", "doctor", "doctors", "clinik", "polyclinic", "lab", "labs",
+           "scan", "scans", "imaging", "path", "pathology", "foundation", "society", "mission", "unit", "blood", "bank",
+           "sadar", "rural", "taluk", "taluka", "dispensary", "studio", "kidney", "veterinary", "sciences", "science",
+           "referral", "upgraded", "area", "esi", "railway", "police", "army", "military", "cantonment", "urban",
+           "block", "subdivisional", "dialysis", "trauma", "burn", "burns", "orthopaedic", "orthopedic", "women",
+           "mother", "skin", "neuro", "ortho", "gynae", "surgical", "medicine", "medicare", "hospitality"}
+WORD = re.compile(r"[a-z0-9]+")
+DIGITS = re.compile(r"(?<!\d)(?:\+?91[\s-]?)?((?:\d[\s-]?){9}\d)(?!\d)")
+
+
+def words(text: str) -> list[str]:
+    return WORD.findall(text.lower())
+
+
+@cache
+def dictionary() -> dict:
+    """names: word tuples of every distinctive facility name; phones: last 10 digits; shingles: 8-word claim spans.
+
+    A name counts when it has 2+ words and a word of 4+ letters that is not generic ("City Hospital" alone is not a
+    facility identity; a name with a distinctive word is). Built in memory only, never written out.
+    """
+    names: set[tuple[str, ...]] = set()
+    for f, cols in (("facility_location.parquet", ["name"]), ("record_trust.parquet", ["name"])):
+        for n in pq.read_table(V1 / f, columns=cols).column("name").to_pylist():
+            w = tuple(words(n or ""))
+            if len(w) >= 2 and any(len(x) >= 4 and not x.isdigit() and x not in GENERIC for x in w):
+                names.add(w)
+    phones = set()
+    listed = pq.read_table(V1 / "record_trust.parquet", columns=["display_phones"]).column("display_phones")
+    for ps in listed.to_pylist():
+        for ph in ps or []:
+            d = re.sub(r"\D", "", str(ph))[-10:]
+            if len(d) == 10 and len(set(d)) > 2:
+                phones.add(d)
+    # Only spans specific to at most MAX_FACILITIES facilities: boilerplate shared by many listings ("24 hours
+    # emergency services available ...") identifies nobody, and also matches ordinary prose.
+    owners: dict[int, set[str]] = defaultdict(set)
+    tab = pq.read_table(V1 / "claims.parquet", columns=["claim_id", "text"])
+    for cid, t in zip(tab.column("claim_id").to_pylist(), tab.column("text").to_pylist(), strict=True):
+        w = words(t or "")
+        fac = (cid or "").split(":", 1)[0]
+        for i in range(len(w) - SHINGLE + 1):
+            o = owners[hash(tuple(w[i:i + SHINGLE]))]
+            if len(o) <= MAX_FACILITIES:
+                o.add(fac)
+    shingles = {h for h, o in owners.items() if len(o) <= MAX_FACILITIES}
+    # Place names and timetables are not facility text ("dadra and nagar haveli and daman and diu", "09 00 13 00").
+    place = {"and", "the", "of"}
+    for col in ("state", "district"):
+        for v in pq.read_table(V1 / "pin_gazetteer.parquet", columns=[col]).column(col).to_pylist():
+            place.update(words(v or ""))
+    by_first: dict[str, set[int]] = defaultdict(set)
+    for n in names:
+        by_first[n[0]].add(len(n))
+    return {"names": names, "by_first": by_first, "phones": phones, "shingles": shingles, "place": place}
+
+
+def facility_hits(text: str) -> Counter:
+    """How many facility names, phones and claim spans from the dictionary a text contains."""
+    d = dictionary()
+    w = words(text)
+    hits: Counter = Counter()
+    for i, x in enumerate(w):
+        for n in d["by_first"].get(x, ()):
+            if tuple(w[i:i + n]) in d["names"]:
+                hits["names"] += 1
+                break
+    for i in range(len(w) - SHINGLE + 1):
+        span = w[i:i + SHINGLE]
+        if (hash(tuple(span)) in d["shingles"] and not all(x in d["place"] for x in span)
+                and sum(x.isdigit() for x in span) < SHINGLE // 2):
+            hits["claim_spans"] += 1
+    for m in DIGITS.finditer(text):
+        if re.sub(r"\D", "", m.group(1))[-10:] in d["phones"]:
+            hits["phones"] += 1
+    return hits
 
 
 def tracked() -> list[str]:
@@ -55,6 +150,12 @@ def tracked() -> list[str]:
 
 
 def text_of(path: Path) -> str:
+    if path.suffix == ".ipynb":  # the public copy clears outputs (strip_outputs), so only the code is judged
+        try:
+            cells = json.loads(path.read_text(encoding="utf-8")).get("cells", [])
+        except ValueError:
+            return path.read_text(encoding="utf-8", errors="ignore")
+        return "\n".join("".join(c.get("source", [])) for c in cells)
     if path.suffix == ".parquet":
         t = pq.ParquetFile(path)
         cols = [f.name for f in t.schema_arrow if str(f.type) in ("string", "large_string")]
@@ -77,7 +178,7 @@ def classify(rel: str) -> tuple[str, str]:
     is_data = ext in DATA_EXT
     if ext in MEDIA_EXT:
         return "image", "media file"
-    txt = text_of(p) if is_data or ext in CODE_EXT else ""
+    txt = text_of(p)  # every non-media file is read: .log, .svg and other text carry names too
     ids, claims = len(set(UUID.findall(txt))), len(set(CLAIM.findall(txt)))
     if rel.startswith(RESTRICTED_DIRS):
         if is_data or ids or claims:
@@ -95,7 +196,43 @@ def classify(rel: str) -> tuple[str, str]:
     if ids or claims:
         return "review", ", ".join(x for x in (f"{ids} record ids" if ids else "",
                                                f"{claims} sentence ids" if claims else "") if x)
+    if txt:
+        h = facility_hits(txt)
+        if h:
+            return "facility_text", ", ".join(f"{v} {k.replace('_', ' ')}" for k, v in sorted(h.items()))
     return "public", ""
+
+
+def strip_outputs(root: Path) -> int:
+    """Clear every notebook's outputs in a built copy: they print facility rows. Returns how many changed."""
+    n = 0
+    for p in root.rglob("*.ipynb"):
+        nb = json.loads(p.read_text(encoding="utf-8"))
+        for c in nb.get("cells", []):
+            if c.get("cell_type") == "code":
+                c["outputs"], c["execution_count"] = [], None
+        p.write_text(json.dumps(nb, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+        n += 1
+    return n
+
+
+def check_copy(root: Path) -> int:
+    """Rescan a built public copy: every text file must be free of record ids and dictionary hits. Exit 1 if not."""
+    bad = []
+    for p in sorted(root.rglob("*")):
+        if not p.is_file() or ".git" in p.parts or p.suffix.lower() in MEDIA_EXT:
+            if p.is_file() and p.suffix.lower() in MEDIA_EXT and ".git" not in p.parts:
+                bad.append((p, "media file"))
+            continue
+        txt = text_of(p)
+        why = [f"{len(set(UUID.findall(txt)))} record ids"] if UUID.search(txt) else []
+        why += [f"{v} {k}" for k, v in sorted(facility_hits(txt).items())]
+        if why:
+            bad.append((p, ", ".join(why)))
+    for p, why in bad:
+        print(f"FAIL {p.relative_to(root)}: {why}")
+    print(f"checked {root}: {len(bad)} files fail")
+    return 1 if bad else 0
 
 
 def main() -> None:
@@ -129,9 +266,10 @@ def main() -> None:
          "lead:** the Databricks-side pipeline comes with #11 / #57. Numbers quoted from hand checks stay in the "
          "docs; their samples do not."),
         "",
-        ("Known gap: the rules find record ids, sentence ids and coordinates, not facility names written in prose. "
-         "A few docs (REPORT.md, model/MODEL_SPEC.md, app_design/, and external/*/README.md for the lists that are "
-         "not restricted) name example facilities; read them before option B."),
+        ("Facility names, phones and claim sentences are found with a dictionary built from derived/v1 (every "
+         "distinctive facility name, every listed phone, every 8-word span of a claim sentence), not by id format. "
+         "`public_copy.sh` rescans the built copy with `data_audit.py --check` and fails on any hit. Not covered: "
+         "a facility named only by a generic name (\"City Hospital\") or paraphrased."),
         "",
         "## Rules (first match wins)",
         "",
@@ -168,4 +306,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 3 and sys.argv[1] == "--check":
+        print(f"cleared outputs of {strip_outputs(Path(sys.argv[2]))} notebooks")
+        sys.exit(check_copy(Path(sys.argv[2])))
     main()
