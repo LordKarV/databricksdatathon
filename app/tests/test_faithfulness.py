@@ -63,7 +63,7 @@ I18N = {lang: json.loads((Path(__file__).resolve().parents[1] / "static" / "i18n
 WORDS = {k: (I18N["en"][k], I18N["hi"][k]) for k in ("travel.road", "travel.rough", "route.met", "route.not_met",
                                                       "delta.same", "num.over99", "num.under1")}
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918\u0902\u091f\u0947",  # "24 ghante" (#104)
-                  r"\bin 10 listings\b"]
+                  r"\bin 10 listings\b", r"\bNFHS-5\b"]  # NFHS-5: the survey's name on the Area brief (WS4 4b)
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
     "Access now: a Likely listing in reach": "area.summary.access_now",
@@ -640,6 +640,29 @@ TEST_RECORD_SHOWN = ("k", "n", "pct", "lo_pct", "hi_pct", "public_n", "opened", 
 GOLD_V3 = ROOT / "model" / "gold" / "v3"
 
 
+def check_brief(area: dict, shown: set[str]) -> list[str]:
+    """WS4 4b: the district brief shows every need value it has, each government list row, the headline's numbers
+    and the source of each; check_screen has already compared each shown value with the payload."""
+    need, errs = area["area"].get("need"), []
+    if need:
+        keys = ["population", "listings", "listings_per_million", "india_per_million", "lgd_district",
+                "source.people", "source.listings"]
+        if area["query"]["service"] in ("emergency_csection", "nicu") and need["csection_pct"] is not None:
+            keys += ["csection_pct", "nfhs_district", "source.nfhs"] + [k for k in (
+                "public_csection_pct", "private_csection_pct", "institutional_pct") if need[k] is not None]
+        errs += [f"area.area.need.{k} not shown" for k in keys if f"area.area.need.{k}" not in shown]
+    for j, g in enumerate(area["area"].get("gov_list", [])):
+        want = ("centres", "districts_working", "districts_total") if g["list"] == "pmndp" else ("name", "valid_to")
+        errs += [f"area.area.gov_list.{j}.{k} not shown" for k in want if f"area.area.gov_list.{j}.{k}" not in shown]
+    h = area.get("headline")
+    if h:
+        errs += [f"area.headline.{k} not shown" for k in ("n", "window_min")[h["kind"] == "none_in_window":]
+                 if f"area.headline.{k}" not in shown]
+        if h["kind"] == "if_confirms" and not {"area.headline.k", "area.headline.now", "area.ten_calls.0.name"} <= shown:
+            errs.append("area.headline: the first call's name, k or now not shown")
+    return errs
+
+
 def expected_test_record() -> dict:
     """Read straight from the committed files, independently of app/facts/build.py."""
     res = json.loads((GOLD_V3 / "test_eval" / "results.json").read_text())
@@ -701,8 +724,17 @@ def check_ledger(o: dict, i: int, shown: set[str], claims: dict[str, str]) -> li
                 errs.append(f"{C}.quotes.{k} not shown with its claim id")
             if claims and q["claim_id"] not in claims:
                 errs.append(f"{C}.quotes.{k}: claim {q['claim_id']} is not a derived/v1 claim")
+        # WS4 4a: every official-list or OpenStreetMap row the term rests on is shown with its source (a NABH row
+        # shows its text in English, its entry number under the Hindi tier wording)
+        for k, x in enumerate(c.get("cites", [])):
+            if not ({f"{C}.cites.{k}.text", f"{C}.cites.{k}.id"} & shown and f"{C}.cites.{k}.source" in shown):
+                errs.append(f"{C}.cites.{k} not shown with its source")
+            if x["precision_n"] and not {f"{C}.cites.{k}.precision_k", f"{C}.cites.{k}.precision_n"} <= shown:
+                errs.append(f"{C}.cites.{k}: hand-check precision not shown")
     errs += [f"options.{i}.not_observed.{j} not shown" for j in range(len(o.get("not_observed", [])))
              if f"options.{i}.not_observed.{j}.label" not in shown]
+    errs += [f"options.{i}.public_lists.{j} not shown" for j in range(len(o.get("public_lists", [])))
+             if not {f"options.{i}.public_lists.{j}.{f}" for f in ("text", "id", "name")} & shown]
     if f"options.{i}.contributions" not in shown:
         errs.append("ledger total not shown")
     return errs
@@ -794,6 +826,18 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         errs += check_screen("plan", payload, got, report)
         plan_shown = {it["path"] for it in got["items"]}
         errs += [f"plan: {e}" for e in check_doubt(payload, plan_shown)]
+        # WS1 1b: the readout's receipt is option 1's first quote (a marked piece of it, cut at 60 characters), and
+        # its "Why first" line is marked: why-not rows, ledger rows or the engine's rank rule.
+        o0 = (payload.get("options") or [None])[0]
+        if o0 and o0["evidence"] and "options.0.evidence.0.quote" not in plan_shown:
+            errs.append("plan: receipt quote not shown")
+        receipt = page.evaluate("() => { const e = document.querySelector('#main .answer [data-f=\"options.0.evidence.0.quote\"]');"
+                                " return e ? e.textContent : null; }")
+        if o0 and o0["evidence"] and not (receipt and len(receipt) <= 60 and o0["evidence"][0]["quote"].startswith(receipt)):
+            errs.append(f"plan: receipt {receipt!r} is not the first 60 characters of the first quote")
+        why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
+        if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
+            errs.append("plan: no marked 'Why first' line on the readout")
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []
@@ -923,6 +967,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             if f"area.ten_calls.{k}.access_gain" not in shown:
                 errs.append(f"area: call {k} not shown")
         errs += [f"area: {e}" for e in check_gap(area, shown)]
+        errs += [f"area: {e}" for e in check_brief(area, shown)]
     finally:
         ctx.close()
     print(f"{name}: {report}")

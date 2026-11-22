@@ -258,7 +258,8 @@ class Engine:
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
-        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status", "town_far"):  # older exports
+        # older exports: no source, site or town checks, so no warnings; no phone_display, so the listing's spelling
+        for k in ("url_kind", "url_place", "url_site", "site_flag", "site_status", "town_far", "phone_display"):
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
         self.site_check = facts.get("site_check") or {}
         self.pin_centre = {int(p): (la, lo) for p, la, lo in zip(self.pins["pin"], self.pins["lat"], self.pins["lon"],
@@ -463,8 +464,10 @@ class Engine:
         return out[:N_TRAVEL]
 
     def _phone(self, i: int) -> dict:
-        raw = self._f("phone_raw", i)
-        return {"e164": self._f("phone_e164", i), "display": raw or None, "shared_listings": self._f("phone_shared", i)}
+        # national format from the build (facts/build.py phone_display); else the listing's own spelling
+        shown = self._f("phone_display", i) or self._f("phone_raw", i)
+        return {"e164": self._f("phone_e164", i), "display": shown or None,
+                "shared_listings": self._f("phone_shared", i)}
 
     def _address(self, i: int) -> str:
         parts = [self._f("city", i), self._f("district", i), self._f("state", i)]

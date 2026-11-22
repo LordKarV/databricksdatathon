@@ -248,7 +248,7 @@ Files: `out_gpu/metrics_gpu_remaining.json`, `out_gpu/run_log.txt`, `out_gpu/nvi
 | bge-small | 409 | 0.248 | 0.597 vs 0.547, +0.050 (-0.065 to 0.170) | 0.452 vs 0.864, -0.412 (-0.551 to -0.285) | 0.168 / 0.154 |
 | me5-small | 460 | 0.250 | 0.519 vs 0.547, -0.028 (-0.140 to 0.091) | 0.333 vs 0.864, -0.531 (-0.665 to -0.392) | 0.224 / 0.178 |
 
-F1 is on label 0 over the same 564 hand labels, at threshold 0.5. bge-small has the lowest validation loss
+F1 is on label 0 over the same hand labels (234 about_this, 330 offers), at threshold 0.5. bge-small has the lowest validation loss
 of the three and is `chosen` in the metrics file. On a GPU each backbone trained in about 7 minutes, against
 7,588 s for minilm-l12 on the Mac. No backbone beats the rules on `offers`, and none is detectably better on
 `about_this`, so the reader stays a documented negative result: the shipped model (derived/v2) does not use it.
