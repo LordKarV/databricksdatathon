@@ -546,6 +546,17 @@ def test_direct_definitive_leads_and_the_nearer_first_care_place_says_so():
     assert not any((x.get("route_reason") or "").startswith("Nearer") for x in patna)
 
 
+LGD_PARQUET = APP.parent / "data" / "external" / "lgd_district_polygons" / "pin_lgd_district.parquet"
+
+
+@pytest.mark.skipif(not LGD_PARQUET.is_file(), reason="LGD PIN file not present (git-ignored data)")
+def test_committed_pin_district_map_matches_the_lgd_join():
+    """app/facts/gov/pin_district_moved.csv is what pin_districts() gives from the LGD file: rerun
+    app/facts/gov/build_gov.py and commit when this fails."""
+    from facts import build
+    assert build.moved_pins() == build.pin_districts(build.pins())
+
+
 def test_every_list_and_osm_row_cites_its_source():
     """WS4 4a: every official-list (X) or OpenStreetMap (O) ledger row with points carries at least one cite with a
     link, over every served pair; points are unchanged (the ledger test above still sums them to p)."""

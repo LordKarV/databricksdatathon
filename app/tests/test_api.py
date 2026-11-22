@@ -135,3 +135,63 @@ def test_non_finite_or_huge_numbers_are_422(path, body):
     # #85: these returned 500 before; every request model forbids NaN/inf and bounds its numbers
     r = client.post(path, content=body, headers={"Content-Type": "application/json"})
     assert r.status_code == 422
+
+
+GEO = Path(__file__).resolve().parents[2] / "viz" / "geography" / "data"
+
+
+def _area(service, lat, lon):
+    r = client.post("/api/area", json={"service": service, "lat": lat, "lon": lon})
+    assert r.status_code == 200
+    return r.json()
+
+
+@needs_data
+def test_area_need_equals_the_committed_district_tables():
+    """WS4 4b: Samastipur's brief is the viz/geography row of its LGD district (s1) and NFHS-5 district (s3)."""
+    import pandas as pd
+    a = _area("emergency_csection", 25.86, 85.78)
+    need = a["area"]["need"]
+    s1 = pd.read_csv(GEO / "s1_district.csv").query("dtname == 'Samastipur' and stname == 'BIHAR'").iloc[0]
+    s3 = pd.read_csv(GEO / "s3_district.csv").query("nfhs_state == 'Bihar' and nfhs_district == 'Samastipur'").iloc[0]
+    assert need["population"] == round(s1["pop"]) and need["listings"] == s1.records
+    assert need["listings_per_million"] == round(s1.per_m, 2) and need["india_per_million"] == 6.8
+    assert need["csection_pct"] == s3.births_delivered_by_csection_5y_pct
+    assert need["public_csection_pct"] == s3.births_in_a_public_fac_that_were_delivered_by_csection_5y_pct
+    assert need["private_csection_pct"] == s3.births_in_a_private_fac_that_were_delivered_by_csection_5y_pct
+    assert need["institutional_pct"] == s3.institutional_birth_5y_pct
+    assert "NFHS-5" in need["source"]["nfhs"]
+    sadar = [g for g in a["area"]["gov_list"] if g["name"] == "Sadar Hospital Samastipur"]
+    assert sadar and sadar[0]["valid_to"] == "2028-03-02" and "LaQshya" in sadar[0]["source"] + sadar[0]["what"]
+
+
+@needs_data
+def test_area_gov_list_and_csection_split_for_gaya():
+    a = _area("emergency_csection", 24.79, 85.0)
+    need, gov = a["area"]["need"], a["area"]["gov_list"]
+    assert (need["public_csection_pct"], need["private_csection_pct"]) == (2.3, 48.3)
+    # the NHSRC master data spells it "Sadar Hopsital Piligrim Gaya"; the page shows the source's own name
+    pilgrim = [g for g in gov if "Gaya" in g["name"] and g["valid_to"] == "2027-03-31"]
+    assert pilgrim and not pilgrim[0]["expired"]
+    assert [g["expired"] for g in gov] == sorted(g["expired"] for g in gov)  # valid certificates first
+    d = _area("dialysis", 24.79, 85.0)["area"]["gov_list"]
+    assert d and d[0]["list"] == "pmndp" and d[0]["districts_total"] == 38
+    assert _area("mri", 24.79, 85.0)["area"]["gov_list"] == []
+
+
+@needs_data
+def test_area_uses_the_committed_lgd_district_map():
+    """(25.6, 85.95) lies in Begusarai by LGD, not Darbhanga, from app/facts/gov/pin_district_moved.csv alone."""
+    a = _area("emergency_csection", 25.6, 85.95)
+    assert a["area"]["district"] == "Begusarai" and a["area"]["need"]["lgd_district"] == "Begusarai"
+
+
+@needs_data
+def test_area_headline_from_the_first_call():
+    a = _area("emergency_csection", 18.37, 76.57)  # Latur
+    assert a["ten_calls"][0]["name"].startswith("Jeevan Jyot")
+    assert a["headline"] == {"kind": "if_confirms", "rank": 1, "k": 22, "n": 22, "now": 6, "window_min": 60}
+    h = _area("emergency_csection", 25.86, 85.78)["headline"]  # Samastipur: every sampled area is covered
+    assert h["kind"] == "all_covered" and h["now"] == h["n"]
+    gaya = _area("emergency_csection", 24.79, 85.0)["headline"]  # Gaya: nothing claimed within 60 min
+    assert gaya["kind"] == "none_in_window"
