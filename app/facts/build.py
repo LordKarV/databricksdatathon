@@ -44,6 +44,7 @@ from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))
 from facts.ledger_terms import NOT_OBSERVED, TERMS  # noqa: E402
+from facts.places import PIN_GRID, centre_pin  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -531,11 +532,21 @@ def rules() -> dict[str, dict]:
                      "citation": r.citation} for r in e.itertuples(index=False)}
 
 
+def centre_flags(p: pd.DataFrame) -> list[int]:
+    """1 for the PIN that is its district's centre (facts/places.py centre_pin), else 0.
+
+    Chosen here from the raw gazetteer points rounded as packs/build_packs.py rounds them, the integers offline.js
+    districtCentre reads, so a district centre is the same PIN online and offline."""
+    q = p.assign(qa=np.round(p.lat * PIN_GRID).astype(int), qo=np.round(p.lon * PIN_GRID).astype(int))
+    centres = {centre_pin(list(zip(g.pin, g.qa, g.qo, strict=True))) for _, g in q.groupby(["state", "district"])}
+    return [int(x in centres) for x in p.pin]
+
+
 def pins() -> dict[str, list]:
     p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "lat", "lon"])
     p = p.dropna(subset=["lat", "lon", "district"])
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
-            "district": list(p.district), "state": list(p.state)}
+            "district": list(p.district), "state": list(p.state), "centre": centre_flags(p)}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).

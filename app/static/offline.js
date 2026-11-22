@@ -110,11 +110,21 @@
     }
     return null;
   }
+  // The district's own PIN point nearest the mean of its PIN points. A plain mean can lie nearer another district's
+  // PINs, so the area view named that district (Anakapalli gave Visakhapatnam). Same rule as facts/places.py
+  // district_centre: integers on the pack's 0.001 degree grid, longitude scaled by cos(lat), lowest PIN on a tie,
+  // so the centre is the same PIN online and offline.
   function districtCentre(pack, d) {
-    const di = pack.districts.indexOf(d);
-    let n = 0, la = 0, lo = 0;
-    pack.pins.d.forEach((x, i) => { if (x === di) { n++; la += pack.pins.lat[i]; lo += pack.pins.lon[i]; } });
-    return n ? {lat: la / n, lon: lo / n, label: `${titleCase(d)} district centre`} : null;
+    const di = pack.districts.indexOf(d), P = pack.pins, G = 1000, own = [];
+    P.d.forEach((x, i) => { if (x === di) own.push(i); });
+    if (!own.length) return null;
+    const qa = own.map(i => Math.round(P.lat[i] * G)), qo = own.map(i => Math.round(P.lon[i] * G));
+    const n = own.length, sa = qa.reduce((t, v) => t + v, 0), so = qo.reduce((t, v) => t + v, 0);
+    const k = Math.cos(sa / n / G * Math.PI / 180);
+    const d2 = j => (n * qa[j] - sa) ** 2 + ((n * qo[j] - so) * k) ** 2;
+    let b = 0;
+    for (let j = 1; j < n; j++) if (d2(j) < d2(b) || (d2(j) === d2(b) && P.pin[own[j]] < P.pin[own[b]])) b = j;
+    return {lat: P.lat[own[b]], lon: P.lon[own[b]], label: `${titleCase(d)} district centre`};
   }
 
   // ---------- satellite fix while offline (spec 3.2.3 step 2) ----------
