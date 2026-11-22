@@ -38,6 +38,13 @@ DANGER = [
     "bleeding a lot", "khoon bah", "khoon jaa raha", "bahut khoon", "खून बह", "बहुत खून", "fits", "fitting",
     "seizure", "jhatke", "झटके", "labour with bleeding", "baby stuck", "bachcha atak", "stroke", "lakwa", "लकवा",
     "poison", "zehar", "ज़हर", "जहर", "snake bite", "saanp ne kaata", "सांप ने काटा", "face burn", "chehra jal",
+    "bleeding heavily", "bleeding badly",
+    # Pregnancy plus bleeding, as phrases rather than a word-pair rule, so the browser's phrase check (input.js)
+    # matches them offline too. Bleeding alone ("bleeding gums") and "pregnant" alone stay off the danger card.
+    "pregnant bleeding", "pregnant and bleeding", "pregnant woman bleeding", "pregnant lady bleeding",
+    "pregnant woman is bleeding", "pregnant lady is bleeding", "pregnant with bleeding", "pregnancy bleeding",
+    "bleeding in pregnancy", "bleeding during pregnancy", "garbhvati ko khoon", "pregnant hai khoon",
+    "गर्भवती को खून", "गर्भवती है खून",
 ]
 SERVICES_FOR_MODEL = ["emergency_csection", "nicu", "trauma_emergency", "burn_care", "dialysis", "mri",
                       "cardiac_surgery", "other", "symptoms_only"]
