@@ -782,7 +782,8 @@ function nextRows(p, from) {
     const i = j + from, P = `options.${i}`, tel = telOf(o);
     return `<li class="next-row"><span class="rank">${N(P + '.rank', o.rank)}</span>
       <a class="nm" href="#/why/${o.rank}"><b lang="en">${F(P + '.name', o.name)}</b>
-        <span>${th('ans.eta', {low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}, ${bandHtml(o, P)}</span>${websiteHtml(o, P)}</a>
+        <span>${th('ans.eta', {low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}, ${bandHtml(o, P)}</span>${
+          o.location_doubt ? `<span class="doubt-short">${icon('warn')} ${th('off.map_wrong')}</span>` : ''}${websiteHtml(o, P)}</a>
       ${tel ? `<a class="btn btn-go-line call" href="${tel}" aria-label="${esc(ts('ans.call_name', {name: o.name}))}">${icon('phone')}</a>` : ''}</li>`;
   }).join('');
   return rows ? `<section class="section" aria-labelledby="h-no"><h2 id="h-no">${th('ans.if_no')}</h2><ol class="rows">${rows}</ol></section>` : '';
