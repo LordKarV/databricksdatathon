@@ -40,6 +40,7 @@ from common.eligibility import (  # noqa: E402, RUF100
     to_sites,
 )
 from common.names import display_name  # noqa: E402, RUF100
+from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))
 from facts.ledger_terms import NOT_OBSERVED, TERMS  # noqa: E402
@@ -314,6 +315,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, li
              for u, s, e in zip(m.unique_id, m.service, m.cite_evidence, strict=True)}
     m, counts = to_sites(m, sites)
     report("facts.duplicates", counts)
+    m = type_fit(m)
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
                                           "p_exists", "base", "contributions"])
@@ -355,6 +357,18 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str], dict[str, li
     words = {"terms": {k: [used[k], *TERMS[k]] for k in sorted(used)},
              "not_observed": {k: list(v) for k, v in NOT_OBSERVED.items()}}
     return out, cited, words
+
+
+def type_fit(m: pd.DataFrame) -> pd.DataFrame:
+    """Drop pairs whose facility type cannot offer the service (#117 B, common/typefit.py, the planner's rule too):
+    a dental, eye or AYUSH place is never an option. Read from the shown site's own name and type field."""
+    loc = pd.read_parquet(V1 / "facility_location.parquet", columns=["unique_id", "name"])
+    at = pd.read_parquet(ATTRS, columns=["unique_id", "facilityTypeId"]) if ATTRS.is_file() else loc[["unique_id"]]
+    f = loc[loc.unique_id.isin(set(m.unique_id))].merge(at, on="unique_id", how="left")
+    kinds = kinds_by_id(f.unique_id, f.name, f.facilityTypeId if "facilityTypeId" in f else [None] * len(f))
+    keep, counts = fit_mask(m.unique_id, m.service.map(V1_TO_APP), kinds)
+    report("facts.type_fit_left_out", counts)
+    return m[keep]
 
 
 def planner_cited() -> set[str]:

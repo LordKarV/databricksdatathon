@@ -3,7 +3,10 @@
 Writes planner/out/planner_v2.json.gz (git-ignored: it holds facility data):
   facilities    id, name, lat, lon, town, district, state, flags. Only facilities v2 scores, so the 12
                 exclude_review records are gone (common/eligibility.py, applied by the v2 export), and no
-                dental or eye clinic (validation H2, #86: none of the pathways is theirs to serve).
+                facility whose type serves no pathway stage: dental, eye, AYUSH and other specialty places
+                (validation H2, #86, #117; the rule is common/typefit.py, shared with the app lists).
+                A diagnostic, IVF or children's facility stays, listed only under the capabilities its
+                type can offer (a children's hospital is never a thrombolysis or cath-lab stop).
   capabilities  per capability tag: facility indexes, p, band and up to 3 evidence claim ids
   pins          PIN centroids with their state (hill-road travel constants are chosen by state)
   The name is common/names.py display_name (no address tail); the record's raw name stays in derived/v1.
@@ -33,9 +36,10 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT), str(ROOT / "app")]
 
 import pandas as pd  # noqa: E402
+from facts.redact import redact_names  # noqa: E402
 
 from common.names import display_name  # noqa: E402
-from facts.redact import redact_names  # noqa: E402
+from common.typefit import facility_kinds, fits, specialty_only  # noqa: E402
 
 # DATATHON_ROOT moves the data root (where derived/ lives); PLANNER_OUT the output folder
 DATA_ROOT = Path(os.environ.get("DATATHON_ROOT") or ROOT)
@@ -50,18 +54,6 @@ EVIDENCE_ROLES = ("offer", "unit_or_equipment", "quantity")  # claim_atoms roles
 # Plans, camps and outreach are not an offer (H3): "plans to launch a blood bank", "free eye camp".
 NOT_AN_OFFER = re.compile(r"\b(?:plans?|planning|planned|propos\w*|upcoming|soon|future|will be|to be (?:started|set up|"
                           r"launched|introduced)|under construction|camps?|outreach)\b", re.I)
-DENTAL = re.compile(r"dental|dentist|orthodont|\bteeth\b", re.I)
-EYE = re.compile(r"\beye\b|netra|nethra|ophthalm|\bvision\b|lasik|retina", re.I)
-# a name with one of these is a general or multi-specialty hospital even when it says dental or eye
-GENERAL = re.compile(r"heart|cardi|multi|general|trauma|ortho(?!dont)|maternity|child|super ?speciality|medical college"
-                     r"|district|sadar|civil|government|govt", re.I)
-
-
-def specialty_only(name, type_id):
-    """True for a dental or eye clinic: no pathway stage (trauma, C-section, STEMI, burns, newborn,
-    snakebite, dialysis) is theirs to serve, whatever its text says (H2; eye hospital as cath lab, #86)."""
-    n = name or ""
-    return (type_id == "dentist" or bool(DENTAL.search(n)) or bool(EYE.search(n))) and not GENERAL.search(n)
 
 
 def _pattern(words):
@@ -86,10 +78,12 @@ def facilities(scored):
     a = pd.read_parquet(V2 / "facility_attributes.parquet", columns=["unique_id", "facilityTypeId"])
     f = f.dropna(subset=["loc_lat", "loc_lon"]).merge(a, on="unique_id", how="left")
     f = f[f.unique_id.isin(scored)]
-    spec = [specialty_only(n, t) for n, t in zip(f.name, f.facilityTypeId)]
-    print(f"facilities: {len(f)} scored by v2, {sum(spec)} dental or eye clinics left out")
+    kinds = [facility_kinds(n, t) for n, t in zip(f.name, f.facilityTypeId, strict=True)]
+    spec = [specialty_only(k) for k in kinds]
+    print(f"facilities: {len(f)} scored by v2, {sum(spec)} specialty places left out (common/typefit.py)")
     f = f[[not s for s in spec]]
-    return [{"id": r.unique_id, "name": display_name(r.name),
+    kinds = [k for k, s in zip(kinds, spec, strict=True) if not s]
+    return kinds, [{"id": r.unique_id, "name": display_name(r.name),
              "lat": round(float(r.loc_lat), 5), "lon": round(float(r.loc_lon), 5),
              "town": _str(r.address_city), "district": _str(r.district), "state": _str(r.state_final),
              "flags": [] if r.loc_conf == "high" else [f"location confidence is {r.loc_conf}: confirm the address by phone"]}
@@ -133,6 +127,11 @@ def text_rows(cap, idx, claims):  # -> (rows, []): a text tag has no NO_SERVICE_
     return out, []
 
 
+def type_fit(rows, silent, unfit):
+    """Rows and NO_SERVICE_TEXT indexes without the facilities whose type cannot offer the capability."""
+    return [r for r in rows if r[0] not in unfit], [i for i in silent if i not in unfit]
+
+
 def pins():
     g = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["state", "lat", "lon"]).dropna()
     states = sorted(g.state.unique())
@@ -144,13 +143,17 @@ def pins():
 def main():
     caps = json.loads(CAPS.read_text())["capabilities"]
     scored = set(pd.read_parquet(V2 / "facility_service_scores.parquet", columns=["unique_id"]).unique_id)
-    fac = facilities(scored)
+    kinds, fac = facilities(scored)
     idx = {f["id"]: i for i, f in enumerate(fac)}
     claims, atom_ok = good_claims()
     own = set(claims.claim_id)
     out = {}
     for cap in caps:
         rows, silent = v2_rows(cap["v2_service"], idx, own, atom_ok) if cap["v2_service"] else text_rows(cap, idx, claims)
+        n = len(rows)
+        rows, silent = type_fit(rows, silent, {i for i, k in enumerate(kinds) if not fits(k, cap["id"])})
+        if n > len(rows):
+            print(f"  {cap['id']}: {n - len(rows)} facilities whose type cannot offer it left out (common/typefit.py)")
         rows = sorted(rows)
         out[cap["id"]] = {"source": f"derived/v2 {cap['v2_service']}" if cap["v2_service"] else "own offer sentences",
                           "i": [r[0] for r in rows], "p": [r[1] for r in rows], "b": [r[2] for r in rows],
