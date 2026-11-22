@@ -2,9 +2,10 @@
 
 The app reads only that file at start-up (standard library, no pandas), the same pattern as the packs and the
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
-counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
-derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
+counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
+common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
+When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each
+pair and engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -34,6 +35,7 @@ from common.eligibility import (  # noqa: E402, RUF100
     same_site_groups,
     to_sites,
 )
+from common.names import display_name  # noqa: E402, RUF100
 
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
@@ -345,7 +347,7 @@ def main() -> None:
         "rules": rules(),
         "track_bins": track_bins(),
         "likely_threshold": likely_threshold(),
-        "fac": {"id": list(f.unique_id), "name": list(f.name), "city": col(f.address_city),
+        "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
                 "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),

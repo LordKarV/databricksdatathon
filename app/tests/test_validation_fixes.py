@@ -15,7 +15,7 @@ import pytest
 APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
 sys.path.insert(0, str(APP.parent))
-from itinerary import place  # noqa: E402, RUF100
+from itinerary import place, stop_1_note  # noqa: E402, RUF100
 from packs import build_packs as bp  # noqa: E402, RUF100
 
 import app as app_module  # noqa: E402, RUF100
@@ -98,6 +98,23 @@ def test_site_quotes_keep_each_members_claim_id():
     ("Gaya", "GAYA", "Gaya"), ("  ", "Darbhanga", "Darbhanga")])
 def test_stop_place_is_nan_safe(town, district, want):
     assert place(town, district) == want
+
+
+def test_stop_1_note_names_what_the_first_option_lacks():
+    """#92: stop 1 is the list's first choice unless it lacks a capability; the note says which, in plain words."""
+    one = {"facility_id": "a", "name": "Alpha Hospital", "travel": {"minutes": 9}}
+    stab = {"facility_id": "b", "name": "Beta Hospital", "purpose": "stabilise", "eta_minutes": 20}
+    dfn = {"facility_id": "c", "name": "Gamma Hospital", "purpose": "definitive", "eta_minutes": 45}
+    info = {"facility_id": "a", "in_data": True, "first_care": False, "missing_first_care": [["emergency_24x7"]],
+            "missing_definitive": [["ct_scan"], ["icu"]]}
+    assert stop_1_note({"stops": [stab, dfn]}, one, info) == (
+        "The route starts at Beta Hospital: the best option Alpha Hospital has no evidence of 24x7 emergency care "
+        "in our data, which first care needs.")
+    direct = {"stops": [dfn]}
+    assert stop_1_note(direct, one, {**info, "first_care": True}) == (
+        "The route goes straight to Gamma Hospital, about 45 min away, for definitive care: the best option "
+        "Alpha Hospital has no evidence of a CT scanner or an ICU in our data.")
+    assert stop_1_note({"stops": [{**stab, "facility_id": "a"}, dfn]}, one, info) is None
 
 
 def test_quote_choice_is_stable_for_equal_lengths():

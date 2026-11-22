@@ -3,7 +3,7 @@
 Given an origin, a pathway from kb/pathways/care_pathways.json, a list of facilities, a
 probability function and a travel-time function, return the best plan and two alternatives.
 
-    plan(origin, pathway, facilities, capability_p, travel_fn=None, state=None, elapsed_minutes=0)
+    plan(origin, pathway, facilities, capability_p, travel_fn=None, state=None, elapsed_minutes=0, first_stop=None)
 
 Inputs
 - origin: (lat, lon).
@@ -21,7 +21,7 @@ Method
     direct   origin -> definitive facility D
     1 stop   origin -> stabilising facility S -> D
   A stop is only considered when the pathway's add_stop_only_if rule holds for D (travel to D is
-  beyond the threshold), S is closer than D and inside a detour corridor.
+  beyond the threshold), S is closer than D and inside a detour corridor (not for stop 1 by rule, below).
   If a facility turns the patient away, TURNAWAY_MINUTES are lost and the patient goes on: from S
   to D, from D to the best fallback definitive facility F.
   Objective, in order: (1) P(stabilised by T1 and definitive care by T2); (2) P(stabilised by T1);
@@ -30,7 +30,16 @@ Method
   T2 is the definitive stage window. Reaching definitive care counts as stabilised. With no
   window the factor is just P(delivered).
   A stop plan is dropped unless it beats the best direct plan by MARGIN on (1), or matches it on
-  (1) and beats it by MARGIN on (2).
+  (1) and beats it by MARGIN on (2), and, when going direct is within the first-care window, it gives
+  first care sooner than going direct.
+  Stop 1 (#92): the nearest plausible first-care stop leads, p is only a filter and a tie-break. The
+  caller's first choice (first_stop, the app's options list #1) is stop 1 when it can give first care,
+  that is deliver the first stage or the definitive one; otherwise the nearest place that can, by
+  travel minutes. With a first stage, that place is the stop on the way to every far definitive
+  candidate (no corridor), and the objective picks the definitive facility. When the rule above
+  drops every plan through it, the plan with the nearest first stop leads (a direct plan's first stop
+  is its definitive facility). The result's first_stop says whether the caller's choice could give
+  first care and what it lacks.
 - Scheduled pathways (objective fewest_trips): one facility per stage; least travel over
   PLANNING_WEEKS first (one return trip per one-off stage, per_week return trips for the recurring
   stage), then fewer distinct sites. Up to 2 stops before the recurring site. Every plan makes the
@@ -208,7 +217,29 @@ def _instructions(pathway):
              "source": r.get("source")} for r in pathway["rules"] if r["type"] in keep]
 
 
-def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed):
+def _missing(fid, stage, capability_p):
+    """Capability groups of the stage this facility has no usable evidence for (p below MIN_P): [tag] per
+    requires_all tag, the whole group per requires_any group. The weakest tag when each passes alone but the
+    product does not."""
+    out = [[c] for c in stage["requires_all"] if capability_p(fid, c)[0] < MIN_P]
+    out += [list(g) for g in stage["requires_any"] if all(capability_p(fid, c)[0] < MIN_P for c in g)]
+    p, _, weak, _ = stage_p(fid, stage, capability_p)
+    return out or ([[weak]] if p < MIN_P else [])
+
+
+def _anchor(origin, first_care, travel_fn, first_stop):
+    """Stop 1 of an emergency route (#92): first_stop when it can give first care, else the nearest place that can
+    by travel minutes, the higher p on a tie. first_care: {facility id: candidate}."""
+    if first_stop in first_care:
+        return first_stop
+    near = sorted(first_care.values(), key=lambda c: c["km"])[:N_STABILISE]
+    if not near:
+        return None
+    rows = travel_fn(origin, [_pt(c["f"]) for c in near])
+    return min(zip(near, rows), key=lambda x: (round(x[1]["minutes"]), -x[0]["p"]))[0]["f"]["id"]
+
+
+def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed, first_stop=None):
     stages = pathway["stages"]
     definitive = stages[-1]
     stab = stages[0] if len(stages) > 1 else None
@@ -226,11 +257,26 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed):
     else:
         t2, t2_basis = None, None
 
-    cand_d = _candidates(origin, definitive, facilities, capability_p, MIN_P)
-    cand_d.sort(key=lambda c: (c["km"] + 5.0) / c["p"])
-    cand_d = cand_d[:N_DEFINITIVE]
+    all_d = _candidates(origin, definitive, facilities, capability_p, MIN_P)
+    all_s = _candidates(origin, stab, facilities, capability_p, MIN_P) if stab else []
+    first_care = {}
+    for c in all_s + all_d:
+        if c["p"] > first_care.get(c["f"]["id"], {"p": -1.0})["p"]:
+            first_care[c["f"]["id"]] = c
+    anchor = _anchor(origin, first_care, travel_fn, first_stop)
+    a_def = next((c for c in all_d if c["f"]["id"] == anchor), None)
+    a_stab = None if a_def else next((c for c in all_s if c["f"]["id"] == anchor), None)
+    info = None
+    if first_stop is not None:
+        known = any(f["id"] == first_stop for f in facilities)
+        info = {"facility_id": first_stop, "in_data": known, "first_care": first_stop in first_care,
+                "missing_first_care": _missing(first_stop, stages[0], capability_p) if known else [],
+                "missing_definitive": _missing(first_stop, definitive, capability_p) if known else []}
+    cand_d = sorted(all_d, key=lambda c: (c["km"] + 5.0) / c["p"])[:N_DEFINITIVE]
+    if a_def is not None and a_def not in cand_d:
+        cand_d.append(a_def)
     if not cand_d:
-        return [], {"t1": t1, "t2": t2, "gate": gate}
+        return [], {"t1": t1, "t2": t2, "gate": gate, "first_stop": info}
     rows_od = travel_fn(origin, [_pt(c["f"]) for c in cand_d])
     # fallback for each D: the other definitive candidate with the least expected extra time
     fallback = {}
@@ -265,19 +311,21 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed):
         outcomes = [(p, t if t is not None else t_fail, t, None, t is not None) for p, t, t_fail in outs]
         sc = _score(outcomes, t1, t2, elapsed)
         stops = [_stop(c_d, definitive, "definitive", t_d, row["low"], row["high"], None, row, fb_json)]
-        plans.append({"type": "direct", "stops": stops, **sc, "_d": c_d, "_row": row})
+        plans.append({"type": "direct", "stops": stops, **sc, "_d": c_d, "_row": row, "_anchor": c_d is a_def})
 
     if stab and gate is not None:
         far = [(c, r) for c, r in zip(cand_d, rows_od) if r["minutes"] > gate]
         if far:
-            cand_s = _candidates(origin, stab, facilities, capability_p, MIN_P)
-            cand_s.sort(key=lambda c: (c["km"] + 5.0) / c["p"])
-            cand_s = cand_s[:N_STABILISE]
+            cand_s = sorted(all_s, key=lambda c: (c["km"] + 5.0) / c["p"])[:N_STABILISE]
+            if a_stab is not None and a_stab not in cand_s:
+                cand_s.append(a_stab)
             rows_os = travel_fn(origin, [_pt(c["f"]) for c in cand_s]) if cand_s else []
             dwell = stab["dwell_minutes"]["typical"]
             for c_s, row_s in zip(cand_s, rows_os):
-                usable = [(c, r) for c, r in far if c["f"]["id"] != c_s["f"]["id"] and c_s["km"] < c["km"]
-                          and c_s["km"] + hav_km(_pt(c_s["f"]), _pt(c["f"])) <= DETOUR_FACTOR * c["km"] + DETOUR_SLACK_KM]
+                is_a = c_s is a_stab  # stop 1 by rule: on the way or not, it is where first care is nearest
+                usable = [(c, r) for c, r in far if c["f"]["id"] != c_s["f"]["id"] and (is_a or (
+                          c_s["km"] < c["km"] and
+                          c_s["km"] + hav_km(_pt(c_s["f"]), _pt(c["f"])) <= DETOUR_FACTOR * c["km"] + DETOUR_SLACK_KM))]
                 if not usable:
                     continue
                 rows_sd = travel_fn(_pt(c_s["f"]), [_pt(c["f"]) for c, _ in usable])
@@ -297,10 +345,10 @@ def _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed):
                     high = row_s["high"] + wait + row_sd["high"]
                     stops = [_stop(c_s, stab, "stabilise", t_s, row_s["low"], row_s["high"], wait, row_s),
                              _stop(c_d, definitive, "definitive", t_ok, low, high, None, row_sd, fb_json)]
-                    plans.append({"type": "one_stop", "stops": stops, **sc, "_d": c_d,
+                    plans.append({"type": "one_stop", "stops": stops, **sc, "_d": c_d, "_anchor": is_a,
                                   "_t2_with_stop": t2_ok, "_after_rule": after_rule})
     return plans, {"t1": t1, "t1_basis": t1_basis, "t2": t2, "t2_basis": t2_basis, "gate": gate,
-                   "gate_rule": gate_rule["id"] if gate_rule else None}
+                   "gate_rule": gate_rule["id"] if gate_rule else None, "first_stop": info}
 
 
 def _order(plans):
@@ -320,6 +368,19 @@ def _order(plans):
     return out
 
 
+def _beats_direct(p, best_direct, t1, elapsed):
+    """A stop plan's clear advantage over the best direct plan: MARGIN on (1), or equal on (1) and MARGIN on (2);
+    and when going direct is within the first-care window, first care sooner than going direct."""
+    if best_direct is None:
+        return True
+    d = best_direct["stops"][-1]["eta_minutes"]
+    if t1 is not None and d + elapsed <= t1 and p["stops"][0]["eta_minutes"] >= d:
+        return False
+    better = p["p_objective"] >= best_direct["p_objective"] + MARGIN
+    same = p["p_objective"] >= best_direct["p_objective"] - 1e-9
+    return better or (same and p["p_first_care"] >= best_direct["p_first_care"] + MARGIN)
+
+
 def _finish_emergency(plans, ctx, pathway, elapsed):
     directs = _order([p for p in plans if p["type"] == "direct"])
     best_direct = directs[0] if directs else None
@@ -327,13 +388,19 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
     for p in plans:
         if p["type"] != "one_stop":
             continue
-        better = p["p_objective"] >= best_direct["p_objective"] + MARGIN if best_direct else True
-        same = best_direct is not None and p["p_objective"] >= best_direct["p_objective"] - 1e-9
-        if better or (same and p["p_first_care"] >= best_direct["p_first_care"] + MARGIN):
+        if _beats_direct(p, best_direct, ctx["t1"], elapsed):
             kept.append(p)
         else:
             dropped += 1
     kept = _order(kept)
+    # stop 1 by rule (#92): the best plan through the anchor when it survived the rule above, else the best plan
+    # with the nearest first stop (a direct plan's first stop is its definitive facility)
+    lead = next((p for p in kept if p.get("_anchor")), None)
+    if lead is None:
+        nearest = min(p["stops"][0]["eta_minutes"] for p in kept)
+        lead = next(p for p in kept if p["stops"][0]["eta_minutes"] == nearest)
+    kept = [lead] + [p for p in kept if p is not lead]
+    by_sig = {tuple(s["facility_id"] for s in p["stops"]): p for p in plans}
     chosen, seen = [], set()
     for p in kept:
         sig = tuple(s["facility_id"] for s in p["stops"])
@@ -355,7 +422,8 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
         vs = None
         if best_direct is not None:
             gain = p["p_objective"] - best_direct["p_objective"]
-            text, shown = _vs_direct_text(p, best_direct, ctx["t1"], elapsed)
+            same_d = by_sig.get((p["stops"][0]["facility_id"], best_direct["stops"][-1]["facility_id"]))
+            text, shown = _vs_direct_text(p, best_direct, ctx["t1"], elapsed, same_d, p is chosen[0])
             vs = {"direct_facility_id": best_direct["stops"][-1]["facility_id"],
                   "direct_name": best_direct["stops"][-1]["name"],
                   "direct_minutes": best_direct["stops"][-1]["eta_minutes"],
@@ -374,24 +442,49 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
     return out, dropped
 
 
-def _vs_direct_text(p, best_direct, t1, elapsed):
+def _vs_direct_text(p, best_direct, t1, elapsed, same_d=None, lead=True):
     """One plain sentence against going straight to the best direct facility, and every number it quotes.
-    Minutes only: the probabilities stay in the vs_direct fields, not in the sentence (#86 decision 3)."""
+    Minutes only: the probabilities stay in the vs_direct fields, not in the sentence (#86 decision 3).
+    A stop plan says why it stops when going direct is within the window (first care sooner), and why its
+    definitive facility is not the direct one. same_d: the plan with the same first stop and the direct one's
+    definitive facility, when there is one; lead: p is the best plan."""
     d = best_direct["stops"][-1]
     shown = {"direct_minutes": d["eta_minutes"]}
     direct = f"Going straight to {d['name']} takes {d['eta_minutes']} min"
+    within = False
     if t1 is not None:
         shown["window_minutes"] = t1
-        missed = d["eta_minutes"] + elapsed > t1
-        direct += f" and misses the {t1}-minute window" if missed else f", within the {t1}-minute window"
+        within = d["eta_minutes"] + elapsed <= t1
+        direct += f", within the {t1}-minute window" if within else f" and misses the {t1}-minute window"
     if p["type"] == "one_stop":
-        s = p["stops"][0]
+        s, e = p["stops"]
         shown["first_care_minutes"] = s["eta_minutes"]
-        return f"{direct}; stopping first at {s['name']} gives first care in about {s['eta_minutes']} min.", shown
+        text = f"{direct}; stopping first at {s['name']} gives first care"
+        if within:  # _beats_direct keeps such a stop only when first care comes sooner
+            shown["minutes_sooner"] = d["eta_minutes"] - s["eta_minutes"]
+            text += f" {shown['minutes_sooner']} min sooner,"
+        text += f" in about {s['eta_minutes']} min"
+        if e["facility_id"] != d["facility_id"]:
+            shown["plan_minutes"] = e["eta_minutes"]
+            why = _why_other(p, d, same_d, lead)
+            text += f", and the route then goes on to {e['name']} (about {e['eta_minutes']} min), {why}"
+        return f"{text}.", shown
     if p is best_direct:
         return f"{direct}.", shown
     shown["plan_minutes"] = p["stops"][-1]["eta_minutes"]
     return f"{direct}; this route goes straight to {p['stops'][-1]['name']} instead, in about {shown['plan_minutes']} min.", shown
+
+
+def _why_other(p, d, same_d, lead):
+    """Why a stop plan's definitive facility is not the direct one (d), in words that hold for this plan. Only the
+    lead plan was ranked above same_d; an alternative just names the other hospital."""
+    if p["stops"][-1]["p"] > d["p"]:
+        return f"which has stronger evidence than {d['name']} for definitive care"
+    if same_d is not None and same_d["stops"][-1]["eta_minutes"] > p["stops"][-1]["eta_minutes"]:
+        return f"which is quicker to reach from {p['stops'][0]['name']} than {d['name']}"
+    if lead and same_d is not None:
+        return f"which the route rates higher than {d['name']} for definitive care"
+    return f"rather than {d['name']}"
 
 
 def _scheduled(origin, pathway, facilities, capability_p, travel_fn):
@@ -478,8 +571,9 @@ def _scheduled(origin, pathway, facilities, capability_p, travel_fn):
     return out, []
 
 
-def plan(origin, pathway, facilities, capability_p, travel_fn=None, state=None, elapsed_minutes=0):
-    """Best plan and up to two alternatives. See the module docstring."""
+def plan(origin, pathway, facilities, capability_p, travel_fn=None, state=None, elapsed_minutes=0, first_stop=None):
+    """Best plan and up to two alternatives. See the module docstring. first_stop: facility id the caller ranks
+    first (time-critical pathways only)."""
     origin = (float(origin[0]), float(origin[1]))
     travel_fn = travel_fn or default_travel_fn(state)
     result = {"pathway": pathway["id"], "service": pathway["service"], "urgency": pathway["urgency"],
@@ -487,7 +581,8 @@ def plan(origin, pathway, facilities, capability_p, travel_fn=None, state=None, 
               "elapsed_minutes": elapsed_minutes, "plans": [], "abstain": None,
               "instructions": _instructions(pathway), "assumptions": dict(ASSUMPTIONS)}
     if pathway["objective"] == "time_critical":
-        plans, ctx = _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed_minutes)
+        plans, ctx = _emergency(origin, pathway, facilities, capability_p, travel_fn, elapsed_minutes, first_stop)
+        result["first_stop"] = ctx.get("first_stop")
         if not plans:
             result["abstain"] = {"text": f"No facility within {MAX_KM:.0f} km has evidence of the definitive stage "
                                          f"({pathway['stages'][-1]['id']}). Call the emergency number."}
