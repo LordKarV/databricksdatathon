@@ -9,7 +9,15 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any
 
-from fastapi import HTTPException
+try:
+    from fastapi import HTTPException
+except ImportError:  # ponytail: notebooks and build scripts import only the constants; the app always has fastapi
+    class HTTPException(Exception):  # type: ignore[no-redef]
+        """Stand-in with the same constructor, so this module imports where fastapi is not installed."""
+
+        def __init__(self, status_code: int, detail: Any = None, headers: dict[str, str] | None = None) -> None:
+            super().__init__(status_code, detail)
+            self.status_code, self.detail, self.headers = status_code, detail, headers
 
 # code -> (en, hi). `{state}` is filled in by payload(); every placeholder appears in both languages.
 MESSAGES: dict[str, tuple[str, str]] = {
