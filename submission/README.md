@@ -68,10 +68,10 @@ nearest + call first, and best on paper. Each policy is run under five hidden-tr
 - the emergency ranking fix (#101), before and after.
 
 It is built and run by `build_sim_notebook.py`, in about 3 minutes locally at 20 seeds x 200 cases.
-`referral_saathi.ipynb` section 7b reads the run's aggregate table from `sim_results.csv`, which is committed, so
+`bharosa.ipynb` section 7b reads the run's aggregate table from `sim_results.csv`, which is committed, so
 it needs no simulation output. The CSV header gives the seeds, cases and commit.
 
-## Still to fill
+## Voice latency
 
 - **Section 10** reads the voice latency measured on the deployed app from `measured_on_databricks.json` (the lead's
   smoke test, posted on #2), since no other file in the repository records it.
