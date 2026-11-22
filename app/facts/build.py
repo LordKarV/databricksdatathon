@@ -57,7 +57,7 @@ from facts.ledger_terms import (  # noqa: E402
     nabh_text,
     osm_text,
 )
-from facts.places import PIN_GRID, centre_pin  # noqa: E402
+from facts.places import PIN_GRID, centre_pin_kept, kept_pins  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -712,24 +712,47 @@ def fill_districts(p: pd.DataFrame) -> pd.DataFrame:
     return p
 
 
-def centre_flags(p: pd.DataFrame) -> list[int]:
-    """1 for the PIN that is its district's centre (facts/places.py centre_pin), else 0.
+def not_centre(p: pd.DataFrame, moved: dict[str, list[str]]) -> set[int]:
+    """The PINs of the PIN table `p` that never become a district centre (facts/places.py kept_pins): the ones the LGD
+    correction `moved` (moved_pins) places in another district, and the ones on a point whose first PIN it does.
+    packs/build_packs.py writes the same set into the packs (pins.not_centre) for offline.js."""
+    filed = list(zip(p.district, p.state, strict=True))
+    where = [tuple(moved.get(str(int(x)), f)) for x, f in zip(p.pin, filed, strict=True)]
+    kept = kept_pins(col(p.lat, 5), col(p.lon, 5), filed, where)
+    return {int(x) for x, k in zip(p.pin, kept, strict=True) if not k}
+
+
+def centre_flags(p: pd.DataFrame, moved: dict[str, list[str]] | None = None) -> list[int]:
+    """1 for the PIN that is its district's centre (facts/places.py centre_pin_kept), else 0.
 
     Chosen here from the raw gazetteer points rounded as packs/build_packs.py rounds them, the integers offline.js
     districtCentre reads, so a district centre is the same PIN online and offline. Only PINs the gazetteer files under
-    the district count (fill_districts' guesses never become a centre)."""
+    the district count (fill_districts' guesses never become a centre), and of those only the ones not_centre leaves;
+    a district with none left keeps all of its PINs, and the count of such districts is printed."""
+    skip = not_centre(p, moved or {})
     q = p[p.district_from == ""] if "district_from" in p else p
-    q = q.assign(qa=np.round(q.lat * PIN_GRID).astype(int), qo=np.round(q.lon * PIN_GRID).astype(int))
-    centres = {centre_pin(list(zip(g.pin, g.qa, g.qo, strict=True))) for _, g in q.groupby(["state", "district"])}
+    q = q.assign(qa=np.round(q.lat * PIN_GRID).astype(int), qo=np.round(q.lon * PIN_GRID).astype(int),
+                 kept=~q.pin.astype(int).isin(skip))
+    picks = [centre_pin_kept(list(zip(g.pin, g.qa, g.qo, strict=True)), list(g.kept))
+             for _, g in q.groupby(["state", "district"])]
+    if n_all := sum(not k for _, k in picks):
+        print(f"district centres: {n_all} districts have no PIN that stays there after the LGD correction, "
+              "centre from all of their PINs")
+    centres = {c for c, _ in picks}
     return [int(x in centres) for x in p.pin]
 
 
+def pin_table(v1: Path) -> pd.DataFrame:
+    """The gazetteer PINs with a point, a state and a district (fill_districts), as facts.json's PIN table holds them."""
+    p = pd.read_parquet(v1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "districts", "lat", "lon"])
+    return fill_districts(p.dropna(subset=["lat", "lon", "state"])).dropna(subset=["district"])
+
+
 def pins() -> dict[str, list]:
-    p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "districts", "lat", "lon"])
-    p = fill_districts(p.dropna(subset=["lat", "lon", "state"])).dropna(subset=["district"])
+    p = pin_table(V1)
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
             "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from),
-            "centre": centre_flags(p)}
+            "centre": centre_flags(p, moved_pins())}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
