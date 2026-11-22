@@ -288,8 +288,8 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = shown == re.sub(r"\s+", " ", str(stored)).strip()
     elif kind == "num":
         ok = isinstance(stored, (int, float)) and within_precision(shown, stored)
-    elif kind == "sum":
-        ok = int(number(shown)) == sum(c["points"] for c in stored)
+    elif kind == "sum":  # the ledger total: the shown rows' sum, to the precision shown (tenths for derived/v2)
+        ok = within_precision(shown, sum(c["points"] for c in stored))
     elif kind == "clock":
         m = re.fullmatch(r"(\d{1,2}):(\d{2})\s*([AaPp][Mm])?", shown.strip())
         when = datetime.fromtimestamp(stored / 1000, IST)
@@ -624,6 +624,26 @@ def check_no_text(payload: dict, text: str) -> list[str]:
     return errs
 
 
+def check_ledger(o: dict, i: int, shown: set[str], claims: dict[str, str]) -> list[str]:
+    """The witness ledger (derived/v2): every row's label and points are shown, every quote a row cites is shown with
+    its claim id, and that id is a derived/v1 claim. Not-observable families are named. check_screen has already
+    compared each shown value with the payload and the total with the rows' sum."""
+    errs = []
+    for j, c in enumerate(o["contributions"]):
+        C = f"options.{i}.contributions.{j}"
+        errs += [f"{C}.label not shown"] if f"{C}.label" not in shown else []
+        for k, q in enumerate(c.get("quotes", [])):
+            if not {f"{C}.quotes.{k}.quote", f"{C}.quotes.{k}.claim_id"} <= shown:
+                errs.append(f"{C}.quotes.{k} not shown with its claim id")
+            if claims and q["claim_id"] not in claims:
+                errs.append(f"{C}.quotes.{k}: claim {q['claim_id']} is not a derived/v1 claim")
+    errs += [f"options.{i}.not_observed.{j} not shown" for j in range(len(o.get("not_observed", [])))
+             if f"options.{i}.not_observed.{j}.label" not in shown]
+    if f"options.{i}.contributions" not in shown:
+        errs.append("ledger total not shown")
+    return errs
+
+
 def check_tie_row(payload: dict, o: dict, rows: list[dict]) -> list[str]:
     """Tie-break (#86): a tied option's why page has the named row, with the rule and every tied option's value
     marked; an option outside the tie (or a plan without one) has no such row."""
@@ -710,6 +730,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
+            errs += [f"why/{o['rank']}: {e}" for e in check_ledger(o, i, shown, claims)]
+            sure = re.sub(r"\s+", " ", page.inner_text("#how-sure"))
+            if "()" in sure or re.search(r"(?:^|[:;.]) ?\([+-]", sure):  # a row named without its label
+                errs.append(f"why/{o['rank']}: How sure has an empty label: {sure[:200]!r}")
             errs += [f"why/{o['rank']}: {e}" for e in check_tie_row(payload, o, got["rows"])]
             errs += [f"why/{o['rank']}: {e}" for e in check_number_wording(page.inner_text("#main"))]
             tr = payload.get("meta", {}).get("test_record")

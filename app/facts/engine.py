@@ -206,6 +206,8 @@ class Pair:
     n_own: int
     model: list | None
     listings: int = 1  # duplicate listings of this site merged into it (#78); the score is the best member's
+    ledger: list | None = None  # derived/v2 terms: [[term, tenths of a point, [claim ids]], ...], base first
+    not_observed: str = ""  # families derived/v2 cannot see for this pair, e.g. "WO" (facts/ledger_terms.py)
 
 
 class Engine:
@@ -225,6 +227,8 @@ class Engine:
         self.likely_threshold = facts.get("likely_threshold")
         self.test_record = facts.get("test_record")  # sealed gold v3 TEST record of LIKELY (#86); None if absent
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
+        words = facts.get("ledger", {})  # older exports: no ledger, one "model score" row
+        self.terms, self.not_observed = words.get("terms", {}), words.get("not_observed", {})
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
         # The score a pair gets once a second source confirms it (the gold override): used for "what would change".
@@ -246,10 +250,10 @@ class Engine:
         """(band, p, lo, hi, contributions, evidence_ids) for one facility and service."""
         pr = self.index[service_id][self.fid[facility_id]]
         ev = self._evidence(pr)
-        if pr.model:  # derived/v2 published: its band and interval, one contribution row
+        if pr.model:  # derived/v2 published: its band and interval, and its ledger rows
             band, p, lo, hi, *_ = pr.model
-            return band, p, lo, hi, [{"label": "Model score", "points": _pts(_logit(p))},
-                                     *self._listings(pr)], ev
+            rows = self._ledger(pr) if pr.ledger else [{"label": "Model score", "points": _pts(_logit(p))}]
+            return band, p, lo, hi, [*rows, *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
         # A second-source check outranks the text grade: it is the stronger evidence (#85: two confirmed pairs were
         # banded Unlikely because the grade was tested first).
@@ -271,6 +275,22 @@ class Engine:
             contrib.append({"label": "checked against a second source: " +
                             ("confirmed" if pr.status == "verified_true" else "contradicted"), "points": gold})
         return band, pr.score, pr.lo, pr.hi, contrib + self._listings(pr), ev
+
+    def _ledger(self, pr: Pair) -> list[dict]:
+        """The model's named terms on the app's scale (10 points per logit unit), base first. The build spreads the
+        rounding so the points sum to round(10 x logit(p), 1). A row's quotes are the app claims its term cites."""
+        rows = []
+        for term, tenths, cids in pr.ledger:
+            family, en, hi = self.terms[term]
+            rows.append({"label": en, "label_hi": hi, "family": family, "points": tenths / 10,
+                         "quotes": [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1]}
+                                    for c in cids if c in self.claims]})
+        return rows
+
+    def _not_observed(self, pr: Pair) -> list[dict]:
+        """Families the model cannot see for this pair: they add no points, so they are named, not scored."""
+        return [{"family": f, "label": self.not_observed[f][0], "label_hi": self.not_observed[f][1]}
+                for f in pr.not_observed if f in self.not_observed]
 
     def _track(self, p: float, rule: dict) -> dict:
         """Of the checked listings at this level, how many were confirmed, contradicted or left without information.
@@ -471,6 +491,7 @@ class Engine:
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
+            "not_observed": self._not_observed(pr),
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
             "track_record": self._track(p, rule),
