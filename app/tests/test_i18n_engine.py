@@ -42,7 +42,7 @@ E_PATHS = [
     "itinerary.plans.*.type_word", "itinerary.plans.*.vs_direct.text", "itinerary.plans.*.vs_direct.what_would_change",
     "itinerary.plans.*.window_checks.*.check", "itinerary.plans.*.stops.*.purpose_word",
     "itinerary.plans.*.stops.*.weakest_capability", "itinerary.plans.*.stops.*.question",
-    "itinerary.plans.*.stops.*.flags.*",
+    "itinerary.plans.*.stops.*.flags.*", "rank_rule.text",
     "options.*.route_reason", "options.*.why_first_text", "options.*.band_word", "options.*.travel.label",
     "options.*.say_to_family.en", "options.*.where_check", "options.*.is_real.*", "options.*.flags.*",
     "options.*.call_ahead.*.question", "options.*.call_ahead.*.asked_because", "options.*.track_record.basis",
