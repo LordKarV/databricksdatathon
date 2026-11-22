@@ -133,8 +133,9 @@ def note_consent(page: Page) -> None:
 
 def change_error(page: Page) -> None:
     go(page, "#/change")
-    page.locator("#place").fill("843317")
+    page.locator("#place").fill("xqzv plonk")
     page.locator("#place-form button[type=submit]").click()
+    page.wait_for_function("document.querySelector('#place-err').textContent.length > 0")  # the server's answer
 
 
 def plan_for(service: str) -> Callable[[Page], None]:

@@ -255,6 +255,8 @@ blockquote { margin: 0 0 var(--sp4); padding: var(--sp1) 0 var(--sp1) var(--sp4)
 .ledger th, .ledger td { padding: var(--sp2) var(--sp3); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .ledger thead th { font: 600 var(--s16)/1.3 var(--font-cond); color: var(--muted); }
 .ledger .pts, .ledger .num, td.num { text-align: right; font-family: var(--font-num); white-space: nowrap; }
+.ledger details > summary { min-height: var(--target); font-weight: 500; }
+.ledger details blockquote { margin: var(--sp2) 0; }
 .ledger tfoot th, .ledger tfoot td { border-top: 3px double var(--line-strong); border-bottom: 0; font-weight: 600; }
 .facts { margin: 0; }
 .facts > div { padding: var(--sp3) 0; border-top: 1px solid var(--line); }

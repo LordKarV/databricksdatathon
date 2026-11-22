@@ -139,7 +139,7 @@ function renderBar() {
 function locLine(loc) {
   if (!loc) return th('loc.none');
   const src = {gps: ts('loc.gps', {m: loc.accuracy_m ?? '?'}), last_fix: ts('loc.last_fix'), manual: ts('loc.manual'),
-    pin: ts('loc.pin'), district: ts('loc.district')}[loc.source] || loc.source;
+    pin: ts('loc.pin'), district: ts('loc.district'), place: ts('loc.place')}[loc.source] || loc.source;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
@@ -147,9 +147,12 @@ function getGps(onDone) {
   navigator.geolocation.getCurrentPosition(p => {
     state.loc = {lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
       source: 'gps', t: Date.now(), label: null};
-    save('loc', state.loc);
+    save('loc', state.loc); state.gpsDenied = false;
     onDone(null);
-  }, e => onDone(e.code === 1 ? ts('gps.blocked') : ts('gps.failed')),
+  }, e => {
+    if (e.code === 1) state.gpsDenied = true;
+    onDone(e.code === 1 ? ts('gps.blocked') : ts('gps.failed'));
+  },
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
 
@@ -258,8 +261,12 @@ function home() {
     ? `<a class="where" href="#/change">${icon('pin')}<span class="where-text"><b data-device>${locLine(state.loc)}</b></span>
         <span class="where-change">${th('home.change')}</span></a>
        <button type="button" class="btn btn-block" id="regps">${th('home.update_gps')}</button>`
-    : `<button type="button" class="btn btn-ink btn-block" id="gps">${icon('pin')} ${th('home.use_gps')}</button>
-       <a class="btn btn-block" href="#/change">${th('home.choose_place')}</a>`;
+    : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
+      ? `<p class="note place-hint">${th('gps.blocked')}</p>
+         <a class="btn btn-ink btn-block" href="#/change">${th('place.type')}</a>
+         <button type="button" class="btn btn-block" id="gps">${icon('pin')} ${th('home.use_gps')}</button>`
+      : `<button type="button" class="btn btn-ink btn-block" id="gps">${icon('pin')} ${th('home.use_gps')}</button>
+         <a class="btn btn-block" href="#/change">${th('home.choose_place')}</a>`;
   const boxes = Array.from({length: N_DANGER}, (_, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
       ${state.danger.has(i) ? 'checked' : ''}> ${th('danger.' + i)}</label>`).join('');
   return `<h1 class="visually-hidden" tabindex="-1">${th('home.h')}</h1>
@@ -312,39 +319,100 @@ function gpsScreen() {
     <a class="btn btn-block" href="#/">${th('nav.back')}</a>`;
 }
 function bindGps() {
-  getGps(err => { state.msg = err || ''; if (!err) announce(ts('gps.found')); location.hash = '#/'; });
+  getGps(err => {
+    state.msg = err || '';
+    if (!err) announce(ts('gps.found'));
+    // GPS blocked: go straight to typing the place, which then comes first (#121 bug 5).
+    location.hash = state.gpsDenied && !state.loc ? '#/change' : '#/';
+  });
 }
 
+// Typed place (#121 bug 5): online the server resolves PINs, districts, towns and post offices (/api/place);
+// offline only the saved pack can, so PINs and districts of a saved state. Coordinates always work.
+const PLACE_SOURCE = {pin: 'pin', district: 'district', town: 'place', post_office: 'place'};
 function changeScreen() {
+  const gpsBtn = `<button type="button" class="btn btn-block section" id="back-gps">${icon('pin')} ${th(state.gpsDenied ? 'place.try_gps' : 'place.back_gps')}</button>`;
   return `<h1 tabindex="-1">${th('place.h')}</h1>
-    <button type="button" class="btn btn-block section" id="back-gps">${icon('pin')} ${th('place.back_gps')}</button>
+    ${state.gpsDenied ? `<p class="panel place-hint section">${th('place.gps_blocked_hint')}</p>` : gpsBtn}
     <form id="place-form" class="section" novalidate>
       <label for="place">${th('place.label')}</label>
-      <input id="place" type="text" inputmode="text" autocomplete="off" aria-describedby="place-help place-err">
+      <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
       <p id="place-help" class="note">${th('place.help')}</p>
       <p id="place-err" class="err" role="alert"></p>
+      <div id="place-choices"></div>
       <button type="submit" class="btn btn-ink btn-block">${th('place.use')}</button>
     </form>
     <div id="district-pick" class="section"></div>
+    ${state.gpsDenied ? gpsBtn : ''}
     <a class="btn btn-block section" href="#/">${th('nav.cancel')}</a>`;
+}
+function usePlace(hit, source) {
+  state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
+  save('loc', state.loc); state.msg = ''; location.hash = '#/';
+}
+function placeErr(text) {
+  $('#place-err').textContent = text;
+  $('#place').setAttribute('aria-invalid', 'true');
+  $('#place').focus();
+}
+// {matches} from the server ([] when it knows no such place), or null when it cannot answer (offline, signed out).
+async function serverPlace(q) {
+  if (!navigator.onLine) return null;
+  try {
+    const r = await fetch('/api/place', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({q}), redirect: 'manual'});
+    const j = r.ok || r.status === 404 ? await r.json() : null;
+    return j && Array.isArray(j.matches) ? j : null;
+  } catch { return null; }
+}
+function placeChoices(matches) {
+  $('#place-choices').innerHTML = `<div role="group" aria-labelledby="place-choices-h" class="place-choices">
+    <p id="place-choices-h">${th('place.choose', {n: matches.length})}</p>
+    ${matches.map((m, i) => `<button type="button" class="btn btn-block" data-place="${i}">${esc(m.label)}</button>`).join('')}
+    </div>`;
+  $('#place-choices').querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
+    const m = matches[+b.dataset.place];
+    usePlace(m, PLACE_SOURCE[m.kind] || 'place');
+  }));
+  $('#place-choices [data-place]').focus();
+}
+// Offline: a PIN, or a district name, from every saved pack.
+async function packHit(v) {
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    if (!pack) return {pack: null};
+    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
+      .replace(/ (district|dist|zila|zilla|jila)$/, '');
+    for (const p of pack.packs || [pack]) {
+      const d = p.districts.find(x => x && key(x) === key(v));
+      if (d) return {pack, hit: window.RSOffline.districtCentre(p, d), source: 'district'};
+    }
+    return {pack, hit: null};
+  } catch { return {pack: null}; }
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
   districtPicker();
-  $('#place-form').addEventListener('submit', e => {
+  $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = $('#place').value.trim();
+    $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
     const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
-      state.loc = {lat: +m[1], lon: +m[2], accuracy_m: null, source: 'manual', t: Date.now(), label: null};
-      save('loc', state.loc); state.msg = ''; location.hash = '#/'; return;
+      usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    const bad = msg => { $('#place-err').textContent = msg; $('#place').setAttribute('aria-invalid', 'true'); $('#place').focus(); };
-    if (/^\d{6}$/.test(v)) {
-      packPlace(p => p.pin(v)).then(ok => { if (!ok) bad(ts('place.pin_missing')); });
-      return;
-    }
-    bad(ts('place.bad'));
+    if (!v) { placeErr(ts('place.empty')); return; }
+    const online = await serverPlace(v);
+    if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
+    if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
+    if (online) { placeErr(ts(/^\d{6}$/.test(v) ? 'place.pin_missing' : 'place.name_missing', {v})); return; }
+    const {pack, hit, source} = await packHit(v);
+    if (hit) { usePlace(hit, source); return; }
+    const why = ts(navigator.onLine ? 'place.no_answer' : 'place.no_net');
+    const saved = load('pack');
+    placeErr(pack ? ts('place.not_saved', {why, v, st: saved ? saved.state : ''}) : ts('place.nothing_saved', {why}));
   });
 }
 
@@ -918,9 +986,7 @@ function whyScreen(rank) {
   const o = p && !p.error && !p.offline && p.options.find(x => x.rank === rank);
   if (!o) return notFound();
   const i = p.options.indexOf(o), P = `options.${i}`;
-  const total = o.contributions.reduce((a, c) => a + c.points, 0);
   const width = o.p_hi - o.p_lo;
-  const sign = n => (n > 0 ? '+' : '');
   const tel = telOf(o);
   const maps = `https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lon}&travelmode=driving`;
   const split = ts(o.track_record && o.track_record.split === 'test' ? 'why.split_test' : 'why.split_dev');
@@ -929,7 +995,7 @@ function whyScreen(rank) {
       <p class="quote-tools"><a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('why.source')}</a></p></blockquote>`).join('')
     : `<p>${th('why.no_quote', {label: labelF(p.query)})}</p>`;
   const sure = o.model_band === 'NO_SERVICE_TEXT'
-    ? th('why.sure_no_text', {band: F(P + '.band_word', o.band_word)})
+    ? noTextSureHtml(o, P, p.query)
     : th('why.sure_score', {band: F(P + '.band_word', o.band_word), p: N(P + '.p', o.p.toFixed(2)), similar: similarHtml(o, P)});
   const outcomes = ['yes', 'no', 'none', 'wrong'];
   return `<a class="back" href="#/plan">${icon('back')} ${th('why.back')}</a>
@@ -961,7 +1027,7 @@ function whyScreen(rank) {
       <p class="note">${th('why.out_note')}</p></section>
 
     <section class="section" aria-labelledby="h-sure"><h2 id="h-sure">${th('why.sure_h')}</h2>
-      <p>${sure} ${width > 0.4 ? th('why.very_unsure') : ''}</p>
+      <p id="how-sure">${sure} ${width > 0.4 ? th('why.very_unsure') : ''}</p>
       <p>${trackHtml(o.track_record, P + '.track_record')} (${esc(split)}).</p>${trackBar(o.track_record)}
       ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
       ${fieldHtml(o, P)}
@@ -971,13 +1037,7 @@ function whyScreen(rank) {
     ${i === 0 ? whyNotHtml(p) : ''}
 
     <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
-      <table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(p.query)})}</caption>
-        <thead><tr><th scope="col">${th('why.ledger_col')}</th><th scope="col" class="pts">${th('why.ledger_pts')}</th></tr></thead>
-        <tbody>${o.contributions.map((c, j) => `<tr><td>${E(`${P}.contributions.${j}.label`, c.label)}</td>
-          <td class="pts">${F(`${P}.contributions.${j}.points`, sign(c.points) + c.points, 'num')}</td></tr>`).join('')}</tbody>
-        <tfoot><tr><th scope="row">${th('why.ledger_total')}</th><td class="pts">${F(P + '.contributions', sign(total) + total, 'sum')} &rarr;
-          ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
-      </table>
+      ${ledgerHtml(o, P, p.query)}
       <p class="note">${th('why.model', {hash: F('meta.model_hash', p.meta.model_hash), id: F(P + '.facility_id', o.facility_id)})}</p></section>
 
     <section class="section" aria-labelledby="h-chk"><h2 id="h-chk">${th('why.checks_h')}</h2><dl class="facts">
@@ -994,6 +1054,42 @@ function whyScreen(rank) {
     <section class="section stack-sm" aria-labelledby="h-act"><h2 id="h-act">${th('why.actions_h')}</h2>
       <a class="btn btn-block" href="#/slip/${o.rank}">${th('why.slip')}</a>
       <a class="btn btn-block" href="${esc(maps)}" rel="noopener noreferrer">${th('why.maps')}</a></section>`;
+}
+// The model's witness ledger (derived/v2, #132): one row per named term, in points (10 per unit of log-odds), summing to
+// the total that maps to p. A row that cites the listing's own sentences opens to show them. Families the model cannot
+// see for this listing add nothing and share one muted line. Hindi shows each row's own label_hi from the payload.
+const signed = n => (n > 0 ? '+' : '') + (Number.isInteger(n) ? String(n) : n.toFixed(1));
+function rowLabel(c, path) {
+  if (state.lang === 'hi' && c.label_hi) return F(path + '.label_hi', c.label_hi);
+  return c.label_hi === undefined ? E(path + '.label', c.label) : F(path + '.label', c.label);
+}
+function ledgerHtml(o, P, q) {
+  const total = o.contributions.reduce((a, c) => a + c.points, 0);
+  const rows = o.contributions.map((c, j) => {
+    const C = `${P}.contributions.${j}`;
+    const label = rowLabel(c, C);
+    const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
+    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
+      <td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+  }).join('');
+  const unseen = o.not_observed || [];
+  return `<table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(q)})}</caption>
+      <thead><tr><th scope="col">${th('why.ledger_col')}</th><th scope="col" class="pts">${th('why.ledger_pts')}</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><th scope="row">${th('why.ledger_total')}</th><td class="pts">${F(P + '.contributions', signed(total), 'sum')} &rarr;
+        ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
+    </table>
+    ${unseen.length ? `<p class="note">${th('why.not_observed', {list: unseen.map((x, j) => rowLabel(x, `${P}.not_observed.${j}`)).join('; ')})}</p>` : ''}`;
+}
+// How sure for NO SERVICE TEXT (derived/v2/README): never Likely, but its score still comes from the ledger's other
+// rows; the two that add most are named, so this line and the ledger agree.
+function noTextSureHtml(o, P, q) {
+  const top = o.contributions.map((c, j) => [c, j]).filter(([c]) => c.family && c.family !== 'base' && c.points > 0)
+    .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
+    .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
+  return th(q.service === 'trauma_emergency' && o.evidence.length ? 'why.no_text_trauma' : 'why.no_text_other',
+    {band: F(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
+    + (top.length ? ' ' + th('why.largest', {rows: top.join('; ')}) : '') + ' ' + th('why.call_to_ask');
 }
 function notFound() {
   return `<h1 tabindex="-1">${th('err.not_found')}</h1><p>${th('err.not_found_help')}</p>
@@ -1347,6 +1443,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const perm = await navigator.permissions?.query({name: 'geolocation'});
     if (perm && perm.state === 'granted' && (location.hash || '#/') === '#/') getGps(err => { if (!err) render(); });
+    // Blocked GPS puts typing the place first; unblocking it in site settings puts GPS back (#121 bug 5).
+    const onPerm = () => {
+      state.gpsDenied = perm.state === 'denied';
+      if (['', '#/', '#/change'].includes(location.hash)) render();
+    };
+    if (perm && perm.state === 'denied') onPerm();
+    if (perm) perm.onchange = onPerm;
   } catch { /* Permissions API missing: the GPS button stays */ }
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
 });

@@ -1,7 +1,9 @@
 """Real facilities behind the plan contract (issue #42). Skips when app/facts/out is not built."""
 from __future__ import annotations
 
+import json
 import math
+import random
 import sys
 import time
 from pathlib import Path
@@ -29,6 +31,12 @@ QUERIES = {
 }
 
 
+def in_budget(r) -> bool:
+    """Spec section 7: plan JSON <= 20 KB gzip on the wire; decoded under 32 KB (the witness ledger made it 29 KB)."""
+    return (r.headers.get("content-encoding") == "gzip" and int(r.headers["content-length"]) < 20_000
+            and len(r.content) < 32_000)
+
+
 def plans():
     return {k: ENGINE.plan(s, la, lo, 40, "gps") for k, (s, la, lo) in QUERIES.items()}
 
@@ -40,7 +48,7 @@ def test_release_queries_answer_from_real_rows(name):
     r = client.post("/api/plan", json={"service": s, "lat": la, "lon": lo, "accuracy_m": 40})
     ms = (time.perf_counter() - t) * 1000
     print(f"{name}: {ms:.0f} ms, {len(r.content)} B")
-    assert r.status_code == 200 and ms < 500 and len(r.content) < 20_000
+    assert r.status_code == 200 and ms < 500 and in_budget(r)
     j = r.json()
     assert j["meta"]["stub"] is False and j["options"]
     for o in j["options"]:
@@ -58,6 +66,40 @@ def test_bands_are_conservative_and_points_reproduce_p():
             assert o["band"] != "unlikely"  # never offered as an option
             total = sum(c["points"] for c in o["contributions"])
             assert abs(1 / (1 + math.exp(-total / 10)) - o["p"]) < 0.03, (o["name"], total, o["p"])
+
+
+V2_SCORES = APP.parent / "derived" / "v2" / "facility_service_scores.parquet"
+TAXONOMY = {"trauma_emergency": "trauma_care"}  # app service id -> derived/v2 service_id where they differ
+
+
+@pytest.mark.skipif(not V2_SCORES.is_file(), reason="derived/v2 not present")
+def test_ledger_rows_are_the_model_terms_and_sum_to_p():
+    """The Why page ledger is derived/v2's own: for 100 random pairs, after a JSON round trip, the rows are the base and
+    the non-zero terms in the model's order, each within the 0.1 rounding of 10 x its logit share, and they sum to
+    10 x logit(p) to the tenth, so the total maps back to p within 0.0013. Every quote a row shows is an app claim."""
+    import pandas as pd
+    served = [(s, pr) for s, rows in ENGINE.pairs.items() for pr in rows if pr.ledger]
+    assert len(served) == sum(len(rows) for rows in ENGINE.pairs.values())  # every served pair carries its ledger
+    picks = random.Random(20261122).sample(served, 100)
+    v2 = pd.read_parquet(V2_SCORES, columns=["unique_id", "service_id", "p", "base", "contributions"])
+    v2 = v2.set_index(["unique_id", "service_id"])
+    for s, pr in picks:
+        fid = ENGINE.fac["id"][pr.fi]
+        _, p, *_, contrib, _ = json.loads(json.dumps(ENGINE.score(fid, s)))
+        rows = [c for c in contrib if "family" in c]  # the duplicate-listings row (no family, 0 points) is extra
+        assert sum(c["points"] for c in contrib) == pytest.approx(sum(c["points"] for c in rows))
+        row = v2.loc[(fid, TAXONOMY.get(s, s))]
+        terms = [t for t in json.loads(row.contributions) if t["points"]]
+        want = [10 * row.base] + [10 * t["points"] * math.log(2) / 20 for t in terms]
+        assert [c["family"] for c in rows] == ["base", *(t["family"] for t in terms)], (fid, s)
+        assert all(abs(c["points"] - w) <= 0.1 + 1e-9 for c, w in zip(rows, want, strict=True)), (fid, s)
+        total = sum(c["points"] for c in rows)
+        assert abs(total / 10 - math.log(p / (1 - p))) <= 0.005 + 1e-9, (fid, s, total, p)
+        assert abs(1 / (1 + math.exp(-total / 10)) - p) < 0.0013
+        assert all(round(c["points"], 1) == c["points"] for c in rows)
+        for c in rows:
+            for q in c["quotes"]:
+                assert q["claim_id"] in ENGINE.claims and q["quote"] == ENGINE.claims[q["claim_id"]][1]
 
 
 def test_evidence_is_verbatim_own_offer_sentences():
@@ -135,7 +177,7 @@ def test_route_rides_along_in_budget(name):
     r = client.post("/api/plan", json={"service": s, "lat": la, "lon": lo, "accuracy_m": 40})
     ms = (time.perf_counter() - t) * 1000
     it = r.json()["itinerary"]
-    assert r.status_code == 200 and ms < 500 and len(r.content) < 20_000, (ms, len(r.content))
+    assert r.status_code == 200 and ms < 500 and in_budget(r), (ms, len(r.content))
     assert it["pathway"] and (it["plans"] or it["abstain"])
     assert "stub" not in it["meta"]
     opts = r.json()["options"]
