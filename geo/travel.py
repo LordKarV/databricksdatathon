@@ -111,7 +111,10 @@ def _row(minutes, km, method, straight_km, low=None, high=None, factor=None, kmh
         label = f"rough estimate: straight line x {factor:.2f} at {kmh:.0f} km/h{roads}, no route check"
     else:
         label = "road route (saved), free flow, no traffic data" if cached else "road route, free flow, no traffic data"
-    return {"minutes": round(minutes), "low": round(low), "high": round(high), "km": round(km, 1),
+    # A place any distance away is never "0 min" (Lucknow C-section: "0 to 227 min" for a point 0.3 km off).
+    floor = 1 if km > 0 else 0
+    m, lo_ = max(floor, round(minutes)), max(floor, round(low))
+    return {"minutes": m, "low": lo_, "high": max(lo_, round(high)), "km": round(km, 1),
             "method": method, "cached": cached,
             "factor": None if factor is None else round(factor, 3), "kmh": None if kmh is None else round(kmh, 1),
             "terrain": terrain, "label": label}

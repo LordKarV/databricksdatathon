@@ -207,3 +207,9 @@ def test_input_validation():
     with pytest.raises(ValueError):
         travel.travel_minutes(O, [(float("nan"), 1.0)])
     assert travel.travel_minutes(O, []) == []
+
+
+def test_a_place_any_distance_away_is_never_zero_minutes():
+    """Lucknow, emergency C-section: City Hospital's map point is 0.3 km off and showed "0 to 227 min"."""
+    r = travel.estimate((26.86, 80.94), (26.858, 80.940))
+    assert r["km"] > 0 and r["minutes"] >= 1 and r["low"] >= 1 and r["high"] >= r["low"]

@@ -211,7 +211,7 @@ def test_gaya_hero_family_line_says_less_than_1_km():
 
 
 def test_jabalpur_nicu_family_line_follows_model_band():
-    from facts.engine import SAY, km_words
+    from facts.engine import SAY, SAY_DOUBT, km_words
 
     o = _post("nicu", 23.18, 79.95)["options"]
     label = SERVICES["nicu"]["label_en"]
@@ -219,7 +219,9 @@ def test_jabalpur_nicu_family_line_follows_model_band():
     assert nst["say_to_family"]["en"] == SAY["NO_SERVICE_TEXT"].format(label=label)
     assert "says it offers" not in nst["say_to_family"]["en"] and "km" not in nst["say_to_family"]["en"]
     lik = next(x for x in o if x["model_band"] == "LIKELY")
-    assert lik["say_to_family"]["en"] == SAY["likely"].format(label=label, dist=km_words(lik["travel"]["km"]))
+    want = (SAY_DOUBT["likely"].format(label=label) if lik["location_doubt"]  # a doubtful point names no distance
+            else SAY["likely"].format(label=label, dist=km_words(lik["travel"]["km"])))
+    assert lik["say_to_family"]["en"] == want
 
 
 def test_pusa_why_not_miracare_leads_with_likely_but_farther():
@@ -741,3 +743,17 @@ def test_restricted_lists_are_only_shown_per_facility():
         pr = ENGINE.index["dialysis"][ENGINE.fid[o["facility_id"]]]
         own = {c for row in pr.ledger for c in row[3]}
         assert {ct["id"] for c in o["contributions"] for ct in c.get("cites", [])} <= own
+
+
+def test_doubtful_map_point_family_line_names_the_doubt_not_a_distance():
+    """Lucknow, emergency C-section (the demo): City Hospital's map point is far from its PIN, so the family line must
+    not say 'less than 1 km away'; and no option there shows a 0-minute lower bound."""
+    opts = _post("emergency_csection", 26.86, 80.94)["options"]
+    doubtful = [o for o in opts if o.get("location_doubt")]
+    assert doubtful, [o["name"] for o in opts]
+    for o in doubtful:
+        say = o["say_to_family"]["en"]
+        assert "map point may be wrong" in say and " km away" not in say, say
+    for o in opts:
+        if o["travel"]["km"] > 0:
+            assert o["travel"]["low"] >= 1 and o["travel"]["minutes"] >= 1, (o["name"], o["travel"])
