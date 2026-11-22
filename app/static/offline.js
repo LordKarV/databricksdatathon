@@ -109,7 +109,10 @@
   function resolvePin(pack, pin) {
     for (const p of pack.packs || [pack]) {
       const i = p.pins.pin.indexOf(+pin);
-      if (i >= 0) return {lat: p.pins.lat[i], lon: p.pins.lon[i], label: `PIN ${pin}, ${titleCase(p.districts[p.pins.d[i]])}`};
+      if (i < 0) continue;
+      // A PIN the gazetteer files under no district is stored with district "": name the state, as online does.
+      const where = titleCase(p.districts[p.pins.d[i]]) || titleCase(p.state);
+      return {lat: p.pins.lat[i], lon: p.pins.lon[i], label: [`PIN ${pin}`, where].filter(Boolean).join(', ')};
     }
     return null;
   }
