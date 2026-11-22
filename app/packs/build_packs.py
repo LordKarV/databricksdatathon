@@ -49,6 +49,9 @@ from common.eligibility import (  # noqa: E402, RUF100
     to_sites,
 )
 
+sys.path.insert(0, str(ROOT / "app"))  # facts.redact: the same name redaction as the live answer (#86)
+from facts.redact import redact_names  # noqa: E402, RUF100
+
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
 
@@ -66,6 +69,8 @@ SERVICE_MAP = {
     "dialysis": "dialysis", "mri": "mri", "cardiac_surgery": "cardiac_surgery",
 }
 SERVICES = list(SERVICE_MAP.values())
+TAXONOMY_TO_APP = {"trauma_care": "trauma_emergency"}  # kb/taxonomy ids that differ from the app keys
+V2_BAND = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
 
 
 def slug(state: str) -> str:
@@ -131,9 +136,10 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
         out.attrs["band_source"] = "placeholder: likely only for pairs verified true; model scores not published yet"
         return out
     m = pd.read_parquet(model_path, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "as_of"])
-    # Accept derived/v1 service names or app keys for service_id.
-    m["service"] = m.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+    # service_id is a kb/taxonomy id (derived/v2); also accept derived/v1 names or app keys.
+    m["service"] = m.service_id.map(lambda s: TAXONOMY_TO_APP.get(s, SERVICE_MAP.get(s, s)))
     m = m[m.service.isin(SERVICES)].drop_duplicates(["unique_id", "service"])
+    m["band"] = m.band.map(lambda b: V2_BAND.get(str(b).upper(), b))  # the same mapping as app/facts/build.py
     unknown = set(m.band) - {"likely", "not_verified", "unlikely"}
     if unknown:
         raise ValueError(f"unknown bands in {model_path}: {sorted(unknown)}")
@@ -162,7 +168,8 @@ def _site_quotes(rep: str, members: list[tuple[str, str | None]], cid: dict[tupl
     for t in sorted(owner, key=lambda t: (len(t), t))[:2]:
         c = cid.get((owner[t], t), "")
         ref = "" if not c else (c.split(":", 1)[1] if owner[t] == rep else "=" + c)
-        out.append((t if len(t) <= QUOTE_MAX else t[:QUOTE_MAX - 3] + "...", ref))
+        shown = redact_names(t)  # never a doctor's name on a phone card (#86)
+        out.append((shown if len(shown) <= QUOTE_MAX else shown[:QUOTE_MAX - 3] + "...", ref))
     return out
 
 

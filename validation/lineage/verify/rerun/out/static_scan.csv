@@ -1,0 +1,141 @@
+file,line,category,snippet
+cleaning/claims/build_claims.py,17,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+cleaning/claims/build_claims.py,18,abs_path,"MERGE = ""/Users/karthikvattem/projects/datathon/audit/merge/out"""
+cleaning/claims/build_claims.py,19,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/merge"")"
+cleaning/claims/evaluate.py,13,abs_path,"GT = ""/Users/karthikvattem/projects/datathon/audit/ground_truth"""
+cleaning/claims/evaluate.py,14,abs_path,"AUDIT = ""/Users/karthikvattem/projects/datathon/audit/claims/out/grades.parquet"""
+cleaning/claims/grade.py,28,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+cleaning/claims/grade.py,29,abs_path,"GEO = ""/Users/karthikvattem/projects/datathon/audit/geo/facility_geo.parquet"""
+cleaning/claims/grade.py,30,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/merge"")"
+cleaning/claims/handcheck.py,8,abs_path,"MERGE = ""/Users/karthikvattem/projects/datathon/audit/merge/out"""
+cleaning/claims/lexicon.py,10,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/claims"")"
+cleaning/claims/measure.py,9,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+cleaning/claims/measure.py,10,abs_path,"AUD = ""/Users/karthikvattem/projects/datathon/audit/claims/out"""
+cleaning/claims/measure.py,11,abs_path,"MERGE = ""/Users/karthikvattem/projects/datathon/audit/merge/out"""
+cleaning/claims/measure.py,80,abs_path,"geo = pd.read_parquet(""/Users/karthikvattem/projects/datathon/audit/geo/facility_geo.parquet"","
+cleaning/claims/run_all.sh,5,abs_path,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+cleaning/claims/run_all.sh,5,venv_pin,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+cleaning/geo_identity/common.py,12,abs_path,"ROOT = Path(""/Users/karthikvattem/projects/datathon"")"
+cleaning/geo_identity/run_all.sh,1,shell_portability,#!/bin/zsh
+cleaning/geo_identity/run_all.sh,7,abs_path,cd /Users/karthikvattem/projects/datathon/cleaning/geo_identity
+cleaning/geo_identity/run_all.sh,8,abs_path,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+cleaning/geo_identity/run_all.sh,8,venv_pin,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+cleaning/geo_identity/run_all.sh,9,shell_portability,$PY places.py >/dev/null 2>&1 || true   # self-check needs pin_gazetteer.parquet; re-run after s1
+pipelines/source_scoring/run_all.sh,1,shell_portability,#!/bin/zsh
+pipelines/source_scoring/run_all.sh,9,abs_path,cd /Users/karthikvattem/projects/datathon/pipelines/source_scoring
+pipelines/source_scoring/run_all.sh,10,abs_path,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+pipelines/source_scoring/run_all.sh,10,venv_pin,PY=/Users/karthikvattem/projects/datathon/.venv/bin/python
+pipelines/source_scoring/run_all.sh,11,abs_path,PYFETCH=/Users/karthikvattem/projects/datathon/.venv-sources/bin/python   # has pypdf for PDF pages
+pipelines/source_scoring/run_all.sh,11,venv_pin,PYFETCH=/Users/karthikvattem/projects/datathon/.venv-sources/bin/python   # has pypdf for PDF pages
+pipelines/source_scoring/run_all.sh,12,abs_path,OUT=/Users/karthikvattem/projects/datathon/derived/v1
+pipelines/source_scoring/s3_pagecheck.py,31,network,import urllib.request
+pipelines/source_scoring/s3_pagecheck.py,33,network,from concurrent.futures import ThreadPoolExecutor
+pipelines/source_scoring/s3_pagecheck.py,115,network,"req = urllib.request.Request(url, headers={""User-Agent"": UA, ""Accept"": ""text/html,application/pdf;q=0.9,*/*;q=0.5""})"
+pipelines/source_scoring/s3_pagecheck.py,117,network,"with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:"
+pipelines/source_scoring/s3_pagecheck.py,214,wallclock,t0 = time.time()
+pipelines/source_scoring/s3_pagecheck.py,222,wallclock,"print(f""{done[0]} urls, {time.time() - t0:.0f}s"", flush=True)"
+pipelines/source_scoring/s3_pagecheck.py,225,network,with ThreadPoolExecutor(max_workers=24) as ex:
+pipelines/source_scoring/s3_pagecheck.py,232,wallclock,"""seconds"": round(time.time() - t0)}"
+pipelines/source_scoring/s5_fit.py,90,hash_order,for cid in set(sup) | set(nos):
+pipelines/source_scoring/ss_common.py,14,abs_path,"ROOT = Path(""/Users/karthikvattem/projects/datathon"")"
+kb/crawl/crawl.py,30,network,import httpx
+kb/crawl/crawl.py,34,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/crawl/crawl.py,84,network,"if isinstance(e, (httpx.TimeoutException, TimeoutError, asyncio.TimeoutError)):"
+kb/crawl/crawl.py,90,network,"if isinstance(e, httpx.ConnectError):"
+kb/crawl/crawl.py,92,network,"if isinstance(e, (httpx.RemoteProtocolError, httpx.ReadError, httpx.WriteError)):"
+kb/crawl/crawl.py,94,network,"if isinstance(e, httpx.InvalidURL) or isinstance(e, httpx.UnsupportedProtocol):"
+kb/crawl/crawl.py,104,network,"limits = httpx.Limits(max_connections=workers + 8, max_keepalive_connections=workers)"
+kb/crawl/crawl.py,108,network,self.client = httpx.AsyncClient(**kw)
+kb/crawl/crawl.py,110,network,"self.lax = httpx.AsyncClient(verify=False, **kw)"
+kb/crawl/crawl.py,122,network,"await asyncio.wait_for(asyncio.get_running_loop().getaddrinfo(host, 443, type=socket.SOCK_STREAM), 10)"
+kb/crawl/crawl.py,257,wallclock,"now = datetime.now(timezone.utc).isoformat(timespec=""seconds"")"
+kb/crawl/crawl.py,342,wallclock,"started = datetime.now(timezone.utc).isoformat(timespec=""seconds"")"
+kb/crawl/crawl.py,374,wallclock,"""pages"": out[""pages""], ""finished_at"": datetime.now(timezone.utc).isoformat(timespec=""seconds"")}"
+kb/crawl/crawl.py,457,wallclock,"""seconds"": round(time.monotonic() - t, 1), ""at"": datetime.now(timezone.utc).isoformat(timespec=""seconds"")}"
+kb/crawl/report.py,13,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/crawl/targets.py,23,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/opendata/build_sources.py,22,abs_path,"ROOT = Path(""/Users/karthikvattem/projects/datathon"")"
+kb/opendata/fetch_wikidata.py,13,network,import urllib.request
+kb/opendata/fetch_wikidata.py,19,abs_path,"OUT = Path(""/Users/karthikvattem/projects/datathon/data/crawl/opendata/wikidata"")"
+kb/opendata/fetch_wikidata.py,60,network,req = urllib.request.Request(
+kb/opendata/fetch_wikidata.py,63,network,"with urllib.request.urlopen(req, timeout=300) as r:"
+kb/opendata/fetch_wikidata.py,69,network,"stats = urllib.request.urlopen(urllib.request.Request(ENDPOINT + ""?cmd=stats"", headers={""User-Agent"": UA}),"
+kb/opendata/fetch_wikidata.py,72,wallclock,"(OUT / ""fetched_at.txt"").write_text(time.strftime(""%Y-%m-%dT%H:%M:%SZ"", time.gmtime()))"
+kb/opendata/match_vf.py,27,abs_path,"ROOT = Path(""/Users/karthikvattem/projects/datathon"")"
+kb/taxonomy/build_lexicon.py,26,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/build_lexicon.py,27,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+kb/taxonomy/build_lexicon.py,28,abs_path,"LOC = ""/Users/karthikvattem/projects/datathon/cleaning/geo_identity/facility_location.parquet"""
+kb/taxonomy/build_specialty_map.py,26,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+kb/taxonomy/build_specialty_map.py,27,abs_path,"USABLE = ""/Users/karthikvattem/projects/datathon/cleaning/geo_identity/facility_location.parquet""  # 9,959 usable records"
+kb/taxonomy/build_specialty_map.py,153,warehouse_llm,"r = json.loads(subprocess.run([""databricks"", ""api"", ""post"", ""/api/2.0/sql/statements"", ""--json"", body],"
+kb/taxonomy/build_specialty_map.py,158,warehouse_llm,"r = json.loads(subprocess.run([""databricks"", ""api"", ""get"", f""/api/2.0/sql/statements/{sid}""],"
+kb/taxonomy/build_specialty_map.py,182,warehouse_llm,"sql = (f""SELECT k, r.result, r.errorMessage FROM (SELECT k, ai_query('{MODEL}', p, responseFormat => '{fmt}', """
+kb/taxonomy/explore_lexicon.py,8,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/explore_lexicon.py,15,wallclock,t0 = time.time()
+kb/taxonomy/explore_lexicon.py,17,wallclock,"print(""tagged in"", round(time.time() - t0), ""s"")"
+kb/taxonomy/handcheck_lexicon.py,11,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/handcheck_v1_1.py,27,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/lexicon_src.py,16,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/cleaning/claims"")"
+kb/taxonomy/review/corroboration.py,15,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+kb/taxonomy/review/corroboration.py,16,abs_path,"LOC = ""/Users/karthikvattem/projects/datathon/cleaning/geo_identity/facility_location.parquet"""
+kb/taxonomy/review/exclusion_loss.py,17,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/review/overlap.py,15,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/review/sample_lexicon.py,18,abs_path,"CLAIMS = ""/Users/karthikvattem/projects/datathon/cleaning/claims/out/claims.parquet"""
+kb/taxonomy/specialty_weights.py,28,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+kb/taxonomy/specialty_weights.py,29,abs_path,"LOC = ""/Users/karthikvattem/projects/datathon/cleaning/geo_identity/facility_location.parquet"""
+kb/vf_details/extract.py,21,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/vf_details/handcheck.py,40,abs_path,"names = pd.read_parquet(""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"", columns=[""unique_id"", ""name""]).drop_duplicates(""unique_id"")"
+kb/vf_details/llm_hours.py,64,warehouse_llm,"r = json.loads(subprocess.run([""databricks"", ""api"", ""post"", ""/api/2.0/sql/statements"", ""--json"", body], env=env, capture_output=True, text=True, check=True).std"
+kb/vf_details/llm_hours.py,67,warehouse_llm,"r = json.loads(subprocess.run([""databricks"", ""api"", ""get"", f""/api/2.0/sql/statements/{r['statement_id']}""], env=env, capture_output=True, text=True, check=True)"
+kb/vf_details/llm_hours.py,128,warehouse_llm,"sql = (f""SELECT claim_id, ai_query('{MODEL}', concat({sql_str(PROMPT)}, text), responseFormat => {sql_str(json.dumps(SCHEMA))}) AS out """
+kb/vf_details/patterns.py,17,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/scale"")"
+kb/vf_details/patterns.py,21,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/cleaning/claims"")"
+kb/vf_details/report_numbers.py,1,venv_pin,"""""""Coverage and plausibility numbers quoted in VF_DETAILS.md. Run: .venv/bin/python report_numbers.py > out/report_numbers.txt"""""""
+kb/vf_details/report_numbers.py,19,abs_path,"sc = pd.read_parquet(""/Users/karthikvattem/projects/datathon/audit/scale/scale_flags.parquet"").drop_duplicates(""unique_id"").set_index(""unique_id"")"
+kb/web_evidence/build_web_evidence.py,29,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/web_evidence/compare_dataset.py,32,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/web_evidence/compare_dataset.py,83,hash_order,allk = {k for k in t_any | spec if k[0] in usable and k[1] in SERVICE_IDS}
+kb/web_evidence/qa/qa.py,24,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/web_evidence/qa/scan.py,23,abs_path,"ROOT = ""/Users/karthikvattem/projects/datathon"""
+kb/web_evidence/qa/scan.py,260,hash_order,own = {u: own_place(u) for u in set(svc.unique_id) | set(facts.unique_id) if u in raw.index}
+kb/web_evidence/report_numbers.py,1,venv_pin,"""""""Print every number WEB_EVIDENCE.md cites. Run: .venv/bin/python report_numbers.py > out/report_numbers.txt"""""""
+kb/web_evidence/web_llm_hours.py,22,abs_path,"_spec = importlib.util.spec_from_file_location(""vf_llm"", ""/Users/karthikvattem/projects/datathon/kb/vf_details/llm_hours.py"")"
+kb/web_evidence/web_llm_hours.py,40,warehouse_llm,"sql = (f""SELECT k, ai_query('{VL.MODEL}', concat({VL.sql_str(PROMPT)}, text), responseFormat => {VL.sql_str(json.dumps(VL.SCHEMA))}) AS out """
+app/facts/build.py,67,hash_order,shared = Counter(str(x) for p in tr.display_phones if p is not None for x in set(p))
+app/facts/build.py,149,wallclock,t0 = time.time()
+app/facts/build.py,157,wallclock,"""built_at"": time.strftime(""%Y-%m-%dT%H:%M:%SZ"", time.gmtime())},"
+app/facts/build.py,183,wallclock,"f""{time.time() - t0:.1f} s; sha {facts_hash}"")"
+app/facts/engine.py,293,wallclock,"""generated_at"": datetime.now(UTC).isoformat(timespec=""seconds"")}"
+app/packs/build_packs.py,122,hash_order,"parts = sorted({p.strip() for p in (joined or """").split("" || "") if p.strip()}, key=len)[:2]"
+app/packs/build_packs.py,231,hash_order,for li in set(idx):
+planner/export_v1.py,49,wallclock,"doc = {""version"": 1, ""built_utc"": time.strftime(""%Y-%m-%dT%H:%M:%SZ"", time.gmtime()),"
+audit/provenance/common.py,9,abs_path,"RAW = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/common.py,10,abs_path,"OUT = ""/Users/karthikvattem/projects/datathon/audit/provenance"""
+audit/provenance/handcheck_domains.py,9,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/handcheck_samples.py,9,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/q1_sources.py,11,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/q2_description.py,11,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/q3_pincode.py,11,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/q4_nfhs.py,12,abs_path,"sys.path.insert(0, ""/Users/karthikvattem/projects/datathon/audit/provenance"")"
+audit/provenance/verify/v0_warehouse.sh,4,abs_path,"/Users/karthikvattem/projects/datathon/sql.sh """
+audit/provenance/verify/v0_warehouse.sh,4,network,"/Users/karthikvattem/projects/datathon/sql.sh """
+audit/provenance/verify/v10_proxies.py,6,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v11_read_cited.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v12_p2_compare.py,3,abs_path,"me = pd.read_parquet(""v10_records.parquet""); fi = pd.read_parquet(""/Users/karthikvattem/projects/datathon/audit/provenance/q1_records.parquet"")"
+audit/provenance/verify/v13_url_classes.py,4,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v14_official.py,5,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v15_misc.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v16_near_dups.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v1_base.py,3,abs_path,"F = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+audit/provenance/verify/v1b_align.py,3,abs_path,"F = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+audit/provenance/verify/v2_url_sample.py,3,abs_path,"F = ""/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"""
+audit/provenance/verify/v3_pin.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v3b_p4_check.py,5,abs_path,"p = pd.read_parquet(""/Users/karthikvattem/projects/datathon/data/raw/india_post_pincode_directory.parquet"")"
+audit/provenance/verify/v4_breadth.py,4,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v5_state.py,4,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v6_desc.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v7_template.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v7b_911.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v8_nfhs.py,3,abs_path,"n = pd.read_parquet(""/Users/karthikvattem/projects/datathon/data/raw/nfhs_5_district_health_indicators.parquet"")"
+audit/provenance/verify/v9_join.py,3,abs_path,"R = ""/Users/karthikvattem/projects/datathon/data/raw"""
+audit/provenance/verify/v9_join.py,10,abs_path,"cw = pd.read_csv(""/Users/karthikvattem/projects/datathon/audit/provenance/nfhs_district_crosswalk.csv"")"

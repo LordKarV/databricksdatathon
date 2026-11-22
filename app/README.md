@@ -61,7 +61,8 @@ Response:
     "band": "likely | not_verified | unlikely", "band_word": "Likely", "band_reason": null | "...",
     "p": 0.81, "p_lo": 0.70, "p_hi": 0.89,
     "p_e": 0.97, "p_l": 0.95,   // MODEL: P(facility exists), P(map point is right); Compare depth (S10)
-    "evidence": [{"claim_id", "field", "quote", "source_url"}],
+    "evidence": [{"claim_id", "field", "quote", "source_url",
+                  "flags": [{"code", "text", "weak", "place", "km"}]}],   // #86: warnings shown next to the quote
     "contributions": [{"label", "points"}],
     "flags": ["plain-English warning", ...],
     "call_ahead": [{"question", "asked_because"}],
@@ -71,7 +72,12 @@ Response:
     "is_real": ["..."], "where_check": "...", "why_first_text": null | "...",
     "say_to_family": {"en": "...", "hi": null | "..."}
   }],
-  "why_not": [{"facility_id", "name", "travel", "reason"}],
+  "why_not": [{"facility_id", "name", "travel", "option_rank", "minutes_vs_first", "band",
+               "reason_code", "reason", "basis": [{"code", "field", "value"}]}],          // #86
+  "what_would_change": null | {"kind": "confirm_nearer | first_says_no", "facility_id", "name",
+                               "first_name", "minutes_vs_first"},
+  "time_window": {"window_min", "first_outside"},
+  "public_option": null | {"facility_id", "name", "operator", "label", "text", "travel"},   // when first_outside
   "meta": {"stub": true, "model_hash": "...", "data_snapshot": "...", "generated_at": "..."}
 }
 ```
@@ -89,8 +95,13 @@ the stub returns invented sample values.
   "summary": {"n_pins", "n_without_option", "access_now", "access_if_confirmed",
               "calls_could_close", "no_public_evidence"},          // MODEL: shares of the area, 0..1
   "caveat": "Low web presence looks like a gap. Verify before deciding.",
+  "gap": {"pins_sampled", "pins_in_district", "radius_km", "district_claiming", "district_confirmed",
+          "covered", "not_confirmed", "far", "no_claim",
+          "public_standard": [{"facility_id", "name", "label"}]},           // #86: data gap vs care gap
   "pins": [{"pin", "lat", "lon", "first": null | {"facility_id", "name"}, "backup": null | {...},
-            "travel": null | {"low", "high"}, "call_first": null | "name", "nearest_km": null | 96.0}],
+            "travel": null | {"low", "high"}, "call_first": null | "name", "nearest_km": null | 96.0,
+            "gap": "covered | not_confirmed | far | no_claim",
+            "public": null | {"facility_id", "name", "km", "label"}}],
   "ten_calls": [{"rank", "facility_id", "name", "phone_kind", "areas", "access_gain"}],   // MODEL
   "meta": {"stub", "model_hash"}
 }
@@ -168,7 +179,7 @@ now a test fixture only).
 - **Known gaps:**
   - `operator` is "unknown" for every option: derived/v1 has no public/private field, and the spec allows
     "public" only when a field says so.
-  - Quotes link to the record's best source URL (official home page first), not a per-sentence page.
+  - Quotes link to the record's best source URL (official home page first, then a page about the facility), not a per-sentence page.
 
 ## How this works page (`#/how`, #45)
 
@@ -331,3 +342,44 @@ and Read aloud. The language is never auto-detected.
   evidence family's weight (a Beta update, with today's mean counted as 10 earlier calls). Nothing retrains
   automatically.
 - **Tests.** `app/tests/test_outcomes.py` mocks the warehouse.
+
+## Why not the nearest, flagged citations, data gap vs care gap (#86)
+
+- **Why not the nearest?** `why_not` lists the 3 nearest candidates by travel time other than the first choice,
+  also when the answer abstains. Each has one plain sentence of at most two clauses, the most decisive first:
+  - contradicted; no own sentence; every sentence flagged;
+  - beyond the urgency window (60 min for emergencies); farther than the first choice;
+  - a prerequisite the first choice's listing mentions and this one's does not (24x7 emergency, CT, operating theatre);
+  - tag-only or vague evidence; map point in doubt; shared phone; not confirmed; weaker evidence.
+
+  `basis` names the field behind each clause. The tests check it against the engine and the payload.
+  - `what_would_change`: the nearer Not verified listing that a "yes" on the phone would move to first place. It is
+    re-ranked with the confirmed-pair score. Otherwise: "if option 1 cannot take the patient, call option 2".
+  - `time_window.first_outside`: when option 1 misses the window (60 min for emergencies), the answer's first line
+    says so ("The best-evidenced option is about 104 min away; that misses the 60-min window for this care"). It
+    shows 108 (and 102 for mothers and newborns) and `public_option`: the nearest hospital the public standard
+    expects to offer the care, labelled "by public standard, not verified". This holds whether or not the answer
+    abstains.
+- **Flags inside the citation.** Each quote carries the warnings the pipeline already computed:
+  - source page: `url_kind` list or unverified (`audit/provenance/q1_sources.py`), or a Wikipedia page about a place
+    in `place_gazetteer` more than 25 km away;
+  - sentence: `claims.parquet` attribution `ambiguous`, `foreign_names`, `places_other_district/state`, and the
+    third-party, hedge, part-time, camp, future and past cues.
+
+  Weak quotes are listed after clean ones (demoted, not hidden), with a 0-point row in "How we decided".
+  The record's source link now prefers a page about the facility over a list or an unchecked page.
+  This covers 9,082 of 9,947 records, against 5,514 before.
+- **No names.** `facts/redact.py` turns "Dr. X Y" into "a doctor" in every quote. That covers options, route stops,
+  "Ignored" flags, the website check and offline packs. Institutions named after someone are kept, and so is the
+  claim id.
+- **Data gap vs care gap** (`gap` in `/api/area`). Each sampled PIN is one of:
+  - covered: a confirmed option within the window;
+  - care gap: listings in the window claim it but none is confirmed, or every listing is beyond the window;
+  - data gap: no listing within 150 km claims it, so we cannot tell.
+
+  The page states the PIN sample (the first 40 PINs by number). Where a PIN has no option with public evidence, its
+  row names the nearest public-standard hospital (`pins[].public`). Where the district shows a gap, the screen lists
+  the district's public-standard hospitals (`gap.public_standard`, at most 5). Both are labelled "by public standard,
+  not verified".
+- **Tests.** `tests/test_standout.py`. `tests/test_faithfulness.py` checks every new value on the page. It adds three
+  probes: Pusa trauma, Pune heart surgery (a named doctor) and Nagpur MRI (flagged sources).

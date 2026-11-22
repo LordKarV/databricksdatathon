@@ -1,0 +1,11 @@
+[
+ {
+  "name": "enums",
+  "status": "pass",
+  "metric": "31 enum columns, 0 with undocumented values",
+  "threshold": "documented sets only",
+  "detail": "outputs/enum_values.csv",
+  "examples": [],
+  "seconds": 6.6
+ }
+]

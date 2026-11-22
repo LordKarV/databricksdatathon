@@ -34,6 +34,8 @@ POLL_SECONDS = 5  # ponytail: plain sleep between polls, only hit when a query o
 # viz/style.py tokens
 BLUE, ORANGE, GREEN, AMBER, PINK, DKGREEN = "#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"
 LIKELY, UNVERIFIED, UNLIKELY = "#6da7ec", "#c3c2b7", "#e34948"
+PUBLIC_CAVEAT = ("Public facilities: the v2 score has no demonstrated ranking ability for public facilities "
+                 "(31 public DEV pairs, AUROC interval spans 0.5 widely), so do not rank public records by P_S.")
 SHARED_CAVEAT = ("A record is a listing in one private-leaning dataset (88% private). "
                  "No evidence here is not no care: read every gap as \"no public evidence of care\".")
 SERVICES = ["trauma_emergency", "dialysis", "emergency_csection", "nicu", "cardiac_surgery", "mri", "burn_care"]
@@ -68,8 +70,7 @@ base AS (
          CASE WHEN array_contains(r.trust_flags, 'official_phone_is_directory') THEN 1 ELSE 0 END AS directory_phone,
          r.trust_level, r.website_class,
          CASE g.degurba WHEN 3 THEN 'Urban centre' WHEN 2 THEN 'Town or semi-dense' WHEN 1 THEN 'Rural' END AS settlement,
-         CASE WHEN g.operatorTypeId IN ('public', 'government') THEN 'Public'
-              WHEN g.operatorTypeId = 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
+         CASE fa.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
          CASE WHEN l.loc_src <> 'listing_coordinates' THEN 1 ELSE 0 END AS fixed_corrected_point,
          CASE WHEN q.unique_id IS NOT NULL THEN 1 ELSE 0 END AS fixed_quarantined_text,
          CASE WHEN l.loc_conf IN ('low', 'disputed') THEN 1 ELSE 0 END AS flagged_location,
@@ -84,6 +85,7 @@ base AS (
   FROM facility_location l
   JOIN geo_facility g ON g.unique_id = l.unique_id
   JOIN record_trust r ON r.unique_id = l.unique_id
+  LEFT JOIN facility_attributes_v2 fa ON fa.unique_id = l.unique_id
   LEFT JOIN facility_hours h ON h.unique_id = l.unique_id
   LEFT JOIN geo_facility_site w ON w.unique_id = l.unique_id
   LEFT JOIN direct d ON d.unique_id = l.unique_id
@@ -183,16 +185,23 @@ FROM claims_funnel_pairs p
 JOIN geo_facility g USING (unique_id)
 """)
 
-ds("ds_pairs", "Facility and service scores (one row per record and service)", """
-SELECT g.stname AS state, upper(g.dtname) AS district, s.service, s.unique_id, s.name,
-       s.p_s, s.p_s_lo, s.p_s_hi, s.band, s.T AS text_level, s.p_l, s.p_e,
-       l.loc_conf, r.website_class, array_join(r.display_phones, ', ') AS phones,
-       CASE WHEN s.T > 0 OR s.p_s >= 0.3 THEN 1 ELSE 0 END AS shortlisted
-FROM pair_scores s
+# Model v2 (derived/v2, facility_service_scores_v2). Bands keep the model's four values; NO_SERVICE_TEXT rows
+# show no P_S (README: show the band, not p). lo/hi are the score bin's DEV track record, not an interval
+# around p. display_phones stays out of the published dashboard (#82).
+ds("ds_pairs", "Facility and service scores, model v2 (one row per record and service)", """
+SELECT g.stname AS state, upper(g.dtname) AS district, s.service_id AS service, s.unique_id, l.name,
+       CASE s.band WHEN 'LIKELY' THEN 'Likely' WHEN 'CALL_FIRST' THEN 'Call first'
+                   WHEN 'NO_SERVICE_TEXT' THEN 'No service text' WHEN 'UNLIKELY' THEN 'Unlikely' END AS band,
+       CASE WHEN s.band <> 'NO_SERVICE_TEXT' THEN s.p END AS p_s,
+       s.lo AS bin_lo, s.hi AS bin_hi, s.p_location AS p_l, s.p_exists AS p_e,
+       CASE s.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
+       array_join(s.overlays, ', ') AS flags, l.loc_conf, r.website_class,
+       CASE WHEN s.band IN ('LIKELY', 'CALL_FIRST') THEN 1 ELSE 0 END AS shortlisted
+FROM facility_service_scores_v2 s
 JOIN geo_facility g ON g.unique_id = s.unique_id
 JOIN facility_location l ON l.unique_id = s.unique_id
 JOIN record_trust r ON r.unique_id = s.unique_id
-ORDER BY s.p_s DESC
+ORDER BY s.p DESC
 """)
 
 # service is renamed list_service so the global service filter does not drop NABH facts (no service).
@@ -315,8 +324,12 @@ CHECKS = [
      "SELECT band, COUNT(*) FROM geo_csection_district WHERE band IN ('under 5%', '5-10%') GROUP BY band ORDER BY band"),
     ("ds_funnel national: mentioned, own checks, own and outside (spec 7969, 1798, 837)",
      "SELECT SUM(mentioned), SUM(own_checks), SUM(own_and_outside) FROM ({ds_funnel})"),
-    ("ds_pairs bands (spec Unlikely 37108, Unverified 32603, Likely 2)",
+    ("ds_pairs v2 bands (derived/v2: Likely 20073, Call first 1671, No service text 242131, Unlikely 94217)",
      "SELECT band, COUNT(*) FROM ({ds_pairs}) GROUP BY band ORDER BY band"),
+    ("ds_pairs v2 contract: rows (358092), exclude_review ids (0), NO_SERVICE_TEXT with P_S (0), operators",
+     "SELECT COUNT(*), SUM(CASE WHEN unique_id IN (SELECT unique_id FROM record_trust WHERE trust_level = "
+     "'exclude_review') THEN 1 ELSE 0 END), SUM(CASE WHEN band = 'No service text' AND p_s IS NOT NULL THEN 1 "
+     "ELSE 0 END), COUNT(DISTINCT operator) FROM ({ds_pairs})"),
     ("ds_plans_window Bihar major trauma (spec 15 of 150)",
      "SELECT k, n, round(rate, 3), round(lo, 3), round(hi, 3) FROM ({ds_plans_window}) WHERE state = 'BIHAR' AND pathway = 'major_trauma'"),
     ("ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar)",
@@ -645,13 +658,18 @@ def page3():
                   pos(0, 6, 12, 4), x_title="Share of mentions"),
         table("p3_facilities", "ds_pairs",
               [("name", "Facility", None), ("district", "District", None), ("service", "Service", None),
-               ("band", "Badge", None), ("p_s", "Chance a public check confirms it (runs high)", NUM2),
-               ("p_s_lo", "Low", NUM2), ("p_s_hi", "High", NUM2), ("text_level", "Text level (0-5)", None),
-               ("p_l", "Location score (0.7+ was right 30 of 33)", NUM2), ("loc_conf", "Location confidence", None),
-               ("website_class", "Website", None), ("phones", "Phones", None)],
-              "3.2 Facilities for the service, ranked by P_S",
-              "Rows with any service text or P_S of 0.3 or more. P_S is a ranking, not a calibrated probability "
-              "(IPW ECE 0.197). Call before referring.", pos(0, 10, 12, 8), filters=["`shortlisted` = 1"]),
+               ("band", "Band (model v2)", None), ("operator", "Operator", None),
+               ("p_s", "P_S: chance a decisive web check confirms it", NUM2),
+               ("bin_lo", "Score bin confirmed rate, low", NUM2), ("bin_hi", "Score bin confirmed rate, high", NUM2),
+               ("p_l", "Location score P_L", NUM2), ("p_e", "Existence score P_E", NUM2),
+               ("loc_conf", "Location confidence", None), ("website_class", "Website", None),
+               ("flags", "Flags", None)],
+              "3.2 Facilities for the service, ranked by P_S (model v2)",
+              "Rows banded Likely or Call first (the record describes the service as its own unit). P_S is the "
+              "chance a web check that finds a decisive answer confirms the service, not the chance a phone call "
+              "finds it. The two bin columns are the observed confirmed rate of DEV pairs in the same 0.2-wide "
+              "score bin, not an interval around P_S. " + PUBLIC_CAVEAT + " Call before referring.",
+              pos(0, 10, 12, 8), filters=["`shortlisted` = 1"]),
         table("p3_lists", "ds_list_facts",
               [("facility", "Facility (dataset record)", None), ("district", "District", None),
                ("list_name", "Official list", None), ("status", "Status on the list", None),
@@ -794,26 +812,31 @@ def page6():
                    ("n", "COUNT(`unique_id`)")]
     return page("trust_scores", "6. How far to trust the scores", header(
         "p6", "How far to trust the scores",
-        SHARED_CAVEAT + " P_S is a ranking, not a probability. Badges need a confirmation, so Likely is almost "
-        "empty (2 of 69,713 pairs). Test numbers are quoted from model/review/stats/results.json, not recomputed; "
-        "the selection rule was written after this test was read, so it cannot evaluate v2.") + [
+        SHARED_CAVEAT + " Bands are model v2 (derived/v2, A_platt) over 36 services and 9,947 eligible records. "
+        + PUBLIC_CAVEAT + " Tables 6.2 and 6.3 are the earlier v1 sealed test, quoted from "
+        "model/review/stats/results.json, not recomputed; they do not evaluate v2.") + [
         {"widget": {"name": "p6_bands",
                     "queries": query("ds_pairs", [("band", "`band`"), ("count(unique_id)", "COUNT(`unique_id`)")], False),
                     "spec": {"version": 3, "widgetType": "bar",
-                             "encodings": {"x": {"fieldName": "band", "displayName": "Badge",
+                             "encodings": {"x": {"fieldName": "band", "displayName": "Band (model v2)",
                                                  "scale": {"type": "categorical", "sort": {"by": "custom-order",
-                                                           "orderedValues": ["Likely", "Unverified", "Unlikely"]}}},
+                                                           "orderedValues": ["Likely", "Call first",
+                                                                             "No service text", "Unlikely"]}}},
                                            "y": {"fieldName": "count(unique_id)", "displayName": "Facility-service pairs",
                                                  "scale": {"type": "quantitative"}},
-                                           "color": {"fieldName": "band", "displayName": "Badge",
+                                           "color": {"fieldName": "band", "displayName": "Band (model v2)",
                                                      "scale": {"type": "categorical", "mappings": [
                                                          {"value": "Likely", "color": LIKELY},
-                                                         {"value": "Unverified", "color": UNVERIFIED},
+                                                         {"value": "Call first", "color": AMBER},
+                                                         {"value": "No service text", "color": UNVERIFIED},
                                                          {"value": "Unlikely", "color": UNLIKELY}]}},
                                            "label": {"show": True}},
-                             "frame": frame("6.1 Badges for the service",
-                                            "Unlikely means the record gives little evidence, not that the service "
-                                            "is absent. National: 37,108 Unlikely, 32,603 Unverified, 2 Likely.")}},
+                             "frame": frame("6.1 Model v2 bands for the service",
+                                            "No service text: the record has no sentence about the service as its "
+                                            "own unit, so P_S rests on context only. Unlikely means little or "
+                                            "contaminated evidence, not that the service is absent. National, 36 "
+                                            "services: 20,073 Likely, 1,671 Call first, 242,131 No service text, "
+                                            "94,217 Unlikely.")}},
          "position": pos(0, 3, 6, 7)},
         vega("p6_website", "ds_facility", site_fields, False, site_spec,
              "6.4 Records with a crawlable own website, by operator and settlement class",

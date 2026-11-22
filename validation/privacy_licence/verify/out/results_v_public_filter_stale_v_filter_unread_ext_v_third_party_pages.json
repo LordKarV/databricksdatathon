@@ -1,0 +1,43 @@
+[
+ {
+  "name": "v_third_party_pages",
+  "status": "warn",
+  "metric": "72 saved pages (10.1 MB); 65 public-class, 22 public-class full HTML pages; AIza: 31 occurrences of 12 distinct keys in 4 files (3 public-class)",
+  "threshold": "0 full third-party pages in the public copy",
+  "detail": "",
+  "examples": [
+   "app_design/feasibility/accessibility/sources/android_a11y_apps.html aiza=9 public=True",
+   "app_design/feasibility/accessibility/sources/android_go.html aiza=9 public=True",
+   "app_design/feasibility/accessibility/sources/talkback.html aiza=4 public=False",
+   "app_design/feasibility/actions/sources/android_intents_common.html aiza=9 public=True"
+  ]
+ },
+ {
+  "name": "v_filter_unread_ext",
+  "status": "fail",
+  "metric": "115 tracked files with unread extensions ({'(none)': 9, '.mjs': 2, '.java': 3, '.cc': 1, '.ttf': 3, '.log': 13, '.wav': 8, '.out': 4, '.svg': 72}); 9 public-class carry ids or provided names/phones; 4 carry record/sentence ids",
+  "threshold": "0 unread files carrying provided ids",
+  "detail": "tools/data_audit.py:54-57 and :87 read only DATA_EXT and CODE_EXT; .svg/.log/.out fall through to 'public' with txt=''.",
+  "examples": [
+   "viz/journeys/charts/s3_itineraries.svg: ids=0 sids=11 names=1 phones=0",
+   "viz/journeys/verify/out/v1_check_plans.log: ids=0 sids=11 names=15 phones=0",
+   "viz/journeys/verify/out/v3_quotes.log: ids=0 sids=11 names=3 phones=0",
+   "viz/journeys/verify/out/v4_snakebite.log: ids=5 sids=0 names=0 phones=0",
+   "viz/journeys/charts/s6_funnel.svg: ids=0 sids=0 names=7 phones=0"
+  ]
+ },
+ {
+  "name": "v_public_filter_stale",
+  "status": "warn",
+  "metric": "DATA_AUDIT.md says 1,463 files, git 1863; 82 non-public files missing from exclude list ({'image': 72, 'review': 5, 'provided': 5}); 0 listed but now public or untracked (0 untracked)",
+  "threshold": "exclude list equals the filter's current non-public set",
+  "detail": "",
+  "examples": [
+   "viz/_demo/demo.png",
+   "viz/claims/charts/s1_default_tags.png",
+   "viz/claims/charts/s1_longtail.png",
+   "viz/claims/charts/s2_inflation.png",
+   "viz/claims/charts/s3_funnel.png"
+  ]
+ }
+]

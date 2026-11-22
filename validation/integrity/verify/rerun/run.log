@@ -1,0 +1,82 @@
+[warn] app_facts_integrity: 0 issues, 0 pair value mismatches (2.8 s)
+         facts pins: 227 gazetteer PINs with coordinates are dropped because district is null (packs and pin_index keep them), e.g. [121999, 122021, 122022]
+[pass] app_hashes_and_sizes: 0 mismatches (0.3 s)
+[pass] app_packs_integrity: 0 issues; 0 quotes without claim id (17.2 s)
+[pass] claim_id_fk: 20/20 sources resolve; 0 with text drift (9.5 s)
+[pass] claim_id_format: 0 malformed, 0 disagree, 0 (record, field) groups with idx gaps (4.3 s)
+[pass] copied_columns: 18/18 copied columns equal (0.8 s)
+[pass] counts_nonneg: 191 columns, 0 with negatives, 0 with fractional counts (2.1 s)
+[pass] crawl_fk: 0 issues, 0 notes (2.1 s)
+[pass] csv_copies_match_parquet: 0 differing columns (0.4 s)
+[warn] dates_and_years: 0 fail, 1 notes (3.6 s)
+         raw yearEstablished: 5 of 4761 non-null values have no year, e.g. ['0', '7', '0']
+[pass] documented_row_counts: 33/33 match (0.2 s)
+[pass] dp_id_format: 0 bad dp_ids; 0 issues (10.9 s)
+[pass] dps_copies_raw_values: 0 mismatches (0.9 s)
+[fail] check_enums: error (2.0 s)
+           File "/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/pandas/io/common.py", line 954, in get_handle
+             handle = open(handle, ioargs.mode)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+         FileNotFoundError: [Errno 2] No such file or directory: '/Users/karthikvattem/projects/datathon/validation/integrity/verify/rerun/outputs/schema_profile.csv'
+[pass] evidence_rules_vs_dps: 0 mismatches (0.1 s)
+[warn] exact_duplicate_rows: 1 tables with duplicates (12.8 s)
+         kb/opendata/vf_opendata_facts.parquet: 1 exact duplicate rows of 6001
+[fail] exclude_review_not_shipped: 9 leaks of 12 excluded records (1.0 s)
+         pack tamil_nadu.json.gz: 885c79f6 'SKS Veterinary Hospital' shipped for ['trauma_emergency']
+         planner capability emergency_24x7: 885c79f6 'SKS Veterinary Hospital' p=0.7643
+         planner capability ecg: 3701980c 'Pet Care Pathology Lab & Diagnostic Centre' p=0.7828
+         planner capability blood_transfusion: 8b8ee908 'Prime Animal Care Hospital - Delhi NCR' p=0.7149
+[pass] facility_groups: 0 issues, 0 one-way links (0.5 s)
+[pass] gold_keys_and_fk: 0 issues (1.1 s)
+[warn] gold_merge_reproduces: 0 merge mismatches; 141 TEST-verified points published (0.2 s)
+         loc:04bae564-9f3f-4b55-8854-3bfd587793a8
+         loc:08d4967a-b02f-4373-aace-2db8f64b0e27
+         loc:09c73691-739e-4b31-88ba-2d31c89f7af3
+         loc:0b88e73f-787e-45c4-bcd3-ec8b27a53c74
+[pass] gold_split_leakage: 0 cross-split links (0.0 s)
+[pass] grades_vs_dps: 0 inconsistencies (0.7 s)
+[warn] lat_lon_bounds: 0 strict failures, 1 reported columns (0.2 s)
+         derived/v1/facility_location.parquet raw_lat/raw_lon: 6 outside India (0 at 0,0), 0 half-null of 9959; e.g. ['364dae5c-b868-450a-9e4e-e6705852c229', '515fb95f-d589-418f-b510-d8bf7438f884', '7c6e6ca4-d07f-4613-a926-47d5ae
+[warn] location_fk: 0 issues, 2 notes (2.0 s)
+         7 facility PINs not in pin_gazetteer, e.g. [('13594579-5b83-48ec-8c81-4b21ad0a6881', 112001), ('231f141f-cc05-42a9-949a-accf4bab933c', 430115), ('3b7c281e-3946-4cb2-8520-5c29e4c38e6b', 359009)]
+         52 records with district_state != state_final
+[warn] null_encodings: 8 key/enum columns carry string nulls (230 cells) (159.4 s)
+         kb/opendata/vf_candidates.parquet.vf_type: 105 null strings, 0 empty containers of 17662
+         kb/opendata/vf_opendata_match.parquet.vf_type: 105 null strings, 0 empty containers of 17662
+         derived/v1/grades.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799
+         derived/v1/grades_v1.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799
+[pass] opendata_fk: 0 issues (10.1 s)
+[pass] pathways_refs: 0 issues (0.0 s)
+[warn] planner_integrity: 0 issues, 2 notes (20.0 s)
+         12 planner facilities are not in facts.json ({'exclude_review': 12}); 5 carry capability evidence, e.g. ['3701980c-4699-4a84-a9f1-024939ba0e34', '4d62cb1d-4dba-49bc-9169-7d13bf7cb151', '885c79f6-9f32-4878-8384-5a90259cfa
+         planner capabilities include pairs the packs exclude: {('emergency_24x7', 'attributed_elsewhere'): 7, ('emergency_24x7', 'counter_evidence'): 5, ('icu', 'attributed_elsewhere'): 4, ('icu', 'counter_evidence'): 1, ('burn_
+[fail] primary_keys: 51/52 keys unique and non-null (11.4 s)
+         kb/opendata/vf_opendata_facts.parquet (unique_id+source+source_id+field+value): 1 duplicate keys, 0 null keys of 6001; e.g. ['dda3a4d5-9b8c-45cb-9d67-49f5c68ae415|osm|node/6994541474|speciality|bone and joints']
+[pass] probabilities: 76 columns checked, 0 issues (0.7 s)
+[pass] raw_hashes_unchanged: 6/6 match (0.1 s)
+[pass] raw_live_warehouse: 6/6 equal (2.0 s)
+[pass] raw_manifest_aggregates: 345/345 checks reproduce (0.9 s)
+[pass] schema_profile: 77 tables, 1265 columns; 91 other files (140.5 s)
+[pass] source_tables_fk: 0 issues (3.4 s)
+[warn] source_url_repeats: 5652 repeated (record, url) rows of 158444 in 1525 of 9959 records (0.1 s)
+         ed6652f3-7d23-4789-8050-1dab7dca6238: 46 repeats
+         20397ed5-ac41-41f4-89cb-1f8aafa9bb34: 45 repeats
+         58a4d0b7-5b03-4b7f-965b-6e260b2c0918: 42 repeats
+[warn] taxonomy_domains: 0 issues; 10 spec keys map to 2+ labels (1971 records); 4 of them disagree on a real service (9 records) (0.8 s)
+         spec key 'anxiety' maps to ['out_of_scope', 'psychiatric_care'] via ['Anxiety', 'anxiety']
+         spec key 'cardiovascularandthoracicsurgery' maps to ['cardiac_surgery', 'out_of_scope'] via ['cardiovascularAndThoracicSurgery', 'cardioVascularAndThoracicSurgery']
+         spec key 'depression' maps to ['out_of_scope', 'psychiatric_care'] via ['Depression', 'depression']
+         spec key 'gynaeoncology' maps to ['out_of_scope', 'surgical_oncology'] via ['Gynaeoncology', 'Gynae Oncology', 'gynaeOncology', 'gynaeoncology']
+[pass] uid8_prefix_unique: 0 colliding prefixes of 9959 (0.0 s)
+[pass] unique_id_fk: 40/40 id columns fully resolve (3.9 s)
+[pass] usable_set_definition: 9959 usable of 10088 raw; 11 duplicated ids, 0 differ (0.7 s)
+[pass] v1_build_stats: 0 mismatches (0.2 s)
+[pass] v1_canonical_copies: 9/9 copies identical; 0 sources moved (0.3 s)
+[pass] v1_inputs_not_stale: 30/30 unchanged (0.1 s)
+[pass] v1_manifest_rows_bytes: 20/20 match (0.0 s)
+[warn] v2_contract: not run (0.0 s)
+[pass] vf_details_fk: 0 issues (5.9 s)
+[warn] web_evidence_fk: 0 issues (13.7 s)
+         web llm_hours: 1 cand_key not in hour_candidates (0 kept): ['data/crawl/pages/68908ad91c7ef7a35ae5.json.gz|text|197']
+[pass] web_quotes_in_pages: 0 rows not found on their page, 0 segments not at seg_start (55.9 s)
+wrote /Users/karthikvattem/projects/datathon/validation/integrity/verify/rerun/outputs/results.json

@@ -1,0 +1,44 @@
+[pass   ] claims_invalid_json_dropped: 0 field values dropped
+[pass   ] claims_key_integrity: dup=0 bad_format=0 uid8_collisions=0
+[pass   ] claims_reproduce_from_raw: raw items=469498 v1 claims=469498 missing=0 extra=0 text_diff=0
+[warn   ] crawl_target_coverage: with target 8015/9959 (README 8,015); covered 5721 (0.574); focus {'BIHAR': 0.546, 'UTTAR PRADESH': 0.519, 'JHARKHAND': 0.439, 'ODISHA': 0.521, 'ASSAM': 0.504}
+[pass   ] dps_composition: rows=518191 by type={'claim_attribution': 469498, 'service_claim': 10799, 'location': 9959, 'existence': 9959, 'phone': 9464, 'email': 8512}
+[pass   ] dup_groups_consistent: 75 groups, 77 non-canonical records, 0 inconsistent groups
+[pass   ] facilities_without_claims: 0/9959 have no claims; 0 unexplained
+[pass   ] facility_trust_counts_consistent: 0 n_sentences and 0 n_service_claims mismatches
+[pass   ] facts_cited_claims_present: 13829 pair cites, 42386 planner cites; missing 0 / 0; not in claims 0
+[pass   ] facts_facilities: 9947 facilities; dropped 12 {'exclude_review': 12}; dup 0; extra 0
+[pass   ] facts_pairs_complete: 8012 pairs; missing 0; extra 0; duplicate 0
+[warn   ] fragment_rows_carry_no_facility: 88 fragments; 0 usable UUIDs, 0 truncated UUIDs inside; 30 fragments hold a coordinates object
+[pass   ] gold_splits_fk: 176 pairs; orphans 0; dup pair_id 0
+[pass   ] grades_keys: rows=10799 dup=0 v1dup=0 keys_equal=True
+[pass   ] kb_claim_refs: 0 bad refs
+[pass   ] kb_fk_integrity: 15/15 clean
+[pass   ] live_table_counts: n,well_formed,truncated,usable=[10088, 9970, 30, 9959]
+[warn   ] location_and_state_coverage: no point=0 no state=0 no district=13
+[warn   ] missed_duplicate_candidates: 12 candidate pairs
+[warn   ] opendata_fanout: 0 (record, source) with >1 object; 44 objects shared by >1 record (35 explained by one duplicate group)
+[warn   ] pack_duplicate_facilities_in_lists: 259/29839 distinct lists repeat a duplicate group; 2158 (PIN, service) answers affected
+[warn   ] pack_facility_membership: 4252 distinct facilities in packs; exclude_review shown 1; ambiguous uid8 0; not a candidate 0; candidates never shown 127 of 4379
+[pass   ] pack_index_and_pins: 36 packs for 36 states; sha mismatch 0; PIN set mismatch 0
+[pass   ] pack_quotes_cited: 16563 quote uses; empty id 0; id/text mismatch 0
+[warn   ] pack_state_coverage: national share of PINs >50 km from nearest candidate: {'burn_care': 0.58, 'cardiac_surgery': 0.36, 'dialysis': 0.294, 'emergency_csection': 0.485, 'mri': 0.345, 'nicu': 0.352, 'trauma_emergency': 0.123}; PINs with none: 0
+[pass   ] pathways_services_exist: 6 existing caps, 0 unknown service
+[warn   ] pin_coverage_vs_india_post: 19586 India Post PINs; missing from gazetteer 0, packs 2, facts.pins 102
+[warn   ] planner_facilities: 9959 facilities (missing 0, extra 0, dup 0); 12 exclude_review records kept; 8 capability entries point at them
+[warn   ] planner_vs_pack_exclusions: 41 planner capability entries are pairs the packs drop
+[pass   ] raw_duplicates_lossless: 11 ids x 2 rows; 0 not identical
+[pass   ] raw_hash_unchanged: 6/6 files match
+[pass   ] raw_row_classes: rows=10088 classes={'well_formed': 9970, 'fragment': 88, 'truncated': 30}
+[warn   ] raw_truncated_real_facilities: 30/10088 rows (30 named facilities) dropped
+[warn   ] source_urls_vs_raw: rows=158444 expected=158444 differing=0; same URL repeated in a record: 5652 rows in 1525 records
+[warn   ] specialties_dup_inflation: rows=117964 missing=0 extra=0 n_raw_wrong=165 (11 facilities, all duplicated ids: True)
+[pass   ] specialty_map_coverage: 0 of 2476 distinct specs unmapped (0 rows, 0 facilities)
+[warn   ] state_coverage_table: below half national: ['BIHAR', 'ODISHA']; national 6.84 records and 3.02 app-service facilities per million
+[pass   ] trace_table: 29 layer/table rows traced; 0 with orphans
+[pass   ] uuid_rule_equivalence: 0 rows differ
+[pass   ] v1_child_tables_fk: 0 orphan ids
+[pass   ] v1_copies_match_sources: 8/8 identical
+[pass   ] v1_per_facility_tables: 5/5 exact
+[not_run] v2_contract: file absent
+[pass   ] web_evidence_reach: 3698 records in web_service_summary, 3664 with a positive service; 0 not crawled

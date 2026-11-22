@@ -85,13 +85,38 @@ TABLES = {
         col("loc_lat", "Cleaned latitude used for distance."),
         col("loc_lon", "Cleaned longitude used for distance."),
         col("loc_conf", "Location confidence: high, medium, low or disputed.", match=True),
-        col("operatorTypeId", "Owner: private, public, or the string 'null' when unknown.", ["ownership"], match=True),
         col("facilityTypeId", "hospital, clinic, dentist, doctor or farmacy; may be the string 'null'.", match=True),
         col("degurba", "Settlement class of the point: 3 urban centre, 2 town or semi-dense, 1 rural."),
         col("is_canonical", "False for 77 duplicate records; filter is_canonical = true to count facilities once."),
         *flag_cols(),
         *[col(c, exclude=True) for c in ("row", "col", "on_grid", "snapped", "grid_id", "state_final", "district",
-                                         "nfhs_state_ut", "nfhs_district_name")],
+                                         "nfhs_state_ut", "nfhs_district_name", "operatorTypeId")],
+    ],
+    f"{S}.facility_service_scores_v2": [
+        col("unique_id", "Facility record id; 9,947 eligible records (exclude_review records are not scored)."),
+        col("service_id", "Taxonomy service id, 36 services (dialysis, icu, emergency_csection, trauma_care, "
+            "emergency_24x7 ...); joins services.service_id.", ["service"], match=True),
+        col("band", "Model v2 band: LIKELY, CALL_FIRST, NO_SERVICE_TEXT (no sentence about the service as its own "
+            "unit; show the band, never p) or UNLIKELY.", ["badge", "likely", "model band"], match=True),
+        col("p", "P_S: chance that a web check which finds a decisive answer confirms the service. Not the chance a "
+            "phone call finds it. Only shown when band is not NO_SERVICE_TEXT.", ["score", "P_S"]),
+        col("lo", "Score bin track record, low: observed confirmed rate of DEV pairs in the same 0.2 score bin. "
+            "Not an interval around p."),
+        col("hi", "Score bin track record, high: observed confirmed rate of DEV pairs in the same 0.2 score bin. "
+            "Not an interval around p."),
+        col("p_location", "P(cleaned location is right)."),
+        col("p_exists", "P(facility exists)."),
+        col("operator", "public, private or unknown.", ["owner", "ownership"], match=True),
+        col("overlays", "Flags beside the band: BORDERLINE, PLACE_UNCLEAR, ON_A_PUBLIC_LIST:list:date."),
+        *[col(c, exclude=True) for c in ("base", "contributions", "as_of", "model_version", "is_24x7", "hours_text")],
+    ],
+    f"{S}.facility_attributes_v2": [
+        col("unique_id", "Facility record id (9,959 records)."),
+        col("operator", "Owner: public (469), private (8,805) or unknown (685).", ["owner", "ownership"], match=True),
+        col("facility_level", "Public level from the name: mc, dh, sdh, phc, chc or unknown.", match=True),
+        col("facility_type", "Facility type (hospital, clinic, dentist ...).", match=True),
+        col("beds", "Beds from the cleaned capacity field."),
+        col("empanel_pmjay", "PM-JAY empanelment from text or web."),
     ],
     f"{S}.grades": [
         col("unique_id", "Facility record id."),
@@ -194,6 +219,10 @@ TEXT_INSTRUCTIONS = """## PURPOSE
 - NABH rows are facility-level (service null): a NABH listing confirms the facility, not a service.
 - citation_url of '#' or 'Not Found' means no usable link.
 - operatorTypeId uses the string 'null' for unknown owner.
+
+## MODEL V2 SCORES
+- "Likely offers", band, score or P_S mean facility_service_scores_v2; get state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p. Never show p for NO_SERVICE_TEXT. lo/hi are the score bin's track record, not an interval around p.
+- Owner means facility_attributes_v2.operator. The score has no demonstrated ranking ability for public facilities: say so when ranking them.
 
 ## CONSTRAINTS
 - Never rank or recommend facilities on dataset claims alone. Order by evidence level first (official list or confirmed, then grade strong, moderate, weak, tag_only), then distance, and show the level.
@@ -314,11 +343,34 @@ ORDER BY CASE gr.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 WHEN 'weak' T
      "Grade distribution: strong and moderate rest on the facility's own sentences; tag_only is a specialty tag."),
 ]
 
+EXAMPLES += [
+    ("Which facilities in Patna district are likely to offer dialysis?",
+     f"""SELECT g.name, s.band, CASE WHEN s.band <> 'NO_SERVICE_TEXT' THEN ROUND(s.p, 2) END AS p_s,
+  ROUND(s.lo, 2) AS bin_confirmed_rate_lo, ROUND(s.hi, 2) AS bin_confirmed_rate_hi, s.operator, s.overlays
+FROM {S}.facility_service_scores_v2 s
+JOIN {GEO} g ON g.unique_id = s.unique_id
+WHERE s.service_id = 'dialysis' AND g.dtname = 'Patna' AND s.band IN ('LIKELY', 'CALL_FIRST')
+ORDER BY CASE s.band WHEN 'LIKELY' THEN 1 ELSE 2 END, s.p DESC""",
+     "Model v2 shortlist for one service and district: LIKELY then CALL_FIRST, by p. State the public-facility "
+     "caveat when public rows appear."),
+    ("How many facilities in Bihar does the model band Likely for each service, public against private?",
+     f"""SELECT s.service_id, a.operator, COUNT(*) AS n_likely
+FROM {S}.facility_service_scores_v2 s
+JOIN {GEO} g ON g.unique_id = s.unique_id
+JOIN {S}.facility_attributes_v2 a ON a.unique_id = s.unique_id
+WHERE g.stname = 'BIHAR' AND s.band = 'LIKELY'
+GROUP BY s.service_id, a.operator
+ORDER BY s.service_id, a.operator""",
+     "Band counts by owner: operator from facility_attributes_v2; ranking ability for public facilities is not "
+     "demonstrated."),
+]
+
 SAMPLE_QUESTIONS = [
     "Which districts in Bihar have no corroborated dialysis?",
     "Which NABH-listed facilities near Patna have a nephrology service?",
     "What share of trauma claims is confirmed by a second source, by state?",
     "Which Bihar districts have the fewest facility records per million people?",
+    "Which facilities in Patna district are likely to offer dialysis?",
     "How many people live in high-need districts far from confirmed dialysis?",
 ]
 
@@ -330,6 +382,8 @@ JOINS = [  # (left table, right table, left col, right col, relationship)
     ("geo_facility", "web_service_summary", "unique_id", "unique_id", "ONE_TO_MANY"),
     ("geo_facility", "claims", "unique_id", "unique_id", "ONE_TO_MANY"),
     ("geo_facility", "geo_dialysis_district", "nfhs_district", "nfhs_district", "MANY_TO_ONE"),
+    ("geo_facility", "facility_service_scores_v2", "unique_id", "unique_id", "ONE_TO_MANY"),
+    ("geo_facility", "facility_attributes_v2", "unique_id", "unique_id", "ONE_TO_ONE"),
 ]
 
 

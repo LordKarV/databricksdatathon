@@ -1,0 +1,487 @@
+[
+ {
+  "name": "claims_invalid_json_dropped",
+  "status": "pass",
+  "metric": "0 field values dropped",
+  "threshold": "0",
+  "detail": "by field: Counter(); root cause cleaning/claims/build_claims.py:35 (where json_valid(j) and json_type(j)='ARRAY')",
+  "examples": [],
+  "seconds": 0.3
+ },
+ {
+  "name": "claims_key_integrity",
+  "status": "pass",
+  "metric": "dup=0 bad_format=0 uid8_collisions=0",
+  "threshold": "0 / 0 / 0",
+  "detail": "claim ids and pack uid8 keys rely on the first 8 hex chars being unique over 9,959 records",
+  "examples": [],
+  "seconds": 0.1
+ },
+ {
+  "name": "claims_reproduce_from_raw",
+  "status": "pass",
+  "metric": "raw items=469498 v1 claims=469498 missing=0 extra=0 text_diff=0",
+  "threshold": "0 / 0 / 0",
+  "detail": "By field (raw): {'capability': 231465, 'procedure': 163647, 'equipment': 55998, 'description': 18388}",
+  "examples": [],
+  "seconds": 0.5
+ },
+ {
+  "name": "crawl_target_coverage",
+  "status": "warn",
+  "metric": "with target 8015/9959 (README 8,015); covered 5721 (0.574); focus {'BIHAR': 0.546, 'UTTAR PRADESH': 0.519, 'JHARKHAND': 0.439, 'ODISHA': 0.521, 'ASSAM': 0.504}",
+  "threshold": "README counts reproduce; focus states within 5 points of national share",
+  "detail": "coverage_by_state.csv mismatches (csv, recomputed): {}. Focus states below national-5pt: ['UTTAR PRADESH', 'JHARKHAND', 'ODISHA', 'ASSAM']. No-target records by state: {'MAHARASHTRA': 298, 'UTTAR PRADESH': 219, 'GUJARAT': 217, 'TAMIL NADU': 143, 'WEST BENGAL': 111, 'KARNATAKA': 100, 'PUNJAB': 93, 'HARYANA': 89}",
+  "examples": [
+   "005c7c7e-b401-4ad4-8565-a8b7e18f6840",
+   "0068f9fe-8453-48e0-aeb0-88c27ede37dc",
+   "007c8638-fd3e-4c28-9dbb-fb7632881d17",
+   "008f8550-efd3-4da5-bab2-66b6254cf24b",
+   "009489cf-5e1a-4c5d-90d9-55dbaeeedc51"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "dps_composition",
+  "status": "pass",
+  "metric": "rows=518191 by type={'claim_attribution': 469498, 'service_claim': 10799, 'location': 9959, 'existence': 9959, 'phone': 9464, 'email': 8512}",
+  "threshold": "expected {'claim_attribution': 469498, 'service_claim': 10799, 'location': 9959, 'existence': 9959, 'phone': 9464, 'email': 8512}",
+  "detail": "dp_id dups=0; sentences==claims True; service==grades True; dup per record {'location': 0, 'existence': 0, 'phone': 0, 'email': 0}. 495 records have no phone point because raw officialPhone is null or 'null' (pipelines/source_scoring/s4_datapoints.py:108); 1447 have no email point (s4:112).",
+  "examples": [
+   "0035ebd7-6492-4691-a871-8640af2d3158",
+   "0068f9fe-8453-48e0-aeb0-88c27ede37dc",
+   "008f8550-efd3-4da5-bab2-66b6254cf24b"
+  ],
+  "seconds": 0.8
+ },
+ {
+  "name": "dup_groups_consistent",
+  "status": "pass",
+  "metric": "75 groups, 77 non-canonical records, 0 inconsistent groups",
+  "threshold": "0",
+  "detail": "9,959 records = 9,882 distinct facilities after duplicate groups; downstream exports keep all 9,959 (see check pack_duplicate_facilities_in_lists).",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "facilities_without_claims",
+  "status": "pass",
+  "metric": "0/9959 have no claims; 0 unexplained",
+  "threshold": "unexplained = 0",
+  "detail": "Facilities with no claim cannot get any service pair, so they never appear in packs or as a service candidate in facts (they remain in facts.fac). Explained = every raw text field empty. Breakdown: {'state': {}, 'ftype': {}, 'operator': {}}",
+  "examples": [],
+  "seconds": 0.4
+ },
+ {
+  "name": "facility_trust_counts_consistent",
+  "status": "pass",
+  "metric": "0 n_sentences and 0 n_service_claims mismatches",
+  "threshold": "0",
+  "detail": "",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "facts_cited_claims_present",
+  "status": "pass",
+  "metric": "13829 pair cites, 42386 planner cites; missing 0 / 0; not in claims 0",
+  "threshold": "0",
+  "detail": "facts.claims is built from pair cites plus planner cites (app/facts/build.py:176)",
+  "examples": [],
+  "seconds": 0.4
+ },
+ {
+  "name": "facts_facilities",
+  "status": "pass",
+  "metric": "9947 facilities; dropped 12 {'exclude_review': 12}; dup 0; extra 0",
+  "threshold": "drops all documented",
+  "detail": "app/facts/build.py:64-65 drops rows with no ranking point and trust_level == exclude_review (cleaning/geo_identity/s5_trust.py:142: veterinary). Dropped: {'state': {'GUJARAT': 2, 'KARNATAKA': 2, 'WEST BENGAL': 1, 'PUNJAB': 1, 'ANDHRA PRADESH': 1, 'TAMIL NADU': 1, 'UTTAR PRADESH': 1, 'KERALA': 1}, 'ftype': {'hospital': 8, 'clinic': 3, 'null': 1}, 'operator': {'private': 8, 'public': 3, 'null': 1}}",
+  "examples": [
+   "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+   "3701980c-4699-4a84-a9f1-024939ba0e34",
+   "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+   "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+   "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b"
+  ],
+  "seconds": 0.0
+ },
+ {
+  "name": "facts_pairs_complete",
+  "status": "pass",
+  "metric": "8012 pairs; missing 0; extra 0; duplicate 0",
+  "threshold": "0 / 0 / 0",
+  "detail": "By service: {'burn_care': 264, 'cardiac_surgery': 973, 'dialysis': 1050, 'emergency_csection': 448, 'mri': 952, 'nicu': 746, 'trauma_emergency': 3579}; 1 app-service pairs of the 12 exclude_review records are dropped with them; icu pairs are dropped (no app tile).",
+  "examples": [],
+  "seconds": 12.3
+ },
+ {
+  "name": "fragment_rows_carry_no_facility",
+  "status": "warn",
+  "metric": "88 fragments; 0 usable UUIDs, 0 truncated UUIDs inside; 30 fragments hold a coordinates object",
+  "threshold": "0 facility payload in fragments",
+  "detail": "Fragments hold the tail of the 30 truncated rows (specialties, coordinates, source_urls shifted into name/address columns). They are correctly excluded, but they are the only copy of those 30 facilities' coordinates and service lists.",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "gold_splits_fk",
+  "status": "pass",
+  "metric": "176 pairs; orphans 0; dup pair_id 0",
+  "threshold": "0",
+  "detail": "v3 test files not opened",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "grades_keys",
+  "status": "pass",
+  "metric": "rows=10799 dup=0 v1dup=0 keys_equal=True",
+  "threshold": "unique, equal",
+  "detail": "4694 facilities with >= 1 graded service; services {'trauma': 3580, 'icu': 2786, 'dialysis': 1050, 'cardiac_surgery': 973, 'mri': 952, 'nicu': 746, 'csection': 448, 'burns': 264}",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "kb_claim_refs",
+  "status": "pass",
+  "metric": "0 bad refs",
+  "threshold": "0",
+  "detail": "lexicon_matches.parquet: 64670 refs, 0 missing claim, 0 other record; facts.parquet: 35447 refs, 0 missing claim, 0 other record",
+  "examples": [],
+  "seconds": 0.1
+ },
+ {
+  "name": "kb_fk_integrity",
+  "status": "pass",
+  "metric": "15/15 clean",
+  "threshold": "0 orphans, 0 duplicate keys",
+  "detail": "targets.parquet: rows=9405 facilities=8015 orphans=0 dup_key=0; sites.parquet: rows=9405 facilities=8015 orphans=0 dup_key=0; pages.parquet: rows=31075 facilities=6744 orphans=0; site_identity.parquet: rows=6770 facilities=5881 orphans=0 dup_key=0; page_identity.parquet: rows=30517 facilities=5881 orphans=0 dup_key=0; web_service_summary.parquet: rows=20886 facilities=3698 orphans=0 dup_key=0; web_facility_details.parquet: rows=17908 facilities=4222 orphans=0 dup_key=0; web_details.parquet: rows=41191 facilities=3308 orphans=0 dup_key=0; web_hours.parquet: rows=43540 facilities=3969 orphans=0 dup_key=0; web_services.parquet: rows=153160 facilities=3904 orphans=0; facts.parquet: rows=42036 facilities=7501 orphans=0 dup_key=0; facility_details.parquet: rows=26046 facilities=7501 orphans=0 dup_key=0; vf_opendata_match.parquet: rows=17662 facilities=9956 orphans=0 dup_key=0; vf_opendata_facts.parquet: rows=6001 facilities=2844 orphans=0; lexicon_matches.parquet: rows=64670 facilities=6038 orphans=0 dup_key=0",
+  "examples": [],
+  "seconds": 0.6
+ },
+ {
+  "name": "live_table_counts",
+  "status": "pass",
+  "metric": "n,well_formed,truncated,usable=[10088, 9970, 30, 9959]",
+  "threshold": "10088,9970,30,9959",
+  "detail": "Databricks Marketplace table, SELECT via sql.sh",
+  "examples": [],
+  "seconds": 1.1
+ },
+ {
+  "name": "location_and_state_coverage",
+  "status": "warn",
+  "metric": "no point=0 no state=0 no district=13",
+  "threshold": "0 / 0 / 0",
+  "detail": "Records without a district cannot get NFHS context or district grouping: {'MAHARASHTRA': 6, 'GUJARAT': 4, 'TELANGANA': 2, 'MADHYA PRADESH': 1}",
+  "examples": [
+   "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+   "18a0b6a3-8792-43ef-8753-47548e4aab02",
+   "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+   "5106028d-191f-4a51-a596-05d8b41e857b",
+   "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+  ],
+  "seconds": 0.0
+ },
+ {
+  "name": "missed_duplicate_candidates",
+  "status": "warn",
+  "metric": "12 candidate pairs",
+  "threshold": "0",
+  "detail": "Same-name records within 300 m outside any facility_groups link. Some are separate units of one campus (dental vs general), some are true duplicates (both appear as separate options). Also see opendata_fanout: OSM objects matched to two records that facility_groups keeps apart.",
+  "examples": [
+   "00361ecc 'Gunam Hospital - Hosur' ~ 8295bdfd 'Gunam Super Speciality Hospital'",
+   "07f22851 'Om Dental Clinic' ~ 9ce89c30 'Om Children and Dental Hospital'",
+   "139e2eb4 'Yash Hospital' ~ a4a146a0 'Yash Orthopedic Hospital - Kalol'",
+   "27071ec4 'Shiromany Dental Care' ~ 6994432c 'Shiromany Hospital'",
+   "428a24a9 'Akshar Pulmo Care, Bopal, Ahmedabad' ~ 62665a19 'Bopal Multispeciality Hospital'"
+  ],
+  "seconds": 1.6
+ },
+ {
+  "name": "opendata_fanout",
+  "status": "warn",
+  "metric": "0 (record, source) with >1 object; 44 objects shared by >1 record (35 explained by one duplicate group)",
+  "threshold": "0 unexplained",
+  "detail": "2844 records carry open-data facts; facts by match_tier {'high': 5553, 'medium': 448}",
+  "examples": [
+   "osm:node/13511670283",
+   "osm:node/2696699678"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "pack_duplicate_facilities_in_lists",
+  "status": "warn",
+  "metric": "259/29839 distinct lists repeat a duplicate group; 2158 (PIN, service) answers affected",
+  "threshold": "0",
+  "detail": "Root cause: build_packs.py:118 top_lists ranks records, not facility_groups.dup_group_id (derived/v1 facility_groups). Affected answers by state (top): {'ASSAM': 511, 'KERALA': 457, 'TAMIL NADU': 394, 'UTTAR PRADESH': 196, 'MANIPUR': 173, 'TRIPURA': 76, 'MADHYA PRADESH': 74, 'MEGHALAYA': 69}",
+  "examples": [
+   "arunachal_pradesh list 34: b2db2916, e93a7ae0, 2ee91ec2",
+   "arunachal_pradesh list 35: 2ee91ec2, b2db2916, e93a7ae0",
+   "arunachal_pradesh list 36: b2db2916, e93a7ae0, ae711d74",
+   "arunachal_pradesh list 59: 95348d2b, b2db2916, e93a7ae0, 7d528d2e",
+   "assam list 98: 95348d2b, b2db2916, e93a7ae0, 587bf5c2"
+  ],
+  "seconds": 0.4
+ },
+ {
+  "name": "pack_facility_membership",
+  "status": "warn",
+  "metric": "4252 distinct facilities in packs; exclude_review shown 1; ambiguous uid8 0; not a candidate 0; candidates never shown 127 of 4379",
+  "threshold": "0 ambiguous, 0 non-candidates, 0 exclude_review",
+  "detail": "build_packs.py:66-67 does not apply the trust_level != exclude_review filter that facts/build.py:65 applies, so the offline pack can show a record the online app hides. Shown but not in facts: 1. Candidates never in any top-3 list are by design (nearest-3 per PIN).",
+  "examples": [
+   "885c79f6-9f32-4878-8384-5a90259cfae4 SKS Veterinary Hospital"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "pack_index_and_pins",
+  "status": "pass",
+  "metric": "36 packs for 36 states; sha mismatch 0; PIN set mismatch 0",
+  "threshold": "0",
+  "detail": "2 gazetteer PINs have no state and are in no pack",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "pack_quotes_cited",
+  "status": "pass",
+  "metric": "16563 quote uses; empty id 0; id/text mismatch 0",
+  "threshold": "0",
+  "detail": "",
+  "examples": [],
+  "seconds": 0.2
+ },
+ {
+  "name": "pack_state_coverage",
+  "status": "warn",
+  "metric": "national share of PINs >50 km from nearest candidate: {'burn_care': 0.58, 'cardiac_surgery': 0.36, 'dialysis': 0.294, 'emergency_csection': 0.485, 'mri': 0.345, 'nicu': 0.352, 'trauma_emergency': 0.123}; PINs with none: 0",
+  "threshold": "focus state within 10 points of national per service",
+  "detail": "focus states: {'BIHAR': {'burn_care': 0.731, 'cardiac_surgery': 0.529, 'dialysis': 0.287, 'emergency_csection': 0.436, 'mri': 0.387, 'nicu': 0.276, 'trauma_emergency': 0.035}, 'UTTAR PRADESH': {'burn_care': 0.436, 'cardiac_surgery': 0.367, 'dialysis': 0.253, 'emergency_csection': 0.4, 'mri': 0.398, 'nicu': 0.339, 'trauma_emergency': 0.103}, 'JHARKHAND': {'burn_care': 0.356, 'cardiac_surgery': 0.253, 'dialysis': 0.281, 'emergency_csection': 0.397, 'mri': 0.402, 'nicu': 0.302, 'trauma_emergency': 0.121}, 'ODISHA': {'burn_care': 0.836, 'cardiac_surgery': 0.632, 'dialysis': 0.62, 'emergency_csection': 0.831, 'mri': 0.679, 'nicu': 0.663, 'trauma_emergency': 0.43}, 'ASSAM': {'burn_care': 0.748, 'cardiac_surgery': 0.443, 'dialysis': 0.184, 'emergency_csection': 0.65, 'mri': 0.457, 'nicu': 0.471, 'trauma_emergency': 0.122}}. Full tables: out/pack_pin_gap_share_gt50km.csv, out/pack_pin_median_km.csv",
+  "examples": [
+   "BIHAR/burn_care",
+   "BIHAR/cardiac_surgery",
+   "ODISHA/burn_care",
+   "ODISHA/cardiac_surgery",
+   "ODISHA/dialysis"
+  ],
+  "seconds": 0.4
+ },
+ {
+  "name": "pathways_services_exist",
+  "status": "pass",
+  "metric": "6 existing caps, 0 unknown service",
+  "threshold": "0",
+  "detail": "graded services: ['burns', 'cardiac_surgery', 'csection', 'dialysis', 'icu', 'mri', 'nicu', 'trauma']",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "pin_coverage_vs_india_post",
+  "status": "warn",
+  "metric": "19586 India Post PINs; missing from gazetteer 0, packs 2, facts.pins 102",
+  "threshold": "0",
+  "detail": "gazetteer PINs without state or centroid (in no pack): [900056, 900099]; without district 227 (dropped from facts.pins by app/facts/build.py:149 dropna(district), kept in packs with district ''). India Post PINs missing from facts.pins by state: {'NA': 100, 'UTTAR PRADESH': 1, 'WEST BENGAL': 1}",
+  "examples": [
+   "121999",
+   "122998",
+   "122999"
+  ],
+  "seconds": 1.4
+ },
+ {
+  "name": "planner_facilities",
+  "status": "warn",
+  "metric": "9959 facilities (missing 0, extra 0, dup 0); 12 exclude_review records kept; 8 capability entries point at them",
+  "threshold": "same filters as facts (no exclude_review)",
+  "detail": "planner/data_v1.py:63-66 drops only rows without a point, not exclude_review (facts/build.py:65 does). Capability entries on exclude_review records: {'emergency_24x7': 1, 'ecg': 1, 'blood_transfusion': 1, 'orthopaedics': 1, 'laboratory': 4}. Duplicate facility indexes per capability: {}",
+  "examples": [
+   "031aa7fc-a91c-4fbf-8e1d-2df21788242d",
+   "3701980c-4699-4a84-a9f1-024939ba0e34",
+   "4d05df11-60b6-48e2-8b8c-3e63c40c99f1",
+   "4d62cb1d-4dba-49bc-9169-7d13bf7cb151",
+   "6385c4ed-c95d-4d4e-9625-eb98e1ce6b4b"
+  ],
+  "seconds": 0.0
+ },
+ {
+  "name": "planner_vs_pack_exclusions",
+  "status": "warn",
+  "metric": "41 planner capability entries are pairs the packs drop",
+  "threshold": "0 (same exclusions in every export)",
+  "detail": "by capability: {'emergency_24x7': 13, 'icu': 5, 'burn_unit': 2, 'haemodialysis_unit': 9, 'comprehensive_emoc': 7, 'nicu': 5}. They carry low p (e.g. 0.03 for verified_false), so they rarely win a plan, but the exports disagree on which facilities are candidates.",
+  "examples": [
+   "17c02c25-710e-4e30-a313-82df5b9d3572 emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2626",
+   "1df3d3c4-c4d3-446d-a687-9d5841a57d84 emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2435",
+   "2d16d221-b3e8-4517-bab4-28fe6805e99e emergency_24x7 grade=attributed_elsewhere status=unverified p=0.2553",
+   "4d6c620f-08f8-4fa6-bb4c-c005cdaba895 emergency_24x7 grade=counter_evidence status=unverified p=0.1594",
+   "5c0d519d-c4ed-42c1-b4b0-a6e3d754c17b emergency_24x7 grade=counter_evidence status=unverified p=0.1353"
+  ],
+  "seconds": 0.5
+ },
+ {
+  "name": "raw_duplicates_lossless",
+  "status": "pass",
+  "metric": "11 ids x 2 rows; 0 not identical",
+  "threshold": "11 ids, all identical",
+  "detail": "9,970 well-formed -> 9,959 usable. Documented: REPORT.md F7/ID1, cleaning/geo_identity/common.py:22. By state: {'KERALA': 2, 'MAHARASHTRA': 2, 'TAMIL NADU': 2, 'HIMACHAL PRADESH': 1, 'KARNATAKA': 1, 'WEST BENGAL': 1, 'GUJARAT': 1, 'RAJASTHAN': 1}",
+  "examples": [
+   "08344cdb-f455-4c22-8d31-a0a8e849124b",
+   "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+   "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+   "9264b21d-4aea-460a-9c77-613407df8439",
+   "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "raw_hash_unchanged",
+  "status": "pass",
+  "metric": "6/6 files match",
+  "threshold": "all match",
+  "detail": "sha256 of data/raw files vs derived/v1/MANIFEST.json raw_input_sha256",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "raw_row_classes",
+  "status": "pass",
+  "metric": "rows=10088 classes={'well_formed': 9970, 'fragment': 88, 'truncated': 30}",
+  "threshold": "10,088 rows; classes equal PROFILE.json row_integrity",
+  "detail": "PROFILE.json says {'well_formed': 9970, 'fragment': 88, 'truncated': 30}. Rule: well_formed = UUID unique_id and source='kie' (audit/geo/geo_common.py:82 load_facilities).",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "raw_truncated_real_facilities",
+  "status": "warn",
+  "metric": "30/10088 rows (30 named facilities) dropped",
+  "threshold": "0 real facilities lost without a listed reason",
+  "detail": "30 truncated rows, 30 with a name, 30 with every column after description null, 0 also present as a usable row. Types: {'hospital': 16, 'clinic': 12, 'dentist': 2}; states: {'Uttar Pradesh': 6, 'Tamil Nadu': 4, 'Telangana': 3, 'Karnataka': 3, 'Punjab': 2, 'Gujarat': 2, 'Haryana': 2, 'Bihar': 2, 'Odisha': 1, 'Uttarakhand': 1, 'Ncr-delhi': 1, 'Madhya Pradesh': 1, 'West Bengal': 1, 'Chhattisgarh': 1}; focus states: {'Uttar Pradesh': 6, 'Bihar': 2, 'Odisha': 1}. PROFILE.json and REPORT.md document the rule (row integrity class 'truncated') but no document lists these 30 as lost facilities or says the app cannot show them; no stitch from the 88 fragment rows was attempted.",
+  "examples": [
+   "ac3a8441-1659-485f-9ea7-ae4e78856d70 Sri Sai Lions Netralaya (Patna, Bihar)",
+   "acbf875b-eec6-4a26-af54-55660a244378 Green Dental Care (Patna, Bihar)",
+   "12d987ef-1ff8-4025-bf5d-8870f2083a90 Bharati Fertility Center (Mandaveli, Tamil Nadu)",
+   "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5 Ajanta Hospital & Ivf Centre (Lucknow, Uttar Pradesh)",
+   "22142a37-a47a-4a9a-bc80-f5981361f000 The Velvet Skin Centre \u2013 Dermatologist in Lucknow, Hair & Skin Clinic (Lucknow, Uttar Pradesh)"
+  ],
+  "seconds": 0.0
+ },
+ {
+  "name": "source_urls_vs_raw",
+  "status": "warn",
+  "metric": "rows=158444 expected=158444 differing=0; same URL repeated in a record: 5652 rows in 1525 records",
+  "threshold": "0 differing; 0 repeated",
+  "detail": "11298 null items in raw arrays dropped (documented by jlist). 0 records have no source URL; 0 unparseable arrays. Repeats are not deduplicated by pipelines/source_scoring/s1_sources.py:21, so w_sd (README 'Attribution weights') counts a repeated URL twice. Repeated rows by class: {'official': 2519, 'health_aggregator': 793, 'other_health_site': 745, 'other': 292, 'social': 274}",
+  "examples": [
+   "0007a104-2bd7-412d-8ffd-7161e703dbc2",
+   "00154d81-ce6b-4c73-a49b-4bd3c20580f7",
+   "0020c82a-2608-406f-9298-779bdd657681"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "specialties_dup_inflation",
+  "status": "warn",
+  "metric": "rows=117964 missing=0 extra=0 n_raw_wrong=165 (11 facilities, all duplicated ids: True)",
+  "threshold": "0 / 0 / 0",
+  "detail": "Root cause: cleaning/claims/build_claims.py:51 SPEC_SQL reads raw without the row_number() dedupe used by EXPLODE_SQL, so n_raw is doubled for duplicated rows. The empty-string spec (non-alpha value) is also kept as its own row.",
+  "examples": [
+   "08344cdb-f455-4c22-8d31-a0a8e849124b",
+   "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+   "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+   "9264b21d-4aea-460a-9c77-613407df8439",
+   "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+  ],
+  "seconds": 0.3
+ },
+ {
+  "name": "specialty_map_coverage",
+  "status": "pass",
+  "metric": "0 of 2476 distinct specs unmapped (0 rows, 0 facilities)",
+  "threshold": "0",
+  "detail": "map rows 2933; unmapped specialties give no evidence weight downstream",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "state_coverage_table",
+  "status": "warn",
+  "metric": "below half national: ['BIHAR', 'ODISHA']; national 6.84 records and 3.02 app-service facilities per million",
+  "threshold": "focus states at least half the national density",
+  "detail": "focus states: {'BIHAR': {'usable': 260, 'facts_with_any_app_service': 131, 'in_any_pack': 129, 'pop_m': 132.61, 'usable_per_m': 1.96, 'app_service_fac_per_m': 0.99}, 'UTTAR PRADESH': {'usable': 948, 'facts_with_any_app_service': 456, 'in_any_pack': 445, 'pop_m': 248.43, 'usable_per_m': 3.82, 'app_service_fac_per_m': 1.84}, 'JHARKHAND': {'usable': 157, 'facts_with_any_app_service': 65, 'in_any_pack': 62, 'pop_m': 41.95, 'usable_per_m': 3.74, 'app_service_fac_per_m': 1.55}, 'ODISHA': {'usable': 119, 'facts_with_any_app_service': 51, 'in_any_pack': 51, 'pop_m': 49.12, 'usable_per_m': 2.42, 'app_service_fac_per_m': 1.04}, 'ASSAM': {'usable': 119, 'facts_with_any_app_service': 52, 'in_any_pack': 52, 'pop_m': 34.57, 'usable_per_m': 3.44, 'app_service_fac_per_m': 1.5}}. usable->facts losses by state: {'GUJARAT': 2, 'UTTAR PRADESH': 1, 'TAMIL NADU': 1, 'KARNATAKA': 2, 'KERALA': 1, 'WEST BENGAL': 1, 'PUNJAB': 1, 'HARYANA': 1, 'TELANGANA': 1, 'ANDHRA PRADESH': 1}. Full table out/state_coverage.csv",
+  "examples": [
+   "BIHAR: 1.96/M",
+   "UTTAR PRADESH: 3.82/M",
+   "JHARKHAND: 3.74/M",
+   "ODISHA: 2.42/M",
+   "ASSAM: 3.44/M"
+  ],
+  "seconds": 0.2
+ },
+ {
+  "name": "trace_table",
+  "status": "pass",
+  "metric": "29 layer/table rows traced; 0 with orphans",
+  "threshold": "0 orphans",
+  "detail": "out/trace.csv. facilities.parquet: 10088 rows / 9959 fac; usable (dedup): 9959 rows / 9959 fac; facility_location.parquet: 9959 rows / 9959 fac; record_trust.parquet: 9959 rows / 9959 fac; facility_groups.parquet: 9959 rows / 9959 fac; facility_trust.parquet: 9959 rows / 9959 fac; claims.parquet: 469498 rows / 9959 fac; specialties.parquet: 117964 rows / 9959 fac; grades.parquet: 10799 rows / 4694 fac; data_point_scores.parquet: 518191 rows / 9959 fac; source_urls.parquet: 158444 rows / 9959 fac; source_page_checks.parquet: 6492 rows / 344 fac; gold_pairs.parquet: 176 rows / 176 fac; crawl/targets.parquet: 9405 rows / 8015 fac; crawl/sites.parquet: 9405 rows / 8015 fac; crawl/pages.parquet: 31075 rows / 6744 fac; web_evidence/out/site_identity.parquet: 6770 rows / 5881 fac; web_evidence/out/web_service_summary.parquet: 20886 rows / 3698 fac; web_evidence/out/web_details.parquet: 41191 rows / 3308 fac; vf_details/out/facts.parquet: 42036 rows / 7501 fac; vf_details/out/facility_details.parquet: 26046 rows / 7501 fac; opendata/vf_opendata_match.parquet: 17662 rows / 9956 fac; opendata/vf_opendata_facts.parquet: 6001 rows / 2844 fac; taxonomy/out/lexicon_matches.parquet: 64670 rows / 6038 fac; facts.fac: 9947 rows / 9947 fac; facts.pairs: 8012 rows / 4393 fac; packs (all states, union): 6815 rows / 4252 fac; planner_v1 facilities: 9959 rows / 9959 fac; planner_v1 capability entries: 26491 rows / 6807 fac",
+  "examples": [],
+  "seconds": 0.9
+ },
+ {
+  "name": "uuid_rule_equivalence",
+  "status": "pass",
+  "metric": "0 rows differ",
+  "threshold": "0",
+  "detail": "audit/geo/geo_common.py:85 (prefix) vs cleaning/claims/build_claims.py:21 (full UUID)",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "v1_child_tables_fk",
+  "status": "pass",
+  "metric": "0 orphan ids",
+  "threshold": "0",
+  "detail": "claims.parquet: 9959 facilities, 0 orphans; specialties.parquet: 9959 facilities, 0 orphans; grades.parquet: 4694 facilities, 0 orphans; grades_v1.parquet: 4694 facilities, 0 orphans; data_point_scores.parquet: 9959 facilities, 0 orphans; source_urls.parquet: 9959 facilities, 0 orphans; source_page_checks.parquet: 344 facilities, 0 orphans; gold_pairs.parquet: 176 facilities, 0 orphans",
+  "examples": [],
+  "seconds": 0.7
+ },
+ {
+  "name": "v1_copies_match_sources",
+  "status": "pass",
+  "metric": "8/8 identical",
+  "threshold": "all identical",
+  "detail": "facility_location.parquet: same as cleaning/geo_identity/facility_location.parquet; manifest ok; record_trust.parquet: same as cleaning/geo_identity/record_trust.parquet; manifest ok; facility_groups.parquet: same as cleaning/geo_identity/facility_groups.parquet; manifest ok; pin_gazetteer.parquet: same as cleaning/geo_identity/pin_gazetteer.parquet; manifest ok; place_gazetteer.parquet: same as cleaning/geo_identity/place_gazetteer.parquet; manifest ok; claims.parquet: same as cleaning/claims/out/claims.parquet; manifest ok; specialties.parquet: same as cleaning/claims/out/specialties.parquet; manifest ok; grades.parquet: same as cleaning/claims/out/grades.parquet; manifest ok",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "v1_per_facility_tables",
+  "status": "pass",
+  "metric": "5/5 exact",
+  "threshold": "9,959 rows = usable set",
+  "detail": "facility_location.parquet: rows=9959 dup=0 missing=0 extra=0; record_trust.parquet: rows=9959 dup=0 missing=0 extra=0; facility_groups.parquet: rows=9959 dup=0 missing=0 extra=0; facility_trust.parquet: rows=9959 dup=0 missing=0 extra=0; facility_trust.csv: rows=9959 set_equal=True",
+  "examples": [],
+  "seconds": 0.1
+ },
+ {
+  "name": "v2_contract",
+  "status": "not_run",
+  "metric": "file absent",
+  "threshold": "exists",
+  "detail": "/Users/karthikvattem/projects/datathon/derived/v2/facility_service_scores.parquet not published yet; contract ready",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "web_evidence_reach",
+  "status": "pass",
+  "metric": "3698 records in web_service_summary, 3664 with a positive service; 0 not crawled",
+  "threshold": "0 outside crawl",
+  "detail": "share with web-positive evidence, focus states {'BIHAR': np.float64(0.392), 'UTTAR PRADESH': np.float64(0.34), 'JHARKHAND': np.float64(0.242), 'ODISHA': np.float64(0.319), 'ASSAM': np.float64(0.345)}; national 0.368",
+  "examples": [],
+  "seconds": 0.3
+ }
+]

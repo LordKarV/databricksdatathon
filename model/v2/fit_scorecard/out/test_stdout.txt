@@ -1,0 +1,5 @@
+  assert np.abs(oof.base + oof[fam].fillna(0).sum(1) - oof.z).max() < 1e-9
+cross-fit mask ok
+additivity ok 9.43689570931383e-16
+not-observable ok: 173399 website and 8907 list contributions, all observable
+folds ok

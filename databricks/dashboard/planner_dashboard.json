@@ -18,8 +18,7 @@
     "         CASE WHEN array_contains(r.trust_flags, 'official_phone_is_directory') THEN 1 ELSE 0 END AS directory_phone,\n",
     "         r.trust_level, r.website_class,\n",
     "         CASE g.degurba WHEN 3 THEN 'Urban centre' WHEN 2 THEN 'Town or semi-dense' WHEN 1 THEN 'Rural' END AS settlement,\n",
-    "         CASE WHEN g.operatorTypeId IN ('public', 'government') THEN 'Public'\n",
-    "              WHEN g.operatorTypeId = 'private' THEN 'Private' ELSE 'Not stated' END AS operator,\n",
+    "         CASE fa.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,\n",
     "         CASE WHEN l.loc_src <> 'listing_coordinates' THEN 1 ELSE 0 END AS fixed_corrected_point,\n",
     "         CASE WHEN q.unique_id IS NOT NULL THEN 1 ELSE 0 END AS fixed_quarantined_text,\n",
     "         CASE WHEN l.loc_conf IN ('low', 'disputed') THEN 1 ELSE 0 END AS flagged_location,\n",
@@ -34,6 +33,7 @@
     "  FROM facility_location l\n",
     "  JOIN geo_facility g ON g.unique_id = l.unique_id\n",
     "  JOIN record_trust r ON r.unique_id = l.unique_id\n",
+    "  LEFT JOIN facility_attributes_v2 fa ON fa.unique_id = l.unique_id\n",
     "  LEFT JOIN facility_hours h ON h.unique_id = l.unique_id\n",
     "  LEFT JOIN geo_facility_site w ON w.unique_id = l.unique_id\n",
     "  LEFT JOIN direct d ON d.unique_id = l.unique_id\n",
@@ -155,17 +155,21 @@
   },
   {
    "name": "ds_pairs",
-   "displayName": "Facility and service scores (one row per record and service)",
+   "displayName": "Facility and service scores, model v2 (one row per record and service)",
    "queryLines": [
-    "SELECT g.stname AS state, upper(g.dtname) AS district, s.service, s.unique_id, s.name,\n",
-    "       s.p_s, s.p_s_lo, s.p_s_hi, s.band, s.T AS text_level, s.p_l, s.p_e,\n",
-    "       l.loc_conf, r.website_class, array_join(r.display_phones, ', ') AS phones,\n",
-    "       CASE WHEN s.T > 0 OR s.p_s >= 0.3 THEN 1 ELSE 0 END AS shortlisted\n",
-    "FROM pair_scores s\n",
+    "SELECT g.stname AS state, upper(g.dtname) AS district, s.service_id AS service, s.unique_id, l.name,\n",
+    "       CASE s.band WHEN 'LIKELY' THEN 'Likely' WHEN 'CALL_FIRST' THEN 'Call first'\n",
+    "                   WHEN 'NO_SERVICE_TEXT' THEN 'No service text' WHEN 'UNLIKELY' THEN 'Unlikely' END AS band,\n",
+    "       CASE WHEN s.band <> 'NO_SERVICE_TEXT' THEN s.p END AS p_s,\n",
+    "       s.lo AS bin_lo, s.hi AS bin_hi, s.p_location AS p_l, s.p_exists AS p_e,\n",
+    "       CASE s.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,\n",
+    "       array_join(s.overlays, ', ') AS flags, l.loc_conf, r.website_class,\n",
+    "       CASE WHEN s.band IN ('LIKELY', 'CALL_FIRST') THEN 1 ELSE 0 END AS shortlisted\n",
+    "FROM facility_service_scores_v2 s\n",
     "JOIN geo_facility g ON g.unique_id = s.unique_id\n",
     "JOIN facility_location l ON l.unique_id = s.unique_id\n",
     "JOIN record_trust r ON r.unique_id = s.unique_id\n",
-    "ORDER BY s.p_s DESC\n"
+    "ORDER BY s.p DESC\n"
    ]
   },
   {
@@ -1901,24 +1905,28 @@
            "expression": "`band`"
           },
           {
+           "name": "operator",
+           "expression": "`operator`"
+          },
+          {
            "name": "p_s",
            "expression": "`p_s`"
           },
           {
-           "name": "p_s_lo",
-           "expression": "`p_s_lo`"
+           "name": "bin_lo",
+           "expression": "`bin_lo`"
           },
           {
-           "name": "p_s_hi",
-           "expression": "`p_s_hi`"
-          },
-          {
-           "name": "text_level",
-           "expression": "`text_level`"
+           "name": "bin_hi",
+           "expression": "`bin_hi`"
           },
           {
            "name": "p_l",
            "expression": "`p_l`"
+          },
+          {
+           "name": "p_e",
+           "expression": "`p_e`"
           },
           {
            "name": "loc_conf",
@@ -1929,8 +1937,8 @@
            "expression": "`website_class`"
           },
           {
-           "name": "phones",
-           "expression": "`phones`"
+           "name": "flags",
+           "expression": "`flags`"
           }
          ],
          "disaggregated": true,
@@ -1961,11 +1969,15 @@
          },
          {
           "fieldName": "band",
-          "displayName": "Badge"
+          "displayName": "Band (model v2)"
+         },
+         {
+          "fieldName": "operator",
+          "displayName": "Operator"
          },
          {
           "fieldName": "p_s",
-          "displayName": "Chance a public check confirms it (runs high)",
+          "displayName": "P_S: chance a decisive web check confirms it",
           "format": {
            "type": "number",
            "decimalPlaces": {
@@ -1975,8 +1987,8 @@
           }
          },
          {
-          "fieldName": "p_s_lo",
-          "displayName": "Low",
+          "fieldName": "bin_lo",
+          "displayName": "Score bin confirmed rate, low",
           "format": {
            "type": "number",
            "decimalPlaces": {
@@ -1986,8 +1998,8 @@
           }
          },
          {
-          "fieldName": "p_s_hi",
-          "displayName": "High",
+          "fieldName": "bin_hi",
+          "displayName": "Score bin confirmed rate, high",
           "format": {
            "type": "number",
            "decimalPlaces": {
@@ -1995,14 +2007,21 @@
             "places": 2
            }
           }
-         },
-         {
-          "fieldName": "text_level",
-          "displayName": "Text level (0-5)"
          },
          {
           "fieldName": "p_l",
-          "displayName": "Location score (0.7+ was right 30 of 33)",
+          "displayName": "Location score P_L",
+          "format": {
+           "type": "number",
+           "decimalPlaces": {
+            "type": "exact",
+            "places": 2
+           }
+          }
+         },
+         {
+          "fieldName": "p_e",
+          "displayName": "Existence score P_E",
           "format": {
            "type": "number",
            "decimalPlaces": {
@@ -2020,16 +2039,16 @@
           "displayName": "Website"
          },
          {
-          "fieldName": "phones",
-          "displayName": "Phones"
+          "fieldName": "flags",
+          "displayName": "Flags"
          }
         ]
        },
        "frame": {
         "showTitle": true,
-        "title": "3.2 Facilities for the service, ranked by P_S",
+        "title": "3.2 Facilities for the service, ranked by P_S (model v2)",
         "showDescription": true,
-        "description": "Rows with any service text or P_S of 0.3 or more. P_S is a ranking, not a calibrated probability (IPW ECE 0.197). Call before referring."
+        "description": "Rows banded Likely or Call first (the record describes the service as its own unit). P_S is the chance a web check that finds a decisive answer confirms the service, not the chance a phone call finds it. The two bin columns are the observed confirmed rate of DEV pairs in the same 0.2-wide score bin, not an interval around P_S. Public facilities: the v2 score has no demonstrated ranking ability for public facilities (31 public DEV pairs, AUROC interval spans 0.5 widely), so do not rank public records by P_S. Call before referring."
        }
       }
      },
@@ -2938,7 +2957,7 @@
       "name": "p6_caveat",
       "multilineTextboxSpec": {
        "lines": [
-        "A record is a listing in one private-leaning dataset (88% private). No evidence here is not no care: read every gap as \"no public evidence of care\". P_S is a ranking, not a probability. Badges need a confirmation, so Likely is almost empty (2 of 69,713 pairs). Test numbers are quoted from model/review/stats/results.json, not recomputed; the selection rule was written after this test was read, so it cannot evaluate v2.\n"
+        "A record is a listing in one private-leaning dataset (88% private). No evidence here is not no care: read every gap as \"no public evidence of care\". Bands are model v2 (derived/v2, A_platt) over 36 services and 9,947 eligible records. Public facilities: the v2 score has no demonstrated ranking ability for public facilities (31 public DEV pairs, AUROC interval spans 0.5 widely), so do not rank public records by P_S. Tables 6.2 and 6.3 are the earlier v1 sealed test, quoted from model/review/stats/results.json, not recomputed; they do not evaluate v2.\n"
        ]
       }
      },
@@ -2977,14 +2996,15 @@
        "encodings": {
         "x": {
          "fieldName": "band",
-         "displayName": "Badge",
+         "displayName": "Band (model v2)",
          "scale": {
           "type": "categorical",
           "sort": {
            "by": "custom-order",
            "orderedValues": [
             "Likely",
-            "Unverified",
+            "Call first",
+            "No service text",
             "Unlikely"
            ]
           }
@@ -2999,7 +3019,7 @@
         },
         "color": {
          "fieldName": "band",
-         "displayName": "Badge",
+         "displayName": "Band (model v2)",
          "scale": {
           "type": "categorical",
           "mappings": [
@@ -3008,7 +3028,11 @@
             "color": "#6da7ec"
            },
            {
-            "value": "Unverified",
+            "value": "Call first",
+            "color": "#eda100"
+           },
+           {
+            "value": "No service text",
             "color": "#c3c2b7"
            },
            {
@@ -3024,9 +3048,9 @@
        },
        "frame": {
         "showTitle": true,
-        "title": "6.1 Badges for the service",
+        "title": "6.1 Model v2 bands for the service",
         "showDescription": true,
-        "description": "Unlikely means the record gives little evidence, not that the service is absent. National: 37,108 Unlikely, 32,603 Unverified, 2 Likely."
+        "description": "No service text: the record has no sentence about the service as its own unit, so P_S rests on context only. Unlikely means little or contaminated evidence, not that the service is absent. National, 36 services: 20,073 Likely, 1,671 Call first, 242,131 No service text, 94,217 Unlikely."
        }
       }
      },

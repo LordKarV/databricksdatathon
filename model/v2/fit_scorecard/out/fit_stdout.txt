@@ -1,0 +1,79 @@
+21:02:25 gold 195 pos 62 PU rows 22140 terms 249
+21:02:25 A_prior group5 fold 0 {}
+21:02:25 A_prior group5 fold 1 {}
+21:02:25 A_prior group5 fold 2 {}
+21:02:25 A_prior group5 fold 3 {}
+21:02:25 A_prior group5 fold 4 {}
+21:02:25 A_prior state5 fold 0 {}
+21:02:25 A_prior state5 fold 1 {}
+21:02:25 A_prior state5 fold 2 {}
+21:02:25 A_prior state5 fold 3 {}
+21:02:25 A_prior state5 fold 4 {}
+21:02:38 B group5 fold 0 {'em_iters': 40, 'converged': True, 'n_rows': 10250, 'dropped_gold': 0, 'dropped_pu': 0}
+21:02:50 B group5 fold 1 {'em_iters': 42, 'converged': True, 'n_rows': 9990, 'dropped_gold': 0, 'dropped_pu': 0}
+21:03:00 B group5 fold 2 {'em_iters': 31, 'converged': True, 'n_rows': 10254, 'dropped_gold': 0, 'dropped_pu': 0}
+21:03:12 B group5 fold 3 {'em_iters': 36, 'converged': True, 'n_rows': 10626, 'dropped_gold': 0, 'dropped_pu': 0}
+21:03:20 B group5 fold 4 {'em_iters': 31, 'converged': True, 'n_rows': 10236, 'dropped_gold': 0, 'dropped_pu': 0}
+21:03:35 B state5 fold 0 {'em_iters': 46, 'converged': True, 'n_rows': 10812, 'dropped_gold': 0, 'dropped_pu': 80}
+21:03:48 B state5 fold 1 {'em_iters': 38, 'converged': True, 'n_rows': 10626, 'dropped_gold': 1, 'dropped_pu': 361}
+21:03:58 B state5 fold 2 {'em_iters': 30, 'converged': True, 'n_rows': 8642, 'dropped_gold': 1, 'dropped_pu': 45}
+21:04:12 B state5 fold 3 {'em_iters': 33, 'converged': True, 'n_rows': 10757, 'dropped_gold': 1, 'dropped_pu': 247}
+21:04:30 B state5 fold 4 {'em_iters': 46, 'converged': True, 'n_rows': 10030, 'dropped_gold': 2, 'dropped_pu': 103}
+21:04:30 B_gold_only group5 fold 0 {'em_iters': 1, 'converged': True, 'n_rows': 145, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:30 B_gold_only group5 fold 1 {'em_iters': 1, 'converged': True, 'n_rows': 155, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:30 B_gold_only group5 fold 2 {'em_iters': 1, 'converged': True, 'n_rows': 159, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:30 B_gold_only group5 fold 3 {'em_iters': 1, 'converged': True, 'n_rows': 165, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:30 B_gold_only group5 fold 4 {'em_iters': 1, 'converged': True, 'n_rows': 156, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:30 B_gold_only state5 fold 0 {'em_iters': 1, 'converged': True, 'n_rows': 156, 'dropped_gold': 0, 'dropped_pu': 80}
+21:04:30 B_gold_only state5 fold 1 {'em_iters': 1, 'converged': True, 'n_rows': 155, 'dropped_gold': 1, 'dropped_pu': 361}
+21:04:30 B_gold_only state5 fold 2 {'em_iters': 1, 'converged': True, 'n_rows': 155, 'dropped_gold': 1, 'dropped_pu': 45}
+21:04:30 B_gold_only state5 fold 3 {'em_iters': 1, 'converged': True, 'n_rows': 155, 'dropped_gold': 1, 'dropped_pu': 247}
+21:04:30 B_gold_only state5 fold 4 {'em_iters': 1, 'converged': True, 'n_rows': 154, 'dropped_gold': 2, 'dropped_pu': 103}
+21:04:39 B_no_web group5 fold 0 {'em_iters': 47, 'converged': True, 'n_rows': 5212, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:48 B_no_web group5 fold 1 {'em_iters': 44, 'converged': True, 'n_rows': 4978, 'dropped_gold': 0, 'dropped_pu': 0}
+21:04:55 B_no_web group5 fold 2 {'em_iters': 41, 'converged': True, 'n_rows': 5107, 'dropped_gold': 0, 'dropped_pu': 0}
+21:05:04 B_no_web group5 fold 3 {'em_iters': 45, 'converged': True, 'n_rows': 5323, 'dropped_gold': 0, 'dropped_pu': 0}
+21:05:14 B_no_web group5 fold 4 {'em_iters': 40, 'converged': True, 'n_rows': 5170, 'dropped_gold': 0, 'dropped_pu': 0}
+21:05:28 B_no_k_text_nabh group5 fold 0 {'em_iters': 42, 'converged': True, 'n_rows': 9122, 'dropped_gold': 0, 'dropped_pu': 0}
+21:05:42 B_no_k_text_nabh group5 fold 1 {'em_iters': 43, 'converged': True, 'n_rows': 8832, 'dropped_gold': 0, 'dropped_pu': 0}
+21:05:50 B_no_k_text_nabh group5 fold 2 {'em_iters': 32, 'converged': True, 'n_rows': 9092, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:01 B_no_k_text_nabh group5 fold 3 {'em_iters': 38, 'converged': True, 'n_rows': 9396, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:10 B_no_k_text_nabh group5 fold 4 {'em_iters': 35, 'converged': True, 'n_rows': 9062, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:20 B_no_list_cited_gold group5 fold 0 {'em_iters': 40, 'converged': True, 'n_rows': 10245, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:33 B_no_list_cited_gold group5 fold 1 {'em_iters': 45, 'converged': True, 'n_rows': 9981, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:43 B_no_list_cited_gold group5 fold 2 {'em_iters': 31, 'converged': True, 'n_rows': 10249, 'dropped_gold': 0, 'dropped_pu': 0}
+21:06:56 B_no_list_cited_gold group5 fold 3 {'em_iters': 44, 'converged': True, 'n_rows': 10618, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:04 B_no_list_cited_gold group5 fold 4 {'em_iters': 34, 'converged': True, 'n_rows': 10227, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:13 B_pu_w0.1 group5 fold 0 {'em_iters': 32, 'converged': True, 'n_rows': 10250, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:23 B_pu_w0.1 group5 fold 1 {'em_iters': 31, 'converged': True, 'n_rows': 9990, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:35 B_pu_w0.1 group5 fold 2 {'em_iters': 28, 'converged': True, 'n_rows': 10254, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:47 B_pu_w0.1 group5 fold 3 {'em_iters': 28, 'converged': True, 'n_rows': 10626, 'dropped_gold': 0, 'dropped_pu': 0}
+21:07:58 B_pu_w0.1 group5 fold 4 {'em_iters': 29, 'converged': True, 'n_rows': 10236, 'dropped_gold': 0, 'dropped_pu': 0}
+21:08:09 B_pu_w0.1 state5 fold 0 {'em_iters': 31, 'converged': True, 'n_rows': 10812, 'dropped_gold': 0, 'dropped_pu': 80}
+21:08:21 B_pu_w0.1 state5 fold 1 {'em_iters': 29, 'converged': True, 'n_rows': 10626, 'dropped_gold': 1, 'dropped_pu': 361}
+21:08:32 B_pu_w0.1 state5 fold 2 {'em_iters': 29, 'converged': True, 'n_rows': 8642, 'dropped_gold': 1, 'dropped_pu': 45}
+21:08:39 B_pu_w0.1 state5 fold 3 {'em_iters': 29, 'converged': True, 'n_rows': 10757, 'dropped_gold': 1, 'dropped_pu': 247}
+21:08:43 B_pu_w0.1 state5 fold 4 {'em_iters': 29, 'converged': True, 'n_rows': 10030, 'dropped_gold': 2, 'dropped_pu': 103}
+21:08:44 platt {'scheme': 'group5', 'a_full': 0.3431011155214983, 'c_full': -0.43649876948385896, 'gain': 0.09150126471385657, 'se': 0.04056986583245831, 'ci95_of_diff': [-0.17709076872084373, -0.015225405537314612], 'used': True, 'rule': 'Platt used only when the out-of-fold gain is at least one SE'} {'scheme': 'state5', 'a_full': 0.40451304864209997, 'c_full': -0.38927520462783066, 'gain': 0.06034707621465715, 'se': 0.033702048892078694, 'ci95_of_diff': [-0.13179256846151044, 0.002462102661679619], 'used': True, 'rule': 'Platt used only when the out-of-fold gain is at least one SE'}
+21:08:46 eval A_prior group5 {'log_loss': [0.86, 0.702, 1.042], 'auroc': [0.74, 0.662, 0.808], 'brier': [0.256, 0.214, 0.301], 'ece': [0.231, 0.175, 0.296]}
+21:08:48 eval A_prior state5 {'log_loss': [0.86, 0.702, 1.042], 'auroc': [0.74, 0.662, 0.808], 'brier': [0.256, 0.214, 0.301], 'ece': [0.231, 0.175, 0.296]}
+21:08:50 eval B group5 {'log_loss': [0.683, 0.568, 0.817], 'auroc': [0.694, 0.615, 0.766], 'brier': [0.22, 0.184, 0.261], 'ece': [0.132, 0.079, 0.201]}
+21:08:52 eval B state5 {'log_loss': [0.646, 0.541, 0.767], 'auroc': [0.711, 0.632, 0.782], 'brier': [0.211, 0.176, 0.25], 'ece': [0.096, 0.06, 0.169]}
+21:08:54 eval B_gold_only group5 {'log_loss': [0.61, 0.508, 0.715], 'auroc': [0.74, 0.668, 0.807], 'brier': [0.203, 0.167, 0.239], 'ece': [0.103, 0.059, 0.177]}
+21:08:56 eval B_gold_only state5 {'log_loss': [0.629, 0.523, 0.743], 'auroc': [0.724, 0.648, 0.794], 'brier': [0.208, 0.171, 0.247], 'ece': [0.118, 0.069, 0.185]}
+21:08:58 eval B_no_k_text_nabh group5 {'log_loss': [0.682, 0.568, 0.814], 'auroc': [0.694, 0.615, 0.767], 'brier': [0.22, 0.183, 0.261], 'ece': [0.15, 0.083, 0.208]}
+21:08:59 eval B_no_list_cited_gold group5 {'log_loss': [0.685, 0.571, 0.82], 'auroc': [0.692, 0.614, 0.764], 'brier': [0.222, 0.185, 0.262], 'ece': [0.132, 0.08, 0.202]}
+21:09:01 eval B_no_web group5 {'log_loss': [0.731, 0.616, 0.858], 'auroc': [0.644, 0.558, 0.724], 'brier': [0.242, 0.202, 0.283], 'ece': [0.171, 0.104, 0.234]}
+21:09:04 eval B_platt group5 {'log_loss': [0.592, 0.532, 0.655], 'auroc': [0.685, 0.604, 0.759], 'brier': [0.203, 0.176, 0.23], 'ece': [0.044, 0.032, 0.126]}
+21:09:06 eval B_platt state5 {'log_loss': [0.586, 0.524, 0.65], 'auroc': [0.686, 0.606, 0.761], 'brier': [0.201, 0.174, 0.228], 'ece': [0.069, 0.032, 0.131]}
+21:09:07 eval B_pu_w0.1 group5 {'log_loss': [0.628, 0.527, 0.742], 'auroc': [0.727, 0.652, 0.797], 'brier': [0.207, 0.173, 0.243], 'ece': [0.077, 0.046, 0.156]}
+21:09:09 eval B_pu_w0.1 state5 {'log_loss': [0.607, 0.512, 0.713], 'auroc': [0.728, 0.651, 0.798], 'brier': [0.202, 0.168, 0.238], 'ece': [0.093, 0.051, 0.161]}
+21:09:16 P_L {'B': [0.855, 0.788, 0.913], 'B_ablate': [0.862, 0.798, 0.918], 'A_prior': [0.875, 0.814, 0.928]}
+21:09:16 thresholds {'B': {'t_L': 0.7, 't_L_fallback': True, 't_U': 0.07974228028016743, 't_U_fallback': False, 'gate_n': 103, 'likely_at_t_L': {'threshold': 0.7, 'n': 22, 'k': 10, 'precision': 0.45454545454545453, 'wilson95': [0.2692029406072818, 0.6534020481750042]}, 'likely_at_0_70': {'threshold': 0.7, 'n': 22, 'k': 10, 'precision': 0.45454545454545453, 'wilson95': [0.2692029406072818, 0.6534020481750042]}, 'ps_only_at_0_70': {'threshold': 0.7, 'n': 26, 'k': 13, 'precision': 0.5, 'wilson95': [0.32060593402470916, 0.6793940659752908]}, 'ps_only_at_0_50': {'threshold': 0.5, 'n': 54, 'k': 27, 'precision': 0.5, 'wilson95': [0.3711458294533728, 0.6288541705466272]}, 'likely_at_0_50': {'threshold': 0.5, 'n': 40, 'k': 20, 'precision': 0.5, 'wilson95': [0.35199526826950456, 0.6480047317304954]}, 'unlikely_at_t_U': {'n': 52, 'k_neg': 47, 'npv': 0.9038461538461539, 'wilson95': [0.7939036977180668, 0.958225649211797]}, 'note': 'P_E gate not applied (candidate A prior-only head); P_L gate uses out-of-fold P_L from location.py'}, 'B_platt': {'t_L': 0.7, 't_L_fallback': True, 't_U': 0.23975620254493785, 't_U_fallback': False, 'gate_n': 103, 'likely_at_t_L': {'threshold': 0.7, 'n': 2, 'k': 0, 'precision': 0.0, 'wilson95': [0.0, 0.6576197760453506]}, 'likely_at_0_70': {'threshold': 0.7, 'n': 2, 'k': 0, 'precision': 0.0, 'wilson95': [0.0, 0.6576197760453506]}, 'ps_only_at_0_70': {'threshold': 0.7, 'n': 2, 'k': 0, 'precision': 0.0, 'wilson95': [0.0, 0.6576197760453506]}, 'ps_only_at_0_50': {'threshold': 0.5, 'n': 22, 'k': 11, 'precision': 0.5, 'wilson95': [0.30722106144268146, 0.6927789385573185]}, 'likely_at_0_50': {'threshold': 0.5, 'n': 18, 'k': 8, 'precision': 0.4444444444444444, 'wilson95': [0.24559518003796732, 0.6628358450657309]}, 'unlikely_at_t_U': {'n': 62, 'k_neg': 56, 'npv': 0.9032258064516129, 'wilson95': [0.8045118129142941, 0.9548881282404698]}, 'note': 'P_E gate not applied (candidate A prior-only head); P_L gate uses out-of-fold P_L from location.py'}, 'A_prior': {'t_L': 0.7, 't_L_fallback': True, 't_U': 0.22443598573092652, 't_U_fallback': False, 'gate_n': 103, 'likely_at_t_L': {'threshold': 0.7, 'n': 57, 'k': 26, 'precision': 0.45614035087719296, 'wilson95': [0.3337260549463177, 0.5840931411752744]}, 'likely_at_0_70': {'threshold': 0.7, 'n': 57, 'k': 26, 'precision': 0.45614035087719296, 'wilson95': [0.3337260549463177, 0.5840931411752744]}, 'ps_only_at_0_70': {'threshold': 0.7, 'n': 73, 'k': 38, 'precision': 0.5205479452054794, 'wilson95': [0.4078159680453948, 0.631225456254401]}, 'ps_only_at_0_50': {'threshold': 0.5, 'n': 110, 'k': 52, 'precision': 0.4727272727272727, 'wilson95': [0.38193206652085265, 0.5653630572507403]}, 'likely_at_0_50': {'threshold': 0.5, 'n': 77, 'k': 33, 'precision': 0.42857142857142855, 'wilson95': [0.3240365234653687, 0.5398946802484099]}, 'unlikely_at_t_U': {'n': 52, 'k_neg': 47, 'npv': 0.9038461538461539, 'wilson95': [0.7939036977180668, 0.958225649211797]}, 'note': 'P_E gate not applied (candidate A prior-only head); P_L gate uses out-of-fold P_L from location.py'}, 'B_gold_only': {'t_L': 0.7, 't_L_fallback': True, 't_U': 0.1902366621220949, 't_U_fallback': False, 'gate_n': 103, 'likely_at_t_L': {'threshold': 0.7, 'n': 18, 'k': 8, 'precision': 0.4444444444444444, 'wilson95': [0.24559518003796732, 0.6628358450657309]}, 'likely_at_0_70': {'threshold': 0.7, 'n': 18, 'k': 8, 'precision': 0.4444444444444444, 'wilson95': [0.24559518003796732, 0.6628358450657309]}, 'ps_only_at_0_70': {'threshold': 0.7, 'n': 22, 'k': 10, 'precision': 0.45454545454545453, 'wilson95': [0.2692029406072818, 0.6534020481750042]}, 'ps_only_at_0_50': {'threshold': 0.5, 'n': 51, 'k': 27, 'precision': 0.5294117647058824, 'wilson95': [0.39523304110136837, 0.6594700988441514]}, 'likely_at_0_50': {'threshold': 0.5, 'n': 36, 'k': 20, 'precision': 0.5555555555555556, 'wilson95': [0.39581061637891446, 0.7045873136245434]}, 'unlikely_at_t_U': {'n': 85, 'k_neg': 77, 'npv': 0.9058823529411765, 'wilson95': [0.8251294795351005, 0.9515349389566441]}, 'note': 'P_E gate not applied (candidate A prior-only head); P_L gate uses out-of-fold P_L from location.py'}, 'shipped': 'B_platt'}
+21:09:23 full fit B {'em_iters': 37, 'converged': True, 'active': 69}
+21:09:23 full fit B_gold_only {'em_iters': 1, 'converged': True, 'active': 155}
+21:09:27 full fit B_no_web {'em_iters': 45, 'converged': True, 'active': 89}
+21:09:32 full fit B_no_k_text_nabh {'em_iters': 39, 'converged': True, 'active': 69}
+21:09:38 full fit B_no_list_cited_gold {'em_iters': 40, 'converged': True, 'active': 72}
+21:09:42 full fit B_pu_w0.1 {'em_iters': 29, 'converged': True, 'active': 92}
+21:09:45 done 440 s

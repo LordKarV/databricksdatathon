@@ -1,0 +1,75 @@
+cap,fi,cid,text,attr,nonoffer,status,cue
+ecg,2156,325be5e7:proc:0,"Conducted a free heart check-up camp on 29 September 2022 offering ECG, 2D echocardiography, random blood sugar testing, blood pressure measurement, and body fat analysis.",unanchored,False,proposed,camp
+ecg,2518,3a559444:proc:5,"Provides free health checkups during community camps including ECG, ECHO, random blood sugar testing (RBS), and blood pressure measurements.",unanchored,False,proposed,camp
+ecg,2518,3a559444:capa:11,"Conducts community health camps in Belagavi offering ECG, ECHO, RBS, and BP testing.",unanchored,False,proposed,camp
+ecg,6490,9685c062:capa:26,"Organizes free health check-up camps offering heart health screening and diagnostic tests such as ECG, CBC, and urine tests",unanchored,False,proposed,camp
+thrombolysis,674,0eee91dc:capa:24,Offers India's first non-surgical heart attack treatment.,unanchored,False,proposed,negation
+pci_cath_lab,552,0be8a076:proc:9,Angiography of the brain is used to perform interventional neuroradiology procedures,unanchored,False,proposed,past
+pci_cath_lab,1950,2e5f00b6:equi:26,Cath Lab coming soon,unanchored,False,proposed,future
+pci_cath_lab,4319,62627348:equi:4,Future-ready cath lab planned,unanchored,False,proposed,future
+pci_cath_lab,4959,7183b0fb:proc:5,Hosts free angiography camps,unanchored,False,proposed,camp
+pci_cath_lab,5427,7ca4ff5d:capa:21,Cath Lab enables non-surgical cardiac catheterization procedures,unanchored,False,proposed,negation
+pci_cath_lab,8218,cb4c40f4:proc:5,Coronary Angioplasty uses a balloon catheter to open a diseased artery without surgery,unanchored,False,proposed,negation
+pci_cath_lab,8965,e0893a32:capa:29,"Plans to establish a super specialty medical centre offering angiography, balloon angioplasty, and bypass surgeries",unanchored,False,proposed,future
+general_surgery_ot,1224,1c06c3fb:proc:13,Dental Department inaugurated in 2009; Ophthalmic department established; new Eye OT and special camps,unanchored,False,proposed,camp
+general_surgery_ot,1351,1f84bdca:proc:23,Patients requiring surgery are immediately transferred to the ground-floor operating theatre for surgical intervention,unanchored,False,proposed,referral
+general_surgery_ot,1737,28ce4bae:proc:0,"Performs planned surgeries including general surgery, TURP (urology), gynecology, orthopedics, and ENT",unanchored,False,proposed,future
+general_surgery_ot,6541,97f5c391:capa:13,"Multispecialty medical camps in Hansot with Neurology, Ophthalmology, Gynecology, Dental, Pediatrics, Spine & Neck, Plastic surgery, Urology, Orthopedics, General Surgery, and ENT",unanchored,False,proposed,camp
+general_surgery_ot,8295,cd8b64e1:proc:20,"Cartography is non-invasive and painless, requiring no surgery, injections, wires, catheters, anesthesia or hospitalization",unanchored,False,proposed,negation
+general_surgery_ot,9919,fe92451b:desc:1,"In 1995, operation theatre and indoor admission facility were added, which later on was transferred to a newly built premises of 2000 sq feet in an elite area of Hotgi Road, Solapur.",unanchored,False,proposed,referral
+blood_transfusion,1720,28726757:capa:23,Plans to launch the first private blood bank of Western Odisha,unanchored,False,proposed,future
+blood_transfusion,3565,51c1ed79:capa:8,Blood bank not available,unanchored,False,proposed,negation
+blood_transfusion,5216,7795f9f8:capa:16,Blood bank not available at the hospital,unanchored,False,proposed,negation
+blood_transfusion,9693,f7e56a1a:proc:14,Blood Bank procedures are not listed in the provided content,unanchored,False,proposed,negation
+ct_scan,258,05773700:capa:40,"Phase II under expansion to hold a cancer care hospital with PET-CT and TrueBeam radiation therapy, construction ongoing and scheduled to be opened by 2017",unanchored,False,proposed,future
+ct_scan,703,0f99a172:equi:15,Proposed CT Scan,unanchored,False,proposed,future
+ct_scan,918,149332ef:equi:3,"Plans to install a 32-slice CT scanner, the first in the surrounding area of Sawai Madhopur.",unanchored,False,proposed,future
+ct_scan,2316,3603f591:equi:3,CT scanner machine planned for installation at Diamond Harbour Government Medical College & Hospital (DHGMC),own_anchored,False,proposed,future
+ct_scan,3091,46d54262:equi:2,CT scan facility is non-functional/unavailable,unanchored,False,proposed,negation
+ct_scan,4592,689ed40e:desc:0,"Accura Speciality Labs have well-trained staffs for providing good quality and reliable diagnostics reports and they keep very attractive charges, took CT Scan here.For their good service, i refer to everyone.",unanchored,False,proposed,referral
+ct_scan,6555,989ef605:capa:19,In-house CT scanning is not available; CT scanning is outsourced,unanchored,False,proposed,negation
+ct_scan,9486,f12bbe3e:proc:11,CT scan service (Coming Soon),unanchored,False,proposed,future
+ct_scan,9486,f12bbe3e:proc:28,CT Scan coming Soon,unanchored,False,proposed,future
+ct_scan,9486,f12bbe3e:capa:9,CT scan service planned (Coming Soon),unanchored,False,proposed,future
+neurosurgery,3867,57f31693:proc:9,Neurosurgery provides surgical and non-surgical treatment for brain and spine disorders,unanchored,False,proposed,negation
+neurosurgery,3867,57f31693:proc:19,Offers neurosurgery with surgical and non-surgical treatment options.,unanchored,False,proposed,negation
+neurosurgery,7735,bbf46f87:proc:18,"Neurosurgery provides surgical and non-surgical care for brain, spinal cord and peripheral nerves (adult and pediatric)",unanchored,False,proposed,negation
+neurosurgery,7950,c2b79056:capa:10,"Plans to add cardiovascular surgeries, a comprehensive diabetes care centre, nephrology, and neurosurgery",unanchored,False,proposed,future
+orthopaedics,307,0655e834:capa:5,Offers surgical and non-surgical orthopedic treatments,unanchored,False,proposed,negation
+orthopaedics,1145,1a2a69ea:proc:1,Offers Orthopaedic Manual Therapy as a non-surgical musculoskeletal treatment,unanchored,False,proposed,negation
+orthopaedics,1145,1a2a69ea:proc:6,Orthopaedic Manual Therapy (OMT) is offered as a non-surgical hands-on treatment.,unanchored,False,proposed,negation
+orthopaedics,2108,314219b2:proc:6,Orthopaedics and Sports Medicine provides non-surgical and surgical management of sports-related musculoskeletal injuries,unanchored,False,proposed,negation
+orthopaedics,2108,314219b2:capa:14,Orthopaedics and Sports Medicine department with non-surgical and surgical management of sports injuries,unanchored,False,proposed,negation
+orthopaedics,2887,42877ba2:proc:1,Organizes free orthopedic check-up camps in collaboration with R.N. Chaudhary Trust and Saksham Organization,unanchored,False,proposed,camp
+orthopaedics,2938,43a1238e:capa:0,Orthopedic care provided with surgical and non-surgical treatments for musculoskeletal conditions,unanchored,False,proposed,negation
+orthopaedics,3527,50f7882b:capa:2,Non-surgical treatments for orthopedic conditions,unanchored,False,proposed,negation
+orthopaedics,3527,50f7882b:desc:0,"Dermatologist offering regenerative therapy, non-surgical treatments for various orthopedic and hair loss conditions.",unanchored,False,proposed,negation
+orthopaedics,4240,6051631b:capa:28,Annual free eye and orthopedic camp,unanchored,False,proposed,camp
+orthopaedics,4711,6b861b73:capa:7,"Arthritis and Osteoporosis Camp program offering Bone Mineral Density testing, Vitamin D3 blood tests, and orthopedic and physiotherapy consultations",unanchored,False,proposed,camp
+orthopaedics,6568,9913a22f:proc:25,Conducts orthopedic camps including bone mineral density screenings,unanchored,False,proposed,camp
+orthopaedics,6716,9d970172:proc:22,"Bone mineral density screening conducted during a health camp on May 6, 2022, with orthopaedic and general physician consultations and blood tests.",unanchored,False,proposed,camp
+orthopaedics,7007,a74aad4c:capa:2,Non-surgical and surgical orthopedic solutions,unanchored,False,proposed,negation
+orthopaedics,7810,be77998f:proc:2,Offers a free bone and joint check-up camp,unanchored,False,proposed,camp
+orthopaedics,7810,be77998f:capa:7,Hosted a free bone and joint check-up camp on 2 July 2023,unanchored,False,proposed,camp
+orthopaedics,9203,e7f2b04c:capa:13,Offers free orthopedic checkup camp,unanchored,False,proposed,camp
+orthopaedics,9242,e9354ac2:proc:33,Pediatric orthopaedic procedures including non-surgical Ponseti method for clubfoot; surgical tendon/ligament corrections when needed,unanchored,False,proposed,negation
+iv_fluid_resuscitation,1468,22400e36:capa:2,Unit I was planned to have 150 inpatient beds.,unanchored,False,proposed,future
+iv_fluid_resuscitation,1468,22400e36:capa:3,Unit II was planned to have 30 inpatient beds.,unanchored,False,proposed,future
+iv_fluid_resuscitation,9919,fe92451b:desc:1,"In 1995, operation theatre and indoor admission facility were added, which later on was transferred to a newly built premises of 2000 sq feet in an elite area of Hotgi Road, Solapur.",unanchored,False,proposed,referral
+plastic_surgery,2003,2f61e07e:capa:21,"Specialties: Plastic surgery, Hair Transplant, cosmetic gynecology, non-surgical liposuction, medical lasers, lipoma removal, gynecomastia, tummy tuck, anti-aging procedures",unanchored,False,proposed,negation
+plastic_surgery,2144,3221860f:proc:9,"Performs periodontal procedures including scaling, flap surgery, root coverage, depigmentation of gums, periodontics plastic surgery, bone grafting procedures, pocket reductions, and non-surgical treatment",unanchored,False,proposed,negation
+plastic_surgery,6541,97f5c391:capa:13,"Multispecialty medical camps in Hansot with Neurology, Ophthalmology, Gynecology, Dental, Pediatrics, Spine & Neck, Plastic surgery, Urology, Orthopedics, General Surgery, and ENT",unanchored,False,proposed,camp
+nephrology,572,0c5a8e83:capa:15,"From January 2026, DM Pediatric Critical Care will be started and new PDCC courses will commence in Pediatric Neurology, Pediatric Nephrology, and Pediatric Rheumatology",unanchored,False,proposed,future
+nephrology,6568,9913a22f:proc:24,Conducts nephrology and urology camps,unanchored,False,proposed,camp
+nephrology,7950,c2b79056:capa:10,"Plans to add cardiovascular surgeries, a comprehensive diabetes care centre, nephrology, and neurosurgery",unanchored,False,proposed,future
+laboratory,811,123421c9:proc:3,"GOOD HEALTH PACKAGE with 52 Tests including HBA1c Glycosylated Hemoglobin, Kidney Function Test (KFT/RFT) includes 4 tests (Blood Urea, Blood Urea Nitrogen, Creatinine - Serum, Uric Acid), Complete Hemogram includes 20 tests (Hemoglobin, Hematocrit, Platelet Count, RBC, etc.), Liver Function Test (LFT) includes 11 tests (Bilirubin Direct/Indirect/Total, Alkaline Phosphatase, SGOT, SGPT, etc.), Urine Routine & Microscopy, Thyroid Profile TFT includes 3 tests (TSH, T3, T4), Iron Profile includes 4 tests (TIBC, UIBC, Iron, % Transferrin Saturation), Lipid Profile includes 8 tests (Total Cholesterol, HDL, LDL, Triglycerides, etc.), HBA1c, Fasting Sugar, and Vitamin/Calcium is not listed here. Certifications NABL & ISO; Available Home Collection & Lab Visit.",unanchored,False,proposed,negation
+laboratory,3649,53363cc9:capa:5,Plans to launch a state-of-the-art diagnostic laboratory offering a wide range of diagnostic tests free of cost.,unanchored,False,proposed,future
+laboratory,3864,57e72aa9:equi:1,Digital pathology lab planned,unanchored,False,proposed,future
+laboratory,5638,823d2a86:proc:0,"Announced plans to organize an executive health check-up camp on 30/04/2016 offering tests including CBC, ESR, blood sugar, urea, creatinine, lipid profile, serum bilirubin, SGPT, SGOT, alkaline phosphatase, HbA1C, electrolytes (Na, K, Ca), TSH, and routine urine examination.",unanchored,False,proposed,camp
+laboratory,6900,a39093c2:equi:2,Ayurveda medicine manufacturing and quality testing laboratory planned in Sontyam area (outskirts of Visakhapatnam) with Rs 6 crore funding,unanchored,False,proposed,future
+laboratory,8242,cbff204e:capa:49,"In April 2016, BMCRI planned to open a private diagnostic laboratory inside the campus",unanchored,False,proposed,future
+laboratory,8873,ddfc13b1:capa:46,Central laboratory system under construction to consolidate all lab facilities under one roof,unanchored,False,proposed,future
+basic_emoc,4953,715f8c0a:capa:2,Offers maternity-related services including a Free Maternity Camp program initiated on 21 February 2021 and held monthly,unanchored,False,proposed,camp
+basic_emoc,7636,b9386c11:capa:28,"Maternity ward expansion planned to increase bed capacity by 150 beds at a cost of Rs.6 crore (announced December 16, 2016)",unanchored,False,proposed,future
+neonatal_stabilisation,3955,5991bda9:capa:2,Plans to start newborn nursery for sick newborns and phototherapy for neonatal jaundice,unanchored,False,proposed,future
+nicu,9288,eac16a4a:capa:4,Plans to establish Newborn Intensive Care Unit (NICU) and Paediatric Intensive Care Unit (PICU),unanchored,False,existing,future

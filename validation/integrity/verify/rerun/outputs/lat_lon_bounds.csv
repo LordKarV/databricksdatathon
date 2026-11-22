@@ -1,0 +1,12 @@
+file,lat,n,outside,zero,half_null
+derived/v1/facility_location.parquet,loc_lat,9959,1,0,0
+derived/v1/facility_location.parquet,raw_lat,9959,6,0,0
+derived/v1/facility_location.parquet,alt_lat,1562,0,0,0
+derived/v1/pin_gazetteer.parquet,lat,19711,0,0,0
+derived/v1/pin_gazetteer.parquet,dir_lat,19584,0,0,0
+derived/v1/place_gazetteer.parquet,lat,147345,0,0,0
+kb/opendata/opendata_not_in_vf.parquet,lat,147080,0,0,0
+kb/opendata/osm_health_facilities.parquet,lat,136392,0,0,0
+kb/opendata/vf_candidates.parquet,cand_lat,17662,0,0,0
+kb/opendata/vf_opendata_match.parquet,cand_lat,17662,0,0,0
+kb/opendata/wikidata_medical_facilities.parquet,lat,13789,0,0,0

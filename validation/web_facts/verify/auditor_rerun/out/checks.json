@@ -1,0 +1,609 @@
+[
+ {
+  "name": "hours_error_patterns",
+  "status": "warn",
+  "metric": {
+   "usable_emergency_24x7_rows": 6679,
+   "emergency_rows_with_phone_cue": 1106,
+   "records_with_emergency_24x7": 1433,
+   "records_whose_every_emergency_row_has_phone_cue": 114,
+   "usable_facility_24x7_rows": 7036,
+   "facility_24x7_naming_a_unit": 619,
+   "facility_24x7_bare_line": 2361,
+   "usable_hour_rows_from_chrome_text": 16860,
+   "usable_hour_rows": 38515
+  },
+  "threshold": "emergency rows with a phone cue <= 5%",
+  "detail": "phone cue regex: \\bcall\\b|helpline|help line|hotline|phone|\\[phone\\]|contact|whatsapp|appointment|enquir|booking|toll[- ]?free|customer care|support",
+  "examples": [
+   "301abaa6-e559-4c1f-ab18-57c7916a7a74 emergency: '- 24/7 Emergency Support'",
+   "7bee457c-c297-4c3b-9315-18dd7b019c89 emergency: 'With specialized departments and emergency services available round-the-clock, w'",
+   "c455ae67-f9cb-472c-9ab9-9795841395f2 emergency: 'Kasare Hospital has treated over 83,000 patients since 2014, follows NABH-standa'",
+   "82fa7e19-25eb-432c-a64a-5eff221845a5 facility: 'AMBULANCE (24/7)'",
+   "58d41201-9bcd-483f-9084-7294d962f20d facility: 'Lab: 24/7'"
+  ]
+ },
+ {
+  "name": "ids_and_domains",
+  "status": "warn",
+  "metric": {
+   "web_hours_dup_fact_id": 0,
+   "web_details_dup_fact_id": 0,
+   "facts_dup_fact_id": 0,
+   "web_services_dup_key": 0,
+   "service_id_outside_taxonomy": 0,
+   "web_hours_bad_status": 0,
+   "web_hours_bad_polarity": 0,
+   "web_hours_nonpositive_usable_count": 0,
+   "web_details_bad_status": 0,
+   "web_details_bad_polarity": 0,
+   "web_details_nonpositive_usable_count": 0,
+   "facts_bad_status": 0,
+   "facts_bad_polarity": 0,
+   "facts_nonpositive_usable_count": 0,
+   "web_hours_invalid_clock_rows": 107,
+   "web_hours_invalid_clock_usable": 104,
+   "facts_invalid_clock_rows": 1,
+   "facts_invalid_clock_usable": 0,
+   "web_facility_details_invalid_clock_facility_values": 16,
+   "facility_details_invalid_clock_facility_values": 0
+  },
+  "threshold": "0",
+  "detail": "unique keys, enum domains, positive counts, clock times",
+  "examples": [
+   "web_hours 664cc819:034dc375bdcd:c333:opd_hours:general:0 days? 08:00-33:00 <- 'Opening Hours : 08:00AM to 21:00PM'",
+   "web_hours 8b5d6123:04c7caa5570f:t360:opd_hours:general:0 mon-sat 90:00-19:00 <- 'Monday \u2013 Saturday\\n90:00 AM - 07:00 PM'",
+   "facts 4c469752:capa:7:opd_hours:opd:0 mon-sat 09:00-14:00; mon-sat 29:00-21:00 <- 'Offers outpatient consultation services Mon-Sat 09'",
+   "web_facility_details 664cc819-2cde-427b-82e6-27089502ec90 general days? 08:00-33:00"
+  ]
+ },
+ {
+  "name": "model_feature_exposure",
+  "status": "warn",
+  "metric": {
+   "e_web_service_pairs": 20218,
+   "of_which_weak": 5444,
+   "weak_single_page": 4257,
+   "attributable_records": 4866,
+   "records_attributable_only_via_medium_identity": 240,
+   "e_web_24x7_emergency_records": 1287,
+   "records_whose_every_row_has_phone_cue": 102,
+   "e_web_nabh_claim_records": 684,
+   "nabh_pre_accreditation_only": 18
+  },
+  "threshold": "informational",
+  "detail": "e_web_service counts weak pairs (sample precision 5/15 web-only weak); e_identity_conf takes max confidence over all targets including medium",
+  "examples": [
+   "weak 1-page pair 8f9516f1-d959-4aa2-a259-4d3a4137a623 high_risk_pregnancy: 'Infertility, IVF & High-Risk Obstetrics'",
+   "weak 1-page pair 1186d459-ad5b-4462-b100-7146cf31dad9 mri: \"- delivered a lecture on 'MRI of Muscle pathologies'. Conduc\"",
+   "weak 1-page pair 6deea35e-ac66-4f30-83e2-6288751cafda chemotherapy: 'Medical Oncology'",
+   "pre-accreditation NABH 9fa3cee3-90f6-4dd0-87bc-c828206f72d7: 'NABH Pre-Accreditation (Entry Level)'",
+   "pre-accreditation NABH ede71837-e6a0-4daf-a676-a203df78ebd3: '- NABH pre-accredited for patient safety and quality of care'"
+  ]
+ },
+ {
+  "name": "quote_redaction",
+  "status": "warn",
+  "metric": {
+   "web_services": {
+    "distinct_quotes": 65059,
+    "with_phone": 9,
+    "with_email": 0
+   },
+   "web_hours": {
+    "distinct_quotes": 19487,
+    "with_phone": 27,
+    "with_email": 0
+   },
+   "web_details": {
+    "distinct_quotes": 18060,
+    "with_phone": 13,
+    "with_email": 0
+   }
+  },
+  "threshold": "0 unredacted contacts",
+  "detail": "regex: Indian mobile (10 digits from 6-9, optional +91) or STD landline with separator; email",
+  "examples": [
+   "web_services: '0416 - 2254463 (Emergency Department)'",
+   "web_services: 'Emergency/Casualty 02261452140 (24 hours)'",
+   "web_hours: 'Emergency/Casualty 02261452140 (24 hours)'",
+   "web_hours: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'",
+   "web_details: 'Kindly contact OPD 02261452154 (8 am \u2013 4 pm) prior to visiting the OPD to confir'"
+  ]
+ },
+ {
+  "name": "sample_site_identity",
+  "status": "pass",
+  "metric": {
+   "k": 23,
+   "n": 30,
+   "p": 0.767,
+   "wilson95": [
+    0.591,
+    0.882
+   ],
+   "population_weighted_p": 0.855,
+   "by_stratum": {
+    "id_acc_high": "9/10 (0.596, 0.982) N=4851",
+    "id_acc_medium": "1/5 (0.036, 0.624) N=312",
+    "id_rej_low": "8/10 (0.49, 0.943) N=861",
+    "id_rej_none": "5/5 (0.566, 1.0) N=231"
+   },
+   "reported_qa": "23/30 (0.591, 0.882)",
+   "errors": {
+    "same_name_elsewhere": 3,
+    "missed_identity": 2,
+    "related_org_site": 1,
+    "unverifiable_title_only": 1
+   }
+  },
+  "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+  "detail": "intervals overlap QA: True",
+  "examples": [
+   "item 123 id_acc_high cb71f5b5-0944-4cb2-9532-a1da8afbca93 continentalhealthfoundation.com: related_org_site",
+   "item 131 id_acc_medium 36e95944-27bc-4f1d-9524-688aaa62b309 stjosephhospital.com: same_name_elsewhere",
+   "item 132 id_acc_medium 57072b5a-7d29-4b65-9003-5d9bd54583cd srisakthihospital.in: unverifiable_title_only",
+   "item 134 id_acc_medium c8bcef99-310d-48c6-9f57-bbd0997407eb patilhospital.com: same_name_elsewhere",
+   "item 135 id_acc_medium 0c7720cd-ea61-4ea5-b667-67e008f402ef sriramhospital.co.in: same_name_elsewhere"
+  ]
+ },
+ {
+  "name": "sample_vf_details",
+  "status": "pass",
+  "metric": {
+   "k": 37,
+   "n": 40,
+   "p": 0.925,
+   "wilson95": [
+    0.801,
+    0.974
+   ],
+   "population_weighted_p": 0.899,
+   "by_stratum": {
+    "vf_accreditation": "4/4 (0.51, 1.0) N=3305",
+    "vf_ambulance": "3/3 (0.438, 1.0) N=1968",
+    "vf_blood_centre": "3/3 (0.438, 1.0) N=1327",
+    "vf_empanelment": "5/5 (0.566, 1.0) N=6061",
+    "vf_equipment_count": "3/3 (0.438, 1.0) N=1503",
+    "vf_free_or_government": "3/3 (0.438, 1.0) N=1470",
+    "vf_hours_24x7": "5/6 (0.436, 0.97) N=10461",
+    "vf_opd_hours": "3/3 (0.438, 1.0) N=568",
+    "vf_staffing": "3/5 (0.231, 0.882) N=4407",
+    "vf_unit_beds": "5/5 (0.566, 1.0) N=3572"
+   },
+   "reported_qa": "46/50 (0.812, 0.968)",
+   "errors": {
+    "phone_support_as_emergency": 1,
+    "chain_total": 1,
+    "headcount_band": 1
+   }
+  },
+  "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+  "detail": "intervals overlap QA: True",
+  "examples": [
+   "item 152 vf_hours_24x7 4de58800-16e9-495f-8592-6b82fa40dbba hours_24x7:emergency: phone_support_as_emergency",
+   "item 169 vf_staffing 0290ddb8-9d7f-4b84-8e5d-535c16abb464 staffing:doctors: chain_total",
+   "item 171 vf_staffing 13d353ff-aaef-4c09-887e-32fe3f661e26 staffing:staff_total: headcount_band"
+  ]
+ },
+ {
+  "name": "sample_web_details",
+  "status": "fail",
+  "metric": {
+   "k": 22,
+   "n": 30,
+   "p": 0.733,
+   "wilson95": [
+    0.556,
+    0.858
+   ],
+   "population_weighted_p": 0.586,
+   "by_stratum": {
+    "det_accreditation": "3/6 (0.188, 0.812) N=955",
+    "det_ambulance": "4/4 (0.51, 1.0) N=1044",
+    "det_beds": "6/6 (0.61, 1.0) N=1125",
+    "det_blood_centre": "4/4 (0.51, 1.0) N=424",
+    "det_empanelment": "4/6 (0.3, 0.903) N=2177",
+    "det_other": "1/4 (0.046, 0.699) N=3474"
+   },
+   "reported_qa": "21/30 (0.521, 0.833)",
+   "errors": {
+    "doctor_bio_or_job_title": 3,
+    "explanatory_or_wrong_sense": 2,
+    "form_or_menu_text": 1,
+    "lexicon_false_hit": 1,
+    "chain_or_other_branch_page": 1
+   }
+  },
+  "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+  "detail": "intervals overlap QA: True",
+  "examples": [
+   "item 97 det_accreditation 43805537-0db7-45b5-b57e-7bde43b53779 accreditation:NABH: form_or_menu_text",
+   "item 98 det_accreditation aa07dc77-d6d2-4be0-94cb-078724248add accreditation:NABH: explanatory_or_wrong_sense",
+   "item 102 det_accreditation 71cc9b3c-85ed-4c98-93cd-5936abda4f56 accreditation:NABH: doctor_bio_or_job_title",
+   "item 106 det_empanelment b43315f5-dffd-4628-af31-75c869a60a48 empanelment:pmjay: doctor_bio_or_job_title",
+   "item 108 det_empanelment ae51b5b8-0c57-42bc-990e-aa19955bdd5f empanelment:private_insurance: lexicon_false_hit"
+  ]
+ },
+ {
+  "name": "sample_web_hours",
+  "status": "warn",
+  "metric": {
+   "k": 21,
+   "n": 30,
+   "p": 0.7,
+   "wilson95": [
+    0.521,
+    0.833
+   ],
+   "population_weighted_p": 0.724,
+   "by_stratum": {
+    "hrs_emergency_24x7": "9/10 (0.596, 0.982) N=1423",
+    "hrs_llm": "3/5 (0.231, 0.882) N=43",
+    "hrs_opd_regex": "5/10 (0.237, 0.763) N=2544",
+    "hrs_other": "4/5 (0.376, 0.964) N=4279"
+   },
+   "reported_qa": "22/30 (0.556, 0.858)",
+   "errors": {
+    "value_mismatch_or_days": 3,
+    "same_name_elsewhere": 1,
+    "form_or_menu_text": 1,
+    "clock_parse_bug": 1,
+    "not_operating_hours": 1,
+    "other_facility": 1,
+    "explanatory_or_wrong_sense": 1
+   }
+  },
+  "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+  "detail": "intervals overlap QA: True",
+  "examples": [
+   "item 66 hrs_emergency_24x7 3d2af64f-3024-4db5-b048-0fc7e42a7174 hours_24x7:emergency: same_name_elsewhere",
+   "item 71 hrs_opd_regex 1de52da4-786c-4a63-8fb9-03a938a1cf13 opd_hours:general: value_mismatch_or_days",
+   "item 75 hrs_opd_regex 5150641e-d3b9-47b3-a41f-b5be9c73b0bb opd_hours:general: form_or_menu_text",
+   "item 78 hrs_opd_regex 4fa53721-29e5-4254-865a-a2c0a623146d opd_hours:general: value_mismatch_or_days",
+   "item 79 hrs_opd_regex 7f542f26-f893-4313-9c17-c9576f2c00a2 opd_hours:general: value_mismatch_or_days"
+  ]
+ },
+ {
+  "name": "sample_web_services",
+  "status": "warn",
+  "metric": {
+   "k": 38,
+   "n": 60,
+   "p": 0.633,
+   "wilson95": [
+    0.507,
+    0.744
+   ],
+   "population_weighted_p": 0.691,
+   "by_stratum": {
+    "svc_confirm_strong": "14/15 (0.702, 0.988) N=8724",
+    "svc_confirm_weak": "11/15 (0.48, 0.891) N=1873",
+    "svc_webonly_strong": "8/15 (0.301, 0.752) N=5971",
+    "svc_webonly_weak": "5/15 (0.152, 0.583) N=3526"
+   },
+   "reported_qa": "36/60 (0.474, 0.714)",
+   "errors": {
+    "explanatory_or_wrong_sense": 12,
+    "chain_or_other_branch_page": 4,
+    "lexicon_false_hit": 3,
+    "address_or_landmark": 1,
+    "testimonial": 1,
+    "doctor_bio_or_job_title": 1
+   }
+  },
+  "threshold": "population-weighted precision >= 0.85 pass, >= 0.6 warn",
+  "detail": "intervals overlap QA: True",
+  "examples": [
+   "item 5 svc_confirm_strong 98e15e38-0990-4543-849a-f1a4c91729b3 chemotherapy: explanatory_or_wrong_sense",
+   "item 19 svc_confirm_weak 8df9ef6c-9ee6-41e9-a7c0-b52f45290f06 cardiac_surgery: chain_or_other_branch_page",
+   "item 21 svc_confirm_weak 1aeb5527-feb0-4466-b541-a2672b165be7 tb_care: explanatory_or_wrong_sense",
+   "item 25 svc_confirm_weak 5e012489-51d0-4230-8820-5e1d3ee68667 emergency_24x7: chain_or_other_branch_page",
+   "item 27 svc_confirm_weak f2272f70-8ff4-4122-a74f-5e566258e31e mri: address_or_landmark"
+  ]
+ },
+ {
+  "name": "service_error_patterns",
+  "status": "warn",
+  "metric": {
+   "positive_pairs": 20218,
+   "chrome_text_menu_footer": {
+    "rows": 41818,
+    "pairs_any": 7430,
+    "pairs_only": 1363,
+    "pairs_only_share": 0.0674
+   },
+   "template_quote_on_10plus_sites": {
+    "rows": 20457,
+    "pairs_any": 5365,
+    "pairs_only": 1454,
+    "pairs_only_share": 0.0719
+   },
+   "doctor_bio_cue": {
+    "rows": 1346,
+    "pairs_any": 764,
+    "pairs_only": 139,
+    "pairs_only_share": 0.0069
+   },
+   "coming_soon_cue": {
+    "rows": 24,
+    "pairs_any": 23,
+    "pairs_only": 8,
+    "pairs_only_share": 0.0004
+   },
+   "page_credited_to_2plus_records": {
+    "rows": 5980,
+    "pairs_any": 771,
+    "pairs_only": 572,
+    "pairs_only_share": 0.0283
+   },
+   "site_serving_3plus_records": {
+    "rows": 31,
+    "pairs_any": 22,
+    "pairs_only": 22,
+    "pairs_only_share": 0.0011
+   }
+  },
+  "threshold": "pairs resting only on a pattern <= 2% each",
+  "detail": "positive & attributable web_services rows; 'pairs_only' = every positive row of the pair has the pattern",
+  "examples": [
+   "template: 'Neurosurgery' on 301 sites",
+   "template: 'Critical Care' on 237 sites",
+   "template: 'Dialysis' on 185 sites",
+   "soon: b2521960-19fd-4432-8d80-f739496ea5d5 ct_scan 'COMING SOON - GASTROENTEROLOGY & CT SCAN'",
+   "soon: 3fc1cb91-b14c-4dd0-b488-7f0d97a9c28d chemotherapy 'Dr. Amit Agarwal, (MEDICAL ONCOLOGIST)Principal Director & Head of the'"
+  ]
+ },
+ {
+  "name": "site_liveness",
+  "status": "pass",
+  "metric": {
+   "sites": 20,
+   "judged": 20,
+   "agree": 20,
+   "wilson95": [
+    0.839,
+    1.0
+   ],
+   "not_fetched": 0,
+   "by_stored_class": {
+    "dns_fail": "4/4",
+    "hijacked_spam": "1/1",
+    "http_4xx": "2/2",
+    "ok": "7/7",
+    "ok_thin": "2/2",
+    "parked_or_for_sale": "1/1",
+    "robots_disallow": "1/1",
+    "suspended_or_expired": "1/1",
+    "timeout": "1/1"
+   }
+  },
+  "threshold": "agreement >= 0.85",
+  "detail": "fresh fetch, robots.txt respected, 1 req/s per domain; drift since crawl counts as disagreement",
+  "examples": []
+ },
+ {
+  "name": "vf_error_patterns",
+  "status": "pass",
+  "metric": {
+   "usable_text_facts": 34691,
+   "emergency_24x7": 4334,
+   "emergency_with_phone_cue": 90,
+   "coming_soon_cue": 0,
+   "doctor_bio_cue_non_staffing": 6,
+   "attribution_other_or_ambiguous": 469,
+   "attribution_counts": {
+    "unanchored": 32326,
+    "own_anchored": 1896,
+    "ambiguous": 469
+   }
+  },
+  "threshold": "phone-cue emergency <= 5%, coming-soon <= 1%",
+  "detail": "usable text facts in kb/vf_details/out/facts.parquet",
+  "examples": [
+   "050479fe:capa:0:hours_24x7:emergency:0: '24x7 emergency imaging support'",
+   "0d5b1a36:capa:25:hours_24x7:emergency:0: 'Provides 24-hour emergency booking'",
+   "53f5e718:capa:3:blood_centre:blood_bank:0: 'Baramulla DH has implemented 14 support services including HIS (OPD/IPD/Pharmacy'"
+  ]
+ },
+ {
+  "name": "vf_facility_value_supported",
+  "status": "warn",
+  "metric": {
+   "usable_facility_facts": 25773,
+   "best_fact_id_missing": 0,
+   "best_quote_differs_from_cited_row": 0,
+   "unique_id_differs": 0,
+   "value_differs_from_cited_row": 442,
+   "share": 0.0171,
+   "top_attributes": {
+    "staffing:doctors": 117,
+    "unit_beds:total": 115,
+    "free_or_government:free_care": 51,
+    "ambulance:ambulance_service": 45,
+    "staffing:staff_total": 19,
+    "staffing:specialty_doctors": 17,
+    "accreditation:NABH": 13,
+    "equipment_count:operation_theatres": 10
+   }
+  },
+  "threshold": "0 (a shown value should be supported by the quote shown next to it)",
+  "detail": "facility-level value_text/value_num vs the row whose quote is cited (best_fact_id)",
+  "examples": [
+   "852bc3d1-7ea6-435a-9660-3b3dff53cf3b staffing:doctors shown=('doctors', 12.0) cited_row=('doctors', 3.0) quote='Staff includes 3 doctors'",
+   "f4ff91f0-a26c-4722-9174-7fa952e8cced staffing:specialty_doctors shown=('surgeons', 7.0) cited_row=('surgeons', 2.0) quote='Has 2 surgeons'",
+   "a1175a29-0c8e-494d-95c7-80beb235afc3 unit_beds:total shown=(nan, 1200.0) cited_row=(nan, 500.0) quote='500'",
+   "13d9cab6-f853-4659-bd61-50c67ad14325 staffing:doctors shown=('doctors', 15.0) cited_row=('doctors', 5.0) quote='Has 5 doctors on staff'",
+   "ce7235e6-330a-4a60-98d7-384530668660 equipment_count:operation_theatres shown=(nan, 4.0) cited_row=(nan, 1.0) quote='Has 1 modular operating theatre'"
+  ]
+ },
+ {
+  "name": "vf_handcheck_reproducible",
+  "status": "warn",
+  "metric": {
+   "labelled": 50,
+   "fact_id_gone": 3,
+   "changed_since_label": 0
+  },
+  "threshold": "0 gone",
+  "detail": "fact_ids gone are the post-handcheck fixes (README: specialty doctors, free_with_package)",
+  "examples": [
+   "f14cec09:capa:30:staffing:doctors:0",
+   "831fc382:capa:15:staffing:doctors:0",
+   "9a5cb946:capa:7:free_or_government:free_care:0"
+  ]
+ },
+ {
+  "name": "vf_quotes_verbatim",
+  "status": "pass",
+  "metric": {
+   "facts": 42036,
+   "text_facts": 35447,
+   "quote_not_in_source_text": 0,
+   "match_not_in_quote": 0,
+   "claim_id_not_found": 0,
+   "source_text_differs_from_claim": 0,
+   "unique_id_or_field_differs": 0,
+   "claim_not_in_raw_field": 0,
+   "typed_fact_value_mismatch": 0,
+   "typed_facts_checked": 6100
+  },
+  "threshold": "0 failures",
+  "detail": "quote -> source_text -> derived/v1/claims.text -> data/raw field",
+  "examples": []
+ },
+ {
+  "name": "web_attributable_contract",
+  "status": "pass",
+  "metric": {
+   "web_services": {
+    "attributable": 125052,
+    "violations": 0
+   },
+   "web_hours": {
+    "attributable": 39239,
+    "violations": 0
+   },
+   "web_details": {
+    "attributable": 35228,
+    "violations": 0
+   },
+   "site_identity": {
+    "rows": 6770,
+    "violations": 0
+   }
+  },
+  "threshold": "0 violations",
+  "detail": "README contract for `attributable`",
+  "examples": []
+ },
+ {
+  "name": "web_facility_value_supported",
+  "status": "warn",
+  "metric": {
+   "usable_facility_facts": 17548,
+   "best_fact_id_missing": 0,
+   "best_quote_differs_from_cited_row": 0,
+   "unique_id_differs": 0,
+   "value_differs_from_cited_row": 1128,
+   "share": 0.0643,
+   "top_attributes": {
+    "opd_hours:general": 624,
+    "ambulance:ambulance_service": 168,
+    "free_or_government:free_care": 68,
+    "unit_beds:total": 41,
+    "opd_hours:opd": 39,
+    "opd_hours:doctor_session": 31,
+    "unit_beds:icu": 21,
+    "staffing:doctors": 21
+   }
+  },
+  "threshold": "0 (a shown value should be supported by the quote shown next to it)",
+  "detail": "facility-level value_text/value_num vs the row whose quote is cited (best_fact_id)",
+  "examples": [
+   "c8064e6a-4033-4ca0-b103-ee08dea6289f opd_hours:general shown=('fri 13:00-19:00', nan) cited_row=('mon-thu 09:00-19:00', nan) quote='Monday to Thursday \u2013 9am to 7pm'",
+   "41b1837b-8344-43cb-a455-f89e4e308d64 opd_hours:general shown=('days? 17:00-20:00', nan) cited_row=('mon-sat 09:00-13:00', nan) quote='Monday - Saturday: 9AM \u2013 1PM'",
+   "87a87835-1ca4-4542-8e17-5e9e231f43ae opd_hours:general shown=('days? 08:00-13:00; days? 14:00-19:00', nan) cited_row=('mon-sat 08:00-18:00', nan) quote='Email :\\nWorking Hours : Mon \u2013 Sat (8:00 a.m. to 6:'",
+   "05773700-259f-4ce2-a83b-ea95c662ec1d ambulance:ambulance_service shown=('als', nan) cited_row=(nan, nan) quote='Ambulance'",
+   "24263813-ac1d-4885-ab4f-55346a558a7a ambulance:ambulance_service shown=(nan, 5.0) cited_row=(nan, nan) quote='Ambulance Services at Nagaland, Dibrugarh and Guwa'"
+  ]
+ },
+ {
+  "name": "web_fact_quotes_verbatim",
+  "status": "pass",
+  "metric": {
+   "rows": 237891,
+   "quote_not_in_field": 0,
+   "segment_not_at_offset": 0,
+   "quote_not_in_segment": 0,
+   "match_not_in_segment": 0
+  },
+  "threshold": "0 failures",
+  "detail": "237891 rows over web_services, web_hours, web_details re-checked against 28106 gz files",
+  "examples": []
+ },
+ {
+  "name": "web_identity_quote_semantics",
+  "status": "pass",
+  "metric": {
+   "pin_quotes": 3606,
+   "pin_quote_without_record_pin": 0,
+   "locality_quotes": 5333,
+   "locality_quote_without_city_or_district": 0
+  },
+  "threshold": "0",
+  "detail": "site_identity evidence quotes contain the record's own PIN / place",
+  "examples": []
+ },
+ {
+  "name": "web_identity_quotes_verbatim",
+  "status": "pass",
+  "metric": {
+   "quotes": 79963,
+   "not_substring": 0,
+   "cited_url_not_stored": 0
+  },
+  "threshold": "0 failures",
+  "detail": "page_identity and site_identity name, PIN and locality quotes",
+  "examples": []
+ },
+ {
+  "name": "web_provenance",
+  "status": "warn",
+  "metric": {
+   "rows": 237891,
+   "final_url": 0,
+   "target_id": 7383,
+   "fetched_at": 9599,
+   "path_hash": 0,
+   "unexplained_meta": 0,
+   "page_rows": 28909,
+   "files_shared_by_2plus_page_rows": 715,
+   "text_hash_mismatch": 0
+  },
+  "threshold": "0 hard mismatches (final_url, path hash, text hash, unexplained meta)",
+  "detail": "row final_url / target_id / fetched_at against the gz file; target_id/fetched_at differences on shared files are the row's own fetch metadata (the file holds the other fetch of the same URL, same text hash)",
+  "examples": [
+   "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: target_id row='sampurna.care' file='sampurnadiagnostics.com'",
+   "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: fetched_at row='2026-11-21T19:52:03+00:00' file='2026-11-21T19:52:10+00:00'",
+   "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: target_id row='sampurna.care' file='sampurnadiagnostics.com'",
+   "web_services b1080977-a8ac-4d86-9b5e-016e6e54298b data/crawl/pages/01b9b5582537e1dbcdb8.json.gz: fetched_at row='2026-11-21T19:52:03+00:00' file='2026-11-21T19:52:10+00:00'",
+   "web_services 1f08b2ae-c50f-423f-a6fa-ce40a723f592 data/crawl/pages/01dd2158f2fa16ae7172.json.gz: fetched_at row='2026-11-21T19:35:12+00:00' file='2026-11-21T19:35:17+00:00'"
+  ]
+ },
+ {
+  "name": "web_service_summary_consistency",
+  "status": "pass",
+  "metric": {
+   "pairs": 20886,
+   "positive_pairs": 20218,
+   "best_quote_not_a_positive_row": 0,
+   "web_positive_mismatch": 0,
+   "strong_mismatch": 0,
+   "n_pages_positive_mismatch": 0
+  },
+  "threshold": "0",
+  "detail": "summary vs web_services recount (page_id distinct)",
+  "examples": []
+ }
+]

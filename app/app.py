@@ -14,7 +14,8 @@ from typing import Annotated, Literal
 
 import outcomes
 from facts.engine import Engine
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from inputs import understand
@@ -55,6 +56,13 @@ app = FastAPI(title="Referral Saathi", docs_url=None, redoc_url=None, openapi_ur
 app.add_middleware(GZipMiddleware, minimum_size=500)
 
 
+@app.exception_handler(RequestValidationError)
+async def _invalid(_: Request, exc: RequestValidationError) -> JSONResponse:
+    # Field, rule and message only: the rejected value is never echoed (a NaN could not even be serialised, #85).
+    return JSONResponse({"detail": [{"loc": list(e.get("loc", ())), "type": e.get("type"), "msg": e.get("msg")}
+                                    for e in exc.errors()]}, 422)
+
+
 def _shell(name: str) -> FileResponse:
     # no-cache = revalidate every time; the service worker, not the HTTP cache, owns offline.
     path = understand.LEXICON if name == "lexicon.json" else STATIC / name
@@ -72,12 +80,12 @@ def ping() -> dict[str, bool]:
 
 
 class PlanRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     service: str = Field(description="One of the 7 decision-layer service keys")
     lat: float = Field(ge=6.0, le=37.5)
     lon: float = Field(ge=68.0, le=97.5)
-    accuracy_m: float | None = Field(default=None, ge=0)
+    accuracy_m: float | None = Field(default=None, ge=0, le=1_000_000)
     source: LocationSource = "gps"
     depth: Depth = "quick"
 
@@ -112,7 +120,7 @@ def plan(req: PlanRequest) -> dict:
 
 
 class AreaRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     service: str
     lat: float = Field(ge=6.0, le=37.5)
@@ -128,7 +136,7 @@ def area(req: AreaRequest) -> dict:
 
 
 class VerifyRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     facility_id: str = Field(min_length=1, max_length=64, pattern=r"^[\w-]+$")
     service_id: str
@@ -151,7 +159,7 @@ def verify(req: VerifyRequest) -> JSONResponse:
 
 
 class ParseRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     text: str = Field(min_length=1, max_length=understand.MAX_TEXT)
 
@@ -166,7 +174,7 @@ NOTE_IMAGE = r"^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$"
 
 
 class NoteRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     image: str = Field(max_length=4_000_000, pattern=NOTE_IMAGE, description="JPEG re-encoded in the browser")
 
@@ -195,13 +203,13 @@ def transcribe(req: TranscribeRequest) -> JSONResponse:
 
 
 class OutcomeRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     outcome_id: str = Field(pattern=outcomes.UUID, description="random UUID from the page; a retry writes once")
     facility_id: str = Field(max_length=64)
     service_id: str = Field(max_length=40)
     outcome: Literal["yes", "no", "no_answer"]
-    said_at_ms: int = Field(ge=0)
+    said_at_ms: int = Field(ge=0, le=4_102_444_800_000)  # before 2100
     lat: float = Field(ge=6.0, le=37.5, description="rounded to 0.01 degree by the page; only the district is kept")
     lon: float = Field(ge=68.0, le=97.5)
 
@@ -304,7 +312,7 @@ def pack(slug: str) -> Response:
 
 
 class LocateRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     lat: float = Field(ge=6.0, le=37.5)
     lon: float = Field(ge=68.0, le=97.5)

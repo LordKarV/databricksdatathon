@@ -76,10 +76,11 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * 6371.0 * math.asin(math.sqrt(a))
 
 
-def travel(lat: float, lon: float, flat: float, flon: float) -> dict:
-    """One geo/travel.py estimate row (#14): measured factor, speed and percentile range, no OSRM call."""
+def travel(lat: float, lon: float, flat: float, flon: float, state: str | None = None) -> dict:
+    """One geo/travel.py estimate row (#14): measured factor, speed and percentile range, no OSRM call. `state` picks
+    the terrain constants (hill states are slower), the same way the route planner does (#85)."""
     if _geo_estimate is not None:
-        return _geo_estimate((lat, lon), (flat, flon))
+        return _geo_estimate((lat, lon), (flat, flon), state=state)
     road = haversine_km(lat, lon, flat, flon) * ROAD_FACTOR
     return {
         "minutes": round(road / SPEED_HI_KMH * 60),

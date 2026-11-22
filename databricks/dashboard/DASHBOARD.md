@@ -23,6 +23,22 @@ Not run: nobody has opened the dashboard in a browser yet. The API accepts the J
 tested, but widget rendering (in particular the 7 Vega-Lite custom charts) has not been looked at. Open each
 page once before the demo; if a custom chart is blank, see "If a widget does not render" below.
 
+## Model v2 repoint (2026-11-21)
+
+Validation report H7 found `ds_pairs` read the fusion prototype (`pair_scores`: 2 pairs Likely for the 7 gold
+services, where the app bands 45). `ds_pairs` now reads `facility_service_scores_v2` (derived/v2, model A_platt,
+358,092 rows: 9,947 eligible records x 36 services) and shows the model's four bands: Likely 20,073, Call first
+1,671, No service text 242,131, Unlikely 94,217. P_S is blank for No service text rows (derived/v2/README.md:
+show the band, not p). The two bin columns are the observed confirmed rate of DEV pairs in the same 0.2 score
+bin, not an interval around P_S. Operator in `ds_facility` and `ds_pairs` comes from `facility_attributes_v2`.
+State and district still come from `geo_facility` (LGD polygon of the cleaned point): `facility_attributes_v2`
+has no district, and `facility_location.district` uses postcode district names that differ from the LGD names
+on 689 of 9,959 records, which would break the shared district filter. The phones column was removed from
+3.2 (#82). Pages 3 and 6 state that the score has no demonstrated ranking ability for public facilities.
+The service filter now lists v2 taxonomy ids for `ds_pairs` (trauma_care, emergency_24x7) beside the v1 ids
+of `ds_funnel` (trauma_emergency); dialysis, emergency_csection, nicu, mri, cardiac_surgery and burn_care
+match in both. Tables 6.2 and 6.3 still quote the v1 sealed test.
+
 ## Files
 
 | File | What |
@@ -67,7 +83,7 @@ from `viz/STORYBOOK.md`); every rate shows n, either as k of n on the bar (with 
 or as a records counter on the same page; gaps are labelled "no public evidence of care", never "no care";
 no choropleth or symbol map (facility locations are a scatter with no basemap and no boundaries; the rest
 are ranked bars and tables). Theme colours are the `viz/style.py` tokens, with evidence states pinned
-(Likely `#6da7ec`, Unverified `#c3c2b7`, Unlikely `#e34948`).
+(Likely `#6da7ec`, Call first `#eda100`, No service text `#c3c2b7`, Unlikely `#e34948`).
 
 ## Skipped tiles
 
@@ -108,7 +124,7 @@ the scatter's `zero: false` scale option. Fix in `build_dashboard.py` and run `a
 | `ds_settlement` | 9 | 1.3 | p2_settlement |
 | `ds_pmndp` | 36 | 1.3 | f_state, p2_pmndp |
 | `ds_funnel` | 9,244 | 1.6 | f_district, f_service, f_state, p3_funnel |
-| `ds_pairs` | 69,713 | 1.7 | f_district, f_service, f_state, p3_facilities, p6_bands |
+| `ds_pairs` | 358,092 | 1.1 | f_district, f_service, f_state, p3_facilities, p6_bands |
 | `ds_list_facts` | 3,062 | 2.2 | f_district, f_state, p3_lists |
 | `ds_plans` | 3,150 | 1.4 | f_state, p5_plantype |
 | `ds_plans_window` | 21 | 1.7 | f_state, p5_window |
@@ -116,7 +132,7 @@ the scatter's `zero: false` scale option. Fix in `build_dashboard.py` and run `a
 | `ds_test_metrics` | 14 | 1.6 | p6_metrics |
 | `ds_test_labels` | 4 | 1.1 | p6_labels |
 
-Run at 2026-11-21 18:25:08 (local time) through `/api/2.0/sql/statements` with catalog `workspace` and schema `referral_saathi`, as `SELECT COUNT(*) FROM (<dataset SQL>) t`. All 16 returned SUCCEEDED.
+Run at 2026-11-21 22:01:57 (local time) through `/api/2.0/sql/statements` with catalog `workspace` and schema `referral_saathi`, as `SELECT COUNT(*) FROM (<dataset SQL>) t`. All 16 returned SUCCEEDED.
 
 ### Spec checks
 
@@ -131,7 +147,8 @@ Each check wraps the dataset SQL itself, so it tests what the widgets read.
 | geo_dialysis_district hot districts and people (spec 69, 103.8 M) | SUCCEEDED: [['69', '103.8']] |
 | geo_csection_district districts in the two low bands (spec 152 = 39 + 113) | SUCCEEDED: [['5-10%', '113'], ['under 5%', '39']] |
 | ds_funnel national: mentioned, own checks, own and outside (spec 7969, 1798, 837) | SUCCEEDED: [['7969', '1798', '837']] |
-| ds_pairs bands (spec Unlikely 37108, Unverified 32603, Likely 2) | SUCCEEDED: [['Likely', '2'], ['Unlikely', '37108'], ['Unverified', '32603']] |
+| ds_pairs v2 bands (derived/v2: Likely 20073, Call first 1671, No service text 242131, Unlikely 94217) | SUCCEEDED: [['Call first', '1671'], ['Likely', '20073'], ['No service text', '242131'], ['Unlikely', '94217']] |
+| ds_pairs v2 contract: rows (358092), exclude_review ids (0), NO_SERVICE_TEXT with P_S (0), operators | SUCCEEDED: [['358092', '0', '0', '3']] |
 | ds_plans_window Bihar major trauma (spec 15 of 150) | SUCCEEDED: [['15', '150', '0.1', '0.062', '0.158']] |
 | ds_plans_concentration Bihar (spec obstetric 81 of 131 Pusa, trauma 79 of 134 Rajeshwar) | SUCCEEDED: [['obstetric_emergency', 'Sub Divisional Hospital Pusa', '81', '131'], ['major_trauma', 'Rajeshwar Hospital', '79', '134']] |
 | ds_test_metrics shipped vs priors, all 71 (storybook 0.776 [0.680, 0.862] vs 0.789; ECE IPW 0.197) | SUCCEEDED: [['AUROC', 'Same scorecard, expert priors', '0.7887', '0.6923', '0.875', '0.684'], ['AUROC', 'Fitted ledger (shipped)', '0.7756', '0.6804', '0.8619', '0.6149'], ['ECE (lower is better)', 'Fitted ledger (shipped)', '0.097', '0.0783', '0.1804', '0.1966']] |
@@ -162,8 +179,7 @@ base AS (
          CASE WHEN array_contains(r.trust_flags, 'official_phone_is_directory') THEN 1 ELSE 0 END AS directory_phone,
          r.trust_level, r.website_class,
          CASE g.degurba WHEN 3 THEN 'Urban centre' WHEN 2 THEN 'Town or semi-dense' WHEN 1 THEN 'Rural' END AS settlement,
-         CASE WHEN g.operatorTypeId IN ('public', 'government') THEN 'Public'
-              WHEN g.operatorTypeId = 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
+         CASE fa.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
          CASE WHEN l.loc_src <> 'listing_coordinates' THEN 1 ELSE 0 END AS fixed_corrected_point,
          CASE WHEN q.unique_id IS NOT NULL THEN 1 ELSE 0 END AS fixed_quarantined_text,
          CASE WHEN l.loc_conf IN ('low', 'disputed') THEN 1 ELSE 0 END AS flagged_location,
@@ -178,6 +194,7 @@ base AS (
   FROM facility_location l
   JOIN geo_facility g ON g.unique_id = l.unique_id
   JOIN record_trust r ON r.unique_id = l.unique_id
+  LEFT JOIN facility_attributes_v2 fa ON fa.unique_id = l.unique_id
   LEFT JOIN facility_hours h ON h.unique_id = l.unique_id
   LEFT JOIN geo_facility_site w ON w.unique_id = l.unique_id
   LEFT JOIN direct d ON d.unique_id = l.unique_id
@@ -307,18 +324,22 @@ JOIN geo_facility g USING (unique_id)
 
 ### ds_pairs
 
-Facility and service scores (one row per record and service).
+Facility and service scores, model v2 (one row per record and service).
 
 ```sql
-SELECT g.stname AS state, upper(g.dtname) AS district, s.service, s.unique_id, s.name,
-       s.p_s, s.p_s_lo, s.p_s_hi, s.band, s.T AS text_level, s.p_l, s.p_e,
-       l.loc_conf, r.website_class, array_join(r.display_phones, ', ') AS phones,
-       CASE WHEN s.T > 0 OR s.p_s >= 0.3 THEN 1 ELSE 0 END AS shortlisted
-FROM pair_scores s
+SELECT g.stname AS state, upper(g.dtname) AS district, s.service_id AS service, s.unique_id, l.name,
+       CASE s.band WHEN 'LIKELY' THEN 'Likely' WHEN 'CALL_FIRST' THEN 'Call first'
+                   WHEN 'NO_SERVICE_TEXT' THEN 'No service text' WHEN 'UNLIKELY' THEN 'Unlikely' END AS band,
+       CASE WHEN s.band <> 'NO_SERVICE_TEXT' THEN s.p END AS p_s,
+       s.lo AS bin_lo, s.hi AS bin_hi, s.p_location AS p_l, s.p_exists AS p_e,
+       CASE s.operator WHEN 'public' THEN 'Public' WHEN 'private' THEN 'Private' ELSE 'Not stated' END AS operator,
+       array_join(s.overlays, ', ') AS flags, l.loc_conf, r.website_class,
+       CASE WHEN s.band IN ('LIKELY', 'CALL_FIRST') THEN 1 ELSE 0 END AS shortlisted
+FROM facility_service_scores_v2 s
 JOIN geo_facility g ON g.unique_id = s.unique_id
 JOIN facility_location l ON l.unique_id = s.unique_id
 JOIN record_trust r ON r.unique_id = s.unique_id
-ORDER BY s.p_s DESC
+ORDER BY s.p DESC
 ```
 
 ### ds_list_facts

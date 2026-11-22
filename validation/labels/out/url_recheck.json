@@ -1,0 +1,865 @@
+{
+ "seed": 20261121,
+ "quota": {
+  "confirmed": 12,
+  "contradicted": 6,
+  "no_info": 12
+ },
+ "ua": "Mozilla/5.0 (compatible; label-audit/1.0)",
+ "rows": [
+  {
+   "pair_id": "v2_dialysis_no_mention_1",
+   "set": "v2",
+   "svc": "dialysis",
+   "name": "Champhai District Hospital, Champhai",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "unclear",
+   "quote": "Field Monitoring Format -District Hospital (DH) Date of Visit: 03.03.2025; 18 Dialysis Unit Y",
+   "notes": "Quote is from the search index snippet of the NHM field monitoring PDF; direct fetch returned 404, so not read in full. Khawzawl DH report names DH Champhai as its next referral point.",
+   "any_page_ok": false,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://gipe.ac.in/wp-content/uploads/2025/07/NHM-Field-Monitoring-Report-2024-25-Champhai-Mizoram.pdf",
+     "status": "http_404",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_021",
+   "set": "e2e",
+   "svc": "cardiac_surgery",
+   "name": "All India Institute of Medical Sciences",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "CTVS ... Dr. Siddhartha Sathia (Addl. Prof. & HOD In-Charge) ... Dr. Rudra Pratap Mahapatra (Assoc. Prof.)",
+   "notes": "Official institute site lists a CTVS department with faculty; no case volumes published. Medium because department page has no service text.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 96.66666666666667,
+   "pages": [
+    {
+     "url": "https://aiimsbhubaneswar.nic.in/all-departments/",
+     "status": "http_200",
+     "chars": 3883,
+     "quote_score": 43.333333333333336,
+     "svc_hits": 1,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://aiimsbhubaneswar.nic.in/category_department/ctvs/",
+     "status": "http_200",
+     "chars": 3245,
+     "quote_score": 96.66666666666667,
+     "svc_hits": 3,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_129",
+   "set": "e2e",
+   "svc": "cardiac_surgery",
+   "name": "Khetan Heart & Super Specialty Hospital",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "cardiac surgeons",
+   "notes": "Own site: Khetan Chauraha, Sikar Road, Jaipur 302039; team includes cardiac surgeons, FAQ lists TAVI. Bypass/valve surgery not explicitly named.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.khetanhospital.com/",
+     "status": "http_200",
+     "chars": 12288,
+     "quote_score": 100.0,
+     "svc_hits": 1,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "emergency_csection_strong_1",
+   "set": "v1",
+   "svc": "emergency_csection",
+   "name": "Tata Main Hospital, Jamshedpur, Jharkhand, India",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "983-bed teaching hospital in Bistupur, Jamshedpur with an emergency department and DNB training in Obstetrics and Gynaecology. It was a recognised BEmOC training centre in an older report. No page found that names caesarean specifically. The hospital's own site refused the connection.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tata_Main_Hospital,_Jamshedpur",
+     "status": "http_200",
+     "chars": 4370,
+     "quote_score": null,
+     "svc_hits": 2,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://indiacsr.in/tata-main-hospital-organises-basic-emergency-obstetric-care-training-programme",
+     "status": "http_200",
+     "chars": 10468,
+     "quote_score": null,
+     "svc_hits": 6,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_1",
+   "set": "v2",
+   "svc": "emergency_csection",
+   "name": "MGM Hospital and Research Centre",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Jagat Narayan Road, Kadamkuan, Patna, Bihar 800003 ... Cesarean delivery ... 24x7 Emergency",
+   "notes": "Women and child hospital (est. 1986, NABH, CGHS empanelled). myUpchar lists cesarean delivery and 24x7 emergency; Practo lists maternity unit and child delivery. Directory procedure list may share a source with the dataset text, hence medium.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": false,
+   "best_quote_score": 67.5,
+   "pages": [
+    {
+     "url": "https://myupchar.com/en/hospitals/patna/mgm-hospital-and-research-centre-pvt-ltd-8695",
+     "status": "http_200",
+     "chars": 10716,
+     "quote_score": 67.5,
+     "svc_hits": 7,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.practo.com/patna/hospital/mgm-hospital-research-centre-kadamkuan",
+     "status": "http_200",
+     "chars": 4907,
+     "quote_score": 51.24999999999999,
+     "svc_hits": 17,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "dialysis_suspect_1",
+   "set": "v1",
+   "svc": "dialysis",
+   "name": "Rastra Kavi Dinkar Blood Bank, Sadar Hospital",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Dialysis at Sadar Hospital Gopalganj is real but run by NephroPlus (Ward 15, Banakata, Gopalganj 841428), not Apollo; the Apollo affiliation claim comes from a Justdial Allahabad page and is contaminated. The blood bank name itself was not verified.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://nephroplus.com/our-clinics/bihar",
+     "status": "http_200",
+     "chars": 4228,
+     "quote_score": null,
+     "svc_hits": 30,
+     "name_token_share": 0.43
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_154",
+   "set": "e2e",
+   "svc": "nicu",
+   "name": "Dr Ram Manohar Lohia Institute of Medical Sciences",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Department of Pediatrics has a well equipped NICU, PICU, Private and general wards.",
+   "notes": "Own site; also 'Level 3 NICU with ventilators'. PIN 226010 is Lucknow.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.drrmlims.ac.in/department/Paediatrics",
+     "status": "http_200",
+     "chars": 3236,
+     "quote_score": 100.0,
+     "svc_hits": 2,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "dialysis_strong_2",
+   "set": "v1",
+   "svc": "dialysis",
+   "name": "Keshlata Hospital",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Own website lists Dialysis among specialities; address Delapeer, Stadium Road, Bareilly 243122 matches. Only source is the hospital's own site (same source the record was built from); nephrology not named there.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.keshlata.com/",
+     "status": "http_200",
+     "chars": 2031,
+     "quote_score": null,
+     "svc_hits": 4,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.explurger.com/pd/utaxz8llx76vguy2q",
+     "status": "http_200",
+     "chars": 1422,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "cardiac_surgery_strong_1",
+   "set": "v1",
+   "svc": "cardiac_surgery",
+   "name": "Metromed International Cardiac Centre",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Own site: Thondayad Bypass Road, Calicut, Kerala 673014. It lists an Adult Cardiac Surgery department and Cardiac Surgery and Heart Transplantation, with a Chief Consultant Cardiothoracic and Vascular Surgeon. The site does not name CABG, but Hexahealth gives a bypass price.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://micc.in",
+     "status": "http_200",
+     "chars": 10039,
+     "quote_score": null,
+     "svc_hits": 27,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.hexahealth.com/kozhikode/hospital/metromed-international-cardiac-centre",
+     "status": "http_200",
+     "chars": 17240,
+     "quote_score": null,
+     "svc_hits": 21,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_trauma_emergency_strong_3",
+   "set": "v2",
+   "svc": "trauma_emergency",
+   "name": "Christian Institute of Health Sciences and Research, Dimapur",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Emergency Department",
+   "notes": "Own site lists an Emergency Department, a 2018 'New Emergency Area' timeline entry and an emergency contact number; hours and trauma level not stated.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://cihsr.in/",
+     "status": "http_200",
+     "chars": 7081,
+     "quote_score": 100.0,
+     "svc_hits": 4,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_016",
+   "set": "e2e",
+   "svc": "nicu",
+   "name": "Marwari Hospitals",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "It consists of 4 beds in NICU and 8 beds in step down (Recovery room).",
+   "notes": "Own site, SJ Road, Athgaon, Guwahati-781008. Neonatology section also says NICU at sister concern unit.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.marwarihospitals.com",
+     "status": "http_200",
+     "chars": 33932,
+     "quote_score": 100.0,
+     "svc_hits": 12,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "emergency_csection_strong_2",
+   "set": "v1",
+   "svc": "emergency_csection",
+   "name": "Nishamani Nursing Home",
+   "label_service": "confirmed",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Own website says around 50 caesarean deliveries monthly; BK Road, Cuttack 753001 matches. No independent source; 24x7 emergency availability not verified.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://nishamani.org/",
+     "status": "http_200",
+     "chars": 4579,
+     "quote_score": null,
+     "svc_hits": 16,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "mri_suspect_1",
+   "set": "v1",
+   "svc": "mri",
+   "name": "Govt. Homoeo Medical College Hospital (Guwahati, Nowgong, Jorhat)",
+   "label_service": "contradicted",
+   "label_exists": "unclear",
+   "label_location": "unclear",
+   "quote": "",
+   "notes": "The 3T MRI (Rs 30 crore) and PET-MRI belong to Gauhati Medical College & Hospital (allopathic) CN Centre, not a homoeopathic college hospital. Record name merges three cities; Assam homoeopathic hospitals list only X-ray/USG/ECG.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://gmch.assam.gov.in/information-and-services/cn-centre",
+     "status": "error:URLError:<urlopen error timed out>",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    },
+    {
+     "url": "https://www.sentinelassam.com/topheadlines/mri-test-go-to-private-centers-gmch-tells-patients",
+     "status": "http_200",
+     "chars": 2555,
+     "quote_score": null,
+     "svc_hits": 9,
+     "name_token_share": 0.5
+    },
+    {
+     "url": "https://www.careerindia.com/colleges/assam-government-homeopathic-medical-college-and-hospital-guwahati-assam-cp14018",
+     "status": "http_200",
+     "chars": 5038,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.5
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_022",
+   "set": "e2e",
+   "svc": "emergency_csection",
+   "name": "Nayan Jyoti Eye Hospital",
+   "label_service": "contradicted",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "NAYAN JYOTI EYE CARE CENTRE",
+   "notes": "PMJAY-empanelled eye care centre in Auraiya, PIN 206122; single-specialty eye facility, emergency C-section implausible.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.policybazaar.com/hospitals/pmjay/auraiya/",
+     "status": "http_200",
+     "chars": 43056,
+     "quote_score": 100.0,
+     "svc_hits": 5,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.drlogy.com/ayushman-bharat/hospitals/uttar-pradesh/auraiya/nayan-jyoti-eye-care-centre-auraiya",
+     "status": "http_200",
+     "chars": 4981,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_burn_care_suspect_1",
+   "set": "v2",
+   "svc": "burn_care",
+   "name": "Government Medical College And Hospital Chandrapur",
+   "label_service": "contradicted",
+   "label_exists": "yes",
+   "label_location": "no",
+   "quote": "KMSK Govt. Medical College & Hospital, T B Hospital Campus, Ramnagar, Chandrapur, Maharashtra",
+   "notes": "Record PIN 440018 is Nagpur district; claim names Indira Gandhi Government Medical College (a Nagpur institution), so the claim belongs to another facility per rubric. Whether GMC Chandrapur itself has a burn ward is unknown; homepage lists General Surgery, no burns unit.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.gmcchandrapur.org/",
+     "status": "http_200",
+     "chars": 7747,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_emergency_csection_strong_5",
+   "set": "v2",
+   "svc": "emergency_csection",
+   "name": "Ferty9 Fertility Center",
+   "label_service": "contradicted",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "infertility medical treatments i.e., in-vitro fertilization (\"IVF\"), intrauterine insemination (\"IUI\") and other related, and/or ancillary fertility services",
+   "notes": "Own site describes an IVF chain (Kukatpally, LB Nagar, Secunderabad, Banjara Hills) with care up to pregnancy confirmation; only an aggregator lists cesarean delivery with an empty surgeries page. Judged single-specialty fertility; low confidence, could be no_info.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": false,
+   "best_quote_score": 52.41379310344827,
+   "pages": [
+    {
+     "url": "https://www.ferty9.com/fertility-clinic/hyderabad",
+     "status": "robots_disallowed",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    },
+    {
+     "url": "https://www.bajajfinservhealth.in/hospitals/hyderabad/ferty9-fertility-and-research-center-kukatpally/surgeries",
+     "status": "http_200",
+     "chars": 2739,
+     "quote_score": 52.41379310344827,
+     "svc_hits": 1,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_130",
+   "set": "e2e",
+   "svc": "cardiac_surgery",
+   "name": "Dr. Panjabrao Deshmukh Memorial Medical College and Hospital",
+   "label_service": "contradicted",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Cardiology with Angiography & Angioplasty",
+   "notes": "Own super-speciality list (16 items) has no cardiac/CTVS surgery. PIN 444602 vs site 444603, both Amravati.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.pdmmc.edu.in/pages/super_speciality_service.php",
+     "status": "http_200",
+     "chars": 5463,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "trauma_emergency_weak_1",
+   "set": "v1",
+   "svc": "trauma_emergency",
+   "name": "Beena Home Nursing, Thrissur",
+   "label_service": "contradicted",
+   "label_exists": "yes",
+   "label_location": "unclear",
+   "quote": "",
+   "notes": "A home nursing agency in Thrissur (job listing PIN 680001 vs record 680004); provides home visits, no emergency or trauma care. Its site has template contact text (Los Angeles address).",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.beenahomenursing.com/index.php/about",
+     "status": "http_200",
+     "chars": 1088,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.evaniosjobs.com/job-details/2516611/home-nurse-job-in-thrissur",
+     "status": "http_200",
+     "chars": 217349,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.75
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_056",
+   "set": "e2e",
+   "svc": "dialysis",
+   "name": "Meghana Nursing Home",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Nagzari, Palghar, Post Nihe, PALGHAR, Maharashtra - 401404",
+   "notes": "Listed as Meghna Nursing Home; insurer listing only, no dialysis mention.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": false,
+   "best_quote_score": 84.61538461538461,
+   "pages": [
+    {
+     "url": "https://www.starhealth.in/network-hospitals/star-health-network-hospitals-in-palghar-maharashtra/",
+     "status": "http_200",
+     "chars": 13445,
+     "quote_score": 84.61538461538461,
+     "svc_hits": 0,
+     "name_token_share": 0.67
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_emergency_csection_weak_2",
+   "set": "v2",
+   "svc": "emergency_csection",
+   "name": "Rewati Nursing Home",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Only a doctor listing: OBGYN consults at 'Rewati Nursing Home - Ivf', Dharampur, Haridwar-Dehradun Rd. No source on deliveries or C-section.",
+   "any_page_ok": false,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.bajajfinservhealth.in/doctor/dehradun/gynaecologist-and-obstetrician/dr-rita-goel",
+     "status": "http_200",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_017",
+   "set": "e2e",
+   "svc": "trauma_emergency",
+   "name": "Naraina Medical College & Research Centre",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "Panki, Kanpur, Pincode 208020, Uttar Pradesh",
+   "notes": "Teaching hospital exists at Panki 208020. Only generic emergency statements (CGHS empanelment boilerplate); no facility-specific trauma evidence. nmch.ac.in is a different institution (Narayan).",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": false,
+   "best_quote_score": 68.29268292682926,
+   "pages": [
+    {
+     "url": "https://medindia.net/education/medical_colleges/naraina-medical-college-research-centre-kanpur-kanpur.htm",
+     "status": "http_200",
+     "chars": 4468,
+     "quote_score": 68.29268292682926,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://cghshospitals.com/facility/naraina-hospital-and-research-center-1972",
+     "status": "http_200",
+     "chars": 4505,
+     "quote_score": 53.65853658536586,
+     "svc_hits": 5,
+     "name_token_share": 0.8
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_037",
+   "set": "e2e",
+   "svc": "dialysis",
+   "name": "Purvanchal Metrocity Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "H N Singh Chowk, Medical College Road, Gorakhpur",
+   "notes": "Exists in Gorakhpur (directory PIN 273001 vs record 273002, same city). No dialysis found.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://medindia.net/directories/labs/purvanchal-metro-city-hospital-gorakhpur-uttar-pradesh-41486-1.htm",
+     "status": "http_200",
+     "chars": 6086,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 0.67
+    },
+    {
+     "url": "https://www.zurichkotak.com/network-locator/cashless-hospitals/gorakhpur/purvanchal-metrocity-hospital",
+     "status": "http_200",
+     "chars": 1395,
+     "quote_score": 86.95652173913044,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "emergency_csection_weak_1",
+   "set": "v1",
+   "svc": "emergency_csection",
+   "name": "Nandini Women\u2019s Clinic",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Own site confirms address Nagasandra, Bengaluru 560073 and an obstetrics service; C-sections appear only as the doctor's past experience, with no operation theatre or 24h emergency mentioned.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://nandiniwomensclinic.com/about-us/",
+     "status": "http_200",
+     "chars": 2693,
+     "quote_score": null,
+     "svc_hits": 11,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_009",
+   "set": "e2e",
+   "svc": "cardiac_surgery",
+   "name": "New B K Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "30-50 bed hospital, Jauhari Bazar, Vaishali 844101; cardiology listed as a specialty, no cardiac surgeon, cath lab or cardiac surgery found.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://bajajfinservhealth.in/hospitals/vaishali/new-b-k-hospital-purani-gandak-pul-road",
+     "status": "http_200",
+     "chars": 3843,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    },
+    {
+     "url": "https://www.publicservicesmap.in/hospitals/centre/new-bk-hospital-vaishali-bihar-hosp10p116395",
+     "status": "error:URLError:<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    }
+   ]
+  },
+  {
+   "pair_id": "v2_burn_care_no_mention_3",
+   "set": "v2",
+   "svc": "burn_care",
+   "name": "Aastha Lok Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "unclear",
+   "quote": "",
+   "notes": "Own site titled 'Aastha Lok Multi Speciality Hospital in Patna'; fetched content has no burns or plastic surgery mention and no address.",
+   "any_page_ok": false,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.aasthalokhospital.com/",
+     "status": "http_200",
+     "chars": 69,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_010",
+   "set": "e2e",
+   "svc": "trauma_emergency",
+   "name": "Reynolds Memorial Hospital and Affiliated Clinics",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "100 Bedded hospital with good infrastructure to develop services",
+   "notes": "Mission hospital in Washim (CMC Vellore/EHA/Church of the Nazarene); no page states emergency or trauma service.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://www.cmai.org/oldsite/network-vacancies/item/404-cmc-vellore-calling-for-multiple-positions-at-reynolds-memorial-hospital-affiliated-clinics-washim-maharashtra.html",
+     "status": "http_200",
+     "chars": 3330,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_050",
+   "set": "e2e",
+   "svc": "nicu",
+   "name": "Jansewa Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "no",
+   "quote": "near Bharat petrol pump, Balrampur NH-30, Balrampur, Uttar Pradesh, 271607",
+   "notes": "Listing PIN 271607 vs record PIN 221107 (a Varanasi-area PIN). Only a general physician listed.",
+   "any_page_ok": false,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.bajajfinservhealth.in/doctor/balrampur/general-physician/dr-chandra-prakash",
+     "status": "http_200",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_024",
+   "set": "e2e",
+   "svc": "dialysis",
+   "name": "Pushpanjali Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Private PM-JAY hospital in Gorakhpur per directory (search snippet; page fetch failed DNS). No dialysis mention; Pushpanjali dialysis results belong to Agra and East Delhi namesakes.",
+   "any_page_ok": false,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.publicservicesmap.in/hospitals/centre/pushpanjali-hospital-gorakhpur-uttar-pradesh-hosp9p25169835",
+     "status": "error:URLError:<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+     "chars": 0,
+     "quote_score": null,
+     "svc_hits": 0,
+     "name_token_share": 0.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_012",
+   "set": "e2e",
+   "svc": "trauma_emergency",
+   "name": "Vivekanand Hospital",
+   "label_service": "no_info",
+   "label_exists": "yes",
+   "label_location": "yes",
+   "quote": "",
+   "notes": "Listing is a NephroPlus dialysis unit of Vivekanand Hospital, Gyatri Nagar, Jalna 431203, open 24x7. Trauma mentioned only in directory reviews, not by the facility.",
+   "any_page_ok": true,
+   "quote_checkable": false,
+   "quote_found": false,
+   "best_quote_score": null,
+   "pages": [
+    {
+     "url": "https://www.hexahealth.com/jalna/hospital/nephroplus-unit-of-vivekanand-hospital-gyatri-nagar",
+     "status": "http_200",
+     "chars": 14992,
+     "quote_score": null,
+     "svc_hits": 6,
+     "name_token_share": 1.0
+    }
+   ]
+  },
+  {
+   "pair_id": "e2e_034",
+   "set": "e2e",
+   "svc": "emergency_csection",
+   "name": "Parijat Hospital",
+   "label_service": "no_info",
+   "label_exists": "unclear",
+   "label_location": "no",
+   "quote": "Sinnar, Nashik, Maharashtra - 422103",
+   "notes": "No Parijat Hospital found in Trimbak; one exists in Sinnar. Record PIN 444603 is Amravati per India Post, inconsistent with Trimbak/Nashik.",
+   "any_page_ok": true,
+   "quote_checkable": true,
+   "quote_found": true,
+   "best_quote_score": 100.0,
+   "pages": [
+    {
+     "url": "https://bajajfinservhealth.in/hospitals/nashik/parijat-hospital-koknipura",
+     "status": "http_200",
+     "chars": 3855,
+     "quote_score": 100.0,
+     "svc_hits": 0,
+     "name_token_share": 1.0
+    }
+   ]
+  }
+ ]
+}
