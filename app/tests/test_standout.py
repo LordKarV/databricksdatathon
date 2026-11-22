@@ -247,3 +247,26 @@ def test_outside_option_follows_the_public_standard_per_service():
         assert po is None or not re.search(r"ayurved|homoeo|homeo|unani|siddha", po["name"], re.I)
     levels = {ENGINE.fac["public_level"][i] for i, svcs in enumerate(ENGINE.fac["public_standard"]) if "cardiac_surgery" in svcs}
     assert levels and levels <= {"mc"}
+
+
+@needs_data
+@pytest.mark.parametrize("s", ["emergency_csection", "nicu", "trauma_emergency", "burn_care"])
+def test_bahraich_is_a_care_gap_with_the_nearest_public_hospital_or_none(s):
+    """#86 item 3: the Bahraich cases with nothing in reach read as a care gap in our data, say how many listings the
+    district has, and name the nearest public-standard hospital we have, or say there is none within the radius."""
+    a = ENGINE.area(s, 27.57, 81.6)
+    g = a["gap"]
+    assert a["area"]["district"] == "Bahraich" and g["covered"] == 0 and g["no_claim"] == 0 and g["pins_sampled"] > 0
+    assert a["summary"]["n_without_option"] == g["far"]  # burns: some PINs have unconfirmed listings in reach
+    assert g["district_listings"] >= 0 and not g["public_standard"]
+    pn = g["public_nearest"]
+    if pn is not None:
+        assert pn["label"] == "by public standard, not verified" and pn["km"] <= g["radius_km"]
+        assert s in ENGINE.fac["public_standard"][ENGINE.fid[pn["facility_id"]]]
+
+
+@needs_data
+def test_public_nearest_only_when_the_district_names_no_public_hospital():
+    for s, la, lo in [("trauma_emergency", 25.6, 85.95), ("nicu", 25.15, 83.68), ("burn_care", 27.57, 81.6)]:
+        g = ENGINE.area(s, la, lo)["gap"]
+        assert (g["public_nearest"] is None) or not g["public_standard"]
