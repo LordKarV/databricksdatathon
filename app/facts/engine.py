@@ -336,10 +336,12 @@ class Engine:
         return rows
 
     def _cite(self, cid: str) -> dict:
-        """One official-list or OpenStreetMap row a ledger term rests on (facts/build.py cites()), with its link."""
-        text, url, source, fetched, tier, k, n = self.cites[cid]
-        return {"id": cid, "text": text, "url": url, "source": source, "fetched_date": fetched, "tier": tier,
-                "precision_k": k, "precision_n": n}
+        """One official-list or OpenStreetMap row a ledger term rests on (facts/build.py cites()), with its link.
+        `url_is_entry` is False when the link is the list's own page, because the entry link cannot open (#166);
+        `text_hi` is the Hindi line where the build writes one (OpenStreetMap matches). Older exports lack both."""
+        text, url, source, fetched, tier, k, n, text_hi, entry = (*self.cites[cid], None, True)[:9]
+        return {"id": cid, "text": text, "text_hi": text_hi, "url": url, "url_is_entry": entry, "source": source,
+                "fetched_date": fetched, "tier": tier, "precision_k": k, "precision_n": n}
 
     def _public_lists(self, pr: Pair, i: int) -> list[dict]:
         """The official lists derived/v2 found this facility on, for one "Official lists" line. A NABH entry says
