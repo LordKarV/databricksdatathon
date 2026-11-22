@@ -309,6 +309,14 @@ def pins() -> dict[str, list]:
             "district": list(p.district), "state": list(p.state)}
 
 
+def scores_source() -> str:
+    """Which scores the app serves, in words a judge reads on the How page and in the build log (#86 item 2)."""
+    if not V2.is_file():
+        return "interim v1 (v2 export not present)"
+    card = json.loads(MODEL_CARD.read_text()) if MODEL_CARD.is_file() else {}
+    return f"model v2 export, model_version {str(card.get('model_version', 'unknown'))[:12]}"
+
+
 def main() -> None:
     t0 = time.time()
     f, fidx = facilities()
@@ -317,8 +325,7 @@ def main() -> None:
     manifest = json.loads((V1 / "MANIFEST.json").read_text())
     facts = {
         "meta": {"as_of": manifest["build_date"], "source": "derived/v1",
-                 "scores": "derived/v2 facility_service_scores" if V2.is_file() else
-                 "interim: derived/v1 data_point_scores (likely only when verified true)",
+                 "scores": scores_source(),
                  "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
         "rules": rules(),
         "track_bins": track_bins(),
@@ -346,6 +353,7 @@ def main() -> None:
     OUT.mkdir(exist_ok=True)
     (OUT / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (OUT / "facts.sha").write_text(facts_hash + "\n")
+    print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
     print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
           f"{len(raw) / 1e6:.1f} MB raw, {(OUT / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
