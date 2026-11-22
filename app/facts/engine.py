@@ -199,8 +199,11 @@ class Pair:
 
 
 class Engine:
-    def __init__(self, facts: dict, sha: str) -> None:
+    def __init__(self, facts: dict, sha: str, moved: dict[str, list[str]] | None = None) -> None:
         self.meta, self.rules, self.fac, self.pins = facts["meta"], facts["rules"], facts["fac"], facts["pins"]
+        # (district, state) where each PIN point lies (facts/build.py pin_districts, validation C4); its own otherwise
+        self.pin_where = [tuple((moved or {}).get(str(pin), (d, st))) for pin, d, st in
+                          zip(self.pins["pin"], self.pins["district"], self.pins["state"], strict=True)]
         # Every quote leaves the server with doctors' names redacted (#86): options, route stops and flags alike.
         self.claims = {k: [f, redact_names(t), *rest] for k, (f, t, *rest) in facts["claims"].items()}
         self.claim_flags = facts.get("claim_flags", {})
@@ -223,7 +226,9 @@ class Engine:
         if not path.is_file():
             return None
         sha = (out / "facts.sha").read_text().strip() if (out / "facts.sha").is_file() else "unknown"
-        return cls(json.loads(gzip.decompress(path.read_bytes())), sha)
+        moved = out / "pin_districts.json"
+        return cls(json.loads(gzip.decompress(path.read_bytes())), sha,
+                   json.loads(moved.read_text()) if moved.is_file() else None)
 
     # ---------- the one scoring function (#11's model drops in here) ----------
     def score(self, facility_id: str, service_id: str) -> tuple[str, float, float, float, list[dict], list[str]]:
@@ -232,7 +237,7 @@ class Engine:
         ev = self._evidence(pr)
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
             band, p, lo, hi, *_ = pr.model
-            return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
+            return band, p, lo, hi, [{"label": "Model score", "points": _pts(_logit(p))},
                                      *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
         # A second-source check outranks the text grade: it is the stronger evidence (#85: two confirmed pairs were
@@ -312,6 +317,13 @@ class Engine:
         if pr.model and pr.model[4] == "NO_SERVICE_TEXT" and self.likely_threshold is not None:
             return min(p, self.likely_threshold)
         return p
+
+    def _exists_where(self, pr: Pair, i: int) -> dict[str, float | None]:
+        """p_e, p_l: the model's P_E and P_L for this pair (derived/v2 p_exists, p_location), the values its band rule
+        tests (#121: the derived/v1 facility trust scores showed 0.34 on a Likely card). Interim pairs keep v1's."""
+        if pr.model and len(pr.model) > 6:
+            return {"p_e": pr.model[6], "p_l": pr.model[5]}
+        return {"p_e": self._f("p_e", i), "p_l": self._f("p_l", i)}
 
     @staticmethod
     def model_band(pr: Pair) -> str | None:
@@ -427,7 +439,7 @@ class Engine:
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
             # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
             "range_kind": "similar_scores" if pr.model else "interval", "model_band": self.model_band(pr),
-            "p_e": self._f("p_e", i), "p_l": self._f("p_l", i),
+            **self._exists_where(pr, i),
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
@@ -490,17 +502,24 @@ class Engine:
 
     # ---------- /api/plan ----------
     def plan(self, service: str, lat: float, lon: float, accuracy_m: float | None, source: str,
-             scores: dict | None = None, tiebreak: dict[str, float] | None = None) -> dict:
+             scores: dict | None = None, tiebreak: dict[str, float] | None = None,
+             lead: dict[str, str] | None = None) -> dict:
         """scores: {facility_id: score() tuple} replacing score() for those facilities, so the ranking, the
         abstention and every sentence below are built from the same p and band the card shows.
         tiebreak: {facility_id: value}, higher first, used only among tied leading options (tied_prefix); missing
-        facilities count 0. The payload then gains tie_break when the values told the tied options apart."""
+        facilities count 0. The payload then gains tie_break when the values told the tied options apart.
+        lead: {facility_id: reason line}, set by itinerary.attach after the route is built (#121): the first key
+        becomes option 1 when it is in the ranked pool, the other options keep their order, and each listed option
+        gets its line as route_reason and why_first_text. The ranking itself is unchanged."""
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pool, unlikely = self._ranked(service, lat, lon, scores=scores)
         tie = None
         if tiebreak and info["profile"] in TIE_BREAK_PROFILES:
             pool, tie = self._break_tie(service, pool, scores, tiebreak)
         chosen = pool[:N_OPTIONS]
+        head = next((r for r in pool if lead and self._f("id", r[2].fi) == next(iter(lead))), None)
+        if head:  # ponytail: a route stop outside the pool (no quote, beyond N_TRAVEL) leaves the order as ranked
+            chosen = ([head] + [r for r in chosen if r is not head])[:N_OPTIONS]
         # Never hide a confirmed listing in reach: if none made the top slots, it takes the last one.
         best_likely = next((r for r in pool if r[4] == "likely"), None)
         if best_likely and best_likely not in chosen:
@@ -517,6 +536,9 @@ class Engine:
                 options[0]["why_first_text"] = (
                     f"{n['name']} is nearer (about {n['travel']['minutes']} min), but this listing's evidence is "
                     f"stronger ({o['p']:.2f} against {n['p']:.2f}), so it ranks first.")
+        for o in options if head else []:
+            if o["facility_id"] in lead:
+                o["route_reason"] = o["why_first_text"] = lead[o["facility_id"]]
         why_not, change = self._why_not(service, chosen, pool + unlikely, options)
         window = WINDOW[info["profile"]]
         abstain = None
@@ -663,9 +685,9 @@ class Engine:
         info, label = SERVICES[service], SERVICES[service]["label_en"]
         pins = self.pins
         k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
-        district, state = pins["district"][k], pins["state"][k]
-        all_idx = sorted((j for j in range(len(pins["pin"])) if pins["district"][j] == district
-                          and pins["state"][j] == state), key=lambda j: pins["pin"][j])
+        district, state = self.pin_where[k]  # the district the nearest PIN point lies in, not the one it is filed under
+        all_idx = sorted((j for j in range(len(pins["pin"])) if self.pin_where[j] == (district, state)),
+                         key=lambda j: pins["pin"][j])
         idx = all_idx[:max_pins]
         window = WINDOW[info["profile"]]
         rows, gains, n_now, n_conf = [], {}, 0, 0

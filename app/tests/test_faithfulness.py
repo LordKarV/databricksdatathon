@@ -11,6 +11,7 @@ data-k="<kind>". This test then checks:
   "in 10 listings") and device-side text (location, clock times, call outcomes) marked data-device;
 - every evidence quote and every contribution of an option is shown on its why page, and every quote carries
   its claim id; when the claim id exists in derived/v1/claims.parquet, the quote equals that claim's text;
+- the claim id is a hidden mark, never printed, and no derived/ path is printed (#121);
 - read aloud (voice support): the Hindi and English text the Read aloud button speaks on the results and why /
   call-ahead screens (state.spoken, from static/speech.js) lists the payload path of every value it uses; each
   equals its field and is in the spoken text, and no other digit is spoken except 108 and 102.
@@ -57,7 +58,7 @@ STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\b24 \u0918
                   r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
-    "Access now": "area.summary.access_now",
+    "Access now: a Likely listing in reach": "area.summary.access_now",
     "If calls confirm the listings": "area.summary.access_if_confirmed",
     "Calls could close": "area.summary.calls_could_close",
     "No public evidence of care": "area.summary.no_public_evidence",
@@ -265,6 +266,17 @@ def quote_numbers(s: str) -> list[str]:
     return re.findall(r"[0-9]+", re.sub(r"(?<=[0-9]),(?=[0-9])", "", s))  # 5,000 and 5000 are one number
 
 
+def capped_pct_ok(shown: str, value: float) -> bool:
+    """A chance shown as a whole percent, capped so a product of model chances never reads as certain."""
+    shown = shown.strip()
+    if shown == "over 99%":
+        return value > 0.99
+    if shown == "under 1%":
+        return value < 0.01
+    m = re.fullmatch(r"(\d+)%", shown)
+    return bool(m) and 0.01 <= value <= 0.99 and within_precision(m[1], 100 * value)
+
+
 def check_item(payload: dict, it: dict) -> str | None:
     """None if the shown value is faithful, else a message."""
     path, kind, shown = it["path"], it["kind"], it["text"]
@@ -283,8 +295,12 @@ def check_item(payload: dict, it: dict) -> str | None:
         when = datetime.fromtimestamp(stored / 1000, IST)
         h = int(m[1]) % 12 + (12 if m[3] and m[3].lower() == "pm" else 0) if m and m[3] else int(m[1]) if m else -1
         ok = bool(m) and (h, int(m[2])) == (when.hour, when.minute)
-    elif kind == "atleast":
-        ok = within_precision(shown, 1 - math.prod(1 - o["p"] for o in stored))
+    elif kind == "pct":  # a stored fraction shown as a whole percent: '82' for 0.82
+        ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
+    elif kind == "count":  # how many items a list holds: '3' for three options
+        ok = isinstance(stored, list) and number(shown) == len(stored)
+    elif kind == "atleast":  # 1 - prod(1 - p) as a capped percent: 'over 99%', 'under 1%' or 'N%' (#121)
+        ok = capped_pct_ok(shown, 1 - math.prod(1 - o["p"] for o in stored))
     elif kind == "tenths":
         ok = int(number(shown)) == round(10 * stored["k_confirmed"] / stored["n"])
     elif kind == "band":
@@ -311,6 +327,18 @@ def check_item(payload: dict, it: dict) -> str | None:
     else:
         return f"{path}: unknown kind {kind!r}"
     return None if ok else f"{path} ({kind}): shown {shown!r}, stored {repr(stored)[:120]}"
+
+
+# A score next to a bracketed range reads as an interval around it; v2's lo / hi are the bin's confirmed rate (#121).
+BRACKETED_RANGE = re.compile(r"\b\d\.\d{2} \(\d\.\d{2} to \d\.\d{2}\)|\(\d\.\d{2}, [a-z ]+\d\.\d{2} to \d\.\d{2}")
+CERTAIN_CHANCE = re.compile(r"checks out: (?:1\.00|100%)")
+
+
+def check_number_wording(text: str) -> list[str]:
+    """No score with its lo / hi in brackets, and no chance shown as certain."""
+    text = re.sub(r"\s+", " ", text)
+    return ([f"score with a bracketed range: {m[0]!r}" for m in BRACKETED_RANGE.finditer(text)]
+            + [f"chance shown as certain: {m[0]!r}" for m in CERTAIN_CHANCE.finditer(text)])
 
 
 SPOKEN_JS = """() => typeof state !== 'undefined' && state.spoken"""
@@ -394,6 +422,15 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
         else:
             report["quotes_without_claim_row"] += 1
     return errs
+
+
+def raw_key_errs(name: str, payload: dict, text: str) -> list[str]:
+    """#121: the visible text (inner_text skips hidden marks) shows no claim id and no derived/ path."""
+    ids = {e["claim_id"] for o in payload["options"] for e in o["evidence"] if e.get("claim_id")}
+    ids |= {e["claim_id"] for r in (payload.get("itinerary") or {}).get("plans") or [] for s in r["stops"]
+            for e in s.get("evidence") or [] if e.get("claim_id")}
+    errs = [f"{name}: claim id {c} printed" for c in sorted(ids) if c in text]
+    return errs + ([f"{name}: a derived/ path printed"] if "derived/" in text else [])
 
 
 CARD_TEMPLATE_NUMBERS = {"108", "102", "24", "7", "1", "16"}  # 108/102 lines, "24x7", Hindi stop list, map zoom
@@ -643,6 +680,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
+        errs += raw_key_errs("plan", payload, text)
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]
@@ -663,6 +701,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             got = page.evaluate(COLLECT_JS)
             errs += check_screen(f"why/{o['rank']}", payload, got, report)
             errs += check_quotes(f"why/{o['rank']}", payload, got["items"], claims, report)
+            errs += raw_key_errs(f"why/{o['rank']}", payload, page.inner_text("#main"))
             spoken = spoken_on(page)
             errs += check_spoken(f"why/{o['rank']}", payload, spoken, i, report)
             if f"options.{i}.name" not in {f["path"] for f in spoken["en"]["fields"]}:
@@ -676,6 +715,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
             errs += [f"why/{o['rank']}: {e}" for e in check_tie_row(payload, o, got["rows"])]
+            errs += [f"why/{o['rank']}: {e}" for e in check_number_wording(page.inner_text("#main"))]
             tr = payload.get("meta", {}).get("test_record")
             if tr and o["band"] == "likely":  # the sealed TEST record sits next to every Likely band (#86)
                 errs += [f"why/{o['rank']}: meta.test_record.{k} not shown" for k in TEST_RECORD_SHOWN
@@ -701,6 +741,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 got = page.evaluate(COLLECT_JS)
                 errs += check_screen(f"slip/{o['rank']}/{lang}", payload, got, report)
                 errs += check_quotes(f"slip/{o['rank']}/{lang}", payload, got["items"], claims, report)
+                errs += raw_key_errs(f"slip/{o['rank']}/{lang}", payload, page.inner_text("#main"))
                 with page.expect_download() as dl:  # Web Share is off in this context, so the card downloads
                     page.locator("#slip-card").click()
                 card = Path(dl.value.path()).read_text(encoding="utf-8")
@@ -715,6 +756,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         page.wait_for_selector(".compare-cards")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("compare", payload, got, report)
+        errs += [f"compare: {e}" for e in check_number_wording(page.inner_text("#main"))]
         errs += check_quotes("compare", payload, got["items"], claims, report)
         shown = {it["path"] for it in got["items"]}
         for i in range(len(payload["options"])):
@@ -821,6 +863,48 @@ def test_translated_quote_shows_only_the_quotes_numbers(base_url, browser):
     assert not errs, "\n".join(errs[:20])
     assert quote_numbers(hindi) and set(quote_numbers(hindi)) <= set(quote_numbers(quote)), (hindi, quote)
     assert original == re.sub(r"\s+", " ", quote).strip()
+
+
+@pytest.mark.skipif(not HOW_JSON.is_file(), reason="how.json not built (app/howto/build.py)")
+def test_how_page_states_the_band_rule_the_model_uses():
+    """#121: the How page quotes derived/v2/model_card.json band_thresholds.rule word for word, with its thresholds."""
+    how, card = json.loads(HOW_JSON.read_text()), json.loads((ROOT / "derived/v2/model_card.json").read_text())
+    bt, f = card["band_thresholds"], how["facts"]
+    assert f["band_rule"]["value"] == bt["rule"] and f["band_rule"]["source"] == "derived/v2/model_card.json"
+    assert (f["likely_p"]["value"], f["likely_p_location"]["value"], f["likely_p_exists"]["value"]) == (
+        bt["likely"]["p"], bt["likely"]["p_location"], bt["likely"]["p_exists"])
+
+
+def test_displayed_transforms_are_checked_against_the_stored_value():
+    """#121: kinds for a value shown in another form than stored: pct (fraction as percent), count, capped atleast."""
+    opts = {"options": [{"p": 0.81, "p_lo": 0.82, "p_hi": 0.93}, {"p": 0.9}, {"p": 0.95}]}  # 1 - prod = 0.99905
+
+    def item(path: str, kind: str, text: str) -> str | None:
+        return check_item(opts, {"path": path, "kind": kind, "text": text})
+
+    assert item("options.0.p_lo", "pct", "82") is None and item("options.0.p_hi", "pct", "93") is None
+    assert item("options.0.p_lo", "pct", "0.82") is not None and item("options.0.p_lo", "pct", "80") is not None
+    assert item("options", "count", "3") is None and item("options", "count", "2") is not None
+    assert item("options", "atleast", "over 99%") is None
+    assert item("options", "atleast", "1.00") is not None and item("options", "atleast", "100%") is not None
+    assert capped_pct_ok("87%", 0.871) and not capped_pct_ok("over 99%", 0.95) and not capped_pct_ok("99%", 0.995)
+    assert capped_pct_ok("under 1%", 0.004) and not capped_pct_ok("0%", 0.004)
+
+
+def test_number_wording_flags_bracketed_ranges_and_certain_chances():
+    before = [
+        "Offers (range) 0.81 (0.82 to 0.93)",
+        "LIKELY (0.81, listings with similar scores checked out 0.82 to 0.93 of the time).",
+        "Chance at least one listing checks out: 1.00 (assumes they fail independently).",
+    ]
+    assert all(check_number_wording(t) for t in before)
+    after = [
+        "Offers score 0.81; similar listings confirmed: 82 to 93%",
+        "LIKELY, score 0.81. Similar listings confirmed: 82 to 93%.",
+        "Chance at least one of these 3 checks out: over 99% (assumes they fail independently).",
+        "NOT VERIFIED, score 0.40. Range 0.20 to 0.60.",
+    ]
+    assert not any(check_number_wording(t) for t in after)
 
 
 # ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
