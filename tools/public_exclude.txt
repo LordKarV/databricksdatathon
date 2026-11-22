@@ -20,15 +20,22 @@ app/checks/screens/describe_danger-dark.png
 app/checks/screens/describe_danger-light.png
 app/checks/screens/how_this_works-dark.png
 app/checks/screens/how_this_works-light.png
+app/checks/screens/journey_card-dark.png
+app/checks/screens/journey_card-light.png
 app/checks/screens/note_consent-dark.png
 app/checks/screens/note_consent-light.png
 app/checks/screens/offline_answer_dialysis-light.png
+app/checks/screens/offline_border_dialysis-light.png
 app/checks/screens/offline_no_saved_pack-light.png
 app/checks/screens/offline_old_fix_confirm-light.png
 app/checks/screens/offline_pin_picker-light.png
 app/checks/screens/offline_reload-light.png
+app/checks/screens/pulse_panel-dark.png
+app/checks/screens/pulse_panel-light.png
 app/checks/screens/read_aloud_hindi-dark.png
 app/checks/screens/read_aloud_hindi-light.png
+app/checks/screens/reason_step-dark.png
+app/checks/screens/reason_step-light.png
 app/checks/screens/results_dialysis-dark.png
 app/checks/screens/results_dialysis-light.png
 app/checks/screens/route_trauma-dark.png
@@ -45,6 +52,8 @@ app/checks/screens/start_first_visit-dark.png
 app/checks/screens/start_first_visit-light.png
 app/checks/screens/start_located-dark.png
 app/checks/screens/start_located-light.png
+app/checks/screens/visit_report-dark.png
+app/checks/screens/visit_report-light.png
 app/checks/screens/voice_confirm_hindi-dark.png
 app/checks/screens/voice_confirm_hindi-light.png
 app/checks/screens/voice_recording-dark.png
@@ -53,6 +62,7 @@ app/checks/screens/website_check-dark.png
 app/checks/screens/website_check-light.png
 app/checks/screens/why_and_how-dark.png
 app/checks/screens/why_and_how-light.png
+app/community/COMMUNITY_CHECK.md
 app/tests/test_api.py
 app/tests/test_standout.py
 app/voice/VOICE_CHECK.md
@@ -140,7 +150,6 @@ app_design/feasibility/voice_language/out/translate_databricks-meta-llama-3-3-70
 app_design/feasibility/voice_language/translate_check.py
 audit/capabilities/CAPABILITIES.md
 audit/claims/audit.py
-audit/claims/labels.py
 audit/claims/out/coherence_examples.tsv
 audit/claims/out/grade_examples.json
 audit/claims/out/handcheck2_foreign.tsv
@@ -149,7 +158,6 @@ audit/claims/out/handcheck3_named.tsv
 audit/claims/out/handcheck_core.tsv
 audit/claims/out/handcheck_foreign.tsv
 audit/claims/out/handcheck_nonoffer.tsv
-audit/claims/out/handcheck_summary.json
 audit/claims/out/hedges.json
 audit/claims/out/quantities.json
 audit/claims/out/specialties_vocab.csv
@@ -164,7 +172,6 @@ audit/claims/verify/out/v_misc.json
 audit/claims/verify/out/v_nonoffer.json
 audit/claims/verify/out/v_nonoffer_only_pairs.txt
 audit/claims/verify/out/v_scope.json
-audit/claims/verify/v_merged.py
 audit/claims/verify/warehouse_check.sql
 audit/geo/city_match_verdicts.csv
 audit/geo/hand_check_far_same_state.txt
@@ -275,8 +282,6 @@ audit/scale/q4_types.json
 audit/scale/q5_web_presence.json
 audit/scale/verify/v2_doctors_text.py
 audit/scale/verify/v3_beds_examples.json
-audit/scale/verify/v5_specialties.py
-audit/scale/verify/v7_types.py
 cleaning/claims/handcheck_labels.csv
 cleaning/claims/lexicon.py
 cleaning/claims/measure.py
@@ -299,6 +304,7 @@ databricks/dashboard/query_tests.json
 databricks/genie/GENIE.md
 databricks/genie/test_results.json
 databricks/genie/test_space.py
+demo/SCRIPT.md
 derived/v1/claims.parquet
 derived/v1/data_point_scores.parquet
 derived/v1/facility_groups.parquet
@@ -308,6 +314,7 @@ derived/v1/facility_trust.parquet
 derived/v1/gold_pairs.parquet
 derived/v1/grades.parquet
 derived/v1/grades_v1.parquet
+derived/v1/place_gazetteer.parquet
 derived/v1/record_trust.parquet
 derived/v1/source_classes.csv
 derived/v1/source_domains.csv
@@ -802,6 +809,7 @@ model/gold/sample_v2.json
 model/gold/splits.json
 model/gold/v3/dev_labels.json
 model/gold/v3/dev_sample.json
+model/gold/v3/test_labels.json
 model/gold/v3/test_sample.json
 model/proto/decision/benchmark_answers.json
 model/proto/decision/cards.py
@@ -809,7 +817,6 @@ model/proto/decision/e2e_pairs_to_label.json
 model/proto/decision/worked_examples.txt
 model/proto/evidence/eval_pairs.csv
 model/proto/evidence/examples.json
-model/proto/evidence/examples.py
 model/proto/evidence/examples.txt
 model/proto/evidence/facility.py
 model/proto/evidence/llm.py
@@ -818,7 +825,6 @@ model/proto/evidence/sentence_labels.csv
 model/proto/evidence/sentence_sample.csv
 model/proto/evidence/test_evidence.py
 model/proto/evidence/test_results.json
-model/proto/fusion/examples.py
 model/proto/fusion/examples.txt
 model/proto/fusion/inputs_snapshot/handcheck_location.csv
 model/proto/fusion/tests_fusion.py
@@ -840,11 +846,9 @@ model/review/explain/audit_benchmark_cards.json
 model/review/explain/cases.json
 model/review/explain/cases.txt
 model/review/explain/probe_ranks.json
-model/review/explain/probe_ranks.py
 model/review/explain/proposed_cards.txt
 model/review/explain/recompute_s1.json
 model/review/explain/recompute_s1.py
-model/review/explain/render_cases.py
 model/v2/assemble/ASSEMBLE.md
 model/v2/assemble/acommon.py
 model/v2/assemble/evidence.py
@@ -855,6 +859,7 @@ model/v2/final/check/CHECK.md
 model/v2/final/check/check.py
 model/v2/final/check/check_stdout.txt
 model/v2/final/check/out.json
+model/v2/fit_reader/out/oof_predictions.parquet
 model/v2/labels/out/gold_dev_facility.parquet
 model/v2/labels/out/gold_dev_pairs.parquet
 model/v2/labels/out/pu_labels.parquet
@@ -867,6 +872,7 @@ research/discover/ml_resources/CANDIDATES.md
 research/discover/need_outcomes/CANDIDATES.md
 research/discover/registries/CANDIDATES.md
 research/model/MODEL_PLAN.md
+tools/data_audit.py
 tools/net-probe/app.py
 tools/test_data_audit.py
 validation/VALIDATION_REPORT.md

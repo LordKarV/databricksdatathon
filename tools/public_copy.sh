@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SUPERSEDED: the lead made this repo public (#2), so no separate copy is published. The rule on #82 is now checked
+# on the repo itself: `.venv-app/bin/python tools/data_audit.py --repo origin/dev`. Kept for reference only.
+#
 # Option B of DATA_AUDIT.md: build a clean code-only copy of this repo in build/public/ (git-ignored).
 # Local only: it never adds a remote, pushes or changes this repo's visibility. A human reviews the copy and decides.
 # The copy is one fresh commit with no history, because this repo's history still holds the excluded files.
