@@ -1,12 +1,16 @@
 """Score the filled human spot-check sheet (issue #103): agreement between the person and the agent labeller.
 
-    .venv-app/bin/python model/gold/v3/human_check/score.py [sheet.csv]     # writes result.json and prints it
+    .venv-app/bin/python model/gold/v3/human_check/score.py [sheet.csv] [result.json] [--answers agent_answers.csv]
 
-Agreement is over rows the person could decide (confirmed or contradicted); cannot_tell rows are counted apart.
-Wilson 95% intervals. Refuses a sheet with an empty or unknown human_verdict.
+Defaults: sheet.csv, result.json and agent_answers.csv in this folder. The agent's verdicts are joined from
+agent_answers.csv on pair_id. Reads Excel's "CSV UTF-8" (with a byte-order mark), skips blank rows, and accepts
+verdicts in any case or with a space or hyphen ("Cannot tell"). Agreement is over rows the person could decide
+(confirmed or contradicted); cannot_tell rows are counted apart. Wilson 95% intervals. Refuses a sheet with an
+empty or unknown human_verdict, or whose pair_ids do not match agent_answers.csv.
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -27,14 +31,35 @@ def wilson(k: int, n: int) -> dict:
     return {"k": k, "n": n, "rate": round(p, 3), "ci95": [round(c - h, 3), round(c + h, 3)]}
 
 
-def score(rows: list[dict]) -> dict:
-    bad = [r["row"] for r in rows if r["human_verdict"].strip().lower() not in ALLOWED]
-    if bad:
+def read_csv(path: Path) -> list[dict]:
+    """Rows with stripped, lower-cased headers and stripped values; fully blank rows dropped."""
+    with path.open(newline="", encoding="utf-8-sig") as fh:
+        rows = [{(k or "").strip().lower(): (v or "").strip() for k, v in r.items()} for r in csv.DictReader(fh)]
+    return [r for r in rows if any(r.values())]
+
+
+def norm(verdict: str) -> str:
+    return "_".join(verdict.lower().replace("-", " ").split())
+
+
+def join(sheet: list[dict], answers: list[dict]) -> list[dict]:
+    agent = {a["pair_id"]: a for a in answers}
+    ids = [r.get("pair_id", "") for r in sheet]
+    if dups := sorted(k for k, n in Counter(ids).items() if n > 1):
+        raise SystemExit(f"pair_ids appear more than once: {dups}")
+    if set(ids) != set(agent):
+        raise SystemExit(f"sheet and answers differ: missing {sorted(set(agent) - set(ids))}, "
+                         f"unknown {sorted(set(ids) - set(agent))}")
+    rows = [{**r, "human_verdict": norm(r.get("human_verdict", "")), "agent_verdict": agent[r["pair_id"]]
+             ["agent_verdict"], "split": agent[r["pair_id"]]["split"]} for r in sheet]
+    if bad := [r.get("row") or r["pair_id"] for r in rows if r["human_verdict"] not in ALLOWED]:
         raise SystemExit(f"rows {bad}: human_verdict must be one of {sorted(ALLOWED)}")
-    for r in rows:
-        r["human_verdict"] = r["human_verdict"].strip().lower()
+    return rows
+
+
+def score(rows: list[dict]) -> dict:
     told = [r for r in rows if r["human_verdict"] != "cannot_tell"]
-    out = {
+    return {
         "rows": len(rows), "cannot_tell": len(rows) - len(told),
         "agreement": wilson(sum(r["human_verdict"] == r["agent_verdict"] for r in told), len(told)),
         "by_agent_verdict": {v: wilson(sum(r["human_verdict"] == v for r in told if r["agent_verdict"] == v),
@@ -45,14 +70,16 @@ def score(rows: list[dict]) -> dict:
                                sum(r["split"] == s for r in told)) for s in ("dev", "test")},
         "note": "a person read the cited pages; agreement is with the agent's verdict, on decided pairs only",
     }
-    return out
 
 
 def main() -> int:
-    path = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "sheet.csv"
-    with path.open(newline="", encoding="utf-8") as fh:
-        res = score(list(csv.DictReader(fh)))
-    (HERE / "result.json").write_text(json.dumps(res, indent=1) + "\n")
+    ap = argparse.ArgumentParser(description="Score the filled human spot-check sheet against the agent labels.")
+    ap.add_argument("sheet", nargs="?", type=Path, default=HERE / "sheet.csv")
+    ap.add_argument("out", nargs="?", type=Path, default=HERE / "result.json")
+    ap.add_argument("--answers", type=Path, default=HERE / "agent_answers.csv")
+    a = ap.parse_args()
+    res = score(join(read_csv(a.sheet), read_csv(a.answers)))
+    a.out.write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps(res, indent=1))
     return 0
 
