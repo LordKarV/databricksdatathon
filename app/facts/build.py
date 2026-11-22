@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import os
 import json
 import math
 import re
@@ -36,7 +37,11 @@ from common.eligibility import (  # noqa: E402, RUF100
 )
 
 V1 = ROOT / "derived" / "v1"
-V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
+# ponytail: v2 scores are opt-in until the app moves to them in #63 (tests and copy still assume v1);
+# #63 removes this switch. Off = a path that does not exist, so the v1 placeholder is used.
+V2 = ROOT / "derived" / "v2" / ("facility_service_scores.parquet" if os.environ.get("USE_MODEL_V2") == "1"
+                                    else "facility_service_scores.off")
+V2_BANDS = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
 PLANNER = ROOT / "planner" / "out" / "planner_v1.json.gz"  # its cited claims ride along, so route stops show quotes
 OUT = Path(__file__).resolve().parent / "out"
 # app service id -> derived/v1 service name (cleaning/claims lexicon keys)
@@ -173,6 +178,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
         v2["service"] = v2.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+        v2["band"] = v2.band.replace(V2_BANDS)  # same mapping as app/packs/build_packs.py (derived/v2/README.md)
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
                                                                   "band": "m_band"}), on=["unique_id", "service"],
                     how="left")
