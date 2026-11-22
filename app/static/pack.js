@@ -24,7 +24,7 @@
     return {
       decoded: true, state: pack.state, built: pack.built, services: pack.services,
       band_note: pack.band_note, ranking_note: pack.ranking_note,
-      fac: {uid8: f.uid8, name: f.name, tel: f.tel, tel_dir: f.tel_dir, loc_low: f.loc_low,
+      fac: {uid8: f.uid8, name: f.name, tel: f.tel, tel_dir: f.tel_dir, loc_low: f.loc_low, dup: f.dup || [],
         lat: undelta(f.lat, pack.scale.fac), lon: undelta(f.lon, pack.scale.fac)},
       ev: Object.assign({}, pack.ev, {f: undelta(pack.ev.f)}),
       q: pack.q, lists: pack.lists, index: pack.index, districts: pack.districts,
@@ -42,6 +42,9 @@
     return [best, bestKm];
   }
 
+  // A quote from a merged duplicate listing (#78) carries its own whole claim id after "=".
+  const claimId = (uid8, ref) => !ref ? null : ref[0] === '=' ? ref.slice(1) : uid8 + ':' + ref;
+
   function query(pack, lat, lon, service) {
     const p = decode(pack);
     if (!p.index[service]) throw new Error('service not in pack: ' + service);
@@ -51,10 +54,10 @@
       const fi = p.ev.f[e];
       const uid8 = p.fac.uid8[fi];
       const quotes = [p.ev.q1[e], p.ev.q2[e]].filter(q => q >= 0).map(q => ({
-        text: p.q[q][0], claim_id: p.q[q][1] ? uid8 + ':' + p.q[q][1] : null}));
+        text: p.q[q][0], claim_id: claimId(uid8, p.q[q][1])}));
       const flat = p.fac.lat[fi], flon = p.fac.lon[fi];
       return {name: p.fac.name[fi], uid8, tel: p.fac.tel[fi] || null, tel_dir: !!p.fac.tel_dir[fi],
-        loc_low: !!p.fac.loc_low[fi], lat: flat, lon: flon, km_straight: Math.round(km(lat, lon, flat, flon) * 10) / 10,
+        loc_low: !!p.fac.loc_low[fi], listings: p.fac.dup[fi] || 1, lat: flat, lon: flon, km_straight: Math.round(km(lat, lon, flat, flon) * 10) / 10,
         likely: !!p.ev.likely[e], p: p.ev.p[e] / 100, lo: p.ev.lo[e] / 100, hi: p.ev.hi[e] / 100, quotes};
     }).sort((a, b) => a.km_straight - b.km_straight);
     return {pin: p.pins.pin[i], district: p.districts[p.pins.d[i]] || null,

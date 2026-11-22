@@ -45,7 +45,8 @@ from common.eligibility import (  # noqa: E402, RUF100
     eligible_pairs,
     groups,
     report,
-    representatives,
+    same_site_groups,
+    to_sites,
 )
 
 HERE = Path(__file__).resolve().parent
@@ -100,15 +101,19 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     svc = svc[keep]
     svc["service"] = svc.service.map(SERVICE_MAP)
     svc = svc[svc.unique_id.isin(fac.unique_id)]
-    keep, counts = representatives(svc, groups(DERIVED))  # one option per real facility (#78)
+    # Duplicate listings of one site become one facility (#78): the canonical record, with every member's quotes.
+    sites, counts = same_site_groups(groups(DERIVED), fac)
+    report("packs.same_site_groups", counts)
+    text_of = {(u, sv): v for u, sv, v in zip(svc.unique_id, svc.service, svc.original_value, strict=True)}
+    svc, counts = to_sites(svc, sites)
     report("packs.duplicates", counts)
-    svc = svc[keep]
-    svc = apply_bands(svc.reset_index(drop=True), MODEL_SCORES)
+    svc = apply_bands(svc, MODEL_SCORES)
 
-    # Sentence text -> claim id, so every quote cites the claim it came from.
+    # Sentence text -> claim id, so every quote cites the claim it came from (a merged member's own claim id).
     sent = dps[dps.dp_type == "claim_attribution"][["unique_id", "claim_id", "original_value"]]
     cid = {(u, t): c for u, c, t in sent.itertuples(index=False)}
-    svc["quotes"] = [_two_shortest(u, v, cid) for u, v in zip(svc.unique_id, svc.original_value, strict=True)]
+    svc["quotes"] = [_site_quotes(rep, [(m, text_of[(m, sv)]) for m in members], cid)
+                     for rep, sv, members in zip(svc.unique_id, svc.service, svc.members, strict=True)]
 
     pins = pd.read_parquet(DERIVED / "pin_gazetteer.parquet", columns=["pin", "state", "district", "lat", "lon"])
     pins = pins.dropna(subset=["state", "lat", "lon"])
@@ -140,15 +145,30 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
     return out
 
 
-def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
-    """The two shortest distinct cited sentences as (text, claim_id suffix after uid8)."""
-    # (length, text): ties between equal-length sentences break the same way on every build (#78)
-    parts = sorted({p.strip() for p in (joined or "").split(" || ") if p.strip()}, key=lambda t: (len(t), t))[:2]
+def _site_quotes(rep: str, members: list[tuple[str, str | None]], cid: dict[tuple[str, str], str]
+                 ) -> list[tuple[str, str]]:
+    """The two shortest distinct sentences over a site's listings, as (text, claim reference).
+
+    The reference is the claim id's suffix after the facility's uid8 (pack.js adds the prefix back). A sentence from
+    a merged duplicate listing keeps its own claim id, stored whole after a leading "=".
+    """
+    owner: dict[str, str] = {}
+    for m, joined in members:
+        for t in (joined or "").split(" || "):
+            if t.strip():
+                owner.setdefault(t.strip(), m)
     out = []
-    for t in parts:
-        c = cid.get((uid, t), "")
-        out.append((t if len(t) <= QUOTE_MAX else t[:QUOTE_MAX - 3] + "...", c.split(":", 1)[1] if c else ""))
+    # (length, text): ties between equal-length sentences break the same way on every build (#78)
+    for t in sorted(owner, key=lambda t: (len(t), t))[:2]:
+        c = cid.get((owner[t], t), "")
+        ref = "" if not c else (c.split(":", 1)[1] if owner[t] == rep else "=" + c)
+        out.append((t if len(t) <= QUOTE_MAX else t[:QUOTE_MAX - 3] + "...", ref))
     return out
+
+
+def _two_shortest(uid: str, joined: str | None, cid: dict[tuple[str, str], str]) -> list[tuple[str, str]]:
+    """The two shortest distinct cited sentences of one listing as (text, claim_id suffix after uid8)."""
+    return _site_quotes(uid, [(uid, joined)], cid)
 
 
 def _haversine(lat1: np.ndarray, lon1: np.ndarray, lat2: np.ndarray, lon2: np.ndarray) -> np.ndarray:
@@ -190,6 +210,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
     ev = svc.loc[used_ev]
     # Facilities sorted by latitude so the coordinate deltas stay small.
     f = fac[fac.unique_id.isin(ev.unique_id)].sort_values(["loc_lat", "loc_lon"]).reset_index(drop=True)
+    listings = dict(zip(ev.unique_id, ev.listings, strict=False))
     fidx = {u: i for i, u in enumerate(f.unique_id)}
     ev = ev.assign(f=ev.unique_id.map(fidx), s=ev.service.map(SERVICES.index)).sort_values(["f", "s"])
     evidx = {old: new for new, old in enumerate(ev.index)}
@@ -216,6 +237,7 @@ def build_state(state: str, pins: pd.DataFrame, fac: pd.DataFrame, svc: pd.DataF
         "fac": {
             "uid8": [u[:8] for u in f.unique_id], "name": f.name.tolist(), "tel": f.tel.tolist(),
             "tel_dir": f.tel_dir.tolist(), "loc_low": [int(c != "high") for c in f.loc_conf],
+            "dup": f.unique_id.map(listings).fillna(1).astype(int).tolist(),  # duplicate listings merged (#78)
             "lat": delta(np.round(f.loc_lat * FAC_SCALE)), "lon": delta(np.round(f.loc_lon * FAC_SCALE)),
         },
         "ev": {

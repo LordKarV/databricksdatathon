@@ -25,7 +25,13 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from common.eligibility import eligible_facilities, groups, report, representatives  # noqa: E402, RUF100
+from common.eligibility import (  # noqa: E402, RUF100
+    eligible_facilities,
+    groups,
+    report,
+    same_site_groups,
+    to_sites,
+)
 
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
@@ -106,9 +112,14 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
            *pre_cols, *risk_cols]]
     m = dps.merge(g, on=["unique_id", "service"], how="inner")
     m = m[m.service.isin(V1_TO_APP) & m.unique_id.isin(fidx)]
-    keep, counts = representatives(m, groups())  # one option per real facility (#78)
+    # Duplicate listings of one site become one facility (#78): the canonical record, with every member's evidence.
+    loc = pd.read_parquet(V1 / "facility_location.parquet", columns=["unique_id", "loc_lat", "loc_lon"])
+    sites, counts = same_site_groups(groups(), loc[loc.unique_id.isin(fidx)])
+    report("facts.same_site_groups", counts)
+    ev_of = {(u, s): [c["claim_id"] for c in json.loads(e or "[]")]
+             for u, s, e in zip(m.unique_id, m.service, m.cite_evidence, strict=True)}
+    m, counts = to_sites(m, sites)
     report("facts.duplicates", counts)
-    m = m[keep]
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
         v2["service"] = v2.service_id.map(lambda s: SERVICE_MAP.get(s, s))
@@ -118,7 +129,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
-        ev = [c["claim_id"] for c in json.loads(r.cite_evidence or "[]")][: MAX_EVIDENCE * 3]
+        ev = list(dict.fromkeys(c for u in r.members for c in ev_of[(u, r.service)]))[: MAX_EVIDENCE * 3]
         cited.update(ev)
         missing = [c[4:] for c in pre_cols if isinstance(getattr(r, c), (bool,)) and getattr(r, c) is False]
         risks = [c[5:] for c in risk_cols if getattr(r, c) is True] + (["scope"] if r.scope_conflict else [])
@@ -126,7 +137,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
             round(r.score_hi, 4), round(r.q_ev, 4), round(r.score_model, 4), ev, missing, risks,
-            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model])
+            r.qty if isinstance(r.qty, str) else None, int(r.n_own_distinct), model, int(r.listings)])
     return out, cited
 
 

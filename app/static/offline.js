@@ -150,6 +150,7 @@
     return `<article class="card" aria-labelledby="off-${n}"><p>${n}. ${band}</p>
       <h3 id="off-${n}">${esc(x.name)}</h3>
       <p>${esc(x.km_straight)} km in a straight line (road is longer).${x.loc_low ? ' Map point may be wrong.' : ''}</p>
+      ${x.listings > 1 ? `<p class="small muted">Listed ${esc(x.listings)} times in the data; shown once, with the best evidenced listing's score.</p>` : ''}
       ${quotes}
       ${tel ? `<a class="btn btn-primary btn-block" href="${esc(tel)}"><span aria-hidden="true">&#9742;</span>
         Call ${esc(x.name)}</a>${x.tel_dir ? '<p class="small">May be a directory number, not the hospital.</p>' : ''}`
