@@ -81,6 +81,10 @@ Response:
     "track_record": {"n", "k_confirmed", "k_contradicted", "k_no_info", "split": "dev | test"},
     "phone": {"e164": null | "+91...", "display", "shared_listings"},
     "is_real": ["..."], "where_check": "...", "why_first_text": null | "...",
+    "website": null | {"site_status": "unchecked | unreliable",
+                       "reason": "no_usable_page (unchecked) | no_identity | other_org (unreliable)",
+                       "label": {"en", "hi"}, "reason_line": null | {"en", "hi"},   // null when unchecked
+                       "text": {"en", "hi"}},   // #117 A, BE-001: listed website not cited as a source
     "say_to_family": {"en": "...", "hi": null | "..."}
   }],
   "why_not": [{"facility_id", "name", "travel", "option_rank", "minutes_vs_first", "band",

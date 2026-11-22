@@ -465,6 +465,12 @@
  "err.search_again": "फिर से खोजें",
  "place.outside_india": "फ़ोन की लोकेशन भारत से बाहर दिख रही है। पिन कोड, ज़िला या कस्बे का नाम लिखें।",
  "place.too_coarse": "फ़ोन की लोकेशन बहुत अंदाज़न है। पिन कोड, ज़िला या कस्बे का नाम लिखें।",
+ "why.website": "वेबसाइट",
+ "why.ledger_quotes": "लिस्टिंग की लाइनें ({n})",
+ "test.model_version": "मॉडल का वर्ज़न",
+ "test.pred_hash": "जाँच के अनुमानों का हैश",
+ "test.label_hash": "जाँच के लेबल का हैश",
+ "place.coords_outside": "ये अक्षांश-देशांतर भारत से बाहर हैं। भारत का पिन कोड, ज़िला या कस्बे का नाम लिखें।",
  "engine": {
   "_about": "Exact English engine text, or a template with {slots}, to Hindi. {label} stands for query.service_label (English on the left, Hindi on the right); other slots copy the payload's own words. A reason joined with '; ' is translated clause by clause. Text not here is shown in English with lang=en.",
   "listing evidence not strong enough to rate it Likely": "लिस्टिंग में इतना सबूत नहीं कि संभावना ज़्यादा कहें",
@@ -607,6 +613,25 @@
    "cathlab or heart lung": "कैथ लैब या हार्ट-लंग मशीन",
    "cardiothoracic surgeon or dept": "दिल का सर्जन",
    "burn unit or plastic surgery": "जलने की चोट का वार्ड या प्लास्टिक सर्जन"
-  }
+  },
+  "blood transfusion": "खून चढ़ाना",
+  "emergency 24x7": "24 घंटे खुली इमरजेंसी",
+  "general surgery ot": "सर्जरी और ऑपरेशन थिएटर",
+  "nicu": "NICU",
+  "vascular access surgery": "डायलिसिस के लिए फ़िस्टुला की सर्जरी",
+  "haemodialysis unit": "डायलिसिस यूनिट",
+  "nephrology": "किडनी के डॉक्टर",
+  "plastic surgery": "प्लास्टिक सर्जरी",
+  "comprehensive emoc": "प्रसव की पूरी इमरजेंसी सुविधा",
+  "iv fluid resuscitation": "ड्रिप से पानी चढ़ाना",
+  "basic emoc": "प्रसव की बुनियादी इमरजेंसी सुविधा",
+  "laboratory": "लैब",
+  "ct scan": "CT स्कैन",
+  "neurosurgery": "दिमाग की सर्जरी",
+  "burn unit": "बर्न यूनिट",
+  "icu": "ICU",
+  "trauma centre": "ट्रॉमा सेंटर",
+  "obstetrics": "प्रसव की सुविधा",
+  "anaesthesia": "बेहोशी के डॉक्टर"
  }
 }

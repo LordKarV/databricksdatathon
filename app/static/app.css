@@ -103,6 +103,8 @@ body.wide main { max-width: 72rem; }
 label { display: block; font-weight: 600; margin: var(--sp3) 0 var(--sp1); }
 input[type=search], input[type=text], select, textarea { display: block; width: 100%; min-height: var(--target); padding: var(--sp2) var(--sp3);
   background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r1); }
+select { -webkit-appearance: none; appearance: none; min-height: var(--target); padding-right: 2.5rem;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2369727D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right .75rem center / 1.25rem; }
 input[aria-invalid="true"] { border: 2px solid var(--hazard); }
 .err { color: var(--hazard-text); font-weight: 600; }
 table { border-collapse: collapse; width: 100%; }
@@ -163,16 +165,22 @@ details[open] > summary::before { transform: rotate(45deg); }
 .check input { width: 1.5rem; height: 1.5rem; accent-color: var(--text); flex: none; margin: 0; }
 
 /* ---------- the answer: one readout ---------- */
-.answer { border-left: 4px solid var(--warn); }
+.answer { border-left: 4px solid var(--warn); padding: var(--sp3) var(--sp4); }
+/* Answer screen: no bottom nav, and the Call button sticks to the bottom edge while its readout is on screen, so it
+   is fully visible on a 320x568 phone in either language (a11y_check fold states). */
+body.on-plan .nav { display: none; }
+body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
+.answer .call-main { position: sticky; bottom: calc(var(--sp2) + env(safe-area-inset-bottom)); z-index: 5;
+  box-shadow: 0 0 0 4px var(--surface); }
 .answer.likely { border-left-color: var(--go); }
 .answer .kicker { font-size: var(--s18); color: var(--muted); margin-bottom: var(--sp1); }
 .answer .name { font-size: var(--s24); line-height: 1.2; margin: 0; overflow-wrap: anywhere; }
 .answer .place { color: var(--muted); font-size: var(--s16); margin: var(--sp1) 0 0; }
-.readout { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--sp2); margin: var(--sp3) 0 0; }
+.readout { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--sp2); margin: var(--sp2) 0 0; }
 .readout .big { font: 500 var(--s36)/1 var(--font-num); color: var(--go-text); }
 .readout .unit { font-size: var(--s18); font-weight: 600; }
-.readout .sub { flex-basis: 100%; margin-top: var(--sp1); color: var(--muted); font-size: var(--s16); }
-.sure { display: flex; flex-wrap: wrap; gap: var(--sp1) var(--sp2); align-items: center; margin: var(--sp3) 0 var(--sp3); padding: var(--sp2) var(--sp3); border-radius: var(--r1); font-weight: 600; }
+.readout .sub { color: var(--muted); font-size: var(--s16); }
+.sure { display: flex; flex-wrap: wrap; gap: var(--sp1) var(--sp2); align-items: center; margin: var(--sp2) 0; padding: var(--sp2) var(--sp3); border-radius: var(--r1); font-weight: 600; }
 .sure-nv { background: var(--warn-tint); }
 .sure-ok { background: var(--go-tint); }
 .sure-no { background: var(--raised); }
@@ -221,6 +229,7 @@ details[open] > summary::before { transform: rotate(45deg); }
 .window.miss svg { color: var(--hazard-text); }
 .route-details { margin-top: var(--sp3); border-top: 1px solid var(--line); }
 .stops-full { padding-left: var(--sp5); }
+.stops-full a[href^="tel:"] { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
 .stops-full ul { padding-left: var(--sp4); }
 .quotes { padding-left: var(--sp4); }
 
@@ -255,6 +264,10 @@ blockquote { margin: 0 0 var(--sp4); padding: var(--sp1) 0 var(--sp1) var(--sp4)
 .ledger th, .ledger td { padding: var(--sp2) var(--sp3); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .ledger thead th { font: 600 var(--s16)/1.3 var(--font-cond); color: var(--muted); }
 .ledger .pts, .ledger .num, td.num { text-align: right; font-family: var(--font-num); white-space: nowrap; }
+.ledger th.pts, .ledger td.pts { width: 1%; }
+.ledger tr.has-ev > td { border-bottom: 0; }
+.ledger tr.ev > td { padding-top: 0; }
+.ledger td { overflow-wrap: anywhere; }
 .ledger details > summary { min-height: var(--target); font-weight: 500; }
 .ledger details blockquote { margin: var(--sp2) 0; }
 .ledger tfoot th, .ledger tfoot td { border-top: 3px double var(--line-strong); border-bottom: 0; font-weight: 600; }

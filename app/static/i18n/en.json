@@ -464,5 +464,11 @@
  "why.call_to_ask": "Call to ask.",
  "err.search_again": "Search again",
  "place.outside_india": "Your phone's location looks outside India. Type a PIN, district or town.",
- "place.too_coarse": "Your phone's location is too rough to use. Type a PIN, district or town."
+ "place.too_coarse": "Your phone's location is too rough to use. Type a PIN, district or town.",
+ "why.website": "Website",
+ "why.ledger_quotes": "Quoted lines ({n})",
+ "test.model_version": "Model version",
+ "test.pred_hash": "Test predictions hash",
+ "test.label_hash": "Test labels hash",
+ "place.coords_outside": "These coordinates are outside India. Type a PIN, district or town in India."
 }

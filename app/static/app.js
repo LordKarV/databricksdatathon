@@ -25,7 +25,7 @@ function esc(s) {
 const $ = sel => document.querySelector(sel);
 const svc = key => SERVICES.find(s => s.key === key);
 function announce(text) { $('#status').textContent = ''; setTimeout(() => { $('#status').textContent = text; }, 50); }
-function timeStr(t) { return new Date(t).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}); }
+function timeStr(t) { return new Date(t).toLocaleTimeString(state.lang === 'hi' ? 'hi-IN' : 'en-IN', {hour: '2-digit', minute: '2-digit'}); }
 const locale = () => (state.lang === 'hi' ? 'hi-IN' : 'en-IN');
 
 // ---------- strings ----------
@@ -35,6 +35,7 @@ function raw(key) { return (I18N[state.lang] || {})[key] ?? (I18N.en || {})[key]
 function ts(key, vars = {}) { return raw(key).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)); }
 function th(key, vars = {}) { return esc(raw(key)).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)); }
 window.ts = ts;
+window.rsEngHi = text => engHi(String(text), curQuery());  // slip.js and journey.js: the same Hindi templates
 window.th = th;
 async function loadStrings() {
   const get = l => fetch(`/i18n/${l}.json`).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
@@ -140,6 +141,7 @@ function locLine(loc) {
   if (!loc) return th('loc.none');
   const src = {gps: ts('loc.gps', {m: loc.accuracy_m ?? '?'}), last_fix: ts('loc.last_fix'), manual: ts('loc.manual'),
     pin: ts('loc.pin'), district: ts('loc.district'), place: ts('loc.place')}[loc.source] || loc.source;
+  if (loc.label && ['pin', 'district', 'place'].includes(loc.source)) return `<span lang="en">${esc(loc.label)}</span>, ${timeStr(loc.t)}`;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
@@ -404,6 +406,7 @@ function bindChange() {
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
       usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
+    if (m) { placeErr(ts('place.coords_outside')); return; }  // coordinates, but not in India (#134)
     if (!v) { placeErr(ts('place.empty')); return; }
     const online = await serverPlace(v);
     if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
@@ -484,8 +487,8 @@ function testRecordHtml(tr) {
     <details class="note"><summary>${th('test.hashes')}</summary>
       <p><a href="${esc(tr.log_url)}" rel="noopener noreferrer">${M('log')}</a>, ${th('test.opened', {when: M('opened')})}
       ${th('test.results')}: ${M('source')}.</p>
-      <p lang="en">Model version <code>${M('model_version')}</code><br>Test predictions hash
-        <code>${M('predictions_sha256')}</code><br>Test labels hash <code>${M('labels_sha256')}</code></p>
+      <p>${th('test.model_version')} <code>${M('model_version')}</code><br>${th('test.pred_hash')}
+        <code>${M('predictions_sha256')}</code><br>${th('test.label_hash')} <code>${M('labels_sha256')}</code></p>
     </details></div>`;
 }
 function methodHtml(t, P) { return F(P + '.method', ts(t.method === 'osrm' ? 'travel.road' : 'travel.rough'), 'method'); }
@@ -638,7 +641,7 @@ function stopHtml(r, g, P) {
     return `<li><strong>${E(S + '.purpose_word', s.purpose_word)}</strong>.
       ${th('route.p', {p: N(S + '.p', s.p.toFixed(2))})}
       ${s.dwell_minutes != null ? th('route.stay', {d: F(S + '.dwell_minutes', durText(s.dwell_minutes), 'dur')}) : ''}
-      ${th('route.weakest', {cap: F(S + '.weakest_capability', s.weakest_capability), p: N(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2))})}
+      ${th('route.weakest', {cap: E(S + '.weakest_capability', s.weakest_capability), p: N(S + '.weakest_capability_p', s.weakest_capability_p.toFixed(2))})}
       ${s.question ? `<br>${th('route.ask', {q: E(S + '.question', s.question)})}` : ''}
       <details class="stop-ev"><summary>${th(s.n_evidence === 1 ? 'route.ev_one' : 'route.ev_n', {n: N(S + '.n_evidence', s.n_evidence)})}</summary>
         ${evidenceHtml(s, S)}</details>
@@ -683,8 +686,11 @@ function stripHtml(r) {
   const x = m => +(100 * m / span).toFixed(2);
   const wx = x(c.limit_minutes);
   const short = n => n.replace(/^(Sub Divisional|District|Sadar) Hospital,? /, 'SDH ').replace(/ (Hospital|Medical College).*$/, '');
-  const labs = lanes.map((s, k) => `<span class="strip-lab" style="${x(s.eta_low) < 50 ? `left:max(0px, calc(${x(s.eta_low)}% - 7px))` : 'right:0;text-align:right'}">${k + 1}. ${esc(short(s.name))}
-    <span class="num">${s.eta_low}-${s.eta_high}</span></span>`).join('');
+  const labs = lanes.map((s, k) => {
+    const S = `itinerary.plans.0.stops.${r.stops.indexOf(s)}`;
+    return `<span class="strip-lab" style="${x(s.eta_low) < 50 ? `left:max(0px, calc(${x(s.eta_low)}% - 7px))` : 'right:0;text-align:right'}"><span lang="en">${k + 1}. ${esc(short(s.name))}</span>
+    <span class="num">${N(S + '.eta_low', s.eta_low)}-${N(S + '.eta_high', s.eta_high)}</span></span>`;
+  }).join('');
   return `<div class="strip" aria-hidden="true">
     <svg><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="6" fill="var(--hazard)" opacity=".5"/></pattern></defs>
       <rect class="late" x="${wx}%" y="12" width="${(100 - wx).toFixed(2)}%" height="24"/><line class="limit" x1="${wx}%" x2="${wx}%" y1="2" y2="44"/>
@@ -717,12 +723,20 @@ function routeHtml(p) {
 }
 
 // ---------- the answer (S3): one readout, then the next two, then the route ----------
+// A listed website flagged by the facts build (#136): its label, and why it is unreliable, in the app language.
+function websiteHtml(o, P) {
+  const w = o.website, l = state.lang === 'hi' && o.website && o.website.label.hi ? 'hi' : 'en';
+  if (!w) return '';
+  return `<p class="note site-line">${F(`${P}.website.label.${l}`, w.label[l])}${w.reason_line
+    ? `<br>${F(`${P}.website.reason_line.${l}`, w.reason_line[l])}` : ''}</p>`;
+}
 function telOf(o) { return o.phone && o.phone.e164 ? `tel:${esc(o.phone.e164)}` : null; }
 function opLabel(o) { return o.operator === 'private' ? th('op.private') : o.operator === 'public' ? th('op.public') : ''; }
 function sureHtml(o, P) {
   const key = o.model_band === 'NO_SERVICE_TEXT' ? 'no_text' : o.band;
   const cls = o.band === 'likely' ? 'sure-ok' : o.band === 'unlikely' ? 'sure-no' : 'sure-nv';
-  return `<p class="sure ${cls}">${bandHtml(o, P)}<span>${th('sure.' + key)}</span></p>`;
+  // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
+  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
 function answerPanel(p, o, i) {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
@@ -730,13 +744,14 @@ function answerPanel(p, o, i) {
   return `<article class="card answer${o.band === 'likely' ? ' likely' : ''}" aria-labelledby="opt-${o.rank}">
     <h2 class="kicker">${th(o.call_first || i === 0 ? 'ans.call_first' : 'ans.option', {n: N(P + '.rank', o.rank)})}</h2>
     <h3 id="opt-${o.rank}" class="name" lang="en">${F(P + '.name', o.name)}</h3>
-    <p class="place">${F(P + '.town', o.town)}${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
+    <p class="place"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
     ${o.route_reason ? `<p class="note">${E(P + '.route_reason', o.route_reason)}</p>` : ''}
+    ${websiteHtml(o, P)}
     ${i === 0 && fb ? `<p class="note"><strong>${E('itinerary.fallback.ask', fb.ask)}</strong> ${E('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="readout"><span class="big">${N(P + '.travel.minutes', tr.minutes)}</span><span class="unit">${th('unit.min')}</span>
       <span class="sub">${travelHtml(tr, P + '.travel')}</span></p>
     ${sureHtml(o, P)}
-    ${tel ? `<a class="btn btn-go btn-block btn-big" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
     <p id="speak-note" class="note" aria-live="polite"></p>
@@ -747,7 +762,7 @@ function nextRows(p, from) {
     const i = j + from, P = `options.${i}`, tel = telOf(o);
     return `<li class="next-row"><span class="rank">${N(P + '.rank', o.rank)}</span>
       <a class="nm" href="#/why/${o.rank}"><b lang="en">${F(P + '.name', o.name)}</b>
-        <span>${th('ans.eta', {low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}, ${bandHtml(o, P)}</span></a>
+        <span>${th('ans.eta', {low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}, ${bandHtml(o, P)}</span>${websiteHtml(o, P)}</a>
       ${tel ? `<a class="btn btn-go-line call" href="${tel}" aria-label="${esc(ts('ans.call_name', {name: o.name}))}">${icon('phone')}</a>` : ''}</li>`;
   }).join('');
   return rows ? `<section class="section" aria-labelledby="h-no"><h2 id="h-no">${th('ans.if_no')}</h2><ol class="rows">${rows}</ol></section>` : '';
@@ -779,7 +794,8 @@ function planScreen() {
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}${routeHtml(p)}`;
     if (!p.options.length) body = body + `<p class="note">${RSInput.speakHtml()}</p><p id="speak-note" class="note" aria-live="polite"></p>`;
   } else {
-    body = farVerifiedNote(p) + (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + nextRows(p, 1) + routeHtml(p);
+    // The readout first, so Call is above the fold on small phones; the far-verified note qualifies it right under it.
+    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + farVerifiedNote(p) + nextRows(p, 1) + routeHtml(p);
   }
   return head + windowHtml(p) + body + foot;
 }
@@ -1013,7 +1029,7 @@ function whyScreen(rank) {
   const split = ts(o.track_record && o.track_record.split === 'test' ? 'why.split_test' : 'why.split_dev');
   state.speak = {danger: isEmergency(), only: i};  // this option, its reason and its questions
   const quotes = o.evidence.length ? o.evidence.map((e, j) => `<blockquote><p class="from">${th('why.quote_from')}</p>${quoteHtml(e, `${P}.evidence.${j}`)}
-      <p class="quote-tools"><a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('why.source')}</a></p></blockquote>`).join('')
+      ${e.source_url ? `<p class="quote-tools"><a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('why.source')}</a></p>` : ''}</blockquote>`).join('')
     : `<p>${th('why.no_quote', {label: labelF(p.query)})}</p>`;
   const sure = o.model_band === 'NO_SERVICE_TEXT'
     ? noTextSureHtml(o, P, p.query)
@@ -1021,7 +1037,7 @@ function whyScreen(rank) {
   const outcomes = ['yes', 'no', 'none', 'wrong'];
   return `<a class="back" href="#/plan">${icon('back')} ${th('why.back')}</a>
     <header class="why-head"><h1 tabindex="-1"><span lang="en">${F(P + '.name', o.name)}</span></h1>
-      <p>${bandHtml(o, P)}</p><p class="note">${F(P + '.town', o.town)}${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
+      <p>${bandHtml(o, P)}</p><p class="note"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
       <p>${th('why.distance', {km: N(P + '.travel.km', o.travel.km), low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}
         <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p></header>
 
@@ -1064,6 +1080,8 @@ function whyScreen(rank) {
     <section class="section" aria-labelledby="h-chk"><h2 id="h-chk">${th('why.checks_h')}</h2><dl class="facts">
       <div><dt>${th('why.real')}</dt><dd>${o.is_real.map((x, j) => E(`${P}.is_real.${j}`, x)).join('; ')}</dd></div>
       <div><dt>${th('why.where')}</dt><dd>${E(P + '.where_check', o.where_check)}</dd></div>
+      ${o.website ? `<div><dt>${th('why.website')}</dt><dd>${F(`${P}.website.text.${state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'}`,
+        o.website.text[state.lang === 'hi' && o.website.text.hi ? 'hi' : 'en'])}</dd></div>` : ''}
       ${o.flags.map((f, j) => `<div><dt>${th('why.warn')}</dt><dd class="warn">${icon('warn')}<span>${E(`${P}.flags.${j}`, f)}</span></dd></div>`).join('')}
       </dl></section>
 
@@ -1090,8 +1108,9 @@ function ledgerHtml(o, P, q) {
     const C = `${P}.contributions.${j}`;
     const label = rowLabel(c, C);
     const quotes = (c.quotes || []).map((e, k) => `<blockquote>${quoteHtml(e, `${C}.quotes.${k}`)}</blockquote>`).join('');
-    return `<tr><td>${quotes ? `<details><summary>${label}</summary>${quotes}</details>` : label}</td>
-      <td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>`;
+    // the row's quotes go full width under it, so a 320 px screen never scrolls sideways
+    return `<tr${quotes ? ' class="has-ev"' : ''}><td>${label}</td><td class="pts">${F(C + '.points', signed(c.points), 'num')}</td></tr>
+      ${quotes ? `<tr class="ev"><td colspan="2"><details><summary>${th('why.ledger_quotes', {n: F(C + '.quotes', c.quotes.length, 'count')})}</summary>${quotes}</details></td></tr>` : ''}`;
   }).join('');
   const unseen = o.not_observed || [];
   return `<table class="ledger"><caption>${th('why.ledger_caption', {label: labelF(q)})}</caption>
@@ -1390,6 +1409,7 @@ function topBar() {
     <a class="btn icon-btn" href="#/settings" aria-label="${th('nav.settings')}">${icon('sliders')}</a>`;
   $('#lang-btn').addEventListener('click', e => setLang(e.currentTarget.dataset.lang));
   $('#skip').textContent = ts('skip');
+  $('#offline').setAttribute('aria-label', ts('off.h'));
   $('#offline').innerHTML = `${icon('wifiOff')}<span><b>${th('off.h')}</b> ${th('off.banner')}</span>`;
   $('#status').lang = state.lang;
 }
@@ -1428,6 +1448,7 @@ function render(opts = {}) {
   if (!bare) { topBar(); bottomNav(route); }
   $('#main').innerHTML = html;
   document.body.classList.toggle('wide', (h === '#/plan' && state.depth === 'compare') || h === '#/area');
+  document.body.classList.toggle('on-plan', h === '#/plan');  // no bottom nav on the answer: Call needs the room
   renderBar();
   const h1 = $('#main h1');
   if (h1 && !opts.keepFocus && !h.endsWith('#call')) h1.focus({preventScroll: false});

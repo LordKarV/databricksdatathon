@@ -2,6 +2,20 @@
 // every number and table cell carries data-f with its path in how.json, and every source links to its repo file.
 'use strict';
 (function (root) {
+  // New strings (#117 A, BE-001), en and hi, ready for the app-wide language setting. {u}, {n} and {of} are marked
+  // numbers. The hi text is new for BE-001 (HINDI_GLOSSARY.md terms) and awaits native review (#10).
+  const TEXT = {
+    sites_flagged: {
+      en: 'Listed websites: of {of} facilities with a crawled website, {u} have one our crawl could not check (no ' +
+        'page it could read) and {n} have one it marks unreliable (no page naming the facility, or another ' +
+        'organisation). The app cites neither. The frozen model still reads the crawl through its website terms ' +
+        '(W family), so a score can include website points for these sites.',
+      hi: 'लिस्टिंग में दी गई वेबसाइट: वेबसाइट वाले {of} अस्पतालों में से {u} की वेबसाइट जाँची नहीं जा सकी ' +
+        '(कोई पेज पढ़ा नहीं जा सका), और {n} की वेबसाइट हमारी जाँच में भरोसे लायक नहीं निकली (किसी पेज पर ' +
+        'अस्पताल का नाम नहीं, या किसी दूसरी संस्था की)। ऐप इनमें से किसी पेज को सबूत के तौर पर नहीं दिखाता। ' +
+        'मॉडल नहीं बदला गया है, इसलिए उसके वेबसाइट वाले अंक (W) अब भी उसी जाँच से आते हैं।',
+    },
+  };
   // New wording (#121), en and hi, ready for the app-wide language setting; this page shows 'en' today.
   const HOW_TEXT = {
     similar_apart: {en: 'Shown separately from it, not as a range around it: how often checked pairs with a similar score were confirmed.',
@@ -154,6 +168,8 @@
       <li>Opening hours: ${n('hours_records')} of ${of('hours_records')} records say anything about hours, mostly a
         generic round-the-clock claim ${src('hours_records')}. No data says whether a bed or slot is free today.</li>
       <li>Bed counts, staff on duty and today's slots are not in the data: phone first.</li>
+      ${f.sites_unreliable && f.sites_unchecked ? `<li>${TEXT.sites_flagged.en.replace('{u}', n('sites_unchecked'))
+    .replace('{n}', n('sites_unreliable')).replace('{of}', of('sites_unreliable'))} ${src('sites_unreliable')}</li>` : ''}
     </ul>
     <p class="small muted">Page data built ${F('built_at', h.built_at)}.</p>`;
   }

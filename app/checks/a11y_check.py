@@ -406,6 +406,44 @@ def prefs_script(lang: str | None, size: int) -> str:
             + (f"localStorage.setItem('rs.size', '{size}');" if size != 100 else ""))
 
 
+# Real phone sizes (#145 review): the answer's Call button is fully on screen and nothing covers it, on a Galaxy S5
+# (360x640) and an iPhone SE (320x568), in both languages; and the Why page's ledger, every row open, never scrolls
+# sideways at 320 px.
+FOLD_VIEWPORTS = [(360, 640), (320, 568)]
+CALL_VISIBLE_JS = """() => { const b = document.querySelector('#main .call-main'); if (!b) return {ok: false, why: 'no Call'};
+  const r = b.getBoundingClientRect(), h = innerHeight, w = innerWidth;
+  const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  return {ok: r.top >= 0 && r.bottom <= h && r.left >= 0 && r.right <= w && !!top && b.contains(top),
+          top: Math.round(r.top), bottom: Math.round(r.bottom), viewport: h}; }"""
+
+
+def fold_checks(browser) -> dict:
+    out = {}
+    for w, h in FOLD_VIEWPORTS:
+        for lang in ("en", "hi"):
+            for service in ("trauma_emergency", "dialysis"):
+                ctx = browser.new_context(viewport={"width": w, "height": h}, geolocation=SITAMARHI,
+                                          permissions=["geolocation"], is_mobile=True, device_scale_factor=1)
+                page = ctx.new_page()
+                page.add_init_script(prefs_script(lang, 100))
+                page.goto(BASE + "/")
+                plan_for(service)(page)
+                page.evaluate("window.scrollTo(0, 0)")
+                page.wait_for_timeout(200)
+                res = page.evaluate(CALL_VISIBLE_JS)
+                page.screenshot(path=str(SCREENS / f"fold_{service}_{lang}-{w}x{h}.png"))
+                out[f"call_{service}_{lang}_{w}x{h}"] = res
+                if (w, h) == (320, 568) and service == "trauma_emergency":
+                    go(page, "#/why/1")
+                    page.locator("#how").wait_for()
+                    page.evaluate("document.querySelectorAll('#main details').forEach(d => d.open = true)")
+                    page.wait_for_timeout(200)
+                    wide = page.evaluate("document.documentElement.scrollWidth > innerWidth")
+                    out[f"why_ledger_open_{lang}_320"] = {"ok": not wide, "horizontal_scroll": wide}
+                ctx.close()
+    return out
+
+
 def main() -> int:
     SCREENS.mkdir(parents=True, exist_ok=True)
     server = subprocess.Popen([sys.executable, "-m", "uvicorn", "app:app", "--port", str(PORT), "--no-access-log"],
@@ -469,6 +507,7 @@ def main() -> int:
                 overflow = page.evaluate("document.documentElement.scrollWidth > innerWidth")
                 results["states"][f"{name}-light"] = {"violations": axe(page), "horizontal_scroll": overflow, **facts}
                 ctx.close()
+            results["fold"] = fold_checks(browser)
             browser.close()
     finally:
         server.terminate()
@@ -481,7 +520,9 @@ def main() -> int:
           f"{cp['budget_requests']} requests); Hindi adds {sum(results['hindi_extra'].values())} B")
     for k, v in bad.items():
         print(k, json.dumps(v))
-    return 1 if bad or scroll else 0
+    fold_bad = {k: v for k, v in results["fold"].items() if not v["ok"]}
+    print(f"fold checks: {len(results['fold'])}; failing: {fold_bad or 'none'}")
+    return 1 if bad or scroll or fold_bad else 0
 
 
 if __name__ == "__main__":

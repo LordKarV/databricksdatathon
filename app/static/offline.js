@@ -16,7 +16,10 @@
   function meta() { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
   function setMeta(m) { try { localStorage.setItem(KEY, JSON.stringify(m)); } catch { /* private mode */ } }
   function daysAgo(t) { return Math.max(0, Math.floor((Date.now() - t) / DAY)); }
-  function dateStr(t) { return new Date(t).toLocaleDateString([], {day: 'numeric', month: 'short'}); }
+  function dateStr(t) {  // the app language (rs.lang), not the phone's
+    const hi = typeof state !== 'undefined' && state.lang === 'hi';
+    return new Date(t).toLocaleDateString(hi ? 'hi-IN' : 'en-IN', {day: 'numeric', month: 'short'});
+  }
 
   // Indian numbers in the pack are 10 digits (mobile or STD code + number) or toll-free 1800; anything else gets no
   // tel: link.
