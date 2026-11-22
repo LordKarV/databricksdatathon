@@ -386,6 +386,26 @@ def pins() -> dict[str, list]:
             "district": list(p.district), "state": list(p.state)}
 
 
+PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
+
+
+def places() -> dict:
+    """Town and post office names from place_gazetteer for the typed-place lookup (#121 bug 5), kept out of facts.
+
+    Districts and PINs come from the PIN table already in facts.json.gz. One row per state and name; a town beats a
+    post office of the same name. 0.001 degree (about 100 m) is finer than the plan's 0.01 degree rounding.
+    """
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "kind"])
+    g = g[g.kind.isin(PLACE_KINDS)].dropna(subset=["name", "lat", "lon", "state"])
+    g = g.assign(rank=g.kind.map(PLACE_KINDS.index)).sort_values(["state", "name", "rank"])
+    g = g.drop_duplicates(["state", "name"])
+    states = sorted(g.state.unique())
+    s_idx = {s: i for i, s in enumerate(states)}
+    return {"v": 1, "kinds": list(PLACE_KINDS), "states": states, "name": list(g.name),
+            "s": [s_idx[x] for x in g.state], "k": [int(x) for x in g["rank"]],
+            "lat": col(g.lat, 3), "lon": col(g.lon, 3)}
+
+
 def scores_source() -> str:
     """Which scores the app serves, in words a judge reads on the How page and in the build log (#86 item 2)."""
     if not V2.is_file():
@@ -438,9 +458,12 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
     (out / "facts.sha").write_text(facts_hash + "\n")
+    pl = places()
+    (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
-    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
+    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs, "
+          f"{len(pl['name'])} places (places.json.gz); "
           f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
           f"{time.time() - t0:.1f} s; sha {facts_hash}")
 

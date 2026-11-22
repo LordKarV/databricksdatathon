@@ -1,0 +1,102 @@
+"""A typed place to a point (#121 bug 5): PIN, district, town or post office name, from data the server already has.
+
+PINs and districts come from the PIN table in facts.json.gz, the same centroids the offline pack uses, so a district
+centre online equals the one offline (offline.js districtCentre). Towns and post offices come from places.json.gz,
+which facts/build.py writes from derived/v1 place_gazetteer. No external geocoder is called.
+"""
+from __future__ import annotations
+
+import gzip
+import json
+import math
+import re
+from pathlib import Path
+from typing import TypedDict
+
+MAX_MATCHES = 6
+_SUFFIX = re.compile(r"\s+(district|dist|zila|zilla|jila)$")
+_KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is more precise than a district centre
+_GAZ_KIND = {"city": "town", "office": "post_office"}
+
+
+class Match(TypedDict):
+    lat: float
+    lon: float
+    label: str
+    kind: str  # pin | district | town | post_office
+    state: str
+
+
+def norm(s: str) -> str:
+    """Lower case, punctuation to spaces, single spaces, no trailing 'district'."""
+    s = " ".join(re.sub(r"[^\w\s]", " ", s.lower()).split())
+    return _SUFFIX.sub("", s)
+
+
+def title(s: str) -> str:
+    return " ".join(w[:1].upper() + w[1:] for w in str(s).lower().split())
+
+
+def load_places(path: Path) -> dict | None:
+    return json.loads(gzip.decompress(path.read_bytes())) if path.is_file() else None
+
+
+class Places:
+    def __init__(self, pins: dict[str, list], places: dict | None) -> None:
+        self.pins = pins
+        self.pin_at = {p: i for i, p in enumerate(pins["pin"])}
+        acc: dict[tuple[str, str], list] = {}
+        for d, s, la, lo in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], strict=True):
+            a = acc.setdefault((norm(d), s), [d, 0, 0.0, 0.0])
+            a[1] += 1
+            a[2] += la
+            a[3] += lo
+        self.districts: dict[str, list[tuple[str, str, float, float]]] = {}
+        for (key, s), (d, n, la, lo) in acc.items():
+            self.districts.setdefault(key, []).append((d, s, round(la / n, 5), round(lo / n, 5)))
+        self.gaz = places
+        self.names: dict[str, list[int]] = {}
+        if places:
+            for i, n in enumerate(places["name"]):
+                self.names.setdefault(norm(n), []).append(i)
+
+    def _district_of(self, lat: float, lon: float) -> str:
+        """District of the nearest PIN centroid, only to tell same-named places apart in a label."""
+        p, k = self.pins, math.cos(math.radians(lat))
+        i = min(range(len(p["pin"])), key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
+        return title(p["district"][i])
+
+    def lookup(self, q: str) -> list[Match]:
+        """Every place the text names, best first (at most MAX_MATCHES); [] when nothing matches.
+
+        'Name, State' keeps only matches in that state.
+        """
+        q = q.strip()
+        if re.fullmatch(r"\d{6}", q):
+            i = self.pin_at.get(int(q))
+            if i is None:
+                return []
+            p = self.pins
+            return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
+                     "label": f"PIN {q}, {title(p['district'][i])}, {title(p['state'][i])}"}]
+        name, _, state_q = q.rpartition(",") if "," in q else (q, "", "")
+        key, sq = norm(name), norm(state_q)
+        if not key:
+            return []
+        found = [("district", d, s, la, lo) for d, s, la, lo in self.districts.get(key, [])]
+        g = self.gaz
+        found += [(_GAZ_KIND[g["kinds"][g["k"][i]]], g["name"][i], g["states"][g["s"][i]], g["lat"][i], g["lon"][i])
+                  for i in (self.names.get(key, []) if g else [])]
+        found.sort(key=lambda m: (_KIND_ORDER[m[0]], m[2]))
+        out: list[Match] = []
+        seen: set[str] = set()
+        for kind, name, s, la, lo in found:
+            if s in seen or (sq and not norm(s).startswith(sq)):
+                continue  # one match per state: the town, else the district centre, else the post office
+            seen.add(s)
+            where = {"town": f"{title(name)} town", "district": f"{title(name)} district centre",
+                     "post_office": f"{title(name)} post office area, {self._district_of(la, lo)}"}[kind]
+            out.append({"lat": la, "lon": lo, "kind": kind, "state": title(s), "label": f"{where}, {title(s)}"})
+            if len(out) == MAX_MATCHES:
+                break
+        return out

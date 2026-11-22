@@ -2,6 +2,60 @@
 //   #/ home (S1)  #/gps (S1a)  #/change (S1b)  #/plan (S3 / S3x)  #/why/<rank> (S4 + S5 + S6)
 'use strict';
 
+// Change location strings (#121 bug 5): one map per language, so they move into the strings files of the coming
+// app-wide language setting. The screen shows 'en' until then. The Hindi is a draft for native review (#10).
+const PLACE_STRINGS = {
+  en: {
+    label: "PIN, district, town or post office, or 'lat, lon'",
+    help: 'With internet: any PIN, district, town or post office name in India. Add the state if many places share ' +
+      'the name, for example Rampur, Bihar. Without internet: a PIN or district of a state saved on this phone. ' +
+      'Coordinates always work, for example 26.59, 85.48.',
+    gpsBlocked: 'GPS is blocked for this site. Type a PIN, district, town or post office instead.',
+    gpsBlockedHint: 'GPS is blocked for this site. Type where the patient is: a PIN, district, town or post office ' +
+      'name. Coordinates work too.',
+    typePlace: 'Type a place',
+    tryGps: 'Try GPS again',
+    typedPlace: 'typed place',
+    choose: n => `${n} places have this name. Choose one:`,
+    empty: 'Type a PIN, a district, town or post office name, or coordinates as "lat, lon".',
+    pinMissing: v => `PIN ${v} is not in our PIN list. Check the number, or type the district or town name.`,
+    nameMissing: v => `No PIN, district, town or post office called "${v}" in our data. Check the spelling, try ` +
+      'the district name, or type coordinates as "lat, lon".',
+    noNet: 'No internet',
+    noAnswer: 'The place search is not answering',
+    notSaved: (why, v, st) => `${why}, and "${v}" is not in the data saved on this phone (${st}). Without ` +
+      'internet, type a PIN or district of a saved state, or coordinates as "lat, lon", for example 26.59, 85.48.',
+    nothingSaved: why => `${why}, and no place data is saved on this phone yet. Type coordinates as "lat, lon", ` +
+      'for example 26.59, 85.48, or use GPS. After one answer with internet, PINs and districts of that state ' +
+      'work offline.',
+  },
+  hi: {
+    label: "पिन कोड, ज़िला, कस्बा या डाकघर, या 'lat, lon'",
+    help: 'इंटरनेट के साथ: भारत का कोई भी पिन कोड, ज़िला, कस्बा या डाकघर का नाम। अगर कई जगहों का एक ही नाम है ' +
+      'तो राज्य भी लिखें, जैसे Rampur, Bihar। इंटरनेट के बिना: इस फ़ोन पर सेव किए गए राज्य का पिन कोड या ज़िला। ' +
+      'अक्षांश-देशांतर हमेशा काम करते हैं, जैसे 26.59, 85.48।',
+    gpsBlocked: 'इस साइट के लिए GPS बंद है। इसकी जगह पिन कोड, ज़िला, कस्बा या डाकघर लिखें।',
+    gpsBlockedHint: 'इस साइट के लिए GPS बंद है। मरीज़ कहाँ है, लिखें: पिन कोड, ज़िला, कस्बा या डाकघर का नाम। ' +
+      'अक्षांश-देशांतर भी चलते हैं।',
+    typePlace: 'जगह लिखें',
+    tryGps: 'GPS फिर से आज़माएँ',
+    typedPlace: 'लिखी गई जगह',
+    choose: n => `${n} जगहों का यही नाम है। एक चुनें:`,
+    empty: 'पिन कोड, ज़िला, कस्बा या डाकघर का नाम, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    pinMissing: v => `पिन कोड ${v} हमारी सूची में नहीं है। नंबर जाँचें, या ज़िले या कस्बे का नाम लिखें।`,
+    nameMissing: v => `"${v}" नाम का कोई पिन कोड, ज़िला, कस्बा या डाकघर हमारे डेटा में नहीं है। वर्तनी जाँचें, ` +
+      'ज़िले का नाम लिखें, या अक्षांश-देशांतर "lat, lon" लिखें।',
+    noNet: 'इंटरनेट नहीं है',
+    noAnswer: 'जगह की खोज जवाब नहीं दे रही',
+    notSaved: (why, v, st) => `${why}, और "${v}" इस फ़ोन पर सेव डेटा (${st}) में नहीं है। इंटरनेट के बिना, सेव ` +
+      'किए गए राज्य का पिन कोड या ज़िला लिखें, या अक्षांश-देशांतर "lat, lon", जैसे 26.59, 85.48।',
+    nothingSaved: why => `${why}, और इस फ़ोन पर अभी जगह का कोई डेटा सेव नहीं है। अक्षांश-देशांतर "lat, lon" ` +
+      'लिखें, जैसे 26.59, 85.48, या GPS चलाएँ। इंटरनेट के साथ एक जवाब के बाद उस राज्य के पिन कोड और ज़िले ' +
+      'बिना इंटरनेट भी चलेंगे।',
+  },
+};
+const PT = PLACE_STRINGS.en;
+
 const SERVICES = [
   // Fixed order, emergencies first (spec 3.1). Hindi labels are drafts until review (#10).
   {key: 'emergency_csection', hi: '\u0911\u092a\u0930\u0947\u0936\u0928 \u0938\u0947 \u0921\u093f\u0932\u0940\u0935\u0930\u0940', en: 'Emergency C-section', profile: 'emergency'},
@@ -49,7 +103,7 @@ function renderBar() {
 function locLine(loc) {
   if (!loc) return 'No location yet.';
   const src = {gps: `GPS ${loc.accuracy_m ?? '?'} m`, last_fix: 'last GPS fix', manual: 'typed coordinates',
-    pin: 'PIN centre', district: 'district centre'}[loc.source] || loc.source;
+    pin: 'PIN centre', district: 'district centre', place: PT.typedPlace}[loc.source] || loc.source;
   return `${esc(loc.label || `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`)}. ${esc(src)}, ${timeStr(loc.t)}`;
 }
 function getGps(onDone) {
@@ -57,10 +111,13 @@ function getGps(onDone) {
   navigator.geolocation.getCurrentPosition(p => {
     state.loc = {lat: p.coords.latitude, lon: p.coords.longitude, accuracy_m: Math.round(p.coords.accuracy),
       source: 'gps', t: Date.now(), label: null};
-    save('loc', state.loc);
+    save('loc', state.loc); state.gpsDenied = false;
     onDone(null);
-  }, e => onDone(e.code === 1 ? 'Location blocked for this site. Type a PIN or place instead.'
-    : 'Could not get GPS. Stand outside, or choose a place instead.'),
+  }, e => {
+    if (e.code === 1) state.gpsDenied = true;
+    onDone(e.code === 1 ? PT.gpsBlocked
+      : 'Could not get GPS. Stand outside, or choose a place instead.');
+  },
   {enableHighAccuracy: true, timeout: 120000, maximumAge: 60000});
 }
 
@@ -138,7 +195,11 @@ function home() {
     ? `<div class="where"><p><span aria-hidden="true">&#128205;</span> ${locLine(state.loc)}</p>
         <div class="row"><a class="btn" href="#/change">Change location</a>
         <button type="button" id="regps">Update GPS</button></div></div>`
-    : `<button type="button" class="btn btn-primary btn-block" id="gps">
+    : state.gpsDenied  // #121 bug 5: with GPS blocked, typing the place is the way in, so it comes first
+      ? `<p class="small place-hint">${PT.gpsBlocked}</p>
+         <a class="btn btn-primary btn-block" href="#/change">${PT.typePlace}</a>
+         <button type="button" class="btn btn-block" id="gps"><span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>`
+      : `<button type="button" class="btn btn-primary btn-block" id="gps">
         <span aria-hidden="true">&#128205;</span> Use my location (GPS)</button>
        <a class="btn btn-block" href="#/change">Choose a place instead</a>`;
   const boxes = DANGER_SIGNS.map((d, i) => `<label class="check"><input type="checkbox" data-danger="${i}"
@@ -193,45 +254,104 @@ function gpsScreen() {
     <a class="btn btn-block" href="#/">Back</a>`;
 }
 function bindGps() {
-  getGps(err => { state.msg = err || ''; if (!err) announce('Location found.'); location.hash = '#/'; });
+  getGps(err => {
+    state.msg = err || '';
+    if (!err) announce('Location found.');
+    // GPS blocked: go straight to typing the place, which then comes first (#121 bug 5).
+    location.hash = state.gpsDenied && !state.loc ? '#/change' : '#/';
+  });
 }
 
+// Typed place (#121 bug 5): online the server resolves PINs, districts, towns and post offices (/api/place);
+// offline only the saved pack can, so PINs and districts of a saved state. Coordinates always work.
+const PLACE_SOURCE = {pin: 'pin', district: 'district', town: 'place', post_office: 'place'};
 function changeScreen() {
+  const gpsBtn = `<button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> ${
+    state.gpsDenied ? PT.tryGps : 'Back to my GPS location'}</button>`;
   return `<h1 tabindex="-1">Change location</h1>
-    <button type="button" class="btn btn-block" id="back-gps"><span aria-hidden="true">&#128205;</span> Back to my GPS location</button>
+    ${state.gpsDenied ? `<p class="card place-hint">${PT.gpsBlockedHint}</p>` : gpsBtn}
     <form id="place-form" novalidate>
-      <label for="place">PIN, village, town, district, or 'lat, lon'</label>
-      <input id="place" type="text" inputmode="text" autocomplete="off" aria-describedby="place-help place-err">
-      <p id="place-help" class="small muted">PIN works from the data saved on this phone. Or type coordinates, for example 26.59, 85.48.</p>
+      <label for="place">${PT.label}</label>
+      <input id="place" type="text" inputmode="text" autocomplete="off" maxlength="80" aria-describedby="place-help place-err">
+      <p id="place-help" class="small muted">${PT.help}</p>
       <p id="place-err" role="alert"></p>
+      <div id="place-choices"></div>
       <button type="submit" class="btn btn-primary btn-block">Use this place</button>
     </form>
     <div id="district-pick"></div>
+    ${state.gpsDenied ? gpsBtn : ''}
     <a class="btn btn-block" href="#/">Cancel</a>`;
+}
+function usePlace(hit, source) {
+  state.loc = {lat: hit.lat, lon: hit.lon, accuracy_m: null, source, t: Date.now(), label: hit.label};
+  save('loc', state.loc); state.msg = ''; location.hash = '#/';
+}
+function placeErr(text) {
+  $('#place-err').textContent = text;
+  $('#place').setAttribute('aria-invalid', 'true');
+  $('#place').focus();
+}
+// {matches} from the server ([] when it knows no such place), or null when it cannot answer (offline, signed out).
+async function serverPlace(q) {
+  if (!navigator.onLine) return null;
+  try {
+    const r = await fetch('/api/place', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({q}), redirect: 'manual'});
+    const j = r.ok || r.status === 404 ? await r.json() : null;
+    return j && Array.isArray(j.matches) ? j : null;
+  } catch { return null; }
+}
+function placeChoices(matches) {
+  $('#place-choices').innerHTML = `<div role="group" aria-labelledby="place-choices-h" class="place-choices">
+    <p id="place-choices-h">${PT.choose(matches.length)}</p>
+    ${matches.map((m, i) => `<button type="button" class="btn btn-block" data-place="${i}">${esc(m.label)}</button>`).join('')}
+    </div>`;
+  $('#place-choices').querySelectorAll('[data-place]').forEach(b => b.addEventListener('click', () => {
+    const m = matches[+b.dataset.place];
+    usePlace(m, PLACE_SOURCE[m.kind] || 'place');
+  }));
+  $('#place-choices [data-place]').focus();
+}
+// Offline: a PIN, or a district name, from every saved pack.
+async function packHit(v) {
+  try {
+    await needScripts(['/pack.js', '/offline.js']);
+    const pack = await window.RSOffline.loadPack();
+    if (!pack) return {pack: null};
+    if (/^\d{6}$/.test(v)) return {pack, hit: window.RSOffline.resolvePin(pack, v), source: 'pin'};
+    const key = s => String(s || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim()
+      .replace(/ (district|dist|zila|zilla|jila)$/, '');
+    for (const p of pack.packs || [pack]) {
+      const d = p.districts.find(x => x && key(x) === key(v));
+      if (d) return {pack, hit: window.RSOffline.districtCentre(p, d), source: 'district'};
+    }
+    return {pack, hit: null};
+  } catch { return {pack: null}; }
 }
 function bindChange() {
   $('#back-gps').addEventListener('click', () => { location.hash = '#/gps'; });
   districtPicker();
-  $('#place-form').addEventListener('submit', e => {
+  $('#place-form').addEventListener('submit', async e => {
     e.preventDefault();
     const v = $('#place').value.trim();
+    $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
     const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
-      state.loc = {lat: +m[1], lon: +m[2], accuracy_m: null, source: 'manual', t: Date.now(), label: null};
-      save('loc', state.loc); state.msg = ''; location.hash = '#/'; return;
+      usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
-    if (/^\d{6}$/.test(v)) {
-      packPlace(p => p.pin(v)).then(ok => {
-        if (ok) return;
-        $('#place-err').textContent = 'PIN not found in the data saved on this phone. Type coordinates as "lat, lon".';
-        $('#place').setAttribute('aria-invalid', 'true');
-        $('#place').focus();
-      });
+    if (!v) { placeErr(PT.empty); return; }
+    const online = await serverPlace(v);
+    if (online && online.matches.length === 1) { usePlace(online.matches[0], PLACE_SOURCE[online.matches[0].kind] || 'place'); return; }
+    if (online && online.matches.length > 1) { placeChoices(online.matches); return; }
+    if (online) {
+      placeErr(/^\d{6}$/.test(v) ? PT.pinMissing(v) : PT.nameMissing(v));
       return;
     }
-    $('#place-err').textContent = 'Type a 6-digit PIN, or coordinates in India as "lat, lon", for example 26.59, 85.48.';
-    $('#place').setAttribute('aria-invalid', 'true');
-    $('#place').focus();
+    const {pack, hit, source} = await packHit(v);
+    if (hit) { usePlace(hit, source); return; }
+    const why = navigator.onLine ? PT.noAnswer : PT.noNet;
+    const saved = load('pack');
+    placeErr(pack ? PT.notSaved(why, v, saved ? saved.state : '') : PT.nothingSaved(why));
   });
 }
 
@@ -1150,6 +1270,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const perm = await navigator.permissions?.query({name: 'geolocation'});
     if (perm && perm.state === 'granted' && (location.hash || '#/') === '#/') getGps(err => { if (!err) render(); });
+    // Blocked GPS puts typing the place first; unblocking it in site settings puts GPS back (#121 bug 5).
+    const onPerm = () => {
+      state.gpsDenied = perm.state === 'denied';
+      if (['', '#/', '#/change'].includes(location.hash)) render();
+    };
+    if (perm && perm.state === 'denied') onPerm();
+    if (perm) perm.onchange = onPerm;
   } catch { /* Permissions API missing: the GPS button stays */ }
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
 });
