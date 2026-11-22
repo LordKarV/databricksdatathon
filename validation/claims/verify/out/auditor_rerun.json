@@ -1,0 +1,363 @@
+[
+ {
+  "name": "app_facts_claim_text",
+  "status": "pass",
+  "metric": "0 unknown ids, 0 field/text/flag mismatches over 44968",
+  "threshold": "0",
+  "detail": "the app shows these quotes verbatim",
+  "examples": []
+ },
+ {
+  "name": "array_truncated_at_50",
+  "status": "warn",
+  "metric": "2078 / 9959 records have a 50-item array",
+  "threshold": "informational",
+  "detail": "per field {'procedure': 1124, 'equipment': 185, 'capability': 1714}; not a claims bug, but 'not found' must never read as 'not offered'",
+  "examples": []
+ },
+ {
+  "name": "attribution_columns_consistent",
+  "status": "pass",
+  "metric": "0 / 469498 labels contradict their detector columns",
+  "threshold": "0",
+  "detail": "own without self name 0; unanchored with self name 0; unanchored that still list a foreign or sibling name 0 (detector put them in a credential/relation context); label set ok=True",
+  "examples": []
+ },
+ {
+  "name": "attribution_handread",
+  "status": "pass",
+  "metric": "{\"ambiguous\": [16, 20, [0.584, 0.919]], \"other_facility\": [15, 20, [0.531, 0.888]], \"own_anchored\": [19, 20, [0.764, 0.991]], \"unanchored\": [20, 20, [0.839, 1.0]]}",
+  "threshold": "other_facility precision >= 0.70; unanchored >= 0.90",
+  "detail": "{\"per\": {\"ambiguous\": {\"n\": 20, \"correct\": 16, \"precision\": 0.8, \"wilson\": [0.584, 0.919], \"verdicts\": {\"other\": 14, \"own\": 4, \"unclear\": 2}}, \"other_facility\": {\"n\": 20, \"correct\": 15, \"precision\": 0.75, \"wilson\": [0.531, 0.888], \"verdicts\": {\"other\": 15, \"own\": 5}}, \"own_anchored\": {\"n\": 20, \"correct\": 19, \"precision\": 0.95, \"wilson\": [0.764, 0.991], \"verdicts\": {\"own\": 19, \"other\": 1}}, \"unanchored\": {\"n\": 20, \"correct\": 20, \"precision\": 1.0, \"wilson\": [0.839, 1.0], \"verdicts\": {\"own\": 20}}}, \"recall\": {\"other_facility_only\": 0.558, \"other_or_ambiguous\": 0.882, \"est_other_sentences\": 12780, \"note\": \"population-weighted; one 'other' among unanchored carries ~21,000 sentences\"}, \"prior\": \"handcheck.json A other_facility 17/23 (0.739), B ambiguous other 7 own 4 not_a_claim 3, C unanchored 18/20; REPORT F1 20/30\", \"notes\": []}",
+  "examples": [
+   "cd0cdb98:capa:23 [ambiguous->own] own corporate parent; relation context is about this facility",
+   "e9c707b0:desc:0 [ambiguous->own] own founding vision; other cities named only as where patients used to go",
+   "454b7120:capa:22 [ambiguous->own] this centre offers fellowships affiliated to a university",
+   "229a9ce3:capa:39 [ambiguous->own] visiting surgeons operate at this hospital (TGMC = record)",
+   "4b992a3a:capa:31 [other_facility->own] Pondicherry = Puducherry, own city; foreign name is the website Watchdoq"
+  ]
+ },
+ {
+  "name": "claim_id_unique_and_format",
+  "status": "pass",
+  "metric": "format mismatches 0, duplicate claim_ids 0, uid8 prefix collisions 0",
+  "threshold": "0",
+  "detail": "claim_id = uid8:field4:idx must be unique; an 8-hex prefix collision would merge two records' ids",
+  "examples": []
+ },
+ {
+  "name": "claims_file_is_cleaning_copy",
+  "status": "pass",
+  "metric": "sha256 equal=True; manifest rows 469498 vs 469498",
+  "threshold": "byte copy and row count equal",
+  "detail": "derived/v1/claims.parquet must be the cleaning/claims output it says it copies",
+  "examples": [
+   "e233088e021b81c3"
+  ]
+ },
+ {
+  "name": "claims_nonoffer_vs_kb_cue",
+  "status": "warn",
+  "metric": "116 / 172 kb-cued service sentences have claims.nonoffer = False",
+  "threshold": "0",
+  "detail": "claims.nonoffer True on 57 rows, on untagged rows 0; consumers of claims.nonoffer (app/facts/build.py, planner/data_v1.py) miss these non-offers",
+  "examples": [
+   "001316e5:proc:5",
+   "001316e5:equi:4",
+   "02331520:equi:13",
+   "05773700:capa:40",
+   "0ad45bb1:desc:0"
+  ]
+ },
+ {
+  "name": "claims_substring_of_raw_field",
+  "status": "pass",
+  "metric": "0 / 469498",
+  "threshold": "0",
+  "detail": "claim text found verbatim inside its stated raw field of the same record",
+  "examples": []
+ },
+ {
+  "name": "claims_verbatim_at_index",
+  "status": "pass",
+  "metric": "0 / 469498 claims not verbatim at stated field and index",
+  "threshold": "0",
+  "detail": "no raw item: 0; text differs: 0",
+  "examples": []
+ },
+ {
+  "name": "description_split_fragments",
+  "status": "warn",
+  "metric": "1815 / 18388 description sentences end at an abbreviation or are 3 chars or fewer",
+  "threshold": "< 1% of description sentences",
+  "detail": "abbreviation ends 1678, very short 431; split rule ([.!?])\\s+",
+  "examples": [
+   "0001f41e:desc:1: 'It was a dream nurtured by a Retina fellow of Dr.'",
+   "0001f41e:desc:3: 'This fellow is none other than Dr.'",
+   "00052555:desc:1: 'The clinic is visited by general surgeons Dr.'",
+   "00052555:desc:2: 'Ranvijay Kumar, Dr.'",
+   "00052555:desc:3: 'Madhu Priya and Dr.'"
+  ]
+ },
+ {
+  "name": "dps_sentence_rows_match_claims",
+  "status": "pass",
+  "metric": "0 inconsistencies over 469498 claims",
+  "threshold": "0",
+  "detail": "{\"claims_without_dp\": 0, \"dp_without_claim\": 0, \"dp_dup\": 0, \"text_differs\": 0, \"uid_differs\": 0, \"field_differs\": 0, \"attribution_differs\": 0, \"rule_differs\": 0, \"dp_id_format\": 0}",
+  "examples": []
+ },
+ {
+  "name": "dup_in_record_recomputed",
+  "status": "pass",
+  "metric": "0 / 469498 disagree; 27528 echoes",
+  "threshold": "0",
+  "detail": "first copy (procedure, capability, equipment, description order) kept, later ones flagged",
+  "examples": []
+ },
+ {
+  "name": "duplicate_uid_rows_identical",
+  "status": "pass",
+  "metric": "0 of 11 duplicated ids differ",
+  "threshold": "0",
+  "detail": "11 extra rows dropped by first-row dedup; dedup order is arbitrary, so copies must be identical",
+  "examples": [
+   "08344cdb-f455-4c22-8d31-a0a8e849124b",
+   "1a0f7290-f227-49fe-9b92-a8c698a165d8",
+   "277e82f0-241a-458a-b9fc-e32d2b3dfcba",
+   "9264b21d-4aea-460a-9c77-613407df8439",
+   "b36f3f71-0b8a-4d7f-8b10-12eb7f5bcf60"
+  ]
+ },
+ {
+  "name": "idx_equals_raw_position",
+  "status": "warn",
+  "metric": "43706 / 469498 claims in 1813 records",
+  "threshold": "0 (documentation issue: idx is the rank among non-empty items)",
+  "detail": "by field {'procedure': 21258, 'capability': 11416, 'equipment': 11032}",
+  "examples": [
+   "001316e5:equi:8: raw position 9",
+   "00197d6a:proc:6: raw position 7",
+   "0020c82a:equi:0: raw position 1",
+   "005c7c7e:proc:0: raw position 1",
+   "0078496c:capa:13: raw position 14"
+  ]
+ },
+ {
+  "name": "kept_text_untrimmed_unicode_space",
+  "status": "pass",
+  "metric": "0 / 469498",
+  "threshold": "0",
+  "detail": "cosmetic: such texts never equal a Python .strip() of the same item",
+  "examples": []
+ },
+ {
+  "name": "lexicon_matches_join_claims",
+  "status": "pass",
+  "metric": "0 inconsistencies over 64670 pairs",
+  "threshold": "0",
+  "detail": "{\"unknown_claim\": 0, \"dup_pairs\": 0, \"unique_id_differs\": 0, \"field_differs\": 0, \"attribution_differs\": 0, \"kind_differs\": 0, \"dup_in_record_differs\": 0}",
+  "examples": []
+ },
+ {
+  "name": "lexicon_matches_reproduce_from_json",
+  "status": "pass",
+  "metric": "0 pair differences; file 64670 pairs / 58004 sentences (TAXONOMY.md states 64670 / 58004)",
+  "threshold": "0",
+  "detail": "only from lexicon.json 0, only in parquet 0",
+  "examples": []
+ },
+ {
+  "name": "lexicon_nonoffer_cue_reproduce",
+  "status": "pass",
+  "metric": "nonoffer_cue 0, negation_extra 0 differ over 64670",
+  "threshold": "0",
+  "detail": "reapplied from lexicon.json shared_cues.nonoffer and services.*.negation_extra",
+  "examples": []
+ },
+ {
+  "name": "lexicon_precision_handread",
+  "status": "pass",
+  "metric": "37/40 = 0.925 Wilson (0.801, 0.974)",
+  "threshold": ">= 0.90",
+  "detail": "random matched (sentence, service) pairs, all 37 services, seed 9102; prior: TAXONOMY v1.1 new-5 95/100 (0.888-0.978), reviewer 37/40; verdicts {'correct': 37, 'wrong': 3}",
+  "examples": [
+   "14166899:capa:18 icu: a critical care team at an Ayurveda college hospital, no unit named",
+   "0d715cf7:capa:6 ct_scan: \"CT Hospital\" is a hospital name in a staff panel list",
+   "ce701b25:proc:11 ultrasound: dental 3D (CBCT) scan, not ultrasound"
+  ]
+ },
+ {
+  "name": "lexicon_recall_handread",
+  "status": "warn",
+  "metric": "misses 2/40 unmatched sentences (Wilson 0.014-0.165); sentence-pair recall about 0.744 (0.468-0.912)",
+  "threshold": "recall >= 0.80",
+  "detail": "random unmatched sentences, seed 9103; unmatched pool 411494; no prior recall estimate existed (REVIEW.md 'Not run')",
+  "examples": [
+   "c15da265:equi:15 should be emergency_24x7: borderline: names an Emergency Hospital building within the complex",
+   "c5c18921:proc:14 should be psychiatric_care: treats personality disorders: psychiatric treatment, no psychiatr* word"
+  ]
+ },
+ {
+  "name": "mri_magnetic_resonance_therapy",
+  "status": "fail",
+  "metric": "10 mri pairs; 3 facilities have MRI only through these",
+  "threshold": "0",
+  "detail": "all 3 are in app/facts pairs.mri graded moderate (G_mod, score about 0.8)",
+  "examples": [
+   "abe799fb",
+   "cd8b64e1",
+   "e7795a4f"
+  ]
+ },
+ {
+  "name": "negation_cue_nonsurgical",
+  "status": "warn",
+  "metric": "17 / 47 negation-cued pairs",
+  "threshold": "0",
+  "detail": "by service {'de_addiction': 4, 'cath_lab_angioplasty': 3, 'neurosurgery': 3, 'orthopaedic_trauma_surgery': 2, 'cataract_surgery': 1, 'stemi_thrombolysis': 1, 'palliative_care': 1, 'radiotherapy': 1, 'burn_care': 1}",
+  "examples": [
+   "0ad45bb1:desc:0",
+   "0eee91dc:capa:24",
+   "1f58d11b:desc:1",
+   "39d34a57:proc:44",
+   "444fb0a8:proc:15"
+  ]
+ },
+ {
+  "name": "nonoffer_broad_scan",
+  "status": "warn",
+  "metric": "317 / 63370 positive pairs carry a broad cue word",
+  "threshold": "informational (upper bound)",
+  "detail": "top words {'no': 81, 'visiting': 30, 'without': 29, 'referral': 29, 'closed': 25, 'not': 18, 'on-call': 14, 'temporary': 12, 'nearby': 11, 'on call': 11, 'monthly': 11, 'referenced': 7}; see nonoffer_30 hand read for the true rate",
+  "examples": [
+   "00fd1dbd:proc:1",
+   "00fd1dbd:proc:20",
+   "00fd1dbd:proc:30",
+   "02331520:desc:12",
+   "02987e8e:proc:14"
+  ]
+ },
+ {
+  "name": "nonoffer_positives_handread",
+  "status": "pass",
+  "metric": "29/30 positives really state an offer; Wilson (0.833, 0.994)",
+  "threshold": ">= 0.90",
+  "detail": "random kb positives (no cue, not other_facility, not staff/directory), seed 9105; verdicts {'offer': 29, 'wrong_service': 1}; prior: REPORT claims-03 v2 cues 34/40, handcheck D 14/15",
+  "examples": [
+   "cd8b64e1:equi:1 mri: QMRT is a magnetic resonance therapy device, not an MRI scanner; no negation missed"
+  ]
+ },
+ {
+  "name": "other_facility_own_place",
+  "status": "warn",
+  "metric": "126 / 9506 other_facility sentences",
+  "threshold": "0",
+  "detail": "in 52 records; list in out/other_facility_own_place_alias.csv",
+  "examples": [
+   "001f21d5:capa:3",
+   "04b0ff52:capa:10",
+   "04b0ff52:capa:27",
+   "05f2409f:capa:0",
+   "05f2409f:capa:1"
+  ]
+ },
+ {
+  "name": "planner_cites_nonoffer_sentences",
+  "status": "fail",
+  "metric": "29 (capability, claim) citations over 28 kb-cued sentences; 48164 citations in all",
+  "threshold": "0",
+  "detail": "the planner shows these as evidence the facility has the capability; read in full: {'nonoffer': 21, 'offer': 7, 'unclear': 1} (nonoffer = the citation is wrong, offer = cue false alarm)",
+  "examples": [
+   "blood_transfusion <- 28726757:capa:23: plans to launch a blood bank",
+   "blood_transfusion <- 51c1ed79:capa:8: blood bank not available",
+   "blood_transfusion <- 7795f9f8:capa:16: blood bank not available at the hospital",
+   "blood_transfusion <- f7e56a1a:proc:14: extractor meta text: not listed in the content",
+   "ct_scan <- 001316e5:proc:5: SonoCT is an ultrasound mode, not CT"
+  ]
+ },
+ {
+  "name": "raw_items_represented_once",
+  "status": "pass",
+  "metric": "misses 0, extras 0, duplicate keys 0; expected 469498, claims 469498",
+  "threshold": "0",
+  "detail": "independent Python reconstruction over the 9,959 kept records (kie, UUID id, first copy)",
+  "examples": []
+ },
+ {
+  "name": "specialty_map_covers_raw_values",
+  "status": "pass",
+  "metric": "raw values 2932, map rows 2933; missing 0, not in raw 1, dup keys 0, n_facilities wrong 0, unknown service ids 0, unknown prereq ids 0",
+  "threshold": "0",
+  "detail": "every raw specialties string maps exactly once to a known id; facility counts over the 9,959 usable records",
+  "examples": []
+ },
+ {
+  "name": "specialty_map_handread",
+  "status": "pass",
+  "metric": "39/40 = 0.975 Wilson (0.871, 0.996)",
+  "threshold": ">= 0.90",
+  "detail": "facility-mention-weighted sample of (record, specialties value), seed 9104; label and prereq_for both judged; prior: fresh v1.1 service-labelled 39/40 (0.871-0.996), reviewer random 80/80 after fixes",
+  "examples": [
+   "spineNeurosurgery -> neurosurgery (prereq ): v1.1 defines neurosurgery as brain surgery incl. head injury with spine as an attribute; spine values are too_general with prereq_for, but spineNeurosurgery (687 facilities) maps straight to the service"
+  ]
+ },
+ {
+  "name": "specialty_weights_consistent",
+  "status": "pass",
+  "metric": "1346 rows; weight out of [0,1] 0, unknown value 0, unknown service 0, dup 0, pair not in map 0",
+  "threshold": "0",
+  "detail": "columns ['specialty', 'service', 'kind', 'k_text_positive', 'n_facilities', 'pooled_rate', 'weight', 'k_fit_half']",
+  "examples": []
+ },
+ {
+  "name": "spine_neurosurgery_only",
+  "status": "warn",
+  "metric": "265 / 687 spineNeurosurgery facilities",
+  "threshold": "0",
+  "detail": "label=neurosurgery; evidence weight [0.4166] damps it in the model; coverage 'any' counts them as neurosurgery",
+  "examples": [
+   "0020c82a",
+   "00a95ae5",
+   "02085f20",
+   "02f048fa",
+   "04747dd8"
+  ]
+ },
+ {
+  "name": "split_records_dropped",
+  "status": "warn",
+  "metric": "30 facility records dropped; 88 fragment rows; about 1499 sentence items lost",
+  "threshold": "0 records lost",
+  "detail": "upstream CSV breakage carried into the Marketplace table; recoverable by stitching fragments",
+  "examples": [
+   "12d987ef-1ff8-4025-bf5d-8870f2083a90",
+   "19363b8d-7ad9-45f6-bdcc-66d5ed07b6f5",
+   "22142a37-a47a-4a9a-bc80-f5981361f000",
+   "287913e3-162c-45d5-873a-eada15f8591b",
+   "3e951c62-51b0-459e-972c-2e1790618894"
+  ]
+ },
+ {
+  "name": "ultrasound_3d_scan_only",
+  "status": "warn",
+  "metric": "81 / 101 are not ultrasound (dental intraoral/CBCT, eye OCT, orthotics); 38 facilities have ultrasound only through them",
+  "threshold": "0",
+  "detail": "precision of the 3D-scan alternative 18/101; kb lexicon.json ultrasound include",
+  "examples": [
+   "00154d81:equi:2",
+   "00cde61f:capa:32",
+   "00cde61f:equi:3",
+   "0207488f:proc:4",
+   "039a1b36:proc:5"
+  ]
+ },
+ {
+  "name": "v2_claim_id_contract",
+  "status": "not_run",
+  "metric": "gated: set RUN_V2=1 once derived/v2 is final",
+  "threshold": "0 unknown claim ids",
+  "detail": "",
+  "examples": []
+ }
+]

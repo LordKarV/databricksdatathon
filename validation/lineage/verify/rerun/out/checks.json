@@ -1,0 +1,259 @@
+[
+ {
+  "name": "derived_copies_identical",
+  "status": "pass",
+  "metric": "9/9 identical",
+  "threshold": "all",
+  "detail": "derived/v1 copy vs its cleaning/ source, by sha256",
+  "examples": []
+ },
+ {
+  "name": "derived_inputs_unchanged",
+  "status": "pass",
+  "metric": "28/28 inputs match",
+  "threshold": "all",
+  "detail": "current sha256 of every non-raw input (audit code, gold labels, hand checks, cleaning tables) vs the hashes recorded at build time",
+  "examples": []
+ },
+ {
+  "name": "derived_manifest_matches_files",
+  "status": "pass",
+  "metric": "0 mismatched, 0 unlisted",
+  "threshold": "0 / 0",
+  "detail": "derived/v1 MANIFEST rows and bytes vs files on disk (MANIFEST records no output hashes, so a same-size edit would not show; the rebuild check covers content)",
+  "examples": []
+ },
+ {
+  "name": "derived_scripts_unchanged",
+  "status": "pass",
+  "metric": "11/11 scripts match",
+  "threshold": "all",
+  "detail": "pipelines/source_scoring scripts now vs script_sha256 at build time",
+  "examples": []
+ },
+ {
+  "name": "exports_deterministic_fixed_hashseed",
+  "status": "pass",
+  "metric": "0 files differ",
+  "threshold": "0",
+  "detail": "packs byte-compared; facts compared after dropping built_at (facts.json.gz bytes also carry the gzip mtime, app/facts/build.py:178 gzip.compress without mtime=0)",
+  "examples": []
+ },
+ {
+  "name": "exports_rebuild",
+  "status": "warn",
+  "metric": "planner equal, facts sha 1f6352f3212b, packs 11/36 byte-identical",
+  "threshold": "all equal",
+  "detail": "pack differences are quote choices among equal-length quotes (set order, app/packs/build_packs.py:122); first diffs: {\"andaman_and_nicobar_islands\": \".q[48][0]: 'Neonatal ICU (NICU) care' vs 'NICU - Neonatal ICU Care'\", \"andhra_pradesh\": \".q[17][0]: 'MRI 1.5 Tesla' vs '1.5 Tesla MRI'\", \"assam\": \".q[92][0]: 'Orthopedics and Traumatology clinic' vs 'Trauma care for orthopedic injuries'\", \"bihar\": \".ev.q1[276]: '253' vs '252'\", \"chandigarh\": \".q[26][0]: 'Has a 3.0 Tesla MRI' vs 'Has a 1.5 Tesla MRI'\"}",
+  "examples": [
+   "pack andaman_and_nicobar_islands",
+   "pack andhra_pradesh",
+   "pack assam",
+   "pack bihar",
+   "pack chandigarh"
+  ]
+ },
+ {
+  "name": "exports_strict_json",
+  "status": "fail",
+  "metric": "1/38 files have NaN/Infinity",
+  "threshold": "0",
+  "detail": "strict parse (parse_constant raises). planner/data_v1.py:77 puts pandas NaN districts into the doc; app/itinerary.py:53 then calls x.isupper() on the float NaN for a stop at one of these facilities",
+  "examples": [
+   "planner/out/planner_v1.json.gz",
+   "planner_v1.json.gz facilities.district: 13 NaN, ids ['12ebca41-d6cd-4a95-98ca-22c943741a8b', '18a0b6a3-8792-43ef-8753-47548e4aab02', '3b7c281e-3946-4cb2-8520-5c29e4c38e6b']"
+  ]
+ },
+ {
+  "name": "live_aggregates",
+  "status": "pass",
+  "metric": "456/456 equal",
+  "threshold": "0 mismatches",
+  "detail": "rows 10088, distinct unique_id 10077; 5 longest text columns (sum chars, sum bytes) equal live and local: {'capability': ('12445326', '12449070'), 'websites': ('12335748', '12335750'), 'source_urls': ('11932717', '11932717'), 'source_ids': ('7862147', '7862147'), 'procedure': ('6217483', '6218932')}",
+  "examples": []
+ },
+ {
+  "name": "live_content_fingerprint",
+  "status": "pass",
+  "metric": "171/171 columns equal",
+  "threshold": "0 mismatches",
+  "detail": "per column: sum over rows of int(md5(value)[:15], 16) for strings, sum(round(value*1e6)) for doubles, sum for BIGINT; 171 columns over 3 tables",
+  "examples": []
+ },
+ {
+  "name": "live_schema",
+  "status": "pass",
+  "metric": "3/3 tables",
+  "threshold": "names, order and types identical",
+  "detail": "information_schema.columns vs _export_meta.json warehouse_schema vs local parquet column order",
+  "examples": []
+ },
+ {
+  "name": "makefile_python",
+  "status": "warn",
+  "metric": ".venv-app/bin/python",
+  "threshold": "default PY exists",
+  "detail": "Makefile default interpreter for app-data/test/notebook; run_all.sh scripts ignore it and use .venv",
+  "examples": [
+   "Makefile:2 PY ?= .venv-app/bin/python (not present on this machine)"
+  ]
+ },
+ {
+  "name": "raw_manifest_recompute",
+  "status": "pass",
+  "metric": "345/345 manifest checks reproduce",
+  "threshold": "all 345",
+  "detail": "row counts, non-null counts, sum(length) per string column and round(sum, 3) per numeric column recomputed in DuckDB from data/raw",
+  "examples": []
+ },
+ {
+  "name": "raw_record_identity",
+  "status": "pass",
+  "metric": "10088 rows, 9970 well-formed, 9959 ids, 9959 distinct rows",
+  "threshold": "10088 / 9970 / 9959 / 9959, no id with two different rows",
+  "detail": "11 well-formed rows are byte-identical duplicates; ids with conflicting content: 0",
+  "examples": []
+ },
+ {
+  "name": "raw_sha256",
+  "status": "pass",
+  "metric": "6/6 files match",
+  "threshold": "all match, no extra files",
+  "detail": "recomputed sha256 of data/raw vs derived/v1/MANIFEST.json raw_input_sha256; extra files: []; data/raw/MANIFEST.json itself records hashes: False",
+  "examples": []
+ },
+ {
+  "name": "rebuild_deterministic_fixed_hashseed",
+  "status": "pass",
+  "metric": "0 files differ",
+  "threshold": "0",
+  "detail": "PYTHONHASHSEED=0 twice; without a fixed seed the float tables differ run to run at 1e-16..2e-13 because pipelines/source_scoring/s5_fit.py:90 iterates `set(sup) | set(nos)`",
+  "examples": []
+ },
+ {
+  "name": "rebuild_inputs_in_repo",
+  "status": "warn",
+  "metric": "13/33 inputs git-ignored",
+  "threshold": "0",
+  "detail": "derived/v1 is committed so the app and notebook run, but `make derived` on a clone needs data/raw (re-export from the Marketplace with data/snapshot_scripts/export.py) and the cleaning parquet outputs, which are ignored by `*.parquet`",
+  "examples": [
+   "data/raw/facilities.parquet",
+   "data/raw/india_post_pincode_directory.parquet",
+   "data/raw/nfhs_5_district_health_indicators.parquet",
+   "cleaning/geo_identity/facility_location.parquet",
+   "cleaning/geo_identity/record_trust.parquet"
+  ]
+ },
+ {
+  "name": "rebuild_matches_derived",
+  "status": "warn",
+  "metric": "14/23 byte-identical; 0 real diffs; 8 float-ulp only",
+  "threshold": "no real diffs; float diffs <= 1e-12",
+  "detail": "MANIFEST.json differs only in script_sha256 (patched ss_common.py) and table bytes; all string and integer cells are equal",
+  "examples": [
+   "data_point_scores.parquet (max float diff 8.3e-16)",
+   "facility_trust.csv",
+   "facility_trust.parquet (max float diff 1.3e-15)",
+   "source_classes.csv",
+   "source_classes.parquet (max float diff 1.1e-13)"
+  ]
+ },
+ {
+  "name": "selfcheck",
+  "status": "pass",
+  "metric": "selfcheck ok: 518191 data points, 10951 domains, 17 tables",
+  "threshold": "exit 0",
+  "detail": "pipelines/source_scoring/selfcheck.py on the published derived/v1 (read-only)",
+  "examples": []
+ },
+ {
+  "name": "static_abs_paths",
+  "status": "fail",
+  "metric": "84 lines in 64 files",
+  "threshold": "0",
+  "detail": "hard-coded /Users/karthikvattem/... paths: a clone elsewhere or a Databricks repo (/Workspace/...) cannot run these unchanged. Full list: out/static_scan.csv",
+  "examples": [
+   "cleaning/claims/build_claims.py:17",
+   "cleaning/claims/build_claims.py:18",
+   "cleaning/claims/build_claims.py:19",
+   "cleaning/claims/evaluate.py:13",
+   "cleaning/claims/evaluate.py:14"
+  ]
+ },
+ {
+  "name": "static_hash_order",
+  "status": "warn",
+  "metric": "6 lines in 5 files",
+  "threshold": "0",
+  "detail": "set iteration; two are confirmed output-changing (s5_fit.py:90 float ulps, build_packs.py:122 quote choice), the others feed counters or assertions only",
+  "examples": [
+   "pipelines/source_scoring/s5_fit.py:90",
+   "kb/web_evidence/compare_dataset.py:83",
+   "kb/web_evidence/qa/scan.py:260",
+   "app/facts/build.py:67",
+   "app/packs/build_packs.py:122"
+  ]
+ },
+ {
+  "name": "static_network",
+  "status": "warn",
+  "metric": "19 lines in 4 files",
+  "threshold": "0",
+  "detail": "live web fetches: kb/crawl, kb/opendata/fetch_wikidata.py, pipelines s3_pagecheck.py (opt-in, FETCH=1)",
+  "examples": [
+   "pipelines/source_scoring/s3_pagecheck.py:31",
+   "pipelines/source_scoring/s3_pagecheck.py:33",
+   "pipelines/source_scoring/s3_pagecheck.py:115",
+   "pipelines/source_scoring/s3_pagecheck.py:117",
+   "pipelines/source_scoring/s3_pagecheck.py:225"
+  ]
+ },
+ {
+  "name": "static_shell_portability",
+  "status": "warn",
+  "metric": "3 lines in 2 files",
+  "threshold": "0",
+  "detail": "#!/bin/zsh run_all scripts (Makefile calls them with zsh, not installed on Databricks clusters) and one swallowed self-check",
+  "examples": [
+   "cleaning/geo_identity/run_all.sh:1",
+   "cleaning/geo_identity/run_all.sh:9",
+   "pipelines/source_scoring/run_all.sh:1"
+  ]
+ },
+ {
+  "name": "static_unseeded_random",
+  "status": "pass",
+  "metric": "0 lines in 0 files",
+  "threshold": "0",
+  "detail": "random draws with no seed on the line (all .sample() calls found carry random_state)",
+  "examples": []
+ },
+ {
+  "name": "static_venv_pins",
+  "status": "warn",
+  "metric": "6 lines in 5 files",
+  "threshold": "0",
+  "detail": "interpreter pinned to a local venv (no requirements file for the data pipelines)",
+  "examples": [
+   "cleaning/claims/run_all.sh:5",
+   "cleaning/geo_identity/run_all.sh:8",
+   "pipelines/source_scoring/run_all.sh:10",
+   "pipelines/source_scoring/run_all.sh:11",
+   "kb/vf_details/report_numbers.py:1"
+  ]
+ },
+ {
+  "name": "static_warehouse_llm",
+  "status": "warn",
+  "metric": "7 lines in 3 files",
+  "threshold": "0",
+  "detail": "Databricks SQL / ai_query calls; results are cached (out/llm_labels.json, llm_hours.parquet), so a rebuild is reproducible only while those caches are present",
+  "examples": [
+   "kb/taxonomy/build_specialty_map.py:153",
+   "kb/taxonomy/build_specialty_map.py:158",
+   "kb/taxonomy/build_specialty_map.py:182",
+   "kb/vf_details/llm_hours.py:64",
+   "kb/vf_details/llm_hours.py:67"
+  ]
+ }
+]

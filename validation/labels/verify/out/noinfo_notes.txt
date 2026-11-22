@@ -1,0 +1,213 @@
+dialysis_weak_2 | 2 | Own site gives 320 Lajpat Nagar, near Nakodar Chowk, Jalandhar and lists Urology but not nephrology or dialysis. The Facilities page returned 404. No page found showing i
+nicu_weak_2 | 0 | The record's website returned 404. Two searches found no Ananya Hospital in Kashipur; only Justdial (a source in the record) lists it. Neither the hospital nor its NICU c
+mri_strong_1 | 2 | Pain clinic chain with branches in Safdarjung Enclave and Raja Garden, West Delhi (fits PIN 110027). Neither its own site nor Practo mentions MRI. Practo lists fluoroscop
+mri_weak_2 | 2 | Own site: Anand Mahal Road, Adajan, Surat 395009, 50 beds, 9-bed ICU, cathlab, endoscopy. It mentions 'advanced imaging' but does not name MRI. MRCP is an MRI study, but 
+trauma_emergency_weak_2 | 1 | Old Dussehra Ground Road, Moga 142001. The whitecoats site (search snippet; the fetch failed on SSL) describes a clinic for general medicine, gynaecology and paediatrics,
+nicu_strong_2 | 3 | Hospital exists in Hoshangabad (Double Phatak, Harda Bypass Road), NABH accredited, PM-JAY empanelled. The cited group-site hospital page returns 404; no independent page
+dialysis_weak_1 | 2 | Directory lists it in Akota, Vadodara as a vascular surgery and neurosurgery facility with 'Fistula Treatment'; no page confirms dialysis. 'Dialysis access procedures' (A
+dialysis_suspect_2 | 2 | No Saravana Hospital found in Kuttalam; record website points to a Chennai hospital and a Madurai Saravana lists dialysis, so the record likely merges same-name hospitals
+emergency_csection_weak_1 | 1 | Own site confirms address Nagasandra, Bengaluru 560073 and an obstetrics service; C-sections appear only as the doctor's past experience, with no operation theatre or 24h
+emergency_csection_suspect_2 | 1 | Only source found is the HexaHealth listing the dataset was built from (lists Caesarean Section, PIN 522007, 'open 24 hours'); circular evidence. Audit signal shows PIN c
+nicu_weak_1 | 2 | Orchid Hospital, Karimnagar 505001 exists (65 beds, 22 ICU beds, pediatrics listed) but no page names a NICU; official site is a 'Launching Soon' placeholder and record s
+cardiac_surgery_suspect_2 | 1 | Official site confirms Madagadipet, Puducherry 605107 (PIN-directory state Tamil Nadu is an artifact); homepage does not list a CTVS department and no search result confi
+mri_weak_1 | 2 | Own site confirms Old Pratap Talkies, Bilaspur 495001; neither it nor the directory lists MRI (directory lists path lab, X-ray, pharmacy). Claim is an inference from site
+trauma_emergency_suspect_2 | 2 | Satna District Hospital blood bank exists (2025 HIV transfusion news), but record PIN 483501 and website dhkatni.org point to District Hospital Katni; a blood bank record
+v2_dialysis_strong_1 | 2 | NABH scope (valid 2022-09-29 to 2026-09-28) lists Nephrology as an accredited clinical service, PIN 793021 matches. Dialysis itself is not named, so strict rubric gives n
+v2_dialysis_weak_3 | 1 | Search snippet only (fetch returned the paper homepage). Undated report says the Samba centre missed its July 2020 deadline. No later inauguration found in 2 searches. No
+v2_dialysis_suspect_5 | 2 | Real facility is in Sonipat, Haryana (PIN 131001), not Delhi 110007. Hexahealth directory lists Dialysis under Urology treatments (template-like, weak); CGHS listing show
+v2_emergency_csection_strong_2 | 2 | Own site lists an Obstetrics and Gynaecology department and PIN 452001; no page fetched states caesarean, delivery, labour room or NICU. 130-150 beds per directories.
+v2_emergency_csection_weak_4 | 1 | Search snippet only (page fetch failed DNS): PM-JAY empanelled private secondary-care hospital at Mominabad Ashajipora, Anantnag; listing is auto-generated. PIN not seen.
+v2_emergency_csection_no_mention_1 | 1 | Wikipedia confirms SVIMS in Tirupati but says nothing about obstetrics; official site svimstpt.ap.nic.in refused connection; search budget exhausted. Not searched.
+v2_nicu_strong_3 | 0 | Not run: search budget exhausted; guessed URL dispurhospitals.com returned empty content.
+v2_nicu_weak_5 | 0 | Not run: search budget exhausted before this pair.
+v2_nicu_no_mention_2 | 0 | Not run: search budget exhausted; guessed URL attarsainjainhospital.org does not resolve.
+v2_cardiac_surgery_no_mention_3 | 0 | Not run: search budget exhausted.
+v2_mri_strong_5 | 1 | Own homepage confirms name and PIN but does not mention MRI; radiology subpage guess 404. Record name field is the site title, so data likely came from this site.
+v2_mri_suspect_2 | 0 | Not run: search budget exhausted. Claim names Soni CT and MRI Centre (SMS Hospital, Jaipur), a different facility; worth checking first when re-run.
+v2_mri_no_mention_4 | 0 | Not run: search budget exhausted.
+v2_burn_care_weak_1 | 0 | Not run: search budget exhausted. Name suggests an Ayurveda clinic (likely contradicted as unrelated single-specialty once existence is verified).
+v2_burn_care_suspect_3 | 0 | Not run: search budget exhausted.
+v2_burn_care_no_mention_5 | 0 | Not run: search budget exhausted. accordhospitals.com is an unrelated Accord hospital in Pimpri-Chinchwad (PIN 412105); accordhospitals.org is a placeholder; accordhospit
+v2_trauma_emergency_weak_2 | 0 | Not run: search budget exhausted. Name indicates a dental clinic (likely contradicted as unrelated single-specialty once existence is verified).
+v2_trauma_emergency_suspect_4 | 0 | Not run: search budget exhausted.
+v2_dialysis_weak_4 | 2 | Only dialysis mention is Dec 2018 (older than 5 years). Jan 2025 report says IPD suspended from 1 Feb 2025 for drug and consumable shortage; current dialysis status unkno
+v2_emergency_csection_strong_3 | 1 | Only listing found is a small clinic with one general physician and General Medical Consultation; no delivery services listed. Directory PIN 700019 vs record 700017 (adja
+v2_emergency_csection_weak_5 | 2 | Bajaj directory lists Cesarean Delivery alongside Kidney transplant in a generic template list; not facility-specific detail, so not counted as confirmation. PM-JAY empan
+v2_emergency_csection_no_mention_2 | 0 | not run: search budget exhausted; guessed official domain did not resolve.
+v2_nicu_strong_4 | 0 | not run: search budget exhausted; guessed domain did not resolve.
+v2_nicu_suspect_1 | 0 | Web not run (budget). Record PIN 452001 maps to INDORE district in the local India Post directory, not Ujjain; the claim text names MYH Indore, another facility.
+v2_nicu_no_mention_3 | 1 | Own site lists oncology, general medicine, ICU and modular OT; no neonatal or NICU service mentioned.
+v2_cardiac_surgery_strong_5 | 0 | not run: search budget exhausted; guessed domain did not resolve.
+v2_cardiac_surgery_no_mention_4 | 1 | Own site lists Cardiology with a clinical cardiologist (PG.D.C.C.) and general ICU/OT; no cardiac surgery, CTVS or cath lab mentioned. PIN 495677 is KORBA.
+v2_mri_weak_1 | 0 | not run: search budget exhausted; moonhospitals.com is a parked domain for sale (hugedomains redirect).
+v2_mri_suspect_3 | 0 | vijayadiagnostic.com returned 403. Record PIN 518501 maps to Nandyal district per local India Post directory, not Visakhapatnam.
+v2_mri_no_mention_5 | 0 | not run: search budget exhausted; guessed domain did not resolve.
+v2_burn_care_weak_2 | 0 | not run: search budget exhausted.
+v2_burn_care_suspect_4 | 0 | not run: search budget exhausted.
+v2_trauma_emergency_strong_1 | 0 | not run: search budget exhausted.
+v2_trauma_emergency_weak_3 | 0 | not run: search budget exhausted.
+v2_trauma_emergency_suspect_5 | 0 | not run: search budget exhausted; guessed domain did not resolve.
+v2_dialysis_weak_5 | 1 | Aggregator lists 'Kidney Dialysis' under a templated 'Other surgeries available' block with 0 surgery results; not facility-specific enough to confirm. Address and PIN ma
+v2_dialysis_no_mention_2 | 1 | Only a search-result summary seen (not fetched): PMJAY listing includes Civil Hospital Lunglei, no dialysis mention. A GIPE NHM monitoring report surfaced in search descr
+v2_emergency_csection_strong_4 | 0 | One search found no page for this name. Closest hit was 'Aadhya Women's & Kidney Hospital', India Colony, Ahmedabad (Bajaj listing), possibly a different facility; PIN 38
+v2_emergency_csection_no_mention_3 | 0 | One search returned nothing about this hospital; budget ran out before a second query.
+v2_nicu_suspect_2 | 2 | PM-JAY empanelled hospital exists in Tiruchirappalli. Directories disagree on address (Sangillyandapuram vs 17 EVR Road, Puthur 620017); record PIN 620020 not confirmed. 
+v2_cardiac_surgery_weak_1 | 1 | Hospital site exists but the fetched page lists no departments. The claim 'Roux en Y bypass' is bariatric/GI surgery, not cardiac surgery, so the record gives no real car
+v2_cardiac_surgery_no_mention_5 | 0 | One search returned nothing about this hospital; budget ran out.
+v2_mri_weak_2 | 0 | Not searched: WebSearch budget exhausted. Claim text is generic dental-implant advice, not evidence of an MRI scanner. PIN 322021 is Sawai Madhopur in India Post director
+v2_mri_suspect_4 | 0 | Not searched: WebSearch budget exhausted. PIN 721101 is Medinipur West, consistent with city; coord_far signal unresolved.
+v2_burn_care_weak_3 | 1 | Site address matches record PIN. Homepage and services page (content failed to load) do not mention burns or plastic surgery. Not searched further: budget exhausted.
+v2_burn_care_suspect_5 | 0 | Not searched: WebSearch budget exhausted. Record PIN 261405 is Sitapur, Uttar Pradesh in the India Post directory, while the record says Maharashtra (Katarkhatav is in Kh
+v2_trauma_emergency_strong_2 | 0 | Not searched: WebSearch budget exhausted. PIN 791102 maps to Siang districts incl. East Siang (Pasighat).
+v2_trauma_emergency_weak_4 | 0 | Not searched: WebSearch budget exhausted. Name indicates a single-specialty dental clinic, which would make trauma/emergency care unlikely (probable contradicted), but no
+v2_trauma_emergency_no_mention_1 | 1 | Official district site lists the hospital with PIN 794111 matching record. No page states emergency or trauma services; not searched further.
+v2_dialysis_strong_4 | 2 | PM-JAY directory lists the hospital in West Garo Hills; the dialysis entry is a generic template list on drlogy, not facility-specific. Tura dialysis news concerns Tura C
+v2_dialysis_suspect_1 | 2 | Sharda Narayan Hospital is in Sahadatpura, Mau 275101, not Lucknow; record city contradicts its own PIN. No source on a nephro institute or dialysis found.
+v2_emergency_csection_suspect_2 | 2 | Record appears to be Garg Mission Hospital, Model Town, Patiala (directory lists Gynecology and Obstetrics). themissionhospital.com is The Mission Hospital, Durgapur WB, 
+v2_nicu_weak_1 | 1 | No Koshi Hospital found in Madhepura, Bihar. The well-known Koshi Hospital (with NICU) is in Biratnagar, Nepal; possible merge. Lord Buddha Koshi Medical College is in Sa
+v2_nicu_suspect_3 | 1 | Own site confirms address and PIN; lists Paediatrics but no NICU. Record coordinates are far (337.8 km) but city/state/PIN match.
+v2_nicu_no_mention_5 | 1 | Directory lists Obstetrics and Gynecology and Pediatrics, 50 beds; no NICU or neonatology mentioned.
+v2_cardiac_surgery_weak_2 | 2 | Directory: 29 beds, 4 ICU beds, near Shakti Mandir, Dhanbad, lists Cardiology; heart transplant entry has an empty surgeries page. A heart transplant at a 29-bed nursing 
+v2_cardiac_surgery_suspect_4 | 1 | No Balaji hospital found in Bhiwadi; PIN 302012 matches a Balaji Multispeciality Hospital in Kanakpura, Jaipur. That directory lists Cardiothoracic Surgery without detail
+v2_burn_care_weak_4 | 0 | Not researched: session web search budget exhausted; site URL guess failed (DNS).
+v2_burn_care_no_mention_1 | 0 | Not researched: session web search budget exhausted.
+v2_trauma_emergency_weak_5 | 0 | Not researched: session web search budget exhausted.
+v2_dialysis_strong_5 | 1 | June 2019 inauguration report (blog repost of press release), 635 Kalikapur, Kolkata 700099; record PIN 700107 (EKT/Madurdaha) is the adjacent PIN. Dedicated dialysis cen
+v2_dialysis_no_mention_4 | 1 | Directory lists cardiology, gastro, paediatrics etc., no nephrology or dialysis. A MedHive search snippet mentioned kidney dialysis but the page did not render (template 
+v2_emergency_csection_suspect_3 | 2 | PIN 125055 is Sirsa, 225 km from Gurgaon; Bala Ji hospitals exist in both cities (Sirsa one also NABH-listed as Shree Balaji, with OBG in a Sirsa district empanelment lis
+v2_emergency_csection_no_mention_5 | 1 | Exists per several insurer network lists (quote from search snippet of insurer lists). No facility-specific obstetric or C-section evidence found; publicservicesmap page 
+v2_nicu_weak_2 | 0 | One search returned no page about Neelam Saroj Hospital, Kanpur. Follow-up search blocked by session search budget. Not judged.
+v2_nicu_suspect_4 | 2 | Address and PIN match record (coordinates flagged far, PIN fine). Directory lists OBG, paediatrics, USG, no NICU; consultant profile lists neonatal intensive care as an i
+v2_cardiac_surgery_weak_3 | 0 | Not run: search budget exhausted; guessed site ravindrahospital.com does not resolve. Heart transplant at a Panipat private hospital is implausible but unverified.
+v2_cardiac_surgery_suspect_5 | 0 | Not run: search budget exhausted. PIN 504001 is Adilabad (local directory); Adilabad is in Telangana since 2014, so the Andhra Pradesh state is outdated rather than forei
+v2_mri_strong_2 | 0 | Not run: search budget exhausted, no known site URL.
+v2_mri_weak_4 | 1 | Institute's own site (now Bhagwan Mahavir Institute of Medical Sciences, Pawapuri, Nalanda). Its equipment list (headed 2019) has no MRI or CT. Would be contradicted, but
+v2_mri_no_mention_1 | 0 | Not run: search budget exhausted.
+v2_burn_care_weak_5 | 1 | OMNI Hospitals is a Hyderabad chain with a plastic surgery speciality page (URL in sitemap), but pages are JS-rendered and no burn text or branch at PIN 500001 could be r
+v2_burn_care_no_mention_2 | 0 | Not run: search budget exhausted.
+v2_trauma_emergency_strong_4 | 0 | Not run properly: search budget exhausted; vedantahospital.com is parked and vedantahospital.in is a different Vedanta Hospital in Ranchi 834011, not Jaipur.
+v2_trauma_emergency_no_mention_3 | 2 | State medical college hospital at PIN 791110 (matches). Official site rendered only a heading; no emergency or trauma text read.
+v2_dialysis_no_mention_5 | 1 | 60-bed Warje hospital; listed specialities omit nephrology/dialysis; no source states dialysis.
+v2_emergency_csection_weak_2 | 1 | Only a doctor listing: OBGYN consults at 'Rewati Nursing Home - Ivf', Dharampur, Haridwar-Dehradun Rd. No source on deliveries or C-section.
+v2_emergency_csection_suspect_4 | 0 | Two searches found no Taj Hospital in Chennai or Arumbakkam (PIN 600106); record coordinates 394 km off.
+v2_nicu_weak_3 | 1 | Only a college-aggregator page lists NICU among ICU/PICU at the 340-bed hospital; not authoritative, not quoted as decisive.
+v2_nicu_suspect_5 | 2 | Hospital is in Sector 59 Mohali; PIN 160055 is S.A.S Nagar, Punjab, record state Chandigarh is wrong. 51-bed; no source states a Level III NICU.
+v2_cardiac_surgery_weak_4 | 2 | Abade Faria Road, Margao 403601. Directories list general surgery, gynae, eye, ortho, ICU; none list cardiac surgery. Absence in directories is not a contradiction.
+v2_cardiac_surgery_no_mention_1 | 1 | PM-JAY empanelled, Medical Colony, Seppa. Visible surgery list has no cardiac surgery but 336 of 351 entries hidden.
+v2_mri_weak_5 | 0 | Not run: search budget exhausted; guessed site lalmemorialhospital.com does not resolve.
+v2_mri_no_mention_2 | 0 | Not run: search budget exhausted before this pair.
+v2_burn_care_strong_4 | 1 | Own homepage: 135-bed hospital, Welfare Complex, Bharuch-Jambusar Road, Bharuch-392001; homepage does not mention burns. Departments pages not checked (search budget).
+v2_burn_care_no_mention_3 | 1 | Own site titled 'Aastha Lok Multi Speciality Hospital in Patna'; fetched content has no burns or plastic surgery mention and no address.
+v2_trauma_emergency_strong_5 | 0 | Not run: search budget exhausted before this pair.
+v2_trauma_emergency_suspect_2 | 0 | Web not run (search budget). Local India Post directory: PIN 365430 is Amreli district, not Ahmedabad; claim names Mamta Hospital, another facility.
+v2_trauma_emergency_no_mention_4 | 1 | District site confirms IMDH operates in Mokokchung; no page checked states emergency or trauma services.
+v2_emergency_csection_strong_1 | 2 | Exists at Telibandha, Raipur 492001. MyHospitalNow lists 'Gynaecology & Obstetrics (potentially)'. Bajaj lists only ENT and Dermatology. No page states that it does deliv
+v2_emergency_csection_suspect_5 | 1 | Practo lists Mayom Hospital, South City-I, Gurgaon, with Gynecology and Obstetrics, LDR and maternity services, but does not mention caesareans. City and PIN 122001 (Guru
+v2_nicu_strong_2 | 0 | Not run: the web search budget was exhausted before this pair. PIN 174001 is in Bilaspur, HP (local directory).
+v2_nicu_weak_4 | 0 | Not run: the web search budget was exhausted. PIN 462042 is in Bhopal (local directory).
+v2_nicu_no_mention_1 | 1 | GMC Srinagar lists LD Hospital as an associated hospital. The fetched page does not mention a NICU. PIN 190008 is in Srinagar (local directory).
+v2_cardiac_surgery_strong_3 | 0 | Not run: search budget exhausted, and the guessed domain ascoms.org did not resolve.
+v2_cardiac_surgery_weak_5 | 0 | Not run: search budget exhausted. The guessed domain jindalhospital.com is a parked for-sale domain, which says nothing about the hospital.
+v2_cardiac_surgery_no_mention_2 | 0 | Not run: search budget exhausted, and the guessed GMC Kozhikode domain did not resolve. The name suggests a neuroscience-only institute, so cardiac surgery is likely abse
+v2_mri_suspect_1 | 0 | Not run: search budget exhausted.
+v2_mri_no_mention_3 | 0 | Not run: gmc.goa.gov.in refused the connection and the search budget was exhausted. PIN 403202 is in North Goa (local directory).
+v2_burn_care_strong_5 | 1 | Address on the own site: B.L.W. Hydle Road, Varanasi-04 (matches PIN 221004). The site lists Plastic & Cosmetic Surgery and an MCh plastic surgeon but does not mention bu
+v2_burn_care_suspect_2 | 0 | Not run on the web: search budget exhausted. location_ok no because the record's PIN 313001 is Udaipur, not Kota (local directory, matches the coord_far signal).
+v2_burn_care_no_mention_4 | 0 | Not run: search budget exhausted, and the guessed domain did not resolve. PIN 425309 is in Jalgaon (local directory).
+v2_trauma_emergency_weak_1 | 0 | Not run: search budget exhausted. The name says it is a dental clinic, and 'same-day emergency care' there means dental emergencies, so it is very likely contradicted for
+v2_trauma_emergency_suspect_3 | 0 | Not run on the web: search budget exhausted. location_ok no because PIN 530026 is Visakhapatnam, not Kurnool (local directory, matches the coord_far signal).
+v2_trauma_emergency_no_mention_5 | 0 | Not run: search budget exhausted. PIN 174001 is in Bilaspur, HP (local directory).
+e2e_001 | 1 | Directory lists Sai Multispeciality Hospital, Milan Vihar, Bargarh; specialities Gynecology/Obstetrics and General Medicine; no dialysis listed. Vikash Multi Speciality H
+e2e_004 | 2 | Own site has an OBG department with 3 OBGs but does not state caesarean or 24x7 obstetric emergency; plausible, not stated.
+e2e_007 | 1 | General medicine/multispecialty hospital in Barshi; no source mentions MRI.
+e2e_010 | 1 | Mission hospital in Washim (CMC Vellore/EHA/Church of the Nazarene); no page states emergency or trauma service.
+e2e_013 | 0 | Searches for Bharati Hospital Chandrapur returned only Bharati Hospital Pune (Bharati Vidyapeeth); PIN 442402 is Chandrapur district per India Post directory. Possible na
+e2e_019 | 1 | Medox Hospital Jankipuram, Lucknow; MRI not listed in directory.
+e2e_025 | 1 | Directory places it at Ratu, Ranchi (PIN 835222 is Ranchi district). OBGs listed but no C-section statement.
+e2e_028 | 2 | Harsh Hospital exists in Motihari (Bankat, NH-28A) and separately in Purnia (Line Bazar). Record PIN 854301 is Purnia per India Post, city Motihari: likely merged record.
+e2e_031 | 2 | Paediatric hospital, PMJAY neonatal and paediatric packages; no dialysis evidence.
+e2e_034 | 1 | No Parijat Hospital found in Trimbak; one exists in Sinnar. Record PIN 444603 is Amravati per India Post, inconsistent with Trimbak/Nashik.
+e2e_037 | 2 | Exists in Gorakhpur (directory PIN 273001 vs record 273002, same city). No dialysis found.
+e2e_040 | 1 | Generic name; Nalanda has several referral hospitals (Chandi, Harnaut). Record PIN 811101 is Sheikhpura district per India Post. No C-section evidence.
+e2e_049 | 1 | Govt referral list: Ashwini Hospital (Plot 3(P), Sector-1, CDA, 753014) is 'All Disciplines'; burn care is listed for the sibling unit Ashwini Trauma Center, separate bui
+e2e_052 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; PIN 121006 is Faridabad per India Post.
+e2e_055 | 1 | KGMU exists at Chowk, Lucknow (226003). kgmu.org unreachable; MRI not verified on any page read.
+e2e_058 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 431508 is Parbhani district per India Post, not Jalgaon.
+e2e_064 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; PIN 241001 is Hardoi per India Post.
+e2e_067 | 2 | Own site lists departments; no burn unit or plastic surgery department.
+e2e_070 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_073 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_076 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_079 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; PIN 410206 is Raigad (Panvel) per India Post.
+e2e_082 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; charakhospital.com did not resolve.
+e2e_088 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; record state field 'New Mondha' is a locality; PIN 431401 is Parbhani.
+e2e_094 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_097 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_100 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_103 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 425418 is Nandurbar, Maharashtra per India Post, state Gujarat.
+e2e_106 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_112 | 1 | Own site lists a 'Neonatology & Pediatrics' department but no NICU text found (department page 404).
+e2e_115 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_124 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_127 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_136 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; newborn and child hospital, obstetric surgery unlikely but unverified.
+e2e_139 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; anshospital.com did not resolve.
+e2e_142 | 1 | Desun burn unit is at Kasba, Kolkata 700107; Siliguri appears only in a 2015 blog title. Claim likely belongs to the Kolkata hospital.
+e2e_145 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch
+e2e_148 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; record PIN 814133 is Godda per India Post, not Jamshedpur (East Singhbhum).
+e2e_157 | 0 | not web-checked: shared WebSearch budget exhausted mid-batch; children's hospital, burn care unverified.
+e2e_002 | 2 | NABH accredited, address matches. Neither NABH snippet nor directory mentions MRI.
+e2e_014 | 2 | JSY accreditation implies institutional deliveries, not caesarean capability. PIN not independently verified.
+e2e_017 | 2 | Teaching hospital exists at Panki 208020. Only generic emergency statements (CGHS empanelment boilerplate); no facility-specific trauma evidence. nmch.ac.in is a differen
+e2e_020 | 1 | Directory PIN 442401 vs record 442402, same city. Possibly Mehra Neurology Hospital. No MRI evidence.
+e2e_023 | 2 | Own site lists a neonatal research title but no explicit NICU service statement.
+e2e_026 | 1 | Directory lists plastic surgery under surgeries; burns not named.
+e2e_029 | 2 | Insurer network listing (updated 2025). No facility-specific trauma evidence; other Apex trauma centres are in Rewari/Dharuhera/Panipat.
+e2e_032 | 2 | 40-bed hospital with 5 ICU beds per directory; no NICU mention.
+e2e_035 | 2 | Berasia Road, 462001, PM-JAY empanelled. No cardiac surgery evidence; listings suggest a general hospital.
+e2e_038 | 1 | Only a city directory; no service detail.
+e2e_041 | 1 | Directory specialities: urology, plastic surgery, ENT, cardiology etc.; dialysis and nephrology not mentioned.
+e2e_044 | 1 | Civil Lines, Gaya 823001. Pediatrics listed, no NICU mention; mainly orthopaedic profile.
+e2e_047 | 1 | Hospital exists (GMC Bhopal). Search found no CTVS evidence; official site fetch failed (connection refused). Under-researched.
+e2e_050 | 1 | Listing PIN 271607 vs record PIN 221107 (a Varanasi-area PIN). Only a general physician listed.
+e2e_053 | 2 | Teaching hospital with twelve OTs per old WHO listing; obstetrics/caesarean not stated on pages read.
+e2e_056 | 1 | Listed as Meghna Nursing Home; insurer listing only, no dialysis mention.
+e2e_006 | 2 | Chiniya Road, Garhwa 822114, PM-JAY empanelled, general medicine. Only one blog claims 24-hour emergency/ICU (CIPACA tie-up); no trauma-specific source.
+e2e_009 | 2 | 30-50 bed hospital, Jauhari Bazar, Vaishali 844101; cardiology listed as a specialty, no cardiac surgeon, cath lab or cardiac surgery found.
+e2e_012 | 1 | Listing is a NephroPlus dialysis unit of Vivekanand Hospital, Gyatri Nagar, Jalna 431203, open 24x7. Trauma mentioned only in directory reviews, not by the facility.
+e2e_015 | 2 | IndiaMart listing (JLN Marg, Jaipur) says OTs used for cardiac surgeries; hospital's own homepage lists no CTVS, bypass or valve service and no cardiac surgeon.
+e2e_018 | 1 | Rayagada district, consistent with PIN 765019. Historical incubator claim on an article flagged for citations; no current NICU description found.
+e2e_024 | 1 | Private PM-JAY hospital in Gorakhpur per directory (search snippet; page fetch failed DNS). No dialysis mention; Pushpanjali dialysis results belong to Agra and East Delh
+e2e_027 | 1 | Uran Naka, Old Panvel 410206; emergency phone listed but OPD hours only, no trauma or 24-hour emergency statement.
+e2e_030 | 2 | Secondary-care PM-JAY hospital, Gaya 823001; listed services ortho, general medicine/surgery, OBGY, emergency. No NICU found.
+e2e_033 | 1 | Charitable multispecialty hospital of the Diocese of Balasore at Kuruda (PIN 756056 is Baleshwar). Specialties general surgery, ortho; no burn unit or plastic surgery fou
+e2e_039 | 0 | No hospital of this name found in Sikar (closest: Amit Neuro Brain and Spine Care clinic; Arya Neuro Spine hospital is in Ajmer). No burn care evidence.
+e2e_042 | 1 | Directory: Balvihar Colony, Kukrail, Lucknow 226015, open 24 hours. No caesarean or obstetric service statement found.
+e2e_045 | 2 | Akola Naka, Washim 444505, PM-JAY. Listed services are neonatal/OBGY/paediatric; nothing on trauma.
+e2e_048 | 2 | NABH and CGHS listed, Ekori Ward, Chandrapur (NABH PIN 442402 vs record 442401, same city). PM-JAY aggregator lists neonatal care packages; no NICU statement by facility.
+e2e_051 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_054 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_057 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_063 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_066 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_069 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; local India Post directory maps PIN 416310 to Sangli district while 
+e2e_072 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_075 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_078 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; guessed domain shahiglobalhospital.com returned expired certificate
+e2e_084 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_087 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_090 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; bansalhospital.com returned HTTP 403
+e2e_093 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_096 | 1 | Own site: VIP Road, Allalpatti, Darbhanga 846003; nephrology consultant and nephrology award listed, but dialysis not stated.
+e2e_102 | 2 | Government medical college at Bariatu, Ranchi with an OBST and Gynae department in its department list; no page states caesarean/emergency obstetric service.
+e2e_105 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_108 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair; ckshospital.com did not resolve
+e2e_111 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_117 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_120 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_126 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_132 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_138 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_144 | 2 | Government hospital at Hanumanthavaka, Visakhapatnam (PIN 530040 is Visakhapatnam). No department or maternity information found; official site offline.
+e2e_150 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair
+e2e_156 | 0 | not run: shared WebSearch budget exhausted after 22 searches; no web evidence gathered for this pair

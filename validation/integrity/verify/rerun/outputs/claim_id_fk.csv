@@ -1,0 +1,21 @@
+source,refs,distinct,unresolved,foreign_record,text_differs
+data_point_scores.claim_id,469498,469498,0,0,0
+data_point_scores.dp_id(sent:),469498,469498,0,0,0
+source_page_checks.claim_id,6364,6144,0,0,0
+grades.cite_evidence,18386,17663,0,0,0
+grades.cite_prereqs,8033,7626,0,0,0
+grades.cite_counter,59,53,0,0,0
+grades.cite_elsewhere,131,122,0,0,0
+grades_v1.cite_evidence,18386,17675,0,0,0
+grades_v1.cite_prereqs,8033,7626,0,0,0
+grades_v1.cite_counter,59,53,0,0,0
+grades_v1.cite_elsewhere,131,122,0,0,0
+lexicon_matches.parquet.claim_id,64670,58004,1,0,0
+hour_candidates.parquet.claim_id,64,64,0,0,0
+vf llm_hours.claim_id,64,64,0,0,0
+vf facts.claim_id,35447,33194,0,0,0
+vf facility_details.claim_ids,34454,32274,0,0,0
+vf facility_details.best_claim_id,20950,19877,0,0,0
+app facts.claims,44968,44968,0,0,0
+app facts.pairs evidence,13942,13829,0,0,0
+planner capabilities.e,48164,42386,0,0,0

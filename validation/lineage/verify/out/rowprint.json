@@ -1,0 +1,41 @@
+{
+ "facilities": {
+  "local": {
+   "rows": 10088,
+   "distinct": 10077,
+   "fp": "5792622820248136936375"
+  },
+  "remote": {
+   "rows": 10088,
+   "distinct": 10077,
+   "fp": "5792622820248136936375"
+  },
+  "equal": true
+ },
+ "india_post_pincode_directory": {
+  "local": {
+   "rows": 165627,
+   "distinct": 165625,
+   "fp": "95389762035722331579730"
+  },
+  "remote": {
+   "rows": 165627,
+   "distinct": 165625,
+   "fp": "95389762035722331579730"
+  },
+  "equal": true
+ },
+ "nfhs_5_district_health_indicators": {
+  "local": {
+   "rows": 706,
+   "distinct": 706,
+   "fp": "427121588247850727780"
+  },
+  "remote": {
+   "rows": 706,
+   "distinct": 706,
+   "fp": "427121588247850727780"
+  },
+  "equal": true
+ }
+}

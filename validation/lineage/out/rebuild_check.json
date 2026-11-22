@@ -1,0 +1,539 @@
+{
+ "scratch": "/var/folders/6c/0ntj4yfx54b5_ppvydcmgrrh0000gn/T/ss_rebuild_aa7_tb7b",
+ "ok": true,
+ "log": [
+  {
+   "step": "ss_common.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "ss_common.py self-check ok\n"
+  },
+  {
+   "step": "package.py --hashes-before",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ""
+  },
+  {
+   "step": "s1_sources.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ": 16714,\n  \"business_dir\": 9275,\n  \"other_health_site\": 8358,\n  \"other\": 8072,\n  \"insurance_scheme\": 4703,\n  \"maps_geo\": 3954,\n  \"official_like\": 2698,\n  \"government\": 2406,\n  \"research\": 1480,\n  \"wikipedia\": 901,\n  \"news\": 809,\n  \"education\": 696,\n  \"docs_repo\": 669,\n  \"crowdfunding_ngo\": 121\n }\n}\n"
+  },
+  {
+   "step": "s2_gold.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "7,\n   \"no_info\": 55\n  }\n },\n \"location_ok_by_split\": {\n  \"dev\": {\n   \"no\": 13,\n   \"unclear\": 32,\n   \"yes\": 43\n  },\n  \"test\": {\n   \"no\": 10,\n   \"unclear\": 32,\n   \"yes\": 46\n  }\n },\n \"exists_by_split\": {\n  \"dev\": {\n   \"unclear\": 28,\n   \"yes\": 60\n  },\n  \"test\": {\n   \"unclear\": 32,\n   \"yes\": 56\n  }\n }\n}\n"
+  },
+  {
+   "step": "s4_datapoints.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "                          True         43\n               test        False        10\n                           True         46\nservice_claim  dev         False         5\n                           True         22\n               test        False         6\n                           True         23\n"
+  },
+  {
+   "step": "s5_fit.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": ".8284,\n  \"other\": 0.8844,\n  \"other_health_site\": 0.8779,\n  \"research\": 0.8624,\n  \"social\": 0.9172,\n  \"wikipedia\": 0.8391\n },\n \"mean_logit_sigma_by_type\": {\n  \"claim_attribution\": 1.907,\n  \"email\": 1.8896,\n  \"existence\": 1.8763,\n  \"location\": 1.8763,\n  \"phone\": 1.8854,\n  \"service_claim\": 1.8336\n }\n}\n"
+  },
+  {
+   "step": "s6_score.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "      0.839859\n       government        372    2406     0.835035 0.797866 0.868960                   0.835267\n         maps_geo         40    3954     0.831392 0.792286 0.868680                   0.831745\n    official_like       1015    2698     0.828413 0.798364 0.856788                   0.828930\n"
+  },
+  {
+   "step": "s7_eval.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "lity\": {\n    \"sentences\": 142,\n    \"supported_rate\": 0.0\n   },\n   \"own_anchored\": {\n    \"sentences\": 515,\n    \"supported_rate\": 0.023\n   },\n   \"unanchored\": {\n    \"sentences\": 5623,\n    \"supported_rate\": 0.059\n   }\n  },\n  \"overall_supported_rate\": 0.054,\n  \"overall_token_supported_rate\": 0.242\n }\n}\n"
+  },
+  {
+   "step": "package.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "99,\n \"grades_v1.parquet\": 10799,\n \"pin_gazetteer.parquet\": 19713,\n \"place_gazetteer.parquet\": 147345,\n \"record_trust.parquet\": 9959,\n \"source_classes.parquet\": 16,\n \"source_domains.parquet\": 10951,\n \"source_page_checks.parquet\": 6492,\n \"source_urls.parquet\": 158444,\n \"specialties.parquet\": 117964\n}\n"
+  },
+  {
+   "step": "selfcheck.py",
+   "rc": 0,
+   "stderr_tail": "",
+   "stdout_tail": "selfcheck ok: 518191 data points, 10951 domains, 17 tables\n"
+  }
+ ],
+ "diff": {
+  "only_ref": [
+   "README.md"
+  ],
+  "only_new": [],
+  "files": {
+   "MANIFEST.json": {
+    "byte_identical": false,
+    "json_top_keys_differ": [
+     "csv_copies",
+     "script_sha256",
+     "tables"
+    ]
+   },
+   "build_stats.json": {
+    "byte_identical": true
+   },
+   "claims.parquet": {
+    "byte_identical": true
+   },
+   "data_point_scores.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 518191,
+     "rows_new": 518191,
+     "cols_equal": true,
+     "cells_differ": {
+      "score": {
+       "n": 57583,
+       "max_abs": 7.771561172376096e-16,
+       "first_rows": [
+        9,
+        10,
+        24,
+        27,
+        75
+       ]
+      },
+      "score_lo": {
+       "n": 211672,
+       "max_abs": 7.771561172376096e-16,
+       "first_rows": [
+        1,
+        7,
+        9,
+        10,
+        19
+       ]
+      },
+      "score_hi": {
+       "n": 21580,
+       "max_abs": 8.326672684688674e-16,
+       "first_rows": [
+        6,
+        9,
+        10,
+        11,
+        24
+       ]
+      },
+      "source_support": {
+       "n": 95248,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        1,
+        7,
+        9,
+        10,
+        19
+       ]
+      },
+      "score_model": {
+       "n": 57672,
+       "max_abs": 7.771561172376096e-16,
+       "first_rows": [
+        9,
+        10,
+        24,
+        27,
+        75
+       ]
+      }
+     },
+     "max_abs_float_diff": 8.326672684688674e-16,
+     "non_float_cells_differ": 0
+    }
+   },
+   "evaluation.json": {
+    "byte_identical": true
+   },
+   "evidence_rules.parquet": {
+    "byte_identical": true
+   },
+   "facility_groups.parquet": {
+    "byte_identical": true
+   },
+   "facility_location.parquet": {
+    "byte_identical": true
+   },
+   "facility_trust.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     9959,
+     9959
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 1.3322676295501878e-15
+   },
+   "facility_trust.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 9959,
+     "rows_new": 9959,
+     "cols_equal": true,
+     "cells_differ": {
+      "existence_score": {
+       "n": 135,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        7,
+        27,
+        68,
+        221,
+        271
+       ]
+      },
+      "location_score": {
+       "n": 766,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        9,
+        10,
+        24,
+        27,
+        75
+       ]
+      },
+      "location_lo": {
+       "n": 1578,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        1,
+        7,
+        9,
+        10,
+        19
+       ]
+      },
+      "location_hi": {
+       "n": 546,
+       "max_abs": 7.216449660063518e-16,
+       "first_rows": [
+        6,
+        9,
+        10,
+        11,
+        24
+       ]
+      },
+      "attribution_score": {
+       "n": 825,
+       "max_abs": 1.3322676295501878e-15,
+       "first_rows": [
+        24,
+        38,
+        41,
+        48,
+        64
+       ]
+      },
+      "service_score_mean": {
+       "n": 1708,
+       "max_abs": 5.551115123125783e-16,
+       "first_rows": [
+        5,
+        12,
+        23,
+        30,
+        33
+       ]
+      },
+      "source_support": {
+       "n": 999,
+       "max_abs": 3.3306690738754696e-16,
+       "first_rows": [
+        33,
+        40,
+        52,
+        58,
+        61
+       ]
+      },
+      "overall_score": {
+       "n": 1510,
+       "max_abs": 1.2212453270876722e-15,
+       "first_rows": [
+        7,
+        9,
+        10,
+        24,
+        27
+       ]
+      },
+      "overall_lo": {
+       "n": 2174,
+       "max_abs": 9.992007221626409e-16,
+       "first_rows": [
+        1,
+        9,
+        10,
+        19,
+        24
+       ]
+      }
+     },
+     "max_abs_float_diff": 1.3322676295501878e-15,
+     "non_float_cells_differ": 0
+    }
+   },
+   "gold_pairs.parquet": {
+    "byte_identical": true
+   },
+   "grades.parquet": {
+    "byte_identical": true
+   },
+   "grades_v1.parquet": {
+    "byte_identical": true
+   },
+   "pin_gazetteer.parquet": {
+    "byte_identical": true
+   },
+   "place_gazetteer.parquet": {
+    "byte_identical": true
+   },
+   "record_trust.parquet": {
+    "byte_identical": true
+   },
+   "source_classes.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     16,
+     16
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 5.684341886080802e-14
+   },
+   "source_classes.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 16,
+     "rows_new": 16,
+     "cols_equal": true,
+     "cells_differ": {
+      "ci05": {
+       "n": 3,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        2,
+        3,
+        12
+       ]
+      },
+      "ci95": {
+       "n": 3,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        7,
+        10,
+        11
+       ]
+      },
+      "median_domain_reliability": {
+       "n": 1,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        5
+       ]
+      },
+      "domain_reliability_p10": {
+       "n": 3,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        9,
+        10,
+        15
+       ]
+      },
+      "domain_reliability_p90": {
+       "n": 2,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        5,
+        15
+       ]
+      },
+      "effective_false": {
+       "n": 9,
+       "max_abs": 5.684341886080802e-14,
+       "first_rows": [
+        0,
+        2,
+        3,
+        6,
+        7
+       ]
+      }
+     },
+     "max_abs_float_diff": 5.684341886080802e-14,
+     "non_float_cells_differ": 0
+    }
+   },
+   "source_domains.csv": {
+    "byte_identical": false,
+    "csv_rows": [
+     10951,
+     10951
+    ],
+    "csv_non_numeric_equal": true,
+    "csv_max_abs_numeric_diff": 5.684341886080802e-14
+   },
+   "source_domains.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 10951,
+     "rows_new": 10951,
+     "cols_equal": true,
+     "cells_differ": {
+      "alpha": {
+       "n": 1237,
+       "max_abs": 5.684341886080802e-14,
+       "first_rows": [
+        4,
+        5,
+        9,
+        11,
+        12
+       ]
+      },
+      "beta": {
+       "n": 1711,
+       "max_abs": 2.842170943040401e-14,
+       "first_rows": [
+        0,
+        4,
+        5,
+        7,
+        8
+       ]
+      },
+      "reliability": {
+       "n": 974,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        5,
+        17,
+        21,
+        24,
+        27
+       ]
+      },
+      "ci05": {
+       "n": 1303,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        4,
+        5,
+        8,
+        14,
+        17
+       ]
+      },
+      "ci95": {
+       "n": 481,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        9,
+        12,
+        14,
+        21,
+        32
+       ]
+      },
+      "credit": {
+       "n": 1408,
+       "max_abs": 5.684341886080802e-14,
+       "first_rows": [
+        4,
+        5,
+        11,
+        12,
+        13
+       ]
+      },
+      "blame": {
+       "n": 3895,
+       "max_abs": 2.842170943040401e-14,
+       "first_rows": [
+        0,
+        5,
+        7,
+        8,
+        9
+       ]
+      },
+      "class_prior_mean": {
+       "n": 1306,
+       "max_abs": 1.1102230246251565e-16,
+       "first_rows": [
+        1,
+        2,
+        4,
+        5,
+        7
+       ]
+      }
+     },
+     "max_abs_float_diff": 5.684341886080802e-14,
+     "non_float_cells_differ": 0
+    }
+   },
+   "source_page_checks.parquet": {
+    "byte_identical": true
+   },
+   "source_urls.parquet": {
+    "byte_identical": false,
+    "frame": {
+     "rows_ref": 158444,
+     "rows_new": 158444,
+     "cols_equal": true,
+     "cells_differ": {
+      "domain_reliability": {
+       "n": 14604,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        21,
+        32,
+        34,
+        61,
+        78
+       ]
+      },
+      "ci05": {
+       "n": 22688,
+       "max_abs": 4.440892098500626e-16,
+       "first_rows": [
+        21,
+        22,
+        32,
+        34,
+        61
+       ]
+      },
+      "ci95": {
+       "n": 9815,
+       "max_abs": 2.220446049250313e-16,
+       "first_rows": [
+        21,
+        24,
+        25,
+        35,
+        75
+       ]
+      }
+     },
+     "max_abs_float_diff": 4.440892098500626e-16,
+     "non_float_cells_differ": 0
+    }
+   },
+   "specialties.parquet": {
+    "byte_identical": true
+   }
+  }
+ }
+}
