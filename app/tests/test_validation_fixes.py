@@ -14,11 +14,12 @@ import pytest
 
 APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
-from facts import eligibility as el  # noqa: E402, RUF100
+sys.path.insert(0, str(APP.parent))
 from itinerary import place  # noqa: E402, RUF100
 from packs import build_packs as bp  # noqa: E402, RUF100
 
 import app as app_module  # noqa: E402, RUF100
+from common import eligibility as el  # noqa: E402, RUF100
 
 V1 = APP.parent / "derived" / "v1"
 PACKS = APP / "packs" / "out"
@@ -29,10 +30,20 @@ VET = "885c79f6-9f32-4878-8384-5a90259cfae4"  # SKS Veterinary Hospital, trust_l
 
 
 # ---------- the shared rule, on small frames ----------
-def test_eligible_drops_excluded_and_unplaced():
-    df = pd.DataFrame({"loc_lat": [1.0, 1.0, np.nan], "loc_lon": [2.0, 2.0, 2.0],
-                       "trust_level": ["no_concerns", "exclude_review", "minor"]})
-    assert el.eligible(df).tolist() == [True, False, False]
+def test_eligible_facilities_drops_excluded_and_unplaced_keeps_unassessed():
+    df = pd.DataFrame({"loc_lat": [1.0, 1.0, np.nan, 1.0, 95.0], "loc_lon": [2.0, 2.0, 2.0, 2.0, 2.0],
+                       "trust_level": ["no_concerns", "exclude_review", "minor", None, "minor"]})
+    mask, counts = el.eligible_facilities(df)
+    assert mask.tolist() == [True, False, False, True, False]
+    assert counts == {"rows": 5, "no_coordinates": 2, "exclude_review": 1, "unassessed_kept": 1, "kept": 2}
+
+
+def test_eligible_pairs_drops_excluded_grades_and_verified_false():
+    df = pd.DataFrame({"grade": ["strong", "counter_evidence", "weak", "attributed_elsewhere"],
+                       "status": ["verified_true", "unverified", "verified_false", "verified_false"]})
+    mask, counts = el.eligible_pairs(df)
+    assert mask.tolist() == [True, False, False, False]
+    assert counts == {"rows": 4, "excluded_grade": 2, "verified_false": 1, "kept": 1}
 
 
 def test_representatives_prefers_canonical_then_smallest_id():
@@ -40,7 +51,8 @@ def test_representatives_prefers_canonical_then_smallest_id():
                         "canonical": [False, True, False, False]})
     pairs = pd.DataFrame({"unique_id": ["a", "b", "a", "d", "c", "e"],
                           "service": ["mri", "mri", "nicu", "mri", "mri", "mri"]}, index=[10, 11, 12, 13, 14, 15])
-    keep = el.representatives(pairs, grp)
+    keep, counts = el.representatives(pairs, grp)
+    assert counts == {"rows": 6, "duplicate_members": 2, "kept": 4}
     # g1/mri -> b (canonical); g1/nicu -> a (only member with it); g2/mri -> c (smallest id); e has no group
     assert keep.to_dict() == {10: False, 11: True, 12: True, 13: False, 14: True, 15: True}
 
@@ -64,15 +76,36 @@ def pack_ids(slug: str) -> tuple[dict, list[str]]:
     return pack, pack["fac"]["uid8"]
 
 
+def excluded_ids() -> set[str]:
+    tl = pd.read_parquet(V1 / "record_trust.parquet", columns=["unique_id", "trust_level"])
+    return set(tl[tl.trust_level.isin(el.EXCLUDE_LEVELS)].unique_id)
+
+
 @needs_v1
 @needs_packs
 def test_no_excluded_record_in_any_pack():
-    tl = pd.read_parquet(V1 / "record_trust.parquet", columns=["unique_id", "trust_level"])
-    excluded = {u[:8] for u in tl[tl.trust_level.isin(el.EXCLUDE_LEVELS)].unique_id}
-    assert VET[:8] in excluded
+    excluded = {u[:8] for u in excluded_ids()}
+    assert len(excluded) == 12 and VET[:8] in excluded
     for f in PACKS.glob("*.json.gz"):
         _, uid8 = pack_ids(f.name.removesuffix(".json.gz"))
         assert not excluded & set(uid8), f.name
+
+
+@needs_v1
+@needs_engine
+@needs_packs
+def test_facts_and_packs_agree_on_eligible_facilities():
+    """Facts carry exactly the eligible set; every pack facility is in it (packs keep only those with evidence)."""
+    eng = app_module._engine()
+    excluded = excluded_ids()
+    assert len(excluded) == 12 and not excluded & set(eng.fac["id"])
+    loc = pd.read_parquet(V1 / "facility_location.parquet", columns=["unique_id", "loc_lat", "loc_lon"])
+    tl = pd.read_parquet(V1 / "record_trust.parquet", columns=["unique_id", "trust_level"])
+    f = loc.merge(tl, on="unique_id", how="left")
+    assert set(eng.fac["id"]) == set(f[el.eligible_facilities(f)[0]].unique_id)
+    facts8 = {u[:8] for u in eng.fac["id"]}
+    for p in PACKS.glob("*.json.gz"):
+        assert set(pack_ids(p.name.removesuffix(".json.gz"))[1]) <= facts8, p.name
 
 
 @needs_v1

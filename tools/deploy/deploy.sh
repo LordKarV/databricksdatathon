@@ -29,7 +29,7 @@ fi
 
 echo "== assemble bundle"
 rm -rf "$BUNDLE" && mkdir -p "$BUNDLE/kb"
-rsync -a --exclude '__pycache__' --exclude 'tests' --exclude 'checks' app geo planner "$BUNDLE/"
+rsync -a --exclude '__pycache__' --exclude 'tests' --exclude 'checks' app common geo planner "$BUNDLE/"
 rsync -a kb/pathways "$BUNDLE/kb/"
 cp app/requirements.txt "$BUNDLE/requirements.txt"
 cat > "$BUNDLE/app.yaml" <<'YAML'

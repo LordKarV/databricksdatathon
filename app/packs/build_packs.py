@@ -39,8 +39,14 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 DERIVED = ROOT / "derived" / "v1"
-sys.path.insert(0, str(ROOT / "app"))
-from facts.eligibility import eligible, groups, representatives  # noqa: E402, RUF100
+sys.path.insert(0, str(ROOT))
+from common.eligibility import (  # noqa: E402, RUF100
+    eligible_facilities,
+    eligible_pairs,
+    groups,
+    report,
+    representatives,
+)
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
@@ -59,11 +65,15 @@ SERVICE_MAP = {
     "dialysis": "dialysis", "mri": "mri", "cardiac_surgery": "cardiac_surgery",
 }
 SERVICES = list(SERVICE_MAP.values())
-EXCLUDED_GRADES = {"attributed_elsewhere", "counter_evidence"}
 
 
 def slug(state: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", state.lower()).strip("_")
+
+
+def _is_list(x: object) -> bool:
+    """A parquet list cell (array or list); False for None or NaN (a record with no trust row)."""
+    return isinstance(x, (list, tuple, np.ndarray))
 
 
 def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
@@ -73,20 +83,26 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     trust = pd.read_parquet(DERIVED / "record_trust.parquet",
                             columns=["unique_id", "display_phones", "trust_flags", "trust_level"])
     fac = loc.merge(trust, on="unique_id", how="left")
-    fac = fac[eligible(fac)]  # same rule as the facts engine (#78): no excluded or unplaced records
+    keep, counts = eligible_facilities(fac)  # same rule as the facts engine and the planner (#78)
+    report("packs.facilities", counts)
+    fac = fac[keep]
     # Facility switchboard only: the record's own first phone, never a chain helpline. A phone the cleaning
     # step marked as a directory number is kept but flagged so the card can say so.
-    fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if p is not None and len(p) else "")
-    fac["tel_dir"] = fac.trust_flags.map(lambda f: int(f is not None and "official_phone_is_directory" in list(f)))
+    fac["tel"] = fac.display_phones.map(lambda p: str(p[0]) if _is_list(p) and len(p) else "")
+    fac["tel_dir"] = fac.trust_flags.map(lambda f: int(_is_list(f) and "official_phone_is_directory" in list(f)))
 
     dps = pd.read_parquet(DERIVED / "data_point_scores.parquet",
                           columns=["dp_type", "unique_id", "claim_id", "service", "original_value",
                                    "score", "score_lo", "score_hi", "status", "grade"])
-    svc = dps[(dps.dp_type == "service_claim") & dps.service.isin(SERVICE_MAP)
-              & ~dps.grade.isin(EXCLUDED_GRADES) & (dps.status != "verified_false")].copy()
+    svc = dps[(dps.dp_type == "service_claim") & dps.service.isin(SERVICE_MAP)].copy()
+    keep, counts = eligible_pairs(svc)
+    report("packs.pairs", counts)
+    svc = svc[keep]
     svc["service"] = svc.service.map(SERVICE_MAP)
     svc = svc[svc.unique_id.isin(fac.unique_id)]
-    svc = svc[representatives(svc, groups(DERIVED))]  # one option per real facility (#78)
+    keep, counts = representatives(svc, groups(DERIVED))  # one option per real facility (#78)
+    report("packs.duplicates", counts)
+    svc = svc[keep]
     svc = apply_bands(svc.reset_index(drop=True), MODEL_SCORES)
 
     # Sentence text -> claim id, so every quote cites the claim it came from.

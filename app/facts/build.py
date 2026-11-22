@@ -19,12 +19,13 @@ import time
 from collections import Counter
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT / "app") not in sys.path:
-    sys.path.insert(0, str(ROOT / "app"))
-from facts.eligibility import eligible, groups, representatives  # noqa: E402, RUF100
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from common.eligibility import eligible_facilities, groups, report, representatives  # noqa: E402, RUF100
 
 V1 = ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
@@ -58,6 +59,11 @@ def col(series: pd.Series, nd: int | None = None) -> list:
     return [None if (not isinstance(x, (list, tuple)) and pd.isna(x)) else x for x in series]
 
 
+def as_list(x: object) -> list:
+    """A parquet list cell as a list; None or NaN (no trust row) as []."""
+    return list(x) if isinstance(x, (list, tuple, np.ndarray)) else []
+
+
 def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     loc = pd.read_parquet(V1 / "facility_location.parquet", columns=[
         "unique_id", "name", "address_city", "district", "state_final", "pin", "loc_lat", "loc_lon"])
@@ -65,9 +71,12 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
         "unique_id", "display_phones", "trust_flags", "trust_reasons", "website_class", "trust_level"])
     ft = pd.read_parquet(V1 / "facility_trust.parquet", columns=[
         "unique_id", "existence_score", "location_score", "location_reason_codes", "drivers"])
-    f = loc.merge(tr, on="unique_id").merge(ft, on="unique_id")
-    f = f[eligible(f)].reset_index(drop=True)
-    phones = [str(p[0]) if p is not None and len(p) else "" for p in f.display_phones]
+    # Left merges: a record with no trust row is "unassessed" and kept (common/eligibility.py).
+    f = loc.merge(tr, on="unique_id", how="left").merge(ft, on="unique_id", how="left")
+    keep, counts = eligible_facilities(f)
+    report("facts.facilities", counts)
+    f = f[keep].reset_index(drop=True)
+    phones = [str(p[0]) if len(as_list(p)) else "" for p in f.display_phones]
     shared = Counter(str(x) for p in tr.display_phones if p is not None for x in set(p))
     f["phone_raw"] = phones
     f["phone_e164"] = [e164(p) for p in phones]
@@ -97,7 +106,9 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
            *pre_cols, *risk_cols]]
     m = dps.merge(g, on=["unique_id", "service"], how="inner")
     m = m[m.service.isin(V1_TO_APP) & m.unique_id.isin(fidx)]
-    m = m[representatives(m, groups())]  # one option per real facility (#78)
+    keep, counts = representatives(m, groups())  # one option per real facility (#78)
+    report("facts.duplicates", counts)
+    m = m[keep]
     if V2.is_file():
         v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
         v2["service"] = v2.service_id.map(lambda s: SERVICE_MAP.get(s, s))
@@ -167,8 +178,8 @@ def main() -> None:
                 "lat": col(f.loc_lat, 5), "lon": col(f.loc_lon, 5),
                 "p_e": col(f.existence_score, 3), "p_l": col(f.location_score, 3), "loc_rule": list(f.loc_rule),
                 "phone_e164": col(f.phone_e164), "phone_raw": list(f.phone_raw), "phone_shared": list(f.phone_shared),
-                "flags": [list(x) if x is not None else [] for x in f.trust_flags],
-                "reasons": [list(x) if x is not None else [] for x in f.trust_reasons],
+                "flags": [as_list(x) for x in f.trust_flags],
+                "reasons": [as_list(x) for x in f.trust_reasons],
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
                 "public_standard": [bool(x) for x in f.public_standard]},
         "pairs": pr,
