@@ -67,9 +67,9 @@ print("source:", SOURCE, "| code:", CODE, "| work:", WORK)
 
 # COMMAND ----------
 
-from planner import export_v1  # noqa: E402
+from planner import export_v2  # noqa: E402
 
-export_v1.main()
+export_v2.main()
 
 # COMMAND ----------
 
