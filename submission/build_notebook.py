@@ -221,6 +221,11 @@ Cleaning does three different things, and the app treats them differently:
 - **Fixed:** repaired in `derived/v1`.
 - **Flagged:** kept, but shown to the user as a warning on the card.
 - **Cannot be fixed by cleaning:** the answer is a phone call before travelling, and the app says so.
+
+The fixed list below is the base everything else stands on: exact and residual duplicates, map points that were
+impossible or outside India, and points moved to where the facility really is. What is left is mostly claims that
+nobody can verify from the web, and the phone and opening-hours facts that no listing carries. That is why the
+app says "call first", and section 6 measures how much of it remains.
 """)
 
 code('''
@@ -228,6 +233,11 @@ fixed, flagged, cannot = (how.table("REPORT.md", h) for h in ("Fixed", "Flagged"
 print(f"fixed: {len(fixed['rows'])} problems | flagged: {len(flagged['rows'])} | cannot be fixed by cleaning: "
       f"{len(cannot['rows'])}")
 show_table(cannot)
+test_eval = ROOT / "model/gold/v3/test_eval/results.json"
+if test_eval.is_file():
+    v = json.loads(test_eval.read_text())["verdicts"]
+    print(f"What remains after cleaning: in the sealed TEST a web check found no decisive answer for {v['no_info']} of "
+          f"{sum(v.values())} facility-service pairs ({v['no_info'] / sum(v.values()):.0%}).")
 ''')
 
 code('''
@@ -503,8 +513,13 @@ print(f"location P_L {row.p_location:.3f}, exists P_E {row.p_exists:.3f}; score-
 md("""
 **The frozen TEST.** Before any TEST label was read, the model was frozen: its version is a hash of the
 parameters, thresholds and code, and its predictions for the sealed TEST pairs were committed with their SHA-256.
-The TEST labels are web checks by agents, like DEV, so they are agent-labelled, not human-checked. The headline
-metric, once TEST is opened, is confirmed against contradicted.
+The TEST labels are web checks by agents, like DEV, so they are agent-labelled, not human-checked. TEST was opened
+once, after the freeze; the cell checks both hashes and reads `model/gold/v3/test_eval/results.json`. The headline
+metric is confirmed against contradicted.
+
+Cleaning (section 3) already fixed duplicates, impossible or out-of-country map points and misplaced points. What
+the model is left with is mostly claims that nobody can settle from the web (the "no decisive answer" share below)
+and the phone and opening-hours facts that no listing carries. That is why the app's default is "call first".
 """)
 
 code('''
@@ -515,14 +530,37 @@ print("model_version (model_card.json):", card["model_version"])
 print(f"TEST predictions: {len(tp)} pairs, sha256 {sealed_sha}")
 print("bytes match the committed sha256:", hashlib.sha256(pred.read_bytes()).hexdigest() == sealed_sha,
       "| written by this model_version:", set(tp.model_version) == {card["model_version"]})
-opened = sorted({*ROOT.glob("model/v2/test_eval*.json"), *ROOT.glob("model/v2/final/test_eval*.json"),
-                 *ROOT.glob("model/gold/v3/test_eval*.json")})
-if opened:
-    res = json.loads(opened[-1].read_text())
-    print(f"TEST opened ({opened[-1].relative_to(ROOT)}); labels {card['label_provenance']['wording']}:")
-    print(json.dumps(res.get("headline", res), indent=1)[:3000])
-else:
+TEST_EVAL = ROOT / "model/gold/v3/test_eval/results.json"
+if not TEST_EVAL.is_file():
     print("TEST is sealed and not yet opened.")
+else:
+    te = json.loads(TEST_EVAL.read_text())
+    assert te["model_version"] == card["model_version"] and te["test_predictions_sha256"] == sealed_sha
+    print(f"Opened once, against these predictions (model/gold/v3/OPENING_LOG.md). {te['about']}")
+    v = te["verdicts"]
+    n_all = sum(v.values())
+    print(f"Verdicts: {v['confirmed']} confirmed, {v['contradicted']} contradicted, and {v['no_info']} of {n_all} "
+          f"({v['no_info'] / n_all:.0%}) with no decisive answer on the web.")
+
+    def test_row(name, m):
+        lk = m["LIKELY_confirmed"]
+        return {"TEST pairs": name, "n": m["n"], "confirmed": m["confirmed"], "contradicted": m["contradicted"],
+                "AUROC": f"{m['auroc']:.3f} [{m['auroc_ci95'][0]:.3f}, {m['auroc_ci95'][1]:.3f}]",
+                "log loss": f"{m['log_loss']:.3f} [{m['log_loss_ci95'][0]:.3f}, {m['log_loss_ci95'][1]:.3f}]",
+                "base-rate log loss": m["base_rate_log_loss"], "Brier": m["brier"], "ECE": m["ece5"],
+                "LIKELY confirmed": f"{lk['k']} of {lk['n']}" + (f" ({lk['rate']:.3f} [{lk['ci95'][0]:.3f}, "
+                                                                f"{lk['ci95'][1]:.3f}])" if lk["n"] else "")}
+
+    ops, meth = te["by_operator_decided"], te["by_method_decided"]
+    display(pd.DataFrame([test_row("headline: all decided", te["headline_decided"]),
+                          *(test_row(f"{op} (decided)", ops[op]) for op in ("public", "private")),
+                          *(test_row(f"labelled by {k} (decided)", m) for k, m in meth.items()),
+                          test_row("sensitivity: no decisive answer = not offered", te["sensitivity_no_info_as_0"])])
+            .set_index("TEST pairs"))
+    pub = ops["public"]
+    print(f"Public facilities: {pub['n']} decided pairs, AUROC interval {pub['auroc_ci95'][0]:.3f} to "
+          f"{pub['auroc_ci95'][1]:.3f}: " + ("ranking shown." if pub["auroc_ci95"][0] > 0.5 else
+                                          "it includes 0.5, so ranking public facilities is not shown."))
 ''')
 
 md("""
