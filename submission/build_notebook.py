@@ -353,7 +353,7 @@ For each option it prints:
 """)
 
 code('''
-from facts.engine import Engine
+from facts.engine import RULE_PLAIN, Engine
 from itinerary import attach
 
 ENGINE = Engine.load()
@@ -433,6 +433,52 @@ print("- Labels come from public web pages, not from phone calls or visits.")
 print(f"- Opening hours: {h['hours_records']['value']:,} of {h['hours_records']['of']:,} records mention hours at all; "
       "nothing says whether a bed or a slot is free today.")
 print("- Travel times are rough estimates (straight line times a road factor), shown as ranges.")
+''')
+
+# ---------------------------------------------------------------------------------------------------------------------
+md("""
+## 9b. Learning from phone calls (reviewed, never automatic)
+
+When a health worker taps "Said yes", "Said no" or "No answer" after calling, the app writes one row to
+`workspace.referral_saathi.call_outcomes`. A row holds the facility, the service, the answer, the call questions,
+the model version, the district and the time. It never holds patient data.
+
+The cell below reads those rows and shows how they *would* move the weight of each evidence family. It uses a
+Beta update: the family's mean score today counts as 10 earlier calls, and each answered call adds one more. Nothing
+is retrained from here; a person reviews the table first.
+""")
+
+code('''
+from collections import defaultdict
+
+OUTCOMES_TABLE = "workspace.referral_saathi.call_outcomes"
+PRIOR_CALLS = 10
+rows = []
+if ON_DATABRICKS:
+    try:
+        q = f"SELECT facility_id, service_id, outcome, count(*) AS n FROM {OUTCOMES_TABLE} GROUP BY ALL"
+        rows = [tuple(r) for r in spark.sql(q).collect()]  # noqa: F821 (spark is predefined on Databricks)
+    except Exception as e:  # table missing in this workspace
+        print("call_outcomes is not readable here:", type(e).__name__)
+if not rows:
+    print("No call outcomes recorded in this environment yet; the table below fills in as calls are recorded.")
+
+fam = defaultdict(lambda: {"yes": 0, "no": 0, "no_answer": 0, "score_sum": 0.0, "pairs": 0})
+for rule_rows in ENGINE.pairs.values():
+    for p in rule_rows:
+        fam[p.rule]["score_sum"] += p.score
+        fam[p.rule]["pairs"] += 1
+for fid, sid, outcome, n in rows:
+    i = ENGINE.fid.get(fid)
+    p = ENGINE.index.get(sid, {}).get(i) if i is not None else None
+    if p is not None:
+        fam[p.rule][outcome] += int(n)
+print(f"{'evidence family':52} {'pairs':>6} {'yes':>4} {'no':>4} {'mean now':>9} {'would be':>9}")
+for rule, f in sorted(fam.items(), key=lambda kv: -kv[1]["pairs"]):
+    mean = f["score_sum"] / f["pairs"]
+    new = (mean * PRIOR_CALLS + f["yes"]) / (PRIOR_CALLS + f["yes"] + f["no"])
+    label = RULE_PLAIN.get(rule, rule)[:52]
+    print(f"{label:52} {f['pairs']:>6,} {f['yes']:>4} {f['no']:>4} {mean:>9.2f} {new:>9.2f}")
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------

@@ -641,7 +641,9 @@ function whyScreen(rank) {
     </ol>
     <div class="row" role="group" aria-label="What did they say?">
       ${['Said yes', 'Said no', 'No answer', 'Wrong number'].map(x => `<button type="button" data-outcome="${x}">${x}</button>`).join('')}
-    </div>`;
+    </div>
+    <p class="small muted">Yes, no or no answer is sent to improve the data: this facility, the service, the district and
+      the time. No patient details.</p>`;
 }
 // ---------- live website check (#37): a dated line next to the plan; never changes the band ----------
 function verifyHtml(v) {
@@ -683,12 +685,44 @@ function bindWhy() {
   const o = state.plan && !state.plan.error && state.plan.options.find(x => x.rank === rank);
   if (o) $('#verify-btn')?.addEventListener('click', () => runVerify(o));
   document.querySelectorAll('[data-outcome]').forEach(b => b.addEventListener('click', () => {
-    // Kept in page memory only, for the slip (#24); never sent or stored.
-    (state.outcomes ||= {})[parseInt(location.hash.split('/')[2], 10)] = {said: b.dataset.outcome, at: Date.now()};
-    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip; nothing is sent.`);
+    const at = Date.now();
+    (state.outcomes ||= {})[rank] = {said: b.dataset.outcome, at};  // for the slip (#24)
+    const sent = o && queueOutcome(o, b.dataset.outcome, at);
+    announce(`Noted: ${b.dataset.outcome}. It goes on the referral slip${sent ? ' and is sent to improve the data, with no patient details' : ''}.`);
   }));
   if (location.hash.endsWith('#call')) $('#call')?.focus();
 }
+
+// ---------- call outcomes (#65): ids, the answer, a district; queued offline, flushed when back online ----------
+const OUTCOME_CODE = {'Said yes': 'yes', 'Said no': 'no', 'No answer': 'no_answer'};  // "Wrong number" is not sent
+function queueOutcome(o, said, at) {
+  const outcome = OUTCOME_CODE[said];
+  if (!outcome || !state.loc || !state.service) return false;
+  const q = load('outq') || [];
+  q.push({outcome_id: crypto.randomUUID(), facility_id: o.facility_id, service_id: state.service, outcome,
+    said_at_ms: at, lat: Math.round(state.loc.lat * 100) / 100, lon: Math.round(state.loc.lon * 100) / 100});
+  save('outq', q.slice(-50));
+  flushOutcomes();
+  return true;
+}
+let flushing = false;
+async function flushOutcomes() {
+  if (flushing || !navigator.onLine) return;
+  flushing = true;
+  try {
+    for (const item of load('outq') || []) {
+      let drop = false;
+      try {
+        const r = await fetch('/api/outcome', {method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(item), signal: AbortSignal.timeout(15000)});
+        drop = r.ok || (r.status >= 400 && r.status < 500);  // 4xx will never succeed; 5xx and network errors retry
+      } catch { /* offline again: keep it */ }
+      if (!drop) break;
+      save('outq', (load('outq') || []).filter(x => x.outcome_id !== item.outcome_id));
+    }
+  } finally { flushing = false; }
+}
+window.addEventListener('online', flushOutcomes);
 
 // ---------- referral slip (S8, #24): slip.js loads only on this route ----------
 function slipScreen(rank) {
@@ -767,7 +801,27 @@ async function bindHow() {
     $('#main h1').focus();
   } catch {
     $('#how-out').innerHTML = '<p role="alert">Could not load this page. Check the connection.</p>';
+    return;
   }
+  liveOutcomes();
+}
+// Live count from the call_outcomes table (#65). Marked data-device: a live reading, not a page-data number.
+async function liveOutcomes() {
+  let s;
+  try {
+    const r = await fetch('/api/outcomes/summary', {signal: AbortSignal.timeout(10000)});
+    if (!r.ok) return;
+    s = await r.json();
+  } catch { return; }
+  const built = [...document.querySelectorAll('#main p.small.muted')].pop();
+  if (!built) return;
+  const sec = document.createElement('section');
+  sec.innerHTML = `<h2>What callers told us</h2><p data-device>${s.recorded} call results recorded so far
+    (${s.yes} said yes, ${s.no} said no, ${s.no_answer} no answer). Of the ${s.answered} answered calls,
+    ${s.contradicted} contradicted the label the app showed and ${s.agreed} agreed with it; the rest were for
+    "Not verified" options. Live from the call_outcomes table at ${esc(timeStr(s.as_of))}. These results are
+    reviewed, not fed back into the scores automatically.</p>`;
+  built.before(sec);
 }
 
 // ---------- Data stories (#53): stories.js and /api/stories load only on this route ----------
@@ -825,6 +879,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelector('a[href="#main"]').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
   setOnline();
   RSInput.load();
+  flushOutcomes();
   render();
   // GPS is the default: refresh silently when permission is already granted (no prompt on load).
   try {

@@ -217,15 +217,15 @@
     "gzip": 2534
    },
    "/app.js": {
-    "raw": 51075,
-    "gzip": 15694
+    "raw": 53761,
+    "gzip": 16579
    },
    "/manifest.webmanifest": {
     "raw": 167,
     "gzip": 136
    }
   },
-  "gzip_total": 18957,
+  "gzip_total": 19842,
   "budget_gzip": 50000,
   "budget_requests": 5
  }
