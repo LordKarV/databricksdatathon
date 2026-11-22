@@ -21,7 +21,8 @@ MAX_QUOTES = 2
 PURPOSE = {"stabilise": "First care: stabilise", "definitive": "Definitive care", "assess": "Assessment",
            "access": "Fistula or line for dialysis", "recurring": "Regular dialysis sessions"}
 TYPE = {"direct": "Go straight there", "one_stop": "Stop for first care, then go on",
-        "two_stop": "Two stops, then go on", "single_site": "One hospital for every stage"}
+        "two_stop": "Two stops, then go on", "single_site": "One hospital for every stage",
+        "two_sites": "Two places, each for its stage", "three_sites": "Three places, each for its stage"}
 # kb/pathways capability tags of the app's emergency pathways, in plain words for stop_1_note
 CAPABILITY_WORDS = {
     "emergency_24x7": "24x7 emergency care", "general_surgery_ot": "an operating theatre",
