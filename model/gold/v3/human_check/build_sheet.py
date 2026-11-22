@@ -1,13 +1,14 @@
 """Draw the human spot-check sheet for gold v3 (issue #103): 25 decided pairs, about 15 confirmed / 10 contradicted.
 
-    .venv-app/bin/python model/gold/v3/human_check/build_sheet.py            # writes sheet.csv + agent_answers.csv
-    .venv-app/bin/python model/gold/v3/human_check/build_sheet.py --force    # rewrite both while sheet.csv is blank
+    .venv-app/bin/python model/gold/v3/human_check/build_sheet.py          # sheet_<person>.csv + agent_answers.csv
+    .venv-app/bin/python model/gold/v3/human_check/build_sheet.py --force  # rewrite them while all are blank
 
 The draw is stable: seed SEED, pairs sorted by pair_id before sampling. Within each verdict the DEV / TEST split
-is kept in proportion to the decided pairs in each split. Rows are shuffled so verdicts are not grouped.
+is kept in proportion to the decided pairs in each split. Rows are shuffled so verdicts are not grouped, then
+split into one sheet per person (8, 8, 9), stratified by agent verdict and service.
 
-sheet.csv is what the checker fills and carries no agent verdict; agent_answers.csv holds the agent's verdict and
-split per pair_id, joined back by score.py. The quote is the last column so the checker reads the page first.
+The sheets carry no agent verdict; agent_answers.csv holds the agent's verdict and split per pair_id, joined back
+by score.py. The quote is the last column so the checker reads the page first.
 """
 from __future__ import annotations
 
@@ -23,7 +24,7 @@ V3 = HERE.parent
 ROOT = V3.parents[2]
 SEED = 20261122
 TAKE = {"confirmed": 15, "contradicted": 10}
-OUT = HERE / "sheet.csv"
+PEOPLE = ["karthik", "aayan", "aarav"]  # one sheet each: 8, 8 and 9 rows
 ANSWERS = HERE / "agent_answers.csv"
 COLS = ["row", "pair_id", "facility", "place", "service", "service_means", "evidence_urls", "human_verdict",
         "url_used", "note", "quote"]
@@ -83,6 +84,20 @@ def draw(rows: list[dict]) -> list[dict]:
     return [{"row": i + 1, **out[j]} for i, j in enumerate(order)]
 
 
+def split_people(sheet: list[dict]) -> dict[str, list[dict]]:
+    """Deal the rows to PEOPLE, stratified by agent verdict then service (ties by pair_id).
+
+    Round-robin over that order gives each person 5 confirmed and 3 or 4 contradicted, and spreads each service
+    across people. The person dealt first gets the 9th row. Each sheet keeps the global (shuffled) row order.
+    """
+    order = sorted(sheet, key=lambda r: (r["agent_verdict"], r["service"], r["pair_id"]))
+    deal = PEOPLE[-1:] + PEOPLE[:-1]  # the last-named person takes the extra row
+    got = {p: [] for p in PEOPLE}
+    for i, r in enumerate(order):
+        got[deal[i % len(deal)]].append(r)
+    return {p: sorted(rows, key=lambda r: r["row"]) for p, rows in got.items()}
+
+
 def started(path: Path) -> bool:
     """True once anyone has written a verdict, URL or note into the sheet."""
     with path.open(newline="", encoding="utf-8-sig") as fh:
@@ -97,16 +112,20 @@ def write(path: Path, cols: list[str], rows: list[dict]) -> None:
 
 
 def main() -> int:
-    if OUT.exists() and "--force" not in sys.argv[1:]:
-        print(f"{OUT.name} exists; the draw is fixed (--force rewrites it with the same seed while it is blank)")
+    outs = {p: HERE / f"sheet_{p}.csv" for p in PEOPLE}
+    exist = [f for f in outs.values() if f.exists()]
+    if exist and "--force" not in sys.argv[1:]:
+        print("sheets exist; the draw is fixed (--force rewrites them with the same seed while they are blank)")
         return 1
-    if OUT.exists() and started(OUT):
-        print(f"{OUT.name} has answers in it; refusing to overwrite")
+    if done := [f.name for f in exist if started(f)]:
+        print(f"{done} have answers in them; refusing to overwrite")
         return 1
     sheet = draw(decided())
-    write(OUT, COLS, sheet)
-    write(ANSWERS, ANSWER_COLS, sheet)
-    print(f"wrote {OUT.relative_to(ROOT)} and {ANSWERS.name}: {len(sheet)} rows, seed {SEED}")
+    for p, rows in split_people(sheet).items():
+        write(outs[p], COLS, rows)
+        print(f"wrote {outs[p].name}: {len(rows)} rows")
+    write(ANSWERS, ANSWER_COLS, sorted(sheet, key=lambda r: r["pair_id"]))
+    print(f"wrote {ANSWERS.name}: {len(sheet)} rows, seed {SEED}")
     return 0
 
 

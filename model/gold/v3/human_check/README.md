@@ -1,15 +1,23 @@
 # Human spot-check of the gold v3 labels (issue #103)
 
 The gold v3 labels were made by AI agents reading public web pages. Nobody has yet checked them by hand. This
-check asks one person to read the pages for 25 labels and say, on their own, whether each facility offers the
+check asks three people to read the pages for 25 labels and say, on their own, whether each facility offers the
 service. The result is the project's only human-checked accuracy figure for its labels.
 
 ## What you need
 
-- `sheet.csv`: 25 rows. Open it in any spreadsheet program. When you are done, save it as **CSV UTF-8**.
-- About 4 minutes per row: **1.5 to 2 hours** in all. You can stop and come back; save as you go.
+- Your own sheet. Open it in any spreadsheet program. When you are done, save it as **CSV UTF-8**.
+
+  | person | sheet | rows |
+  | --- | --- | --- |
+  | Karthik | `sheet_karthik.csv` | 8 |
+  | Aayan | `sheet_aayan.csv` | 8 |
+  | Aarav | `sheet_aarav.csv` | 9 |
+
+- About 4 minutes per row: **about 35 minutes** each (1.5 to 2 hours across all 25 rows). You can stop and come
+  back; save as you go.
 - **Do not open `agent_answers.csv` until you have finished every row.** It holds the agent's verdicts. The
-  check only means something if you decide first.
+  check only means something if you decide first. Do not compare answers with the other two before you finish.
 
 ## The 25 rows
 
@@ -17,6 +25,8 @@ service. The result is the project's only human-checked accuracy figure for its 
   contradicted. You are not told which.
 - They come from both splits in proportion: 17 DEV and 8 TEST.
 - Only "decided" labels are included. A "no information" verdict cannot be checked against a page.
+- Split into the three sheets above, spread as evenly as possible across the agent's verdicts (each sheet has 5
+  confirmed and 3 or 4 contradicted) and across services. `row` keeps the 1 to 25 numbering of the whole draw.
 
 ## Columns, left to right
 
@@ -53,7 +63,7 @@ From the labelling rubric (`../RUBRIC.md`), with the edge cases the agents appli
 1. Read `facility`, `place`, `service` and `service_means`.
 2. Open the link(s) in `evidence_urls`. Check the page is about this facility (name **and** place).
    - **If there is no quote, read the whole page** (and its services or departments page, if it has one).
-   - **If there is no link** (row 14), search the facility name and district (or city). **Record the URL you
+   - **If there is no link** (row 14, on Aarav's sheet), search the facility name and district (or city). **Record the URL you
      used** in `url_used`.
    - If you decide from any page that is not in `evidence_urls`, put it in `url_used`.
 3. Decide, using the rules below, and write `confirmed`, `contradicted` or `cannot_tell` in `human_verdict`.
@@ -103,27 +113,32 @@ Silence counts as **`contradicted`** only in one of two cases:
 ## When you are done
 
 1. Check every row has `human_verdict` filled in.
-2. Save as **CSV UTF-8** under the name `sheet.csv`.
-3. **Post the filled `sheet.csv` on #103, or give it to the project owner.**
+2. Save as **CSV UTF-8**, named after yourself: `karthik.csv`, `aayan.csv` or `aarav.csv`.
+3. Put it at **`model/gold/v3/human_check/filled/<name>.csv`** (for example `filled/aayan.csv`). If you are not
+   working in the repo, **post the filled file on #103, or give it to the project owner**, who will put it there.
 
 ## Scoring (project owner)
 
 ```
-.venv-app/bin/python model/gold/v3/human_check/score.py [sheet.csv] [result.json] [--answers agent_answers.csv]
+.venv-app/bin/python model/gold/v3/human_check/score.py [filled/karthik.csv ...] [--out result.json]
+    [--answers agent_answers.csv] [--partial]
 ```
 
-The paths default to the files in this folder. `score.py` joins `agent_answers.csv` on `pair_id`, reads Excel's
-CSV UTF-8 (with a byte-order mark), skips blank rows and accepts verdicts in any case. It writes `result.json`:
+With no paths it reads `filled/karthik.csv`, `filled/aayan.csv` and `filled/aarav.csv`, and writes `result.json`
+in this folder. The person is taken from the file name. `score.py` joins `agent_answers.csv` on `pair_id`, reads
+Excel's CSV UTF-8 (with a byte-order mark), skips blank rows and accepts verdicts in any case. It refuses missing
+pairs unless `--partial` is given. `result.json` has:
 
-- agreement with the agent on the rows the person could decide, with a 95% interval;
+- agreement with the agent on the rows people could decide, with a 95% interval, overall and per person;
 - agreement for confirmed and contradicted separately, and by split;
-- the count of `cannot_tell` rows.
+- the count of `cannot_tell` rows, overall and per person.
 
-With 25 rows the interval will be wide (about plus or minus 15 points). That is expected: the point is a real
-human check, not a precise rate. Commit the filled `sheet.csv` and `result.json` together.
+With 25 rows the interval will be wide (about plus or minus 15 points), and per person (8 or 9 rows) wider
+still. That is expected: the point is a real human check, not a precise rate. Commit the three filled files and
+`result.json` together.
 
 Across all 194 decided labels, 3 have no link: row 14 (confirmed from a search-result snippet whose page did not
 open) and two contradictions made from the facility's name alone.
 
-`build_sheet.py` refuses to overwrite `sheet.csv`. `--force` rewrites it, with the same seed and the same 25 rows,
-only while no verdict, URL or note has been entered.
+`build_sheet.py` refuses to overwrite the sheets. `--force` rewrites them, with the same seed, the same 25 rows
+and the same split, only while no verdict, URL or note has been entered in any of them.
