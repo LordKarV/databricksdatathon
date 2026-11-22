@@ -9,17 +9,22 @@
   const W = 320, H = 220, PAD = 30, RINGS = [30, 60, 120], SEP = 56;  // SEP: one 48 px target at a 288 px wide map
   const KM_LAT = 110.57, KM_LON = 111.32, R = Math.PI / 180;
   const STEPS = [0.5, 1, 2, 5, 10, 20, 50, 100, 200];
-  const CSS = `.mp{margin-top:1rem}.mp-box{position:relative}.mp svg{display:block;width:100%;height:auto;background:var(--raised);border:1px solid var(--line);border-radius:8px}
+  const CSS = `.mp{margin-top:1rem}.mp-box{position:relative}.mp-box svg{display:block;width:100%;height:auto;background:var(--raised);border:1px solid var(--line);border-radius:8px}
 .mp .lg{stroke:var(--go);stroke-width:2.5}.mp .lg.dbt{stroke:var(--warn);stroke-dasharray:6 5}.mp .rg{fill:none;stroke:var(--line-strong);stroke-width:1;stroke-dasharray:2 4}
 .mp text{font:600 12px var(--font);fill:var(--text);paint-order:stroke;stroke:var(--raised);stroke-width:4px;stroke-linejoin:round}.mp .rl{font-size:11px;fill:var(--muted)}
 .mp .pin{fill:var(--go);stroke:var(--surface);stroke-width:2.5}.mp .pin.dbt{fill:var(--surface);stroke:var(--warn);stroke-width:3;stroke-dasharray:4 3}
 .mp .pn{fill:var(--on-go);stroke:none;font-size:13px}.mp .pn.dbt{fill:var(--text)}.mp .me{fill:var(--text);stroke:var(--surface);stroke-width:3}.mp .ink{fill:var(--text);stroke:none}.mp .bar{stroke:var(--text);stroke-width:2;fill:none}
-.mp-hit{position:absolute;width:var(--target);height:var(--target);margin:calc(var(--target)/-2) 0 0 calc(var(--target)/-2);border:0;border-radius:50%;background:transparent;cursor:pointer;padding:0}`;
+.mp-hit{position:absolute;width:var(--target);height:var(--target);margin:calc(var(--target)/-2) 0 0 calc(var(--target)/-2);border:0;border-radius:50%;background:transparent;cursor:pointer;padding:0}
+.mp-lf{height:280px;width:100%;border:1px solid var(--line);border-radius:8px;overflow:hidden;z-index:0}
+.mp-n{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font:700 14px var(--font);color:#fff;background:#1b7a3a;border:2px solid #fff;box-shadow:0 1px 3px #0006;box-sizing:border-box}
+.mp-n.amb{background:#b45309}.mp-n.dbt{background:#fff;color:#111;border:3px dashed #b45309}
+.mp-dir{list-style:none;padding:0;margin:.75rem 0 0;display:grid;gap:.5rem}.mp-dir a{display:block;min-height:48px;padding:.75rem 1rem;box-sizing:border-box;border:1px solid var(--line-strong);border-radius:8px;color:var(--text);background:var(--raised);font-weight:600;text-decoration:none;overflow-wrap:anywhere}`;
+  const LF = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet', TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', LF_MS = 5000;
 
   // The map's own words, en and hi, kept here (not in i18n/*.json) so they cost nothing on the critical path.
   const L = {
-    en: {"h": "Map", "note": "Straight lines, not roads; times are the road estimates on the cards. Tap a number to go to that option.", "note_off": "Straight lines, not roads, from the data saved on this phone. Tap a number to go to that option.", "leg": "{min} min, {km} km", "leg_km": "{km} km", "you": "You", "n": "N", "dirs": "north,north-east,east,south-east,south,south-west,west,north-west", "alt": "Map, {n} options: {list}.", "alt_one": "{n} is {min} min {dir}", "alt_one_km": "{n} is {km} km {dir}", "alt_doubt": "(map point may be wrong)", "go": "Go to option {n}"},
-    hi: {"h": "नक्शा", "note": "सीधी रेखाएँ, सड़क नहीं; समय कार्ड पर दिए सड़क के अनुमान हैं। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "note_off": "सीधी रेखाएँ, सड़क नहीं, इस फ़ोन में सेव डेटा से। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "leg": "{min} मिनट, {km} किमी", "leg_km": "{km} किमी", "you": "आप", "n": "उ", "dirs": "उत्तर,उत्तर-पूर्व,पूर्व,दक्षिण-पूर्व,दक्षिण,दक्षिण-पश्चिम,पश्चिम,उत्तर-पश्चिम", "alt": "नक्शा, {n} विकल्प: {list}।", "alt_one": "{n}: {min} मिनट, {dir} में", "alt_one_km": "{n}: {km} किमी, {dir} में", "alt_doubt": "(नक्शे की जगह गलत हो सकती है)", "go": "विकल्प {n} पर जाएँ"},
+    en: {"h": "Map", "note": "Straight lines, not roads; times are the road estimates on the cards. Tap a number to go to that option.", "note_off": "Straight lines, not roads, from the data saved on this phone. Tap a number to go to that option.", "leg": "{min} min, {km} km", "leg_km": "{km} km", "you": "You", "n": "N", "dirs": "north,north-east,east,south-east,south,south-west,west,north-west", "alt": "Map, {n} options: {list}.", "alt_one": "{n} is {min} min {dir}", "alt_one_km": "{n} is {km} km {dir}", "alt_doubt": "(map point may be wrong)", "go": "Go to option {n}", "dir": "Directions to {n}. {name}", "street": "Street map: you and the {n} options", "here": "You are here", "pop": "{min} min, {km} km"},
+    hi: {"h": "नक्शा", "note": "सीधी रेखाएँ, सड़क नहीं; समय कार्ड पर दिए सड़क के अनुमान हैं। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "note_off": "सीधी रेखाएँ, सड़क नहीं, इस फ़ोन में सेव डेटा से। किसी नंबर को छूकर उस विकल्प पर जाएँ।", "leg": "{min} मिनट, {km} किमी", "leg_km": "{km} किमी", "you": "आप", "n": "उ", "dirs": "उत्तर,उत्तर-पूर्व,पूर्व,दक्षिण-पूर्व,दक्षिण,दक्षिण-पश्चिम,पश्चिम,उत्तर-पश्चिम", "alt": "नक्शा, {n} विकल्प: {list}।", "alt_one": "{n}: {min} मिनट, {dir} में", "alt_one_km": "{n}: {km} किमी, {dir} में", "alt_doubt": "(नक्शे की जगह गलत हो सकती है)", "go": "विकल्प {n} पर जाएँ", "dir": "{n}. {name} तक रास्ता", "street": "सड़क का नक्शा: आप और {n} विकल्प", "here": "आप यहाँ हैं", "pop": "{min} मिनट, {km} किमी"},
   };
   const word = k => (L[state.lang === 'hi' ? 'hi' : 'en'][k] ?? L.en[k]);
   const fill = (s, v) => s.replace(/\{(\w+)\}/g, (m, x) => (x in v ? String(v[x]) : m));
@@ -33,11 +38,11 @@
       const a = p.answer;
       if (!a || !state.loc) return null;
       return {me: state.loc, opts: a.options.filter(x => ok(x.lat) && ok(x.lon)).map((x, i) => ({n: i + 1, lat: x.lat, lon: x.lon,
-        doubt: x.loc_low, km: x.km_straight, el: () => $('#off-' + (i + 1))?.closest('article')}))};
+        doubt: x.loc_low, km: x.km_straight, name: x.name, el: () => $('#off-' + (i + 1))?.closest('article')}))};
     }
     const rows = [...document.querySelectorAll('#main .rows .next-row')];
     return {me: p.location, opts: p.options.map((o, i) => ({o, i})).filter(({o}) => ok(o.lat) && ok(o.lon)).map(({o, i}) => ({
-      n: o.rank, lat: o.lat, lon: o.lon, doubt: !!o.location_doubt, min: o.travel.minutes, km: o.travel.km, P: `options.${i}`, name: o.name,
+      n: o.rank, lat: o.lat, lon: o.lon, doubt: !!o.location_doubt, min: o.travel.minutes, km: o.travel.km, P: `options.${i}`, name: o.name, likely: o.band === 'likely',
       el: () => (i ? rows[i - 1] : $('#main article.answer'))}))};
   }
 
@@ -163,6 +168,54 @@
     at.insertAdjacentHTML('afterend', `<section class="section mp" aria-labelledby="h-map"><h2 id="h-map">${mh('h')}</h2>
       ${mapSvg(p, pts)}<p class="note">${mh(p.offline ? 'note_off' : 'note')}</p></section>`);
     main.querySelectorAll('.mp-hit').forEach(b => b.addEventListener('click', () => go(+b.dataset.mp, pts)));
+    const sec = main.querySelector('.mp');
+    sec.querySelector('.note').insertAdjacentHTML('beforebegin', dirList(pts));
+    if (navigator.onLine) leaflet().then(L => street(L, sec, pts)).catch(() => {});  // offline or slow: the SVG stays
+  }
+
+  // payload numbers keep their data-f marks (the faithfulness check reads every number on screen)
+  const num = (q, f, v) => (q.P ? tsp(`${q.P}.${f}`, v).replace(/tspan/g, 'span') : esc(String(v)));
+  const dirUrl = (me, q) => `https://www.google.com/maps/dir/?api=1&origin=${me.lat},${me.lon}&destination=${q.lat},${q.lon}&travelmode=driving`;
+  const dirList = ({me, opts}) => `<ul class="mp-dir">${opts.map(q => `<li><a href="${esc(dirUrl(me, q))}" target="_blank" rel="noopener noreferrer">${mh('dir', {n: num(q, 'rank', q.n), name: esc(q.name || '')})}</a></li>`).join('')}</ul>`;
+
+  // Leaflet from unpkg, injected once; rejects after 5 s so a slow network keeps the SVG.
+  let lfP = null;
+  function leaflet() {
+    if (window.L && window.L.map) return Promise.resolve(window.L);
+    lfP = lfP || new Promise((ok_, no) => {
+      document.head.appendChild(Object.assign(document.createElement('link'), {rel: 'stylesheet', href: LF + '.css'}));
+      const s = Object.assign(document.createElement('script'), {src: LF + '.js', async: true});
+      s.onload = () => (window.L && window.L.map ? ok_(window.L) : no(new Error('no L')));
+      s.onerror = () => no(new Error('leaflet load failed'));
+      document.head.appendChild(s);
+    }).catch(e => { lfP = null; throw e; });
+    return Promise.race([lfP, new Promise((_, no) => setTimeout(() => no(new Error('leaflet timeout')), LF_MS))]);
+  }
+
+  function street(L, sec, {me, opts}) {
+    const box = sec.querySelector('.mp-box');
+    if (!box || !sec.isConnected) return;
+    const div = Object.assign(document.createElement('div'), {className: 'mp-lf'});
+    div.setAttribute('role', 'region');
+    div.setAttribute('aria-label', mt('street', {n: opts.length}));
+    box.replaceWith(div);
+    const map = L.map(div, {scrollWheelZoom: false});
+    L.tileLayer(TILES, {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    const here = [me.lat, me.lon];
+    map.fitBounds(L.latLngBounds([here, ...opts.map(q => [q.lat, q.lon])]), {padding: [30, 30]});
+    const seen = [];  // a marker on top of an earlier one is left out of the tab order (overlapping targets); the Directions links below carry the same
+    L.circleMarker(here, {radius: 9, color: '#fff', weight: 3, fillColor: '#1d4ed8', fillOpacity: 1}).addTo(map)
+      .bindTooltip(mt('here'), {permanent: true, direction: 'top', offset: [0, -8]});
+    opts.forEach(q => {
+      const cls = q.doubt ? 'dbt' : q.likely ? '' : 'amb';
+      const icon = L.divIcon({className: '', html: `<span class="mp-n ${cls}">${num(q, 'rank', q.n)}</span>`, iconSize: [28, 28], iconAnchor: [14, 14]});
+      const facts = q.P ? mh('pop', {min: num(q, 'travel.minutes', q.min), km: num(q, 'travel.km', Math.round(q.km))}) : mh('leg_km', {km: esc(String(q.km))});
+      const pt = map.latLngToContainerPoint([q.lat, q.lon]), keyboard = !seen.some(o => o.distanceTo(pt) < 32);
+      seen.push(pt);
+      L.marker([q.lat, q.lon], {icon, keyboard, title: `${q.n}. ${q.name || ''}`, alt: q.name || String(q.n)}).addTo(map)
+        .bindPopup(`<strong>${num(q, 'rank', q.n)}. ${esc(q.name || '')}</strong><br>${facts}<br><a href="${esc(dirUrl(me, q))}" target="_blank" rel="noopener noreferrer">${mh('dir', {n: num(q, 'rank', q.n), name: esc(q.name || '')})}</a>`);
+    });
+    if (opts[0]) L.polyline([here, [opts[0].lat, opts[0].lon]], {color: '#1d4ed8', weight: 3, dashArray: '6 6'}).addTo(map);
   }
 
   root.RSMap = {draw};
