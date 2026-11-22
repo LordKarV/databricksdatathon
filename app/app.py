@@ -461,10 +461,11 @@ def place(req: PlaceRequest) -> JSONResponse:
 
     The text travels in the body and is never logged. 404 with no matches, so the page can say what to type.
     """
-    matches = _places().lookup(req.q)
+    matches, matched_as = _places().resolve(req.q)
     if not matches:
         return JSONResponse({"error": "place not found", "matches": [], **errors.payload("place_not_found")}, 404)
-    return JSONResponse({"matches": matches})
+    # matched_as (additive): the name shown when the typed one is an old name or a near spelling of it
+    return JSONResponse({"matches": matches, **({"matched_as": matched_as} if matched_as else {})})
 
 
 class NearRequest(BaseModel):

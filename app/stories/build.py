@@ -26,7 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 GALLERY = "viz/gallery.json"
 OUT = Path(__file__).resolve().parent / "out"
-REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/main/"
+REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/submission/"
 # The model_ stories describe the v1 prototype model (its sealed test and AUROC); the v2 TEST in the notebook
 # supersedes them, so the page leaves them out rather than show two contradicting results.
 SUPERSEDED_PREFIX = "model_"

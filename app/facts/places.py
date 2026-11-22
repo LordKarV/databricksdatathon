@@ -6,16 +6,71 @@ which facts/build.py writes from derived/v1 place_gazetteer. No external geocode
 """
 from __future__ import annotations
 
+import difflib
 import gzip
 import json
 import math
 import re
+from itertools import zip_longest
 from pathlib import Path
 from typing import TypedDict
 
 MAX_MATCHES = 6
 NEAR_KM = 15  # "Near <place>" only when that place is this close; past it the line names only the district and PIN
 TOWN_KM = 5  # a town centre this close is named before a nearer post office
+# Official renames, old to new. When the typed name is in none of our tables, the other name of its pair is tried
+# (either way: our tables may carry the old name or the new one). When the old name is itself a place in our tables
+# (Simla is a post office in Assam), the new one's matches in other states come first and the old ones stay, so
+# neither is picked for the user. Source for every pair: "List of renamed places in India",
+# https://en.wikipedia.org/wiki/List_of_renamed_places_in_India (with the year where that list gives one).
+RENAMES: tuple[tuple[str, str], ...] = (
+    ("bombay", "mumbai"),  # 1995
+    ("madras", "chennai"),  # 1996
+    ("calcutta", "kolkata"),  # 2001
+    ("gurgaon", "gurugram"),  # 2016
+    ("allahabad", "prayagraj"),
+    ("alleppey", "alappuzha"),
+    ("poona", "pune"),  # 1978
+    ("cawnpore", "kanpur"),
+    ("banaras", "varanasi"),
+    ("benares", "varanasi"),  # the older spelling of Banaras
+    ("gauhati", "guwahati"),
+    ("cannanore", "kannur"),
+    ("palghat", "palakkad"),
+    ("quilon", "kollam"),
+    ("trichur", "thrissur"),
+    ("tanjore", "thanjavur"),
+    ("trivandrum", "thiruvananthapuram"),
+    ("calicut", "kozhikode"),
+    ("cochin", "kochi"),  # 1996
+    ("baroda", "vadodara"),  # 1974
+    ("pondicherry", "puducherry"),  # 2006
+    ("simla", "shimla"),
+    ("jubbulpore", "jabalpur"),
+    ("bangalore", "bengaluru"),  # 1 November 2014, with the eleven below
+    ("mysore", "mysuru"),
+    ("mangalore", "mangaluru"),
+    ("belgaum", "belagavi"),
+    ("gulbarga", "kalaburagi"),
+    ("bellary", "ballari"),
+    ("shimoga", "shivamogga"),
+    ("tumkur", "tumakuru"),
+    # not ("bijapur", "vijayapura"): Bijapur is also the current name of a district in Chhattisgarh
+    ("hubli", "hubballi"),
+    ("chikmagalur", "chikkamagaluru"),
+    ("hoshangabad", "narmadapuram"),
+    ("faizabad", "ayodhya"),
+    ("aurangabad", "chhatrapati sambhaji nagar"),
+    ("osmanabad", "dharashiv"),
+    ("ahmednagar", "ahilyanagar"),
+    # not a rename: the common short name of Visakhapatnam, used for no other place (served as how "rename")
+    ("vizag", "visakhapatnam"),
+)
+# A spelling match (difflib ratio, same first letter) only when the name and its rename find nothing. 'Baharaich'
+# to 'bahraich' scores 0.94.
+SPELLING_CUTOFF = 0.9
+SPELLING_TIE = 0.05  # every name scoring this close to the best is offered: a near miss never picks one for the user
+SPELLING_MIN_LEN = 5  # shorter names are one letter away from too many others
 _SUFFIX = re.compile(r"\s+(district|dist|zila|zilla|jila)$")
 _KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is more precise than a district centre
 _GAZ_KIND = {"city": "town", "office": "post_office"}
@@ -32,6 +87,7 @@ class Match(TypedDict, total=False):
     label: str
     kind: str  # pin | district | town | post_office
     state: str
+    matched_as: dict  # only from Places.resolve's fallbacks: {"query", "name", "how": "rename" | "spelling"}
     district: str  # only with district_from
     district_from: str  # a PIN the gazetteer files under no district: "nearest_pin" or "gazetteer_list"
 
@@ -111,6 +167,15 @@ class Places:
         if places:
             for i, n in enumerate(places["name"]):
                 self.names.setdefault(norm(n), []).append(i)
+        self.renames: dict[str, list[str]] = {}  # either way, for a name our tables do not have
+        self.renamed_to: dict[str, list[str]] = {}  # old to new only, for an old name that is also a place
+        for a, b in RENAMES:
+            self.renames.setdefault(a, []).append(b)
+            self.renames.setdefault(b, []).append(a)
+            self.renamed_to.setdefault(a, []).append(b)
+        self.by_letter: dict[str, list[str]] = {}
+        for k in sorted(set(self.districts) | set(self.names)):
+            self.by_letter.setdefault(k[:1], []).append(k)
 
     def _district_of(self, lat: float, lon: float) -> str:
         """District of the nearest PIN centroid, only to tell same-named places apart in a label."""
@@ -154,7 +219,7 @@ class Places:
             p, how = self.pins, self.district_from[i]
             if how:  # the gazetteer files no district here: the label names only the state, the district is a guess
                 return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
-                         "label": f"PIN {q}, {title(p['state'][i])}", "district": title(p["district"][i]),
+                         "label": f"PIN {pin}, {title(p['state'][i])}", "district": title(p["district"][i]),
                          "district_from": how}]
             return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
                      "label": f"PIN {pin}, {title(p['district'][i])}, {title(p['state'][i])}"}]
@@ -179,3 +244,58 @@ class Places:
             if len(out) == MAX_MATCHES:
                 break
         return out
+
+    def resolve(self, q: str) -> tuple[list[Match], dict | None]:
+        """lookup(q), else what an official rename (RENAMES) or a close spelling of the name finds. An old name that
+        is also a place keeps its own matches after those of its new name in other states (Simla: Shimla first).
+
+        Returns (matches, matched_as). Every match a fallback finds carries matched_as = {"query", "name", "how"}
+        ("rename" or "spelling"), so the page can say which name it shows. "query" is the name as norm() read it,
+        never the raw text (/api/place does not echo input). The second value is that dict when all
+        matches come from one name, else None. Every name within SPELLING_TIE of the best spelling score is offered,
+        each with at least one match, so a near miss is never quietly read as one of two real places.
+        """
+        found = self.lookup(q)
+        if pin_of(q):
+            return found, None
+        name, _, state_q = q.strip().rpartition(",") if "," in q else (q, "", "")
+        key, tail = norm(name), (f", {state_q}" if state_q.strip() else "")
+        if found:  # an old name that is also a place: add the renamed place where it is in another state
+            have = {m["state"] for m in found}
+            new = [(n, ms) for n in self.renamed_to.get(key, [])
+                   if (ms := [m for m in self.lookup(n + tail) if m["state"] not in have])]
+            return ((self._tagged(new, key, "rename")[0] + found)[:MAX_MATCHES], None) if new else (found, None)
+        if not key:
+            return [], None
+        for other in self.renames.get(key, []):
+            if found := self.lookup(other + tail):
+                return self._tagged([(other, found)], key, "rename")
+        if len(key) < SPELLING_MIN_LEN or not key[0].isalpha():
+            return [], None
+        scored = self._spellings(key)
+        if not scored:
+            return [], None
+        best = scored[0][0]
+        hits = [(k, ms) for r, k in scored if r >= best - SPELLING_TIE and (ms := self.lookup(k + tail))]
+        return self._tagged(hits, key, "spelling") if hits else ([], None)
+
+    def _spellings(self, key: str) -> list[tuple[float, str]]:
+        """(difflib ratio, name) of every known name with key's first letter scoring SPELLING_CUTOFF or more, best
+        first (then by name, so the order never depends on the tables' order)."""
+        sm = difflib.SequenceMatcher(autojunk=False)
+        sm.set_seq2(key)
+        out = []
+        for k in self.by_letter.get(key[0], []):
+            sm.set_seq1(k)
+            if sm.real_quick_ratio() >= SPELLING_CUTOFF and sm.quick_ratio() >= SPELLING_CUTOFF \
+                    and (r := sm.ratio()) >= SPELLING_CUTOFF:
+                out.append((r, k))
+        return sorted(out, key=lambda t: (-t[0], t[1]))
+
+    @staticmethod
+    def _tagged(hits: list[tuple[str, list[Match]]], key: str, how: str) -> tuple[list[Match], dict | None]:
+        """Each name's matches tagged with matched_as, interleaved (every name's first match before any second)."""
+        tagged = [[{**m, "matched_as": {"query": key, "name": title(n), "how": how}} for m in ms]
+                  for n, ms in hits]
+        out = [m for row in zip_longest(*tagged) for m in row if m][:MAX_MATCHES]
+        return out, (out[0]["matched_as"] if len(tagged) == 1 else None)
