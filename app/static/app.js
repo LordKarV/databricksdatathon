@@ -503,13 +503,15 @@ async function districtPicker() {
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
 const N = (path, v) => F(path, v, 'num');
+// UI-SCORE-1: a model score reads out of 100 ('47 / 100'), kind 'pct100', checked as round(100 * p); the payload keeps p.
+const S100 = (path, p) => F(path, `${Math.round(100 * p)} / 100`, 'pct100');
 // Model v2's p_lo / p_hi are the score bin's observed confirmed rate (derived/v2 field_descriptions), not an interval
 // around p, so they are shown apart from p as a percent, never in brackets next to it (#121). Interim scores keep a range.
 function similarHtml(o, P) {
   const pc = x => String(Math.round(100 * x));
   return o.range_kind === 'similar_scores'
     ? th('num.similar', {lo: F(P + '.p_lo', pc(o.p_lo), 'pct'), hi: F(P + '.p_hi', pc(o.p_hi), 'pct')})
-    : th('num.range', {lo: N(P + '.p_lo', o.p_lo.toFixed(2)), hi: N(P + '.p_hi', o.p_hi.toFixed(2))});
+    : th('num.range', {lo: F(P + '.p_lo', pc(o.p_lo), 'pct'), hi: F(P + '.p_hi', pc(o.p_hi), 'pct')});
 }
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
@@ -689,7 +691,8 @@ function sureHtml(o, P) {
   const key = o.model_band === 'NO_SERVICE_TEXT' ? 'no_text' : o.band;
   const cls = o.band === 'likely' ? 'sure-ok' : o.band === 'unlikely' ? 'sure-no' : 'sure-nv';
   // NO SERVICE TEXT: the chip already says "call to ask", so no second line (keeps Call above the fold)
-  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
+  // Likely: the kicker already says "Call first", so no second line (#140 overload review)
+  return `<p class="sure ${cls}">${bandHtml(o, P)}${key === 'no_text' || key === 'likely' ? '' : `<span>${th('sure.' + key)}</span>`}</p>`;
 }
 // WS1 1d: the map point may be wrong (engine location_doubt, #147). Say so in amber with the listing's address and,
 // when the engine has it, the time from the PIN centre (travel.alt), so the worker asks the way on the call.
@@ -744,7 +747,7 @@ function whyFirstHtml(p, o, P) {
       .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
     if (top.length) return `<p class="why-first">${th('ans.why_first.rows', {rows: top.join('; ')})}</p>`;
   }
-  return rule.text ? `<p class="why-first">${th('ans.why_first.rule', {rule: E('rank_rule.text', rule.text)})}</p>` : '';
+  return '';  // the general rank rule is the same sentence on every answer: it is on the Why page, not the card (#140)
 }
 function answerPanel(p, o, i, describedBy = '') {
   const P = `options.${i}`, tr = o.travel, tel = telOf(o);
@@ -762,8 +765,7 @@ function answerPanel(p, o, i, describedBy = '') {
     ${sureHtml(o, P)}
     ${receiptHtml(p, o, P)}
     ${i === 0 ? whyFirstHtml(p, o, P) : ''}
-    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>
-      <p class="note call-note">${th('call.number_note')}</p>`
+    ${tel ? `<a class="btn btn-go btn-block btn-big call-main" href="${tel}">${icon('phone')} ${th('ans.call')} <span class="num">${F(P + '.phone.display', o.phone.display || o.phone.e164)}</span></a>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     ${askLineHtml(o, P)}
     ${i ? '' : `<div id="call-loop">${window.RSCommunity?.callLoopHtml(p) || ''}</div>`}
@@ -825,9 +827,9 @@ function planScreen() {
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
   ['cmp.band', (o, P) => bandHtml(o, P)],
-  ['cmp.offers', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? th('cmp.no_sentence') : `${th('num.score')} ${N(P + '.p', o.p.toFixed(2))}; ${similarHtml(o, P)}`],
+  ['cmp.offers', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? th('cmp.no_sentence') : `${E(P + '.band_word', o.band_word)}, ${th('num.score')} ${S100(P + '.p', o.p)}; ${similarHtml(o, P)}`],
   ['cmp.track', (o, P) => o.track_record ? th('cmp.track_line', {k: N(P + '.track_record.k_confirmed', o.track_record.k_confirmed), n: N(P + '.track_record.n', o.track_record.n)}) : th('track.none')],
-  ['cmp.exists', (o, P) => `${N(P + '.p_e', o.p_e.toFixed(2))} / ${N(P + '.p_l', o.p_l.toFixed(2))}`],
+  ['cmp.exists', (o, P) => `${S100(P + '.p_e', o.p_e)}, ${S100(P + '.p_l', o.p_l)}`],
   ['cmp.road', (o, P) => `${N(P + '.travel.km', Math.round(o.travel.km))}, ${N(P + '.travel.low', o.travel.low)}-${N(P + '.travel.high', o.travel.high)}`],
   ['cmp.quote', (o, P) => o.evidence.length ? noTextCaptionHtml(o, state.plan.query) + quoteHtml(o.evidence[0], P + '.evidence.0') : th('cmp.none_data')],
   ['cmp.warnings', (o, P) => o.flags.length ? o.flags.map((f, j) => E(`${P}.flags.${j}`, f)).join('; ') : th('cmp.none')],
@@ -1117,14 +1119,14 @@ function whyScreen(rank) {
     : `<p>${th('why.no_quote', {label: labelF(p.query)})}</p>`;
   const sure = o.model_band === 'NO_SERVICE_TEXT'
     ? noTextSureHtml(o, P, p.query)
-    : th('why.sure_score', {band: E(P + '.band_word', o.band_word), p: N(P + '.p', o.p.toFixed(2)), similar: similarHtml(o, P)});
+    : th('why.sure_score', {band: E(P + '.band_word', o.band_word), p: S100(P + '.p', o.p), similar: similarHtml(o, P)});
   const outcomes = ['yes', 'no', 'none', 'wrong'];
   return `<a class="back" href="#/plan">${icon('back')} ${th('why.back')}</a>
     <header class="why-head"><h1 tabindex="-1"><span lang="en">${F(P + '.name', o.name)}</span></h1>
       <p>${bandHtml(o, P)}</p><p class="note"><span lang="en">${F(P + '.town', o.town)}</span>${opLabel(o) ? th('punct.stop') + ' ' + opLabel(o) : ''}</p>
       <p>${th('why.distance', {km: N(P + '.travel.km', o.travel.km), low: N(P + '.travel.low', o.travel.low), high: N(P + '.travel.high', o.travel.high)})}
         <span class="note">(${E(P + '.travel.label', o.travel.label)})</span></p>
-      ${tel ? `<a class="btn btn-go btn-block" href="${tel}">${icon('phone')} ${th('ans.call')}</a>` : ''}</header>
+      ${tel ? `<a class="btn btn-go btn-block" href="${tel}">${icon('phone')} ${th('ans.call')}</a><p class="note call-note">${th('call.number_note')}</p>` : ''}</header>
 
     <section class="section" aria-labelledby="h-q"><h2 id="h-q">${th('why.quotes_h')}</h2>${noTextCaptionHtml(o, p.query)}${quotes}</section>
     <section class="section" aria-labelledby="how"><h2 id="how">${th('why.ledger_h')}</h2>
@@ -1205,7 +1207,7 @@ function ledgerHtml(o, P, q) {
       <thead><tr><th scope="col">${th('why.ledger_col')}</th><th scope="col" class="pts">${th('why.ledger_pts')}</th></tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr><th scope="row">${th('why.ledger_total')}</th><td class="pts">${F(P + '.contributions', signed(total), 'sum')} &rarr;
-        ${N(P + '.p', o.p.toFixed(2))}</td></tr></tfoot>
+        ${S100(P + '.p', o.p)} (${E(P + '.band_word', o.band_word)})</td></tr></tfoot>
     </table>
     ${unseen.length ? `<p class="note">${th('why.not_observed', {list: unseen.map((x, j) => rowLabel(x, `${P}.not_observed.${j}`)).join('; ')})}</p>` : ''}`;
 }
@@ -1238,7 +1240,7 @@ function noTextSureHtml(o, P, q) {
     .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
     .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
   return th(q.service === 'trauma_emergency' && o.evidence.length ? 'why.no_text_trauma' : 'why.no_text_other',
-    {band: E(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
+    {band: E(P + '.band_word', o.band_word), label: labelF(q), p: S100(P + '.p', o.p)})
     + (top.length ? ' ' + th('why.largest', {rows: top.join('; ')}) : '') + ' ' + th('why.call_to_ask');
 }
 // A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
@@ -1564,6 +1566,8 @@ function render(opts = {}) {
   document.body.classList.toggle('wide', (h === '#/plan' && state.depth === 'compare') || h === '#/area');
   document.body.classList.toggle('on-plan', h === '#/plan');  // no bottom nav on the answer: Call needs the room
   renderBar();
+  if (h.startsWith('#/why/')) needScripts(['/passed.js']).then(() => RSPassed()).catch(() => {});  // UI-PASSED-1, after paint
+  if (h.startsWith('#/why/')) needScripts(['/receipt.js']).then(() => RSReceipt()).catch(() => {});  // UI-RECEIPT-1
   if (h === '#/plan' && state.plan && state.plan.itinerary && typeof routeHtml !== 'function') {
     needScripts(['/route.js']).then(() => render({keepFocus: true})).catch(() => {});  // e.g. back to #/plan
   }
@@ -1573,6 +1577,7 @@ function render(opts = {}) {
   bind();
   if ($('#speak')) RSInput.bindSpeak(state.speak);
   callBar();
+  if (h === '#/plan' && state.plan) needScripts(['/map.js']).then(() => RSMap.draw(state.plan)).catch(() => {});  // UI-MAP-1, after paint
   if (state.lang === 'hi' && state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
 }
 // On a short screen (under 600 px tall) a fixed Call bar shows whenever any part of the answer card is on screen and

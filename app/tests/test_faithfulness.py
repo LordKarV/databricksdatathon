@@ -354,6 +354,9 @@ def check_item(payload: dict, it: dict) -> str | None:
         ok = bool(m) and (h, int(m[2])) == (when.hour, when.minute)
     elif kind == "pct":  # a stored fraction shown as a whole percent: '82' for 0.82
         ok = isinstance(stored, (int, float)) and within_precision(shown, 100 * stored)
+    elif kind == "pct100":  # UI-SCORE-1: a model score out of 100, '47 / 100' for 0.47, so round(100 * p)
+        m = re.fullmatch(r"(\d+) / 100", shown.strip())
+        ok = bool(m) and isinstance(stored, (int, float)) and within_precision(m[1], 100 * stored)
     elif kind == "count":  # how many items a list holds: '3' for three options
         ok = isinstance(stored, list) and number(shown) == len(stored)
     elif kind == "likely":  # how many options in a list are in the Likely band: '2' in "2 of 3 options are Likely"
@@ -801,6 +804,38 @@ def test_location_doubt_line_on_the_readout(base_url, browser):
         assert not errs, errs[:10]
 
 
+def test_why_page_shows_the_score_out_of_100(base_url, browser):
+    """UI-SCORE-1: a score of p = 0.47 reads "47 / 100" next to its band word on the Why page, in en and hi, and the
+    mark checks it as round(100 * p); no score is shown as a decimal."""
+    import copy
+    base = next(p for n, p in PAYLOADS if n.startswith("stub-trauma"))
+    payload = copy.deepcopy(base)
+    o = payload["options"][0]
+    o["p"] = 0.47
+    for lang in ("en", "hi"):
+        ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
+        page = ctx.new_page()
+        page.route("**/api/plan", json_reply(payload))
+        page.add_init_script("localStorage.setItem('rs.lang', " + json.dumps(json.dumps(lang)) + ");"
+                             "localStorage.setItem('rs.loc', JSON.stringify({lat: 26.5951, lon: 85.4808, accuracy_m: 40,"
+                             " source: 'gps', t: Date.now(), label: null}))")
+        try:
+            page.goto(base_url + "/#/")
+            page.locator(f"[data-svc={payload['query']['service']}]").first.click()
+            page.wait_for_selector("article.card")
+            page.evaluate("h => { location.hash = h; }", f"#/why/{o['rank']}")
+            page.wait_for_selector(".why-head")
+            got = page.evaluate(COLLECT_JS)
+            text = page.inner_text("#main")
+        finally:
+            ctx.close()
+        scores = [it for it in got["items"] if it["path"] == "options.0.p"]
+        assert scores and all(it["kind"] == "pct100" and it["text"] == "47 / 100" for it in scores), scores
+        assert "47 / 100" in text and not re.search(r"\b0\.47\b", text)
+        errs = check_screen(f"score100/{lang}", payload, got, {"values_checked": 0})
+        assert not errs, errs[:10]
+
+
 NO_DIAL = ("window.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href^=\"tel:\"]');"
            " if (a) e.preventDefault(); }, true);")
 PHONE_BACK = """() => { Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'visible'});
@@ -891,9 +926,10 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             for m, f in enumerate(o0["evidence"][j].get("flags", [])):
                 if f"options.0.evidence.{j}.flags.{m}.text" not in plan_shown:
                     errs.append(f"plan: receipt quote's warning {m} not shown")
-        why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
-        if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
-            errs.append("plan: no marked 'Why first' line on the readout")
+        # #140 overload review: the card keeps only a specific why-first (the farther Likely option, or planned care's
+        # top ledger rows); the general rank rule moved to the Why page, so an unmarked line must not appear either.
+        if page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first')].some(e => !e.querySelector('[data-f]'))"):
+            errs.append("plan: an unmarked 'Why first' line on the readout")
         # Safety (#140 WS1): the route line on the answer screen shows a missed window check, never a green
         # "inside the limit" while another check (for example definitive care) is not met.
         checks = (((payload.get("itinerary") or {}).get("plans") or [{}])[0]).get("window_checks") or []
@@ -1186,6 +1222,9 @@ def test_displayed_transforms_are_checked_against_the_stored_value():
     assert item("options.0.p_lo", "pct", "82") is None and item("options.0.p_hi", "pct", "93") is None
     assert item("options.0.p_lo", "pct", "0.82") is not None and item("options.0.p_lo", "pct", "80") is not None
     assert item("options", "count", "3") is None and item("options", "count", "2") is not None
+    assert item("options.0.p", "pct100", "81 / 100") is None
+    assert item("options.0.p", "pct100", "0.81") is not None and item("options.0.p", "pct100", "81") is not None
+    assert item("options.0.p", "pct100", "79 / 100") is not None and item("options.0.p", "pct100", "81 / 10") is not None
     assert item("options", "atleast", "over 99%") is None
     assert item("options", "atleast", "1.00") is not None and item("options", "atleast", "100%") is not None
     assert capped_pct_ok("87%", 0.871) and not capped_pct_ok("over 99%", 0.95) and not capped_pct_ok("99%", 0.995)
@@ -1248,6 +1287,7 @@ def route_expected(it: dict) -> set[str]:
 
 
 ROUTED = [(n, p) for n, p in PAYLOADS if p.get("itinerary")]
+ROUTE_SCORE = re.compile(r"itinerary\.plans\.\d+\.(?:stops\.\d+\.(?:p|weakest_capability_p|fallback\.p)|totals\.p_(?:first_care|treated))")
 
 
 @pytest.mark.skipif(not ROUTED, reason="no payload with a route (planner/out or app/facts/out not built)")
@@ -1271,13 +1311,18 @@ def test_every_route_field_is_shown(name, payload, base_url, browser):
     # #140 3e: the route says "score", never "chance"; its totals name their assumption; windows count from departure
     assert not re.search(r"\bchance\b", route_text, re.IGNORECASE), f"{name}: 'chance' on the route"
     if any(p["totals"].get("minutes_to_definitive") is not None for p in payload["itinerary"]["plans"]):
-        assert "Score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
+        assert "Evidence score if the listings are right" in route_text and I18N["en"]["route.totals_assume"] in route_text
     if any(p["window_checks"] for p in payload["itinerary"]["plans"]):
         assert "counted from when the patient leaves" in route_text
     shown = {it["path"] for it in got["items"]}
     missing = sorted(route_expected(payload["itinerary"]) - shown)
     assert not missing, f"{name}: route fields not shown: {missing[:20]}"
     assert not check_screen("route", payload, got, {"values_checked": 0})
+    # UI-SCORE-1 (#193 review): every route score reads "N / 100" like the cards, checked as round(100 * p)
+    scores = [it for it in got["items"] if ROUTE_SCORE.fullmatch(it["path"])]
+    assert scores or not any(ROUTE_SCORE.fullmatch(x) for x in route_expected(payload["itinerary"])), f"{name}: no route score"
+    bad = [it for it in scores if it["kind"] != "pct100" or not re.fullmatch(r"\d+ / 100", it["text"])]
+    assert not bad, f"{name}: route scores not out of 100: {bad[:5]}"
 
 
 # ---------- field reports: every count and "days ago" on a field line equals the reports fed in ----------
