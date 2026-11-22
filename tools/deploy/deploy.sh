@@ -49,6 +49,8 @@ env:
     valueFrom: serving-endpoint-text
   - name: SERVING_ENDPOINT_VISION
     valueFrom: serving-endpoint-vision
+  - name: REPORTER_KEY
+    valueFrom: reporter-key
 YAML
 du -sh "$BUNDLE"
 
