@@ -376,6 +376,7 @@ def itinerary(eng: Engine, service: str, lat: float, lon: float, first_option: d
     fid1 = (first_option or {}).get("facility_id")
     out = svc.plan_for_service(service, lat, lon, facilities=sure, first_stop=fid1)
     if first_option and first_option.get("location_doubt"):  # card 1 is not in `sure`: rule 1 still needs its stages
+        # This call's route is discarded: only its first_stop (card 1 on the full facility list) is used.
         out["first_stop"] = svc.plan_for_service(service, lat, lon, first_stop=fid1).get("first_stop")
     pw = svc.pathways()[out["pathway"]]
     meta = out.get("meta") or {}
