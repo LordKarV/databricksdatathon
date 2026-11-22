@@ -51,13 +51,22 @@ def test_every_app_service_gets_v2_scores(built):
 
 
 def test_track_bins_read_from_model_card_and_drop_incomplete(tmp_path):
-    card = {"calibration": {"bins": [
-        {"lo": 0.0, "hi": 0.5, "n": 40, "k_confirmed": 5, "k_contradicted": 10, "k_no_info": 25, "split": "dev"},
-        {"lo": 0.5, "hi": 1.0, "n": 30, "k_confirmed": 20, "k_contradicted": 3}]}}  # no k_no_info: dropped
+    card = {"calibration_by_score_bin": [
+        {"bin": 0, "p_min": 0.0, "p_max": 0.5, "n_decided": 15, "k_confirmed": 5, "k_contradicted": 10,
+         "k_no_info": 25, "k_never_searched": 9},
+        {"bin": 1, "p_min": 0.5, "p_max": 1.0, "n_decided": 23, "k_confirmed": 20, "k_contradicted": 3}]}  # dropped
     path = tmp_path / "model_card.json"
     path.write_text(__import__("json").dumps(card))
-    assert build.track_bins(path) == [card["calibration"]["bins"][0]]
+    assert build.track_bins(path) == [{"lo": 0.0, "hi": 0.5, "n": 40, "k_confirmed": 5, "k_contradicted": 10,
+                                       "k_no_info": 25, "split": "dev"}]  # never-searched pairs are not checks
     assert build.track_bins(tmp_path / "missing.json") == []
+
+
+def test_real_model_card_gives_five_bins():
+    if not build.MODEL_CARD.is_file():
+        pytest.skip("derived/v2 model card not present")
+    bins = build.track_bins()
+    assert len(bins) == 5 and all(b["n"] == b["k_confirmed"] + b["k_contradicted"] + b["k_no_info"] for b in bins)
 
 
 def test_engine_track_record_three_outcomes_or_none():
@@ -104,3 +113,20 @@ def test_operator_comes_from_v2_attributes():
         pytest.skip("derived/v2 facility_attributes not present")
     f, _ = build.facilities()
     assert set(f.operator) <= {"public", "private", "unknown"} and (f.operator == "public").sum() > 100
+
+
+def test_no_service_text_ranks_at_most_at_the_likely_threshold():
+    from facts.engine import Engine, Pair
+    eng = Engine.__new__(Engine)
+    eng.likely_threshold = 0.3686
+    pr = Pair(0, "tag_only", "T", "unverified", 0.5, 0.1, 0.9, 0.5, 0.5, [], [], [], None, 1,
+              model=["not_verified", 0.97, 0.6, 0.8, "NO_SERVICE_TEXT"])
+    assert eng.rank_p(pr, 0.97) == 0.3686 and Engine.model_band(pr) == "NO_SERVICE_TEXT"
+    pr.model[4] = "CALL_FIRST"
+    assert eng.rank_p(pr, 0.97) == 0.97
+
+
+def test_likely_threshold_read_from_card():
+    if not build.MODEL_CARD.is_file():
+        pytest.skip("derived/v2 model card not present")
+    assert 0 < build.likely_threshold() < 1

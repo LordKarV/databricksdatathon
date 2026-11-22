@@ -34,7 +34,9 @@ def test_contract_shape(service):
     for o in j["options"]:
         assert OPTION_KEYS <= o.keys()
         assert o["band"] in {"likely", "not_verified", "unlikely"}
-        assert o["p_lo"] <= o["p"] <= o["p_hi"]
+        assert 0 <= o["p_lo"] <= o["p_hi"] <= 1
+        if o["range_kind"] == "interval":  # v2's lo-hi is the score bin's record, which p need not lie inside
+            assert o["p_lo"] <= o["p"] <= o["p_hi"]
         assert o["travel"]["method"] in {"osrm", "haversine_factor"}
         assert o["travel"]["low"] <= o["travel"]["minutes"] <= o["travel"]["high"]
         assert {"km", "method", "cached", "factor", "kmh", "terrain", "label"} <= o["travel"].keys()
@@ -47,7 +49,7 @@ def test_contract_shape(service):
 
 @needs_data
 def test_abstention_shape():
-    j = get(service="emergency_csection", lat=20.2, lon=78.4).json()
+    j = get(service="nicu", lat=19.9, lon=83.17).json()  # Kalahandi: no confirmed NICU in reach on v2
     assert j["abstain"]["text"]
     assert all(o["band"] != "likely" for o in j["options"])
     assert {n["number"] for n in j["emergency_numbers"]} == {"108", "102"}

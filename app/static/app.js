@@ -282,8 +282,12 @@ function travelHtml(t, P) {
     `${F(P + '.high', t.high, 'num')} min (${F(P + '.method', t.method === 'osrm' ? 'road route' : 'rough', 'method')})`;
 }
 function bandHtml(o, P) {
-  const word = o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
-  return `<span class="band band-${o.band}" data-f="${P}.band" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
+  // derived/v2 sub-bands of "Not verified": the listing describes the service but nothing confirms it (CALL FIRST),
+  // or the listing has no sentence about the service at all (NO SERVICE TEXT; its p is not shown as a chance)
+  const word = o.model_band === 'NO_SERVICE_TEXT' ? 'NO SERVICE TEXT: call to ask' :
+    o.band === 'not_verified' ? 'NOT VERIFIED: call to confirm' : o.band_word.toUpperCase();
+  const path = o.model_band === 'NO_SERVICE_TEXT' ? `${P}.model_band` : `${P}.band`;
+  return `<span class="band band-${o.band}" data-f="${path}" data-k="band"><span aria-hidden="true">${BAND_ICON[o.band]}</span> ${esc(word)}</span>`;
 }
 // Data-quality warnings inside the citation (#86): from the claims pipeline and the source-page check.
 function quoteFlagsHtml(e, P) {
@@ -485,7 +489,7 @@ function planSpeech(p) {
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
   ['Band', (o, P) => bandHtml(o, P)],
-  ['Offers (range)', (o, P) => `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
+  ['Offers (range)', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
   ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
@@ -678,8 +682,10 @@ function whyScreen(rank) {
     <h2>Is it real</h2><p>${o.is_real.map((x, j) => F(`${P}.is_real.${j}`, x)).join('; ')}</p>
     <h2>Where</h2><p>${F(P + '.where_check', o.where_check)}</p>
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
-    <h2>How sure</h2><p>${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
-      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).
+    <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
+    ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
+    : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
+      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.why_first_text ? `<h2>Why it ranks here</h2><p>${F(P + '.why_first_text', o.why_first_text)}</p>` : ''}
     <h2>Distance</h2><p>${F(P + '.travel.km', o.travel.km, 'num')} km by road, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')} min

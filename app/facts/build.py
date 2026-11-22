@@ -272,16 +272,26 @@ def claims(ids: set[str]) -> tuple[dict[str, list], dict[str, list]]:
 def track_bins(path: Path | None = None) -> list[dict]:
     """Three-outcome track record per score bin from derived/v2/model_card.json (#63, #82 H2); [] until published.
 
-    Expected shape: {"calibration": {"bins": [{"lo", "hi", "n", "k_confirmed", "k_contradicted", "k_no_info",
-    "split"}, ...]}}. A bin missing any count is dropped rather than shown with a made-up zero.
+    Reads `calibration_by_score_bin`: p_min, p_max, n_decided, k_confirmed, k_contradicted, k_no_info (DEV pairs whose
+    labeller searched and found nothing). n here is every checked pair: decided plus no information. Pairs never
+    searched are not checks and are left out. A bin missing any count is dropped rather than shown with a made-up 0.
     """
     path = path or MODEL_CARD
     if not path.is_file():
         return []
-    bins = json.loads(path.read_text()).get("calibration", {}).get("bins", [])
-    keys = ("lo", "hi", "n", "k_confirmed", "k_contradicted", "k_no_info")
-    return [{k: b[k] for k in (*keys, "split") if k in b} | {"split": b.get("split", "dev")}
-            for b in bins if all(isinstance(b.get(k), (int, float)) for k in keys)]
+    keys = ("p_min", "p_max", "n_decided", "k_confirmed", "k_contradicted", "k_no_info")
+    return [{"lo": b["p_min"], "hi": b["p_max"], "n": b["n_decided"] + b["k_no_info"], "k_confirmed": b["k_confirmed"],
+             "k_contradicted": b["k_contradicted"], "k_no_info": b["k_no_info"], "split": b.get("split", "dev")}
+            for b in json.loads(path.read_text()).get("calibration_by_score_bin", [])
+            if all(isinstance(b.get(k), (int, float)) for k in keys)]
+
+
+def likely_threshold(path: Path | None = None) -> float | None:
+    """t_L, the model's p threshold for LIKELY (model_card band_thresholds); None before v2 is published."""
+    path = path or MODEL_CARD
+    if not path.is_file():
+        return None
+    return json.loads(path.read_text()).get("band_thresholds", {}).get("likely", {}).get("p")
 
 
 def rules() -> dict[str, dict]:
@@ -312,6 +322,7 @@ def main() -> None:
                  "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
         "rules": rules(),
         "track_bins": track_bins(),
+        "likely_threshold": likely_threshold(),
         "fac": {"id": list(f.unique_id), "name": list(f.name), "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],

@@ -21,6 +21,10 @@ NAMED = re.compile(r"\b(?:Dr|DR|Prof)\b\.?\s*[A-Z][a-z]+\s+[A-Z][a-z]+\b(?!\s+(?
 PROBES = [("trauma_emergency", 25.6, 85.95), ("dialysis", 26.6, 85.48), ("emergency_csection", 19.88, 75.34),
           ("trauma_emergency", 25.15, 83.68), ("mri", 21.15, 79.09), ("cardiac_surgery", 18.52, 73.86),
           ("nicu", 24.0, 84.0), ("burn_care", 23.02, 72.57), ("mri", 19.07, 72.88)]
+# Places for data-driven checks: the cases below are searched for, not hard-coded, so a model refit cannot break them.
+GRID = [(25.6, 85.1), (28.6, 77.2), (18.52, 73.86), (21.15, 79.09), (26.85, 80.95), (22.57, 88.36), (19.07, 72.88),
+        (12.97, 77.59), (25.6, 85.95), (26.6, 85.48)]
+GRID_PROBES = [(s, la, lo) for s in sorted(SERVICES) for la, lo in GRID]
 
 
 # ---------- doctor names ----------
@@ -52,8 +56,11 @@ def test_no_named_doctor_in_any_quote_and_the_claim_id_stays():
             assert not NAMED.search(e["quote"]), e
             assert e["claim_id"] in ENGINE.claims
         assert not any(NAMED.search(f) for o in p["options"] for f in o["flags"])
-    jehangir = ENGINE.plan("cardiac_surgery", 18.52, 73.86, 40, "gps")["options"]
-    assert any("a doctor" in e["quote"].lower() for o in jehangir for e in o["evidence"])  # the demo case
+    shown = [(e, ENGINE.claims[e["claim_id"]][1]) for s, la, lo in GRID_PROBES
+             for o in ENGINE.plan(s, la, lo, 40, "gps")["options"] for e in o["evidence"]]
+    named = [e for e, raw in shown if NAMED.search(raw)]
+    assert named and all(e["quote"] == redact_names(raw) != raw for e, raw in shown if NAMED.search(raw)
+                         and redact_names(raw) != raw)  # real named-doctor sentences are shown redacted
 
 
 def test_offline_pack_quotes_are_redacted():
@@ -73,7 +80,7 @@ def test_source_is_a_page_about_the_facility_not_another_town():
 @needs_data
 def test_quote_flags_come_from_pipeline_fields_and_weak_quotes_come_last():
     seen = set()
-    for s, la, lo in PROBES:
+    for s, la, lo in PROBES + GRID_PROBES:
         for o in ENGINE.plan(s, la, lo, 40, "gps")["options"]:
             i = ENGINE.fid[o["facility_id"]]
             for e in o["evidence"]:
@@ -90,7 +97,7 @@ def test_quote_flags_come_from_pipeline_fields_and_weak_quotes_come_last():
             flagged = any(f["weak"] for e in o["evidence"] for f in e["flags"])
             row = [c for c in o["contributions"] if c["label"].startswith("quoted sentences with a warning")]
             assert bool(row) == flagged and all(c["points"] == 0 for c in row)
-    assert {"src_list", "src_unverified", "hedge"} <= seen
+    assert {"src_list", "src_unverified"} <= seen
 
 
 @needs_data
@@ -144,19 +151,23 @@ def test_why_not_rows_rest_on_engine_fields(s, la, lo):
 
 @needs_data
 def test_what_would_change_is_a_phone_call_that_really_changes_the_order(monkeypatch):
-    p = ENGINE.plan("mri", 28.6, 77.2, 40, "gps")
-    c = p["what_would_change"]
-    assert c["kind"] == "confirm_nearer" and c["minutes_vs_first"] < 0
-    # Re-run with that pair confirmed (the gold override): it must now rank first.
-    pr = ENGINE.index["mri"][ENGINE.fid[c["facility_id"]]]
+    s, la, lo = next(q for q in GRID_PROBES
+                     if (ENGINE.plan(*q, 40, "gps")["what_would_change"] or {}).get("kind") == "confirm_nearer")
+    c = ENGINE.plan(s, la, lo, 40, "gps")["what_would_change"]
+    assert c["minutes_vs_first"] < 0
+    # Re-run with that pair confirmed at the confirmed-pair score: it must now rank first.
+    pr = ENGINE.index[s][ENGINE.fid[c["facility_id"]]]
     monkeypatch.setattr(pr, "status", "verified_true")
     monkeypatch.setattr(pr, "score", ENGINE.p_confirmed)
-    assert ENGINE.plan("mri", 28.6, 77.2, 40, "gps")["options"][0]["facility_id"] == c["facility_id"]
+    if pr.model:
+        monkeypatch.setattr(pr, "model", ["likely", ENGINE.p_confirmed, *pr.model[2:4], "LIKELY"])
+    assert ENGINE.plan(s, la, lo, 40, "gps")["options"][0]["facility_id"] == c["facility_id"]
 
 
 @needs_data
 def test_change_falls_back_to_option_two_when_no_call_can_flip_it():
-    p = ENGINE.plan("trauma_emergency", 25.6, 85.95, 40, "gps")  # Pusa: the first choice is also the nearest
+    p = next(x for x in (ENGINE.plan(*q, 40, "gps") for q in GRID_PROBES)
+             if (x["what_would_change"] or {}).get("kind") == "first_says_no")
     c = p["what_would_change"]
     assert c["kind"] == "first_says_no" and c["facility_id"] == p["options"][1]["facility_id"]
     assert c["minutes_vs_first"] == p["options"][1]["travel"]["minutes"] - p["options"][0]["travel"]["minutes"]

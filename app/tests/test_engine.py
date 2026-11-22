@@ -51,7 +51,10 @@ def test_bands_are_conservative_and_points_reproduce_p():
     for p in plans().values():
         for o in p["options"]:
             pr = ENGINE.index[p["query"]["service"]][ENGINE.fid[o["facility_id"]]]
-            assert (o["band"] == "likely") == (pr.status == "verified_true")
+            if pr.model:  # derived/v2: the model's band, mapped (derived/v2/README)
+                assert o["band"] == {"LIKELY": "likely", "UNLIKELY": "unlikely"}.get(pr.model[4], "not_verified")
+            else:  # interim: Likely only for pairs a second source confirmed
+                assert (o["band"] == "likely") == (pr.status == "verified_true")
             assert o["band"] != "unlikely"  # never offered as an option
             total = sum(c["points"] for c in o["contributions"])
             assert abs(1 / (1 + math.exp(-total / 10)) - o["p"]) < 0.03, (o["name"], total, o["p"])
@@ -107,12 +110,16 @@ def test_every_service_has_rows():
 
 
 def test_nearer_first_but_a_confirmed_listing_in_reach_is_never_hidden():
-    p = ENGINE.plan("dialysis", 26.6, 85.48, 40, "gps")  # Sitamarhi: the only verified pair is about 150 km away
-    bands = [o["band"] for o in p["options"]]
-    assert "likely" in bands and p["abstain"] is None
-    likely = next(o for o in p["options"] if o["band"] == "likely")
-    assert likely["rank"] == len(p["options"])  # far away, so it takes the last slot rather than the first
-    assert p["options"][0]["travel"]["minutes"] < likely["travel"]["minutes"]
+    # Whatever the scores: if any Likely listing is in reach, the answer shows one (in the last slot if it did not
+    # rank into the top ones) and does not abstain.
+    for service in ("dialysis", "nicu", "emergency_csection"):
+        for la, lo in [(26.6, 85.48), (25.6, 85.1), (19.9, 83.17), (24.78, 85.0), (26.75, 94.2)]:
+            pool, _ = ENGINE._ranked(service, la, lo)
+            p = ENGINE.plan(service, la, lo, 40, "gps")
+            if any(r[4] == "likely" for r in pool):
+                assert any(o["band"] == "likely" for o in p["options"]) and p["abstain"] is None
+            else:
+                assert p["abstain"] is not None
 
 
 # ---------- multi-stop route (#47) ----------

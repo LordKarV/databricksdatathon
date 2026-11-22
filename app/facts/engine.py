@@ -123,6 +123,7 @@ class Engine:
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
+        self.likely_threshold = facts.get("likely_threshold")
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
@@ -213,6 +214,18 @@ class Engine:
     # ---------- helpers ----------
     def _f(self, k: str, i: int):
         return self.fac[k][i]
+
+    def rank_p(self, pr: Pair, p: float) -> float:
+        """p for ranking. A NO_SERVICE_TEXT pair has no sentence about the service as its own unit, so its p rests on
+        context alone (derived/v2/README: "show the band, not p"). It ranks as if at most at the LIKELY threshold, so a
+        district hospital with p 0.95 from its level never outranks a listing that describes the service."""
+        if pr.model and pr.model[4] == "NO_SERVICE_TEXT" and self.likely_threshold is not None:
+            return min(p, self.likely_threshold)
+        return p
+
+    @staticmethod
+    def model_band(pr: Pair) -> str | None:
+        return pr.model[4] if pr.model and len(pr.model) > 4 else None
 
     def _operator(self, i: int) -> str:
         ops = self.fac.get("operator")  # older facts files have no operator column
@@ -309,7 +322,7 @@ class Engine:
                 else RULE_PLAIN.get(pr.rule, "contradicted by a second source")),
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
             # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
-            "range_kind": "similar_scores" if pr.model else "interval",
+            "range_kind": "similar_scores" if pr.model else "interval", "model_band": self.model_band(pr),
             "p_e": self._f("p_e", i), "p_l": self._f("p_l", i),
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
@@ -332,7 +345,7 @@ class Engine:
             if not ev and band != "unlikely":
                 continue  # every recommendation cites facility text (#85): a pair with no usable quote is not offered
             tr = self._travel(lat, lon, pr.fi, state)
-            row = (p * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
+            row = (self.rank_p(pr, p) * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
