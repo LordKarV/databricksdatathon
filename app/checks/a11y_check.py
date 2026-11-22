@@ -414,11 +414,14 @@ def prefs_script(lang: str | None, size: int) -> str:
 # (360x640) and an iPhone SE (320x568), in both languages; and the Why page's ledger, every row open, never scrolls
 # sideways at 320 px.
 FOLD_VIEWPORTS = [(360, 640), (320, 568)]
-CALL_VISIBLE_JS = """() => { const b = document.querySelector('#main .call-main'); if (!b) return {ok: false, why: 'no Call'};
-  const r = b.getBoundingClientRect(), h = innerHeight, w = innerWidth;
-  const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-  return {ok: r.top >= 0 && r.bottom <= h && r.left >= 0 && r.right <= w && !!top && b.contains(top),
-          top: Math.round(r.top), bottom: Math.round(r.bottom), viewport: h}; }"""
+CALL_VISIBLE_JS = """() => {
+  // the card's own Call, or the fixed Call bar a short screen shows when the card's Call is not fully visible (#178)
+  const seen = b => { const r = b.getBoundingClientRect(), h = innerHeight, w = innerWidth;
+    const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return {ok: r.top >= 0 && r.bottom <= h && r.left >= 0 && r.right <= w && !!top && b.contains(top),
+            top: Math.round(r.top), bottom: Math.round(r.bottom), viewport: h, fixed: b.classList.contains('call-fixed')}; };
+  const all = [...document.querySelectorAll('#main .call-main, #call-bar:not([hidden]) .call-fixed')].map(seen);
+  return all.find(x => x.ok) || all[0] || {ok: false, why: 'no Call'}; }"""
 
 
 def fold_checks(browser) -> dict:
