@@ -17,9 +17,9 @@ logit(p), so the contributions ledger still sums exactly to the score shown.
 
 Guardrails (SAFETY 9): reports alone never take a score below the Unlikely line (0.20, MODEL_SPEC fallback t_U),
 they say "Reports disagree with the listing: call first" instead; and with no facility text they never lift a
-score to the Likely line (0.70, t_L), so NO SERVICE TEXT stays its own flag.
+score to the Likely line (t_L = 0.3686, derived/v2/model_card.json), so NO SERVICE TEXT stays its own flag.
 
-Reports can lower a band, never raise it: a Likely pair whose adjusted p falls below 0.70 becomes Not verified
+Reports can lower a band, never raise it: a Likely pair whose adjusted p falls below t_L becomes Not verified
 ("Health-worker reports disagree with the listing: call first"). Every other band stays as the model set it, even
 when reports are positive. The plan is then rebuilt from the adjusted scores (apply_field), so the order, the
 abstention and every sentence built from p agree with the card.
@@ -47,7 +47,8 @@ PHONE_WEIGHT = 0.5
 MIN_REPORTERS = 2
 WINDOW_DAYS = 90
 NOTE_DAYS = 7
-T_LIKELY, T_UNLIKELY = 0.70, 0.20
+# The model v2 band lines (derived/v2/model_card.json band_thresholds; test_field pins them to the card).
+T_LIKELY, T_UNLIKELY = 0.3686, 0.20
 TTL_S = 60
 TERM_LABEL = "Field reports"
 MAX_ROWS = 50_000  # ponytail: 90 days of keyed reports nationally is far below this; aggregate further if not

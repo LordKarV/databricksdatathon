@@ -112,9 +112,9 @@ def test_the_term_is_exactly_additive_in_log_odds():
 
 
 def test_reports_alone_cannot_lift_a_pair_with_no_service_text_to_likely():
-    out = field_adjust(0.4, accepted(40), NOW, has_text=False)
+    out = field_adjust(0.30, accepted(40), NOW, has_text=False)  # below the model's Likely line (t_L 0.3686)
     assert out["p"] < field.T_LIKELY and field.NO_TEXT_CAP in out["lines"]
-    assert field_adjust(0.4, accepted(40), NOW)["p"] >= field.T_LIKELY
+    assert field_adjust(0.30, accepted(40), NOW)["p"] >= field.T_LIKELY
 
 
 def test_lines_say_what_happened_without_names():
@@ -170,7 +170,7 @@ def test_a_likely_pair_still_above_the_line_stays_likely_and_says_call_first():
 
 
 def test_rescore_uses_no_evidence_as_no_service_text():
-    (_, p, *_), _ = field.rescore(scored(ev=()), accepted(40), NOW)
+    (_, p, *_), _ = field.rescore(scored(p=0.30, ev=()), accepted(40), NOW)
     assert p < field.T_LIKELY
 
 
@@ -430,3 +430,14 @@ def test_demo_reports_are_simulated_in_memory_and_reach_a_real_plan(monkeypatch)
     for f in shown:
         for line in f["lines"] + f["notes"]:
             assert line["en"].startswith("Simulated for the demo: ")
+
+
+def test_band_lines_match_the_model_card():
+    """The field rules use the shipped model's own band lines, not a second set of numbers."""
+    import json
+    from pathlib import Path
+    card = Path(__file__).resolve().parents[2] / "derived" / "v2" / "model_card.json"
+    if not card.is_file():
+        pytest.skip("model card not present")
+    bt = json.loads(card.read_text())["band_thresholds"]
+    assert abs(field.T_LIKELY - bt["likely"]["p"]) < 1e-3 and abs(field.T_UNLIKELY - bt["unlikely"]["p"]) < 1e-9
