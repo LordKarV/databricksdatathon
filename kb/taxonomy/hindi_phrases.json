@@ -1,0 +1,60 @@
+{
+ "about": "Hindi (Devanagari) and Hinglish (romanised) words a health worker or family member says for the 7 app services, plus spellings speech-to-text produces (app_design/feasibility/voice_language/out/asr_small.json). Read by app/inputs/build_lexicon.py. Team-written, not clinically reviewed. Keys are app service ids; 'danger' adds to the danger words in app/inputs/understand.py.",
+ "services": {
+  "dialysis": [
+   "डायलिसिस", "डायलेसिस", "डायलासिस", "डायलिसीस", "डाइलिसिस", "डायलसिस", "डायलिसिस मशीन",
+   "खून साफ", "खून साफ करवाना", "खून की सफाई", "खून बदलवाना",
+   "किडनी फेल", "किडनी खराब", "किडनी काम नहीं कर रही", "गुर्दे खराब", "गुर्दा खराब", "गुर्दे फेल", "गुर्दे की मशीन",
+   "किडनी की मशीन",
+   "dialisis", "dayalisis", "dailysis", "dialysys", "dyalisis", "dialysis machine",
+   "khoon saaf", "khun saaf", "khoon saf", "khoon ki safai", "kidney kharab", "kidney fail", "kidney failure",
+   "kidney kaam nahi kar rahi", "gurde kharab", "gurda kharab", "gurde fail", "kidney ki machine"
+  ],
+  "emergency_csection": [
+   "सिजेरियन", "सिज़ेरियन", "सीजेरियन", "सिजेरीयन", "सिजर", "सीज़र", "सिजेरियन ऑपरेशन",
+   "ऑपरेशन से डिलीवरी", "ऑपरेशन से बच्चा", "डिलीवरी का ऑपरेशन", "पेट चीर कर डिलीवरी",
+   "बच्चा उल्टा", "बच्चा उलटा", "बच्चा आड़ा", "बच्चा टेढ़ा", "डिलीवरी में दिक्कत", "डिलीवरी में परेशानी",
+   "प्रसव में दिक्कत", "नॉर्मल डिलीवरी नहीं", "डिलीवरी के बाद खून",
+   "operation se bachcha", "operation wali delivery", "delivery ka operation", "siserian", "cesarian",
+   "caesarian", "bacha ulta", "baccha ulta", "bachcha aada", "bachcha tedha", "normal delivery nahi",
+   "delivery me dikkat", "delivery mein problem", "delivery ke baad khoon", "bleeding after delivery"
+  ],
+  "nicu": [
+   "नवजात", "नवजात शिशु", "नया बच्चा कमजोर", "बच्चा कमजोर", "कमजोर बच्चा", "बच्चा कमज़ोर", "कम वजन का बच्चा",
+   "कम वज़न", "समय से पहले पैदा", "अधूरे महीने", "सातवें महीने में पैदा", "बच्चे को पीलिया", "पीलिया वाला बच्चा",
+   "शीशे की मशीन", "मशीन में रखना", "बच्चा दूध नहीं पी रहा", "एन आई सी यू",
+   "navjaat", "navjat", "naya bachcha", "bachcha kamzor", "bacha kamjor", "kamzor bachcha", "kam vajan",
+   "kam wajan", "weight kam hai bachche ka", "baby ko piliya", "bachche ko peeliya", "samay se pehle",
+   "adhure mahine", "sheeshe ki machine", "doodh nahi pee raha"
+  ],
+  "trauma_emergency": [
+   "एक्सीडेंट", "एक्सिडेंट", "ऐक्सिडेंट", "हादसा", "चोट लगी", "सिर में चोट", "सर पे चोट", "हड्डी टूट", "हड्डी टूटी",
+   "पैर टूट", "हाथ टूट", "छत से गिरा", "पेड़ से गिरा", "टक्कर", "बाइक से गिरा", "फ्रैक्चर",
+   "फ्रेक्चर", "ट्रॉमा",
+   "exident", "accident hua", "chot lag gayi", "haddi tut", "haddi tooti", "haddi tuti", "pair tut", "haath toot",
+   "chhat se gira", "ped se gira", "takkar", "bike se gira", "fracher", "trauma"
+  ],
+  "burn_care": [
+   "जल गए", "झुलस", "झुलस गया", "आग से जला", "आग लग गई", "आग लगी", "गरम पानी गिरा", "गर्म पानी गिर", "गरम तेल",
+   "तेजाब", "तेज़ाब", "एसिड", "करंट लगा", "करंट लग गया", "सिलेंडर फटा", "बर्न",
+   "jal gaye", "jhulas", "jhulsa", "aag lag gayi", "aag lagi", "garam pani gira", "garam pani gir", "garam tel", "tezab",
+   "acid attack", "current lag gaya", "karant laga", "cylinder phata", "cylinder fat gaya"
+  ],
+  "mri": [
+   "एम आर आई", "एमआरआई स्कैन", "बड़ी मशीन वाली जांच", "सिर का एमआरआई",
+   "mri scan", "em aar aai"
+  ],
+  "cardiac_surgery": [
+   "दिल का आपरेशन", "हार्ट सर्जरी", "हार्ट का ऑपरेशन", "बाईपास", "बायपास", "वाल्व बदलना", "दिल में छेद",
+   "ओपन हार्ट",
+   "heart ka operation", "baipas", "valve badalna", "dil mein chhed", "dil me ched"
+  ]
+ },
+ "danger": [
+  "बेहोशी", "होश नहीं", "सांस नहीं ले रहा", "सांस नहीं ले रही", "सांस नहीं आ रही", "सांस लेने में तकलीफ", "सांस फूल",
+  "दम घुट", "खून बह रहा", "खून रुक नहीं", "खून नहीं रुक", "दौरे पड़", "दौरा पड़", "मिर्गी", "ज़हर खा", "सांप काटा",
+  "नाग ने डसा", "दिल का दौरा", "हार्ट अटैक", "बच्चा अटक", "बच्चा फंस", "चेहरा जल", "जवाब नहीं दे रहा",
+  "behoshi", "hosh nahi", "saas nahi", "sans nahi", "dam ghut", "khoon ruk nahi", "khun bah", "daura pad",
+  "mirgi", "heart attack", "dil ka daura", "jahar", "zahar", "saap ne kata", "saanp kaata", "bachcha phans"
+ ]
+}

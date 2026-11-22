@@ -10,8 +10,9 @@ import pandas as pd
 
 D = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(D, "out")
-GT = "/Users/karthikvattem/projects/datathon/audit/ground_truth"
-AUDIT = "/Users/karthikvattem/projects/datathon/audit/claims/out/grades.parquet"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(D, "../..")))
+GT = os.path.join(_ROOT, "audit/ground_truth")
+AUDIT = os.path.join(_ROOT, "audit/claims/out/grades.parquet")
 SVC = {"emergency_csection": "csection", "trauma_emergency": "trauma"}
 POS = {"strong", "moderate", "medium"}  # recommendable grades (audit grader used 'medium')
 

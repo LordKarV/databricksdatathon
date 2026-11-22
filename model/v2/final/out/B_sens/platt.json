@@ -1,0 +1,13 @@
+{
+ "scheme": "group5",
+ "a_full": 0.49302716217026443,
+ "c_full": -0.23417749322025458,
+ "gain": 0.04370849507728278,
+ "se": 0.017573212775305,
+ "ci95_of_diff": [
+  -0.07936549380593064,
+  -0.009196485683484672
+ ],
+ "used": true,
+ "rule": "Platt used only when the out-of-fold gain is at least one SE"
+}

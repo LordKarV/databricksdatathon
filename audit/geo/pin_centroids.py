@@ -23,10 +23,9 @@ import numpy as np
 import pandas as pd
 
 import sys
-sys.path.insert(0, "/Users/karthikvattem/projects/datathon/audit/geo")
-from geo_common import ZONE
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from geo_common import DATA, ROOT, ZONE
 
-ROOT = Path("/Users/karthikvattem/projects/datathon")
 OUT = ROOT / "audit/geo"
 LAT_MIN, LAT_MAX, LON_MIN, LON_MAX = 6.0, 37.6, 68.0, 97.6
 OUTLIER_KM = 50.0  # ponytail: fixed radius; a big rural PIN rarely spans >50 km
@@ -48,7 +47,7 @@ def mode_or_none(s):
 
 
 def main():
-    p = pd.read_parquet(ROOT / "data/raw/india_post_pincode_directory.parquet")
+    p = pd.read_parquet(DATA / "raw/india_post_pincode_directory.parquet")
     log = {"rows_total": len(p), "distinct_pins": int(p.pincode.nunique())}
     p["lat"] = pd.to_numeric(p.latitude, errors="coerce")
     p["lon"] = pd.to_numeric(p.longitude, errors="coerce")

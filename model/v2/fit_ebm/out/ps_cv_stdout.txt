@@ -1,0 +1,35 @@
+gold labelled pairs 195 (pos 62); PU rows 22140 (pos 8706); terms 26; masks {'eraktkosh': ['x_erk_blood_centre_on_site'], 'laqshya': ['x_laqshya_ot_valid'], 'mohfw_tcf': ['x_mohfw_trauma_centre'], 'nabh': ['x_nabh_service_code', 'x_nabh_full_accreditation', 'k_text_nabh'], 'nmc': ['x_nmc_course_strong'], 'pmndp_goa': []}
+fold5 fold 0: train gold 145, PU 17773, test 50, clamp edits 3, 54s
+fold5 fold 1: train gold 155, PU 17287, test 40, clamp edits 6, 51s
+fold5 fold 2: train gold 159, PU 17899, test 36, clamp edits 3, 52s
+fold5 fold 3: train gold 165, PU 18074, test 30, clamp edits 6, 43s
+fold5 fold 4: train gold 156, PU 17527, test 39, clamp edits 8, 39s
+fold5_noweb fold 0: train gold 145, PU 17773, test 50, clamp edits 2, 34s
+fold5_noweb fold 1: train gold 155, PU 17287, test 40, clamp edits 7, 32s
+fold5_noweb fold 2: train gold 159, PU 17899, test 36, clamp edits 3, 35s
+fold5_noweb fold 3: train gold 165, PU 18074, test 30, clamp edits 4, 38s
+fold5_noweb fold 4: train gold 156, PU 17527, test 39, clamp edits 7, 35s
+state fold 0: train gold 156, PU 16703, test 39, clamp edits 8, 44s
+state fold 1: train gold 154, PU 16033, test 39, clamp edits 7, 36s
+state fold 2: train gold 155, PU 19621, test 39, clamp edits 3, 43s
+state fold 3: train gold 154, PU 16751, test 39, clamp edits 4, 42s
+state fold 4: train gold 156, PU 18570, test 39, clamp edits 4, 50s
+Traceback (most recent call last):
+  File "/Users/karthikvattem/projects/datathon/model/v2/fit_ebm/fit_ps.py", line 302, in <module>
+    main()
+  File "/Users/karthikvattem/projects/datathon/model/v2/fit_ebm/fit_ps.py", line 280, in main
+    (OUT / "ps_fit_meta.json").write_text(json.dumps(meta, indent=1, default=str))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/Cellar/python@3.12/3.12.11/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/encoder.py", line 377, in _iterencode_dict
+    raise TypeError(f'keys must be str, int, float, bool or None, '
+TypeError: keys must be str, int, float, bool or None, not tuple

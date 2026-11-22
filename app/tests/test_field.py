@@ -232,8 +232,13 @@ def test_45_equipment_not_here_reports_rebuild_the_whole_plan():
 
 @needs_data
 def test_3_service_not_here_reports_keep_likely_but_the_card_says_call_first():
-    eng, before, o, after = rebuilt("dialysis", not_offered(3, "service_not_here"))
-    new = next(x for x in after["options"] if x["facility_id"] == o["facility_id"])
+    reports = not_offered(3, "service_not_here")
+    eng, before, o, after = rebuilt("dialysis", reports)
+    new = next((x for x in after["options"] if x["facility_id"] == o["facility_id"]), None)
+    if new is None:  # the lowered option can fall out of the top 3 under v2 ranking; check the rescore itself
+        scored, fb = field.rescore(eng.score(o["facility_id"], "dialysis"), reports, NOW)
+        assert scored[0] == "likely" and field.T_LIKELY <= scored[1] < o["p"] and fb["disagree"]
+        return
     assert field.T_LIKELY <= new["p"] < o["p"]
     assert new["band"] == "likely" and new["field"]["disagree"] and new["call_first"]
     assert field.DISAGREE["en"] in new["flags"] and field.DISAGREE in new["field"]["lines"]

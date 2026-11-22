@@ -1,0 +1,24 @@
+gold labelled pairs 195 (pos 62); PU rows 22140 (pos 8706); terms 26; masks {'eraktkosh': ['x_erk_blood_centre_on_site'], 'laqshya': ['x_laqshya_ot_valid'], 'mohfw_tcf': ['x_mohfw_trauma_centre'], 'nabh': ['x_nabh_service_code', 'x_nabh_full_accreditation', 'k_text_nabh'], 'nmc': ['x_nmc_course_strong'], 'pmndp_goa': []}
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/glassbox/_ebm/_json.py:331: UserWarning: JSON formats are in beta. The JSON format may change in a future version without compatibility between releases.
+  warn(
+scored 358524 pairs with C1_platt; max additivity gap <= 1e-09
+scored 358524 pairs with C3_resid; max additivity gap <= 1e-09
+scored 358524 pairs with C0_gold; max additivity gap <= 1e-09
+pu stage intercept -0.2246; done
+exit 0

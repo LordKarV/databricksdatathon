@@ -1,8 +1,11 @@
 """Shared loader for the scale/metadata audit. Local snapshot only."""
 import json
+import os
 import duckdb
 
-RAW = "/Users/karthikvattem/projects/datathon/data/raw/facilities.parquet"
+_ROOT = os.environ.get("DATATHON_ROOT", os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")))
+_DATA = os.environ.get("DATATHON_DATA_ROOT", os.path.join(_ROOT, "data"))
+RAW = os.path.join(_DATA, "raw/facilities.parquet")
 UUID_RE = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 NULLS = {None, "", "null", "NULL", "[]", '[""]', "[null]"}
 

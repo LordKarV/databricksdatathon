@@ -1,0 +1,425 @@
+{
+ "eval_rows": 564,
+ "facilities": 506,
+ "rules": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.795,
+   "accuracy_ci95": [
+    0.739,
+    0.842
+   ],
+   "class_0": {
+    "tp": 29,
+    "fp": 16,
+    "fn": 32,
+    "precision": 0.644,
+    "precision_ci95": [
+     0.498,
+     0.768
+    ],
+    "recall": 0.475,
+    "recall_ci95": [
+     0.355,
+     0.598
+    ],
+    "f1": 0.547
+   },
+   "class_1": {
+    "tp": 157,
+    "fp": 32,
+    "fn": 16,
+    "precision": 0.831,
+    "precision_ci95": [
+     0.771,
+     0.877
+    ],
+    "recall": 0.908,
+    "recall_ci95": [
+     0.855,
+     0.942
+    ],
+    "f1": 0.867
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.964,
+   "accuracy_ci95": [
+    0.938,
+    0.979
+   ],
+   "class_0": {
+    "tp": 38,
+    "fp": 1,
+    "fn": 11,
+    "precision": 0.974,
+    "precision_ci95": [
+     0.868,
+     0.995
+    ],
+    "recall": 0.776,
+    "recall_ci95": [
+     0.641,
+     0.87
+    ],
+    "f1": 0.864
+   },
+   "class_1": {
+    "tp": 280,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.962,
+    "precision_ci95": [
+     0.934,
+     0.979
+    ],
+    "recall": 0.996,
+    "recall_ci95": [
+     0.98,
+     0.999
+    ],
+    "f1": 0.979
+   }
+  }
+ },
+ "by_source_rules": {
+  "about_this": {
+   "audit/merge/handcheck/dev/q1_precision_dev.tsv": {
+    "n": 8,
+    "accuracy": 0.5
+   },
+   "audit/merge/handcheck/dev/q1_recall_U1_dev.tsv": {
+    "n": 29,
+    "accuracy": 1.0
+   },
+   "audit/merge/handcheck/dev/q1_recall_U2_dev.tsv": {
+    "n": 30,
+    "accuracy": 0.833
+   },
+   "audit/merge/handcheck/q1_holdout.tsv": {
+    "n": 20,
+    "accuracy": 0.65
+   },
+   "audit/merge/handcheck/q1_recall_U1.tsv": {
+    "n": 30,
+    "accuracy": 0.933
+   },
+   "audit/merge/handcheck/q1_recall_U2.tsv": {
+    "n": 30,
+    "accuracy": 0.867
+   },
+   "audit/merge/handcheck/q2_holdout.tsv": {
+    "n": 9,
+    "accuracy": 0.556
+   },
+   "audit/merge/handcheck/q3_sample.tsv": {
+    "n": 26,
+    "accuracy": 0.654
+   },
+   "cleaning/claims/handcheck_labels.csv": {
+    "n": 52,
+    "accuracy": 0.75
+   }
+  },
+  "offers": {
+   "cleaning/claims/handcheck_labels.csv": {
+    "n": 15,
+    "accuracy": 1.0
+   },
+   "kb/taxonomy/out/handcheck_lexicon_v0.csv": {
+    "n": 140,
+    "accuracy": 0.979
+   },
+   "kb/taxonomy/out/handcheck_lexicon_v1_trauma.csv": {
+    "n": 20,
+    "accuracy": 0.95
+   },
+   "kb/taxonomy/out/handcheck_v1_1_sample.csv": {
+    "n": 155,
+    "accuracy": 0.948
+   }
+  }
+ },
+ "model_version": "reader-me5-small-v1",
+ "backbone": "intfloat/multilingual-e5-small",
+ "temperature": [
+  0.7386888262992556,
+  0.7104154162669611
+ ],
+ "threshold": 0.5,
+ "reader": {
+  "about_this": {
+   "n": 234,
+   "positives": 173,
+   "negatives": 61,
+   "accuracy": 0.731,
+   "accuracy_ci95": [
+    0.671,
+    0.784
+   ],
+   "class_0": {
+    "tp": 34,
+    "fp": 36,
+    "fn": 27,
+    "precision": 0.486,
+    "precision_ci95": [
+     0.372,
+     0.6
+    ],
+    "recall": 0.557,
+    "recall_ci95": [
+     0.433,
+     0.675
+    ],
+    "f1": 0.519
+   },
+   "class_1": {
+    "tp": 137,
+    "fp": 27,
+    "fn": 36,
+    "precision": 0.835,
+    "precision_ci95": [
+     0.771,
+     0.884
+    ],
+    "recall": 0.792,
+    "recall_ci95": [
+     0.725,
+     0.846
+    ],
+    "f1": 0.813
+   }
+  },
+  "offers": {
+   "n": 330,
+   "positives": 281,
+   "negatives": 49,
+   "accuracy": 0.77,
+   "accuracy_ci95": [
+    0.721,
+    0.812
+   ],
+   "class_0": {
+    "tp": 19,
+    "fp": 46,
+    "fn": 30,
+    "precision": 0.292,
+    "precision_ci95": [
+     0.196,
+     0.412
+    ],
+    "recall": 0.388,
+    "recall_ci95": [
+     0.264,
+     0.528
+    ],
+    "f1": 0.333
+   },
+   "class_1": {
+    "tp": 235,
+    "fp": 30,
+    "fn": 46,
+    "precision": 0.887,
+    "precision_ci95": [
+     0.843,
+     0.92
+    ],
+    "recall": 0.836,
+    "recall_ci95": [
+     0.789,
+     0.875
+    ],
+    "f1": 0.861
+   }
+  }
+ },
+ "reader_vs_rules": {
+  "about_this": {
+   "class_0": {
+    "f1_reader_minus_rules": -0.028,
+    "ci95": [
+     -0.14,
+     0.091
+    ],
+    "share_of_resamples_reader_better": 0.316
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.054,
+    "ci95": [
+     -0.09,
+     -0.019
+    ],
+    "share_of_resamples_reader_better": 0.002
+   },
+   "accuracy_reader_minus_rules": -0.064
+  },
+  "offers": {
+   "class_0": {
+    "f1_reader_minus_rules": -0.531,
+    "ci95": [
+     -0.665,
+     -0.392
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "class_1": {
+    "f1_reader_minus_rules": -0.118,
+    "ci95": [
+     -0.15,
+     -0.09
+    ],
+    "share_of_resamples_reader_better": 0.0
+   },
+   "accuracy_reader_minus_rules": -0.194
+  }
+ },
+ "calibration_reader": {
+  "about_this": {
+   "bins": [
+    {
+     "bin": "0.0-0.2",
+     "n": 64,
+     "mean_p": 0.04,
+     "observed": 0.484
+    },
+    {
+     "bin": "0.2-0.4",
+     "n": 3,
+     "mean_p": 0.314,
+     "observed": 1.0
+    },
+    {
+     "bin": "0.4-0.6",
+     "n": 4,
+     "mean_p": 0.453,
+     "observed": 0.75
+    },
+    {
+     "bin": "0.6-0.8",
+     "n": 7,
+     "mean_p": 0.71,
+     "observed": 0.714
+    },
+    {
+     "bin": "0.8-1.0",
+     "n": 156,
+     "mean_p": 0.972,
+     "observed": 0.84
+    }
+   ],
+   "ece": 0.224,
+   "brier": 0.235
+  },
+  "offers": {
+   "bins": [
+    {
+     "bin": "0.0-0.2",
+     "n": 53,
+     "mean_p": 0.034,
+     "observed": 0.717
+    },
+    {
+     "bin": "0.2-0.4",
+     "n": 6,
+     "mean_p": 0.266,
+     "observed": 0.833
+    },
+    {
+     "bin": "0.4-0.6",
+     "n": 11,
+     "mean_p": 0.494,
+     "observed": 0.364
+    },
+    {
+     "bin": "0.6-0.8",
+     "n": 8,
+     "mean_p": 0.741,
+     "observed": 0.25
+    },
+    {
+     "bin": "0.8-1.0",
+     "n": 252,
+     "mean_p": 0.976,
+     "observed": 0.921
+    }
+   ],
+   "ece": 0.178,
+   "brier": 0.193
+  }
+ },
+ "by_source_reader": {
+  "about_this": {
+   "audit/merge/handcheck/dev/q1_precision_dev.tsv": {
+    "n": 8,
+    "accuracy": 0.25
+   },
+   "audit/merge/handcheck/dev/q1_recall_U1_dev.tsv": {
+    "n": 29,
+    "accuracy": 0.828
+   },
+   "audit/merge/handcheck/dev/q1_recall_U2_dev.tsv": {
+    "n": 30,
+    "accuracy": 0.667
+   },
+   "audit/merge/handcheck/q1_holdout.tsv": {
+    "n": 20,
+    "accuracy": 0.6
+   },
+   "audit/merge/handcheck/q1_recall_U1.tsv": {
+    "n": 30,
+    "accuracy": 0.867
+   },
+   "audit/merge/handcheck/q1_recall_U2.tsv": {
+    "n": 30,
+    "accuracy": 0.9
+   },
+   "audit/merge/handcheck/q2_holdout.tsv": {
+    "n": 9,
+    "accuracy": 0.889
+   },
+   "audit/merge/handcheck/q3_sample.tsv": {
+    "n": 26,
+    "accuracy": 0.654
+   },
+   "cleaning/claims/handcheck_labels.csv": {
+    "n": 52,
+    "accuracy": 0.673
+   }
+  },
+  "offers": {
+   "cleaning/claims/handcheck_labels.csv": {
+    "n": 15,
+    "accuracy": 0.133
+   },
+   "kb/taxonomy/out/handcheck_lexicon_v0.csv": {
+    "n": 140,
+    "accuracy": 0.907
+   },
+   "kb/taxonomy/out/handcheck_lexicon_v1_trauma.csv": {
+    "n": 20,
+    "accuracy": 0.95
+   },
+   "kb/taxonomy/out/handcheck_v1_1_sample.csv": {
+    "n": 155,
+    "accuracy": 0.684
+   }
+  }
+ },
+ "disagreements_on_eval": {
+  "about_this": {
+   "n": 43,
+   "reader_right": 14,
+   "rules_right": 29
+  },
+  "offers": {
+   "n": 74,
+   "reader_right": 5,
+   "rules_right": 69
+  }
+ }
+}

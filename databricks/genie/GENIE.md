@@ -1,13 +1,13 @@
 # Genie space: Referral Saathi planner
 
-A Genie space (Genie Agent) for district health planners, over 10 tables in `workspace.referral_saathi`. It answers questions about where facilities show public evidence of a service and how strong that evidence is, following the project's honesty rules.
+A Genie space (Genie Agent) for district health planners, over 12 tables in `workspace.referral_saathi`. It answers questions about where facilities show public evidence of a service and how strong that evidence is, following the project's honesty rules.
 
 ## Space
 
 - Space id: `01f1e60264ac19f98063e082b625c2df`
 - URL: https://dbc-ea4e0abe-8cd4.cloud.databricks.com/genie/rooms/01f1e60264ac19f98063e082b625c2df (standard Genie room link built from the id; the space was read back with `databricks genie get-space`, the link was not opened in a browser)
 - Warehouse: `6a2f5637720a2c17`, profile `vf`. Parent folder: the profile user's workspace home.
-- Created on 2026-11-21 by `space.py deploy`. Read back: 10 tables, 10 example SQL queries, 7 join specs, 1 text instruction, 5 sample questions.
+- Created on 2026-11-21 by `space.py deploy`. Read back: 10 tables, 10 example SQL queries, 7 join specs, 1 text instruction, 5 sample questions. Updated 2026-11-21 for model v2; read back: 12 tables, 12 example SQL queries, 9 join specs, 1 text instruction, 6 sample questions.
 
 Description shown in Genie:
 
@@ -20,7 +20,7 @@ Description shown in Genie:
 | `space.py` | The whole space as code: tables with column descriptions, synonyms, entity matching and hidden columns; text instructions; example SQL; join specs; sample questions. `check` runs every example SQL, `build` writes `genie_space.json`, `deploy` checks, builds and creates the space, or updates it when `space_id.txt` exists |
 | `genie_space.json` | The `serialized_space` payload that was sent |
 | `space_id.txt` | Id of the live space; makes `deploy` an update |
-| `test_space.py` | Asks the 6 test questions through the Conversation API and compares with our SQL |
+| `test_space.py` | Asks the 7 test questions through the Conversation API and compares with our SQL |
 | `test_results.json` | Full test output: question, ground-truth SQL and rows, Genie's SQL, rows and text |
 
 Re-run from the project root:
@@ -32,12 +32,14 @@ python3 databricks/genie/space.py deploy    # updates the live space in place
 cd databricks/genie && python3 test_space.py
 ```
 
-When `derived/v2` is loaded under the same table names, the space needs no change; re-run `check` and the tests.
+Model v2 (2026-11-21): derived/v2 is loaded as `facility_service_scores_v2` and `facility_attributes_v2` (validation report H7). The space now carries both tables, two v2 example queries, two join specs and a MODEL V2 SCORES instruction block; owner questions use `facility_attributes_v2.operator` and `geo_facility.operatorTypeId` is hidden. The geo_facility claimed and corroborated flags are unchanged.
 
 ## Tables
 
 - `claims`: One row per claim sentence (469,498): the text and attribution behind each claim_id.
 - `facility_list_facts`: 3,062 per-facility matched facts from NABH, LaQshya, NMC, MoHFW trauma, e-RaktKosh and Goa PMNDP, each with citation_url.
+- `facility_attributes_v2`: One row per facility record (9,959), model v2: operator (public, private, unknown), level, type, beds, PM-JAY.
+- `facility_service_scores_v2`: One row per (eligible record, service), 358,092: model v2 band, p, score-bin track record lo/hi, P_L, P_E, operator, overlays.
 - `facility_trust`: One row per facility: existence, location and overall record scores with plain-English drivers.
 - `geo_dialysis_district`: One row per NFHS-5 district (704): dialysis need proxy, claimed and confirmed counts, share within 60 minutes, hot flag.
 - `geo_district`: One row per LGD district (784, including the 227 with no records): population, records, records per million.
@@ -47,13 +49,13 @@ When `derived/v2` is loaded under the same table names, the space needs no chang
 - `specialties`: One row per (facility, specialty tag): the weakest evidence, used for nephrology and similar departments.
 - `web_service_summary`: One row per (facility, service) the facility's own website states, with best quote and URL.
 
-Joins (declared as join specs): `geo_facility.unique_id` to `grades`, `facility_trust` (1:1), `facility_list_facts`, `specialties`, `web_service_summary` and `claims`; `geo_facility (nfhs_state, nfhs_district)` to `geo_dialysis_district`. All 9,959 facility rows match a `geo_dialysis_district` row, and its `n_claim` and `n_corr` equal the sums of the `geo_facility` dialysis flags in all 704 districts (checked with SQL on 2026-11-21).
+Joins (declared as join specs): `geo_facility.unique_id` to `grades`, `facility_trust` (1:1), `facility_list_facts`, `specialties`, `web_service_summary`, `claims` and `facility_service_scores_v2`, and 1:1 to `facility_attributes_v2`; `geo_facility (nfhs_state, nfhs_district)` to `geo_dialysis_district`. All 9,959 facility rows match a `geo_dialysis_district` row, and its `n_claim` and `n_corr` equal the sums of the `geo_facility` dialysis flags in all 704 districts (checked with SQL on 2026-11-21).
 
 Column configs: descriptions on the evidence columns, entity matching and format assistance on state, district, service, grade, list and status columns, and hidden grid, raw-name and JSON columns.
 
 ## General instructions (as sent)
 
-These encode the honesty rules: every row is a claim with an evidence level, report n and the level, say "no public evidence" rather than "no care", never rank on unverified claims alone, cite claim_ids. 1542 characters, under the 2,000 limit.
+These encode the honesty rules: every row is a claim with an evidence level, report n and the level, say "no public evidence" rather than "no care", never rank on unverified claims alone, cite claim_ids. 1,988 characters, under the 2,000 limit.
 
 ```
 ## PURPOSE
@@ -70,6 +72,10 @@ These encode the honesty rules: every row is a claim with an evidence level, rep
 - NABH rows are facility-level (service null): a NABH listing confirms the facility, not a service.
 - citation_url of '#' or 'Not Found' means no usable link.
 - operatorTypeId uses the string 'null' for unknown owner.
+
+## MODEL V2 SCORES
+- "Likely offers", band, score or P_S mean facility_service_scores_v2; get state and district from geo_facility. Order by band (LIKELY, CALL_FIRST, NO_SERVICE_TEXT, UNLIKELY), then p. Never show p for NO_SERVICE_TEXT. lo/hi are the score bin's track record, not an interval around p.
+- Owner means facility_attributes_v2.operator. The score has no demonstrated ranking ability for public facilities: say so when ranking them.
 
 ## CONSTRAINTS
 - Never rank or recommend facilities on dataset claims alone. Order by evidence level first (official list or confirmed, then grade strong, moderate, weak, tag_only), then distance, and show the level.
@@ -88,10 +94,11 @@ Sample questions shown in the UI:
 - What share of trauma claims is confirmed by a second source, by state?
 - Which Bihar districts have the fewest facility records per million people?
 - How many people live in high-need districts far from confirmed dialysis?
+- Which facilities in Patna district are likely to offer dialysis?
 
 ## Example SQL queries (trusted assets)
 
-All 10 ran on the warehouse with `space.py check` before the deploy and returned rows (34, 19, 33, 61, 10, 24, 7, 39, 18 and 4 rows). Each sorts facilities by evidence level before distance or name.
+All 12 ran on the warehouse with `space.py check` before the deploy and returned rows (34, 19, 33, 61, 10, 24, 7, 39, 18, 4, 25 and 77 rows). Each sorts facilities by evidence level before distance or name.
 
 ### 1. Which districts in Bihar have no corroborated dialysis?
 
@@ -245,9 +252,36 @@ GROUP BY gr.grade
 ORDER BY CASE gr.grade WHEN 'strong' THEN 1 WHEN 'moderate' THEN 2 WHEN 'weak' THEN 3 WHEN 'tag_only' THEN 4 ELSE 5 END
 ```
 
+### 11. Which facilities in Patna district are likely to offer dialysis?
+
+Model v2 shortlist for one service and district: LIKELY then CALL_FIRST, by p. State the public-facility caveat when public rows appear.
+
+```sql
+SELECT g.name, s.band, CASE WHEN s.band <> 'NO_SERVICE_TEXT' THEN ROUND(s.p, 2) END AS p_s,
+  ROUND(s.lo, 2) AS bin_confirmed_rate_lo, ROUND(s.hi, 2) AS bin_confirmed_rate_hi, s.operator, s.overlays
+FROM workspace.referral_saathi.facility_service_scores_v2 s
+JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id
+WHERE s.service_id = 'dialysis' AND g.dtname = 'Patna' AND s.band IN ('LIKELY', 'CALL_FIRST')
+ORDER BY CASE s.band WHEN 'LIKELY' THEN 1 ELSE 2 END, s.p DESC
+```
+
+### 12. How many facilities in Bihar does the model band Likely for each service, public against private?
+
+Band counts by owner: operator from facility_attributes_v2; ranking ability for public facilities is not demonstrated.
+
+```sql
+SELECT s.service_id, a.operator, COUNT(*) AS n_likely
+FROM workspace.referral_saathi.facility_service_scores_v2 s
+JOIN workspace.referral_saathi.geo_facility g ON g.unique_id = s.unique_id
+JOIN workspace.referral_saathi.facility_attributes_v2 a ON a.unique_id = s.unique_id
+WHERE g.stname = 'BIHAR' AND s.band = 'LIKELY'
+GROUP BY s.service_id, a.operator
+ORDER BY s.service_id, a.operator
+```
+
 ## Test results
 
-Six questions asked through the Conversation API (`genie start-conversation`) on 2026-11-21, each compared with our own SQL. The check is automatic (`test_space.py`) and I read every answer: the pass/fail column is the automatic one, and the honesty column is my reading of Genie's text.
+Seven questions asked through the Conversation API (`genie start-conversation`) on 2026-11-21 (re-run after the v2 update; tests 1 to 6 gave the same answers as before), each compared with our own SQL. The check is automatic (`test_space.py`) and I read every answer: the pass/fail column is the automatic one, and the honesty column is my reading of Genie's text.
 
 | # | Question | Our SQL says | Genie returned | Numbers | Honesty rules in the text |
 |---|---|---|---|---|---|
@@ -257,12 +291,13 @@ Six questions asked through the Conversation API (`genie start-conversation`) on
 | 4 | How many facilities in Maharashtra hold a LaQshya certificate that is still valid? | 2 | 1 rows: 2 | pass | Says it is list evidence, not a verified fact |
 | 5 | Which Bihar districts have zero facility records? | Araria; Arwal; Banka; Jamui; Jehanabad; Lakhisarai; Sheohar | 7 rows: Araria, 4.12, 0; Jamui, 2.51, 0; Banka, 2.46, 0 ... | pass | Names 5 of 7 in the text, says all 7 and "no public evidence in this dataset, not a statement about actual facility presence" |
 | 6 | Is there dialysis care in Madhubani district of Bihar? | 0, 0 | 1 rows: Madhubani, 5.95, 0, 0, 0.5, false | pass | Says 0 claimed and 0 confirmed and "no public evidence in this dataset", never "no care" |
+| 7 | How many facilities in Bihar does model v2 band Likely for dialysis? | 36 | 3 rows: private 27, public 4, unknown 5 | pass | States 36 and the split, says they are claims; reads facility_service_scores_v2 joined to facility_attributes_v2. No public-facility caveat (it counts, it does not rank) |
 
-Result: 6 of 6 pass on numbers, and all 6 answers follow the honesty rules.
+Result: 7 of 7 pass on numbers, and all 7 answers follow the honesty rules.
 
 Limits of this test, stated plainly:
 
-- Six questions is a smoke test, not a benchmark. Tests 3 and 6 reused an example query almost verbatim (the claim-citation and Bihar dialysis shapes), so they show the examples are picked up, not that Genie generalises. Tests 1, 2, 4 and 5 changed the state, threshold, list or filter, and Genie adapted the examples into new SQL that matched our ground truth.
+- Seven questions is a smoke test, not a benchmark. Tests 3 and 6 reused an example query almost verbatim (the claim-citation and Bihar dialysis shapes), so they show the examples are picked up, not that Genie generalises. Tests 1, 2, 4 and 5 changed the state, threshold, list or filter, and Genie adapted the examples into new SQL that matched our ground truth.
 - No benchmark set is attached to the space yet, so `genie-create-eval-run` was not run.
 - The honesty column is my judgement of the text; the automatic check only bans phrases such as "no dialysis care available".
 - Genie's summary sometimes names a column ("evidence level: n_corr = 0") instead of plain words. A planner-facing wording pass on the instructions would fix that.

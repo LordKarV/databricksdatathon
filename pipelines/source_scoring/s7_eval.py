@@ -102,7 +102,7 @@ def main() -> None:
            "location": evaluate(gold[gold.dp_type == "location"])}
     both = gold[gold.dp_type.isin(["service_claim", "location"])]
     res["service_and_location_pooled"] = evaluate(both)
-    res["goal3_page_check"] = goal3()
+    res["goal3_page_check"] = goal3() if (OUT / "source_page_checks.parquet").exists() else None  # FETCH=0 build
     (OUT / "evaluation.json").write_text(json.dumps(res, indent=1, default=int))
     print(json.dumps(res, indent=1, default=int))
 

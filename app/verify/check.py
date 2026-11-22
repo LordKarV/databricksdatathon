@@ -9,6 +9,7 @@ Network, clock and sleep are injectable so tests replay recorded pages with no n
 """
 from __future__ import annotations
 
+import codecs
 import gzip
 import http.client
 import ipaddress
@@ -26,12 +27,16 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
+from facts.redact import redact_names
+
 USER_AGENT = "datathon-facility-check/0.1"
 MAX_PAGES = 4
 BUDGET_S = 8.0
 PER_DOMAIN_GAP_S = 1.0
 MAX_BYTES = 1_500_000
 CACHE_TTL_S = 24 * 3600
+UNREACHABLE_TTL_S = 600  # a site that did not answer is asked again after 10 min, not a day (#85)
+CHUNK = 65_536
 CACHE_MAX = 2000
 MAX_QUOTES = 2
 OUT = Path(__file__).resolve().parent / "out"
@@ -105,14 +110,24 @@ def open_connection(scheme: str, host: str, ip: str, port: int, timeout: float) 
 
 
 def http_transport(url: str, timeout: float) -> Page:
-    """GET with pinned, checked addresses and manual http(s)-only redirects."""
+    """GET with pinned, checked addresses and manual http(s)-only redirects, all within `timeout` seconds in total.
+
+    A socket timeout alone bounds each read, not the whole fetch: a server that trickles bytes or redirects kept a
+    check running 41 to 56 s against its 8 s budget (#85). So every connect, redirect and chunk checks the deadline."""
+    deadline = time.monotonic() + timeout
+
+    def left() -> float:
+        t = deadline - time.monotonic()
+        if t <= 0:
+            raise TimeoutError("fetch budget spent")
+        return t
     for _ in range(MAX_REDIRECTS + 1):
         u = urlsplit(url)
         if u.scheme not in SCHEMES:
             raise OSError(f"scheme not allowed: {u.scheme!r}")
         port = u.port or SCHEMES[u.scheme]
         ip = resolve_public(u.hostname or "", port)
-        conn = open_connection(u.scheme, u.hostname, ip, port, timeout)
+        conn = open_connection(u.scheme, u.hostname, ip, port, left())
         try:
             conn.request("GET", urlunsplit(("", "", u.path or "/", u.query, "")),
                          headers={"User-Agent": USER_AGENT, "Accept": "text/html,text/plain;q=0.9"})
@@ -121,7 +136,16 @@ def http_transport(url: str, timeout: float) -> Page:
             if r.status in REDIRECTS and loc:
                 url = urljoin(url, loc)
                 continue
-            return Page(r.status, url, r.getheader("Content-Type") or "", r.read(MAX_BYTES))
+            body = bytearray()
+            while len(body) < MAX_BYTES:
+                if getattr(conn, "sock", None) is not None:
+                    conn.sock.settimeout(left())
+                chunk = r.read(min(CHUNK, MAX_BYTES - len(body)))
+                if not chunk:
+                    break
+                body += chunk
+                left()
+            return Page(r.status, url, r.getheader("Content-Type") or "", bytes(body))
         finally:
             conn.close()
     raise OSError("too many redirects")
@@ -178,7 +202,12 @@ class _Text(HTMLParser):
 
 def page_text(p: Page) -> tuple[str, str, list[tuple[str, str]]]:
     charset = re.search(r"charset=([\w-]+)", p.content_type or "")
-    raw = p.body.decode(charset.group(1) if charset else "utf-8", errors="replace")
+    enc = charset.group(1) if charset else "utf-8"
+    try:
+        codecs.lookup(enc)
+    except LookupError:  # an unknown charset label returned 500 (#85); read it as UTF-8
+        enc = "utf-8"
+    raw = p.body.decode(enc, errors="replace")
     if "html" not in (p.content_type or "html").lower() and not re.search(r"<html|<body", raw[:2000], re.I):
         return raw, "", []
     t = _Text()
@@ -262,7 +291,8 @@ class Polite:
         if not self._wait_turn(host, deadline):
             return None
         try:
-            return self.transport(url, max(0.5, deadline - self.clock()))
+            left = deadline - self.clock()
+            return self.transport(url, left) if left > 0 else None
         except (OSError, ValueError):
             return None
 
@@ -309,7 +339,8 @@ class Checker:
     def check(self, facility_id: str, service_id: str) -> dict:
         key = (facility_id, service_id)
         hit = self._cache.get(key)
-        if hit and self.now() - hit["checked_at_ms"] / 1000 < CACHE_TTL_S:
+        ttl = UNREACHABLE_TTL_S if hit and hit["status"] == "unreachable" else CACHE_TTL_S
+        if hit and self.now() - hit["checked_at_ms"] / 1000 < ttl:
             return {**hit, "cached": True}
         res = self._run(facility_id, service_id)
         if res["status"] != "no_website":
@@ -359,8 +390,9 @@ class Checker:
             identity = identity or looks_like(site["name"], site.get("city"), host, title, text)
             for s in sentences(text):
                 kind = self.lexicon.classify(sid, s)
-                if kind and not any(q["text"] == s for q in yes + no):
-                    (yes if kind == "yes" else no).append({"text": s, "url": fetched[-1], "says": kind})
+                shown = redact_names(s)  # verbatim except a doctor's name, which never reaches the page (#86)
+                if kind and not any(q["text"] == shown for q in yes + no):
+                    (yes if kind == "yes" else no).append({"text": shown, "url": fetched[-1], "says": kind})
             if len(fetched) == 1:  # follow links from the first page only: service words first, then the rest
                 skip = ("#", "mailto:", "tel:", "javascript:")
                 cand = [(_norm(urljoin(fetched[0], h)), t) for h, t in links if h and not h.startswith(skip)]

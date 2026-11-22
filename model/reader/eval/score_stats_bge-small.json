@@ -1,0 +1,22 @@
+{
+ "model_version": "reader-bge-small-v1",
+ "rows": 537431,
+ "claim_rows": 469498,
+ "service_rows": 67933,
+ "seconds_predict": 280,
+ "seconds_total": 453,
+ "device": "cuda",
+ "rows_with_tokens": 93332,
+ "file_mb": 5.3,
+ "about_this": {
+  "rules_other_facility": 9506,
+  "reader_below_0.5": 25399,
+  "both": 8844
+ },
+ "offers": {
+  "rules_offer": 63620,
+  "reader_at_least_0.5": 63301,
+  "both": 62692
+ },
+ "disagreement_counts": "{('about_this', 'rules_0_reader_1'): 662, ('about_this', 'rules_1_reader_0'): 16555, ('offers', 'rules_0_reader_1'): 609, ('offers', 'rules_1_reader_0'): 928}"
+}
