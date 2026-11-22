@@ -96,7 +96,23 @@ REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
                 "nagpur_mri_flagged_sources": ("mri", 21.15, 79.09),
                 # a Likely option 1 that misses the 60-min window, without abstaining; and one that abstains
                 "odisha_csection_likely_far": ("emergency_csection", 20.8, 85.01),
-                "palamu_nicu_out_of_window": ("nicu", 24.0, 84.0)}
+                "palamu_nicu_out_of_window": ("nicu", 24.0, 84.0),
+                # BE-001: Mohania (above) has an unchecked website on option 1; Banda an unreliable one with its reason
+                "banda_trauma_unreliable_site": ("trauma_emergency", 25.48, 80.33)}
+
+
+def check_website_card(payload: dict, shown: set[str]) -> list[str]:
+    """BE-001: a card with a flagged listed website shows its label, and its reason line exactly when unreliable."""
+    errs = []
+    for i, o in enumerate(payload.get("options", [])):
+        w = o.get("website")
+        if not w:
+            continue
+        if f"options.{i}.website.label.en" not in shown:
+            errs.append(f"option {i + 1}: website label not shown")
+        if (f"options.{i}.website.reason_line.en" in shown) != (w["site_status"] == "unreliable"):
+            errs.append(f"option {i + 1}: reason line shown for a {w['site_status']} website, or missing")
+    return errs
 
 
 # ---------- payloads ----------
@@ -698,6 +714,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
         errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
+        errs += [f"plan: {e}" for e in check_website_card(payload, {it["path"] for it in got["items"]})]
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
         errs += raw_key_errs("plan", payload, text)
@@ -734,6 +751,8 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
+            if o.get("website") and f"options.{i}.website.text.en" not in shown:
+                errs.append(f"why/{o['rank']}: website line not shown")
             errs += [f"why/{o['rank']}: {e}" for e in check_ledger(o, i, shown, claims)]
             sure = re.sub(r"\s+", " ", page.inner_text("#how-sure"))
             if "()" in sure or re.search(r"(?:^|[:;.]) ?\([+-]", sure):  # a row named without its label

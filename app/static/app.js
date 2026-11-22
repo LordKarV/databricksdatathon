@@ -1,6 +1,13 @@
 // Referral Saathi skeleton (issue #5). Plain JS, no framework, hash routes:
 //   #/ home (S1)  #/gps (S1a)  #/change (S1b)  #/plan (S3 / S3x)  #/why/<rank> (S4 + S5 + S6)
 'use strict';
+// New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
+// {label} is the service label (data-f). The screen shows 'en' until that setting lands.
+const STR121 = {
+  first_is_nearest: {en: 'The first choice is already the nearest listing that offers {label}.',
+    hi: '\u092a\u0939\u0932\u093e \u0935\u093f\u0915\u0932\u094d\u092a \u092a\u0939\u0932\u0947 \u0938\u0947 \u0939\u0940 {label} \u0935\u093e\u0932\u0940 \u0938\u092c\u0938\u0947 \u092a\u093e\u0938 \u0915\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0939\u0948\u0964'},
+  rows_farther: {en: 'The places below are farther away.', hi: '\u0928\u0940\u091a\u0947 \u0926\u0940 \u0917\u0908 \u091c\u0917\u0939\u0947\u0902 \u0907\u0938\u0938\u0947 \u0926\u0942\u0930 \u0939\u0948\u0902\u0964'},
+};
 
 // Change location strings (#121 bug 5): one map per language, so they move into the strings files of the coming
 // app-wide language setting. The screen shows 'en' until then. The Hindi is a draft for native review (#10).
@@ -536,9 +543,10 @@ function whyNotHtml(p) {
       ${F(W + '.travel.km', Math.round(w.travel.km), 'num')} km${where}. ${F(W + '.reason', w.reason)}.</li>`;
   }).join('');
   // #121: when option 1 is already the nearest, say so; the rows are then farther places, not nearer alternatives.
+  const [pre, post] = STR121.first_is_nearest.en.split('{label}');
   const nearest = p.first_is_nearest && p.options.length
-    ? `<p class="why-not-nearest">The first choice is already the nearest listing
-      that offers ${F('query.service_label.en', p.query.service_label.en)}.${rows.length ? ' The places below are farther away.' : ''}</p>` : '';
+    ? `<p class="why-not-nearest">${pre}${F('query.service_label.en', p.query.service_label.en)}${post}${
+      rows.length ? ' ' + STR121.rows_farther.en : ''}</p>` : '';
   return `<section class="card" aria-labelledby="why-not-h"><h2 id="why-not-h">Why not the nearest?</h2>
     ${nearest}${items ? `<ul class="why-not">${items}</ul>` : ''}${changeHtml(p)}
     <p class="small muted">This describes our data, not the facility.</p></section>`;
@@ -557,6 +565,8 @@ function card(o, label, i) {
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
+    ${o.website ? `<p class="small">${F(P + '.website.label.en', o.website.label.en)}${o.website.reason_line
+      ? `<br>${F(P + '.website.reason_line.en', o.website.reason_line.en)}` : ''}</p>` : ''}
     <p class="small">${trackHtml(o.track_record, P + '.track_record')}. About the listing, not about today. Call to check a slot.</p>
     ${fieldHtml(o, P)}
     <div class="row"><a class="btn" href="#/why/${o.rank}#call">Call ahead</a>
@@ -1031,8 +1041,9 @@ function whyScreen(rank) {
     <h2>Say this to the family</h2><p>"${F(P + '.say_to_family.en', o.say_to_family.en)}"</p>
     <h2>From its own listing</h2>
     ${noTextCaptionHtml(o, p.query)}${o.evidence.length ? o.evidence.map((e, j) => `<blockquote>${quoteHtml(e, `${P}.evidence.${j}`)}
-      <br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a></blockquote>`).join('')
+      ${e.source_url ? `<br><a class="small" href="${esc(e.source_url)}" rel="noopener noreferrer">Source page</a>` : ''}</blockquote>`).join('')
       : `<p>Our data has no own sentence about ${L} for this listing.</p>`}
+    ${o.website ? `<p class="small">${F(P + '.website.text.en', o.website.text.en)}</p>` : ''}
     <h2>Check the website now</h2>
     <p class="small">Opens this facility's own website now (a few pages, a few seconds). It does not change the label above.</p>
     <button type="button" id="verify-btn" class="btn-block">Check website now</button>

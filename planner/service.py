@@ -22,11 +22,12 @@ Arguments
                    facility when facilities are passed in. The state used is returned in meta.
     implications   True (default) wraps capability_p with planner.implied.with_implications: a strongly
                    evidenced capability lends a discounted probability to the ones it implies, and
-                   blood comes from the blood-centre list when list facts are available. Applied
+                   blood comes from the blood-centre list only when you pass `blood`. Applied
                    to a capability_p you pass in as well. Stops then carry capability_notes. With
                    the store, tags model v2 scores are never implied: v2's band is final for them.
-    blood          optional list facts for blood (see planner/implied.py). Default: taken from the
-                   planner export when it was built with the e-RaktKosh outputs present.
+    blood          optional list facts for blood (see planner/implied.py). Default: none. The v2
+                   export (planner/export_v2.py) writes no blood key, so the app's plans never use
+                   the e-RaktKosh list: blood_transfusion is the model v2 blood_bank score alone.
     first_stop     optional facility id the caller ranks first (the app's options list #1). In an
                    emergency it is stop 1 when it can give first care; `first_stop` in the result says
                    whether it could and which capabilities it lacks (planner.core).
