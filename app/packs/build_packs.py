@@ -29,7 +29,6 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
-import os
 import json
 import re
 import sys
@@ -62,11 +61,7 @@ TOP_K = 3
 QUOTE_MAX = 160  # characters on a phone card; longer quotes are cut with "..."
 FAC_SCALE = 10_000  # facility coordinates in 1e-4 degree (about 11 m)
 PIN_SCALE = 1_000  # PIN centroids in 1e-3 degree (about 110 m)
-# ponytail: v2 scores are opt-in until the app moves to them in #63 (tests and copy still assume v1);
-# #63 removes this switch. Off = a path that does not exist, so the v1 placeholder is used.
-MODEL_SCORES = ROOT / "derived" / "v2" / ("facility_service_scores.parquet" if os.environ.get("USE_MODEL_V2") == "1"
-                                    else "facility_service_scores.off")
-V2_BANDS = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
+MODEL_SCORES = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
 
 # derived/v1 service names -> app service keys (app/stub_data.py). "icu" has no app tile, so it is dropped.
 SERVICE_MAP = {
@@ -74,6 +69,8 @@ SERVICE_MAP = {
     "dialysis": "dialysis", "mri": "mri", "cardiac_surgery": "cardiac_surgery",
 }
 SERVICES = list(SERVICE_MAP.values())
+TAXONOMY_TO_APP = {"trauma_care": "trauma_emergency"}  # kb/taxonomy ids that differ from the app keys
+V2_BAND = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
 
 
 def slug(state: str) -> str:
@@ -139,11 +136,10 @@ def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:
         out.attrs["band_source"] = "placeholder: likely only for pairs verified true; model scores not published yet"
         return out
     m = pd.read_parquet(model_path, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "as_of"])
-    # Accept derived/v1 service names or app keys for service_id.
-    m["service"] = m.service_id.map(lambda s: SERVICE_MAP.get(s, s))
+    # service_id is a kb/taxonomy id (derived/v2); also accept derived/v1 names or app keys.
+    m["service"] = m.service_id.map(lambda s: TAXONOMY_TO_APP.get(s, SERVICE_MAP.get(s, s)))
     m = m[m.service.isin(SERVICES)].drop_duplicates(["unique_id", "service"])
-    # Model v2 bands (derived/v2/README.md); NO_SERVICE_TEXT = no sentence about the service, so not verified.
-    m["band"] = m.band.replace(V2_BANDS)
+    m["band"] = m.band.map(lambda b: V2_BAND.get(str(b).upper(), b))  # the same mapping as app/facts/build.py
     unknown = set(m.band) - {"likely", "not_verified", "unlikely"}
     if unknown:
         raise ValueError(f"unknown bands in {model_path}: {sorted(unknown)}")

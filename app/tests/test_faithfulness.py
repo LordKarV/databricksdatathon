@@ -41,7 +41,8 @@ sys.path.insert(0, str(APP))
 from facts.redact import redact_names  # noqa: E402, RUF100
 from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
-BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY"}
+BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY",
+              "NO_SERVICE_TEXT": "NO SERVICE TEXT: call to ask"}  # derived/v2 sub-band, shown from options.N.model_band
 STATIC_PHRASES = [r"\b108\b", r"\b102\b", r"\b112\b", r"\b24x7\b", r"\bin 10 listings\b"]
 # Labels whose meaning must not drift: the gap split is a safety rule (spec Safety 19.1).
 AREA_ROW_FIELDS = {
@@ -473,7 +474,9 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         errs += check_quotes("compare", payload, got["items"], claims, report)
         shown = {it["path"] for it in got["items"]}
         for i in range(len(payload["options"])):
-            for f in ("p", "p_lo", "p_hi", "p_e", "p_l", "travel.km"):
+            # derived/v2: a NO_SERVICE_TEXT pair shows its band, not p (derived/v2/README)
+            no_text = payload["options"][i].get("model_band") == "NO_SERVICE_TEXT"
+            for f in (("p_e", "p_l", "travel.km") if no_text else ("p", "p_lo", "p_hi", "p_e", "p_l", "travel.km")):
                 if f"options.{i}.{f}" not in shown:
                     errs.append(f"compare: options.{i}.{f} not shown")
         # Area (S11, S12): per-PIN plan, gap split and ten calls.

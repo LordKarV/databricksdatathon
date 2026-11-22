@@ -123,6 +123,8 @@ class Engine:
         for k in ("url_kind", "url_place"):  # older exports: no source checks, so no source warnings
             self.fac.setdefault(k, [None] * len(self.fac["id"]))
         self.sha = sha
+        self.track_bins = facts.get("track_bins", [])
+        self.likely_threshold = facts.get("likely_threshold")
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
@@ -146,7 +148,7 @@ class Engine:
               and self.claims[c][3] != "other_facility"]
         ev = sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
-            band, p, lo, hi = pr.model
+            band, p, lo, hi, *_ = pr.model
             return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
                                      *self._listings(pr)], ev
         # Interim, conservative: Likely only for pairs verified true by a second source.
@@ -170,6 +172,22 @@ class Engine:
             contrib.append({"label": "checked against a second source: " +
                             ("confirmed" if pr.status == "verified_true" else "contradicted"), "points": gold})
         return band, pr.score, pr.lo, pr.hi, contrib + self._listings(pr), ev
+
+    def _track(self, p: float, rule: dict) -> dict:
+        """Of the checked listings at this level, how many were confirmed, contradicted or left without information.
+
+        From the model card's score bin when published (#82 H2). Before that, the evidence rule's hand checks, which
+        recorded only confirmed and contradicted: k_no_info is None (not recorded), never a made-up 0.
+        """
+        if self.track_bins:
+            # Equal-count bins have data-dependent edges and need not tile [0, 1] (#84 review): a p below the lowest
+            # edge, above the highest or in a gap takes the nearest bin, and the basis says which bin it was.
+            b = min(self.track_bins, key=lambda b: 0 if b["lo"] <= p <= b["hi"] else min(abs(p - b["lo"]),
+                                                                                          abs(p - b["hi"])))
+            return {**{k: b[k] for k in ("n", "k_confirmed", "k_contradicted", "k_no_info", "split")},
+                    "basis": f"score {b['lo']:.2f} to {b['hi']:.2f}"}
+        return {"n": rule["n"], "k_confirmed": rule["k_confirmed"], "k_contradicted": rule["k_contradicted"],
+                "k_no_info": None, "split": "dev", "basis": "evidence rule"}
 
     def _n_weak(self, cid: str) -> int:
         return sum(QUOTE_FLAGS[c][1] for c, _ in self.claim_flags.get(cid, []) if c in QUOTE_FLAGS)
@@ -197,6 +215,22 @@ class Engine:
     # ---------- helpers ----------
     def _f(self, k: str, i: int):
         return self.fac[k][i]
+
+    def rank_p(self, pr: Pair, p: float) -> float:
+        """p for ranking. A NO_SERVICE_TEXT pair has no sentence about the service as its own unit, so its p rests on
+        context alone (derived/v2/README: "show the band, not p"). It ranks as if at most at the LIKELY threshold, so a
+        district hospital with p 0.95 from its level never outranks a listing that describes the service."""
+        if pr.model and pr.model[4] == "NO_SERVICE_TEXT" and self.likely_threshold is not None:
+            return min(p, self.likely_threshold)
+        return p
+
+    @staticmethod
+    def model_band(pr: Pair) -> str | None:
+        return pr.model[4] if pr.model and len(pr.model) > 4 else None
+
+    def _operator(self, i: int) -> str:
+        ops = self.fac.get("operator")  # older facts files have no operator column
+        return ops[i] if ops else "unknown"
 
     def _travel(self, lat: float, lon: float, i: int, state: str | None = None) -> dict:
         return travel(lat, lon, self._f("lat", i), self._f("lon", i), state)
@@ -281,22 +315,22 @@ class Engine:
         return {
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
-            "address": self._address(i), "operator": "unknown",
+            "address": self._address(i), "operator": self._operator(i),
             "lat": self._f("lat", i), "lon": self._f("lon", i), "travel": trav,
             "band": band, "band_word": BAND_WORDS[band],
             "band_reason": None if band == "likely" else (
                 "listing evidence not yet confirmed by a second source" if band == "not_verified"
                 else RULE_PLAIN.get(pr.rule, "contradicted by a second source")),
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
+            # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
+            "range_kind": "similar_scores" if pr.model else "interval", "model_band": self.model_band(pr),
             "p_e": self._f("p_e", i), "p_l": self._f("p_l", i),
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
             "flags": self._flags(pr, i),
             "call_ahead": self._call_ahead(pr, band, label, i), "call_first": rank == 1,
-            "track_record": {"n": rule["n"], "k_confirmed": rule["k_confirmed"],
-                             "k_contradicted": rule["k_contradicted"],
-                             "k_no_info": 0, "split": "dev"},
+            "track_record": self._track(p, rule),
             "phone": self._phone(i), "is_real": self._is_real(i),
             "where_check": WHERE.get(self._f("loc_rule", i), "Location not checked"),
             "why_first_text": None, "say_to_family": {"en": say, "hi": None},
@@ -312,7 +346,7 @@ class Engine:
             if not ev and band != "unlikely":
                 continue  # every recommendation cites facility text (#85): a pair with no usable quote is not offered
             tr = self._travel(lat, lon, pr.fi, state)
-            row = (p * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
+            row = (self.rank_p(pr, p) * math.exp(-tr["minutes"] / scale), tr["minutes"], pr, tr, band)
             (unlikely if band == "unlikely" else pool).append(row)
         # Distance counts for every band: a confirmed listing three hours away should not outrank one an hour away
         # by default. Likely options still carry a higher p, and the abstention depends on the band, not the order.
@@ -335,7 +369,7 @@ class Engine:
         if best is None:
             return None
         i = best[1]
-        return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": "unknown",
+        return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": self._operator(i),
                 "label": PUBLIC_LABEL,
                 "text": "By the public standard a hospital at this level should offer it; not verified in our data.",
                 "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
