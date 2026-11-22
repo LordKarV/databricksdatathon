@@ -345,25 +345,7 @@ legend { font-size: var(--s21); font-weight: 600; padding: 0; margin-bottom: var
 .nav :lang(hi), .nav a span { line-height: 1.4; }
 @media (min-width: 48rem) { .nav { justify-content: center; } .nav a { flex: 0 1 9rem; } }
 
-/* ---------- referral slip (S8): one A5 page in print; "Show big" for the family to photograph ---------- */
-.slip { border: 2px solid var(--text); border-radius: var(--r2); padding: var(--sp3) var(--sp4); margin: var(--sp3) 0; background: var(--surface); }
-.slip h2 { font-size: var(--s21); margin-top: 0; }
-.slip-table { table-layout: fixed; }
-.slip-table th, .slip-table td { padding: var(--sp2) var(--sp1); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-.slip-table td { overflow-wrap: anywhere; }
-.slip-table th { width: 30%; }
-.slip-table ul { margin: 4px 0; padding-left: 18px; }
-.slip a { overflow-wrap: anywhere; }
-.slip-name { border-top: 1px dashed var(--line-strong); padding-top: var(--sp2); }
-body.slip-big .slip { font-size: 200%; }
-body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
-
-/* ---------- data stories (#53) and community forms ---------- */
-.story { border-top: 1px solid var(--line); padding-top: var(--sp3); margin-top: var(--sp4); }
-.story-chart { margin: var(--sp3) 0; }
-.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: var(--r2); }
-.story-toc { padding-left: 20px; }
-.story details a, .story-chart figcaption a { display: inline-block; padding: 6px 0; min-height: 24px; overflow-wrap: anywhere; }
+/* ---------- community forms (slip and data-stories styles load with slip.js and stories.js) ---------- */
 .reason-step legend, #visit-form legend { font-size: var(--s18); }
 #visit-form fieldset { margin-top: var(--sp4); }
 #visit-form fieldset:disabled { opacity: .6; }

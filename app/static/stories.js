@@ -34,7 +34,21 @@
     </article>`;
   }
 
+  // Styles for this screen only, injected on first use so they stay off the first-paint CSS (75 KB budget).
+  const CSS = `.story { border-top: 1px solid var(--line); padding-top: var(--sp3); margin-top: var(--sp4); }
+.story-chart { margin: var(--sp3) 0; }
+.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: var(--r2); }
+.story-toc { padding-left: 20px; }
+.story details a, .story-chart figcaption a { display: inline-block; padding: 6px 0; min-height: 24px; overflow-wrap: anywhere; }`;
+  function injectCss() {
+    if (typeof document === 'undefined' || document.getElementById('stories-css')) return;
+    const st = document.createElement('style');
+    st.id = 'stories-css';
+    st.textContent = CSS;
+    document.head.appendChild(st);
+  }
   function render(d) {
+    injectCss();
     const toc = d.acts.map((a, k) => `<li><a href="#/stories" data-act="${k}">${F(`acts.${k}`, a)}</a></li>`).join('');
     const body = d.acts.map((a, k) => `<section aria-labelledby="act-${k}"><h2 id="act-${k}" tabindex="-1">${F(`acts.${k}`, a)}</h2>
       ${d.stories.map((s, i) => s.act === a ? story(d, s, i) : '').join('')}</section>`).join('');
