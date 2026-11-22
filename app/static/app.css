@@ -139,7 +139,17 @@ table { border-collapse: collapse; width: 100%; }
 .sos-row { display: flex; align-items: center; gap: var(--sp3); padding: var(--sp2) var(--sp2) var(--sp2) var(--sp4);
   background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hazard); border-radius: var(--r2); }
 .sos-row p { flex: 1 1 auto; font-weight: 600; margin: 0; }
-.window-miss { border-left: 4px solid var(--hazard); }
+.window-miss { border-left: 4px solid var(--hazard); padding: var(--sp2) var(--sp3); }
+.window-miss p { margin: 0 0 var(--sp2); font-size: var(--s16); }
+.window-miss .sos-inline { margin: 0; }
+.window-miss .sos-inline a { flex: 1 1 7rem; padding: var(--sp1) var(--sp3); font-size: var(--s16); }
+.window-public { border-left: 4px solid var(--hazard); font-size: var(--s16); }
+/* Narrow phones: the sticky 108/102 bar keeps one row (the sub-line "Free" / "pregnant woman or baby" is dropped
+   there), so the answer card, and its Call button, stay on a 320x568 screen even under a window-miss panel. */
+@media (max-width: 25rem) {
+  .sos a { flex: 1 1 0; padding: var(--sp1) var(--sp3); font-size: var(--s16); }
+  .sos a span span { display: none; }
+}
 
 /* ---------- home ---------- */
 .where { display: flex; align-items: center; gap: var(--sp3); width: 100%; min-height: var(--target); padding: var(--sp3) var(--sp4);

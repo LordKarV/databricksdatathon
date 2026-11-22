@@ -567,12 +567,20 @@ function windowHtml(p) {
   const w = p.time_window;
   if (!w || !w.first_outside || !p.options.length) return '';
   const po = p.public_option;
+  // Kept short above the card (the sentence and one compact 108/102 row) so Call stays on screen on a 320x568 phone;
+  // the public hospital goes under the card (windowBelowHtml).
   return `<section class="panel window-miss" aria-label="${th('window.label')}">
     <p><strong>${th('window.miss', {min: N('options.0.travel.minutes', p.options[0].travel.minutes), win: N('time_window.window_min', w.window_min)})}</strong></p>
-    <div class="sos-inline">${sosHtml(has102(p.query.service))}</div>
-    ${po ? `<p>${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
-      ${travelHtml(po.travel, 'public_option.travel')}.</p>` : `<p>${th('window.no_public')}</p>`}
+    <div class="sos-inline">${sosCompact(has102(p.query.service))}</div>
   </section>`;
+}
+const sosCompact = with102 => `<a href="tel:108">${icon('phone')}<b>${th('sos.108')}</b></a>${with102
+  ? `<a href="tel:102">${icon('phone')}<b>${th('sos.102')}</b></a>` : ''}`;
+function windowBelowHtml(p) {
+  const w = p.time_window, po = p.public_option;
+  if (!w || !w.first_outside || !p.options.length) return '';
+  return `<p class="panel window-public">${po ? `${th('window.public', {name: `<strong lang="en">${F('public_option.name', po.name)}</strong>`, label: E('public_option.label', po.label)})}
+    ${travelHtml(po.travel, 'public_option.travel')}.` : th('window.no_public')}</p>`;
 }
 function whyNotHtml(p) {
   const rows = p.why_not || [];
@@ -845,7 +853,7 @@ function planScreen() {
   if (p.abstain) {
     const oo = p.abstain.outside_option;
     body = `<p class="panel section"><strong>${E('abstain.text', p.abstain.text)}</strong></p>
-      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${nextRows(p, 1)}
+      ${p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : ''}${windowBelowHtml(p)}${nextRows(p, 1)}
       ${oo && !windowHtml(p) ? `<article class="panel section"><h3 lang="en">${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="note"><strong>${E('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${E('abstain.outside_option.text', oo.text)}</p>
@@ -853,7 +861,7 @@ function planScreen() {
     if (!p.options.length) body = body + `<p class="note">${RSInput.speakHtml()}</p><p id="speak-note" class="note" aria-live="polite"></p>`;
   } else {
     // The readout first, so Call is above the fold on small phones; the far-verified note qualifies it right under it.
-    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + farVerifiedNote(p) + nextRows(p, 1) + routeHtml(p);
+    body = (p.options.length ? `<div class="section">${answerPanel(p, p.options[0], 0)}</div>` : '') + windowBelowHtml(p) + farVerifiedNote(p) + nextRows(p, 1) + routeHtml(p);
   }
   return head + windowHtml(p) + body + foot;
 }
