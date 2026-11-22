@@ -13,7 +13,7 @@
       go: 'Where to go', stops: 'Go to these places, in this order', for: 'For', address: 'Address',
       geo: 'Open in map app', osm: 'Map (OpenStreetMap)', listed: 'Listed for this service', check: 'Call first to check',
       bring: 'What to bring', items: ['Any referral note from the health worker or doctor', 'Aadhaar card',
-        'Ayushman / PMJAY or JSSK card', 'Previous reports', 'Medicines being taken now'],
+        'Ayushman card or MCP (mother and child) card', 'Previous reports', 'Medicines being taken now'],
       callTitle: 'Call before you go', ask: 'Ask', askDefault: 'Can you see a patient for this today?',
       notMedical: 'This is not a medical opinion; information may be out of date.',
       old: 'If this card is more than a day old, call before going.',
