@@ -50,7 +50,7 @@ function pickLang() {
   const old = (load('voice') || {}).lang;  // UI1 kept a read-aloud language; it becomes the app language once
   return old === 'hi' || old === 'en' ? old : null;
 }
-// #140 3f: Hindi for a Hindi phone and for any phone set to an Indian locale (en-IN, mr-IN, ...); English otherwise.
+// hi or any -IN locale (#140 3f)
 function phoneLang() { const l = (navigator.language || '').toLowerCase(); return l.startsWith('hi') || l.endsWith('-in') ? 'hi' : 'en'; }
 
 // Engine text (band reasons, why-not reasons, call-ahead questions, route words) is English in the payload. In Hindi
@@ -145,10 +145,7 @@ function renderBar() {
 }
 
 // ---------- location ----------
-// A GPS fix or typed coordinates in words (#140 3f): "Near <town or post office>, <district> (PIN)" from
-// /api/place/near, the coordinates after it muted. Offline, or before the answer, the old line stays. A typed PIN,
-// district, town or post office keeps the words that were typed: the near lookup works on the point rounded to
-// 0.01 degree, so it could name the next village's post office instead of the one the health worker chose.
+// GPS or typed coordinates in words (#140 3f), from /api/place/near; a typed place keeps its own words.
 const NEAR_SOURCES = ['gps', 'last_fix', 'manual'];
 const coordText = loc => `${loc.lat.toFixed(3)}, ${loc.lon.toFixed(3)}`;
 function nearHtml(n) {
@@ -156,7 +153,6 @@ function nearHtml(n) {
   return n.place ? th('home.near', {place: en(n.place), district: en(n.district), pin: esc(n.pin)})
     : th('home.near_district', {district: en(n.district), pin: esc(n.pin)});
 }
-// hi-IN in Chromium prints "10:42 am"; a 24-hour clock reads the same in both languages (post-ui2 check).
 function fixTime(t) {
   return new Date(t).toLocaleTimeString(locale(), {hour: '2-digit', minute: '2-digit', hourCycle: 'h23'});
 }
@@ -170,7 +166,6 @@ function locLine(loc) {
   if (loc.label && ['pin', 'district', 'place'].includes(loc.source)) return `<span lang="en">${esc(loc.label)}</span>, ${fixTime(loc.t)}`;
   return `${esc(loc.label || coordText(loc))}. ${esc(src)}, ${fixTime(loc.t)}`;
 }
-// Ask the server once per fix; the answer is kept with the fix, so the plan and area screens show it too.
 async function fetchNear() {
   const l = state.loc;
   if (!l || l.near || !NEAR_SOURCES.includes(l.source) || !navigator.onLine) return;
@@ -183,7 +178,7 @@ async function fetchNear() {
     save('loc', l);
     const el = $('#where-line');
     if (el) el.innerHTML = locLine(l);
-  } catch { /* offline or signed out: the coordinates stay */ }
+  } catch { /* offline: coordinates stay */ }
 }
 function getGps(onDone) {
   if (!('geolocation' in navigator)) { onDone(ts('gps.none')); return; }
@@ -272,7 +267,7 @@ function saveOfflinePack() {
 // ---------- chooser (first launch) ----------
 function chooserScreen() {
   const pre = state.lang || phoneLang();
-  const order = LANGS;  // Hindi always first (#140 3f); the phone's language only decides which one is ticked
+  const order = LANGS;  // Hindi first (#140 3f)
   const S = l => I18N[l] || {};
   return `<div class="chooser">
     <svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><path d="M5 14h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
