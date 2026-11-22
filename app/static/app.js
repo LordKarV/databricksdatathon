@@ -16,6 +16,20 @@ const SERVICES = [
 const DANGER_SIGNS = ['Heavy bleeding', 'Breathing trouble', 'Unconscious or fitting',
   'Labour with bleeding or baby stuck', 'Chest pain', 'Burn on face or large area'];
 const BAND_ICON = {likely: '\u2714', not_verified: '?', unlikely: '\u2716'};
+// Number wording (#121), en and hi, ready for the app-wide language setting; these screens show 'en' today.
+// Hindi uses kb/taxonomy/HINDI_GLOSSARY.md terms (listing, confirmed).
+const NUM_TEXT = {
+  offers: {en: 'Offers', hi: '\u0938\u0947\u0935\u093e'},
+  score: {en: 'score', hi: '\u0938\u094d\u0915\u094b\u0930'},
+  similar: {en: 'similar listings confirmed', hi: '\u092e\u093f\u0932\u0924\u0940-\u091c\u0941\u0932\u0924\u0940 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u091c\u094b \u092a\u0915\u094d\u0915\u0940 \u0928\u093f\u0915\u0932\u0940\u0902'},
+  to: {en: 'to', hi: '\u0938\u0947'},
+  range: {en: 'range', hi: '\u0926\u093e\u092f\u0930\u093e'},
+  chance_any: {en: 'Chance at least one of these {k} checks out', hi: '\u0907\u0928 {k} \u092e\u0947\u0902 \u0938\u0947 \u0915\u092e \u0938\u0947 \u0915\u092e \u090f\u0915 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
+  chance_one: {en: 'Chance this listing checks out', hi: '\u0907\u0938 \u0932\u093f\u0938\u094d\u091f\u093f\u0902\u0917 \u0915\u0947 \u092a\u0915\u094d\u0915\u093e \u0928\u093f\u0915\u0932\u0928\u0947 \u0915\u0940 \u0938\u0902\u092d\u093e\u0935\u0928\u093e'},
+  over99: {en: 'over 99%', hi: '99% \u0938\u0947 \u091c\u093c\u094d\u092f\u093e\u0926\u093e'},
+  under1: {en: 'under 1%', hi: '1% \u0938\u0947 \u0915\u092e'},
+};
+const NT = k => NUM_TEXT[k].en;
 
 const state = {loc: load('loc'), service: null, danger: new Set(), plan: null, msg: ''};
 
@@ -265,6 +279,16 @@ async function districtPicker() {
 // kind in data-k; app/tests/test_faithfulness.py checks each against the payload. Device-side text (the user's
 // location, clock times, call outcomes) is wrapped in data-device instead.
 function F(path, text, kind = 'text') { return `<span data-f="${path}" data-k="${kind}">${esc(text)}</span>`; }
+// Model v2's p_lo / p_hi are the score bin's observed confirmed rate (derived/v2 field_descriptions), not an interval
+// around p, so they are shown apart from p as a percent, never in brackets next to it (#121). Interim scores keep a range.
+function similarHtml(o, P) {
+  const pc = x => String(Math.round(100 * x));
+  return o.range_kind === 'similar_scores'
+    ? `${NT('similar')}: ${F(P + '.p_lo', pc(o.p_lo), 'pct')} ${NT('to')} ${F(P + '.p_hi', pc(o.p_hi), 'pct')}%`
+    : `${NT('range')} ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} ${NT('to')} ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}`;
+}
+// A chance shown as a whole percent, capped: never "100%" or "1.00" from a product of model chances (#121).
+const capPct = x => (x > 0.99 ? NT('over99') : x < 0.01 ? NT('under1') : `${Math.round(100 * x)}%`);
 // Three outcomes (#82 H2): no information is the most common result of a check, so it is shown, not hidden.
 function trackHtml(tr, P) {
   if (!tr) return 'Listings like this: not checked yet';
@@ -613,7 +637,7 @@ function planScreen() {
 // ---------- Compare depth (S10): same rows for every option; table on desk, cards on phone ----------
 const COMPARE_ROWS = [
   ['Band', (o, P) => bandHtml(o, P)],
-  ['Offers (range)', (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${F(P + '.p', o.p.toFixed(2), 'num')} (${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')})`],
+  [NT('offers'), (o, P) => o.model_band === 'NO_SERVICE_TEXT' ? 'no sentence about it in the listing' : `${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}; ${similarHtml(o, P)}`],
   ['Track record', (o, P) => o.track_record ? `${F(P + '.track_record.k_confirmed', o.track_record.k_confirmed, 'num')} of ${F(P + '.track_record.n', o.track_record.n, 'num')} confirmed` : 'not checked yet'],
   ['Exists (expert prior) / where', (o, P) => `${F(P + '.p_e', o.p_e.toFixed(2), 'num')} / ${F(P + '.p_l', o.p_l.toFixed(2), 'num')}`],
   ['Road km, min', (o, P) => `${F(P + '.travel.km', Math.round(o.travel.km), 'num')}, ${F(P + '.travel.low', o.travel.low, 'num')}-${F(P + '.travel.high', o.travel.high, 'num')}`],
@@ -636,9 +660,10 @@ function compareHtml(p) {
   const P = i => `options.${i}`;
   const atLeast = 1 - opts.reduce((a, o) => a * (1 - o.p), 1);
   const names = opts.map((o, i) => F(P(i) + '.name', o.name)).join(', then ');
+  const which = opts.length > 1 ? NT('chance_any').replace('{k}', F('options', opts.length, 'count')) : NT('chance_one');
   const head = `<p>${state.patientHere ? 'Patient is at this location.' : 'Patient is elsewhere: distances are from this location.'}</p>
     <p>Plan: ${names}.</p>
-    <p>Chance at least one listing checks out: ${F('options', atLeast.toFixed(2), 'atleast')} (assumes they fail independently).</p>`;
+    ${opts.length ? `<p>${which}: ${F('options', capPct(atLeast), 'atleast')} (assumes they fail independently).</p>` : ''}`;
   const table = `<div class="compare-table"><table><caption>${F('query.service_label.en', p.query.service_label.en)}: options side by side</caption>
     <thead><tr><th scope="col">Row</th>${opts.map((o, i) => `<th scope="col">${F(P(i) + '.rank', o.rank, 'num')}. ${F(P(i) + '.name', o.name)}</th>`).join('')}</tr></thead>
     <tbody>${COMPARE_ROWS.map(([lab, fn]) => `<tr><th scope="row">${esc(lab)}</th>${opts.map((o, i) => `<td>${fn(o, P(i))}</td>`).join('')}</tr>`).join('')}</tbody>
@@ -841,8 +866,7 @@ function whyScreen(rank) {
     ${o.flags.length ? `<h2>Warnings and what we ignored</h2><ul>${o.flags.map((f, j) => `<li>${F(`${P}.flags.${j}`, f)}</li>`).join('')}</ul>` : ''}
     <h2>How sure</h2><p>${o.model_band === 'NO_SERVICE_TEXT'
     ? `${F(P + '.band_word', o.band_word)}: its listing has no sentence about this service, so we give no chance for it. Call to ask.`
-    : `${F(P + '.band_word', o.band_word)} (${F(P + '.p', o.p.toFixed(2), 'num')}, ${o.range_kind === 'similar_scores' ? 'listings with similar scores checked out' : 'range'}
-      ${F(P + '.p_lo', o.p_lo.toFixed(2), 'num')} to ${F(P + '.p_hi', o.p_hi.toFixed(2), 'num')}${o.range_kind === 'similar_scores' ? ' of the time' : ''}).`}
+    : `${F(P + '.band_word', o.band_word)}, ${NT('score')} ${F(P + '.p', o.p.toFixed(2), 'num')}. ${similarHtml(o, P).replace(/^./, c => c.toUpperCase())}.`}
       ${width > 0.4 ? 'We are very unsure about this one. ' : ''}${trackHtml(o.track_record, P + '.track_record')} (${split}).</p>
     ${o.band === 'likely' ? testRecordHtml(p.meta.test_record) : ''}
     ${fieldHtml(o, P)}

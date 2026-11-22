@@ -318,6 +318,13 @@ class Engine:
             return min(p, self.likely_threshold)
         return p
 
+    def _exists_where(self, pr: Pair, i: int) -> dict[str, float | None]:
+        """p_e, p_l: the model's P_E and P_L for this pair (derived/v2 p_exists, p_location), the values its band rule
+        tests (#121: the derived/v1 facility trust scores showed 0.34 on a Likely card). Interim pairs keep v1's."""
+        if pr.model and len(pr.model) > 6:
+            return {"p_e": pr.model[6], "p_l": pr.model[5]}
+        return {"p_e": self._f("p_e", i), "p_l": self._f("p_l", i)}
+
     @staticmethod
     def model_band(pr: Pair) -> str | None:
         return pr.model[4] if pr.model and len(pr.model) > 4 else None
@@ -432,7 +439,7 @@ class Engine:
             "p": round(p, 2), "p_lo": round(lo, 2), "p_hi": round(hi, 2),
             # v2's lo / hi are the confirmed rate of checked DEV pairs at a similar score, not an interval around p
             "range_kind": "similar_scores" if pr.model else "interval", "model_band": self.model_band(pr),
-            "p_e": self._f("p_e", i), "p_l": self._f("p_l", i),
+            **self._exists_where(pr, i),
             "evidence": evidence,
             "contributions": contrib + ([{"label": "quoted sentences with a warning are listed last", "points": 0}]
                                         if any(f["weak"] for e in evidence for f in e["flags"]) else []),
