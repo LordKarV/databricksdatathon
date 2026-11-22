@@ -1108,6 +1108,7 @@ function render() {
   document.title = (h1 ? h1.textContent.trim() + ' - ' : '') + 'Referral Saathi';
   bind();
   if ($('#speak')) RSInput.bindSpeak(state.speak);
+  if (state.plan && $('#main [data-f$=".quote"]')) needScripts(['/translate.js']).then(() => RSTranslate.bind($('#main'))).catch(() => {});
 }
 window.addEventListener('hashchange', () => {
   window.RSCommunity?.sendPending();  // a "no" left without a reason is sent as it is

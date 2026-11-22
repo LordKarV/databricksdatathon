@@ -50,7 +50,7 @@ function packResponse(rec) {
 }
 const SHELL = ['/', '/app.js', '/app.css', '/pack.js', '/offline.js', '/slip.js', '/how.js', '/stories.js', '/input.js',
   '/lexicon.json', '/manifest.webmanifest', '/voice.js', '/speech.js', '/speech_templates.json',
-  '/community.js', '/journey.js', '/pulse.js'];
+  '/community.js', '/journey.js', '/pulse.js', '/translate.js'];
 
 self.addEventListener('install', e => e.waitUntil(
   caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));

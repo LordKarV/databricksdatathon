@@ -505,8 +505,9 @@ def test_untied_options_never_move():
 
 
 @needs_data
-@pytest.mark.parametrize("service", ["emergency_csection", "trauma_emergency", "burn_care"])
-def test_emergencies_never_move(service):
+@pytest.mark.parametrize("service", ["emergency_csection", "trauma_emergency", "burn_care", "nicu"])
+def test_emergencies_and_nicu_never_move(service):
+    """Emergency and urgent (NICU) orders never move on report counts (#116: TIE_BREAK_PROFILES)."""
     eng = app_module._engine()
     before = demo_plan(eng, service)
     ids = [o["facility_id"] for o in before["options"]]
