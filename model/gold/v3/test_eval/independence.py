@@ -83,13 +83,20 @@ def unlikely_by_route(d: pd.DataFrame, t_u: float) -> dict:
 
 
 def existence_head(t: pd.DataFrame, rng: np.random.Generator) -> dict:
-    """P_E against TEST exists. No label says "no", so use the DEV y_E rule: unclear after a search counts as 0."""
+    """P_E against TEST exists. No label says "no", so use the DEV y_E rule: unclear after a search counts as 0.
+
+    The AUROC and its interval are copied from extras.json (evaluate.py, the scored-TEST script) so every doc cites
+    one interval; the bootstrap here still runs, as the last rng consumer, and only the point value is checked."""
     searched = t.evidence_urls.map(lambda u: len(u if u is not None else []) > 0)
     d = t[(t.exists != "unclear") | searched].assign(y=lambda x: (x.exists == "yes").astype(int))
+    s = split_stats(d, "p_exists", rng)
+    ref = json.loads((HERE / "extras.json").read_text())["existence_head"]["y_E_rule"]
+    assert s["auroc"] == ref["auroc"] and s["n"] == ref["n"], f"existence AUROC {s['auroc']} != extras.json {ref['auroc']}"
     return {"counts": t.exists.value_counts().to_dict(),
-            "y_E_rule": split_stats(d, "p_exists", rng) | {
-                "rule": "confirmed = exists yes (1); contradicted = no, or unclear after a search (0); unclear and "
-                        "never searched excluded (model/v2/labels y_E rule)"}}
+            "y_E_rule": s | {"auroc_ci95": ref["auroc_ci95"],
+                             "rule": "confirmed = exists yes (1); contradicted = no, or unclear after a search (0); "
+                                     "unclear and never searched excluded (model/v2/labels y_E rule)",
+                             "ci_source": "extras.json existence_head.y_E_rule (evaluate.py)"}}
 
 
 def main() -> None:
@@ -158,8 +165,11 @@ def main() -> None:
         "existence_head": existence_head(t, rng),
         "unlikely_by_route": {"t_U": t_u, "TEST": unlikely_by_route(dec, t_u), "DEV": unlikely_by_route(dev, t_u)},
     }
-    headline = json.loads((HERE / "results.json").read_text())["headline_decided"]["auroc"]
-    assert res["overall"]["auroc"] == headline, f"overall AUROC {res['overall']['auroc']} != results.json {headline}"
+    headline = json.loads((HERE / "results.json").read_text())["headline_decided"]
+    assert res["overall"]["auroc"] == headline["auroc"], \
+        f"overall AUROC {res['overall']['auroc']} != results.json {headline['auroc']}"
+    # One overall interval everywhere: results.json's. The bootstrap above still ran, so later splits keep their draws.
+    res["overall"] = res["overall"] | {"auroc_ci95": headline["auroc_ci95"], "ci_source": "results.json headline_decided"}
     (HERE / "independence.json").write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps(res, indent=1))
 
