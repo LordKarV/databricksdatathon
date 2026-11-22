@@ -1562,8 +1562,8 @@ function render(opts = {}) {
   document.body.classList.toggle('wide', (h === '#/plan' && state.depth === 'compare') || h === '#/area');
   document.body.classList.toggle('on-plan', h === '#/plan');  // no bottom nav on the answer: Call needs the room
   renderBar();
-  if (h === '#/plan') needScripts(['/passed.js']).then(() => RSPassed()).catch(() => {});  // UI-PASSED-1, after paint
-  if (h === '#/plan') needScripts(['/receipt.js']).then(() => RSReceipt()).catch(() => {});  // UI-RECEIPT-1
+  if (h.startsWith('#/why/')) needScripts(['/passed.js']).then(() => RSPassed()).catch(() => {});  // UI-PASSED-1, after paint
+  if (h.startsWith('#/why/')) needScripts(['/receipt.js']).then(() => RSReceipt()).catch(() => {});  // UI-RECEIPT-1
   if (h === '#/plan' && state.plan && state.plan.itinerary && typeof routeHtml !== 'function') {
     needScripts(['/route.js']).then(() => render({keepFocus: true})).catch(() => {});  // e.g. back to #/plan
   }

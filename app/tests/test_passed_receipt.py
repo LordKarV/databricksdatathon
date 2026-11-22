@@ -1,15 +1,16 @@
-"""UI-PASSED-1 and UI-RECEIPT-1 (#140): the two lazy lines on the answer, drawn by passed.js and receipt.js.
+"""UI-PASSED-1 and UI-RECEIPT-1 (#140, lead 15:55Z): two lazy lines at the top of the Why page, by passed.js and
+receipt.js. Card 1 gets neither.
 
-- The "Passed over" line under card 1 is the engine's why_not[0] row: its name, travel km and reason, each marked and
-  equal to the payload (Thane dialysis, a real plan, when app/facts/out is built; a stub plan always).
-- A plan with first_is_nearest shows the "nothing nearer" line and no why_not value.
-- A Likely card shows the tested-trust line: k and n equal meta.test_record, with n dots, k of them filled; a card
-  that is not Likely shows no such line.
+- Order at the top of the Why page: the band (and score) row, then the tested-trust line, then "Passed over".
+- "Passed over" is on option 1's Why page only: the engine's why_not[0] row, its name, travel km and reason, each
+  marked and equal to the payload (Thane dialysis, a real plan, when app/facts/out is built; a stub plan always).
+- A plan with first_is_nearest shows the "nothing nearer" line there instead, with no why_not value.
+- A Likely option's Why page shows the tested-trust line: k and n equal meta.test_record, with n dots, k of them
+  filled; the Why page of an option that is not Likely shows no such line.
 Every marked value on the screen is also checked by test_faithfulness's check_screen (no unmarked digit).
 """
 from __future__ import annotations
 
-import copy
 import json
 import sys
 from pathlib import Path
@@ -28,6 +29,9 @@ base_url, browser = tf.base_url, tf.browser  # the same module-scoped server and
 I18N = tf.I18N
 THANE = ("dialysis", 19.16, 72.95)
 GAYA_TRAUMA = ("trauma_emergency", 24.7955, 85.0077)
+ORDER_JS = """() => { const h = document.querySelector('#main .why-head');
+  const kids = [...h.children], at = s => kids.findIndex(e => e.matches(s) || !!e.querySelector(s));
+  return {band: at('.band'), tested: at('.tested'), passed: at('.passed')}; }"""
 
 
 def results_record() -> dict:
@@ -46,12 +50,16 @@ def stub_plan(band: str = "likely", nearest: bool = False) -> dict:
     p = recommend_stub("dialysis", 26.6, 85.48, 40, "gps")
     p["options"][0]["band"] = band
     p["first_is_nearest"] = nearest
-    p["meta"] = {**p["meta"], "test_record": {"split": "test", **results_record()}}
+    # The whole record, as build.py writes it: the Why page's sealed-test section shows every field of it.
+    log = "model/gold/v3/OPENING_LOG.md"
+    tr = {"split": "test", **tf.expected_test_record(), "source": "model/gold/v3/test_eval/results.json", "log": log,
+          "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/submission/{log}"}
+    p["meta"] = {**p["meta"], "test_record": tr}
     return p
 
 
-def open_plan(browser, base_url, payload: dict, lang: str, viewport=(360, 780)) -> tuple:
-    ctx = browser.new_context(viewport={"width": viewport[0], "height": viewport[1]}, service_workers="block")
+def open_plan(browser, base_url, payload: dict, lang: str):
+    ctx = browser.new_context(viewport={"width": 360, "height": 780}, service_workers="block")
     page = ctx.new_page()
     page.route("**/api/plan", tf.json_reply(payload))
     page.add_init_script("localStorage.setItem('rs.lang', " + json.dumps(json.dumps(lang)) + ");"
@@ -60,9 +68,15 @@ def open_plan(browser, base_url, payload: dict, lang: str, viewport=(360, 780)) 
     page.goto(base_url + "/#/")
     page.locator(f"[data-svc={payload['query']['service']}]").first.click()
     page.wait_for_selector("article.card")
+    page.evaluate("() => new Promise(r => setTimeout(r, 100))")
+    return ctx, page
+
+
+def open_why(page, rank: int) -> None:
+    page.evaluate("h => { location.hash = h; }", f"#/why/{rank}")
+    page.wait_for_selector("#main .why-head")
     page.wait_for_function("typeof RSPassed === 'function' && typeof RSReceipt === 'function'")
     page.evaluate("() => new Promise(r => setTimeout(r, 50))")
-    return ctx, page
 
 
 def marked(page, sel: str) -> dict[str, str]:
@@ -74,35 +88,39 @@ def faithful(page, name: str, payload: dict) -> list[str]:
     return tf.check_screen(name, payload, page.evaluate(tf.COLLECT_JS), {"values_checked": 0})
 
 
+def card_has_neither(page) -> list[str]:
+    n = page.evaluate("() => document.querySelectorAll('#main .passed, #main .tested').length")
+    return [] if n == 0 else [f"the answer screen shows {n} passed-over or tested lines; card 1 gets neither"]
+
+
 def check_passed_row(page, name: str, payload: dict) -> list[str]:
     errs = faithful(page, name, payload)
-    got = marked(page, "#main .passed")
-    for f in ("name", "travel.km", "reason"):
-        if f"why_not.0.{f}" not in got:
-            errs.append(f"{name}: why_not.0.{f} not on the passed-over line")
+    got = marked(page, "#main .why-head .passed")
+    errs += [f"{name}: why_not.0.{f} not on the passed-over line" for f in ("name", "travel.km", "reason")
+             if f"why_not.0.{f}" not in got]
     if page.locator("#main .passed").count() != 1:
         errs.append(f"{name}: expected one passed-over line")
-    # under card 1, never inside it
-    if not page.evaluate("() => !!document.querySelector('#main .section > article.answer') &&"
-                         " document.querySelector('#main .passed').previousElementSibling.contains("
-                         "document.querySelector('#main article.answer'))"):
-        errs.append(f"{name}: the passed-over line is not right under card 1")
     return errs
 
 
 @pytest.mark.parametrize("lang", ["en", "hi"])
-def test_thane_shows_why_not_0_as_passed_over(lang, base_url, browser):
+def test_thane_why_page_order_and_passed_over(lang, base_url, browser):
     p = real_plan(*THANE)
     if p is None:
         pytest.skip("app/facts/out not built")
     assert not p["first_is_nearest"] and p["why_not"], "Thane dialysis no longer has a nearer passed-over row"
+    assert p["options"][0]["band"] == "likely"
     ctx, page = open_plan(browser, base_url, p, lang)
     try:
-        errs = check_passed_row(page, f"thane/{lang}", p)
+        errs = card_has_neither(page)
+        open_why(page, p["options"][0]["rank"])
+        errs += check_passed_row(page, f"thane/{lang}", p)
         text = page.locator("#main .passed").inner_text()
-        assert I18N[lang]["passed.over"] in text and p["why_not"][0]["name"] in text
+        order = page.evaluate(ORDER_JS)
     finally:
         ctx.close()
+    assert I18N[lang]["passed.over"] in text and p["why_not"][0]["name"] in text
+    assert 0 <= order["band"] < order["tested"] < order["passed"], order
     assert not errs, errs[:10]
 
 
@@ -111,10 +129,25 @@ def test_stub_passed_over_line_is_why_not_0(lang, base_url, browser):
     p = stub_plan()
     ctx, page = open_plan(browser, base_url, p, lang)
     try:
-        errs = check_passed_row(page, f"stub/{lang}", p)
+        errs = card_has_neither(page)
+        open_why(page, p["options"][0]["rank"])
+        errs += check_passed_row(page, f"stub/{lang}", p)
+        order = page.evaluate(ORDER_JS)
     finally:
         ctx.close()
+    assert 0 <= order["band"] < order["tested"] < order["passed"], order
     assert not errs, errs[:10]
+
+
+def test_passed_over_only_on_option_1(base_url, browser):
+    p = stub_plan()
+    ctx, page = open_plan(browser, base_url, p, "en")
+    try:
+        open_why(page, p["options"][1]["rank"])
+        n = page.locator("#main .passed").count()
+    finally:
+        ctx.close()
+    assert n == 0
 
 
 @pytest.mark.parametrize("lang", ["en", "hi"])
@@ -126,9 +159,11 @@ def test_first_is_nearest_shows_nothing_nearer(src, lang, base_url, browser):
     assert p["first_is_nearest"], f"{src}: first_is_nearest is no longer set"
     ctx, page = open_plan(browser, base_url, p, lang)
     try:
-        text = page.locator("#main .passed").inner_text().strip()
+        errs = card_has_neither(page)
+        open_why(page, p["options"][0]["rank"])
+        text = page.locator("#main .why-head .passed").inner_text().strip()
         got = marked(page, "#main .passed")
-        errs = faithful(page, f"nearest-{src}/{lang}", p)
+        errs += faithful(page, f"nearest-{src}/{lang}", p)
     finally:
         ctx.close()
     assert text == I18N[lang]["passed.none"]
@@ -137,7 +172,7 @@ def test_first_is_nearest_shows_nothing_nearer(src, lang, base_url, browser):
 
 
 @pytest.mark.parametrize("lang", ["en", "hi"])
-def test_likely_card_shows_the_test_record(lang, base_url, browser):
+def test_likely_why_page_shows_the_test_record(lang, base_url, browser):
     p = real_plan(*THANE) or stub_plan()
     tr = p["meta"].get("test_record") or {}
     if not tr:
@@ -146,29 +181,30 @@ def test_likely_card_shows_the_test_record(lang, base_url, browser):
     assert {k: tr[k] for k in ("k", "n")} == results_record()
     ctx, page = open_plan(browser, base_url, p, lang)
     try:
-        got = marked(page, "#main article.answer .tested")
-        dots = page.evaluate("() => { const s = document.querySelector('#main article.answer .tested svg');"
+        errs = card_has_neither(page)
+        open_why(page, p["options"][0]["rank"])
+        got = marked(page, "#main .why-head .tested")
+        dots = page.evaluate("() => { const s = document.querySelector('#main .why-head .tested svg');"
                              " return s && {hidden: s.getAttribute('aria-hidden'), all: s.querySelectorAll(':scope > circle,"
                              " :scope > g').length, filled: s.querySelectorAll(':scope > circle').length}; }")
-        below_call = page.evaluate("() => { const c = document.querySelector('#main .call-main'),"
-                                   " t = document.querySelector('#main .tested');"
-                                   " return !c || !!(c.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING); }")
-        errs = faithful(page, f"tested/{lang}", p)
+        errs += faithful(page, f"tested/{lang}", p)
     finally:
         ctx.close()
     assert got == {"meta.test_record.k": str(tr["k"]), "meta.test_record.n": str(tr["n"])}
     assert dots == {"hidden": "true", "all": tr["n"], "filled": tr["k"]}
-    assert below_call, "the tested-trust line moved Call down"
     assert not errs, errs[:10]
 
 
 @pytest.mark.parametrize("band", ["not_verified", "unlikely"])
-def test_card_not_likely_shows_no_test_record(band, base_url, browser):
+def test_why_page_not_likely_shows_no_test_record(band, base_url, browser):
     p = stub_plan(band=band)
-    ctx, page = open_plan(browser, base_url, copy.deepcopy(p), "en")
+    ctx, page = open_plan(browser, base_url, p, "en")
     try:
-        assert not page.locator("#main article.answer").get_attribute("class").count("likely")
+        errs = card_has_neither(page)
+        open_why(page, p["options"][0]["rank"])
         assert page.locator("#main .tested").count() == 0
-        assert page.locator("#main [data-f^='meta.test_record']").count() == 0
+        assert page.locator("#main .why-head [data-f^='meta.test_record']").count() == 0
+        assert page.locator("#main .why-head .passed").count() == 1  # the passed-over line is not band-gated
     finally:
         ctx.close()
+    assert not errs, errs
