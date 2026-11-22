@@ -61,6 +61,12 @@ SHELL_FILES: dict[str, str] = {
     "translate.js": "text/javascript; charset=utf-8",
     "route.js": "text/javascript; charset=utf-8",
     "manifest.webmanifest": "application/manifest+json",
+    # ICON-1: home-screen icons. Served here only; not in the sw.js SHELL, so they never weigh on first paint.
+    "icon.svg": "image/svg+xml",
+    "icon-180.png": "image/png",
+    "icon-192.png": "image/png",
+    "icon-512.png": "image/png",
+    "icon-512-maskable.png": "image/png",
 }
 
 app = FastAPI(title="Referral Saathi", docs_url=None, redoc_url=None, openapi_url=None)
