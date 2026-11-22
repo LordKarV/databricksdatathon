@@ -57,7 +57,7 @@ from facts.ledger_terms import (  # noqa: E402
     nabh_text,
     osm_text,
 )
-from facts.places import PIN_GRID, centre_pin_kept, kept_pins  # noqa: E402
+from facts.places import PIN_GRID, centre_pin_kept, kept_pins, norm  # noqa: E402
 
 # DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
 # submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
@@ -752,7 +752,7 @@ def pins() -> dict[str, list]:
     p = pin_table(V1)
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
             "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from),
-            "centre": centre_flags(p, moved_pins())}
+            "centre": centre_flags(p, moved_pins(p))}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
@@ -791,10 +791,28 @@ GOV = Path(__file__).resolve().parent / "gov"  # small committed inputs, written
 GEO = ROOT / "viz" / "geography" / "data"  # committed district tables of the data stories (viz/geography)
 
 
-def moved_pins() -> dict[str, list[str]]:
+def lgd_moves() -> dict[str, list[str]]:
     """pin_districts() as committed in gov/pin_district_moved.csv, so a clean checkout gets the LGD district too."""
     m = pd.read_csv(GOV / "pin_district_moved.csv", dtype=str)
     return {p: [d, s] for p, d, s in zip(m.pin, m.district, m.state, strict=True)}
+
+
+def foreign_moves(moved: dict[str, list[str]], p: pd.DataFrame) -> set[str]:
+    """The PINs `moved` sends to a district the PIN table `p` has none of in that state (names compared by norm).
+
+    The LGD names come from dist_lgd codes, and gov/district_lgd.csv gives Durg and Pratapgarh (Uttar Pradesh) the
+    same code 378, so 11 Chhattisgarh PINs were moved to "Pratapgarh, Chhattisgarh"; 782470 to West Jaintia Hills,
+    Assam (a Meghalaya district). Such a move names no district of the state; the PIN keeps its own."""
+    have = set(zip(p.state.map(norm), p.district.map(norm)))
+    return {k for k, (d, s) in moved.items() if (norm(s), norm(d)) not in have}
+
+
+def moved_pins(p: pd.DataFrame | None = None) -> dict[str, list[str]]:
+    """lgd_moves() less foreign_moves() against the PIN table `p` (pin_table(V1) when None): the map every user of
+    the LGD correction reads (pins' centres, pin_districts.json for the area view, the packs' not_centre)."""
+    moved = lgd_moves()
+    skip = foreign_moves(moved, pin_table(V1) if p is None else p)
+    return {k: v for k, v in moved.items() if k not in skip}
 
 
 def _num(x: object, nd: int) -> float | None:
@@ -918,6 +936,7 @@ def main() -> None:
     (out / "facts.sha").write_text(facts_hash + "\n")
     # Outside facts.json and its hash, as before the LGD map was committed (gov/pin_district_moved.csv).
     moved = moved_pins()
+    print(f"LGD moves skipped (target not a district of the state): {len(lgd_moves()) - len(moved)}")
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in "
           "(app/facts/gov/pin_district_moved.csv)")

@@ -1,7 +1,7 @@
 # Offline state pack sizes
 
 Built by `app/packs/build_packs.py` from derived/v1 on 2026-11-21. Budget: 150,000 B gzip
-per state. States over budget: 0 of 36. Largest: MAHARASHTRA 87,593 B. Total for all states: 854,505 B gzip.
+per state. States over budget: 0 of 36. Largest: MAHARASHTRA 87,593 B. Total for all states: 854,482 B gzip.
 
 | State | PINs | Facilities | Evidence rows | Quotes | Distinct lists | Raw bytes | Gzip bytes | Budget |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
@@ -21,8 +21,8 @@ per state. States over budget: 0 of 36. Largest: MAHARASHTRA 87,593 B. Total for
 | BIHAR | 889 | 208 | 376 | 532 | 1,123 | 104,765 | 31,430 | ok |
 | ODISHA | 944 | 147 | 251 | 367 | 689 | 83,027 | 23,969 | ok |
 | JHARKHAND | 388 | 135 | 253 | 358 | 556 | 59,125 | 19,238 | ok |
-| CHHATTISGARH | 283 | 135 | 218 | 319 | 456 | 50,504 | 16,643 | ok |
-| ASSAM | 580 | 83 | 165 | 239 | 451 | 54,391 | 16,541 | ok |
+| CHHATTISGARH | 283 | 135 | 218 | 319 | 456 | 50,434 | 16,623 | ok |
+| ASSAM | 580 | 83 | 165 | 239 | 451 | 54,384 | 16,538 | ok |
 | HIMACHAL PRADESH | 439 | 101 | 167 | 234 | 445 | 47,617 | 15,194 | ok |
 | DELHI | 103 | 153 | 235 | 343 | 440 | 44,420 | 15,179 | ok |
 | UTTARAKHAND | 306 | 84 | 163 | 239 | 351 | 39,673 | 12,991 | ok |

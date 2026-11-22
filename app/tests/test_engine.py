@@ -619,7 +619,7 @@ def test_committed_pin_district_map_matches_the_lgd_join():
     """app/facts/gov/pin_district_moved.csv is what pin_districts() gives from the LGD file: rerun
     app/facts/gov/build_gov.py and commit when this fails."""
     from facts import build
-    assert build.moved_pins() == build.pin_districts(build.pins())
+    assert build.lgd_moves() == build.pin_districts(build.pins())
 
 
 def test_every_list_and_osm_row_cites_its_source():
