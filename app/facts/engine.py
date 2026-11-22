@@ -8,6 +8,7 @@ from __future__ import annotations
 import gzip
 import json
 import math
+import re
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -17,6 +18,14 @@ from services import BAND_WORDS, SERVICES, emergency_numbers, haversine_km, trav
 
 from facts.redact import redact_names
 
+# New user-facing strings (#121), en and hi, ready to move into the strings files of the app-wide language setting.
+# The payload carries "en"; the Hindi question is also in static/speech_templates.json for read-aloud.
+STRINGS = {
+    "need_today": {"en": "Is {need} available today for this patient?",
+                   "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
+    "need_named": {"en": "its listing names it, but not whether it is free today",
+                   "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+}
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
 N_OPTIONS = 3
@@ -132,6 +141,18 @@ NEED_PLAIN = {
 # Why the call asks about cost, by the operator the card shows; None leaves the question out.
 COST_REASON = {"private": "private hospital, may charge", "public": None,
                "unknown": "our data does not say if it is public or private"}
+# Words that name each prerequisite in a quote. A call-ahead question never says "our data does not mention it"
+# when a quote on the card names it (#121: "Do you have a dialysis unit?" next to "Advanced Kidney Dialysis").
+NEED_WORDS = {k: re.compile(v, re.I) for k, v in {
+    "emergency_24x7": r"24\s*[x/×*]\s*7|24[- ]hours?|round[- ]the[- ]clock", "ct": r"\bct\b|computed tomography",
+    "surgery_or_ortho": r"surg|orthop", "operating_theatre": r"operation theat|operating theat|\bOT\b",
+    "anaesthesia": r"an(a)?esthe", "obstetrics": r"obstet|gyn(a)?ec|maternity",
+    "incubator_warmer_ventilator": r"incubat|warmer|ventilat", "paeds_or_neonatology": r"p(a)?ediat|neonat|\bnicu\b",
+    "dialysis_unit_or_machine": r"dialys", "nephrology": r"nephro", "mri_scanner": r"\bmri\b|magnetic resonance",
+    "cathlab_or_heart_lung": r"cath ?lab|catheteri[sz]ation lab|heart[- ]lung",
+    "cardiothoracic_surgeon_or_dept": r"cardiothoracic|\bctvs\b|cardiac surg|heart surg|bypass|\bcabg\b",
+    "burn_unit_or_plastic_surgery": r"\bburns?\b|plastic surg",
+}.items()}
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
 PUBLIC_LABEL = "by public standard, not verified"
@@ -208,9 +229,7 @@ class Engine:
     def score(self, facility_id: str, service_id: str) -> tuple[str, float, float, float, list[dict], list[str]]:
         """(band, p, lo, hi, contributions, evidence_ids) for one facility and service."""
         pr = self.index[service_id][self.fid[facility_id]]
-        ev = [c for c in pr.evidence if c in self.claims and not self.claims[c][2]
-              and self.claims[c][3] != "other_facility"]
-        ev = sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
+        ev = self._evidence(pr)
         if pr.model:  # derived/v2 published: its band and interval, one contribution row
             band, p, lo, hi, *_ = pr.model
             return band, p, lo, hi, [{"label": "model score (derived/v2)", "points": _pts(_logit(p))},
@@ -252,6 +271,12 @@ class Engine:
                     "basis": f"score {b['lo']:.2f} to {b['hi']:.2f}"}
         return {"n": rule["n"], "k_confirmed": rule["k_confirmed"], "k_contradicted": rule["k_contradicted"],
                 "k_no_info": None, "split": "dev", "basis": "evidence rule"}
+
+    def _evidence(self, pr: Pair) -> list[str]:
+        """The claim ids a card quotes for this pair: its own sentences, at most three."""
+        ev = [c for c in pr.evidence if c in self.claims and not self.claims[c][2]
+              and self.claims[c][3] != "other_facility"]
+        return sorted(ev, key=self._n_weak)[:3]  # demoted, not hidden: flagged sentences come after clean ones
 
     def _n_weak(self, cid: str) -> int:
         return sum(QUOTE_FLAGS[c][1] for c, _ in self.claim_flags.get(cid, []) if c in QUOTE_FLAGS)
@@ -335,7 +360,13 @@ class Engine:
             qs.append({"question": q, "asked_because": "listing not rated Likely"})
         if pr.missing:
             need = pr.missing[0].replace("_or_", " or ").replace("_", " ")
-            qs.append({"question": f"Do you have {need} on site?", "asked_because": "our data does not mention it"})
+            words = NEED_WORDS.get(pr.missing[0])
+            if words and any(words.search(self.claims[c][1]) for c in self._evidence(pr)):
+                # a quote on the card names it: what is unknown is whether it can take this patient today
+                qs.append({"question": STRINGS["need_today"]["en"].format(need=need),
+                           "asked_because": STRINGS["need_named"]["en"]})
+            else:
+                qs.append({"question": f"Do you have {need} on site?", "asked_because": "our data does not mention it"})
         if "claims_6plus_of_8_services" in self._f("flags", i) or "copies_far_apart" in self._f("flags", i):
             qs.append({"question": "Is this the branch in this town, or another branch?",
                        "asked_because": "record may merge several branches"})
