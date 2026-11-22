@@ -452,7 +452,8 @@ class PlaceRequest(BaseModel):
 
 @functools.lru_cache(maxsize=1)
 def _places() -> Places:
-    return Places(_need_engine().pins, load_places(PLACES))
+    eng = _need_engine()
+    return Places(eng.pins, load_places(PLACES), eng.pin_where)
 
 
 @app.post("/api/place")

@@ -31,7 +31,7 @@ Excluded: `icu` (no app tile), grades `attributed_elsewhere` and `counter_eviden
 | `q` | quote table `[text, claim id suffix]`, shared by all rows |
 | `lists` | distinct top lists (evidence row ids); neighbouring PINs share them |
 | `index` | per service, one list id per PIN |
-| `pins` | `pin`, `lat`, `lon` as deltas (1e-3 degree), `d` district index into `districts` |
+| `pins` | `pin`, `lat`, `lon` as deltas (1e-3 degree), `d` district index into `districts`, `not_centre` the PINs (ascending, not deltas) the area view names another district for after the LGD correction (facts/build.py not_centre), which offline.js districtCentre skips |
 
 These three choices brought Uttar Pradesh from 228 KB in the prototype to about 80 KB: columnar arrays with delta
 coordinates, dictionary-encoded quotes, and deduplicated top lists. Post-office names are not included; the picker

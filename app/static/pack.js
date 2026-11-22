@@ -30,7 +30,7 @@
       ev: Object.assign({}, pack.ev, {f: undelta(pack.ev.f)}),
       q: pack.q, lists: pack.lists, index: pack.index, districts: pack.districts,
       pins: {pin: undelta(pack.pins.pin), lat: undelta(pack.pins.lat, pack.scale.pin),
-        lon: undelta(pack.pins.lon, pack.scale.pin), d: pack.pins.d},
+        lon: undelta(pack.pins.lon, pack.scale.pin), d: pack.pins.d, not_centre: pack.pins.not_centre || []},
     };
   }
 
