@@ -41,13 +41,16 @@ On public hospitals we cannot show the score ranks them, and the card says that 
 offer the service', our rules beat all three, and on 'is it about this facility' none showed a gain, so the glass
 box shipped." [model/reader/out/metrics_full.json, model/reader/out_gpu/metrics_gpu_remaining.json]
 
-**2:25 a score is not a referral.** Pusa accident. "In a simulation where the truth is known, our first ranking
+**2:25 a score is not a referral.** Gaya accident (24.79, 85.0, trauma): first care at Dr. A Barkat
+Multispeciality Hospital, then AIIMS Patna. "In a simulation where the truth is known, our first ranking
 lost to 'nearest place, call first' for trauma: a 'no' on the phone costs five minutes, a wasted trip costs the
 golden hour. So in emergencies the app now calls the nearest plausible place first. In our simulation it is now
 within one to two points of nearest place plus a call, and ahead only when we assume the model is right, because
 it offers only places whose own listing it can quote. In an emergency the score filters and explains; the call
 decides. The multi-stop route is not part of the simulation." [submission/sim_results.csv, sim/README.md] Show the
-route: "[route sentence from the screen]."
+route: "[route sentence from the screen; on model v2 it reads: Going straight to All India Institute of
+Medical Sciences Patna takes 92 min and misses the 60-minute window; stopping first at Dr. A Barkat
+Multispeciality Hospital gives first care in about 1 min.]"
 
 **2:55 the loop back into the data.** "Health workers log what happened, from fixed choices. Reports from at
 least two different workers become one more named row in the same ledger; they can lower a score, never raise

@@ -632,7 +632,8 @@
     "icu": "ICU",
     "trauma centre": "ट्रॉमा सेंटर",
     "obstetrics": "प्रसव की सुविधा",
-    "anaesthesia": "बेहोशी के डॉक्टर"
+    "anaesthesia": "बेहोशी के डॉक्टर",
+    "Ordered by how sure we are, discounted by travel time.": "हम कितने पक्के हैं उसके हिसाब से क्रम, यात्रा के समय को घटाकर।"
   },
   "why.cite.summary": "यह किस सूची की एंट्री से है ({n})",
   "why.cite.link": "सूची में इसकी एंट्री खोलें",
@@ -659,5 +660,10 @@
   "area.gov.pmndp": "मुफ़्त डायलिसिस योजना (PMNDP): {state} के {total} में से {working} ज़िलों में {centres} सरकारी केंद्र चल रहे हैं।",
   "area.gov.none": "NHSRC की सूची में इस ज़िले में LaQshya प्रमाणपत्र वाला कोई प्रसव ऑपरेशन थिएटर नहीं।",
   "area.need.cs_public": "सरकारी अस्पतालों में {pub}%।",
-  "area.need.cs_private": "प्राइवेट अस्पतालों में {priv}%।"
+  "area.need.cs_private": "प्राइवेट अस्पतालों में {priv}%।",
+  "ans.receipt.from": "इसकी लिस्टिंग में लिखा है",
+  "ans.receipt.source": "स्रोत पेज",
+  "ans.why_first.nearest": "पहले यहीं क्यों: यह इलाज कर सकने वाली सबसे पास की जगह है। {name} की संभावना ज़्यादा है, पर यह {n} मिनट दूर है: पहले यहाँ फ़ोन करें, फिर {name} को।",
+  "ans.why_first.rows": "पहले यहीं क्यों: {rows}।",
+  "ans.why_first.rule": "पहले यहीं क्यों: {rule}"
 }
