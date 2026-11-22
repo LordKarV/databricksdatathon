@@ -199,7 +199,8 @@ Returns:
 `/api/plan`, `/api/area` and the slip read real facilities from `derived/v1` (the stub in `stub_data.py` is
 now a test fixture only).
 - **Build:** `.venv-app/bin/python app/facts/build.py` writes `app/facts/out/facts.json.gz` (git-ignored, about
-  1.4 MB, under a second). It holds 9,947 facilities, 8,012 facility-service pairs, the 13,829 cited claims,
+  2.4 MB, a few seconds). It holds 9,947 facilities, 7,618 facility-service pairs (the model's scored pairs for
+  the app's services, without the 362 whose facility type cannot offer the service, #117), the 42,801 cited claims,
   the PIN gazetteer and the evidence-rule hand-check counts, all copied unchanged.
 - **Runtime:** the app loads that file once at start-up using only the standard library. Until it is built,
   both endpoints return 503.

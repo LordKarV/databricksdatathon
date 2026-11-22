@@ -98,9 +98,10 @@ upstream cleaning steps; see `derived/v1/README.md`.
   221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720, 0.867], log loss 0.427
   [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made from public web pages,
   not human-checked; the sealed TEST set was opened once, after the model was frozen.
-- **Likely:** 102 of 120 DEV pairs labelled Likely were confirmed [0.775, 0.903]. Of the 7,980 facility-service
-  pairs the app serves, 4,507 are Likely; the rest say "call to confirm", "no service text: call to ask" or
-  "Unlikely".
+- **Likely:** 102 of 120 DEV pairs labelled Likely were confirmed [0.775, 0.903]. The model scores 7,980
+  facility-service pairs for the app's seven services. The app serves 7,618 of them: the 362 at places whose type
+  cannot offer the service (an eye or dental clinic for trauma, #117) are left out. Of the 7,618, 4,457 are
+  Likely; the rest say "call to confirm", "no service text: call to ask" or "Unlikely".
   On the sealed TEST labels, 25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963],
   `model/gold/v3/test_eval/results.json`). Every option still says to call first, and when nothing is Likely the
   app says so.
