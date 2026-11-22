@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referral replay (simulated)</title>
+<style>
+:root{--bg:#fbfbfa;--fg:#1d1d1b;--muted:#6b6b66;--card:#fff;--line:#e4e3de;--dot:#d6d4cc;--pt:#2d5be3;
+--fac:#7a7a74;--yes:#1f8a4c;--no:#c2372b;--warn:#b7791f;--route:#2d5be3}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#ecebe6;--muted:#a3a29b;--card:#1f1f1d;--line:#34332f;
+--dot:#3a3934;--pt:#7ea0ff;--fac:#9a9990;--yes:#4cc47f;--no:#f07a6e;--warn:#e0a84a;--route:#7ea0ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,sans-serif}
+header{padding:14px 16px;border-bottom:1px solid var(--line)}h1{font-size:18px;margin:0 0 4px}
+.sim{display:inline-block;background:var(--warn);color:#fff;font-weight:700;font-size:12px;padding:2px 8px;border-radius:4px;letter-spacing:.04em}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+button,select{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer}
+.case{padding:10px 16px;font-size:15px}.case b{font-weight:650}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;padding:0 16px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.panel h2{font-size:14px;margin:0 0 6px}.status{min-height:44px;font-size:13px}
+svg{width:100%;height:auto;display:block}.pin{fill:var(--dot)}.res{font-weight:700}
+.ok{color:var(--yes)}.bad{color:var(--no)}.mid{color:var(--warn)}
+table{border-collapse:collapse;font-size:13px;margin:0 16px 16px}td,th{border-bottom:1px solid var(--line);padding:4px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}.foot{color:var(--muted);font-size:12px;padding:0 16px 20px}
+.legend{font-size:12px;color:var(--muted);padding:0 16px 8px}
+</style></head><body>
+<header><h1>Referral replay <span class="sim">SIMULATED</span></h1>
+<div style="color:var(--muted);font-size:13px">One patient, one hidden world, several ways to refer. Nothing here is a field result.</div></header>
+<div class="bar">
+  <label>Scenario <select id="scen"></select></label>
+  <button id="prev" aria-label="Previous patient">&#9664;</button><button id="play">Pause</button><button id="next" aria-label="Next patient">&#9654;</button>
+  <label>Speed <select id="speed"><option value="10">slow</option><option value="25" selected>normal</option><option value="60">fast</option></select></label>
+  <label><input type="checkbox" id="auto" checked> next patient automatically</label>
+  <label><input type="checkbox" id="all"> all policies</label>
+</div>
+<div class="case" id="case" aria-live="polite"></div>
+<div class="legend">&#9633; home &nbsp; &#9679; patient &nbsp; &#9675; facility on the list &nbsp; &#9742; phone call &nbsp; &#10003; treated &nbsp; &#10007; turned away / gave up &nbsp; grey dots: PIN areas</div>
+<div class="grid" id="grid"></div>
+<h2 style="font-size:15px;padding:0 16px">Whole run, this scenario (all patients and seeds)</h2>
+<table id="tab"></table>
+<div class="foot">Simulated. The policies never see the hidden truth; only the simulator does. Facility positions are where the data says they are.
+Assumed constants (turn-away, phone reliability, opening) are in sim/assumptions.py. Run: <span id="run"></span>.</div>
+<script>
+const D = __DATA__;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let scen = Object.keys(D.scenarios)[0], idx = 0, clock = 0, playing = true, last = null, done = false;
+const W = 340, H = 260;
+for (const [k, v] of Object.entries(D.scenarios)) $('scen').insertAdjacentHTML('beforeend', `<option value="${k}">${esc(v)}</option>`);
+$('run').textContent = D.run;
+const cases = () => D.cases.filter(c => c.scenario === scen);
+const policies = () => $('all').checked ? D.policies : D.shown.filter(p => D.policies.includes(p));
+function proj(c, pts) {
+  const lats = pts.map(p => p[0]), lons = pts.map(p => p[1]);
+  let la0 = Math.min(...lats), la1 = Math.max(...lats), lo0 = Math.min(...lons), lo1 = Math.max(...lons);
+  const k = Math.cos(c.lat * Math.PI / 180), padA = Math.max(0.15, (la1 - la0) * 0.2), padO = Math.max(0.15, (lo1 - lo0) * 0.2);
+  la0 -= padA; la1 += padA; lo0 -= padO; lo1 += padO;
+  const s = Math.min(W / ((lo1 - lo0) * k), H / (la1 - la0));
+  const ox = (W - (lo1 - lo0) * k * s) / 2, oy = (H - (la1 - la0) * s) / 2;
+  return (lat, lon) => [ox + (lon - lo0) * k * s, oy + (la1 - lat) * s];
+}
+function build() {
+  const c = cases()[idx]; if (!c) return;
+  clock = 0; done = false;
+  const st = D.steps[scen + '|' + c.id] || {};
+  const projs = {};
+  for (const p of policies()) {  // each panel zooms to its own patient and facilities
+    const pts = [[c.lat, c.lon]];
+    for (const e of st[p] || []) if (D.fac[e[2]]) pts.push([D.fac[e[2]][1], D.fac[e[2]][2]]);
+    projs[p] = proj(c, pts);
+  }
+  $('case').innerHTML = `Patient ${idx + 1} of ${cases().length}: <b>${esc(c.service.replace(/_/g, ' '))}</b> (${c.urgency}, window ${c.window} min),
+    ${esc(c.district)}, ${esc(c.state)}. ${c.data ? 'Mobile data on' : '<span class="mid">No mobile data</span>'}; ${c.signal ? 'phone signal' : '<span class="mid">no phone signal</span>'}.`;
+  const back = P => D.pins.map(p => { const [x, y] = P(p[0], p[1]); return (x >= -5 && x <= W + 5 && y >= -5 && y <= H + 5) ? `<circle class="pin" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.3"/>` : ''; }).join('');
+  $('grid').innerHTML = policies().map(p => {
+    const P = projs[p], [x0, y0] = P(c.lat, c.lon);
+    const facs = [...new Set((st[p] || []).map(e => e[2]).filter(f => D.fac[f]))];
+    const fm = facs.map(f => { const [x, y] = P(D.fac[f][1], D.fac[f][2]); return `<g id="f-${p}-${f}"><circle cx="${x}" cy="${y}" r="6" fill="none" stroke="var(--fac)" stroke-width="2"/></g>`; }).join('');
+    return `<section class="panel" aria-label="${esc(D.label[p] || p)}"><h2>${esc(D.label[p] || p)}</h2>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map for ${esc(D.label[p] || p)}">${back(P)}<rect x="${x0 - 5}" y="${y0 - 5}" width="10" height="10" fill="none" stroke="var(--pt)" stroke-width="2"><title>Patient's home</title></rect><g id="r-${p}"></g>${fm}
+      <circle id="pt-${p}" cx="${x0}" cy="${y0}" r="6" fill="var(--pt)"/><g id="m-${p}"></g></svg>
+      <div class="status" id="s-${p}">Starting...</div></section>`;
+  }).join('');
+  window._P = projs; window._st = st; window._c = c;
+}
+function label(f) { return f && D.fac[f] ? esc(D.fac[f][0]) : 'a facility'; }
+function render() {
+  const c = window._c, st = window._st; if (!c) return;
+  let allDone = true;
+  for (const p of policies()) {
+    const P = window._P[p];
+    const ev = st[p] || [];
+    const past = ev.filter(e => e[3] <= clock);
+    const end = ev.find(e => e[1] === 'treated' || e[1] === 'gave_up');
+    if (!end || end[3] > clock) allDone = false;
+    // position: last arrival, or interpolated along the current trip
+    let pos = [c.lat, c.lon], route = '';
+    let from = [c.lat, c.lon];
+    for (const e of ev) {
+      if (e[1] !== 'travel' || !D.fac[e[2]]) continue;
+      const to = [D.fac[e[2]][1], D.fac[e[2]][2]], t1 = e[3], t0 = t1 - Number(e[4] || 0);
+      if (clock >= t1) { route += seg(P, from, to, 1); pos = to; from = to; }
+      else if (clock > t0) { const f = (clock - t0) / Math.max(1, t1 - t0); route += seg(P, from, to, f); pos = [from[0] + (to[0] - from[0]) * f, from[1] + (to[1] - from[1]) * f]; break; }
+      else break;
+    }
+    $('r-' + p).innerHTML = route;
+    const [x, y] = P(pos[0], pos[1]); const pt = $('pt-' + p); pt.setAttribute('cx', x); pt.setAttribute('cy', y);
+    let marks = '';
+    const lastCall = {};
+    for (const e of past) if (e[1] === 'call') lastCall[e[2]] = e;
+    for (const e of past) {
+      if (!D.fac[e[2]]) continue;
+      if (e[1] === 'call' && lastCall[e[2]] !== e) continue;
+      const [fx, fy] = P(D.fac[e[2]][1], D.fac[e[2]][2]);
+      if (e[1] === 'call') marks += `<text x="${fx + 8}" y="${fy - 6}" font-size="12" fill="${e[4] === 'yes' ? 'var(--yes)' : 'var(--no)'}">&#9742; ${esc(e[4].replace('_', ' '))}</text>`;
+      if (e[1] === 'turned_away') marks += `<text x="${fx - 5}" y="${fy + 5}" font-size="14" fill="var(--no)">&#10007;</text>`;
+      if (e[1] === 'treated') marks += `<text x="${fx - 6}" y="${fy + 5}" font-size="16" fill="var(--yes)">&#10003;</text>`;
+    }
+    $('m-' + p).innerHTML = marks;
+    const cur = past[past.length - 1];
+    const going = ev.find(e => e[1] === 'travel' && e[3] > clock && e[3] - Number(e[4] || 0) <= clock);
+    $('s-' + p).innerHTML = status(c, going || cur, end && end[3] <= clock ? end : null, p);
+  }
+  if (allDone && !done) { done = true; reveal(); }
+}
+function seg(P, a, b, f) {
+  const [x1, y1] = P(a[0], a[1]), [x2, y2] = P(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f);
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--route)" stroke-width="2.5" stroke-linecap="round"/>`;
+}
+const WORD = {call: 'Calling', travel: 'Travelling to', arrive: 'Arrived at', outage: 'Problem:', turned_away: 'Turned away at', treated: 'Treated at', gave_up: 'Gave up'};
+function status(c, cur, end, p) {
+  const t = `<span class="muted">${Math.round(clock)} min</span>`;
+  if (end) {
+    if (end[1] === 'treated') { const ok = end[3] <= c.window; return `<span class="res ${ok ? 'ok' : 'bad'}">${ok ? '&#10003; Treated in time' : '&#10007; Treated too late'}</span>: ${label(end[2])}, at ${Math.round(end[3])} min (window ${c.window}).`; }
+    return `<span class="res bad">&#10007; No care</span>: ${esc(end[4].replace('_', ' '))} at ${Math.round(end[3])} min. Call 108.`;
+  }
+  if (!cur) return `${t} Deciding where to go...`;
+  const what = cur[1] === 'outage' ? `Problem: ${esc(cur[4].replace('_', ' '))}` : cur[1] === 'call' ? `Called ${label(cur[2])}: <b>${esc(cur[4].replace('_', ' '))}</b>`
+    : cur[1] === 'turned_away' ? `<span class="bad">Turned away</span> at ${label(cur[2])} (${esc(cur[4].replace('_', ' '))})` : `${WORD[cur[1]] || cur[1]} ${label(cur[2])}`;
+  return `${t} ${what}`;
+}
+function reveal() {
+  const c = window._c, tr = (D.truth[scen] || {});
+  for (const p of policies()) {
+    const facs = [...new Set((window._st[p] || []).map(e => e[2]).filter(f => D.fac[f]))];
+    const bits = facs.map(f => { const t = tr[f + '|' + c.service]; if (!t) return ''; return `${label(f)}: ${t[0] ? '<span class="ok">offers it</span>' : '<span class="bad">does not offer it</span>'}${t[2] ? '' : ', <span class="bad">does not exist</span>'}${t[1] ? '' : ', phone does not reach it'}`; }).filter(Boolean);
+    if (bits.length) $('s-' + p).insertAdjacentHTML('beforeend', `<div class="muted" style="margin-top:4px">Hidden truth: ${bits.join('; ')}.</div>`);
+  }
+  if ($('auto').checked) setTimeout(() => { if (playing && done) { idx = (idx + 1) % cases().length; build(); } }, 3500);
+}
+function table() {
+  const s = D.summary[scen] || {};
+  $('tab').innerHTML = `<thead><tr><th>Policy</th><th>Treated in window</th><th>Median min (treated)</th><th>Wasted trips / patient</th><th>Patients</th></tr></thead><tbody>` +
+    D.policies.map(p => s[p] ? `<tr><td>${esc(D.label[p] || p)}</td><td>${(s[p].in_window * 100).toFixed(0)}%</td><td>${s[p].median_min ?? '-'}</td><td>${s[p].wasted.toFixed(2)}</td><td>${s[p].n}</td></tr>` : '').join('') + '</tbody>';
+}
+function tick(ts) {
+  if (last === null) last = ts;
+  const dt = (ts - last) / 1000; last = ts;
+  if (playing && !done) { clock += dt * Number($('speed').value); render(); }
+  requestAnimationFrame(tick);
+}
+$('scen').onchange = e => { scen = e.target.value; idx = 0; build(); table(); };
+$('prev').onclick = () => { idx = (idx - 1 + cases().length) % cases().length; build(); };
+$('next').onclick = () => { idx = (idx + 1) % cases().length; build(); };
+$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; };
+$('all').onchange = () => build();
+build(); table(); requestAnimationFrame(tick);
+</script></body></html>
