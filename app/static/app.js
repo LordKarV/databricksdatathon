@@ -761,17 +761,29 @@ function sureHtml(o, P) {
 // WS1 1b, the receipt: the first listing sentence, cut at 60 characters (kind 'part': the shown text is a piece of
 // the stored quote), in English as written, with its source page. A NO SERVICE TEXT option says its lines are general.
 const RECEIPT_CUT = 60;
+// Which quote: the first one with no weak flag whose field is not a generic description; else the first, shown with
+// its warning (#171 review). The cut ends at a word: the last space at or before 60 characters.
+function receiptQuote(o) {
+  const ok = e => !(e.flags || []).some(f => f.weak) && e.field !== 'description';
+  const j = o.evidence.findIndex(ok);
+  return j >= 0 ? j : 0;
+}
+function cutAtWord(q) {
+  if (q.length <= RECEIPT_CUT) return q;
+  const sp = q.lastIndexOf(' ', RECEIPT_CUT);
+  return (sp > 0 ? q.slice(0, sp) : q.slice(0, RECEIPT_CUT)).trimEnd();
+}
 function receiptHtml(p, o, P) {
-  const e = o.evidence[0];
-  if (!e) return '';
-  const Q = `${P}.evidence.0`;
-  const cut = e.quote.length > RECEIPT_CUT ? e.quote.slice(0, RECEIPT_CUT).trimEnd() : e.quote;
+  if (!o.evidence.length) return '';
+  const j = receiptQuote(o), e = o.evidence[j];
+  const Q = `${P}.evidence.${j}`;
+  const cut = cutAtWord(e.quote);
   const lead = o.model_band === 'NO_SERVICE_TEXT'
     ? th(p.query.service === 'trauma_emergency' ? 'quote.caption_trauma' : 'quote.caption', {label: labelF(p.query)})
     : th('ans.receipt.from');
   return `<p class="receipt">${lead}: <span lang="en">"${F(Q + '.quote', cut, 'part')}${cut.length < e.quote.length ? '...' : ''}"</span>${
     claimHtml(Q + '.claim_id', e.claim_id)}${e.source_url
-    ? ` <a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('ans.receipt.source')}</a>` : ''}</p>`;
+    ? ` <a href="${esc(e.source_url)}" rel="noopener noreferrer">${th('ans.receipt.source')}</a>` : ''}${quoteFlagsHtml(e, Q)}</p>`;
 }
 // WS1 1b, why this one first, in one line: nearest-first emergencies name the Likely option they put second and how
 // much farther it is; planned care names the two ledger rows that add most; otherwise the engine's rank rule.

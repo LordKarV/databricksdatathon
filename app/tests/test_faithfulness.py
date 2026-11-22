@@ -797,13 +797,21 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             errs.append(f"plan: golden-hour sentence shown {main_vd} times outside Route details, vs_direct.text={bool(vd)}")
         # WS1 1b: the readout's receipt is option 1's first quote (a marked piece of it, cut at 60 characters), and
         # its "Why first" line is marked: why-not rows, ledger rows or the engine's rank rule.
+        # #171 review: the receipt is the first quote with no weak flag that is not a generic description (else the
+        # first, with its warning), cut at the last space at or before 60 characters.
         o0 = (payload.get("options") or [None])[0]
-        if o0 and o0["evidence"] and "options.0.evidence.0.quote" not in plan_shown:
-            errs.append("plan: receipt quote not shown")
-        receipt = page.evaluate("() => { const e = document.querySelector('#main .answer [data-f=\"options.0.evidence.0.quote\"]');"
-                                " return e ? e.textContent : null; }")
-        if o0 and o0["evidence"] and not (receipt and len(receipt) <= 60 and o0["evidence"][0]["quote"].startswith(receipt)):
-            errs.append(f"plan: receipt {receipt!r} is not the first 60 characters of the first quote")
+        if o0 and o0["evidence"]:
+            j = next((k for k, e in enumerate(o0["evidence"]) if not any(f.get("weak") for f in e.get("flags", []))
+                      and e.get("field") != "description"), 0)
+            q = o0["evidence"][j]["quote"]
+            want = q if len(q) <= 60 else (q[:q.rfind(" ", 0, 61)] if q.rfind(" ", 0, 61) > 0 else q[:60]).rstrip()
+            receipt = page.evaluate("p => { const e = document.querySelector(`#main .answer [data-f=\"${p}\"]`);"
+                                    " return e ? e.textContent : null; }", f"options.0.evidence.{j}.quote")
+            if receipt != want:
+                errs.append(f"plan: receipt {receipt!r}, expected evidence {j} cut at a word: {want!r}")
+            for m, f in enumerate(o0["evidence"][j].get("flags", [])):
+                if f"options.0.evidence.{j}.flags.{m}.text" not in plan_shown:
+                    errs.append(f"plan: receipt quote's warning {m} not shown")
         why_first = page.evaluate("() => [...document.querySelectorAll('#main .answer .why-first [data-f]')].map(e => e.dataset.f)")
         if o0 and (payload.get("rank_rule") or {}).get("text") and not why_first:
             errs.append("plan: no marked 'Why first' line on the readout")
