@@ -53,7 +53,7 @@ def test_every_code_has_en_and_hi(code):
     assert DEVANAGARI.search(hi), "Hindi text must be Devanagari"
     assert PLACEHOLDER.findall(en) == PLACEHOLDER.findall(hi), "same placeholders in both languages"
     for text in (en, hi):
-        assert "—" not in text and "–" not in text, "no dashes"
+        assert "\u2014" not in text and "\u2013" not in text, "no dashes"
         assert text.endswith((".", "।")), "a full sentence"
 
 
