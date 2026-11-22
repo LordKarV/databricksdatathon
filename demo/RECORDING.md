@@ -17,20 +17,21 @@ and re-check the numbers in brackets on the day; the narration reads them off th
 
 ## The beats
 
-Two places. Lucknow C-section: Sensors 26.86, 80.94. Patna heart surgery: Sensors 25.59, 85.14 (or Change place
-and type 800013). Checked on live v38 and dev on 2026-11-22; re-check the bracketed numbers on the day.
+Two places. Gaya road accident: Sensors 24.79, 85.0. Patna heart surgery: Sensors 25.59, 85.14. Checked on dev on
+2026-11-22; re-check the bracketed numbers on the day. Film the skit (0:00) on a phone camera; everything else is
+a screen recording.
 
 | Script time | Location (Sensors) | Do this | What the screen shows |
 |---|---|---|---|
-| 0:00 the emergency | Lucknow 26.86, 80.94 | Home screen, located | The service tiles and Call 108 / 102. |
-| 0:15 data | any | Bottom bar: Data stories | The data stories (stay on them; the model stories there are from v1). Optional: How this works, the chatbot card. |
-| 0:40 the rescue | Lucknow | Home, "C-section, emergency" | Card 1 BNK Hospital, Likely, [4] min, the LSCS quote, "First: it has evidence of blood transfusion...". Row 3 City Hospital, "Map point may be wrong", [1 to 227] min. Scroll to Suggested route: "first care (stabilised) within 60 min: met". |
-| 1:15 where to go | Lucknow | Scroll to the map | Street map: You, pin 1 BNK, hollow pins 2 and 3; "Directions to 1. BNK Hospital". If the street map has not loaded, the drawn map shows instead. |
-| 1:30 the model | Lucknow | Card 1: "Why this place?", scroll slowly | The witnesses; "Likely, evidence score [82] / 100". |
-| 1:55 the sealed test | Lucknow | Top of the Why page | The dots: 25 of 28 confirmed; "Passed over: City Hospital, 0.3 km. Its listing does not mention an operating theatre; its map point may be wrong". |
-| 2:20 the call | Lucknow | Back; card 1 Call; cancel the Mac dialog; switch tab and back; "No answer" | "Call next" with Fatima Hospital's number. |
+| 0:00 the skit | Gaya 24.79, 85.0 | Teammate "falls"; the health worker taps the red "Call 108" bar, then opens Bharosa | The home screen, located near Gaya, Call 108 on top. |
+| 0:20 data | any | Bottom bar: Data stories | The data stories (stay on them; the model stories there are from v1). Optional: How this works, the chatbot card. |
+| 0:45 the rescue | Gaya | Home, "Accident or injury"; scroll to Suggested route | Card 1 Dr. A Barkat Multispeciality Hospital, Likely, [1] min, "Provides 24/7 trauma and emergency care". The route line: "Going straight to All India Institute of Medical Sciences Patna takes [92] min and misses the 60-minute window; stopping first at Dr. A Barkat Multispeciality Hospital gives first care in about [1] min." |
+| 1:15 where to go | Gaya | Scroll to the map | Street map: You, pin 1 Barkat, pins 2 and 3; "Directions to 1. ...". If the street map has not loaded, the drawn map shows instead. |
+| 1:30 the model | Gaya | Card 1: "Why this place?", scroll slowly | The witnesses; "Likely, evidence score [96] / 100". |
+| 1:55 the sealed test | Gaya | Top of the Why page | The dots: 25 of 28 confirmed, and the Passed over line. |
+| 2:20 the call | Gaya | Back; card 1 Call; cancel the Mac dialog; switch tab and back; "No answer" | "Call next" with option 2's number (Arsh Superspeciality Hospital). |
 | 2:40 planned care | Patna 25.59, 85.14 | Home, "Heart surgery" | Card 1 Ford Hospital And Research Center, Likely, [3] min, the CABG quote, "Why first: Its own website says so clearly, on 2 or more pages (+20.9); NABH's portal lists a related department for it (+8.6)". Its Why page: "Nothing nearer offers this care". |
-| 3:00 field | Patna or Lucknow | Settings or the first-run chooser: the language list; then header "हिन्दी"; Why > "Make a referral slip" | The language list (Hindi plus eight, each marked machine translation); the Hindi answer; the slip and "Send on WhatsApp". |
+| 3:00 field | Gaya | Settings or the first-run chooser: the language list; then header "हिन्दी"; Why > "Make a referral slip" | The language list (Hindi plus eight, each marked machine translation); the Hindi answer; the slip and "Send on WhatsApp". |
 | 3:20 Databricks | n/a | Workspace: the notebook; Catalog `workspace.referral_saathi`; Genie "Referral Saathi planner"; dashboard | In Genie ask "Where can a patient get dialysis near Jaipur?" |
 
 ## Field reports
