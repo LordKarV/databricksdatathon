@@ -247,3 +247,10 @@ def test_nearest_plausible_ties_have_no_bucket_edge():
     assert [r[2] for r in nearest_plausible(rows)] == ["e", "c", "b", "a", "d"]
     # a tie never pulls the first choice out of the window
     assert [r[2] for r in nearest_plausible([(0.7, 60, "in"), (0.9, 63, "out")], 60)] == ["in", "out"]
+
+
+def test_toll_free_numbers_are_dialable():
+    from facts.build import e164
+
+    assert e164("1800 313 1714") == "18003131714"  # shown as a call link, not "no phone number in our data"
+    assert e164("98765 43210") == "+919876543210" and e164("12345") is None
