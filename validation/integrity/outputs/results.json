@@ -1,0 +1,488 @@
+[
+ {
+  "name": "app_facts_integrity",
+  "status": "warn",
+  "metric": "0 issues, 0 pair value mismatches",
+  "threshold": "0",
+  "detail": "9947 facilities (77 without PIN), 8012 pairs, 44968 claims, 19484 PINs",
+  "examples": [
+   "facts pins: 227 gazetteer PINs with coordinates are dropped because district is null (packs and pin_index keep them), e.g. [121999, 122021, 122022]"
+  ],
+  "seconds": 5.2
+ },
+ {
+  "name": "app_hashes_and_sizes",
+  "status": "pass",
+  "metric": "0 mismatches",
+  "threshold": "0",
+  "detail": "facts.sha 1f6352f3212b; 36 packs",
+  "examples": [],
+  "seconds": 1.2
+ },
+ {
+  "name": "app_packs_integrity",
+  "status": "pass",
+  "metric": "0 issues; 0 quotes without claim id",
+  "threshold": "0",
+  "detail": "{'packs': 36, 'fac': 6815, 'ev': 11505, 'pins': 19711, 'pins_blank_district': 227}",
+  "examples": [],
+  "seconds": 21.7
+ },
+ {
+  "name": "claim_id_fk",
+  "status": "pass",
+  "metric": "20/20 sources resolve; 0 with text drift",
+  "threshold": "all resolve, own record, text equal",
+  "detail": "outputs/claim_id_fk.csv (packs: app_packs_integrity)",
+  "examples": [],
+  "seconds": 7.8
+ },
+ {
+  "name": "claim_id_format",
+  "status": "pass",
+  "metric": "0 malformed, 0 disagree, 0 (record, field) groups with idx gaps",
+  "threshold": "0",
+  "detail": "469498 claims; fields {'capability': 231465, 'procedure': 163647, 'equipment': 55998, 'description': 18388}",
+  "examples": [],
+  "seconds": 2.0
+ },
+ {
+  "name": "copied_columns",
+  "status": "pass",
+  "metric": "18/18 copied columns equal",
+  "threshold": "all",
+  "detail": "names and facility type vs raw; claim attributes vs claims.parquet",
+  "examples": [],
+  "seconds": 1.1
+ },
+ {
+  "name": "counts_nonneg",
+  "status": "pass",
+  "metric": "191 columns, 0 with negatives, 0 with fractional counts",
+  "threshold": ">= 0",
+  "detail": "",
+  "examples": [],
+  "seconds": 1.3
+ },
+ {
+  "name": "crawl_fk",
+  "status": "pass",
+  "metric": "0 issues, 0 notes",
+  "threshold": "0",
+  "detail": "9405 targets, 31075 page attempts, 28106 stored files, 28106 on disk",
+  "examples": [],
+  "seconds": 1.2
+ },
+ {
+  "name": "csv_copies_match_parquet",
+  "status": "pass",
+  "metric": "0 differing columns",
+  "threshold": "0",
+  "detail": "facility_trust, source_classes, source_domains",
+  "examples": [],
+  "seconds": 0.1
+ },
+ {
+  "name": "dates_and_years",
+  "status": "warn",
+  "metric": "0 fail, 1 notes",
+  "threshold": "parseable, 1700-2026, not after 2026-11-21",
+  "detail": "4761 raw yearEstablished values; year median 2005.0",
+  "examples": [
+   "raw yearEstablished: 5 of 4761 non-null values have no year, e.g. ['0', '7', '0']"
+  ],
+  "seconds": 0.4
+ },
+ {
+  "name": "documented_row_counts",
+  "status": "pass",
+  "metric": "33/33 match",
+  "threshold": "all match",
+  "detail": "row counts stated in README/VF_DETAILS/WEB_EVIDENCE/TAXONOMY/crawl_stats vs disk",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "dp_id_format",
+  "status": "pass",
+  "metric": "0 bad dp_ids; 0 issues",
+  "threshold": "0",
+  "detail": "518191 data points",
+  "examples": [],
+  "seconds": 2.3
+ },
+ {
+  "name": "dps_copies_raw_values",
+  "status": "pass",
+  "metric": "0 mismatches",
+  "threshold": "0",
+  "detail": "existence, phone, email, location (5 dp) and service_claim originals vs raw / grades",
+  "examples": [],
+  "seconds": 0.3
+ },
+ {
+  "name": "enums",
+  "status": "pass",
+  "metric": "31 enum columns, 0 with undocumented values",
+  "threshold": "documented sets only",
+  "detail": "outputs/enum_values.csv",
+  "examples": [],
+  "seconds": 1.7
+ },
+ {
+  "name": "evidence_rules_vs_dps",
+  "status": "pass",
+  "metric": "0 mismatches",
+  "threshold": "0",
+  "detail": "20 rules",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "exact_duplicate_rows",
+  "status": "warn",
+  "metric": "1 tables with duplicates",
+  "threshold": "0",
+  "detail": "77 tables scanned; outputs/exact_duplicates.csv",
+  "examples": [
+   "kb/opendata/vf_opendata_facts.parquet: 1 exact duplicate rows of 6001"
+  ],
+  "seconds": 7.5
+ },
+ {
+  "name": "exclude_review_not_shipped",
+  "status": "fail",
+  "metric": "9 leaks of 12 excluded records",
+  "threshold": "0",
+  "detail": "exclude_review reasons: {'Name indicates an animal-care facility.': 12, 'Location fields disagree and nothing settles which is right.': 1, 'Location is approximate (postcode centre or a corrected point).': 2, 'No phone or website that belongs only to this facility.': 2}",
+  "examples": [
+   "pack tamil_nadu.json.gz: 885c79f6 'SKS Veterinary Hospital' shipped for ['trauma_emergency']",
+   "planner capability emergency_24x7: 885c79f6 'SKS Veterinary Hospital' p=0.7643",
+   "planner capability ecg: 3701980c 'Pet Care Pathology Lab & Diagnostic Centre' p=0.7828",
+   "planner capability blood_transfusion: 8b8ee908 'Prime Animal Care Hospital - Delhi NCR' p=0.7149",
+   "planner capability orthopaedics: 885c79f6 'SKS Veterinary Hospital' p=0.7828",
+   "planner capability laboratory: 3701980c 'Pet Care Pathology Lab & Diagnostic Centre' p=0.7828",
+   "planner capability laboratory: 4d62cb1d 'The Vet Point' p=0.7828",
+   "planner capability laboratory: 885c79f6 'SKS Veterinary Hospital' p=0.7149"
+  ],
+  "seconds": 1.0
+ },
+ {
+  "name": "facility_groups",
+  "status": "pass",
+  "metric": "0 issues, 0 one-way links",
+  "threshold": "0",
+  "detail": "75 groups over 152 records",
+  "examples": [],
+  "seconds": 0.1
+ },
+ {
+  "name": "gold_keys_and_fk",
+  "status": "pass",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "176 pairs ({'test': 88, 'dev': 88}); 331 label rows; 158 e2e pairs",
+  "examples": [],
+  "seconds": 0.2
+ },
+ {
+  "name": "gold_merge_reproduces",
+  "status": "warn",
+  "metric": "0 merge mismatches; 141 TEST-verified points published",
+  "threshold": "0 mismatches; TEST verdicts not in model inputs",
+  "detail": "141 data points carry a TEST gold verdict in score/status ({'location': 56, 'existence': 56, 'service_claim': 29}); score_model holds the pre-override value. 0 conflict verdicts",
+  "examples": [
+   "loc:04bae564-9f3f-4b55-8854-3bfd587793a8",
+   "loc:08d4967a-b02f-4373-aace-2db8f64b0e27",
+   "loc:09c73691-739e-4b31-88ba-2d31c89f7af3",
+   "loc:0b88e73f-787e-45c4-bcd3-ec8b27a53c74"
+  ],
+  "seconds": 0.6
+ },
+ {
+  "name": "gold_split_leakage",
+  "status": "pass",
+  "metric": "0 cross-split links",
+  "threshold": "0",
+  "detail": "links from splits.json group, facility_groups dup_group_id, possible_same_site, co_located_with",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "grades_vs_dps",
+  "status": "pass",
+  "metric": "0 inconsistencies",
+  "threshold": "0",
+  "detail": "10799 graded pairs; facility_trust counts recomputed from claims/grades/dps",
+  "examples": [],
+  "seconds": 0.9
+ },
+ {
+  "name": "lat_lon_bounds",
+  "status": "warn",
+  "metric": "0 strict failures, 1 reported columns",
+  "threshold": "lat 6.0-37.5, lon 68.0-97.5",
+  "detail": "outputs/lat_lon_bounds.csv",
+  "examples": [
+   "derived/v1/facility_location.parquet raw_lat/raw_lon: 6 outside India (0 at 0,0), 0 half-null of 9959; e.g. ['364dae5c-b868-450a-9e4e-e6705852c229', '515fb95f-d589-418f-b510-d8bf7438f884', '7c6e6ca4-d07f-4613-a926-47d5ae7a2afe']"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "location_fk",
+  "status": "warn",
+  "metric": "0 issues, 2 notes",
+  "threshold": "0",
+  "detail": "9959 records; 77 without PIN, 25 without an NFHS key ({nan: 13, 'no_nfhs_row': 12})",
+  "examples": [
+   "7 facility PINs not in pin_gazetteer, e.g. [('13594579-5b83-48ec-8c81-4b21ad0a6881', 112001), ('231f141f-cc05-42a9-949a-accf4bab933c', 430115), ('3b7c281e-3946-4cb2-8520-5c29e4c38e6b', 359009)]",
+   "52 records with district_state != state_final"
+  ],
+  "seconds": 0.3
+ },
+ {
+  "name": "null_encodings",
+  "status": "warn",
+  "metric": "8 key/enum columns carry string nulls (230 cells)",
+  "threshold": "0 outside verbatim text and JSON columns",
+  "detail": "38 columns use '' for missing (4431780 cells); full list outputs/null_encodings.csv",
+  "examples": [
+   "kb/opendata/vf_candidates.parquet.vf_type: 105 null strings, 0 empty containers of 17662",
+   "kb/opendata/vf_opendata_match.parquet.vf_type: 105 null strings, 0 empty containers of 17662",
+   "derived/v1/grades.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799",
+   "derived/v1/grades_v1.parquet.facilityTypeId: 8 null strings, 0 empty containers of 10799",
+   "derived/v1/place_gazetteer.parquet.name: 1 null strings, 0 empty containers of 147345",
+   "kb/opendata/osm_health_facilities.parquet.operator: 1 null strings, 0 empty containers of 136396",
+   "kb/opendata/osm_health_facilities.parquet.website: 1 null strings, 0 empty containers of 136396",
+   "kb/crawl/coverage_by_type.csv.ftype: 1 null strings, 0 empty containers of 8"
+  ],
+  "seconds": 0.0
+ },
+ {
+  "name": "opendata_fk",
+  "status": "pass",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "not_in_vf {'osm': 133640, 'wikidata': 13440} vs source tables {'osm': 136396, 'wikidata': 14286}; accepted matches 2997",
+  "examples": [],
+  "seconds": 6.1
+ },
+ {
+  "name": "pathways_refs",
+  "status": "pass",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "7 pathways, 26 capabilities; unused by any stage: ['ventilator']",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "planner_integrity",
+  "status": "warn",
+  "metric": "0 issues, 2 notes",
+  "threshold": "0",
+  "detail": "9959 facilities, 26 capabilities, 19711 PINs",
+  "examples": [
+   "12 planner facilities are not in facts.json ({'exclude_review': 12}); 5 carry capability evidence, e.g. ['3701980c-4699-4a84-a9f1-024939ba0e34', '4d62cb1d-4dba-49bc-9169-7d13bf7cb151', '885c79f6-9f32-4878-8384-5a90259cfae4']",
+   "planner capabilities include pairs the packs exclude: {('emergency_24x7', 'attributed_elsewhere'): 7, ('emergency_24x7', 'counter_evidence'): 5, ('icu', 'attributed_elsewhere'): 4, ('icu', 'counter_evidence'): 1, ('burn_unit', 'attributed_elsewhere'): 1, ('burn_unit', 'counter_evidence'): 1, ('haemodialysis_unit', 'attributed_elsewhere'): 6, ('haemodialysis_unit', 'counter_evidence'): 3, ('comprehensive_emoc', 'attributed_elsewhere'): 3, ('comprehensive_emoc', 'counter_evidence'): 2, ('nicu', 'counter_evidence'): 1, ('nicu', 'attributed_elsewhere'): 3}"
+  ],
+  "seconds": 7.6
+ },
+ {
+  "name": "primary_keys",
+  "status": "fail",
+  "metric": "51/52 keys unique and non-null",
+  "threshold": "all",
+  "detail": "outputs/primary_keys.csv",
+  "examples": [
+   "kb/opendata/vf_opendata_facts.parquet (unique_id+source+source_id+field+value): 1 duplicate keys, 0 null keys of 6001; e.g. ['dda3a4d5-9b8c-45cb-9d67-49f5c68ae415|osm|node/6994541474|speciality|bone and joints']"
+  ],
+  "seconds": 2.4
+ },
+ {
+  "name": "probabilities",
+  "status": "pass",
+  "metric": "76 columns checked, 0 issues",
+  "threshold": "[0, 1]; lo <= point <= hi",
+  "detail": "outputs/probabilities.csv",
+  "examples": [],
+  "seconds": 0.2
+ },
+ {
+  "name": "raw_hashes_unchanged",
+  "status": "pass",
+  "metric": "6/6 match",
+  "threshold": "all match",
+  "detail": "sha256 of data/raw/* vs derived/v1 MANIFEST raw_input_sha256",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "raw_live_warehouse",
+  "status": "pass",
+  "metric": "6/6 equal",
+  "threshold": "all equal",
+  "detail": "live {'n': '10088', 'd': '10077', 'lu': '365241', 'ln': '286854', 'ls': '11932717', 'slat': '213563.269'}",
+  "examples": [],
+  "seconds": 1.7
+ },
+ {
+  "name": "raw_manifest_aggregates",
+  "status": "pass",
+  "metric": "345/345 checks reproduce",
+  "threshold": "all reproduce",
+  "detail": "data/raw/MANIFEST.json warehouse values recomputed locally",
+  "examples": [],
+  "seconds": 1.6
+ },
+ {
+  "name": "schema_profile",
+  "status": "pass",
+  "metric": "77 tables, 1265 columns; 91 other files",
+  "threshold": "every JSON parses",
+  "detail": "outputs/schema_profile.csv, outputs/json_inventory.csv",
+  "examples": [],
+  "seconds": 130.6
+ },
+ {
+  "name": "source_tables_fk",
+  "status": "pass",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "158444 urls, 10951 domains, 16 classes, 6492 page checks",
+  "examples": [],
+  "seconds": 6.6
+ },
+ {
+  "name": "source_url_repeats",
+  "status": "warn",
+  "metric": "5652 repeated (record, url) rows of 158444 in 1525 of 9959 records",
+  "threshold": "0",
+  "detail": "domains most affected: {'facebook.com': 193, 'redcliffelabs.com': 161, 'agilusdiagnostics.com': 141}",
+  "examples": [
+   "ed6652f3-7d23-4789-8050-1dab7dca6238: 46 repeats",
+   "20397ed5-ac41-41f4-89cb-1f8aafa9bb34: 45 repeats",
+   "58a4d0b7-5b03-4b7f-965b-6e260b2c0918: 42 repeats"
+  ],
+  "seconds": 0.1
+ },
+ {
+  "name": "taxonomy_domains",
+  "status": "warn",
+  "metric": "0 issues; 10 spec keys map to 2+ labels (1971 records); 4 of them disagree on a real service (9 records)",
+  "threshold": "0",
+  "detail": "36 services + 1 candidate; 2933 specialty values; derived/v1/specialties joins to the map only through the lowercased key",
+  "examples": [
+   "spec key 'anxiety' maps to ['out_of_scope', 'psychiatric_care'] via ['Anxiety', 'anxiety']",
+   "spec key 'cardiovascularandthoracicsurgery' maps to ['cardiac_surgery', 'out_of_scope'] via ['cardiovascularAndThoracicSurgery', 'cardioVascularAndThoracicSurgery']",
+   "spec key 'depression' maps to ['out_of_scope', 'psychiatric_care'] via ['Depression', 'depression']",
+   "spec key 'gynaeoncology' maps to ['out_of_scope', 'surgical_oncology'] via ['Gynaeoncology', 'Gynae Oncology', 'gynaeOncology', 'gynaeoncology']",
+   "spec key 'icl' maps to ['not_a_service', 'out_of_scope'] via ['ICL', 'icl']",
+   "spec key 'oculoplasticsandreconstructiveorbitalsurgery' maps to ['out_of_scope', 'too_general'] via ['oculoplasticsAndReconstructiveOrbitalSurgery', 'oculoPlasticsAndReconstructiveOrbitalSurgery']",
+   "spec key 'oculoplasticsurgery' maps to ['out_of_scope', 'too_general'] via ['oculoplasticSurgery', 'oculoPlasticSurgery']",
+   "spec key 'orthopedicsjointreplacement' maps to ['out_of_scope', 'too_general'] via ['Orthopedics & Joint Replacement', 'orthopedicsJointReplacement']"
+  ],
+  "seconds": 1.0
+ },
+ {
+  "name": "uid8_prefix_unique",
+  "status": "pass",
+  "metric": "0 colliding prefixes of 9959",
+  "threshold": "0",
+  "detail": "uid8 = unique_id[:8] over the usable set",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "unique_id_fk",
+  "status": "pass",
+  "metric": "40/40 id columns fully resolve",
+  "threshold": "every id in raw and usable",
+  "detail": "outputs/unique_id_fk.csv",
+  "examples": [],
+  "seconds": 7.2
+ },
+ {
+  "name": "usable_set_definition",
+  "status": "pass",
+  "metric": "9959 usable of 10088 raw; 11 duplicated ids, 0 differ",
+  "threshold": "duplicates identical; per-record tables == usable set",
+  "detail": "rule: UUID unique_id and source == 'kie' (9970 rows), keep first per id",
+  "examples": [],
+  "seconds": 0.3
+ },
+ {
+  "name": "v1_build_stats",
+  "status": "pass",
+  "metric": "0 mismatches",
+  "threshold": "0",
+  "detail": "build_stats.json s1 and s6 counts vs tables",
+  "examples": [],
+  "seconds": 0.3
+ },
+ {
+  "name": "v1_canonical_copies",
+  "status": "pass",
+  "metric": "9/9 copies identical; 0 sources moved",
+  "threshold": "copy == manifest == source",
+  "detail": "sha256 of derived/v1 copies and cleaning/ sources",
+  "examples": [],
+  "seconds": 0.2
+ },
+ {
+  "name": "v1_inputs_not_stale",
+  "status": "pass",
+  "metric": "30/30 unchanged",
+  "threshold": "all unchanged",
+  "detail": "an input or script changed after the build means the build is not reproducible from the tree as it stands",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "v1_manifest_rows_bytes",
+  "status": "pass",
+  "metric": "20/20 match",
+  "threshold": "rows and bytes equal; every file listed",
+  "detail": "MANIFEST tables + csv_copies vs disk",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "v2_contract",
+  "status": "warn",
+  "metric": "not run",
+  "threshold": "contract holds",
+  "detail": "skipped: derived/v2 is in flux (exists: False); set INTEGRITY_CHECK_V2=1 to run",
+  "examples": [],
+  "seconds": 0.0
+ },
+ {
+  "name": "vf_details_fk",
+  "status": "pass",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "42036 facts, 26046 facility rows; 0 (record, type, attribute) keys have facts but no facility row; llm facts 18, llm kept 18",
+  "examples": [],
+  "seconds": 6.6
+ },
+ {
+  "name": "web_evidence_fk",
+  "status": "warn",
+  "metric": "0 issues",
+  "threshold": "0",
+  "detail": "153160 service rows, 84731 fact rows, 30517 page identity rows",
+  "examples": [
+   "web llm_hours: 1 cand_key not in hour_candidates (0 kept): ['data/crawl/pages/68908ad91c7ef7a35ae5.json.gz|text|197']"
+  ],
+  "seconds": 24.7
+ },
+ {
+  "name": "web_quotes_in_pages",
+  "status": "pass",
+  "metric": "0 rows not found on their page, 0 segments not at seg_start",
+  "threshold": "0",
+  "detail": "{'web_services_rows': 153160, 'web_services_no_pages_row': 0, 'web_services_path_differs_from_pages': 0, 'web_services_final_url_differs_from_pages': 0, 'web_services_fetched_at_differs_from_pages': 0, 'web_details_rows': 41191, 'web_details_no_pages_row': 0, 'web_details_path_differs_from_pages': 0, 'web_details_final_url_differs_from_pages': 0, 'web_details_fetched_at_differs_from_pages': 0, 'web_hours_rows': 43540, 'web_hours_no_pages_row': 0, 'web_hours_path_differs_from_pages': 0, 'web_hours_final_url_differs_from_pages': 0, 'web_hours_fetched_at_differs_from_pages': 0, 'identity_quotes': 65128}; 26454 files",
+  "examples": [],
+  "seconds": 70.0
+ }
+]

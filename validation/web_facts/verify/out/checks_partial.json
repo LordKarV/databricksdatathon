@@ -1,0 +1,104 @@
+[
+ {
+  "name": "v_facility_value",
+  "status": "warn",
+  "metric": {
+   "web": {
+    "usable_facility_facts": 17548,
+    "value_differs": 1128,
+    "case_only_text_diff": 3,
+    "same_text_count_differs": 147,
+    "share": 0.0643,
+    "shown_value_has_own_usable_row": 1090,
+    "best_row_not_attributable": 0,
+    "n_distinct_values_gt1_among_differs": 127,
+    "top": {
+     "opd_hours:general": 624,
+     "ambulance:ambulance_service": 168,
+     "free_or_government:free_care": 68,
+     "unit_beds:total": 41,
+     "opd_hours:opd": 39
+    }
+   },
+   "vf": {
+    "usable_facility_facts": 25773,
+    "value_differs": 442,
+    "case_only_text_diff": 2,
+    "same_text_count_differs": 288,
+    "share": 0.0171,
+    "shown_value_has_own_usable_row": 418,
+    "best_row_not_attributable": 0,
+    "n_distinct_values_gt1_among_differs": 296,
+    "top": {
+     "staffing:doctors": 117,
+     "unit_beds:total": 115,
+     "free_or_government:free_care": 51,
+     "ambulance:ambulance_service": 45,
+     "staffing:staff_total": 19
+    }
+   }
+  },
+  "threshold": "0",
+  "detail": "value_text/value_num of the facility row vs the row named by best_fact_id",
+  "examples": [
+   "web 7df67343-efd3-4b99-93c8-3b189e08a8e0 free_or_government:free_camp shown=free ent check-up cited=free health check-up q='- Free health check-up camps'",
+   "web bedbd19c-9b59-4c7e-b0b9-cbeb9e1276db accreditation:NABH shown=accredited cited=entry_level q='The Teaching Hospital is accredited by NABH at the'",
+   "web 24157fa2-8957-40bd-b292-f314c22570ee opd_hours:general shown=days? 10:30-13:30; closed sun cited=sun 10:30-13:30 q='Opening Hours\\nMorning Timings : 10:30 AM to 01:30 '",
+   "vf d0906cdd-585d-44da-bf75-e91857ef84ee staffing:doctors shown=doctors cited=doctors q='Has 2 doctors on staff (Gynecologists/Obstetrician'",
+   "vf a03289ff-9907-468a-ab84-a43e5fdb7db0 unit_beds:dialysis shown=Dialysis cited=dialysis q='Has 12 dialysis beds'"
+  ]
+ },
+ {
+  "name": "v_sense_errors_population",
+  "status": "warn",
+  "metric": {
+   "de_addiction_detox_without_addiction_word": {
+    "rows": 140,
+    "pairs_any": 53,
+    "pairs_only": 46
+   },
+   "stemi_thrombolysis_with_stroke_word": {
+    "rows": 2,
+    "pairs_any": 2,
+    "pairs_only": 1
+   },
+   "trauma_care_eye_or_cataract": {
+    "rows": 79,
+    "pairs_any": 39,
+    "pairs_only": 13
+   },
+   "cataract_surgery_knee_or_arthroscopy": {
+    "rows": 32,
+    "pairs_any": 21,
+    "pairs_only": 19
+   }
+  },
+  "threshold": "informational",
+  "detail": "positive attributable web_services rows",
+  "examples": [
+   "de_addiction_detox_without_addiction_word: db21af38-04a7-47ba-9772-d6d3360c33fd 'Dermatology & Detoxification'",
+   "stemi_thrombolysis_with_stroke_word: 3b680c95-9cea-4501-918b-0ec34babf223 'Staffed by a dedicated team of neurologists, nurses, and therapists, t'",
+   "trauma_care_eye_or_cataract: ce3c6c05-09f3-4fa1-b97a-91f445c82060 'Specialist care for eyelids, ptosis, watery eyes, DCR, orbital disease'",
+   "cataract_surgery_knee_or_arthroscopy: 813cc06c-144e-4d4d-9a2a-fafd98edcfd8 'Done arthroscopically or through a small incision, strong sutures with'"
+  ]
+ },
+ {
+  "name": "v_vf_chain",
+  "status": "pass",
+  "metric": {
+   "facts": 42036,
+   "text_facts": 35447,
+   "structured_facts": 6589,
+   "quote_not_in_source": 0,
+   "claim_missing": 0,
+   "claim_text_or_owner_differs": 0,
+   "claim_not_in_raw": 0,
+   "structured_methods": {
+    "structured": 6589
+   }
+  },
+  "threshold": "0",
+  "detail": "concatenated raw rows per record so duplicate raw rows do not hide a match",
+  "examples": []
+ }
+]

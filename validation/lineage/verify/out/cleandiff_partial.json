@@ -1,0 +1,45 @@
+{
+ "pin_gazetteer": {
+  "byte_identical": true
+ },
+ "facility_location": {
+  "byte_identical": true
+ },
+ "place_gazetteer": {
+  "byte_identical": true
+ },
+ "record_trust": {
+  "byte_identical": true
+ },
+ "facility_groups": {
+  "byte_identical": true
+ },
+ "claims": {
+  "byte_identical": true
+ },
+ "specialties": {
+  "byte_identical": false,
+  "cells_differ": 0,
+  "max_abs": 0.0,
+  "nonfloat_cols_differ": [
+   [
+    "unique_id",
+    117712
+   ],
+   [
+    "spec",
+    115700
+   ],
+   [
+    "n_raw",
+    73246
+   ]
+  ],
+  "rank_changes": {},
+  "round3_differ": 0
+ },
+ "grades": "not rebuilt",
+ "grades_v1": {
+  "byte_identical": true
+ }
+}

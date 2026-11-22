@@ -1,0 +1,175 @@
+[
+ {
+  "name": "v_chosen_points_on_land",
+  "status": "pass",
+  "metric": "max distance to an LGD district 0.41 km",
+  "threshold": "every chosen point inside an LGD district (<= 1 km)",
+  "detail": "bbox check in s2 is loose, but no chosen point lies abroad or at sea",
+  "examples": []
+ },
+ {
+  "name": "v_gazetteer_all_pins_for_app",
+  "status": "warn",
+  "metric": "486 of 19295 exported PIN points > 50 km outside own polygon",
+  "threshold": "PIN points used as search origin within 10 km of their polygon",
+  "detail": "> km counts {10: 2241, 25: 1276, 50: 486, 100: 120}; 463 of the > 50 km PINs carry no facility (outside the auditor's scope); by src at > 25 km {'pin_median': 1080, 'district_median': 192, 'prefix3_median': 4}",
+  "examples": [
+   "PIN 224172 FIROZABAD district_median 467 km off",
+   "PIN 504346 PRAKASAM district_median 434 km off",
+   "PIN 384316 NAGAUR district_median 415 km off",
+   "PIN 612906 KOZHIKODE district_median 400 km off",
+   "PIN 283152 FIROZABAD pin_median 345 km off"
+  ]
+ },
+ {
+  "name": "v_hot_matches_on_rejected_raw_point",
+  "status": "warn",
+  "metric": "272 of 3263 HOT strong matches sit on the raw point but > 25 km from the v1 point; sample 12/12 wrong (Wilson 0.76-1.00)",
+  "threshold": "0",
+  "detail": "anchor x geo_conflict for strong: {np.False_: {'coord': 2289, 'pin': 316}, np.True_: {'coord': 392, 'pin': 266}}",
+  "examples": [
+   "45c3d70b-ac2b-4c11-ac10-41ab029e34f8",
+   "51d31015-8f2c-4f5a-b86d-81aa213a7939",
+   "553fe6a3-9c2c-48fe-bc8f-8aeb3a982c5f",
+   "5c0d519d-c4ed-42c1-b4b0-a6e3d754c17b",
+   "5e222fef-87cb-468a-bfa9-d57e2d48c83d"
+  ]
+ },
+ {
+  "name": "v_loc01_bad_pin_centres",
+  "status": "warn",
+  "metric": "20 facilities moved off a correct point onto a bad PIN centre; 69 facility PINs > 25 km off",
+  "threshold": "0",
+  "detail": "facility PINs 3019, with polygon 2862. Gazetteer point > 25 km from own PIN polygon: 69 PINs, 90 facilities, 34 placed on it; > 50 km: 23 PINs, 33 facilities, 25 placed. Raw point within 2 km of own polygon but chosen point > 25 km away (cleaning made it worse): 20 ({'low': 15, 'disputed': 5}).",
+  "examples": [
+   "0088ffdf-0639-4fdb-9788-c77bd029e964",
+   "0b3d5090-2525-48f1-8969-6ef4947f9ca5",
+   "1dbb2f3d-e4c6-4fcb-9e95-a02eab39e091",
+   "21a2f3a1-d780-40ae-bce1-0fb0fd6612e5",
+   "3541a676-35db-414b-a52c-c607769c2512"
+  ]
+ },
+ {
+  "name": "v_loc02_state_final",
+  "status": "warn",
+  "metric": "49 records (32 high)",
+  "threshold": "0",
+  "detail": "pairs {('ANDHRA PRADESH', 'TELANGANA'): 21, ('DELHI', 'UTTAR PRADESH'): 3, ('CHANDIGARH', 'PUNJAB'): 2, ('UTTAR PRADESH', 'MADHYA PRADESH'): 2, ('DELHI', 'HARYANA'): 2}; Hyderabad/Secunderabad cities: {'TELANGANA': 346, 'ANDHRA PRADESH': 24, 'CHHATTISGARH': 1}",
+  "examples": [
+   "076633ac-580a-42b0-8bb6-94828bd6ccfe",
+   "0afa0b00-0807-4d1d-9eec-d620eb199be0",
+   "0cf3edb4-cd74-4395-839d-4f1a99f783a7",
+   "0d9c1629-aa77-4b85-b2e3-e8173ff26e2c",
+   "0f8375e1-a47c-4959-94c5-313e0e2512a1"
+  ]
+ },
+ {
+  "name": "v_loc03_high_conf",
+  "status": "warn",
+  "metric": "28 high records > 10 km outside own PIN polygon (auditor headline 164)",
+  "threshold": "0",
+  "detail": "164 of 7762 high > 10 km from PIN centre; of these with a polygon (124): inside own polygon 58, within 5 km 90, > 10 km outside 24; no polygon 40. All high > 10 km outside own polygon: 28. High on prefix3 PIN point: 106. Auditor example 19302dcf (Nashik 422007, 44 km) is inside its own polygon: the PIN centre is wrong, not the point.",
+  "examples": [
+   "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+   "10f3985d-a8fc-4e9a-9835-da54218060ad",
+   "180df6d2-2cb4-4bc9-a564-238aea44a2f0",
+   "181acde8-8007-4612-b3b1-b737b28d134d",
+   "1961618c-d50e-42ea-9a80-3adb07a21443"
+  ]
+ },
+ {
+  "name": "v_loc04_city_conflicts",
+  "status": "warn",
+  "metric": "29 high points > 50 km outside stated city's LGD district (own resolver, 8154 resolved)",
+  "threshold": "0",
+  "detail": "chosen > 50 km 203, raw > 50 km 921. Own read: 7 resolver false alarms (Mahe enclave, Khanapur TS, Gorantla, Kalol x2, Khanpur and Sheikhpura localities), about 22 real text-vs-(PIN+coords) conflicts. f59cbf5c Jabalpur escaped the rule because audit facility_geo city_match_pin/near are both True for a Sagar PIN; Thalassery and Bengaluru escaped because places.build_layers has no 'city' layer although v1 place_gazetteer has one (s3).",
+  "examples": [
+   "0020c82a-2608-406f-9298-779bdd657681",
+   "078259b4-57f0-4bb3-aff4-126869c8c2e9",
+   "0914c599-783f-4e13-a05b-6cd3b06f3afc",
+   "10cf3019-e579-4d1a-9c50-7f573e351ff0",
+   "14979420-8be6-4880-bcdf-05347f2aca33"
+  ]
+ },
+ {
+  "name": "v_loc05_moved",
+  "status": "warn",
+  "metric": "1171 moved > 25 km; 19 had a raw point inside own PIN polygon",
+  "threshold": "-",
+  "detail": "moved points landing inside own PIN polygon 750",
+  "examples": [
+   "c50d0b3e-8615-4166-9579-6708be64ef66",
+   "404af51a-ac38-4d7c-b405-2f0361f0f3c4"
+  ]
+ },
+ {
+  "name": "v_loc06_nirmal",
+  "status": "warn",
+  "metric": "6 facilities",
+  "threshold": "0",
+  "detail": "raw directory 799001 districts {'Nirmal': 4, 'NA': 1}",
+  "examples": [
+   "2f829ae1-e706-42ea-88ca-7a07b588c9fc",
+   "40f9f8de-b064-4b43-b30f-64f88f104494",
+   "43ff0012-b765-4574-9543-a217b58d412e",
+   "5ad204a8-139e-4ef7-a583-74a5d60d55f9",
+   "82f67036-f403-477d-8822-e2813f949ae5"
+  ]
+ },
+ {
+  "name": "v_loc07_null_district",
+  "status": "warn",
+  "metric": "13 null district, district_src {'map_point': 13}",
+  "threshold": "0",
+  "detail": "reference gazetteer rows with null district 95; cities ['Nagpur', 'Thane West', 'Surat', 'Nagpur', 'Napier Town', 'Hyderabad', 'Kuchaman City', 'Nagpur', 'Bhiwandi', 'Mumbai', 'Vadodara', 'Hyderabad', 'Rajkot']",
+  "examples": [
+   "12ebca41-d6cd-4a95-98ca-22c943741a8b",
+   "18a0b6a3-8792-43ef-8753-47548e4aab02",
+   "3b7c281e-3946-4cb2-8520-5c29e4c38e6b",
+   "5106028d-191f-4a51-a596-05d8b41e857b",
+   "5b00a82b-e740-4119-b4c1-6012d8808c9d"
+  ]
+ },
+ {
+  "name": "v_loc08_external_tables",
+  "status": "warn",
+  "metric": "283 real disagreements (auditor 289 counts NaN != NaN)",
+  "threshold": "0",
+  "detail": "{\"idp\": {\"raw_ne\": 289, \"both_null\": 6, \"real\": 283}, \"lgd\": {\"raw_ne\": 289, \"both_null\": 6, \"real\": 283}}; no consumer outside external/*/ build scripts found by grep",
+  "examples": []
+ },
+ {
+  "name": "v_nabh_matches_on_rejected_raw_point",
+  "status": "warn",
+  "metric": "57 of 1921 NABH pairs; sample 7/10 wrong match, 3/10 v1 point wrong",
+  "threshold": "0",
+  "detail": "140 NABH pairs have no NABH coordinate",
+  "examples": [
+   "04ad106d-21a9-4236-8754-f82c5cd6ea3d",
+   "a82c0050-687a-47a5-b5f2-9cc527f83957",
+   "90003975-1c3c-43ba-9c26-610b29adbcab",
+   "404af51a-ac38-4d7c-b405-2f0361f0f3c4",
+   "4e5ea99e-286a-41da-a405-6f150dd9534e"
+  ]
+ },
+ {
+  "name": "v_nfhs_fuzzy_joins",
+  "status": "pass",
+  "metric": "27 distinct fuzzy pairs, all read as correct",
+  "threshold": "all correct",
+  "detail": "{('24 PARAGANAS NORTH', 'North Twenty Four Pargana '): 79, ('24 PARAGANAS SOUTH', 'South Twenty Four Pargana '): 15, ('AHMEDNAGAR', 'Ahmadnagar '): 22, ('BARABANKI', 'Bara Banki '): 3, ('BARAMULLA', 'Baramula '): 1, ('BULDHANA', 'Buldana '): 6, ('CHAMARAJANAGARA', 'Chamarajanagar '): 1, ('CHARKI DADRI', 'Charkhi Dadri '): 3, ('DAVANGERE', 'Davanagere '): 10, ('FIROZEPUR', 'Firozpur '): 4, ('GONDIA', 'Gondiya '): 3, ('HARIDWAR', 'Hardwar '): 20, ('JALORE', 'Jalor '): 3, ('JHUNJHUNU', 'Jhunjhunun '): 5, ('KUSHI NAGAR', 'Kushinagar '): 3, ('MAHARAJGANJ', 'Mahrajganj '): 3, ('NABARANGPUR', 'Nabara",
+  "examples": []
+ },
+ {
+  "name": "v_osm_opendata_on_rejected_raw_point",
+  "status": "pass",
+  "metric": "3 of 2997",
+  "threshold": "< 10",
+  "detail": "kb/opendata anchors on the v1 point, so it avoids the HOT/NABH failure",
+  "examples": [
+   "58242a13-38f5-445d-affe-7c3baade6969",
+   "de22190c-09b3-47fa-8882-77d3fd20c336",
+   "eb00e400-4366-466a-b95a-ab9747cc3896"
+  ]
+ }
+]

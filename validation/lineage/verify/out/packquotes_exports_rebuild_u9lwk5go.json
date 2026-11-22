@@ -1,0 +1,156 @@
+{
+ "pairs": 11505,
+ "quotes_shown": 16563,
+ "pairs_quote_changed": 123,
+ "pairs_quote_set_changed": 37,
+ "pairs_score_changed": 0,
+ "packs_with_change": [
+  "andaman_and_nicobar_islands.json",
+  "andhra_pradesh.json",
+  "assam.json",
+  "bihar.json",
+  "chandigarh.json",
+  "chhattisgarh.json",
+  "delhi.json",
+  "goa.json",
+  "gujarat.json",
+  "haryana.json",
+  "himachal_pradesh.json",
+  "jharkhand.json",
+  "karnataka.json",
+  "kerala.json",
+  "madhya_pradesh.json",
+  "maharashtra.json",
+  "odisha.json",
+  "punjab.json",
+  "rajasthan.json",
+  "sikkim.json",
+  "tamil_nadu.json",
+  "telangana.json",
+  "uttar_pradesh.json",
+  "uttarakhand.json",
+  "west_bengal.json"
+ ],
+ "examples": [
+  [
+   "andaman_and_nicobar_islands.json",
+   [
+    "94acaff7",
+    "nicu"
+   ],
+   [
+    "Neonatal ICU (NICU) care",
+    "NICU - Neonatal ICU Care"
+   ],
+   [
+    "NICU - Neonatal ICU Care",
+    "Neonatal ICU (NICU) care"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "0ed7fc50",
+    "mri"
+   ],
+   [
+    "MRI 1.5 Tesla",
+    "1.5 Tesla MRI"
+   ],
+   [
+    "1.5 Tesla MRI",
+    "MRI 1.5 Tesla"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "24677213",
+    "emergency_csection"
+   ],
+   [
+    "C-section surgeries are performed routinely for obstetric emergencies",
+    "Obstetric emergency services including cesarean sections are provided"
+   ],
+   [
+    "Obstetric emergency services including cesarean sections are provided",
+    "C-section surgeries are performed routinely for obstetric emergencies"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "aa6d8ce2",
+    "trauma_emergency"
+   ],
+   [
+    "24/7 emergency services",
+    "Emergency surgical care"
+   ],
+   [
+    "Emergency surgical care",
+    "24/7 emergency services"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "8df9ef6c",
+    "trauma_emergency"
+   ],
+   [
+    "Emergency department in Secunderabad",
+    "Specializes in trauma and GI surgery"
+   ],
+   [
+    "Specializes in trauma and GI surgery",
+    "Emergency department in Secunderabad"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "dc652285",
+    "mri"
+   ],
+   [
+    "Offers MRI imaging",
+    "MRI scanning services"
+   ],
+   [
+    "Offers MRI imaging",
+    "Offers 4D MRI imaging"
+   ]
+  ],
+  [
+   "andhra_pradesh.json",
+   [
+    "94acaff7",
+    "nicu"
+   ],
+   [
+    "Neonatal ICU (NICU) care",
+    "NICU - Neonatal ICU Care"
+   ],
+   [
+    "NICU - Neonatal ICU Care",
+    "Neonatal ICU (NICU) care"
+   ]
+  ],
+  [
+   "assam.json",
+   [
+    "c9563f2e",
+    "trauma_emergency"
+   ],
+   [
+    "Offers 24/7 emergency care",
+    "Orthopedics and Traumatology clinic"
+   ],
+   [
+    "Offers 24/7 emergency care",
+    "Trauma care for orthopedic injuries"
+   ]
+  ]
+ ]
+}

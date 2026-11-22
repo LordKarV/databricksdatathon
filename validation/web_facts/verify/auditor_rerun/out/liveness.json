@@ -1,0 +1,202 @@
+[
+ {
+  "target_id": "vivaanhospitals.in",
+  "site": "vivaanhospitals.in",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://vivaanhospital.com/ title='Vivaan Hospital || A Multi-Specialty healthcare facility' chars=3953",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "familytreedentalclinic.com",
+  "site": "familytreedentalclinic.com",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://familytreedentalclinic.com/ title='Family Tree Dental Clinic &#8211; We Believe In Saving The Tooth, Not Removing I' chars=8072",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "dcaredental.org",
+  "site": "dcaredental.org",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://www.dcaredental.org/ title='dcare' chars=2649",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "neodental.in",
+  "site": "neodental.in",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://neodental.in/ title='Neo - Dentist & Dental' chars=12357",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "asianhealthmeter.com",
+  "site": "asianhealthmeter.com",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://asianhealthmeter.com/ title='Asian Health Meter' chars=8018",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "bellevueclinic.com",
+  "site": "bellevueclinic.com",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://bellevueclinic.com/ title='Bellevue Clinic' chars=15432",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "chaitanyarehab.com",
+  "site": "chaitanyarehab.com",
+  "stored": "ok",
+  "live_class": "ok",
+  "live_detail": "200 https://chaitanyarehab.com/ title='Mental Health Rehabilitation, De-Addiction, Dementia Care Rehabilitation in Indi' chars=6064",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "mdcrc.org",
+  "site": "mdcrc.org",
+  "stored": "ok_thin",
+  "live_class": "ok_thin",
+  "live_detail": "200 https://mdcrc.org/ title='' chars=1",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "aarogyamdiagnostics.com",
+  "site": "aarogyamdiagnostics.com",
+  "stored": "ok_thin",
+  "live_class": "ok_thin",
+  "live_detail": "200 https://aarogyamdiagnostics.com/ title='' chars=1",
+  "stored_group": "reachable",
+  "live_group": "reachable",
+  "agree": true
+ },
+ {
+  "target_id": "stfrancishospitalajmer.com",
+  "site": "stfrancishospitalajmer.com",
+  "stored": "dns_fail",
+  "live_class": "dns_fail",
+  "live_detail": "[Errno 8] nodename nor servname provided, or not known",
+  "stored_group": "dead",
+  "live_group": "dead",
+  "agree": true
+ },
+ {
+  "target_id": "madrasdentalcentre.com",
+  "site": "madrasdentalcentre.com",
+  "stored": "dns_fail",
+  "live_class": "dns_fail",
+  "live_detail": "[Errno 8] nodename nor servname provided, or not known",
+  "stored_group": "dead",
+  "live_group": "dead",
+  "agree": true
+ },
+ {
+  "target_id": "thespinecare.in",
+  "site": "thespinecare.in",
+  "stored": "dns_fail",
+  "live_class": "dns_fail",
+  "live_detail": "[Errno 8] nodename nor servname provided, or not known",
+  "stored_group": "dead",
+  "live_group": "dead",
+  "agree": true
+ },
+ {
+  "target_id": "akalpurakhhospital.com",
+  "site": "akalpurakhhospital.com",
+  "stored": "dns_fail",
+  "live_class": "dns_fail",
+  "live_detail": "[Errno 8] nodename nor servname provided, or not known",
+  "stored_group": "dead",
+  "live_group": "dead",
+  "agree": true
+ },
+ {
+  "target_id": "specialistshospital.org",
+  "site": "specialistshospital.org",
+  "stored": "http_4xx",
+  "live_class": "http_4xx",
+  "live_detail": "HTTP 403",
+  "stored_group": "not_facility",
+  "live_group": "not_facility",
+  "agree": true
+ },
+ {
+  "target_id": "drshivdubey.com",
+  "site": "drshivdubey.com",
+  "stored": "http_4xx",
+  "live_class": "http_4xx",
+  "live_detail": "HTTP 404",
+  "stored_group": "not_facility",
+  "live_group": "not_facility",
+  "agree": true
+ },
+ {
+  "target_id": "newlifehospitals.co.in",
+  "site": "newlifehospitals.co.in",
+  "stored": "hijacked_spam",
+  "live_class": "hijacked_spam",
+  "live_detail": "https://www.visionindratej.in/ title='Vortex Game India \u2013 Play the Turbo Games Crash Game Online'",
+  "stored_group": "not_facility",
+  "live_group": "not_facility",
+  "agree": true
+ },
+ {
+  "target_id": "novadentsolutions.com",
+  "site": "novadentsolutions.com",
+  "stored": "parked_or_for_sale",
+  "live_class": "parked_or_for_sale",
+  "live_detail": "https://novadentsolutions.com/ title='Emergency Dental Service | Professional & Fast | Call (888) 523-3417'",
+  "stored_group": "not_facility",
+  "live_group": "not_facility",
+  "agree": true
+ },
+ {
+  "target_id": "kulwantihospitals.com",
+  "site": "kulwantihospitals.com",
+  "stored": "timeout",
+  "live_class": "timeout",
+  "live_detail": "timed out",
+  "stored_group": "dead",
+  "live_group": "dead",
+  "agree": true
+ },
+ {
+  "target_id": "thedentalhouse.co.in",
+  "site": "thedentalhouse.co.in",
+  "stored": "suspended_or_expired",
+  "live_class": "suspended_or_expired",
+  "live_detail": "https fails ([SSL: CERTIFICATE_VERIFY_FAILED] certifi); http: http://thedentalhouse.co.in/ title=''",
+  "stored_group": "not_facility",
+  "live_group": "not_facility",
+  "agree": true
+ },
+ {
+  "target_id": "merfmk.com",
+  "site": "merfmk.com",
+  "stored": "robots_disallow",
+  "live_class": "robots_disallow",
+  "live_detail": "https fails ([SSL: CERTIFICATE_VERIFY_FAILED] certifi); http: robots.txt: a User-agent * group disallows /",
+  "stored_group": "blocked",
+  "live_group": "blocked",
+  "agree": true
+ }
+]

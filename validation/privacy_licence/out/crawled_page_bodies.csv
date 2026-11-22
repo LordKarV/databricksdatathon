@@ -1,0 +1,8 @@
+file,crawl_sentences,also_provided,file_sentences,ships
+derived/v2/facility_attributes.parquet,92,3,2162,private_only
+derived/v2/witnesses.parquet,8776,80,23222,private_only
+kb/web_evidence/out/llm_hours_raw.json,16,0,432,public_copy
+kb/web_evidence/out/selfcheck_round1.csv,1,0,54,private_only
+kb/web_evidence/out/selfcheck_round2.csv,3,0,59,private_only
+kb/web_evidence/qa/out/sample.csv,2,0,194,private_only
+kb/web_evidence/qa/out/sample_scored.csv,2,0,199,private_only

@@ -1,0 +1,30 @@
+capability,claim_id,verdict,note
+basic_emoc,b9386c11:capa:28,unclear,ward expansion planned; ward itself may exist
+blood_transfusion,28726757:capa:23,nonoffer,plans to launch a blood bank
+blood_transfusion,51c1ed79:capa:8,nonoffer,blood bank not available
+blood_transfusion,7795f9f8:capa:16,nonoffer,blood bank not available at the hospital
+blood_transfusion,f7e56a1a:proc:14,nonoffer,extractor meta text: not listed in the content
+ct_scan,001316e5:proc:5,nonoffer,"SonoCT is an ultrasound mode, not CT"
+ct_scan,05773700:capa:40,nonoffer,future expansion scheduled for 2017
+ct_scan,0f99a172:equi:15,nonoffer,proposed CT scan
+ct_scan,149332ef:equi:3,nonoffer,plans to install a CT scanner
+ct_scan,3603f591:equi:3,nonoffer,CT planned for installation
+ct_scan,46d54262:equi:2,nonoffer,CT non-functional/unavailable
+ct_scan,689ed40e:desc:0,offer,patient review: took CT scan here; referral cue false alarm
+ct_scan,989ef605:capa:19,nonoffer,in-house CT not available; outsourced
+ct_scan,f12bbe3e:capa:9,nonoffer,coming soon
+ct_scan,f12bbe3e:proc:11,nonoffer,coming soon
+ct_scan,f12bbe3e:proc:28,nonoffer,coming soon
+nephrology,0c5a8e83:capa:15,nonoffer,future courses from January 2026
+nephrology,c2b79056:capa:10,nonoffer,plans to add nephrology
+neurosurgery,57f31693:proc:19,offer,non-surgical cue false alarm
+neurosurgery,57f31693:proc:9,offer,non-surgical cue false alarm
+neurosurgery,bbf46f87:proc:18,offer,non-surgical cue false alarm
+neurosurgery,c2b79056:capa:10,nonoffer,plans to add neurosurgery
+nicu,eac16a4a:capa:4,nonoffer,plans to establish NICU
+pci_cath_lab,2e5f00b6:equi:26,nonoffer,cath lab coming soon
+pci_cath_lab,62627348:equi:4,nonoffer,cath lab planned
+pci_cath_lab,7ca4ff5d:capa:21,offer,non-surgical cue false alarm
+pci_cath_lab,cb4c40f4:proc:5,offer,without surgery cue false alarm
+pci_cath_lab,e0893a32:capa:29,nonoffer,plans to establish
+thrombolysis,0eee91dc:capa:24,offer,non-surgical cue false alarm (treatment offered)

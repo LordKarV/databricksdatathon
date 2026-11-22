@@ -1,0 +1,75 @@
+cap,cid,cue,verdict,note,text
+ecg,325be5e7:proc:0,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Conducted a free heart check-up camp on 29 September 2022 offering ECG, 2D echocardiography, random blood sugar testing, blood pressure measurement, and body fat analysis."
+ecg,3a559444:proc:5,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Provides free health checkups during community camps including ECG, ECHO, random blood sugar testing (RBS), and blood pressure measurements."
+ecg,3a559444:capa:11,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Conducts community health camps in Belagavi offering ECG, ECHO, RBS, and BP testing."
+ecg,9685c062:capa:26,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Organizes free health check-up camps offering heart health screening and diagnostic tests such as ECG, CBC, and urine tests"
+thrombolysis,0eee91dc:capa:24,negation,wrong_other,"not this capability (eye OT, dermatologist, periodontal plastic surgery, non-surgical heart attack therapy is not thrombolysis)",Offers India's first non-surgical heart attack treatment.
+pci_cath_lab,0be8a076:proc:9,past,offer,cue false alarm: offered,Angiography of the brain is used to perform interventional neuroradiology procedures
+pci_cath_lab,2e5f00b6:equi:26,future,nonoffer,"sentence says absent, planned, or no surgery",Cath Lab coming soon
+pci_cath_lab,62627348:equi:4,future,nonoffer,"sentence says absent, planned, or no surgery",Future-ready cath lab planned
+pci_cath_lab,7183b0fb:proc:5,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Hosts free angiography camps
+pci_cath_lab,7ca4ff5d:capa:21,negation,offer,cue false alarm: offered,Cath Lab enables non-surgical cardiac catheterization procedures
+pci_cath_lab,cb4c40f4:proc:5,negation,offer,cue false alarm: offered,Coronary Angioplasty uses a balloon catheter to open a diseased artery without surgery
+pci_cath_lab,e0893a32:capa:29,future,nonoffer,"sentence says absent, planned, or no surgery","Plans to establish a super specialty medical centre offering angiography, balloon angioplasty, and bypass surgeries"
+general_surgery_ot,1c06c3fb:proc:13,camp,wrong_other,"not this capability (eye OT, dermatologist, periodontal plastic surgery, non-surgical heart attack therapy is not thrombolysis)",Dental Department inaugurated in 2009; Ophthalmic department established; new Eye OT and special camps
+general_surgery_ot,1f84bdca:proc:23,referral,offer,cue false alarm: offered,Patients requiring surgery are immediately transferred to the ground-floor operating theatre for surgical intervention
+general_surgery_ot,28ce4bae:proc:0,future,offer,cue false alarm: offered,"Performs planned surgeries including general surgery, TURP (urology), gynecology, orthopedics, and ENT"
+general_surgery_ot,97f5c391:capa:13,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Multispecialty medical camps in Hansot with Neurology, Ophthalmology, Gynecology, Dental, Pediatrics, Spine & Neck, Plastic surgery, Urology, Orthopedics, General Surgery, and ENT"
+general_surgery_ot,cd8b64e1:proc:20,negation,nonoffer,"sentence says absent, planned, or no surgery","Cartography is non-invasive and painless, requiring no surgery, injections, wires, catheters, anesthesia or hospitalization"
+general_surgery_ot,fe92451b:desc:1,referral,offer,cue false alarm: offered,"In 1995, operation theatre and indoor admission facility were added, which later on was transferred to a newly built premises of 2000 sq feet in an elite area of Hotgi Road, Solapur."
+blood_transfusion,28726757:capa:23,future,nonoffer,"sentence says absent, planned, or no surgery",Plans to launch the first private blood bank of Western Odisha
+blood_transfusion,51c1ed79:capa:8,negation,nonoffer,"sentence says absent, planned, or no surgery",Blood bank not available
+blood_transfusion,7795f9f8:capa:16,negation,nonoffer,"sentence says absent, planned, or no surgery",Blood bank not available at the hospital
+blood_transfusion,f7e56a1a:proc:14,negation,nonoffer,"sentence says absent, planned, or no surgery",Blood Bank procedures are not listed in the provided content
+ct_scan,05773700:capa:40,future,nonoffer,"sentence says absent, planned, or no surgery","Phase II under expansion to hold a cancer care hospital with PET-CT and TrueBeam radiation therapy, construction ongoing and scheduled to be opened by 2017"
+ct_scan,0f99a172:equi:15,future,nonoffer,"sentence says absent, planned, or no surgery",Proposed CT Scan
+ct_scan,149332ef:equi:3,future,nonoffer,"sentence says absent, planned, or no surgery","Plans to install a 32-slice CT scanner, the first in the surrounding area of Sawai Madhopur."
+ct_scan,3603f591:equi:3,future,nonoffer,"sentence says absent, planned, or no surgery",CT scanner machine planned for installation at Diamond Harbour Government Medical College & Hospital (DHGMC)
+ct_scan,46d54262:equi:2,negation,nonoffer,"sentence says absent, planned, or no surgery",CT scan facility is non-functional/unavailable
+ct_scan,689ed40e:desc:0,referral,offer,cue false alarm: offered,"Accura Speciality Labs have well-trained staffs for providing good quality and reliable diagnostics reports and they keep very attractive charges, took CT Scan here.For their good service, i refer to everyone."
+ct_scan,989ef605:capa:19,negation,nonoffer,"sentence says absent, planned, or no surgery",In-house CT scanning is not available; CT scanning is outsourced
+ct_scan,f12bbe3e:proc:11,future,nonoffer,"sentence says absent, planned, or no surgery",CT scan service (Coming Soon)
+ct_scan,f12bbe3e:proc:28,future,nonoffer,"sentence says absent, planned, or no surgery",CT Scan coming Soon
+ct_scan,f12bbe3e:capa:9,future,nonoffer,"sentence says absent, planned, or no surgery",CT scan service planned (Coming Soon)
+neurosurgery,57f31693:proc:9,negation,offer,cue false alarm: offered,Neurosurgery provides surgical and non-surgical treatment for brain and spine disorders
+neurosurgery,57f31693:proc:19,negation,offer,cue false alarm: offered,Offers neurosurgery with surgical and non-surgical treatment options.
+neurosurgery,bbf46f87:proc:18,negation,offer,cue false alarm: offered,"Neurosurgery provides surgical and non-surgical care for brain, spinal cord and peripheral nerves (adult and pediatric)"
+neurosurgery,c2b79056:capa:10,future,nonoffer,"sentence says absent, planned, or no surgery","Plans to add cardiovascular surgeries, a comprehensive diabetes care centre, nephrology, and neurosurgery"
+orthopaedics,0655e834:capa:5,negation,offer,cue false alarm: offered,Offers surgical and non-surgical orthopedic treatments
+orthopaedics,1a2a69ea:proc:1,negation,offer,cue false alarm: offered,Offers Orthopaedic Manual Therapy as a non-surgical musculoskeletal treatment
+orthopaedics,1a2a69ea:proc:6,negation,offer,cue false alarm: offered,Orthopaedic Manual Therapy (OMT) is offered as a non-surgical hands-on treatment.
+orthopaedics,314219b2:proc:6,negation,offer,cue false alarm: offered,Orthopaedics and Sports Medicine provides non-surgical and surgical management of sports-related musculoskeletal injuries
+orthopaedics,314219b2:capa:14,negation,offer,cue false alarm: offered,Orthopaedics and Sports Medicine department with non-surgical and surgical management of sports injuries
+orthopaedics,42877ba2:proc:1,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Organizes free orthopedic check-up camps in collaboration with R.N. Chaudhary Trust and Saksham Organization
+orthopaedics,43a1238e:capa:0,negation,offer,cue false alarm: offered,Orthopedic care provided with surgical and non-surgical treatments for musculoskeletal conditions
+orthopaedics,50f7882b:capa:2,negation,offer,cue false alarm: offered,Non-surgical treatments for orthopedic conditions
+orthopaedics,50f7882b:desc:0,negation,wrong_other,"not this capability (eye OT, dermatologist, periodontal plastic surgery, non-surgical heart attack therapy is not thrombolysis)","Dermatologist offering regenerative therapy, non-surgical treatments for various orthopedic and hair loss conditions."
+orthopaedics,6051631b:capa:28,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Annual free eye and orthopedic camp
+orthopaedics,6b861b73:capa:7,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Arthritis and Osteoporosis Camp program offering Bone Mineral Density testing, Vitamin D3 blood tests, and orthopedic and physiotherapy consultations"
+orthopaedics,9913a22f:proc:25,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Conducts orthopedic camps including bone mineral density screenings
+orthopaedics,9d970172:proc:22,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Bone mineral density screening conducted during a health camp on May 6, 2022, with orthopaedic and general physician consultations and blood tests."
+orthopaedics,a74aad4c:capa:2,negation,offer,cue false alarm: offered,Non-surgical and surgical orthopedic solutions
+orthopaedics,be77998f:proc:2,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Offers a free bone and joint check-up camp
+orthopaedics,be77998f:capa:7,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Hosted a free bone and joint check-up camp on 2 July 2023
+orthopaedics,e7f2b04c:capa:13,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Offers free orthopedic checkup camp
+orthopaedics,e9354ac2:proc:33,negation,offer,cue false alarm: offered,Pediatric orthopaedic procedures including non-surgical Ponseti method for clubfoot; surgical tendon/ligament corrections when needed
+iv_fluid_resuscitation,22400e36:capa:2,future,unclear,plan is about expansion or an old plan; the base service may exist,Unit I was planned to have 150 inpatient beds.
+iv_fluid_resuscitation,22400e36:capa:3,future,unclear,plan is about expansion or an old plan; the base service may exist,Unit II was planned to have 30 inpatient beds.
+iv_fluid_resuscitation,fe92451b:desc:1,referral,offer,cue false alarm: offered,"In 1995, operation theatre and indoor admission facility were added, which later on was transferred to a newly built premises of 2000 sq feet in an elite area of Hotgi Road, Solapur."
+plastic_surgery,2f61e07e:capa:21,negation,offer,cue false alarm: offered,"Specialties: Plastic surgery, Hair Transplant, cosmetic gynecology, non-surgical liposuction, medical lasers, lipoma removal, gynecomastia, tummy tuck, anti-aging procedures"
+plastic_surgery,3221860f:proc:9,negation,wrong_other,"not this capability (eye OT, dermatologist, periodontal plastic surgery, non-surgical heart attack therapy is not thrombolysis)","Performs periodontal procedures including scaling, flap surgery, root coverage, depigmentation of gums, periodontics plastic surgery, bone grafting procedures, pocket reductions, and non-surgical treatment"
+plastic_surgery,97f5c391:capa:13,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Multispecialty medical camps in Hansot with Neurology, Ophthalmology, Gynecology, Dental, Pediatrics, Spine & Neck, Plastic surgery, Urology, Orthopedics, General Surgery, and ENT"
+nephrology,0c5a8e83:capa:15,future,nonoffer,"sentence says absent, planned, or no surgery","From January 2026, DM Pediatric Critical Care will be started and new PDCC courses will commence in Pediatric Neurology, Pediatric Nephrology, and Pediatric Rheumatology"
+nephrology,9913a22f:proc:24,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Conducts nephrology and urology camps
+nephrology,c2b79056:capa:10,future,nonoffer,"sentence says absent, planned, or no surgery","Plans to add cardiovascular surgeries, a comprehensive diabetes care centre, nephrology, and neurosurgery"
+laboratory,123421c9:proc:3,negation,offer,cue false alarm: offered,"GOOD HEALTH PACKAGE with 52 Tests including HBA1c Glycosylated Hemoglobin, Kidney Function Test (KFT/RFT) includes 4 tests (Blood Urea, Blood Urea Nitrogen, Creatinine - Serum, Uric Acid), Complete Hemogram includes 20 tests (Hemoglobin, Hematocrit, Platelet Count, RBC, etc.), Liver Function Test (LFT) includes 11 tests (Bilirubin Direct/Indirect/Total, Alkaline Phosphatase, SGOT, SGPT, etc.), Urine Routine & Microscopy, Thyroid Profile TFT includes 3 tests (TSH, T3, T4), Iron Profile includes 4 tests (TIBC, UIBC, Iron, % Transferrin Saturation), Lipid Profile includes 8 tests (Total Cholesterol, HDL, LDL, Triglycerides, etc.), HBA1c, Fasting Sugar, and Vitamin/Calcium is not listed here. Certifications NABL & ISO; Available Home Collection & Lab Visit."
+laboratory,53363cc9:capa:5,future,nonoffer,"sentence says absent, planned, or no surgery",Plans to launch a state-of-the-art diagnostic laboratory offering a wide range of diagnostic tests free of cost.
+laboratory,57e72aa9:equi:1,future,nonoffer,"sentence says absent, planned, or no surgery",Digital pathology lab planned
+laboratory,823d2a86:proc:0,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,"Announced plans to organize an executive health check-up camp on 30/04/2016 offering tests including CBC, ESR, blood sugar, urea, creatinine, lipid profile, serum bilirubin, SGPT, SGOT, alkaline phosphatase, HbA1C, electrolytes (Na, K, Ca), TSH, and routine urine examination."
+laboratory,a39093c2:equi:2,future,nonoffer,"sentence says absent, planned, or no surgery",Ayurveda medicine manufacturing and quality testing laboratory planned in Sontyam area (outskirts of Visakhapatnam) with Rs 6 crore funding
+laboratory,cbff204e:capa:49,future,nonoffer,"sentence says absent, planned, or no surgery","In April 2016, BMCRI planned to open a private diagnostic laboratory inside the campus"
+laboratory,ddfc13b1:capa:46,future,unclear,plan is about expansion or an old plan; the base service may exist,Central laboratory system under construction to consolidate all lab facilities under one roof
+basic_emoc,715f8c0a:capa:2,camp,camp,only evidence is an outreach camp; kb rule removes camp sentences,Offers maternity-related services including a Free Maternity Camp program initiated on 21 February 2021 and held monthly
+basic_emoc,b9386c11:capa:28,future,unclear,plan is about expansion or an old plan; the base service may exist,"Maternity ward expansion planned to increase bed capacity by 150 beds at a cost of Rs.6 crore (announced December 16, 2016)"
+neonatal_stabilisation,5991bda9:capa:2,future,nonoffer,"sentence says absent, planned, or no surgery",Plans to start newborn nursery for sick newborns and phototherapy for neonatal jaundice
+nicu,eac16a4a:capa:4,future,nonoffer,"sentence says absent, planned, or no surgery",Plans to establish Newborn Intensive Care Unit (NICU) and Paediatric Intensive Care Unit (PICU)
