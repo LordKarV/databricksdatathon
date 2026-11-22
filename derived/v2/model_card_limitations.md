@@ -36,6 +36,42 @@ carries. That is why the app says "call first".
   (`label_provenance.wording`). A human spot-check of 25 pairs is set up (PR #105,
   `model/gold/v3/human_check/`) and not yet done; no human agreement number exists yet.
 
+## What the sealed TEST does and does not show (WS5, #140)
+
+Numbers from [`independence.json`](../../model/gold/v3/test_eval/independence.json) (code: `model/gold/v3/test_eval/independence.py`, read-only on the
+frozen predictions) and [`results.json`](../../model/gold/v3/test_eval/results.json). Decided TEST pairs only.
+
+- **Lead number: Likely confirmed 25 of 28** (0.893 [0.728, 0.963]). AUROC 0.819 [0.686, 0.924] measures ranking
+  within a list, not how often an answer is right. By band (confirmed / contradicted / no answer on the web):
+  LIKELY 25 / 3 / 35, CALL_FIRST 0 / 0 / 11, NO_SERVICE_TEXT 20 / 8 / 44, UNLIKELY 2 / 2 / 0 (`bands`). The band
+  itself ranks less well than p: AUROC 0.670 [0.509, 0.813]; LIKELY against the rest 0.651 [0.507, 0.778]
+  (`band_as_score`).
+- **Independence.** Where a facility's own website states the service, the model and the web check both see it
+  (21 of 21 confirmed). Where it does not, the score still ranks above chance but weakly: AUROC 0.703 [0.521,
+  0.864] on 39 pairs (`by_website_family`). Labels that cite the record's own source URL or domain: AUROC 0.894
+  [0.768, 0.988] on 39 pairs; labels from an independent domain: 0.705 [0.400, 0.945] on 19
+  (`by_label_evidence_source`).
+- **No TEST negatives** for emergency_csection, nicu, emergency_24x7 and stemi_thrombolysis
+  (`services_with_0_test_negatives`): TEST cannot show ranking within those services.
+- **Exists and location are not tested.** TEST has no "no" label for either (114 yes, 36 unclear each). With the
+  DEV rule (unclear after a search counts as 0) the existence score gets AUROC 0.617 [0.484, 0.749]
+  (`existence_head`), which includes chance.
+- **The c2 override.** UNLIKELY from p <= t_U (0.2) was right (contradicted) on 9 of 9 labelled pairs: DEV 7 of 7,
+  TEST 2 of 2. UNLIKELY from the c2 rule with p > t_U was right on 3 of 10: DEV 3 of 8, TEST 0 of 2
+  (`unlikely_by_route`; DEV is the fit set). A c2 Unlikely means the text names another facility, not that the
+  service is absent.
+- **Label agreement.** Cohen's kappa 0.834 on DEV (75 double-labelled pairs) and 0.624 on TEST (38); on TEST there
+  is no confirmed-against-contradicted disagreement (`report.overlap` in
+  [`dev_labels.json`](../../model/gold/v3/dev_labels.json) and
+  [`test_labels.json`](../../model/gold/v3/test_labels.json)).
+- **DEV Likely precision is how the threshold was set.** t_L is the lowest DEV threshold with out-of-fold precision
+  at least 0.85, so 102 of 120 on DEV ([`model_card.json`](model_card.json), `thresholds.likely`) is not a test.
+- **Simulation.** In the simulated referral world ([`submission/sim_results.csv`](../../submission/sim_results.csv),
+  trauma, `minus_ncf`) the app is within 1 to 2 points of nearest listing plus a call ahead, and ahead only when
+  the model is assumed right (S1, +1.0). The cause is the citation rule: the app offers only places with a quote
+  from their own listing. In emergencies the score filters and explains, and the call decides. The multi-stop
+  route is not evaluated in the simulation. Simulated, not a field result.
+
 ## Paths forward
 
 - **Field reports:** the app's call-outcome reports (#65) are the path for phones, hours and turn-aways.

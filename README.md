@@ -94,21 +94,56 @@ upstream cleaning steps; see `derived/v1/README.md`.
   - 2,489 of 9,959 records (25.0%) carry a sentence that names another facility; in 1,232 it is written as if
     about the record itself, and cleaning quarantines it as evidence;
   - 1,367 of 9,869 map points are more than 50 km from their own PIN code (1,101 more than 100 km).
-- **The model** (`derived/v2/model_card.json`): A_platt, an expert-set scorecard with one calibration step. On
-  221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720, 0.867], log loss 0.427
-  [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made from public web pages,
-  not human-checked; the sealed TEST set was opened once, after the model was frozen.
-- **Likely:** 102 of 120 DEV pairs labelled Likely were confirmed [0.775, 0.903]. The model scores 7,980
-  facility-service pairs for the app's seven services. The app serves 7,618 of them: the 362 at places whose type
-  cannot offer the service (an eye or dental clinic for trauma, #117) are left out. Of the 7,618, 4,457 are
-  Likely; the rest say "call to confirm", "no service text: call to ask" or "Unlikely".
-  On the sealed TEST labels, 25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963],
-  `model/gold/v3/test_eval/results.json`). Every option still says to call first, and when nothing is Likely the
-  app says so.
+- **The model** ([`derived/v2/model_card.json`](derived/v2/model_card.json)): A_platt, an expert-set scorecard
+  with one calibration step. On 221 DEV pairs (168 confirmed), grouped five-fold out of fold: AUROC 0.800 [0.720,
+  0.867], log loss 0.427 [0.352, 0.515] against 0.557 for a constant base rate, ECE 0.044. Labels are agent-made
+  from public web pages, not human-checked; the sealed TEST set was opened once, after the model was frozen.
+- **Sealed TEST, the lead number** ([`model/gold/v3/test_eval/results.json`](model/gold/v3/test_eval/results.json)):
+  25 of the 28 Likely pairs with a verdict were confirmed (0.893 [0.728, 0.963]). AUROC 0.819 [0.686, 0.924] on
+  the 60 decided pairs says how well the score orders the options in a list, not how often an answer is right. By
+  band ([`independence.json`](model/gold/v3/test_eval/independence.json), `bands`):
+
+  | Band | confirmed | contradicted | no answer on the web |
+  | --- | --- | --- | --- |
+  | LIKELY | 25 | 3 | 35 of 63 |
+  | CALL_FIRST | 0 | 0 | 11 of 11 |
+  | NO_SERVICE_TEXT | 20 | 8 | 44 of 72 |
+  | UNLIKELY | 2 | 2 | 0 of 4 |
+
+  The band the app shows ranks less well than the score behind it: AUROC 0.670 [0.509, 0.813] (`band_as_score`).
+- **How independent the TEST check is** ([`independence.json`](model/gold/v3/test_eval/independence.json),
+  `by_website_family`): where a facility's own website states the service, the model and the web check both see
+  it (21 of 21 confirmed). Where it does not, the score still ranks above chance but weakly: AUROC 0.703 [0.521,
+  0.864] on 39 pairs. On the 19 pairs whose label cites a domain other than the record's own source, AUROC is 0.705
+  [0.400, 0.945] (`by_label_evidence_source`).
+- **Likely on DEV:** the Likely threshold was set on DEV, as the lowest score whose out-of-fold precision is at
+  least 0.85, so 102 of 120 DEV Likely pairs confirmed [0.775, 0.903] is how it was set, not a test; the TEST
+  number above is the test. The model scores 7,980 facility-service pairs for the app's seven services. The app
+  serves 7,618 of them: the 362 at places whose type cannot offer the service (an eye or dental clinic for trauma,
+  #117) are left out. Of the 7,618, 4,457 are Likely; the rest say "call to confirm", "no service text: call to
+  ask" or "Unlikely". Every option still says to call first, and when nothing is Likely the app says so.
+- **Exists and location are not tested.** No TEST label says a facility does not exist or is in the wrong place
+  (114 yes and 36 unclear for each). Counting "unclear after a search" as a negative, the DEV rule, the existence
+  score gets AUROC 0.617 [0.484, 0.749], close to chance
+  ([`independence.json`](model/gold/v3/test_eval/independence.json), `existence_head`).
+- **Two routes to Unlikely** ([`independence.json`](model/gold/v3/test_eval/independence.json),
+  `unlikely_by_route`): a low score (p <= 0.2) was right, that is contradicted, on 9 of 9 labelled pairs (DEV 7,
+  TEST 2). The c2 rule (text names another facility and no unit of its own) with a higher score was right on 3 of
+  10 (DEV 3 of 8, TEST 0 of 2), so a c2 Unlikely means "check", not "no". DEV pairs are the fit set.
+- **Label agreement:** Cohen's kappa 0.834 on DEV and 0.624 on TEST double-labelled pairs; on TEST no pair had
+  one labeller confirm and the other contradict ([`model/gold/v3/README.md`](model/gold/v3/README.md),
+  `report.overlap` in [`dev_labels.json`](model/gold/v3/dev_labels.json) and
+  [`test_labels.json`](model/gold/v3/test_labels.json)).
+- **Simulation, not a field result** ([`submission/sim_results.csv`](submission/sim_results.csv), trauma,
+  `minus_ncf`): in the simulated referral world the app is within 1 to 2 points of "nearest listing plus a call
+  ahead" (S0-high -1.7, S0-low -1.5, S2 -1.0, S3 -1.3 points of patients treated in the window), and ahead only in
+  S1, where the model is assumed right (+1.0). The cause is the citation rule: the app offers only places with a
+  quote from their own listing, so it passes over some near places the baseline phones. In emergencies the score
+  filters and explains, and the call decides. The multi-stop route is not evaluated in the simulation.
 - **Top two:** a confirmed place was among the first 2 options in 27 of 27 emergency and 19 of 20 planned-care
   DEV groups, but a random order does nearly as well (0.97), so this says little about live queries.
-- **Public facilities:** on 31 labelled public pairs (3 contradicted) we could not show that the score ranks public
-  facilities better than chance; the sample is too small to tell.
+- **Public facilities:** on 31 labelled public DEV pairs (3 contradicted) we could not show that the score ranks
+  public facilities better than chance; the sample is too small to tell.
 - **What did not work** in the earlier prototype is listed in `model/MODEL_SPEC.md` section 4.11 and on the app's
   "How this works" page, as history. Its numbers are not comparable with the DEV numbers above.
 - **Faithfulness:** every number and quote the app shows is checked against its stored row by
