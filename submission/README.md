@@ -13,7 +13,8 @@ Free Edition, and also locally.
    `submission/referral_saathi.ipynb`.
 3. Attach serverless compute and Run all. pandas, pyarrow and matplotlib are already there; nothing else is
    installed.
-   - The first run builds the app's small data exports from `derived/v1`, which takes about 10 seconds.
+   - The first run builds the app's small data exports from `derived/v1` and `derived/v2`, which takes about 10
+     seconds.
    - The rest runs in under a minute.
 
 To rebuild the team dataset itself on Databricks, run `submission/00_rebuild_derived.ipynb` first (serverless,
@@ -38,9 +39,25 @@ code cell has no output, or if the file is 20 MB or more. The notebook tooling (
 matplotlib) is for development only and is not in `app/requirements.txt`. To register the kernel once:
 `.venv-app/bin/python -m ipykernel install --user --name rs-app`.
 
+## Simulation appendix (SIMULATED)
+
+`02_simulation.ipynb` is the appendix for the simulated referral world in `sim/` (#92). Everything in it is
+SIMULATED, not field results. Simulated patients in Bihar and Uttar Pradesh who need trauma care (60-minute window)
+or dialysis (120-minute window) are sent through five referral policies: the app, the app offline, nearest,
+nearest + call first, and best on paper. Each policy is run under five hidden-truth scenarios: S0-high and S0-low
+(read together), S1, S2 and S3. The notebook shows:
+- the share treated within the window, with seed-bootstrap intervals;
+- how much the result depends on the assumed rates: the phone reaches the facility, a "yes" is wrong, the
+  facility is open, it accepts the patient;
+- the emergency ranking fix (#101), before and after.
+
+It is built and run by `build_sim_notebook.py`, in about 3 minutes locally at 20 seeds x 200 cases.
+`referral_saathi.ipynb` section 7b reads the run's aggregate table from `sim_results.csv`, which is committed, so
+it needs no simulation output. The CSV header gives the seeds, cases and commit.
+
 ## Still to fill
 
-- **Section 7b:** the simulation table (`sim/out/metrics.parquet`, #92) and the real-data policy table
-  (`validation/out/policy_compare.csv`, #93) show as pending until those land.
+- **Section 7b:** the real-data policy table (`validation/out/policy_compare.csv`, #93) shows as pending until it
+  is committed.
 - **Section 10** reads the voice latency measured on the deployed app from `measured_on_databricks.json` (the lead's
   smoke test, posted on #2), since no other file in the repository records it.
