@@ -71,6 +71,8 @@ def test_rescan_uses_the_same_detectors(tmp_path):
 
 
 def test_name_head_before_bracket_counts():
-    full = next(n for n in real("name", "facility_location.parquet") if " (" in n and len(d.words(n.split(" (")[0])) >= 2
-                and any(len(x) >= 4 and x not in d.GENERIC for x in d.words(n.split(" (")[0])))
+    def head_ok(n: str) -> bool:
+        w = d.words(n.split(" (")[0])
+        return len(w) >= 2 and any(len(x) >= 4 and x not in d.GENERIC for x in w)
+    full = next(n for n in real("name", "facility_location.parquet") if " (" in n and head_ok(n))
     assert d.facility_hits(f"we called {full.split(' (')[0]} yesterday")["names"] == 1
