@@ -12,7 +12,7 @@ Filled here
 - travel: the geo.travel row of the last leg into the definitive facility
 - p: the planner's objective for the whole plan (see route.totals), not a facility score
 - evidence: [{claim_id}] for the definitive stage (quotes are joined by the app from its facts)
-- flags: plain-English warnings (location confidence, windows not met, stub probabilities)
+- flags: plain-English warnings (location confidence, windows not met, call first to check)
 - call_ahead: one question per stop, asked about its weakest capability
 - call_first: true whenever any stop's probability is below CALL_FIRST_BELOW
 - route: {type, stops, totals, window_checks, vs_direct}
@@ -51,13 +51,12 @@ def _question(stop):
                              f"(probability {stop['weakest_capability_p']:.2f})"}
 
 
-def to_options(result, stub=True):
-    """stub=True adds the placeholder-probability warning to every option's flags."""
+def to_options(result):
     options = []
     for rank, p in enumerate(result["plans"], start=1):
         d = p["stops"][-1]
         totals = p["totals"]
-        flags = ["Probabilities are a placeholder built from derived/v1, not the fitted model."] if stub else []
+        flags = []
         for s in p["stops"]:
             flags += [f"{s['name']}: {f}" for f in s["flags"]]
         flags += [f"{c['check']} within {c['limit_minutes']} min is not met (arrival at {c['eta_minutes']} min)."
@@ -72,7 +71,7 @@ def to_options(result, stub=True):
             "evidence": [{"claim_id": i} for i in d["evidence_ids"]],
             "flags": flags,
             "call_ahead": [_question(s) for s in p["stops"]],
-            "call_first": any(s["p"] < CALL_FIRST_BELOW for s in p["stops"]),
+            "call_first": any(s["p"] < CALL_FIRST_BELOW or s.get("call_first") for s in p["stops"]),
             "route": {"type": p["type"], "stops": p["stops"], "totals": totals,
                       "window_checks": p["window_checks"], "vs_direct": p["vs_direct"]},
         })

@@ -192,9 +192,10 @@ def test_likely_option_too_far_names_the_public_standard_hospital_without_abstai
     assert p["abstain"] is None and first["band"] == "likely" and first["travel"]["minutes"] > 60
     assert p["time_window"]["first_outside"] and po and po["label"] == "by public standard, not verified"
     i = ENGINE.fid[po["facility_id"]]
-    assert ENGINE.fac["public_standard"][i]
+    assert "emergency_csection" in ENGINE.fac["public_standard"][i]  # IPHS expects it at this level (#85 H2)
+    assert po["facility_id"] not in {o["facility_id"] for o in p["options"]} | {w["facility_id"] for w in p["why_not"]}
     # nearest such hospital within the search radius
-    km = ENGINE._public_near(p["location"]["lat"], p["location"]["lon"])[0]
+    km = ENGINE._public_near("emergency_csection", p["location"]["lat"], p["location"]["lon"])[0]
     assert abs(po["travel"]["km"] - km) < km * 0.6 + 1
     assert {"108"} <= {n["number"] for n in p["emergency_numbers"]}
     inside = ENGINE.plan("mri", 28.6, 77.2, 40, "gps")
@@ -205,14 +206,15 @@ def test_likely_option_too_far_names_the_public_standard_hospital_without_abstai
 def test_area_names_public_standard_hospitals_where_there_is_no_public_evidence():
     a = ENGINE.area("trauma_emergency", 25.15, 83.68)
     none = [r for r in a["pins"] if r["first"] is None]
-    assert none and all(r["public"] and r["public"]["label"] == "by public standard, not verified" for r in none)
+    # where no public facility's level is expected to offer trauma care (IPHS 2022), none is named (#85 H2)
+    assert none and all(r["public"] is None or r["public"]["label"] == "by public standard, not verified" for r in none)
     assert all(r["public"] is None for r in a["pins"] if r["first"])
     for r in none:
-        assert ENGINE.fac["public_standard"][ENGINE.fid[r["public"]["facility_id"]]]
+        assert r["public"] is None or "trauma_emergency" in ENGINE.fac["public_standard"][ENGINE.fid[r["public"]["facility_id"]]]
     g = ENGINE.area("trauma_emergency", 25.6, 85.95)["gap"]  # Darbhanga
     for h in g["public_standard"]:
         i = ENGINE.fid[h["facility_id"]]
-        assert ENGINE.fac["public_standard"][i] and ENGINE.fac["district"][i] == "DARBHANGA"
+        assert "trauma_emergency" in ENGINE.fac["public_standard"][i] and ENGINE.fac["district"][i] == "DARBHANGA"
 
 
 # ---------- data gap vs care gap ----------
@@ -235,3 +237,13 @@ def test_gap_split_adds_up_and_matches_the_pins(s, la, lo):
 def test_ladakh_burns_is_a_data_gap_not_a_care_gap():
     g = ENGINE.area("burn_care", 34.1, 77.5)["gap"]
     assert g["no_claim"] == g["pins_sampled"] > 0 and g["district_claiming"] == 0
+
+
+@needs_data
+def test_outside_option_follows_the_public_standard_per_service():
+    """#85 H2: no AYUSH college, and no cardiac surgery claim for a district hospital."""
+    for s, la, lo in [("trauma_emergency", 28.61, 77.21), ("burn_care", 26.76, 83.37)]:  # were homeopathic / ayurvedic
+        po = ENGINE._outside(s, la, lo)
+        assert po is None or not re.search(r"ayurved|homoeo|homeo|unani|siddha", po["name"], re.I)
+    levels = {ENGINE.fac["public_level"][i] for i, svcs in enumerate(ENGINE.fac["public_standard"]) if "cardiac_surgery" in svcs}
+    assert levels and levels <= {"mc"}

@@ -4,7 +4,7 @@
     .venv/bin/python -m planner --pathway dialysis_start --lat 26.6 --lon 85.48 --json
     .venv/bin/python -m planner --list
 
-Probabilities come from the derived/v1 stub in planner/data_v1.py (not the fitted model). Travel
+Probabilities come from model v2 through planner/out/planner_v2.json.gz (planner/export_v2.py). Travel
 times are geo.travel estimates with no network calls; add --osrm to route the legs of the printed
 plans on the OSRM demo server (a handful of requests).
 """
@@ -25,7 +25,7 @@ def load_pathways():
 
 
 def text(result):
-    out = [f"Pathway: {result['pathway']} ({result['urgency']}). Probabilities: derived/v1 stub, not the fitted model."]
+    out = [f"Pathway: {result['pathway']} ({result['urgency']}). Probabilities: model v2 (derived/v2)."]
     if result["abstain"]:
         return "\n".join(out + [result["abstain"]["text"]])
     th = result.get("thresholds")
@@ -87,14 +87,16 @@ def main(argv=None):
     if a.pathway not in pathways or a.lat is None or a.lon is None:
         ap.error("need --pathway (see --list), --lat and --lon")
     from geo import travel
-    from planner.data_v1 import V1Store
-    store = V1Store()
+    from planner.store import Store
+    store = Store.load()
+    if store is None:
+        ap.error("planner data not built: run planner/export_v2.py")
 
     def travel_fn(origin, destinations):
         return travel.travel_minutes(origin, destinations, use_osrm=a.osrm, state=a.state)
     result = plan((a.lat, a.lon), pathways[a.pathway], store.facilities(), store.capability_p, travel_fn=travel_fn,
                   elapsed_minutes=a.elapsed)
-    result["meta"] = {"stub": True, "probabilities": store.describe(),
+    result["meta"] = {"probabilities": store.meta["probabilities"],
                       "travel": "live OSRM" if a.osrm else "geo.travel estimate, no network"}
     print(json.dumps(result, indent=1) if a.json else text(result))
     return 0

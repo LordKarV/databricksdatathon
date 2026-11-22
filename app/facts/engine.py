@@ -74,6 +74,8 @@ NEED_PLAIN = {
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
 PUBLIC_LABEL = "by public standard, not verified"
+PUBLIC_LEVEL = {"phc": "primary health centre", "chc": "community health centre", "sdh": "sub-divisional hospital",
+                "dh": "district hospital", "mc": "medical college hospital"}
 RISK_PLAIN = {
     "location": "Its location is uncertain.",
     "name_collision": "Another listing has a similar name; make sure you have the right one.",
@@ -354,24 +356,30 @@ class Engine:
         unlikely.sort(key=lambda r: r[1])
         return pool, unlikely
 
-    def _public_near(self, lat: float, lon: float) -> tuple[float, int] | None:
-        """(km, index) of the nearest facility the public standard expects to offer acute care, within RADIUS_KM."""
+    def _public_near(self, service: str, lat: float, lon: float, exclude: frozenset = frozenset()) -> tuple[float, int] | None:
+        """(km, index) of the nearest facility the public standard (IPHS 2022) expects to offer this service at its
+        level, within RADIUS_KM. Skips `exclude` ids and listings our data rates Unlikely for the service (#85 H2)."""
         best = None
-        for i, ok in enumerate(self.fac["public_standard"]):
-            if ok:
+        for i, svcs in enumerate(self.fac["public_standard"]):
+            if service in svcs and self._f("id", i) not in exclude and not self._unlikely(i, service):
                 km = haversine_km(lat, lon, self._f("lat", i), self._f("lon", i))
                 if km <= RADIUS_KM and (best is None or km < best[0]):
                     best = (km, i)
         return best
 
-    def _outside(self, service: str, lat: float, lon: float) -> dict | None:
-        best = self._public_near(lat, lon)
+    def _unlikely(self, i: int, service: str) -> bool:
+        return i in self.index[service] and self.score(self._f("id", i), service)[0] == "unlikely"
+
+    def _outside(self, service: str, lat: float, lon: float, exclude: frozenset = frozenset()) -> dict | None:
+        """The public-standard option: never one already listed or explained under "why not" (#85 H2)."""
+        best = self._public_near(service, lat, lon, exclude)
         if best is None:
             return None
         i = best[1]
+        level = PUBLIC_LEVEL.get(self.fac["public_level"][i], "public hospital")
         return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": self._operator(i),
                 "label": PUBLIC_LABEL,
-                "text": "By the public standard a hospital at this level should offer it; not verified in our data.",
+                "text": f"By the public standard (IPHS 2022) a {level} should offer it; not verified in our data.",
                 "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
 
     # ---------- /api/plan ----------
@@ -394,7 +402,8 @@ class Engine:
         why_not, change = self._why_not(service, chosen, pool + unlikely, options)
         window = WINDOW[info["profile"]]
         abstain = None
-        public = self._outside(service, lat, lon)
+        shown = frozenset(o["facility_id"] for o in options) | {w["facility_id"] for w in why_not}
+        public = self._outside(service, lat, lon, shown)
         if not any(o["band"] == "likely" for o in options):
             abstain = {"text": (f"No facility within {RADIUS_KM} km is confirmed for {label}. The listings below say "
                                 "they offer it; call to confirm before going.") if options else
@@ -540,7 +549,7 @@ class Engine:
                 "call_first": self._f("name", first[2].fi) if first else None,
                 "nearest_km": None if first else (round(near[3]["km"], 1) if near else None),
                 "gap": gap,
-                "public": self._public_pin(plat, plon) if first is None else None,
+                "public": self._public_pin(service, plat, plon) if first is None else None,
             })
         n = len(rows) or 1
         calls = sorted(gains.items(), key=lambda t: (-len(t[1]), self._f("name", t[0])))[:10]
@@ -561,8 +570,8 @@ class Engine:
             "meta": self._meta(),
         }
 
-    def _public_pin(self, lat: float, lon: float) -> dict | None:
-        best = self._public_near(lat, lon)
+    def _public_pin(self, service: str, lat: float, lon: float) -> dict | None:
+        best = self._public_near(service, lat, lon)
         return None if best is None else {"facility_id": self._f("id", best[1]), "name": self._f("name", best[1]),
                                           "km": round(best[0], 1), "label": PUBLIC_LABEL}
 
@@ -573,8 +582,8 @@ class Engine:
                 and self._f("state", p.fi) == state]
         bands = [self.score(self._f("id", p.fi), service)[0] for p in mine]
         count = {k: sum(r["gap"] == k for r in rows) for k in ("covered", "not_confirmed", "far", "no_claim")}
-        public = sorted((self._f("name", i), self._f("id", i)) for i, ok in enumerate(self.fac["public_standard"])
-                        if ok and self._f("district", i) == district and self._f("state", i) == state)[:5]
+        public = sorted((self._f("name", i), self._f("id", i)) for i, svcs in enumerate(self.fac["public_standard"])
+                        if service in svcs and not self._unlikely(i, service) and self._f("district", i) == district and self._f("state", i) == state)[:5]
         return {"pins_sampled": len(rows), "pins_in_district": n_total, "radius_km": RADIUS_KM,
                 "district_claiming": sum(b != "unlikely" for b in bands),
                 "district_confirmed": sum(b == "likely" for b in bands), **count,

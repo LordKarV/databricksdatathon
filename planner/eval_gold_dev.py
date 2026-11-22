@@ -19,7 +19,7 @@ whether the planner trusts that facility's own claim. A planner that separates g
 picks the gold facility more often when the label says confirmed than when it says contradicted.
 
 Writes planner/out_eval/gold_dev.json and prints a summary. Needs pandas (for the two parquet reads).
-Run: .venv/bin/python planner/eval_gold_dev.py      (after planner/export_v1.py)
+Run: .venv/bin/python planner/eval_gold_dev.py      (after planner/export_v2.py)
 """
 import json
 import math
@@ -97,7 +97,7 @@ def why_not_gold(uid, pathway, capability_p):
 def main():
     st = store()
     if st is None:
-        sys.exit("planner data not built: run planner/export_v1.py")
+        sys.exit("planner data not built: run planner/export_v2.py")
     gold = pd.read_parquet(DATA_ROOT / "derived/v1/gold_pairs.parquet",
                            columns=["pair_id", "unique_id", "service", "stratum", "split", "service_verdict"])
     gold = gold[(gold.split == "dev") & gold.service.isin(GOLD_TO_APP)].reset_index(drop=True)   # TEST never used
@@ -138,7 +138,7 @@ def main():
     rows, skipped = run(True)
     result = {"split": "dev", "pairs_used": len(rows), "pairs_without_location": skipped,
               "gold_verdicts": {v: int(n) for v, n in gold.service_verdict.value_counts().items()},
-              "probabilities": "derived/v1 stub (planner/data_v1.py), not the fitted model",
+              "probabilities": "model v2 (derived/v2 via planner/export_v2.py)",
               "travel": "geo.travel estimate, no network",
               "blood_from_list": st.blood_facts() is not None,
               "overall": {"planner": summarise(rows, "planner"), "planner_without_implications": summarise(before, "planner"),

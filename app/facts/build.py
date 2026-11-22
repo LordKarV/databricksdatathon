@@ -4,7 +4,7 @@ The app reads only that file at start-up (standard library, no pandas), the same
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
 counts, a source URL per record, prerequisites the grader did not find). When #11 publishes
 derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each pair and
-engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v1.py
+engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -43,7 +43,7 @@ OPERATORS = {"public", "private"}
 # derived/v2 bands to the app's three (lead, #2): CALL_FIRST and NO_SERVICE_TEXT both read "Not verified".
 V2_BAND = {"LIKELY": "likely", "CALL_FIRST": "not_verified", "NO_SERVICE_TEXT": "not_verified", "UNLIKELY": "unlikely"}
 MIN_V2_COVERAGE = 0.9  # per app service, the share of offered pairs v2 scores; below it the build fails (#84 review)
-PLANNER = ROOT / "planner" / "out" / "planner_v1.json.gz"  # its cited claims ride along, so route stops show quotes
+PLANNER = ROOT / "planner" / "out" / "planner_v2.json.gz"  # its cited claims ride along, so route stops show quotes
 OUT = Path(__file__).resolve().parent / "out"
 # app service id -> derived/v1 service name (cleaning/claims lexicon keys)
 SERVICE_MAP = {"burn_care": "burns", "cardiac_surgery": "cardiac_surgery", "dialysis": "dialysis",
@@ -54,10 +54,12 @@ V1_TO_APP = {v: k for k, v in SERVICE_MAP.items()}
 APP_TO_TAXONOMY = {"trauma_emergency": "trauma_care"}
 TAXONOMY_TO_V1 = {APP_TO_TAXONOMY.get(a, a): v1 for a, v1 in SERVICE_MAP.items()}
 MAX_EVIDENCE = 3
-# Facilities the public standard expects to offer acute care (used only for the abstention "outside option").
-PUBLIC_STANDARD = re.compile(r"\b(?:district hospital|sadar hospital|medical college|aiims"
-                             r"|government (?:general )?hospital"
-                             r"|civil hospital|general hospital|sub[- ]?divisional hospital|referral hospital)\b", re.I)
+# The "outside option" (#85 H2): a public facility whose level IPHS 2022 expects to offer the service, read from
+# derived/v2 facility_features g_iphs_prior (> 0: essential, desirable or size dependent at that level; NaN when the
+# facility is not public or its level is unknown). Per service, so a district hospital is never named for cardiac
+# surgery. AYUSH and dental colleges match "medical college" in the level rule but offer none of these services.
+FEATURES = ROOT / "derived" / "v2" / "facility_features.parquet"
+NOT_ALLOPATHIC = re.compile(r"ayurved|homoeo|homeo|unani|siddha|\bayush\b|naturopath|yoga|dental", re.I)
 
 
 URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
@@ -157,9 +159,29 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
     f["url_kind"] = f.unique_id.map(best.url_kind)
     f["url_place"] = [wiki_place(u, la, lo) if k != "about" else None
                       for u, k, la, lo in zip(f.url, f.url_kind, f.loc_lat, f.loc_lon, strict=True)]
-    f["public_standard"] = f.name.fillna("").str.contains(PUBLIC_STANDARD)
+    f["public_standard"] = public_standard(f.unique_id, f.name)
+    f["public_level"] = public_levels(f.unique_id)
     f["operator"] = operators(f.unique_id)
     return f, {u: i for i, u in enumerate(f.unique_id)}
+
+
+def public_standard(ids: pd.Series, names: pd.Series) -> list[list[str]]:
+    """Per facility, the app services the public standard (IPHS 2022) expects it to offer at its level; [] if none."""
+    if not FEATURES.is_file():
+        return [[] for _ in ids]
+    tax = {APP_TO_TAXONOMY.get(a, a): a for a in SERVICE_MAP}
+    g = pd.read_parquet(FEATURES, columns=["unique_id", "service", "g_iphs_prior"])
+    g = g[g.service.isin(tax) & (g.g_iphs_prior > 0)]
+    by = g.groupby("unique_id").service.agg(lambda s: sorted(tax[x] for x in s)).to_dict()
+    return [[] if NOT_ALLOPATHIC.search(n or "") else by.get(u, []) for u, n in zip(ids, names, strict=True)]
+
+
+def public_levels(ids: pd.Series) -> list[str]:
+    """phc / chc / sdh / dh / mc from derived/v2 facility_attributes; "" when unknown."""
+    if not ATTRS.is_file():
+        return [""] * len(ids)
+    lv = pd.read_parquet(ATTRS, columns=["unique_id", "facility_level"]).drop_duplicates("unique_id").set_index("unique_id")
+    return [x if x in ("phc", "chc", "sdh", "dh", "mc") else "" for x in ids.map(lv.facility_level)]
 
 
 def operators(ids: pd.Series) -> list[str]:
@@ -230,7 +252,7 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
 
 
 def planner_cited() -> set[str]:
-    """Claim ids the multi-stop planner cites (#47). Build planner/export_v1.py first, or stops show ids only."""
+    """Claim ids the multi-stop planner cites (#47). Build planner/export_v2.py first, or stops show ids only."""
     if not PLANNER.is_file():
         print("note: planner/out not built; route stops will carry claim ids without quotes")
         return set()
@@ -333,7 +355,8 @@ def main() -> None:
                 "reasons": [as_list(x) for x in f.trust_reasons],
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
                 "url_kind": col(f.url_kind), "url_place": list(f.url_place),
-                "public_standard": [bool(x) for x in f.public_standard], "operator": list(f.operator)},
+                "public_standard": list(f.public_standard), "public_level": list(f.public_level),
+                "operator": list(f.operator)},
         "pairs": pr,
         "claims": claim_rows,
         "claim_flags": claim_fl,

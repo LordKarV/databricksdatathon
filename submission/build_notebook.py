@@ -110,7 +110,7 @@ export copies the sentences the planner cites, then the "How this works" page da
 """)
 
 code('''
-BUILDS = [("planner/out/planner_v1.json.gz", "planner/export_v1.py"),
+BUILDS = [("planner/out/planner_v2.json.gz", "planner/export_v2.py"),
           ("app/facts/out/facts.json.gz", "app/facts/build.py"),
           ("app/howto/out/how.json", "app/howto/build.py")]
 for out, script in BUILDS:

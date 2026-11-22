@@ -4,7 +4,8 @@
  "notes": [
   "Capability tags the pathway stages need. kb_status existing = one of the 8 services graded in derived/v1 (kb_service names it); proposed = new tag for kb/taxonomy to reconcile.",
   "evidence_words are starting points for matching facility text, not a tested lexicon. None of the proposed tags has been run against the data.",
-  "used_by lists pathway.stage; used_by_rules lists pathway.rule ids that name the tag in a condition."
+  "used_by lists pathway.stage; used_by_rules lists pathway.rule ids that name the tag in a condition.",
+  "v2_service: the kb/taxonomy service whose derived/v2 score (p and band) the planner uses for this tag; null when v2 scores no matching service, and the planner then reads the record's own offer sentences."
  ],
  "capabilities": [
   {
@@ -26,7 +27,8 @@
    ],
    "used_by_rules": [],
    "kb_status": "existing",
-   "kb_service": "trauma"
+   "kb_service": "trauma",
+   "v2_service": "emergency_24x7"
   },
   {
    "id": "ecg",
@@ -41,7 +43,8 @@
     "stemi.thrombolysis"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "thrombolysis",
@@ -61,7 +64,8 @@
     "stemi.thrombolysis"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "stemi_thrombolysis"
   },
   {
    "id": "pci_cath_lab",
@@ -81,7 +85,8 @@
     "stemi.pci"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "cath_lab_angioplasty"
   },
   {
    "id": "general_surgery_ot",
@@ -102,7 +107,8 @@
     "burns.burn_unit"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "blood_transfusion",
@@ -121,7 +127,8 @@
    "used_by_rules": [
     "obstetric_emergency.pph_transfer_with_oxytocin"
    ],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "blood_bank"
   },
   {
    "id": "ct_scan",
@@ -137,7 +144,8 @@
     "major_trauma.definitive"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "ct_scan"
   },
   {
    "id": "icu",
@@ -154,7 +162,8 @@
    ],
    "used_by_rules": [],
    "kb_status": "existing",
-   "kb_service": "icu"
+   "kb_service": "icu",
+   "v2_service": "icu"
   },
   {
    "id": "trauma_centre",
@@ -171,7 +180,8 @@
     "major_trauma.definitive"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "trauma_care"
   },
   {
    "id": "neurosurgery",
@@ -190,7 +200,8 @@
    "used_by_rules": [
     "major_trauma.head_injury_needs_neurosurgery"
    ],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "neurosurgery"
   },
   {
    "id": "orthopaedics",
@@ -207,7 +218,8 @@
     "major_trauma.definitive"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "orthopaedic_trauma_surgery"
   },
   {
    "id": "anti_snake_venom",
@@ -227,7 +239,8 @@
    "used_by_rules": [
     "snakebite.no_asv_here"
    ],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "snakebite_antivenom"
   },
   {
    "id": "ventilator",
@@ -242,7 +255,8 @@
    "used_by_rules": [
     "snakebite.cannot_lift_neck"
    ],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": "ventilator_support"
   },
   {
    "id": "iv_fluid_resuscitation",
@@ -259,7 +273,8 @@
     "burns.fluids"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "burns_dressing",
@@ -275,7 +290,8 @@
     "burns.fluids"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "burn_unit",
@@ -297,7 +313,8 @@
     "burns.refer_to_tertiary_sizes"
    ],
    "kb_status": "existing",
-   "kb_service": "burns"
+   "kb_service": "burns",
+   "v2_service": "burn_care"
   },
   {
    "id": "plastic_surgery",
@@ -313,7 +330,8 @@
     "burns.burn_unit"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "nephrology",
@@ -329,7 +347,8 @@
     "dialysis_start.assessment"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "laboratory",
@@ -347,7 +366,8 @@
     "dialysis_start.assessment"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "vascular_access_surgery",
@@ -365,7 +385,8 @@
     "dialysis_start.access"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "haemodialysis_unit",
@@ -388,7 +409,8 @@
     "dialysis_start.separate_machine_if_seropositive"
    ],
    "kb_status": "existing",
-   "kb_service": "dialysis"
+   "kb_service": "dialysis",
+   "v2_service": "dialysis"
   },
   {
    "id": "basic_emoc",
@@ -406,7 +428,8 @@
     "obstetric_emergency.basic_emoc"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "comprehensive_emoc",
@@ -428,7 +451,8 @@
     "obstetric_emergency.needs_surgery_or_blood"
    ],
    "kb_status": "existing",
-   "kb_service": "csection"
+   "kb_service": "csection",
+   "v2_service": "emergency_csection"
   },
   {
    "id": "neonatal_stabilisation",
@@ -445,7 +469,8 @@
     "sick_newborn.stabilise"
    ],
    "used_by_rules": [],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "sncu",
@@ -463,7 +488,8 @@
    "used_by_rules": [
     "sick_newborn.to_sncu"
    ],
-   "kb_status": "proposed"
+   "kb_status": "proposed",
+   "v2_service": null
   },
   {
    "id": "nicu",
@@ -484,7 +510,8 @@
     "sick_newborn.sncu_cannot_ventilate"
    ],
    "kb_status": "existing",
-   "kb_service": "nicu"
+   "kb_service": "nicu",
+   "v2_service": "nicu"
   }
  ]
 }

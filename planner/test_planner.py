@@ -95,7 +95,9 @@ def test_far_definitive_adds_a_stop_and_explains_it():
     direct = next(p for p in r["plans"] if p["type"] == "direct")
     assert direct["totals"]["p_objective"] == 0   # 100 min is past the 60 min first-care limit
     assert best["vs_direct"]["gain"] == pytest.approx(0.729, abs=1e-3)
-    assert "beyond the 60 min threshold" in best["vs_direct"]["text"]
+    assert best["vs_direct"]["text"] == ("Going straight to FAR_D takes 100 min and misses the 60-minute window; "
+                                         "stopping first at CLINIC gives first care in about 20 min.")
+    assert "0." not in best["vs_direct"]["text"]  # minutes only: the probabilities stay in the fields
     assert best["window_checks"][0]["met"] and not direct["window_checks"][0]["met"]
 
 
@@ -249,11 +251,14 @@ def test_real_pathways_load_and_plan_with_fixtures():
 # ---- run-time store and the one-call service (issue #47) ----
 
 def synthetic_doc():
-    return {"version": 1, "built_utc": "2026-01-01T00:00:00Z", "probabilities": {"source": "test"}, "no_mention_p": 0.02,
+    """An export in planner/export_v2.py's shape: emergency_24x7 here is a text tag, icu a model v2 tag."""
+    return {"version": 2, "built_utc": "2026-01-01T00:00:00Z", "probabilities": {"source": "test"}, "no_mention_p": 0.02,
             "facilities": {"id": ["a", "b"], "name": ["A", "B"], "lat": [O[0] + 0.1, O[0] + 0.9], "lon": [O[1], O[1]],
                            "town": ["T", "T"], "district": ["D", "D"], "state": ["PLAINS", "SIKKIM"], "flags": [[], ["check"]]},
-            "capabilities": {"emergency_24x7": {"i": [0], "p": [0.9], "e": [["a:1"]]},
-                             "icu": {"i": [1], "p": [0.8], "e": [["b:1", "b:2"]]}}}
+            "capabilities": {"emergency_24x7": {"source": "own offer sentences", "i": [0], "p": [0.9], "b": ["T"],
+                                                "e": [["a:1"]], "n": []},
+                             "icu": {"source": "derived/v2 icu", "i": [1], "p": [0.8], "b": ["C"], "e": [["b:1", "b:2"]],
+                                     "n": [0]}}}
 
 
 def test_store_roundtrip_without_pandas(tmp_path):
@@ -267,6 +272,8 @@ def test_store_roundtrip_without_pandas(tmp_path):
     assert st.capability_p("a", "emergency_24x7") == (0.9, ["a:1"])
     assert st.capability_p("b", "emergency_24x7") == (0.02, [])      # no mention
     assert st.capability_p("b", "icu") == (0.8, ["b:1", "b:2"])
+    assert st.capability_p("a", "icu") == (0.0, [])  # a v2 pair not offered (NO_SERVICE_TEXT) is never a stop
+    assert (st.band("a", "icu"), st.band("b", "icu"), st.band("b", "emergency_24x7")) == ("NO_SERVICE_TEXT", "CALL_FIRST", None)
     with pytest.raises(KeyError):
         st.capability_p("a", "not_a_capability")
     assert st.state_near(O) == "PLAINS" and st.state_near((O[0] + 1.0, O[1])) == "SIKKIM"   # no PINs: nearest facility
@@ -299,10 +306,9 @@ def test_service_maps_app_services_and_passes_other_services_through():
     only_first = {"emergency_24x7": 0.9}
     out = service.plan_for_service("trauma_emergency", O[0], O[1], capability_p=caps({"big": everything, "small": only_first}),
                                    facilities=f, travel_fn=travel_60)
-    assert out["pathway"] == "major_trauma" and out["meta"]["stub"] is False and out["abstain"] is None
+    assert out["pathway"] == "major_trauma" and "stub" not in out["meta"] and out["abstain"] is None
     o = out["options"][0]
     assert o["route"]["type"] == "one_stop" and [s["facility_id"] for s in o["route"]["stops"]] == ["small", "big"]
-    assert o["flags"] == [] or all("placeholder" not in x for x in o["flags"])   # a real capability_p drops the stub warning
     assert out["thresholds"]["add_stop_only_if_definitive_beyond_minutes"] == 60
     assert any(i["type"] == "never_delay" for i in out["instructions"])
     json.dumps(out)
@@ -311,15 +317,51 @@ def test_service_maps_app_services_and_passes_other_services_through():
 def test_service_says_when_the_export_is_missing(monkeypatch):
     from planner import service
     monkeypatch.setitem(service._cache, "store", None)
-    with pytest.raises(RuntimeError, match="export_v1"):
+    with pytest.raises(RuntimeError, match="export_v2"):
         service.plan_for_service("dialysis", 20.0, 78.0)
 
 
-def test_stub_warning_is_on_by_default():
-    f = [fac("d", 30)]
-    r = core.plan(O, pathway(stages=1), f, caps({"d": FULL}), travel_60)
-    assert any("placeholder" in x for x in to_options(r)[0]["flags"])
-    assert not any("placeholder" in x for x in to_options(r, stub=False)[0]["flags"])
+def v2_doc(facilities, rows, silent=None):
+    """A planner_v2 export: rows {cap: {fid: (p, band)}}, silent {cap: [fid]} (NO_SERVICE_TEXT)."""
+    caps_doc = json.loads((ROOT / "kb" / "pathways" / "capabilities.json").read_text())["capabilities"]
+    ids = [f["id"] for f in facilities]
+    out = {}
+    for c in caps_doc:
+        r = rows.get(c["id"], {})
+        out[c["id"]] = {"source": f"derived/v2 {c['v2_service']}" if c["v2_service"] else "own offer sentences",
+                        "i": [ids.index(f) for f in r], "p": [v[0] for v in r.values()], "b": [v[1] for v in r.values()],
+                        "e": [[f"{f}:1"] for f in r], "n": [ids.index(f) for f in (silent or {}).get(c["id"], [])]}
+    return {"version": 2, "built_utc": "t", "probabilities": {"source": "test"}, "no_mention_p": 0.02,
+            "facilities": {k: [f.get(k, []) if k == "flags" else f[k] for f in facilities]
+                           for k in ("id", "name", "lat", "lon", "town", "district", "state", "flags")},
+            "capabilities": out}
+
+
+def test_call_first_wording_and_what_would_change(monkeypatch):
+    from planner import service
+    from planner.store import Store
+    f = [fac("near", 10), fac("stop", 20), fac("far", 100)]
+    rows = {"emergency_24x7": {"stop": (0.8, "C"), "far": (0.95, "L")}, "general_surgery_ot": {"far": (0.78, "T")},
+            **{c: {"far": (0.95, "L")} for c in ("blood_transfusion", "ct_scan", "icu", "trauma_centre")}}
+    monkeypatch.setitem(service._cache, "store", Store(v2_doc(f, rows, {"emergency_24x7": ["near"]})))
+    out = service.plan_for_service("trauma_emergency", O[0], O[1], travel_fn=travel_60)
+    o = out["options"][0]
+    stop = o["route"]["stops"][0]
+    assert o["route"]["type"] == "one_stop" and stop["facility_id"] == "stop" and stop["call_first"] and o["call_first"]
+    assert "Call first to check: emergency 24x7 is not confirmed in our data." in stop["flags"]
+    assert "placeholder" not in " ".join(o["flags"])
+    # near is NO_SERVICE_TEXT for the stage: p 0, never a stop, but a phone "yes" from it would change the answer
+    assert o["route"]["vs_direct"]["what_would_change"] == "A 'yes' from NEAR on the phone would change this."
+    assert o["route"]["vs_direct"]["text"] == ("Going straight to FAR takes 100 min and misses the 60-minute window; "
+                                               "stopping first at STOP gives first care in about 20 min.")
+
+
+def test_near_equal_chances_go_to_the_nearer_stop():
+    # 0.83 against 0.82 is inside MARGIN, so the 20 km clinic leads the 40 km one
+    f = [fac("far_d", 100), fac("near_s", 20), fac("farther_s", 40)]
+    table = {"far_d": FULL, "near_s": {"first_aid": 0.82}, "farther_s": {"first_aid": 0.83}}
+    r = core.plan(O, pathway(gate=60, dwell=30), f, caps(table), travel_60)
+    assert r["plans"][0]["stops"][0]["facility_id"] == "near_s"
 
 
 def test_service_applies_the_origin_state_to_travel():

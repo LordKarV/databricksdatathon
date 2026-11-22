@@ -588,7 +588,9 @@ def test_how_page_every_number_is_from_how_json(base_url, browser):
 
 
 # ---------- multi-stop route (#47): every itinerary field is shown, or listed here as deliberately not shown ----------
-ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings"}
+# The vs_direct probabilities stay in the payload for the record; the page shows the plain sentence (#86).
+ROUTE_NOT_SHOWN = {"facility_id", "purpose", "type", "pathway", "urgency", "shared_listings", "direct_p_objective",
+                   "plan_p_objective", "direct_p_first_care", "plan_p_first_care"}
 
 
 def route_leaves(obj: Any, path: str) -> list[str]:
@@ -619,6 +621,7 @@ def route_expected(it: dict) -> set[str]:
         for key in ("rank", "type_word", "totals", "window_checks", "vs_direct"):
             want |= set(route_leaves(r.get(key), f"{P}.{key}"))
     want |= {"itinerary.pathway_name"} | ({"itinerary.abstain"} if it.get("abstain") else set())
+    want |= {"itinerary.stop_1_note"} if it.get("stop_1_note") else set()
     return want
 
 

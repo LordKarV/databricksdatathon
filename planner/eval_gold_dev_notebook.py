@@ -62,7 +62,7 @@ print("source:", SOURCE, "| code:", CODE, "| work:", WORK)
 
 # MAGIC %md
 # MAGIC ## 1. Build the planner inputs
-# MAGIC `planner/export_v1.py` writes the facility list, the stub probability per capability, the PIN centroids and,
+# MAGIC `planner/export_v2.py` writes the facility list, the model v2 probability per capability, the PIN centroids and,
 # MAGIC when the e-RaktKosh outputs are under the data root, the blood-centre list.
 
 # COMMAND ----------

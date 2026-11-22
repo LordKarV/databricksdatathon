@@ -16,7 +16,7 @@ cd "$ROOT"
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
   echo "== build data files from derived/"
   # Planner first: app/facts/build.py copies the claims the planner cites, so route stops show quotes (#47).
-  uv run --no-project "${UV_DEPS[@]}" python planner/export_v1.py
+  uv run --no-project "${UV_DEPS[@]}" python planner/export_v2.py
   uv run --no-project "${UV_DEPS[@]}" python app/facts/build.py
   uv run --no-project "${UV_DEPS[@]}" python app/packs/build_packs.py
   # 'How this works' page data (#45): reads REPORT.md, model/MODEL_SPEC.md, research/DATASETS.md and the facts
@@ -30,7 +30,7 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
 fi
 
 echo "== check every feature's data file exists"
-for f in planner/out/planner_v1.json.gz app/facts/out/facts.json.gz app/packs/out/index.json \
+for f in planner/out/planner_v2.json.gz app/facts/out/facts.json.gz app/packs/out/index.json \
          app/howto/out/how.json app/stories/out/stories.json app/verify/out/sites.json.gz; do
   [ -s "$f" ] || { echo "missing build output: $f (a feature would be off in the deployed app)" >&2; exit 1; }
 done

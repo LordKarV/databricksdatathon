@@ -433,19 +433,16 @@ function routePlanHtml(r, P) {
       ${F(`${P}.window_checks.${j}.limit_minutes`, c.limit_minutes, 'num')} min:
       <strong>${F(`${P}.window_checks.${j}.met`, c.met ? 'met' : 'not met', 'met')}</strong>
       (about ${F(`${P}.window_checks.${j}.eta_minutes`, c.eta_minutes, 'num')} min).</p>`).join('')}
-    ${v ? `<p class="small">Going straight to ${F(P + '.vs_direct.direct_name', v.direct_name)} takes about
-      ${F(P + '.vs_direct.direct_minutes', v.direct_minutes, 'num')} min. Chance of care in time: direct
-      ${F(P + '.vs_direct.direct_p_objective', v.direct_p_objective.toFixed(2), 'num')}, this route
-      ${F(P + '.vs_direct.plan_p_objective', v.plan_p_objective.toFixed(2), 'num')}. First care in time: direct
-      ${F(P + '.vs_direct.direct_p_first_care', v.direct_p_first_care.toFixed(2), 'num')}, this route
-      ${F(P + '.vs_direct.plan_p_first_care', v.plan_p_first_care.toFixed(2), 'num')}.</p>` : ''}`;
+    ${v ? `<p class="small">${F(P + '.vs_direct.text', v.text)}
+      ${v.what_would_change ? F(P + '.vs_direct.what_would_change', v.what_would_change) : ''}</p>` : ''}`;
 }
 function routeHtml(p) {
   const it = p.itinerary;
   if (!it) return p.itinerary_note ? `<p class="card small">${F('itinerary_note', p.itinerary_note)}</p>` : '';
   const head = `<h2>Suggested route</h2>
     <p class="small">${F('itinerary.pathway_name', it.pathway_name)}: where to go, in order. Times are rough
-      estimates. ${it.meta.stub ? 'Chances are a placeholder built from listings, not the fitted model.' : ''}</p>`;
+      estimates.</p>
+    ${it.stop_1_note ? `<p class="small">${F('itinerary.stop_1_note', it.stop_1_note)}</p>` : ''}`;
   if (it.abstain) return head + `<p class="card"><strong>${F('itinerary.abstain', it.abstain)}</strong></p>`;
   if (!it.plans.length) return '';
   const best = `<article class="card route" aria-labelledby="route-1"><h3 id="route-1">Route

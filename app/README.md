@@ -222,16 +222,17 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
                      n_evidence, phone, fallback: {facility_id, name, eta_minutes, p}|null, flags}],
             totals: {minutes_to_definitive, low, high, p_first_care, p_treated},
             window_checks: [{check, limit_minutes, eta_minutes, met}],
-            vs_direct: {direct_name, direct_minutes, direct_p_objective, plan_p_objective,
+            vs_direct: {text, what_would_change|null, direct_p_objective, plan_p_objective,
                         direct_p_first_care, plan_p_first_care}|null}],
-   meta: {stub, origin_state, terrain, plans_considered}}
+   stop_1_note: text|null,   (why route 1's first stop is not the options list's first choice)
+   meta: {origin_state, terrain, plans_considered}}
   ```
 - **Results screen.** A "Suggested route" card shows route 1 as numbered stops. Stages at the same hospital
   (dialysis: assessment, fistula, sessions) nest under it. The other routes sit in expandable sections.
 - **Slip.** The slip and the WhatsApp text list route 1's stops, with phone and arrival range.
-- **Comparison against going direct.** The page builds this sentence from the structured fields, so every
-  number in it is marked and checked.
-- **Build order.** Run `planner/export_v1.py` before `app/facts/build.py`, because the facts export copies
+- **Comparison against going direct.** One plain sentence from the planner, in minutes, plus "what would
+  change this answer" (#86). The probabilities stay in the payload, not in the sentence.
+- **Build order.** Run `planner/export_v2.py` before `app/facts/build.py`, because the facts export copies
   the claims the planner cites (about 45k claims, 2.1 MB gz in total). `tools/deploy/deploy.sh` runs them
   in that order.
 - **Tests.**
