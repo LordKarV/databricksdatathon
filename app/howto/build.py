@@ -3,6 +3,8 @@
 Every number on the page comes from here, and every entry names the repo file it came from:
 - counts are computed from derived/v1, the facts export and kb/pathways;
 - the model section is computed from derived/v2/model_card.json; the earlier prototype's tables are history only;
+- the sealed TEST record of Likely comes from the facts export, which copies model/gold/v3/test_eval/results.json
+  and the hashes in model/gold/v3/OPENING_LOG.md;
 - tables and lists are copied verbatim (only backticks and bold markers stripped) from REPORT.md,
   model/MODEL_SPEC.md and research/DATASETS.md, found by their heading; a missing heading or table fails the build;
 - drift check (validation H6): the REPORT.md cells the page shows for findings 1 and 2, the far-from-PIN Flagged row
@@ -200,6 +202,7 @@ def facts(c: dict[str, float]) -> dict:
     if sum(bands.values()) != app_pairs:
         raise SystemExit(f"band counts {dict(bands)} do not add up to {app_pairs} pairs")
     bihar = int((loc.state_final.str.upper() == "BIHAR").sum())
+    test = sealed_test_facts(eng.test_record)
     floc, claims_src, eng_src = f"{V1}/facility_location.parquet", f"{V1}/claims.parquet", "app/facts/engine.py"
     return {
         "records": fact(len(loc), floc, "rows"),
@@ -234,6 +237,26 @@ def facts(c: dict[str, float]) -> dict:
         "bihar_records": fact(bihar, floc, "state_final = Bihar", of=len(loc)),
         "hours_records": fact(int(hours), claims_src,
                               "records with any sentence about opening hours or 24/7", of=len(loc)),
+    } | test
+
+
+def sealed_test_facts(tr: dict | None) -> dict:
+    """The sealed gold v3 TEST record of LIKELY (#86, #66), as app/facts/build.py exported it from
+    model/gold/v3/test_eval/results.json (hashes from OPENING_LOG.md). Empty when the app serves interim scores."""
+    if not tr:
+        return {}
+    src, log = tr["source"], tr["log"]
+    lk = "headline_decided.LIKELY_confirmed"
+    return {
+        "test_likely": fact(tr["k"], src, f"{lk}.k: LIKELY TEST pairs confirmed, of those with a verdict", of=tr["n"]),
+        "test_likely_pct": fact(tr["pct"], src, f"{lk}.rate, as a whole percent"),
+        "test_likely_lo": fact(tr["lo_pct"], src, f"{lk}.ci95 low, as a whole percent"),
+        "test_likely_hi": fact(tr["hi_pct"], src, f"{lk}.ci95 high, as a whole percent"),
+        "test_public_n": fact(tr["public_n"], src, "by_operator_decided.public.n"),
+        "test_opened": fact(tr["opened"], log, "the one 'opened' row, UTC"),
+        "test_model_version": fact(tr["model_version"], src, "model_version (equals derived/v2/model_card.json)"),
+        "test_predictions_sha": fact(tr["predictions_sha256"], log, "model predictions sha256"),
+        "test_labels_sha": fact(tr["labels_sha256"], log, "labels sha256 (full)"),
     }
 
 

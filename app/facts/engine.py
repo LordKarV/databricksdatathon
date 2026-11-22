@@ -165,6 +165,7 @@ class Engine:
         self.sha = sha
         self.track_bins = facts.get("track_bins", [])
         self.likely_threshold = facts.get("likely_threshold")
+        self.test_record = facts.get("test_record")  # sealed gold v3 TEST record of LIKELY (#86); None if absent
         self.pairs = {s: [Pair(*row) for row in rows] for s, rows in facts["pairs"].items()}
         self.index = {s: {p.fi: p for p in rows} for s, rows in self.pairs.items()}
         self.fid = {u: i for i, u in enumerate(self.fac["id"])}
@@ -574,7 +575,8 @@ class Engine:
     def _meta(self) -> dict:
         return {"stub": False, "model_hash": f"interim-{self.sha}" if "interim" in self.meta["scores"] else self.sha,
                 "data_snapshot": f"{self.meta['source']} {self.meta['as_of']}", "scores": self.meta["scores"],
-                "generated_at": datetime.now(UTC).isoformat(timespec="seconds")}
+                "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
+                **({"test_record": self.test_record} if self.test_record else {})}
 
     # ---------- /api/area ----------
     def area(self, service: str, lat: float, lon: float, max_pins: int = 40) -> dict:

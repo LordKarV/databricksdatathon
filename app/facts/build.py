@@ -326,6 +326,51 @@ def likely_threshold(path: Path | None = None) -> float | None:
     return json.loads(path.read_text()).get("band_thresholds", {}).get("likely", {}).get("p")
 
 
+GOLD_V3 = ROOT / "model" / "gold" / "v3"
+TEST_RESULTS = GOLD_V3 / "test_eval" / "results.json"
+OPENING_LOG = GOLD_V3 / "OPENING_LOG.md"
+TEST_LABELS_SHA = GOLD_V3 / "test_labels.sha256"
+
+
+def opening_log(path: Path = OPENING_LOG) -> dict[str, str]:
+    """The single 'opened' row of OPENING_LOG.md: its date and the two committed hashes. Fails on zero or two rows."""
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in path.read_text().splitlines()
+            if ln.startswith("| opened ")]
+    if len(rows) != 1:
+        raise SystemExit(f"{path}: expected exactly one 'opened' row, found {len(rows)}")
+    return {"opened": rows[0][1], "predictions_sha256": rows[0][3], "labels_sha256": rows[0][4]}
+
+
+def sealed_test_record(card_path: Path | None = None, results_path: Path = TEST_RESULTS) -> dict | None:
+    """The sealed gold v3 TEST record of the LIKELY band (#86, #66), from model/gold/v3/test_eval/results.json.
+
+    None when the file is absent or the app does not serve the model the record is about (interim scores, or a
+    model_version other than the one the TEST was run against). Fails when the opening log, the label commitment and
+    the results disagree, or when the public-facility caveat the page shows stops being true.
+    """
+    card_path = card_path or MODEL_CARD
+    if not (results_path.is_file() and card_path.is_file() and V2.is_file()):
+        return None
+    res, card = json.loads(results_path.read_text()), json.loads(card_path.read_text())
+    if res["model_version"] != card.get("model_version"):
+        return None
+    log = opening_log()
+    labels_full = next(ln.split()[0] for ln in TEST_LABELS_SHA.read_text().splitlines()
+                       if ln.endswith(".full.canonical"))
+    if log["predictions_sha256"] != res["test_predictions_sha256"] or log["labels_sha256"] != labels_full:
+        raise SystemExit(f"{OPENING_LOG}: hashes differ from {results_path.name} or {TEST_LABELS_SHA.name}")
+    lk, pub = res["headline_decided"]["LIKELY_confirmed"], res["by_operator_decided"]["public"]
+    if pub["auroc_ci95"][0] > 0.5:
+        raise SystemExit(f"{results_path}: public AUROC interval excludes 0.5; update the public caveat in app.js")
+    rel = lambda p: str(p.relative_to(ROOT))  # noqa: E731
+    return {"split": "test", "k": lk["k"], "n": lk["n"], "pct": round(100 * lk["rate"]),
+            "lo_pct": round(100 * lk["ci95"][0]), "hi_pct": round(100 * lk["ci95"][1]),
+            "public_n": pub["n"], "model_version": res["model_version"],
+            "predictions_sha256": res["test_predictions_sha256"], "labels_sha256": labels_full,
+            "opened": log["opened"], "source": rel(results_path), "log": rel(OPENING_LOG),
+            "log_url": f"https://github.com/LordKarV/databricksdatathon/blob/dev/{rel(OPENING_LOG)}"}
+
+
 def rules() -> dict[str, dict]:
     e = pd.read_parquet(V1 / "evidence_rules.parquet")
     return {r.rule: {"n": int(r.handcheck_true + r.handcheck_false + r.dev_true + r.dev_false),
@@ -366,6 +411,7 @@ def main() -> None:
         "rules": rules(),
         "track_bins": track_bins(),
         "likely_threshold": likely_threshold(),
+        "test_record": sealed_test_record(),
         "fac": {"id": list(f.unique_id), "name": [display_name(n) for n in f.name], "city": col(f.address_city),
                 "district": col(f.district), "state": col(f.state_final),
                 "pin": [None if pd.isna(x) else int(x) for x in f.pin],
