@@ -51,6 +51,7 @@ from common.eligibility import (  # noqa: E402, RUF100
     same_site_groups,
     to_sites,
 )
+from common.typefit import fit_mask, kinds_by_id  # noqa: E402, RUF100
 
 sys.path.insert(0, str(ROOT / "app"))  # facts.redact: the same name redaction as the live answer (#86)
 from facts.redact import redact_names  # noqa: E402, RUF100
@@ -66,6 +67,7 @@ FAC_SCALE = 10_000  # facility coordinates in 1e-4 degree (about 11 m)
 PIN_SCALE = 1_000  # PIN centroids in 1e-3 degree (about 110 m)
 PTS_SCALE = 10  # index.json facility points in 0.1 degree (at most about 8 km off): enough for a 150 km radius test
 MODEL_SCORES = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
+ATTRS = ROOT / "derived" / "v2" / "facility_attributes.parquet"  # facilityTypeId, for the type-fit rule (#117 B)
 
 # derived/v1 service names -> app service keys (app/stub_data.py). "icu" has no app tile, so it is dropped.
 SERVICE_MAP = {
@@ -117,6 +119,7 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     text_of = {(u, sv): v for u, sv, v in zip(svc.unique_id, svc.service, svc.original_value, strict=True)}
     svc, counts = to_sites(svc, sites)
     report("packs.duplicates", counts)
+    svc = type_fit(svc, fac)
     svc = apply_bands(svc, MODEL_SCORES)
 
     # Sentence text -> claim id, so every quote cites the claim it came from (a merged member's own claim id).
@@ -129,6 +132,16 @@ def load() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     pins = pins.dropna(subset=["state", "lat", "lon"])
     pins["district"] = pins.district.fillna("")
     return fac.reset_index(drop=True), svc.reset_index(drop=True), pins.reset_index(drop=True)
+
+
+def type_fit(svc: pd.DataFrame, fac: pd.DataFrame) -> pd.DataFrame:
+    """Drop pairs whose facility type cannot offer the service: the app's and the planner's rule (common/typefit.py)."""
+    types = (pd.read_parquet(ATTRS, columns=["unique_id", "facilityTypeId"]).set_index("unique_id").facilityTypeId
+             if ATTRS.is_file() else pd.Series(dtype=object))
+    kinds = kinds_by_id(fac.unique_id, fac.name, fac.unique_id.map(types))
+    keep, counts = fit_mask(svc.unique_id, svc.service, kinds)
+    report("packs.type_fit_left_out", counts)
+    return svc[keep]
 
 
 def apply_bands(svc: pd.DataFrame, model_path: Path) -> pd.DataFrame:

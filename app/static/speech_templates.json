@@ -15,6 +15,7 @@
     "band": {"likely": "likely", "not_verified": "not verified, call first", "unlikely": "unlikely"},
     "purpose": {},
     "questions": [],
+    "needs": {},
     "no_hindi_voice": "No Hindi voice on this phone. Reading in English.",
     "cannot_speak": "This phone cannot read aloud."
   },
@@ -37,6 +38,22 @@
       "assess": "जाँच",
       "access": "फ़िस्टुला बनवाने या लाइन डलवाने",
       "recurring": "नियमित डायलिसिस"
+    },
+    "needs": {
+      "emergency 24x7": "चौबीसों घंटे खुली इमरजेंसी",
+      "ct": "CT स्कैन मशीन",
+      "surgery or ortho": "सर्जन या हड्डी का डॉक्टर",
+      "operating theatre": "ऑपरेशन थिएटर",
+      "anaesthesia": "बेहोशी का डॉक्टर",
+      "obstetrics": "डिलीवरी की सुविधा",
+      "incubator warmer ventilator": "इनक्यूबेटर, वार्मर या वेंटिलेटर",
+      "paeds or neonatology": "बच्चों का डॉक्टर",
+      "dialysis unit or machine": "डायलिसिस मशीन",
+      "nephrology": "किडनी का डॉक्टर",
+      "mri scanner": "MRI स्कैन मशीन",
+      "cathlab or heart lung": "कैथ लैब या हार्ट-लंग मशीन",
+      "cardiothoracic surgeon or dept": "दिल का सर्जन",
+      "burn unit or plastic surgery": "जलने की चोट का वार्ड या प्लास्टिक सर्जन"
     },
     "questions": [
       ["Can you do {label} today?", "क्या आज {label} के लिए मरीज़ को ला सकते हैं?"],

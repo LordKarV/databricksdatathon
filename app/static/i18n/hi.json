@@ -347,8 +347,8 @@
  "page.english_only": "यह पेज अभी सिर्फ़ अंग्रेज़ी में है।",
  "err.plan": "सर्वर योजना नहीं बना सका ({code})।",
  "err.signed_out": "साइन आउट",
- "err.not_found": "यह जवाब अब फ़ोन पर नहीं है",
- "err.not_found_help": "पेज दोबारा खुलने पर जवाब नहीं रहते। शुरुआत से फिर खोजें।",
+ "err.not_found": "यह विकल्प देखने के लिए फिर से खोजें",
+ "err.not_found_help": "विकल्प सिर्फ़ तब तक रहते हैं जब तक यह पेज खुला है। पेज दोबारा खोलने या शेयर किए गए लिंक में वे नहीं आते।",
  "off.h": "इंटरनेट नहीं है",
  "off.banner": "जवाब इस फ़ोन पर सेव डेटा से हैं।",
  "off.next": "इमरजेंसी हो तो अभी 108 पर फ़ोन करें। पूरा जवाब पाने के लिए नेटवर्क वाली जगह जाएँ और फिर से कोशिश करें दबाएँ।",
@@ -462,6 +462,7 @@
  "why.no_text_other": "{band}: इसकी लिस्टिंग में कोई बात {label} को अलग सेवा के रूप में नहीं बताती, इसलिए संभावना ज़्यादा नहीं कहा। फिर भी यह हो सकता है: बाकी रिकॉर्ड से मॉडल इसे {p} स्कोर देता है (नीचे, हमने कैसे तय किया)।",
  "why.largest": "सबसे बड़ी पंक्तियाँ: {rows}।",
  "why.call_to_ask": "फ़ोन करके पूछें।",
+ "err.search_again": "फिर से खोजें",
  "engine": {
   "_about": "Exact English engine text, or a template with {slots}, to Hindi. {label} stands for query.service_label (English on the left, Hindi on the right); other slots copy the payload's own words. A reason joined with '; ' is translated clause by clause. Text not here is shown in English with lang=en.",
   "listing evidence not strong enough to rate it Likely": "लिस्टिंग में इतना सबूत नहीं कि संभावना ज़्यादा कहें",
@@ -588,6 +589,22 @@
   "procedure": "इलाज",
   "equipment": "उपकरण",
   "specialty": "विभाग",
-  "description": "विवरण"
+  "description": "विवरण",
+  "_needs": {
+   "emergency 24x7": "चौबीसों घंटे खुली इमरजेंसी",
+   "ct": "CT स्कैन मशीन",
+   "surgery or ortho": "सर्जन या हड्डी का डॉक्टर",
+   "operating theatre": "ऑपरेशन थिएटर",
+   "anaesthesia": "बेहोशी का डॉक्टर",
+   "obstetrics": "डिलीवरी की सुविधा",
+   "incubator warmer ventilator": "इनक्यूबेटर, वार्मर या वेंटिलेटर",
+   "paeds or neonatology": "बच्चों का डॉक्टर",
+   "dialysis unit or machine": "डायलिसिस मशीन",
+   "nephrology": "किडनी का डॉक्टर",
+   "mri scanner": "MRI स्कैन मशीन",
+   "cathlab or heart lung": "कैथ लैब या हार्ट-लंग मशीन",
+   "cardiothoracic surgeon or dept": "दिल का सर्जन",
+   "burn unit or plastic surgery": "जलने की चोट का वार्ड या प्लास्टिक सर्जन"
+  }
  }
 }

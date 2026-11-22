@@ -65,7 +65,7 @@ function engHi(text, q) {
       const m = part.match(new RegExp('^' + pat + '$'));
       if (!m) continue;
       const vals = {label: q ? q.service_label.hi : ''};
-      names.forEach((n, i) => { vals[n] = m[i + 1]; });
+      names.forEach((n, i) => { vals[n] = n === 'need' && (map._needs || {})[m[i + 1]] || m[i + 1]; });
       return v.replace(/\{(\w+)\}/g, (_, n) => vals[n] ?? '');
     }
     return null;
@@ -1091,9 +1091,11 @@ function noTextSureHtml(o, P, q) {
     {band: E(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
     + (top.length ? ' ' + th('why.largest', {rows: top.join('; ')}) : '') + ' ' + th('why.call_to_ask');
 }
+// A #/why or #/slip link with no plan in memory: after a reload, from a shared link, or offline (#121).
 function notFound() {
+  const back = svc(state.service) && state.loc ? '#/plan' : '#/';  // the saved answer, or the service tiles
   return `<h1 tabindex="-1">${th('err.not_found')}</h1><p>${th('err.not_found_help')}</p>
-    <a class="btn btn-block section" href="#/">${th('nav.start')}</a>`;
+    <a class="btn btn-ink btn-block section" href="${back}">${th('err.search_again')}</a>`;
 }
 // ---------- live website check (#37): a dated line next to the plan; never changes the band ----------
 function verifyHtml(v) {

@@ -301,6 +301,8 @@ def _engine_one(part: str, q: dict | None) -> str | None:
         if not m:
             continue
         vals = {"label": q["service_label"]["hi"] if q else "", **dict(zip(names, m.groups(), strict=True))}
+        if "need" in vals:  # the engine's fixed {need} words have glossary terms (#121 bug 8)
+            vals["need"] = table.get("_needs", {}).get(vals["need"], vals["need"])
         return re.sub(r"\{(\w+)\}", lambda x: vals.get(x[1], ""), v)
     return None
 
@@ -425,6 +427,8 @@ def check_spoken(name: str, payload: dict, spoken: dict, only: int | None, repor
 
 def spoken_on(page) -> dict:
     assert page.locator("#speak").count() == 1, "no Read aloud button"
+    # UI2: no separate read-aloud language toggle; read aloud follows the app language (#121 bug 8 superseded).
+    assert page.locator("[data-say-lang]").count() == 0
     return page.wait_for_function(SPOKEN_JS).json_value()
 
 

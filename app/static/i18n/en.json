@@ -347,8 +347,8 @@
  "page.english_only": "This page is in English only.",
  "err.plan": "The server could not make a plan ({code}).",
  "err.signed_out": "signed out",
- "err.not_found": "This answer is no longer on the phone",
- "err.not_found_help": "Answers are not kept after the page reloads. Start again from Home.",
+ "err.not_found": "Search again to see this option",
+ "err.not_found_help": "Options stay only while this page is open. A reloaded page or a shared link does not carry them.",
  "off.h": "No internet",
  "off.banner": "Answers come from the data saved on this phone.",
  "off.next": "Emergency? Call 108 now. For the full answer, move to where there is signal and tap Try again.",
@@ -461,5 +461,6 @@
  "why.no_text_trauma": "{band}: no line in its listing describes {label} as its own service, so it is not rated Likely. It is still plausible for first care: its listing has general emergency lines (quoted above), and the model scores it {p} from the rest of its record (How we decided, below).",
  "why.no_text_other": "{band}: no line in its listing describes {label} as its own service, so it is not rated Likely. It is still plausible: the model scores it {p} from the rest of its record (How we decided, below).",
  "why.largest": "Largest rows: {rows}.",
- "why.call_to_ask": "Call to ask."
+ "why.call_to_ask": "Call to ask.",
+ "err.search_again": "Search again"
 }

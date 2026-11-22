@@ -94,8 +94,10 @@ out = plan_for_service("trauma_emergency", 26.45, 85.95)
   newborn stabilisation, SNCU, IV fluids, burn dressings, plastic surgery) are support tags v2 does not
   score. They come from the record's own offer sentences that name them (0.7 for one sentence, 0.78 for
   two or more, 0.02 for none: assumptions), or from an implication (below).
-- Facilities: only those v2 scores (so the 12 exclude_review records are gone) and no dental or eye
-  clinic (2,190 records): none of the pathways is theirs to serve (validation H2; eye hospital as cath lab).
+- Facilities: only those v2 scores (so the 12 exclude_review records are gone) and no place whose type
+  serves no pathway stage: dental, eye, AYUSH, skin, physiotherapy, ENT, psychiatric (2,872 records;
+  validation H2, eye hospital as cath lab; #117). Diagnostic, IVF and children's places stay, listed only
+  under what their type can offer. The rule is common/typefit.py, shared with the app's lists.
 - Evidence: own offer sentences only. Not another facility's sentence, not a non-offer, plan, camp,
   staff or list sentence (validation H3), and never a sentence that names a doctor (#86).
 

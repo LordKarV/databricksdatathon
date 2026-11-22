@@ -34,11 +34,13 @@
         .replace('\\{need\\}', '(.+)') + '$');
       const m = q.match(re);
       if (!m) continue;
-      const need = m[1];
+      // A {need} from the engine's fixed list is spoken with its glossary term (#121 bug 8): the question is then a
+      // fixed template too. An unknown {need} keeps the payload's own words.
+      const need = m[1], needHi = need !== undefined ? (L.needs || {})[need] : undefined;
       if (hi.includes('{label}')) fields.push({path: 'query.service_label.hi', value: plan.query.service_label.hi, kind: 'text'});
-      if (need !== undefined) fields.push({path, value: need, kind: 'part'});
+      if (need !== undefined && needHi === undefined) fields.push({path, value: need, kind: 'part'});
       else fields.push({path, value: q, kind: 'template'});
-      return fill(hi, {label: plan.query.service_label.hi, need});
+      return fill(hi, {label: plan.query.service_label.hi, need: needHi ?? need});
     }
     fields.push({path, value: q, kind: 'text'});
     return q;
