@@ -76,6 +76,12 @@ another catalog name, change `CATALOG` below.
 **Locally:** the same cells read the repository's cleaned tables in `derived/v1/` instead. Set `MODE` below to
 force one or the other.
 
+**Your own rebuild:** `00_rebuild_derived.ipynb` rebuilds `derived/v1` from the Marketplace table into a volume.
+Put that folder (the one holding `derived/v1`, by default `/Volumes/workspace/referral_saathi/uploads/rebuild`) in
+the `data_root` widget, or in the `DATATHON_ROOT` environment variable locally. Every table below and the app
+builds then read your rebuild, and section 0.1 checks that it gives the same app as the repository's copy. Empty
+means the repository's `derived/v1`.
+
 Some steps cannot run inside Free Edition: the website crawl, web labelling and external downloads. They ran
 offline. Their outputs are summary files in the repository, or tables in a Unity Catalog volume (`VOLUME`).
 Each section that uses one says so.
@@ -107,9 +113,19 @@ for p in (ROOT, ROOT / "app"):
 
 plt.rcParams.update({"figure.dpi": 100, "figure.figsize": (7, 3.2), "axes.spines.top": False,
                      "axes.spines.right": False})
-V1 = ROOT / "derived" / "v1"
+# Where derived/v1 is read from: the data_root widget on Databricks, else DATATHON_ROOT, else this repository.
+try:
+    dbutils.widgets.text("data_root", "")  # noqa: F821 (dbutils is predefined on Databricks)
+    DATA_ROOT = Path(dbutils.widgets.get("data_root") or os.environ.get("DATATHON_ROOT") or ROOT)  # noqa: F821
+except NameError:
+    DATA_ROOT = Path(os.environ.get("DATATHON_ROOT") or ROOT)
+if not (DATA_ROOT / "derived" / "v1" / "MANIFEST.json").is_file():
+    raise FileNotFoundError(f"{DATA_ROOT}/derived/v1/MANIFEST.json not found: check data_root")
+os.environ["DATATHON_ROOT"] = str(DATA_ROOT)  # the app builds below (subprocesses) read the same folder
+V1 = DATA_ROOT / "derived" / "v1"
 REPO_URL = "https://github.com/LordKarV/databricksdatathon/blob/dev/"
-print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name)
+print("running on", "Databricks" if ON_DATABRICKS else "a local machine", "| repository at", ROOT.name,
+      "| derived/v1 from", "the repository" if DATA_ROOT == ROOT else DATA_ROOT)
 rebuilt = re.search(r"On Free Edition serverless it gave [^.]+\\.", (ROOT / "submission/README.md").read_text())
 print("00_rebuild_derived.ipynb:", " ".join(rebuilt.group(0).split()) if rebuilt else "no Free Edition run recorded")
 ''')
@@ -130,6 +146,48 @@ for out, script in BUILDS:  # always rebuild: a stale export once broke a Databr
     if r.returncode != 0:
         raise RuntimeError(f"{script} failed: {r.stderr[-800:]}")
     print(f"built   {out}: {r.stdout.strip().splitlines()[-1] if r.stdout.strip() else 'ok'}")
+''')
+
+md("""
+### 0.1 Check: does your rebuild give the same app?
+
+Runs only when `data_root` points at a rebuild. It builds the app's facility facts and the 36 offline state packs
+twice, from the repository's `derived/v1` and from yours, into a temporary folder, and compares them. The facts
+hash covers every facility, pair, quote and score the app serves, but not the build time or the folder it was
+read from. The packs are compared byte for byte with the same build date. PASS means a judge's rebuild drives
+exactly the app we ship. Table-level checks against `MANIFEST.json` are in `00_rebuild_derived.ipynb`.
+""")
+
+code('''
+import tempfile
+
+
+def app_build(data_root: Path, out: Path, built: str) -> dict:
+    """Facts hash and per-state pack hashes, built from data_root/derived/v1 into out."""
+    env = {**os.environ, "DATATHON_ROOT": str(data_root)}
+    for script, args in (("app/facts/build.py", ["--out", str(out / "facts")]),
+                         ("app/packs/build_packs.py", ["--out", str(out / "packs"), "--built", built])):
+        r = subprocess.run([sys.executable, script, *args], cwd=ROOT, env=env, capture_output=True, text=True)
+        if r.returncode != 0:
+            raise RuntimeError(f"{script} failed on {data_root}: {r.stderr[-500:] or r.stdout[-500:]}")
+    packs = json.loads((out / "packs" / "index.json").read_text())["packs"]
+    return {"facts": (out / "facts" / "facts.sha").read_text().strip(),
+            "packs": {k: v["sha256"] for k, v in packs.items()}}
+
+
+if DATA_ROOT == ROOT:
+    print("data_root is the repository: nothing to compare. Set data_root to your rebuild to run this check.")
+else:
+    built = json.loads((ROOT / "derived/v1/MANIFEST.json").read_text())["build_date"]
+    with tempfile.TemporaryDirectory() as tmp:
+        repo, mine = app_build(ROOT, Path(tmp) / "repo", built), app_build(DATA_ROOT, Path(tmp) / "mine", built)
+    rows = [("facts (facilities, pairs, quotes, scores)", repo["facts"], mine["facts"])]
+    rows += [(f"pack {k}", repo["packs"][k], mine["packs"].get(k, "missing")) for k in sorted(repo["packs"])]
+    check = pd.DataFrame(rows, columns=["output", "from the repository", "from your rebuild"])
+    check["result"] = (check["from the repository"] == check["from your rebuild"]).map({True: "PASS", False: "DIFF"})
+    n_pass = int((check.result == "PASS").sum())
+    print(f"{n_pass} of {len(check)} app outputs identical: {'PASS' if n_pass == len(check) else 'DIFF'}")
+    display(check[check.result != "PASS"] if n_pass < len(check) else check.head(3))  # noqa: F821
 ''')
 
 # ---------------------------------------------------------------------------------------------------------------------

@@ -10,10 +10,12 @@ engine.score() uses them; nothing else changes. Run from the repo root, after pl
 """
 from __future__ import annotations
 
+import argparse
 import gzip
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 import time
@@ -35,7 +37,11 @@ from common.eligibility import (  # noqa: E402, RUF100
     to_sites,
 )
 
-V1 = ROOT / "derived" / "v1"
+# DATATHON_ROOT: the folder holding derived/v1, for example the Databricks volume that
+# submission/00_rebuild_derived.ipynb writes to (#86 step 2; same variable as planner/data_v1.py). Default: this repo.
+# derived/v2 (the frozen model) and planner/out always come from the repo; the rebuild does not remake them.
+DATA_ROOT = Path(os.environ.get("DATATHON_ROOT") or ROOT)
+V1 = DATA_ROOT / "derived" / "v1"
 V2 = ROOT / "derived" / "v2" / "facility_service_scores.parquet"
 MODEL_CARD = ROOT / "derived" / "v2" / "model_card.json"
 ATTRS = ROOT / "derived" / "v2" / "facility_attributes.parquet"  # operator: public / private / unknown (#86 action 5)
@@ -342,6 +348,9 @@ def scores_source() -> str:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", type=Path, default=OUT, help="output folder (default app/facts/out, which the app reads)")
+    out = ap.parse_args().out
     t0 = time.time()
     f, fidx = facilities()
     pr, cited = pairs(fidx)
@@ -349,6 +358,7 @@ def main() -> None:
     manifest = json.loads((V1 / "MANIFEST.json").read_text())
     facts = {
         "meta": {"as_of": manifest["build_date"], "source": "derived/v1",
+                 "data_root": "repo" if DATA_ROOT == ROOT else str(DATA_ROOT),
                  "scores": scores_source(),
                  "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
         "rules": rules(),
@@ -371,17 +381,19 @@ def main() -> None:
         "claim_flags": claim_fl,
         "pins": pins(),
     }
-    # The hash covers the data only (not built_at), so model_hash changes only when the data does.
-    content = {k: v for k, v in facts.items() if k != "meta"} | {"meta": {**facts["meta"], "built_at": None}}
+    # The hash covers the data only (not built_at or where it was read from), so it changes only when the data does
+    # and a rebuild of derived/v1 that matches the repo gives the same hash (#86 step 3).
+    content = {k: v for k, v in facts.items() if k != "meta"} | {
+        "meta": {**facts["meta"], "built_at": None, "data_root": None}}
     facts_hash = hashlib.sha256(json.dumps(content, separators=(",", ":"), sort_keys=True).encode()).hexdigest()[:12]
     raw = json.dumps(facts, separators=(",", ":"), ensure_ascii=False).encode()
-    OUT.mkdir(exist_ok=True)
-    (OUT / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
-    (OUT / "facts.sha").write_text(facts_hash + "\n")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "facts.json.gz").write_bytes(gzip.compress(raw, 6))
+    (out / "facts.sha").write_text(facts_hash + "\n")
     print(f"scores: {facts['meta']['scores']}")
     n_pairs = sum(len(v) for v in pr.values())
     print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
-          f"{len(raw) / 1e6:.1f} MB raw, {(OUT / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
+          f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
           f"{time.time() - t0:.1f} s; sha {facts_hash}")
 
 
