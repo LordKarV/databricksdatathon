@@ -302,6 +302,8 @@ blockquote { margin: 0 0 var(--sp4); padding: var(--sp1) 0 var(--sp1) var(--sp4)
 .ledger td { overflow-wrap: anywhere; }
 .ledger details > summary { min-height: var(--target); font-weight: 500; }
 .ledger details blockquote { margin: var(--sp2) 0; }
+.ledger tfoot .pts { white-space: normal; overflow-wrap: normal; }
+.ledger tfoot .pts > * { white-space: nowrap; }
 .ledger tfoot th, .ledger tfoot td { border-top: 3px double var(--line-strong); border-bottom: 0; font-weight: 600; }
 .facts { margin: 0; }
 .facts > div { padding: var(--sp3) 0; border-top: 1px solid var(--line); }

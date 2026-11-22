@@ -1402,9 +1402,11 @@ async function bindHow() {
   try {
     const [, r] = await Promise.all([loadScript('/how.js', 'RSHow'), fetch('/api/how', {redirect: 'manual'})]);
     if (!r.ok) throw new Error();
-    $('#main').innerHTML = enOnly() + `<div lang="en">${RSHow.render(await r.json())}</div>
+    const h = await r.json();
+    $('#main').innerHTML = enOnly() + `<div lang="en">${RSHow.render(h)}</div>
       <a class="btn btn-block section" href="#/stories">${th('nav.stories')}</a>`;
     $('#main h1').focus();
+    h.trap && loadScript('/trap.js', 'RSTrap').then(() => RSTrap.show(h.trap, state.lang)).catch(() => {});
   } catch {
     $('#how-out').innerHTML = `<p role="alert">${th('page.failed')}</p>`;
     return;
@@ -1624,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('#skip').addEventListener('click', e => { e.preventDefault(); $('#main').focus(); });
   applyPrefs();
   try { await loadStrings(); } catch {
-    $('#main').innerHTML = '<h1>Referral Saathi</h1><p>Could not load the app. In an emergency call <a href="tel:108">108</a>.</p>';
+    $('#main').innerHTML = '<h1>Bharosa</h1><p>Could not load the app. In an emergency call <a href="tel:108">108</a>.</p>';
     return;
   }
   state.lang = pickLang();

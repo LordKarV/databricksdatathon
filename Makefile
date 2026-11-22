@@ -26,7 +26,7 @@ test:  ## run the app, planner and travel test suites
 a11y:  ## axe check, phone screenshots and page weight for every app state (about 10 minutes)
 	$(PY) app/checks/a11y_check.py
 
-notebook:  ## write and execute submission/referral_saathi.ipynb with outputs
+notebook:  ## write and execute submission/bharosa.ipynb (and its copy referral_saathi.ipynb) with outputs
 	$(PY) submission/build_notebook.py
 
 serve:  ## run the app locally on http://127.0.0.1:8000

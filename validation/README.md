@@ -1,6 +1,6 @@
 # Validation suite
 
-Re-runnable data-quality checks for Referral Saathi. Each area folder holds one auditor's `checks.py`
+Re-runnable data-quality checks for Bharosa. Each area folder holds one auditor's `checks.py`
 (functions `check_<name>() -> dict(name, status, metric, threshold, detail, examples)`), its outputs and its
 FINDINGS. `run_all.py` runs all of them and writes one scorecard.
 

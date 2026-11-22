@@ -1,6 +1,7 @@
 # Submission notebook
 
-`referral_saathi.ipynb` is the code and the reasoning behind Referral Saathi, in plain words first. It is
+`bharosa.ipynb` is the code and the reasoning behind Bharosa, in plain words first. `referral_saathi.ipynb` is a
+byte-identical copy under the project's earlier name, kept because the deployed Databricks job runs that path. It is
 committed with its outputs, so it can be read on GitHub without running it. It runs end to end on Databricks
 Free Edition, and also locally.
 
@@ -10,7 +11,7 @@ Free Edition, and also locally.
    `databricks_virtue_foundation_dataset_dais_2026` and the table `virtue_foundation_dataset.facilities`. If
    you installed it under another name, change `CATALOG` in the first code cell.
 2. Add this repository as a Git folder (Workspace > Create > Git folder), then open
-   `submission/referral_saathi.ipynb`.
+   `submission/bharosa.ipynb`.
 3. Attach serverless compute and Run all. pandas, pyarrow and matplotlib are already there; nothing else is
    installed.
    - The first run builds the app's small data exports from `derived/v1` and `derived/v2`, which takes about 10
