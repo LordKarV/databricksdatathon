@@ -38,6 +38,7 @@ pw = pytest.importorskip("playwright.sync_api")
 APP = Path(__file__).resolve().parents[1]
 ROOT = APP.parent
 sys.path.insert(0, str(APP))
+from facts.redact import redact_names  # noqa: E402, RUF100
 from stub_data import SERVICES, area_stub, recommend_stub  # noqa: E402
 
 BAND_WORDS = {"likely": "LIKELY", "not_verified": "NOT VERIFIED: call to confirm", "unlikely": "UNLIKELY"}
@@ -75,7 +76,11 @@ SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
 REAL_QUERIES = {"gaya_dialysis": ("dialysis", 24.79, 85.0),
                 "sitamarhi_dialysis": ("dialysis", 26.6, 85.48),  # verified option far, nearer ones not verified
                 "maharashtra_csection": ("emergency_csection", 19.88, 75.34),
-                "nh19_trauma_mohania": ("trauma_emergency", 25.15, 83.68)}
+                "nh19_trauma_mohania": ("trauma_emergency", 25.15, 83.68),
+                # #86 demo QA: the audit's trauma probe, a quote naming a doctor, quotes with source warnings
+                "pusa_trauma": ("trauma_emergency", 25.6, 85.95),
+                "pune_cardiac_named_doctor": ("cardiac_surgery", 18.52, 73.86),
+                "nagpur_mri_flagged_sources": ("mri", 21.15, 79.09)}
 
 
 # ---------- payloads ----------
@@ -228,6 +233,10 @@ def check_item(payload: dict, it: dict) -> str | None:
         m = re.fullmatch(r"(\d+) (min|h|days?)", shown.strip())
         unit = {"min": 1, "h": 60, "day": 1440, "days": 1440}[m[2]] if m else 0
         ok = bool(m) and abs(int(m[1]) * unit - stored) <= unit / 2
+    elif kind == "delta":  # minutes against the first choice: 'N min closer', 'N min farther', 'about the same time'
+        m = re.fullmatch(r"(\d+) min (closer|farther)", shown.strip())
+        ok = (stored == 0 and shown.strip() == "about the same time") or (
+            bool(m) and int(m[1]) == abs(stored) and (m[2] == "closer") == (stored < 0) and stored != 0)
     elif kind == "met":
         ok = shown == ("met" if stored is True else "not met" if stored is False else None)
     elif kind == "mapsurl":
@@ -262,13 +271,94 @@ def check_quotes(name: str, payload: dict, items: list[dict], claims: dict[str, 
             errs.append(f"{name}: quote {it['path']} shown without its claim id")
         cid = resolve(payload, base + ".claim_id")
         if cid in claims:
-            text, q = claims[cid], it["text"]
+            text, q = redact_names(claims[cid]), it["text"]  # a doctor's name is never shown (#86)
             ok = q == text or (q.endswith("...") and text.startswith(q[:-3]))
             report["quotes_matched_to_claims"] += ok
             if not ok:
                 errs.append(f"{name}: quote {it['path']} differs from claim {cid}: {q!r} vs {text!r}")
         else:
             report["quotes_without_claim_row"] += 1
+    return errs
+
+
+# ---------- #86: why not the nearest, flagged citations, data gap vs care gap ----------
+WHY_NOT_CODES = {"contradicted", "no_quote", "weak_quotes", "outside_window", "farther", "missing", "evidence_kind",
+                 "location", "shared_phone", "not_confirmed", "weaker"}
+
+
+def check_why_not(payload: dict, shown: set[str]) -> list[str]:
+    """Every why-not row and the change line are shown, and each reason agrees with the fields it names."""
+    errs, opts = [], payload["options"]
+    first = opts[0]["travel"]["minutes"] if opts else None
+    for k, w in enumerate(payload.get("why_not") or []):
+        for f in ("name", "reason", "travel.km"):
+            if f"why_not.{k}.{f}" not in shown:
+                errs.append(f"why_not.{k}.{f} not shown")
+        if "minutes_vs_first" not in w:
+            continue  # an older export without the structured fields: the shown text is still checked verbatim
+        if f"why_not.{k}.minutes_vs_first" not in shown:
+            errs.append(f"why_not.{k}.minutes_vs_first not shown")
+        if w["minutes_vs_first"] != w["travel"]["minutes"] - first:
+            errs.append(f"why_not.{k}: minutes_vs_first {w['minutes_vs_first']} is not its travel minus option 1's")
+        if w["facility_id"] == opts[0]["facility_id"]:
+            errs.append(f"why_not.{k}: lists the first choice")
+        if (w["option_rank"] is not None) != any(o["facility_id"] == w["facility_id"] for o in opts):
+            errs.append(f"why_not.{k}: option_rank disagrees with the options list")
+        for b in w["basis"]:
+            code = b["code"]
+            bad = (code not in WHY_NOT_CODES
+                   or (code == "farther" and not (b["value"] == w["minutes_vs_first"] > 0))
+                   or (code == "outside_window" and not (b["value"] == w["travel"]["minutes"] > b["window_min"]))
+                   or (code == "contradicted" and w["band"] != "unlikely")
+                   or (code == "not_confirmed" and not (w["band"] == "not_verified" and opts[0]["band"] == "likely")))
+            if bad:
+                errs.append(f"why_not.{k}: reason {code} does not match its fields {b} / band {w['band']}")
+        if w["reason_code"] != w["basis"][0]["code"]:
+            errs.append(f"why_not.{k}: reason_code is not the first basis")
+    c = payload.get("what_would_change")
+    if c:
+        for f in ("name", "minutes_vs_first"):
+            if f"what_would_change.{f}" not in shown:
+                errs.append(f"what_would_change.{f} not shown")
+        if c["kind"] == "confirm_nearer" and not c["minutes_vs_first"] < 0:
+            errs.append("what_would_change: confirm_nearer is not nearer than option 1")
+        if c["kind"] == "first_says_no" and (len(opts) < 2 or c["facility_id"] != opts[1]["facility_id"]):
+            errs.append("what_would_change: first_says_no does not point at option 2")
+    tw = payload.get("time_window")
+    if tw and opts and tw["first_outside"] != (first > tw["window_min"]):
+        errs.append("time_window.first_outside disagrees with option 1's travel time")
+    if tw and tw["first_outside"] and "time_window.window_min" not in shown:
+        errs.append("time_window: first choice is outside the window but the page does not say so")
+    return errs
+
+
+def check_quote_flags(o: dict, i: int, shown: set[str]) -> list[str]:
+    """Every warning on a quote is shown next to it; weak quotes come after clean ones (demoted, not hidden)."""
+    errs = []
+    weak = [sum(f["weak"] for f in e.get("flags", [])) for e in o["evidence"]]
+    if weak != sorted(weak):
+        errs.append(f"evidence of option {i} is not ordered clean first: {weak}")
+    for j, e in enumerate(o["evidence"]):
+        for m, f in enumerate(e.get("flags", [])):
+            P = f"options.{i}.evidence.{j}.flags.{m}"
+            need = [P + ".text"] + ([P + ".place"] if f.get("place") else []) + ([P + ".km"] if f.get("km") else [])
+            errs += [f"{x} not shown" for x in need if x not in shown]
+    return errs
+
+
+def check_gap(area: dict, shown: set[str]) -> list[str]:
+    g = area.get("gap")
+    if not g:
+        return []
+    errs = [f"area.gap.{k} not shown" for k in ("district_claiming", "district_confirmed", "covered",
+                                                 "not_confirmed", "far", "no_claim", "pins_sampled", "pins_in_district")
+            if f"area.gap.{k}" not in shown]
+    split = g["covered"] + g["not_confirmed"] + g["far"] + g["no_claim"]
+    if not split == g["pins_sampled"] == len(area["pins"]):
+        errs.append(f"area.gap: the split does not add up to the sampled PINs {g}")
+    for k in ("covered", "not_confirmed", "far", "no_claim"):
+        if g[k] != sum(r.get("gap") == k for r in area["pins"]):
+            errs.append(f"area.gap.{k} is not the count of PIN rows with that gap")
     return errs
 
 
@@ -299,6 +389,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         far = (opts and opts[0]["band"] != "likely" and any(o["band"] == "likely" for o in opts)
                and any(o["band"] != "likely" and o["travel"]["minutes"] < min(
                    x["travel"]["minutes"] for x in opts if x["band"] == "likely") for o in opts))
+        errs += [f"plan: {e}" for e in check_why_not(payload, {it["path"] for it in got["items"]})]
         shown_note = "The nearest verified" in page.inner_text("#main")
         if bool(far) != shown_note:
             errs.append(f"plan: far-verified note shown={shown_note}, expected={bool(far)}")
@@ -315,6 +406,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
             for j in range(len(o["contributions"])):
                 if f"options.{i}.contributions.{j}.points" not in shown:
                     errs.append(f"why/{o['rank']}: contribution {j} not shown")
+            errs += [f"why/{o['rank']}: {e}" for e in check_quote_flags(o, i, shown)]
             # Live website check (#37): the dated line and its quotes must equal the /api/verify answer.
             ver = verify_fixture(o)
             page.route("**/api/verify", json_reply(ver))
@@ -368,6 +460,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         for k in range(len(area["ten_calls"])):
             if f"area.ten_calls.{k}.access_gain" not in shown:
                 errs.append(f"area: call {k} not shown")
+        errs += [f"area: {e}" for e in check_gap(area, shown)]
     finally:
         ctx.close()
     print(f"{name}: {report}")

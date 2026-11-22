@@ -13,11 +13,13 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import math
 import re
 import sys
 import time
 from collections import Counter
 from pathlib import Path
+from urllib.parse import unquote
 
 import numpy as np
 import pandas as pd
@@ -46,6 +48,46 @@ MAX_EVIDENCE = 3
 PUBLIC_STANDARD = re.compile(r"\b(?:district hospital|sadar hospital|medical college|aiims"
                              r"|government (?:general )?hospital"
                              r"|civil hospital|general hospital|sub[- ]?divisional hospital|referral hospital)\b", re.I)
+
+
+URL_KIND_RANK = {"about": 0, "list": 1, "unverified": 2}
+FAR_KM = 25  # a source page about a place farther than this from the facility is flagged
+
+
+def _places() -> dict[str, list[tuple[float, float]]]:
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["name", "lat", "lon"]).dropna()
+    out: dict[str, list[tuple[float, float]]] = {}
+    for n, la, lo in zip(g.name, g.lat, g.lon, strict=True):
+        out.setdefault(n, []).append((la, lo))
+    return out
+
+
+_PLACES: dict[str, list[tuple[float, float]]] | None = None
+
+
+def wiki_place(url: object, lat: object, lon: object) -> list | None:
+    """[place, km] when the source is a Wikipedia article about a place (place_gazetteer) far from the facility.
+
+    The nearest gazetteer entry of that name is used, so the distance is a lower bound.
+    """
+    global _PLACES
+    m = re.match(r"https?://[a-z]+\.wikipedia\.org/wiki/([^?#]+)", str(url or ""))
+    if not m or lat is None or pd.isna(lat):
+        return None
+    title = unquote(m.group(1)).replace("_", " ").split(",")[0].strip()
+    if _PLACES is None:
+        _PLACES = _places()
+    pts = _PLACES.get(title.lower())
+    if not pts:
+        return None
+    km = min(haversine(float(lat), float(lon), a, b) for a, b in pts)
+    return [title, round(km)] if km > FAR_KM else None
+
+
+def haversine(la1: float, lo1: float, la2: float, lo2: float) -> float:
+    p1, p2 = math.radians(la1), math.radians(la2)
+    a = math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lo2 - lo1) / 2) ** 2
+    return 12742 * math.asin(math.sqrt(a))
 
 
 def e164(raw: str) -> str | None:
@@ -91,12 +133,20 @@ def facilities() -> tuple[pd.DataFrame, dict[str, int]]:
         lambda codes: next((c for c in codes if c.startswith("LOC_")), ""))
 
     urls = pd.read_parquet(V1 / "source_urls.parquet",
-                           columns=["unique_id", "url", "source_class", "domain_reliability"])
+                           columns=["unique_id", "url", "source_class", "domain_reliability", "url_kind"])
     urls = urls[urls.url.str.match(r"https?://")]
     urls["k"] = (~urls.source_class.isin(["official", "official_like"])).astype(int)
+    # A page about this facility (url_kind from audit/provenance/q1_sources.py) before a list or an unchecked page
+    # (#86): the shortest-path rule alone picked e.g. a Wikipedia page about another town.
+    urls["kind_rank"] = urls.url_kind.map(URL_KIND_RANK).fillna(len(URL_KIND_RANK))
     urls["depth"] = urls.url.str.replace(r"^https?://[^/]+/?", "", regex=True).str.len()
-    best = urls.sort_values(["unique_id", "k", "depth", "domain_reliability"], ascending=[True, True, True, False])
-    f["url"] = f.unique_id.map(best.drop_duplicates("unique_id").set_index("unique_id").url)
+    best = urls.sort_values(["unique_id", "k", "kind_rank", "depth", "domain_reliability"],
+                            ascending=[True, True, True, True, False])
+    best = best.drop_duplicates("unique_id").set_index("unique_id")
+    f["url"] = f.unique_id.map(best.url)
+    f["url_kind"] = f.unique_id.map(best.url_kind)
+    f["url_place"] = [wiki_place(u, la, lo) if k != "about" else None
+                      for u, k, la, lo in zip(f.url, f.url_kind, f.loc_lat, f.loc_lon, strict=True)]
     f["public_standard"] = f.name.fillna("").str.contains(PUBLIC_STANDARD)
     return f, {u: i for i, u in enumerate(f.unique_id)}
 
@@ -151,10 +201,34 @@ def planner_cited() -> set[str]:
     return {cid for c in caps.values() for ids in c["e"] for cid in ids}
 
 
-def claims(ids: set[str]) -> dict[str, list]:
-    c = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "field", "text", "nonoffer", "attribution"])
+# Sentence-level warnings the claims pipeline already computed (cleaning/claims), copied per cited sentence (#86).
+CUE_FLAGS = {"cue_third_party": "third_party", "cue_hedge": "hedge", "cue_parttime": "parttime",
+             "cue_camp": "camp", "cue_future": "future", "cue_past": "past"}
+FLAG_COLS = ["attribution", "foreign_names", "places_other_district", "places_other_state", *CUE_FLAGS]
+
+
+def claim_flags(r: object) -> list[list]:
+    """[[code, detail]] for one claims.parquet row; detail is a place or facility name, or None."""
+    out: list[list] = []
+    if r.attribution == "ambiguous":
+        out.append(["ambiguous", None])
+    if r.foreign_names:
+        out.append(["foreign", None])
+    for col_, code in (("places_other_district", "other_district"), ("places_other_state", "other_state")):
+        if getattr(r, col_):
+            out.append([code, str(getattr(r, col_)).split("|")[0].strip().title()])
+    out += [[code, None] for c, code in CUE_FLAGS.items() if getattr(r, c)]
+    return out
+
+
+def claims(ids: set[str]) -> tuple[dict[str, list], dict[str, list]]:
+    c = pd.read_parquet(V1 / "claims.parquet", columns=["claim_id", "field", "text", "nonoffer", *FLAG_COLS])
     c = c[c.claim_id.isin(ids)]
-    return {r.claim_id: [r.field, r.text, bool(r.nonoffer), r.attribution] for r in c.itertuples(index=False)}
+    for k in ("foreign_names", "places_other_district", "places_other_state"):
+        c[k] = c[k].fillna("")
+    rows = {r.claim_id: [r.field, r.text, bool(r.nonoffer), r.attribution] for r in c.itertuples(index=False)}
+    flags = {r.claim_id: f for r in c.itertuples(index=False) if (f := claim_flags(r))}
+    return rows, flags
 
 
 def rules() -> dict[str, dict]:
@@ -176,6 +250,7 @@ def main() -> None:
     t0 = time.time()
     f, fidx = facilities()
     pr, cited = pairs(fidx)
+    claim_rows, claim_fl = claims(cited | planner_cited())
     manifest = json.loads((V1 / "MANIFEST.json").read_text())
     facts = {
         "meta": {"as_of": manifest["build_date"], "source": "derived/v1",
@@ -192,9 +267,11 @@ def main() -> None:
                 "flags": [as_list(x) for x in f.trust_flags],
                 "reasons": [as_list(x) for x in f.trust_reasons],
                 "website_own": list(f.website_class == "own"), "url": col(f.url),
+                "url_kind": col(f.url_kind), "url_place": list(f.url_place),
                 "public_standard": [bool(x) for x in f.public_standard]},
         "pairs": pr,
-        "claims": claims(cited | planner_cited()),
+        "claims": claim_rows,
+        "claim_flags": claim_fl,
         "pins": pins(),
     }
     # The hash covers the data only (not built_at), so model_hash changes only when the data does.

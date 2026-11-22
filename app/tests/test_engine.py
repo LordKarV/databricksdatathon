@@ -14,6 +14,7 @@ sys.path.insert(0, str(APP))
 import app as app_module  # noqa: E402
 import itinerary  # noqa: E402
 from facts.engine import Engine  # noqa: E402
+from facts.redact import redact_names  # noqa: E402, RUF100
 from services import SERVICES  # noqa: E402
 
 ENGINE = app_module._engine()
@@ -62,7 +63,7 @@ def test_evidence_is_verbatim_own_offer_sentences():
             assert len(o["evidence"]) <= 3
             for e in o["evidence"]:
                 field, text, nonoffer, attribution = ENGINE.claims[e["claim_id"]]
-                assert e["quote"] == text and e["field"] == field
+                assert e["quote"] == redact_names(text) and e["field"] == field
                 assert not nonoffer and attribution != "other_facility"
                 assert e["claim_id"].split(":")[0] == o["facility_id"][:8]
 
@@ -135,7 +136,7 @@ def test_route_rides_along_in_budget(name):
             assert st["eta_low"] <= st["eta_high"] and 0 <= st["p"] <= 1
             for e in st["evidence"]:  # quotes are the claim rows' own text, never another facility's sentence
                 field, text, nonoffer, attribution = ENGINE.claims[e["claim_id"]]
-                assert e["quote"] == text and not nonoffer and attribution != "other_facility"
+                assert e["quote"] == redact_names(text) and not nonoffer and attribution != "other_facility"
 
 
 @needs_planner
