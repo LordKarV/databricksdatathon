@@ -3,6 +3,7 @@
 Run from the repo root with a venv that has fastapi, uvicorn, playwright, axe-playwright-python:
     .venv-app/bin/python app/checks/a11y_check.py
 Writes app/checks/a11y_results.json and app/checks/screens/<state>-<scheme>.png.
+The server runs with COMMUNITY_DEMO=1, so the field-report lines and the area pulse have (simulated) content.
 """
 from __future__ import annotations
 
@@ -307,6 +308,43 @@ def stories_page(page: Page) -> None:
     page.wait_for_function("[...document.querySelectorAll('#main img')].every(i => i.complete && i.naturalWidth > 0)")
 
 
+def reason_step(page: Page) -> None:
+    """Why page after "Said no": the optional reason buttons (community.js)."""
+    why(page)
+    page.get_by_role("button", name="Said no").click()
+    page.locator(".reason-step").wait_for()
+
+
+def visit_report(page: Page) -> None:
+    """'How did this referral go?' on a referral remembered when its slip was made, turned away chosen."""
+    plan_for("Dialysis")(page)
+    go(page, "#/slip/1")
+    page.locator(".slip").wait_for()
+    page.wait_for_function("!!localStorage.getItem('rs.recent')")
+    go(page, "#/report")
+    page.locator("#visit-form").wait_for()
+    page.locator("input[name=outcome][value=turned_away]").check()
+
+
+def pulse_panel(page: Page) -> None:
+    """'Your area' (pulse.js) for the demo district, from the results screen."""
+    plan_for("Dialysis")(page)
+    go(page, "#/pulse")
+    page.locator("#main h2").first.wait_for()
+    page.wait_for_function("!document.querySelector('#main').innerText.includes('Loading')")
+
+
+def journey_card(page: Page) -> None:
+    """The family journey card (journey.js) in Hindi, opened as the family would open the file."""
+    plan_for("Dialysis")(page)
+    go(page, "#/slip/1")
+    page.locator(".slip").wait_for()
+    html = page.evaluate("""() => new Promise((ok, fail) => { const s = document.createElement('script');
+      s.src = '/journey.js'; s.onload = () => ok(RSJourney.buildJourney(state.plan, 'hi', {rank: 1}).html);
+      s.onerror = fail; document.head.appendChild(s); })""")
+    page.set_content(html)
+
+
 STATES: dict[str, Callable[[Page], None]] = {
     "start_first_visit": first_visit,
     "start_located": home_located,
@@ -332,13 +370,18 @@ STATES: dict[str, Callable[[Page], None]] = {
     "route_trauma": route_all_open,
     "how_this_works": how_page,
     "data_stories": stories_page,
+    "reason_step": reason_step,
+    "visit_report": visit_report,
+    "pulse_panel": pulse_panel,
+    "journey_card": journey_card,
 }
 
 
 def main() -> int:
     SCREENS.mkdir(parents=True, exist_ok=True)
     server = subprocess.Popen([sys.executable, "-m", "uvicorn", "app:app", "--port", str(PORT), "--no-access-log"],
-                              cwd=APP, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                              cwd=APP, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                              env={**os.environ, "COMMUNITY_DEMO": "1"})
     results: dict = {"axe_tags": AXE_TAGS, "viewport": VIEWPORT, "states": {}}
     try:
         wait_up()
