@@ -125,6 +125,39 @@ The service worker keeps each saved state pack in IndexedDB (`rs-packs` database
 the network fails. Packs saved before #32 in Cache Storage (`rs-packs-v1`) move over on activate. After the first
 save the page calls `navigator.storage.persist()` once and records the answer in `localStorage['rs.pack'].persisted`.
 
+### Radius rule: neighbour packs
+
+Crossing a state line for care is normal (PM-JAY cards work in any state), so the phone saves more than its own
+state. `POST /api/pack/locate` returns the home state (state of the nearest PIN centroid) plus, nearest first, every
+built pack whose state has a facility offering an app service within 150 km of the fix (`RADIUS_KM` in
+`facts/engine.py`, the same radius as the planner's `MAX_KM`). `build_packs.py` writes each state's facility points to
+`packs/out/index.json` (`pts`, 0.1 degree, so at most about 8 km off; 1,144 points in all, kept out of
+`/api/pack/version`). `offline.js` saves every named pack through the service worker, refreshes them on each online
+answer as before, and drops a neighbour pack that no fix has named for 30 days; the home pack is never dropped.
+
+Offline, `pack.js` (`queryAll`) takes the list of the nearest PIN in each saved pack, removes duplicates and ranks
+the union by straight-line km as before, keeping the 3 nearest plus the nearest likely one (the build rule). With
+one pack the answer is exactly the old one (checked on 19,803 queries over all 36 packs). A card names the
+facility's state when it is not the state of the PIN the plan is made for ("In Uttar Pradesh, 81.9 km"), and the
+staleness line lists each state's build date when they differ.
+
+Measured on the current build (`R` = 150 km; #1 compared with the home pack alone, over the 7 services):
+
+| Border point | Packs saved | Gzip bytes | #1 changed |
+| --- | --- | ---: | --- |
+| Bihar-UP, Gopalganj/Kushinagar (26.50, 84.25) | Bihar, UP | 109,736 | 1 of 7 (MRI: UP hospital, 117.2 vs 119.6 km) |
+| Delhi NCR, Noida edge (28.57, 77.32) | UP, Delhi, Haryana, Rajasthan, Uttarakhand | 184,748 | 0 of 7 |
+| Jharkhand-Odisha, Chaibasa/Rourkela (22.40, 85.10) | Jharkhand, Odisha | 43,213 | 0 of 7 |
+| Assam-Meghalaya, south of Guwahati (26.08, 91.78) | Assam, Meghalaya | 22,834 | 4 of 7 (one in Meghalaya; 0.2 to 3.3 km nearer) |
+| Maharashtra-Karnataka, near Belagavi (16.20, 74.40) | Maharashtra, Karnataka, Goa | 145,834 | 0 of 7 |
+
+Of the 7,885 PIN centroids within 50 km of a state border (a PIN of another state within 50 km), the nearest
+facility offering the service is in another state for 24.2% of (PIN, service) pairs (13,334 of 55,195; from 14.2%
+for trauma to 34.0% for burns). The home pack already lists those for a fix inside the home state, because every
+pack ranks its PINs against candidates from all of India. The neighbour packs matter when the fix is across the
+line from the home state (the patient's village, a trip), and they add the neighbour's PINs to the offline picker.
+Interior points save one pack (Lucknow, Pune); Delhi NCR saves the most (5 packs, 185 KB).
+
 ## Live website check (`POST /api/verify`, #37)
 
 Body `{facility_id, service_id}`. The server fetches the facility's official website and looks for the service.

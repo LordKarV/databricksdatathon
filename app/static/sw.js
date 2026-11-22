@@ -2,7 +2,7 @@
 // (a stopped Databricks App answers with a proxy error page, not a network error). Redirects pass
 // through so an expired session can sign in again. API calls are never cached here, except the
 // offline state packs, which are stored on request (message 'cache-pack') in IndexedDB (spec, #32).
-const CACHE = 'rs-shell-v14';
+const CACHE = 'rs-shell-v15';
 const OLD_PACKS = 'rs-packs-v1';  // Cache Storage before #32; moved to IndexedDB on activate
 
 // ---------- pack store: IndexedDB 'rs-packs', object store 'packs', {slug, body, sha256, built, saved_at} ----------
@@ -29,6 +29,7 @@ async function tx(mode, fn) {
 }
 const getPack = slug => tx('readonly', s => s.get(slug));
 const putPack = rec => tx('readwrite', s => s.put(rec));
+const dropPack = slug => tx('readwrite', s => s.delete(slug)).then(() => ({status: 'dropped'}));
 
 async function migrateOldPacks() {
   if (!(await caches.has(OLD_PACKS))) return;
@@ -83,8 +84,9 @@ self.addEventListener('fetch', e => {
   }).catch(() => caches.match(key)));
 });
 
-// Loader stub: the page posts {type: 'cache-pack', slug}; the reply goes back on the message port, or
-// to the posting client, as {type: 'pack-status', slug, status, sha256?, error?}.
+// Loader stub: the page posts {type: 'cache-pack' | 'drop-pack', slug}; the reply goes back on the message port, or
+// to the posting client, as {type: 'pack-status', slug, status, sha256?, error?}. offline.js drops neighbour
+// packs that no recent fix needed.
 async function cachePack(slug) {
   const v = await fetch('/api/pack/version', {cache: 'no-store'}).then(r => r.ok ? r.json() : null);
   const meta = v && v.packs && v.packs[slug];
@@ -101,11 +103,12 @@ async function cachePack(slug) {
 
 self.addEventListener('message', e => {
   const m = e.data || {};
-  if (m.type !== 'cache-pack' || typeof m.slug !== 'string') return;
+  if ((m.type !== 'cache-pack' && m.type !== 'drop-pack') || typeof m.slug !== 'string') return;
   const reply = r => {
     const msg = Object.assign({type: 'pack-status', slug: m.slug}, r);
     if (e.ports && e.ports[0]) e.ports[0].postMessage(msg);
     else if (e.source) e.source.postMessage(msg);
   };
-  e.waitUntil(cachePack(m.slug).then(reply, err => reply({status: 'error', error: String(err)})));
+  e.waitUntil((m.type === 'drop-pack' ? dropPack : cachePack)(m.slug)
+    .then(reply, err => reply({status: 'error', error: String(err)})));
 });

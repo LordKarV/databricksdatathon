@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Annotated, Literal
 
 import outcomes
-from facts.engine import Engine
+from facts.engine import RADIUS_KM, Engine
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.gzip import GZipMiddleware
@@ -21,7 +21,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from inputs import understand
 from itinerary import attach
 from pydantic import BaseModel, ConfigDict, Field
-from services import SERVICES
+from services import SERVICES, haversine_km
 from verify.check import Checker
 from voice import transcribe as voice
 
@@ -295,7 +295,9 @@ def pack_version() -> JSONResponse:
     idx = _pack_index()
     if idx is None:
         return JSONResponse({"error": "no packs built"}, 404, headers={"Cache-Control": "no-cache"})
-    return JSONResponse(idx, headers={"Cache-Control": "no-cache"})
+    # The facility points (index.json "pts") are for /api/pack/locate only; the phone never needs them.
+    packs = {k: {f: v for f, v in m.items() if f != "pts"} for k, m in idx["packs"].items()}
+    return JSONResponse({**idx, "packs": packs}, headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/api/pack/{slug}")
@@ -344,9 +346,27 @@ def pack_locate(req: LocateRequest) -> JSONResponse:
     k = math.cos(math.radians(lat))
     i = min(range(len(lats)), key=lambda j: (lats[j] - lat) ** 2 + ((lons[j] - lon) * k) ** 2)
     slug, state = states[sidx[i]]
-    if slug not in (_pack_index() or {"packs": {}})["packs"]:
+    idx = _pack_index() or {"packs": {}}
+    if slug not in idx["packs"]:
         return JSONResponse({"error": "no pack for this state", "slug": slug, "state": state}, 404)
-    return JSONResponse({"slug": slug, "state": state})
+    return JSONResponse({"slug": slug, "state": state,
+                         "packs": [{"slug": slug, "state": state}] + _near_packs(idx, slug, lat, lon)})
+
+
+def _near_packs(idx: dict, home: str, lat: float, lon: float) -> list[dict]:
+    """Other built packs with a facility of their state within the search radius (care crosses state lines).
+
+    index.json keeps each state's facility points in 0.1 degree; nearest packs first.
+    """
+    scale = idx.get("pts_scale", 10)
+    near = []
+    for s, m in idx["packs"].items():
+        if s == home or not m.get("pts"):
+            continue
+        d = min(haversine_km(lat, lon, a / scale, b / scale) for a, b in m["pts"])
+        if d <= RADIUS_KM:
+            near.append((d, {"slug": s, "state": m["state"]}))
+    return [x for _, x in sorted(near, key=lambda t: t[0])]
 
 
 @app.get("/{name}")

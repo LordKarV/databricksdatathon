@@ -28,6 +28,7 @@ BASE = f"http://127.0.0.1:{PORT}"
 AXE_JS = (Path(axe_playwright_python.__file__).parent / "axe.min.js").read_text()
 AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]  # spec section 7
 SITAMARHI = {"latitude": 26.5951, "longitude": 85.4808, "accuracy": 40}
+BIHAR_UP_BORDER = {"latitude": 26.50, "longitude": 84.25, "accuracy": 40}  # west of Gopalganj, near Kushinagar
 VIEWPORT = {"width": 360, "height": 780}
 
 
@@ -226,11 +227,30 @@ def offline_pin_picker(ctx, page: Page) -> dict:
     return {"district_select": page.evaluate("location.hash")}
 
 
+def offline_border(ctx, page: Page) -> dict:
+    """Near the Bihar-UP border: the Bihar and UP packs are both saved and a card names the other state."""
+    ctx.set_geolocation(BIHAR_UP_BORDER)
+    sw_ready(ctx, page)
+    home_located(page)
+    page.locator(".tile", has_text="Dialysis").click()
+    page.locator("article.card").first.wait_for()
+    page.wait_for_function("Object.keys((JSON.parse(localStorage.getItem('rs.pack')) || {}).packs || {}).length > 1",
+                           timeout=60000)
+    ctx.set_offline(True)
+    go(page, "#/")
+    page.locator(".tile", has_text="Dialysis").click()
+    page.get_by_text("Call before you go").wait_for()
+    saved = page.evaluate("Object.keys(JSON.parse(localStorage.getItem('rs.pack')).packs).sort()")
+    return {"saved_packs": saved, "options": page.locator("article.card").count(),
+            "other_state_cards": page.locator("article.card", has_text="In Uttar Pradesh,").count()}
+
+
 OFFLINE_STATES = {
     "offline_answer_dialysis": offline_answer,
     "offline_no_saved_pack": offline_no_pack,
     "offline_old_fix_confirm": offline_old_fix,
     "offline_pin_picker": offline_pin_picker,
+    "offline_border_dialysis": offline_border,
 }
 
 

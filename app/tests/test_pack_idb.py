@@ -151,3 +151,34 @@ def test_persist_requested_after_save(base_url, browser, pack):
         assert page.evaluate("window.__persistCalls") == 1  # asked once, not on every save
     finally:
         ctx.close()
+
+
+def test_neighbour_packs_saved_then_dropped_after_grace(base_url, browser):
+    """Every pack /api/pack/locate names is saved; a neighbour no fix needed for 30 days is dropped, home is kept."""
+    idx = json.loads((OUT / "index.json").read_text())["packs"]
+    home, near = sorted(idx, key=lambda s: idx[s]["gzip_bytes"])[:2]
+    ctx = browser.new_context(service_workers="allow")
+    page = ctx.new_page()
+    try:
+        want = {"packs": [home, near]}
+        page.route("**/api/pack/locate", lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(
+            {"slug": home, "state": home, "packs": [{"slug": s, "state": s} for s in want["packs"]]})))
+        page.goto(base_url + "/")
+        _ready(page)
+        page.evaluate("""() => new Promise((ok, fail) => { const s = document.createElement('script');
+          s.src = '/pack.js'; s.onload = () => { const t = document.createElement('script'); t.src = '/offline.js';
+          t.onload = ok; t.onerror = fail; document.head.appendChild(t); }; document.head.appendChild(s); })""")
+        page.evaluate("RSOffline.savePack(25.6, 85.1)")
+        assert sorted(page.evaluate("Object.keys(RSOffline.meta().packs)")) == sorted([home, near])
+        assert page.evaluate(READ_IDB, near) is not None
+        assert len(page.evaluate("RSOffline.loadPack().then(p => p.packs.map(x => x.state))")) == 2
+        want["packs"] = [home]
+        page.evaluate("RSOffline.savePack(25.6, 85.1)")  # inside the grace period: kept
+        assert page.evaluate(READ_IDB, near) is not None
+        page.evaluate("""n => { const m = RSOffline.meta(); m.packs[n].seen -= 31 * 86400e3;
+          localStorage.setItem('rs.pack', JSON.stringify(m)); }""", near)
+        page.evaluate("RSOffline.savePack(25.6, 85.1)")
+        assert list(page.evaluate("Object.keys(RSOffline.meta().packs)")) == [home]
+        assert page.evaluate(READ_IDB, near) is None and page.evaluate(READ_IDB, home) is not None
+    finally:
+        ctx.close()
