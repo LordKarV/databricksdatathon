@@ -112,6 +112,12 @@ The page reads only these fields. `travel` is one row of `geo/travel.py` (#7, PR
 the stub calls `geo.travel.estimate` (measured factor and percentile range, no OSRM call) and falls back to
 straight-line x 1.35 only if `geo/` is not importable.
 
+`area.district` is the district the nearest PIN point lies in (#121, validation C4). `facts/build.py` takes it
+from the LGD office join in `data/external/lgd_district_polygons/pin_lgd_district.parquet` and writes
+`app/facts/out/pin_districts.json` (outside `facts.json` and its hash). That file is git-ignored local data, not
+part of `derived/v1`: **a fresh clone, or a rebuild without it, falls back to the old answer**, the district each
+PIN is filed under. Then (25.6, 85.95) reads Darbhanga instead of Begusarai, and the build log says so.
+
 ## Not done here
 
 PIN/place lookup (`/api/resolve`), note scan,
@@ -259,8 +265,15 @@ call. MRI and cardiac surgery have no pathway and return `itinerary: null`.
             vs_direct: {text, what_would_change|null, direct_p_objective, plan_p_objective,
                         direct_p_first_care, plan_p_first_care}|null}],
    stop_1_note: text|null,   (why route 1's first stop is not the options list's first choice)
+   fallback: {ask, text}|absent,   (emergency, route stop 1 not option 1 and not led: see below)
    meta: {origin_state, terrain, plans_considered}}
   ```
+- **One answer above the fold (#121, #126).** In an emergency whose route starts elsewhere than option 1,
+  `itinerary.lead_with_route` rebuilds the options with the route's first stop as option 1 when that stop
+  is within the time window or no farther than option 1. The card says why (`route_reason`), the former
+  first says what it lacks, and `stop_1_note` is dropped. Otherwise a far hospital never displaces a near
+  first call. Option 1 keeps "Call first" with `fallback.ask`, `fallback.text` frames the route ("If they
+  cannot treat: ..."), and the route card moves below the options.
 - **Results screen.** A "Suggested route" card shows route 1 as numbered stops. Stages at the same hospital
   (dialysis: assessment, fistula, sessions) nest under it. The other routes sit in expandable sections.
 - **Slip.** The slip and the WhatsApp text list route 1's stops, with phone and arrival range.

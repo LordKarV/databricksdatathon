@@ -139,9 +139,9 @@ def test_route_rides_along_in_budget(name):
     assert it["pathway"] and (it["plans"] or it["abstain"])
     assert "stub" not in it["meta"]
     opts = r.json()["options"]
-    if it["plans"] and opts:  # route stop 1 is the list's first choice, or one plain line says why (#86)
+    if it["plans"] and opts:  # route stop 1 is the list's first choice, or the route is framed as the fallback (#126)
         same = it["plans"][0]["stops"][0]["facility_id"] == opts[0]["facility_id"]
-        assert same or (it["stop_1_note"] and opts[0]["name"] in it["stop_1_note"])
+        assert same or it["fallback"]["text"].startswith("If they cannot treat: ")
     for plan in it["plans"]:
         assert plan["stops"][-1]["purpose"] in ("definitive", "recurring")
         for st in plan["stops"]:
@@ -157,12 +157,31 @@ def _post(s: str, la: float, lo: float) -> dict:
 
 @needs_planner
 def test_route_changes_the_options_only_by_leading_with_its_first_stop():
-    plain = [o["facility_id"] for o in ENGINE.plan("trauma_emergency", 25.15, 83.68, 40, "gps")["options"]]
-    routed = _post("trauma_emergency", 25.15, 83.68)
+    plain = [o["facility_id"] for o in ENGINE.plan("trauma_emergency", 25.6, 85.14, 40, "gps")["options"]]
+    routed = _post("trauma_emergency", 25.6, 85.14)
     ids = [o["facility_id"] for o in routed["options"]]
     assert ids[0] == routed["itinerary"]["plans"][0]["stops"][0]["facility_id"]
     rest = [i for i in plain if i in ids[1:]]
     assert ids[1:1 + len(rest)] == rest  # the others keep their order
+
+
+# #126: a route stop beyond the window and farther than card 1 never displaces it; the route becomes the fallback
+FAR_ROUTES = {"banda_trauma": ("trauma_emergency", 25.48, 80.33, "Ask: do you take accident patients now?"),
+              "banda_csection": ("emergency_csection", 25.48, 80.33, "Ask: can you do an emergency C-section now?")}
+
+
+@needs_planner
+@pytest.mark.parametrize("name", FAR_ROUTES)
+def test_far_route_stop_leaves_card_1_and_is_the_fallback(name):
+    s, la, lo, ask = FAR_ROUTES[name]
+    plain = ENGINE.plan(s, la, lo, 40, "gps")["options"]
+    p = _post(s, la, lo)
+    o, it = p["options"], p["itinerary"]
+    assert [x["facility_id"] for x in o] == [x["facility_id"] for x in plain] and o[0]["call_first"]
+    stop = it["plans"][0]["stops"][0]
+    assert stop["facility_id"] != o[0]["facility_id"] and not any(x.get("route_reason") for x in o)
+    assert it["fallback"]["ask"] == ask and it["stop_1_note"] is None
+    assert it["fallback"]["text"].startswith("If they cannot treat: ") and stop["name"] in it["fallback"]["text"]
 
 
 # #121: in an emergency with a route, card 1 is the route's first stop and says why; the former first says what it lacks

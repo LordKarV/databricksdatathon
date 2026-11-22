@@ -384,12 +384,15 @@ function whyNotHtml(p) {
 }
 function card(o, label, i) {
   const P = `options.${i}`;
+  const fb = state.plan.itinerary && state.plan.itinerary.fallback;  // route only if card 1 cannot treat (#126)
   const q = o.evidence[0];
   return `<article class="card" aria-labelledby="opt-${o.rank}">
     ${o.call_first ? '<p class="call-first">Call first</p>' : ''}
     <p>${F(P + '.rank', o.rank, 'num')}. ${bandHtml(o, P)}</p>
     <h3 id="opt-${o.rank}">${F(P + '.name', o.name)}</h3>
     ${o.route_reason ? `<p class="small">${F(P + '.route_reason', o.route_reason)}</p>` : ''}
+    ${i === 0 && fb ? `<p class="small"><strong>${F('itinerary.fallback.ask', fb.ask)}</strong></p>
+      <p class="small">${F('itinerary.fallback.text', fb.text)}</p>` : ''}
     <p class="small">${F(P + '.town', o.town)}. ${o.operator === 'private' ? 'Private: may charge.' : o.operator === 'public' ? 'Government.' : ''}</p>
     <p>${travelHtml(o.travel, P + '.travel')}</p>
     ${noTextCaptionHtml(o, state.plan.query)}${q ? `<blockquote>${quoteHtml(q, P + '.evidence.0')}</blockquote>` : ''}
@@ -582,17 +585,19 @@ function planScreen() {
   if (depth === 'compare') return head + toggle + compareHtml(p) + foot;
   if (depth === 'area') return head + toggle + areaHtml(state.area) + foot;
   let body;
+  // When the route is only the fallback (#126), it goes below the options, not above the fold.
+  const fb = p.itinerary && p.itinerary.fallback, route = fb ? '' : routeHtml(p), after = fb ? routeHtml(p) : '';
   if (p.abstain) {
     const oo = p.abstain.outside_option;
     body = `<p class="card"><strong>${F('abstain.text', p.abstain.text)}</strong></p>
-      ${routeHtml(p)}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
-      ${whyNotHtml(p)}
+      ${route}<h2>Call to confirm</h2>${p.options.map((o, i) => card(o, label, i)).join('')}
+      ${whyNotHtml(p)}${after}
       ${oo && !windowHtml(p) ? `<article class="card"><h3>${F('abstain.outside_option.name', oo.name)}</h3>
         ${oo.label ? `<p class="small"><strong>${F('abstain.outside_option.label', oo.label)}</strong></p>` : ''}
         <p>${F('abstain.outside_option.text', oo.text)}</p>
         <p>${travelHtml(oo.travel, 'abstain.outside_option.travel')}</p></article>` : ''}`;
   } else {
-    body = routeHtml(p) + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p);
+    body = route + '<h2>Options to call</h2>' + farVerifiedNote(p) + p.options.map((o, i) => card(o, label, i)).join('') + whyNotHtml(p) + after;
   }
   state.speak = {danger: isEmergency()};  // read aloud (voice support): options, route and questions, from p only
   return head + windowHtml(p) + toggle + RSInput.speakHtml() + body + foot;

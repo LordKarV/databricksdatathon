@@ -208,10 +208,29 @@ def attach(plan: dict, eng: Engine) -> dict:
     return plan
 
 
+# What card 1 asks on the phone when the route is only the fallback (lead on #126); other services use the label.
+ASK = {"trauma_emergency": "Ask: do you take accident patients now?",
+       "emergency_csection": "Ask: can you do an emergency C-section now?",
+       "burn_care": "Ask: do you take burn patients now?"}
+
+
+def fallback(route: dict, plan: dict) -> dict[str, str]:
+    """Card 1 stays first; the route is what to do if it cannot treat."""
+    s, d = route["stops"][0], route["stops"][-1]
+    go = (f"the suggested route goes straight to {d['name']}, about {d['eta_low']} to {d['eta_high']} min away"
+          if s is d else f"the suggested route stops at {s['name']} ({s['purpose_word'].lower()}), then goes on to "
+          f"{d['name']}, about {d['eta_low']} to {d['eta_high']} min in all")
+    label = plan["query"]["service_label"]["en"]
+    return {"ask": ASK.get(plan["query"]["service"], f"Ask: can you give {label} now?"),
+            "text": f"If they cannot treat: {go}."}
+
+
 def lead_with_route(plan: dict, eng: Engine) -> dict:
-    """One answer above the fold (#121): in an emergency with a route, option 1 is the route's first stop. The plan is
-    rebuilt by the engine with that lead, so why_not, "if the first says no", read-aloud and the journey card follow;
-    the route is not recomputed and the stop_1_note it no longer needs is dropped."""
+    """One answer above the fold (#121): in an emergency with a route, option 1 is the route's first stop when that
+    stop is within the time window or no farther than option 1. The plan is rebuilt by the engine with that lead, so
+    why_not, "if the first says no", read-aloud and the journey card follow; the route is not recomputed and the
+    stop_1_note it no longer needs is dropped. Otherwise option 1 keeps its place with a question to ask, and the
+    route is framed as the fallback (lead on #126: a far hospital never displaces a near first call)."""
     if not plan.get("itinerary"):
         return plan
     first_stop = plan["itinerary"].get("first_stop")  # the planner's view of option 1; not sent to the page
@@ -224,6 +243,8 @@ def lead_with_route(plan: dict, eng: Engine) -> dict:
     loc = plan["location"]
     lead = lead_lines(route, plan["options"], first_stop, it["stop_1_note"])
     fresh = eng.plan(plan["query"]["service"], loc["lat"], loc["lon"], loc["accuracy_m"], loc["source"], lead=lead)
-    if fresh["options"][0]["facility_id"] != route["stops"][0]["facility_id"]:
-        return plan  # the stop is not in the ranked pool: keep the options and the stop_1_note
-    return {**plan, **fresh, "itinerary": {**it, "stop_1_note": None}}
+    head, minutes = fresh["options"][0], fresh["options"][0]["travel"]["minutes"]
+    if head["facility_id"] == route["stops"][0]["facility_id"] and (
+            minutes <= plan["time_window"]["window_min"] or minutes <= plan["options"][0]["travel"]["minutes"]):
+        return {**plan, **fresh, "itinerary": {**it, "stop_1_note": None}}
+    return {**plan, "itinerary": {**it, "stop_1_note": None, "fallback": fallback(route, plan)}}
