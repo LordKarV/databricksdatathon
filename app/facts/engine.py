@@ -97,7 +97,8 @@ def nearest_plausible(rows: list, window: float = math.inf) -> list:
 
 def expected_in_window(rows: list[tuple[float, float]], window: float, call_min: float = CALL_MIN) -> float:
     """Chance of care within the window when the options are called in order and the first "yes" is visited:
-    rows are (p, minutes); the k-th call ends at k x call_min. p is the per-call chance of a "yes" that holds."""
+    rows are (p, minutes); the k-th call ends at k x call_min. p is the model's chance that a decisive web check
+    confirms the service, not the chance of a "yes" on the phone, so this treats one as a stand-in for the other."""
     e, miss = 0.0, 1.0
     for k, (p, minutes) in enumerate(rows, 1):
         if k * call_min + minutes <= window:
@@ -167,6 +168,22 @@ NEED_WORDS = {k: re.compile(v, re.I) for k, v in {
 }.items()}
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
+# "Say this to the family" by the model's band (#140 2d). A NO_SERVICE_TEXT listing never "says it offers" the care,
+# whatever band field reports give it. New English strings for the hi.json engine table (2e).
+SAY = {
+    "likely": "This hospital's listing says it offers {label}. It is {dist}. We will phone before going.",
+    "mentions": "This hospital's listing mentions {label}, but we have not confirmed it. It is {dist}. "
+                "We will phone before going.",
+    "NO_SERVICE_TEXT": "Its listing has no line of its own about {label} (it names it only in a list). "
+                       "We will phone to ask before going.",
+}
+LIKELY_FARTHER = ("It is rated Likely, but it is {n} min farther. In an emergency we phone the nearest plausible "
+                  "place first and go on if they say no")
+
+
+def km_words(km: float) -> str:
+    """'less than 1 km away' under 1 km (never '0 km'), else 'about N km away' in whole km."""
+    return "less than 1 km away" if km < 1 else f"about {round(km)} km away"
 PUBLIC_LABEL = "by public standard, not verified"
 PUBLIC_LEVEL = {"phc": "primary health centre", "chc": "community health centre", "sdh": "sub-divisional hospital",
                 "dh": "district hospital", "mc": "medical college hospital"}
@@ -470,6 +487,12 @@ class Engine:
         """score(), or the caller's replacement for this facility (community/field.py's field-adjusted score)."""
         return (scores or {}).get(fid) or self.score(fid, service)
 
+    def say_to_family(self, pr: Pair, band: str, label: str, km: float) -> str:
+        """The family sentence by model_band, then by the shown band (field reports can lower a Likely card)."""
+        if self.model_band(pr) == "NO_SERVICE_TEXT":
+            return SAY["NO_SERVICE_TEXT"].format(label=label)
+        return SAY["likely" if band == "likely" else "mentions"].format(label=label, dist=km_words(km))
+
     def option(self, rank: int, pr: Pair, service: str, lat: float, lon: float, trav: dict,
                scores: dict | None = None) -> dict:
         i, label = pr.fi, SERVICES[service]["label_en"]
@@ -479,10 +502,7 @@ class Engine:
         url = self.cited_url(i)
         evidence = [{"claim_id": c, "field": self.claims[c][0], "quote": self.claims[c][1], "source_url": url,
                      "flags": self.quote_flags(c, i)} for c in ev]
-        say = (f"This hospital's listing says it offers {label}. It is about {round(trav['km'])} kilometres away. "
-               "We will phone before going.") if band == "likely" else (
-               f"This hospital's listing mentions {label}, but we have not confirmed it. It is about "
-               f"{round(trav['km'])} kilometres away. We will phone before going.")
+        say = self.say_to_family(pr, band, label, trav["km"])
         return {
             "rank": rank, "facility_id": fid, "name": self._f("name", i), "town": self._f("city", i) or "",
             "district": self._f("district", i) or "", "state": self._f("state", i) or "",
@@ -620,7 +640,7 @@ class Engine:
             "time_window": {"window_min": window, "first_outside": first_outside},
             "rank_rule": {"code": "nearest_plausible" if nearest_first else "evidence_and_time",
                           "text": RANK_RULE["nearest_plausible" if nearest_first else "evidence_and_time"],
-                          # model p as the chance each call ends in care; CALL_MIN per call is an assumption
+                          # model p (web-check confirm chance) stands in for a "yes" per call; CALL_MIN per call is assumed
                           "expected_in_window": expected_in_window([(o["p"], o["travel"]["minutes"]) for o in options],
                                                                    window) if nearest_first else None},
             "public_option": public if first_outside else None,
@@ -665,6 +685,11 @@ class Engine:
         if minutes > window >= top[1]:  # the first choice is inside the window and this one is not
             out.append(("outside_window", "It is beyond the time window for this care",
                         {"field": "travel.minutes", "value": minutes, "window_min": window}))
+        elif (minutes > top[1] and band == "likely" and top[4] != "likely"
+              and SERVICES[service]["profile"] in NEAREST_FIRST):
+            # #140 2d: say why a Likely place is not first under the nearest-plausible rule, before anything else
+            out.insert(0, ("farther", LIKELY_FARTHER.format(n=minutes - top[1]),
+                           {"field": "minutes_vs_first", "value": minutes - top[1]}))
         elif minutes > top[1]:
             out.append(("farther", "It is farther away than the first choice",
                         {"field": "minutes_vs_first", "value": minutes - top[1]}))
@@ -692,7 +717,9 @@ class Engine:
     def _why_not_reason(self, service: str, r: tuple, top: tuple) -> tuple[str, str, list[dict]]:
         """(code, one plain sentence of at most two clauses, basis per clause)."""
         cl = self._why_not_clauses(service, r, top)[:2]
-        text = cl[0][1] + "".join(f"; {c[1][0].lower()}{c[1][1:]}" for c in cl[1:])
+        # A lead of two sentences takes the next clause as a third sentence, not after a semicolon
+        join = (lambda t: f". {t}") if ". " in cl[0][1] else (lambda t: f"; {t[0].lower()}{t[1:]}")
+        text = cl[0][1] + "".join(join(c[1]) for c in cl[1:])
         return cl[0][0], text, [{"code": c[0], **c[2]} for c in cl]
 
     def _why_not(self, service: str, chosen: list, cands: list, options: list) -> tuple[list[dict], dict | None]:

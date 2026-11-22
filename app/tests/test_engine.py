@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import random
+import re
 import sys
 import time
 from pathlib import Path
@@ -162,6 +163,54 @@ def test_nearer_first_but_a_confirmed_listing_in_reach_is_never_hidden():
                 assert any(o["band"] == "likely" for o in p["options"]) and p["abstain"] is None
             else:
                 assert p["abstain"] is not None
+
+
+# ---------- #140 2d: engine wording ----------
+def test_km_words_never_says_zero_km():
+    from facts.engine import km_words
+
+    assert [km_words(k) for k in (0.0, 0.4, 0.99, 1.0, 1.4, 187.9)] == [
+        "less than 1 km away", "less than 1 km away", "less than 1 km away", "about 1 km away", "about 1 km away",
+        "about 188 km away"]
+
+
+def test_gaya_hero_family_line_says_less_than_1_km():
+    o = _post("trauma_emergency", 24.79, 85.0)["options"][0]  # the D1 hero: Barkat, about 0.5 km
+    assert o["name"] == "Dr. A Barkat Multispeciality Hospital" and o["travel"]["km"] < 1
+    assert o["say_to_family"]["en"] == ("This hospital's listing says it offers accident and injury care. "
+                                        "It is less than 1 km away. We will phone before going.")
+    for p in plans().values():
+        for x in p["options"]:
+            assert not re.search(r"\b0 km|\d\.\d+ km|kilometres", x["say_to_family"]["en"]), x["say_to_family"]
+
+
+def test_jabalpur_nicu_family_line_follows_model_band():
+    from facts.engine import SAY, km_words
+
+    o = _post("nicu", 23.18, 79.95)["options"]
+    label = SERVICES["nicu"]["label_en"]
+    nst = next(x for x in o if x["model_band"] == "NO_SERVICE_TEXT")
+    assert nst["say_to_family"]["en"] == SAY["NO_SERVICE_TEXT"].format(label=label)
+    assert "says it offers" not in nst["say_to_family"]["en"] and "km" not in nst["say_to_family"]["en"]
+    lik = next(x for x in o if x["model_band"] == "LIKELY")
+    assert lik["say_to_family"]["en"] == SAY["likely"].format(label=label, dist=km_words(lik["travel"]["km"]))
+
+
+def test_pusa_why_not_miracare_leads_with_likely_but_farther():
+    p = _post("trauma_emergency", 25.6, 85.95)
+    assert p["options"][0]["band"] != "likely"
+    w = next(x for x in p["why_not"] if x["name"] == "Miracare Hospital")
+    n = w["minutes_vs_first"]
+    assert w["band"] == "likely" and n > 0 and w["reason_code"] == "farther" and w["basis"][0]["value"] == n
+    assert w["reason"].startswith(f"It is rated Likely, but it is {n} min farther. In an emergency we phone the "
+                                  "nearest plausible place first and go on if they say no.")
+    assert ";" not in w["reason"]
+
+
+def test_likely_but_farther_lead_is_emergency_only():
+    for s, la, lo in [("nicu", 23.18, 79.95), ("dialysis", 25.6, 85.1), ("mri", 25.6, 85.1)]:
+        assert SERVICES[s]["profile"] != "emergency"
+        assert not any(w["reason"].startswith("It is rated Likely") for w in _post(s, la, lo)["why_not"]), s
 
 
 # ---------- multi-stop route (#47) ----------
