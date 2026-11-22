@@ -142,15 +142,7 @@ tables:
     One row per evidence rule with its hand-check and gold-dev counts, Beta(a, b) and q_ev = a / (a + b).
     Source: derived/v1/evidence_rules.parquet, see the rule table in derived/v1/README.md.
 
-- table: gold_pairs
-  group: derived
-  file: "{derived}/gold_pairs.parquet"
-  primary_key: [pair_id]
-  spot: service_verdict
-  description: >-
-    One row per gold facility-service pair (176) with merged web verdicts and its frozen dev or test split.
-    Source: derived/v1/gold_pairs.parquet.
-
+# gold_pairs is NOT loaded here: labels live in workspace.referral_saathi_eval (no app grant), see app_plumbing/grants.sql (#82 H5).
 - table: facility_location
   group: derived
   file: "{derived}/facility_location.parquet"
