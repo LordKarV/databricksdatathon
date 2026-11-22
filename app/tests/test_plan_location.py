@@ -67,3 +67,40 @@ def test_bad_location_opens_typed_place(base_url, lang, code, server_text):
     want = server_text[lang] if server_text else I18N[lang][KEY[code]]
     assert shown == want
     assert I18N[lang]["err.plan"].split("(")[0].strip() not in text  # never the generic "could not make a plan"
+
+
+def _page(p, base_url, init=""):
+    b = p.chromium.launch()
+    page = b.new_context(viewport={"width": 360, "height": 780}, service_workers="block").new_page()
+    if init:
+        page.add_init_script(init)
+    return b, page
+
+
+@pytest.mark.parametrize("typed", ["26.59, 85.48", "26.59 85.48", "26.59,85.48"])
+def test_coordinates_with_or_without_a_comma(base_url, typed):
+    with pw.sync_playwright() as p:
+        b, page = _page(p, base_url, "localStorage.setItem('rs.lang', '\"en\"');")
+        try:
+            page.goto(base_url + "/#/change")
+            page.locator("#place").fill(typed)
+            page.locator("#place-form button[type=submit]").click()
+            page.wait_for_function("location.hash === '#/'")
+            loc = page.evaluate("JSON.parse(localStorage.getItem('rs.loc'))")
+        finally:
+            b.close()
+    assert (loc["lat"], loc["lon"], loc["source"]) == (26.59, 85.48, "manual")
+
+
+@pytest.mark.parametrize("link", ["#/change", "#/settings"])
+def test_fresh_phone_goes_where_it_was_headed_after_the_chooser(base_url, link):
+    with pw.sync_playwright() as p:
+        b, page = _page(p, base_url)
+        try:
+            page.goto(base_url + "/" + link)
+            page.locator("#lang-go").wait_for()
+            page.locator("#lang-go").click()
+            page.wait_for_function(f"location.hash === '{link}'")
+            assert page.locator("#main h1").count() == 1
+        finally:
+            b.close()

@@ -251,7 +251,8 @@ function bindChooser() {
   }));
   $('#lang-go').addEventListener('click', () => {
     setLang(document.querySelector('input[name=first-lang]:checked').value, {rerender: false});
-    location.hash = '#/';
+    location.hash = state.afterLang || '#/';
+    state.afterLang = null;
   });
 }
 
@@ -402,7 +403,7 @@ function bindChange() {
     e.preventDefault();
     const v = $('#place').value.trim();
     $('#place-err').textContent = ''; $('#place-choices').innerHTML = '';
-    const m = v.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+    const m = v.match(/^(-?\d+(?:\.\d+)?)[\s,]+(-?\d+(?:\.\d+)?)$/);  // "26.59, 85.48" or "26.59 85.48"
     if (m && +m[1] >= 6 && +m[1] <= 37.5 && +m[2] >= 68 && +m[2] <= 97.5) {
       usePlace({lat: +m[1], lon: +m[2], label: null}, 'manual'); return;
     }
@@ -1424,7 +1425,12 @@ function bottomNav(route) {
 // ---------- router ----------
 function render(opts = {}) {
   const h = location.hash || '#/';
-  if (!state.lang && h !== '#/lang') { location.hash = '#/lang'; return; }
+  if (!state.lang && h !== '#/lang') {
+    // a fresh phone opening a deep link (#/change, #/why/1, a shared link) goes there once the language is chosen
+    if (h !== '#/' && h !== '#') state.afterLang = h;
+    location.hash = '#/lang';
+    return;
+  }
   const route = (h.match(/^#\/(\w*)/) || [])[1] || '';
   let html, bind = () => {};
   if (route === 'lang') [html, bind] = [chooserScreen(), bindChooser];

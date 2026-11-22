@@ -351,12 +351,12 @@
     "gzip": 587
    },
    "/app.css": {
-    "raw": 26939,
-    "gzip": 6455
+    "raw": 28022,
+    "gzip": 6844
    },
    "/app.js": {
-    "raw": 94985,
-    "gzip": 29490
+    "raw": 98145,
+    "gzip": 30489
    },
    "/input.js": {
     "raw": 15543,
@@ -367,8 +367,8 @@
     "gzip": 136
    },
    "/i18n/en.json": {
-    "raw": 25675,
-    "gzip": 8638
+    "raw": 26171,
+    "gzip": 8776
    },
    "/fonts/barlow-500.woff2": {
     "raw": 8524,
@@ -379,13 +379,71 @@
     "gzip": 8651
    }
   },
-  "gzip_total": 67919,
+  "gzip_total": 69445,
   "budget_gzip": 75000,
   "budget_requests": 8
  },
  "hindi_extra": {
-  "/i18n/hi.json": 16038,
+  "/i18n/hi.json": 16470,
   "/fonts/hind-500-deva.woff2": 35665,
   "/fonts/hind-600-deva.woff2": 35013
+ },
+ "fold": {
+  "call_trauma_emergency_en_360x640": {
+   "ok": true,
+   "top": 479,
+   "bottom": 535,
+   "viewport": 640
+  },
+  "call_dialysis_en_360x640": {
+   "ok": true,
+   "top": 402,
+   "bottom": 458,
+   "viewport": 640
+  },
+  "call_trauma_emergency_hi_360x640": {
+   "ok": true,
+   "top": 546,
+   "bottom": 602,
+   "viewport": 640
+  },
+  "call_dialysis_hi_360x640": {
+   "ok": true,
+   "top": 469,
+   "bottom": 525,
+   "viewport": 640
+  },
+  "call_trauma_emergency_en_320x568": {
+   "ok": true,
+   "top": 479,
+   "bottom": 535,
+   "viewport": 568
+  },
+  "why_ledger_open_en_320": {
+   "ok": true,
+   "horizontal_scroll": false
+  },
+  "call_dialysis_en_320x568": {
+   "ok": true,
+   "top": 402,
+   "bottom": 458,
+   "viewport": 568
+  },
+  "call_trauma_emergency_hi_320x568": {
+   "ok": true,
+   "top": 490,
+   "bottom": 560,
+   "viewport": 568
+  },
+  "why_ledger_open_hi_320": {
+   "ok": true,
+   "horizontal_scroll": false
+  },
+  "call_dialysis_hi_320x568": {
+   "ok": true,
+   "top": 469,
+   "bottom": 539,
+   "viewport": 568
+  }
  }
 }

@@ -867,7 +867,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                 if f"options.{i}.{f}" not in shown:
                     errs.append(f"compare: options.{i}.{f} not shown")
         # Area (S11, S12): per-PIN plan, gap split and ten calls.
-        page.locator('#nav a[href="#/area"]').click()  # UI2: Area is a bottom-navigation tab
+        page.evaluate("h => { location.hash = h; }", "#/area")  # UI2: the Area tab (no nav on the answer screen)
         page.wait_for_selector("#ten-calls")
         got = page.evaluate(COLLECT_JS)
         errs += check_screen("area", full, got, report)

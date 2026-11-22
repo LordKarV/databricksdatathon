@@ -289,7 +289,7 @@ def compare(desk: bool) -> Callable[[Page], None]:
 
 def area(page: Page) -> None:
     plan_for("trauma_emergency")(page)
-    page.locator('#nav a[href="#/area"]').click()  # UI2: Area is a bottom-navigation tab
+    go(page, "#/area")  # UI2: Area is a bottom-navigation tab (the answer screen itself has no nav)
     page.locator("#ten-calls").wait_for()
 
 
