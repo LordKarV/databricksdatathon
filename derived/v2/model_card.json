@@ -1,0 +1,2283 @@
+{
+ "model_version": "eed29abe3b7d857800e31103e702da866299739f7d19d13375585bf7dbf1d69a",
+ "created": "2026-11-21T21:53:20",
+ "selected": "A_platt",
+ "selected_meaning": "P_S = chance that a web check which finds a decisive answer confirms the service (confirmed vs contradicted; no-information checks excluded). It is not the chance that a phone call finds the service.",
+ "service_head": {
+  "base_scorecard": "candidate A expert prior scorecard (fit_prior/prior_a.py), no weight fitted",
+  "platt": {
+   "a": 0.5019991572517853,
+   "c": 1.4982969001957578,
+   "fitted_on": "all 221 decided DEV pairs, unweighted",
+   "contribution_rule": "every term contribution is a x prior contribution; base = a x sum(intercepts) + c"
+  }
+ },
+ "location_head": {
+  "shipped": "A prior scorecard (expert settings)",
+  "comparison": {
+   "n": 443,
+   "negatives": 40,
+   "prior": {
+    "n": 443,
+    "n_pos": 403,
+    "log_loss": [
+     0.2103070469383708,
+     0.1529956488236219,
+     0.27366246606720857
+    ],
+    "auroc": [
+     0.8948200992555831,
+     0.8303505334859194,
+     0.9462564964881488
+    ],
+    "brier": [
+     0.06324994249581486,
+     0.04625092182137311,
+     0.08082168791461972
+    ],
+    "ece": [
+     0.005842523926387524,
+     0.00592897634346708,
+     0.03497606725939581
+    ]
+   },
+   "ebm": {
+    "n": 443,
+    "n_pos": 403,
+    "log_loss": [
+     0.2308889178372535,
+     0.17254334806833344,
+     0.2930920152200063
+    ],
+    "auroc": [
+     0.8470533498759305,
+     0.769434535461059,
+     0.9144897120032223
+    ],
+    "brier": [
+     0.06573800486982806,
+     0.048825107982930445,
+     0.08442494143627903
+    ],
+    "ece": [
+     0.010251427741611056,
+     0.009127438460300681,
+     0.04124140606582152
+    ]
+   },
+   "ebm_minus_prior": {
+    "diff": 0.020581870898882706,
+    "cluster_se": 0.015288961285398988,
+    "ci95": [
+     -0.009523454992631283,
+     0.05038862838462838
+    ]
+   },
+   "ebm_wins": false
+  }
+ },
+ "existence_head": "prior-only expert settings, not learned (decision; 47 DEV negatives, all 'unclear and searched')",
+ "selection_rule": "ship the least-fitted of A < A_platt < B < B_platt < C unless a more-fitted one lowers grouped 5-fold OOF log loss by at least one paired cluster SE",
+ "selection_headline": {
+  "table": {
+   "A": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.7228807627657602,
+     0.5983167378476851,
+     0.861259439553836
+    ],
+    "auroc": [
+     0.8041329739442947,
+     0.7254270944291432,
+     0.8687620192307692
+    ],
+    "brier": [
+     0.2340012490322089,
+     0.19487915381694357,
+     0.27623798724277066
+    ],
+    "ece": [
+     0.22982816189671113,
+     0.1850631982260552,
+     0.2912537794649578
+    ],
+    "ipw_v3": {
+     "log_loss": 0.7194639130847962,
+     "auroc": 0.7652791066687469,
+     "brier": 0.24135349003619624
+    }
+   },
+   "A_platt": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.4268181176083507,
+     0.35187041301005534,
+     0.5151072773650998
+    ],
+    "auroc": [
+     0.8000898472596586,
+     0.7201020643081882,
+     0.8668999004038553
+    ],
+    "brier": [
+     0.1324367361305068,
+     0.10517132093783048,
+     0.16392458396556403
+    ],
+    "ece": [
+     0.04357682526470752,
+     0.026919268577649,
+     0.10323316801284757
+    ],
+    "minus_A": {
+     "diff": -0.2960626451574094,
+     "cluster_se": 0.05882228691040914,
+     "ci95": [
+      -0.412553895858887,
+      -0.18441055244851262
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4885791966735639,
+     "auroc": 0.7612097103649524,
+     "brier": 0.16291527459866811
+    }
+   },
+   "B": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.450672833504683,
+     0.352653991471395,
+     0.5600356363136911
+    ],
+    "auroc": [
+     0.8125561545372866,
+     0.7416407307811054,
+     0.8794880702795804
+    ],
+    "brier": [
+     0.1427005155542806,
+     0.10883766895638321,
+     0.17822877893687153
+    ],
+    "ece": [
+     0.07394979993888007,
+     0.04131082474462815,
+     0.13438416901885247
+    ],
+    "minus_A": {
+     "diff": -0.2722079292610771,
+     "cluster_se": 0.06685066103018374,
+     "ci95": [
+      -0.4083352452309375,
+      -0.1427269642750725
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.40924202832529794,
+     "auroc": 0.8768236837378899,
+     "brier": 0.13996831543031132
+    }
+   },
+   "B_platt": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.432025615200102,
+     0.35537066204205775,
+     0.5181684911019955
+    ],
+    "auroc": [
+     0.8121069182389937,
+     0.7411485372641047,
+     0.8791042305666573
+    ],
+    "brier": [
+     0.13811842398702473,
+     0.10970487270023968,
+     0.1695786816691096
+    ],
+    "ece": [
+     0.05261745895727941,
+     0.02547965510798264,
+     0.10788985057620923
+    ],
+    "minus_A": {
+     "diff": -0.2908551475656581,
+     "cluster_se": 0.06652432851807537,
+     "ci95": [
+      -0.4234424820538767,
+      -0.16572056659591272
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.41724561952664174,
+     "auroc": 0.8743575675141951,
+     "brier": 0.1424665102504676
+    }
+   },
+   "C": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.46148186896120946,
+     0.3858615181609363,
+     0.551364998583358
+    ],
+    "auroc": [
+     0.7656109613656783,
+     0.6826806523940666,
+     0.840855080204539
+    ],
+    "brier": [
+     0.14603736338764803,
+     0.11820849155464609,
+     0.17814820628596395
+    ],
+    "ece": [
+     0.04284562512066472,
+     0.024700244629009584,
+     0.10565036970796686
+    ],
+    "minus_A": {
+     "diff": -0.2613988938045507,
+     "cluster_se": 0.07183451719562649,
+     "ci95": [
+      -0.403299453868432,
+      -0.12757120356502866
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4364357294574675,
+     "auroc": 0.8165641963643616,
+     "brier": 0.14109647135342027
+    }
+   },
+   "C3_resid": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.38988198199570673,
+     0.2949985003851229,
+     0.5061652815256377
+    ],
+    "auroc": [
+     0.8333333333333334,
+     0.7557298152760481,
+     0.9028365241123604
+    ],
+    "brier": [
+     0.10951918447397527,
+     0.0817042016039581,
+     0.14172543068174162
+    ],
+    "ece": [
+     0.03699272507375485,
+     0.02542080015963131,
+     0.09393351780164659
+    ],
+    "minus_A": {
+     "diff": -0.33299878077005335,
+     "cluster_se": 0.0715109196283365,
+     "ci95": [
+      -0.47646512719358075,
+      -0.20098988166955703
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.45988780855683487,
+     "auroc": 0.7469802412385576,
+     "brier": 0.12171797988637748
+    }
+   },
+   "C0_gold": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.3695563609449302,
+     0.2895594808880033,
+     0.4676065146488431
+    ],
+    "auroc": [
+     0.8376010781671159,
+     0.7581596222193903,
+     0.9036116593592091
+    ],
+    "brier": [
+     0.10728322861584179,
+     0.08061557084729665,
+     0.1376990656098804
+    ],
+    "ece": [
+     0.055513255978405604,
+     0.028576140150342537,
+     0.09820472307743662
+    ],
+    "minus_A": {
+     "diff": -0.35332440182082997,
+     "cluster_se": 0.06957835534132678,
+     "ci95": [
+      -0.4955287471073083,
+      -0.22344234194029905
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.41739887408273857,
+     "auroc": 0.7620686781205182,
+     "brier": 0.11370868255964309
+    }
+   },
+   "C1_shift": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.4613799087827201,
+     0.38047291854990056,
+     0.5556197648223082
+    ],
+    "auroc": [
+     0.765947888589398,
+     0.6832501300961814,
+     0.841845238095238
+    ],
+    "brier": [
+     0.145182458871047,
+     0.11624148906409101,
+     0.17817154172300778
+    ],
+    "ece": [
+     0.07312648688163875,
+     0.031176456577496885,
+     0.11581743297615822
+    ],
+    "minus_A": {
+     "diff": -0.2615008539830399,
+     "cluster_se": 0.07224348132086224,
+     "ci95": [
+      -0.40619440137417845,
+      -0.12674932509157097
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4420347577398749,
+     "auroc": 0.8161241656756507,
+     "brier": 0.1428811745611909
+    }
+   },
+   "base_rate": {
+    "n": 221,
+    "n_pos": 168,
+    "log_loss": [
+     0.5566853652465021,
+     0.490016761335344,
+     0.6299091762568046
+    ],
+    "auroc": [
+     0.4132973944294699,
+     0.3284861046204174,
+     0.5051332246899021
+    ],
+    "brier": [
+     0.18437038579262915,
+     0.15449329034331202,
+     0.21700320733441006
+    ],
+    "ece": [
+     0.06784241424043928,
+     0.035172382415403915,
+     0.12526097806682718
+    ],
+    "minus_A": {
+     "diff": -0.16619539751925808,
+     "cluster_se": 0.07889974179121036,
+     "ci95": [
+      -0.3239308992511436,
+      -0.02033428225036357
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.5570531484777421,
+     "auroc": 0.35994588330851557,
+     "brier": 0.18406706652648236
+    }
+   },
+   "_ipw_v3_n": {
+    "n": 134,
+    "pos": 107,
+    "kish_n": 43.2
+   }
+  },
+  "selection": {
+   "selected": "A_platt",
+   "steps": [
+    {
+     "candidate": "A_platt",
+     "incumbent": "A",
+     "diff": -0.2960626451574094,
+     "se": 0.05882228691040914,
+     "ci95": [
+      -0.412553895858887,
+      -0.18441055244851262
+     ],
+     "replaces": true
+    },
+    {
+     "candidate": "B",
+     "incumbent": "A_platt",
+     "diff": 0.02385471589633223,
+     "se": 0.035045973945364156,
+     "ci95": [
+      -0.045574187295225714,
+      0.09266574120548746
+     ],
+     "replaces": false
+    },
+    {
+     "candidate": "B_platt",
+     "incumbent": "A_platt",
+     "diff": 0.005207497591751254,
+     "se": 0.0256503981179269,
+     "ci95": [
+      -0.04770029722534917,
+      0.05577468652135257
+     ],
+     "replaces": false
+    },
+    {
+     "candidate": "C",
+     "incumbent": "A_platt",
+     "diff": 0.03466375135285864,
+     "se": 0.0274109056798963,
+     "ci95": [
+      -0.018983063058879156,
+      0.08585250950327661
+     ],
+     "replaces": false
+    }
+   ]
+  }
+ },
+ "selection_sensitivity": {
+  "table": {
+   "A": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.7466466455422244,
+     0.6528701341438667,
+     0.8500054845039419
+    ],
+    "auroc": [
+     0.7273829233680227,
+     0.6777733817067375,
+     0.7739648747941147
+    ],
+    "brier": [
+     0.23407680329932926,
+     0.20565524616224523,
+     0.2616230801201004
+    ],
+    "ece": [
+     0.17624605942573435,
+     0.13660107774169503,
+     0.21530615606276648
+    ],
+    "ipw_v3": {
+     "log_loss": 0.6699436794212166,
+     "auroc": 0.7624923165357117,
+     "brier": 0.21506314332590656
+    }
+   },
+   "A_platt": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.5805321191390803,
+     0.5408160484155012,
+     0.6214765849321
+    ],
+    "auroc": [
+     0.7262003311258278,
+     0.6767061407384765,
+     0.7730812220288675
+    ],
+    "brier": [
+     0.19746994678348623,
+     0.18048049158448945,
+     0.21474102025990752
+    ],
+    "ece": [
+     0.031684984659724615,
+     0.01941801622509169,
+     0.07742316434334429
+    ],
+    "minus_A": {
+     "diff": -0.16611452640314422,
+     "cluster_se": 0.036361041764396085,
+     "ci95": [
+      -0.2414538916203995,
+      -0.09942125186320828
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.528685041676544,
+     "auroc": 0.7602667946789948,
+     "brier": 0.17453799564139547
+    }
+   },
+   "B": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.6295906994797351,
+     0.5591119875885251,
+     0.7049461455324335
+    ],
+    "auroc": [
+     0.7336605171870072,
+     0.6850629676642808,
+     0.780822856595629
+    ],
+    "brier": [
+     0.2043000044361325,
+     0.18153625907348103,
+     0.22799526889457938
+    ],
+    "ece": [
+     0.07565616745767254,
+     0.05040916542300992,
+     0.11985288854735075
+    ],
+    "minus_A": {
+     "diff": -0.11705594606248935,
+     "cluster_se": 0.0405772272408953,
+     "ci95": [
+      -0.2006354218829132,
+      -0.04283798007571443
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4593853820415601,
+     "auroc": 0.8403943536278795,
+     "brier": 0.14092265047620176
+    }
+   },
+   "B_platt": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.5858822044024523,
+     0.5463216834157201,
+     0.6276245847562946
+    ],
+    "auroc": [
+     0.7308814254178493,
+     0.682195246731254,
+     0.7785144829435411
+    ],
+    "brier": [
+     0.19943668971341763,
+     0.18325466419052946,
+     0.2166882750844203
+    ],
+    "ece": [
+     0.04198783310952659,
+     0.027548047689644715,
+     0.09172183720752271
+    ],
+    "minus_A": {
+     "diff": -0.16076444113977212,
+     "cluster_se": 0.04340763699573564,
+     "ci95": [
+      -0.25271760781717667,
+      -0.07834778058059655
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.489031483757501,
+     "auroc": 0.8385116955384098,
+     "brier": 0.15710964061003146
+    }
+   },
+   "C": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.5888688602236295,
+     0.5508414252549475,
+     0.631620636738309
+    ],
+    "auroc": [
+     0.7181882686849574,
+     0.6682622447357313,
+     0.7615443501687591
+    ],
+    "brier": [
+     0.20041740643394168,
+     0.18373867343851213,
+     0.21796843084370984
+    ],
+    "ece": [
+     0.019610901711025735,
+     0.018451217155603817,
+     0.075004446061726
+    ],
+    "minus_A": {
+     "diff": -0.15777778531859488,
+     "cluster_se": 0.047117357136803456,
+     "ci95": [
+      -0.2514786635877214,
+      -0.0682182188233013
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.506209358574113,
+     "auroc": 0.8260094028874357,
+     "brier": 0.1654134453189387
+    }
+   },
+   "C3_resid": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.571102997202575,
+     0.5175201870616569,
+     0.6308456941544502
+    ],
+    "auroc": [
+     0.7594410280668559,
+     0.7133083002832543,
+     0.8023291943538481
+    ],
+    "brier": [
+     0.19176532224095447,
+     0.17158028093431824,
+     0.2144163525274533
+    ],
+    "ece": [
+     0.043728846079189476,
+     0.026849657172181938,
+     0.09278041653978564
+    ],
+    "minus_A": {
+     "diff": -0.17554364833964953,
+     "cluster_se": 0.04125976978625739,
+     "ci95": [
+      -0.25855561059964843,
+      -0.09689709757257645
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4889181484051847,
+     "auroc": 0.8184589926125725,
+     "brier": 0.16212171092210823
+    }
+   },
+   "C0_gold": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.553371017292159,
+     0.5057021880659898,
+     0.6048499507963631
+    ],
+    "auroc": [
+     0.7678374329864396,
+     0.7205597534765473,
+     0.813266325385873
+    ],
+    "brier": [
+     0.18611595310036494,
+     0.1669510086123727,
+     0.20724467049404624
+    ],
+    "ece": [
+     0.03158903713136777,
+     0.020094944736513062,
+     0.08543863856710358
+    ],
+    "minus_A": {
+     "diff": -0.19327562825006545,
+     "cluster_se": 0.04180956952405357,
+     "ci95": [
+      -0.27904943900988805,
+      -0.11457450155596814
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4753521107805805,
+     "auroc": 0.8281519185358197,
+     "brier": 0.1559264415713412
+    }
+   },
+   "C1_shift": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.6086108988657577,
+     0.5558473440621876,
+     0.6682157654513355
+    ],
+    "auroc": [
+     0.7187007253232419,
+     0.6687348695540174,
+     0.7617253094653943
+    ],
+    "brier": [
+     0.20442589485898674,
+     0.18465752235661007,
+     0.22624458396638347
+    ],
+    "ece": [
+     0.07413536768223768,
+     0.041642107808816074,
+     0.1123795705053553
+    ],
+    "minus_A": {
+     "diff": -0.1380357466764667,
+     "cluster_se": 0.04732159684842978,
+     "ci95": [
+      -0.23356540321195463,
+      -0.04944968225382996
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.4891667923561257,
+     "auroc": 0.8310827758862608,
+     "brier": 0.16071456271402138
+    }
+   },
+   "base_rate": {
+    "n": 470,
+    "n_pos": 168,
+    "log_loss": [
+     0.6538474496659088,
+     0.627358452327846,
+     0.6803481517457133
+    ],
+    "auroc": [
+     0.4532580416272469,
+     0.39948107879613853,
+     0.5093341880881861
+    ],
+    "brier": [
+     0.23055939430543956,
+     0.2176977058700103,
+     0.24342174100236982
+    ],
+    "ece": [
+     0.04931307565155837,
+     0.02547922003988965,
+     0.09466617952875987
+    ],
+    "minus_A": {
+     "diff": -0.0927991958763157,
+     "cluster_se": 0.05207782265100321,
+     "ci95": [
+      -0.19894704413505168,
+      0.006635410645966617
+     ]
+    },
+    "ipw_v3": {
+     "log_loss": 0.6333099829540403,
+     "auroc": 0.44460428405420344,
+     "brier": 0.22058538028539548
+    }
+   },
+   "_ipw_v3_n": {
+    "n": 277,
+    "pos": 107,
+    "kish_n": 68.9
+   }
+  },
+  "selection": {
+   "selected": "A_platt",
+   "steps": [
+    {
+     "candidate": "A_platt",
+     "incumbent": "A",
+     "diff": -0.16611452640314422,
+     "se": 0.036361041764396085,
+     "ci95": [
+      -0.2414538916203995,
+      -0.09942125186320828
+     ],
+     "replaces": true
+    },
+    {
+     "candidate": "B",
+     "incumbent": "A_platt",
+     "diff": 0.04905858034065487,
+     "se": 0.026731003659109888,
+     "ci95": [
+      -0.004003105187660365,
+      0.10471066823894054
+     ],
+     "replaces": false
+    },
+    {
+     "candidate": "B_platt",
+     "incumbent": "A_platt",
+     "diff": 0.005350085263372104,
+     "se": 0.014459967778184486,
+     "ci95": [
+      -0.023266845183341586,
+      0.03434669387519163
+     ],
+     "replaces": false
+    },
+    {
+     "candidate": "C",
+     "incumbent": "A_platt",
+     "diff": 0.008336741084549338,
+     "se": 0.01810040985501983,
+     "ci95": [
+      -0.02678739737274177,
+      0.044128122450625314
+     ],
+     "replaces": false
+    }
+   ]
+  },
+  "agrees_with_headline": true
+ },
+ "public_vs_private": {
+  "public": {
+   "n": 31,
+   "confirmed": 28,
+   "contradicted": 3,
+   "metrics": {
+    "A": {
+     "n": 31,
+     "n_pos": 28,
+     "log_loss": [
+      1.0300205081508191,
+      0.6832494668547852,
+      1.4221557241753326
+     ],
+     "auroc": [
+      0.4166666666666667,
+      0.10714285714285714,
+      0.8
+     ],
+     "brier": [
+      0.35759425811828793,
+      0.23577266030991104,
+      0.4890588379616288
+     ],
+     "ece": [
+      0.43513298781519977,
+      0.29370865455982914,
+      0.5937429807915254
+     ]
+    },
+    "A_platt": {
+     "n": 31,
+     "n_pos": 28,
+     "log_loss": [
+      0.4356771811268484,
+      0.23719465386955746,
+      0.6957948117217247
+     ],
+     "auroc": [
+      0.39285714285714285,
+      0.07142857142857142,
+      0.8
+     ],
+     "brier": [
+      0.12684513736070976,
+      0.05908752176401781,
+      0.21392964642467732
+     ],
+     "ece": [
+      0.19935334282455347,
+      0.11898314607817852,
+      0.3093242334535323
+     ]
+    }
+   }
+  },
+  "private": {
+   "n": 186,
+   "confirmed": 137,
+   "contradicted": 49,
+   "metrics": {
+    "A": {
+     "n": 186,
+     "n_pos": 137,
+     "log_loss": [
+      0.680333276773213,
+      0.5397179645616604,
+      0.8255600325135516
+     ],
+     "auroc": [
+      0.8284671532846716,
+      0.7542671209376373,
+      0.8931136072261072
+     ],
+     "brier": [
+      0.21634951207461453,
+      0.17203120988424755,
+      0.26038487351960476
+     ],
+     "ece": [
+      0.20963154888740557,
+      0.15667063845626758,
+      0.2717501195551446
+     ]
+    },
+    "A_platt": {
+     "n": 186,
+     "n_pos": 137,
+     "log_loss": [
+      0.4295206984236447,
+      0.3464251458442166,
+      0.5190271211406386
+     ],
+     "auroc": [
+      0.8249664829435424,
+      0.7494791062307928,
+      0.892335068090857
+     ],
+     "brier": [
+      0.13508820211374603,
+      0.10462108530554898,
+      0.16798288142605894
+     ],
+     "ece": [
+      0.07132599739082501,
+      0.02822626519571029,
+      0.11404013923138685
+     ]
+    }
+   }
+  },
+  "unknown": {
+   "n": 4,
+   "confirmed": 3,
+   "contradicted": 1,
+   "metrics": {
+    "A": {
+     "n": 4,
+     "n_pos": 3,
+     "log_loss": [
+      0.321005834684993,
+      0.08540258370831239,
+      0.5637874503440313
+     ],
+     "auroc": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "brier": [
+      0.09696119714323219,
+      0.009875781055397001,
+      0.19558846494277032
+     ],
+     "ece": [
+      0.25037942952898895,
+      0.07996334705815147,
+      0.42079551199982645
+     ]
+    },
+    "A_platt": {
+     "n": 4,
+     "n_pos": 3,
+     "log_loss": [
+      0.23249036742882806,
+      0.11883811543056447,
+      0.40486931559154427
+     ],
+     "auroc": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "brier": [
+      0.05247845837580944,
+      0.01302501388860307,
+      0.11763267285538645
+     ],
+     "ece": [
+      0.19842336391485163,
+      0.11174561045261139,
+      0.3249570066273666
+     ]
+    }
+   }
+  }
+ },
+ "public_note": "Public DEV pairs: 28 confirmed, 3 contradicted. The score has no demonstrated ranking ability for public facilities (AUROC interval spans 0.5 widely).",
+ "per_service_text_only": [
+  {
+   "service": "burn_care",
+   "n": 22,
+   "confirmed": 15,
+   "contradicted": 7,
+   "ll_selected": 0.6196232155135154,
+   "ll_text": 0.6755428411799186,
+   "diff": -0.05591962566640321,
+   "se": 0.13045633909862414,
+   "auroc_selected": 0.6285714285714286,
+   "auroc_T": 0.6428571428571429,
+   "beats_text": false
+  },
+  {
+   "service": "cardiac_surgery",
+   "n": 38,
+   "confirmed": 26,
+   "contradicted": 12,
+   "ll_selected": 0.5121359685825854,
+   "ll_text": 0.5639492759094624,
+   "diff": -0.0518133073268769,
+   "se": 0.07117366006040907,
+   "auroc_selected": 0.8044871794871795,
+   "auroc_T": 0.7115384615384616,
+   "beats_text": false
+  },
+  {
+   "service": "dialysis",
+   "n": 32,
+   "confirmed": 28,
+   "contradicted": 4,
+   "ll_selected": 0.24260953452953885,
+   "ll_text": 0.38929137215607845,
+   "diff": -0.14668183762653966,
+   "se": 0.052610656132813155,
+   "auroc_selected": 0.9196428571428571,
+   "auroc_T": 0.7366071428571429,
+   "beats_text": true
+  },
+  {
+   "service": "emergency_24x7",
+   "n": 26,
+   "confirmed": 18,
+   "contradicted": 8,
+   "ll_selected": 0.4440929235744945,
+   "ll_text": 0.5555510786242648,
+   "diff": -0.11145815504977026,
+   "se": 0.0924649846383533,
+   "auroc_selected": 0.8472222222222222,
+   "auroc_T": 0.7291666666666666,
+   "beats_text": true
+  },
+  {
+   "service": "emergency_csection",
+   "n": 27,
+   "confirmed": 20,
+   "contradicted": 7,
+   "ll_selected": 0.3273424937960745,
+   "ll_text": 0.5749700907113692,
+   "diff": -0.24762759691529462,
+   "se": 0.066175796075183,
+   "auroc_selected": 0.95,
+   "auroc_T": 0.6464285714285715,
+   "beats_text": true
+  },
+  {
+   "service": "mri",
+   "n": 21,
+   "confirmed": 16,
+   "contradicted": 5,
+   "ll_selected": 0.527505484354957,
+   "ll_text": 0.5737281858172756,
+   "diff": -0.046222701462318785,
+   "se": 0.08154299650365872,
+   "auroc_selected": 0.5625,
+   "auroc_T": 0.48125,
+   "beats_text": false
+  },
+  {
+   "service": "nicu",
+   "n": 25,
+   "confirmed": 21,
+   "contradicted": 4,
+   "ll_selected": 0.2746062815956014,
+   "ll_text": 0.4297668221679148,
+   "diff": -0.15516054057231335,
+   "se": 0.0799207703156993,
+   "auroc_selected": 0.9761904761904762,
+   "auroc_T": 0.7619047619047619,
+   "beats_text": true
+  },
+  {
+   "service": "stemi_thrombolysis",
+   "n": 16,
+   "confirmed": 14,
+   "contradicted": 2,
+   "ll_selected": 0.5049648012387948,
+   "ll_text": 0.4428013943251584,
+   "diff": 0.06216340691363639,
+   "se": 0.09333066347372485,
+   "auroc_selected": 0.9285714285714286,
+   "auroc_T": 0.6428571428571429,
+   "beats_text": false
+  },
+  {
+   "service": "trauma_care",
+   "n": 14,
+   "confirmed": 10,
+   "contradicted": 4,
+   "ll_selected": 0.5045392116049271,
+   "ll_text": 0.5901979908130618,
+   "diff": -0.08565877920813479,
+   "se": 0.16584913036987342,
+   "auroc_selected": 0.875,
+   "auroc_T": 0.6,
+   "beats_text": false
+  }
+ ],
+ "thresholds": {
+  "t_L": 0.36862903391548474,
+  "t_L_fallback": false,
+  "t_U": 0.2,
+  "t_U_fallback": true,
+  "likely": {
+   "n": 120,
+   "k_correct": 102,
+   "rate": 0.85,
+   "wilson95": [
+    0.7753,
+    0.903
+   ]
+  },
+  "unlikely": {
+   "n": 7,
+   "k_correct": 7,
+   "rate": 1.0,
+   "wilson95": [
+    0.6457,
+    1.0
+   ]
+  },
+  "eligible_curve": [
+   {
+    "t": 0.3,
+    "n": 120,
+    "k": 102
+   },
+   {
+    "t": 0.5,
+    "n": 116,
+    "k": 101
+   },
+   {
+    "t": 0.6,
+    "n": 112,
+    "k": 99
+   },
+   {
+    "t": 0.7,
+    "n": 101,
+    "k": 88
+   },
+   {
+    "t": 0.8,
+    "n": 87,
+    "k": 77
+   },
+   {
+    "t": 0.9,
+    "n": 54,
+    "k": 49
+   }
+  ]
+ },
+ "band_thresholds": {
+  "likely": {
+   "p": 0.36862903391548474,
+   "p_location": 0.7,
+   "p_exists": 0.7
+  },
+  "unlikely": {
+   "p": 0.2
+  },
+  "rule": "LIKELY: p >= t_L, P_L and P_E >= 0.7, T >= 2. UNLIKELY: p <= t_U, or C = 2 with T <= 1 (the c2 term). Otherwise CALL_FIRST when T >= 2, else NO_SERVICE_TEXT."
+ },
+ "eligibility": {
+  "rows": 9959,
+  "no_coordinates": 0,
+  "exclude_review": 12,
+  "unassessed_kept": 0,
+  "kept": 9947,
+  "rule": "common/eligibility.py eligible_facilities: exclude_review records are not scored"
+ },
+ "conformal": {
+  "emergency": {
+   "services": [
+    "trauma_care",
+    "emergency_24x7",
+    "emergency_csection",
+    "burn_care",
+    "stemi_thrombolysis",
+    "nicu"
+   ],
+   "n_queries": 27,
+   "queries_without_confirmed": 2,
+   "alpha": 0.1,
+   "k": 2,
+   "coverage": 1.0,
+   "coverage_k": 27,
+   "coverage_wilson95": [
+    0.8754449685379289,
+    1.0
+   ],
+   "random_order_coverage": 0.9737213403880071,
+   "query_size_median": 2.0,
+   "query_size_max": 7
+  },
+  "planned": {
+   "services": [
+    "dialysis",
+    "mri",
+    "cardiac_surgery"
+   ],
+   "n_queries": 20,
+   "queries_without_confirmed": 0,
+   "alpha": 0.1,
+   "k": 2,
+   "coverage": 0.95,
+   "coverage_k": 19,
+   "coverage_wilson95": [
+    0.7638688045357189,
+    0.9911185512976646
+   ],
+   "random_order_coverage": 0.9650000000000001,
+   "query_size_median": 3.0,
+   "query_size_max": 6
+  }
+ },
+ "conformal_note": "Pseudo-queries are (service, state) groups of DEV pairs, median size 2 to 3; a random order reaches nearly the same coverage, so k carries little information about live queries.",
+ "calibration_by_score_bin": [
+  {
+   "bin": 0,
+   "p_min": 0.0,
+   "p_max": 0.2,
+   "n_decided": 7,
+   "k_confirmed": 0,
+   "k_contradicted": 7,
+   "mean_p": 0.1679564907678645,
+   "wilson95": [
+    0.0,
+    0.35433043867586833
+   ],
+   "k_no_info": 0,
+   "k_never_searched": 9
+  },
+  {
+   "bin": 1,
+   "p_min": 0.2,
+   "p_max": 0.4,
+   "n_decided": 17,
+   "k_confirmed": 5,
+   "k_contradicted": 12,
+   "mean_p": 0.31620699038042827,
+   "wilson95": [
+    0.1327998952626943,
+    0.5313311024822815
+   ],
+   "k_no_info": 8,
+   "k_never_searched": 15
+  },
+  {
+   "bin": 2,
+   "p_min": 0.4,
+   "p_max": 0.6,
+   "n_decided": 22,
+   "k_confirmed": 11,
+   "k_contradicted": 11,
+   "mean_p": 0.5347929908148195,
+   "wilson95": [
+    0.30722106144268146,
+    0.6927789385573185
+   ],
+   "k_no_info": 63,
+   "k_never_searched": 27
+  },
+  {
+   "bin": 3,
+   "p_min": 0.6,
+   "p_max": 0.8,
+   "n_decided": 47,
+   "k_confirmed": 38,
+   "k_contradicted": 9,
+   "mean_p": 0.6972452575971464,
+   "wilson95": [
+    0.6745599530208418,
+    0.8958406735172132
+   ],
+   "k_no_info": 89,
+   "k_never_searched": 45
+  },
+  {
+   "bin": 4,
+   "p_min": 0.8,
+   "p_max": 1.0,
+   "n_decided": 128,
+   "k_confirmed": 114,
+   "k_contradicted": 14,
+   "mean_p": 0.9133244435577588,
+   "wilson95": [
+    0.8247655480085974,
+    0.9337212045540804
+   ],
+   "k_no_info": 89,
+   "k_never_searched": 46
+  }
+ ],
+ "calibration_note": "bins on DEV OOF P_S for decided pairs and on the shipped P_S for undecided pairs",
+ "per_term_weights": [
+  {
+   "term": "b_anti_rabies",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_blood_bank",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_burn_care",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_cardiac_surgery",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_cataract_surgery",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_cath_lab_angioplasty",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_chemotherapy",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_ct_scan",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_de_addiction",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_dialysis",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_emergency_24x7",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_emergency_csection",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_eye_emergency",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_high_risk_pregnancy",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_hiv_art",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_icu",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_institutional_delivery",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_kidney_transplant",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_mri",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_neurosurgery",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_nicu",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_nutrition_rehabilitation",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_orthopaedic_trauma_surgery",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_paediatric_inpatient",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_picu",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_psychiatric_care",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_radiotherapy",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_safe_abortion_mtp",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_snakebite_antivenom",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_stemi_thrombolysis",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_stroke_care",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_surgical_oncology",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_tb_care",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_trauma_care",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_ultrasound",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "b_ventilator_support",
+   "family": "base",
+   "prior_weight": -2.9,
+   "shipped_logit": -1.4557975560301775,
+   "shipped_points": -42.0054382924602,
+   "derivation": "expert: base rate about 5% for a pair with no mention (no audit rate exists before labels) (M1 b_*, same for all 36)",
+   "n_fired_all": 9959
+  },
+  {
+   "term": "t1",
+   "family": "T",
+   "prior_weight": 0.4479492080306787,
+   "shipped_logit": 0.2248701249230054,
+   "shipped_points": 6.4883802814100315,
+   "derivation": "expert: a specialties tag or list-only mention is weak evidence x = specialty evidence weight when the only mention is a specialties item",
+   "n_fired_all": 30222
+  },
+  {
+   "term": "t2",
+   "family": "T",
+   "prior_weight": 0.8405860543330557,
+   "shipped_logit": 0.4219734908727974,
+   "shipped_points": 12.175581253375782,
+   "derivation": "v1 weak stratum 1/12 confirmed: logit -2.04 = b + t1 + t2, so t2 = -2.04 - (-2.9) - 0.4",
+   "n_fired_all": 21899
+  },
+  {
+   "term": "t3",
+   "family": "T",
+   "prior_weight": 0.8,
+   "shipped_logit": 0.4015993258014283,
+   "shipped_points": 11.587707115161436,
+   "derivation": "v1 strong 10/12 vs weak 1/12: LLR 3.47 split over t3, t4, t5/2, p1, p2/2",
+   "n_fired_all": 11286
+  },
+  {
+   "term": "t4",
+   "family": "T",
+   "prior_weight": 1.0,
+   "shipped_logit": 0.5019991572517853,
+   "shipped_points": 14.484633893951793,
+   "derivation": "same split as t3 (2+ fields is the core of the strong stratum)",
+   "n_fired_all": 7692
+  },
+  {
+   "term": "t5",
+   "family": "T",
+   "prior_weight": 0.6,
+   "shipped_logit": 0.3011994943510712,
+   "shipped_points": 8.690780336371075,
+   "derivation": "same split as t3 (about half of strong pairs carry a unit or quantity)",
+   "n_fired_all": 4357
+  },
+  {
+   "term": "trunc0",
+   "family": "T",
+   "prior_weight": 0.04793056525928267,
+   "shipped_logit": 0.0240611033667616,
+   "shipped_points": 0.6942566901108741,
+   "derivation": "expert: no mention on a record whose list hit the 50-item cap says less; also when the only mention is a specialties item",
+   "n_fired_all": 63861
+  },
+  {
+   "term": "d_unit",
+   "family": "D",
+   "prior_weight": 0.46,
+   "shipped_logit": 0.23091961233582126,
+   "shipped_points": 6.662931591217824,
+   "derivation": "a dataset detail (equipment count, unit beds, 24x7 unit) is one own unit from the same text: the t2 step, only when T < 2 (D is not independent of T)",
+   "n_fired_all": 243
+  },
+  {
+   "term": "tb_mid",
+   "family": "C_prior",
+   "prior_weight": -0.43,
+   "shipped_logit": -0.2158596376182677,
+   "shipped_points": -6.228392574399272,
+   "derivation": "half of tb_high; bucket by URL count 8 to 29 (v1 n_urls cut, q_share not in v2)",
+   "n_fired_all": 8197
+  },
+  {
+   "term": "tb_high",
+   "family": "C_prior",
+   "prior_weight": -0.6459203444376587,
+   "shipped_logit": -0.32425146855948755,
+   "shipped_points": -9.355919713834727,
+   "derivation": "merge audit: contamination 59.6% of records at 30+ URLs vs 4.2% at < 3 URLs; LLR log(0.404/0.958); 30+ URLs",
+   "n_fired_all": 8890
+  },
+  {
+   "term": "tp_public",
+   "family": "C_prior",
+   "prior_weight": -0.19466570989539736,
+   "shipped_logit": -0.09772202231331001,
+   "shipped_points": -2.81966153954106,
+   "derivation": "log P(own | OR 2.34) / P(own) at the mid bucket (q 0.377 -> 0.586), applied when T >= 2",
+   "n_fired_all": 1478
+  },
+  {
+   "term": "tw_none",
+   "family": "C_prior",
+   "prior_weight": 0.0,
+   "shipped_logit": 0.0,
+   "shipped_points": 0.0,
+   "derivation": "log P(own | OR 1.34) / P(own) at the mid bucket (q 0.377 -> 0.448), applied when T >= 2",
+   "n_fired_all": 2050
+  },
+  {
+   "term": "c1",
+   "family": "C",
+   "prior_weight": -0.51,
+   "shipped_logit": -0.25601957019841054,
+   "shipped_points": -7.387163285915415,
+   "derivation": "cleaning hand check: 17/25 other-facility flags are true foreign content (logit 0.73), scaled by 0.7 because own units remain; v2 witness rates 23/34 agree",
+   "n_fired_all": 459
+  },
+  {
+   "term": "c2",
+   "family": "C",
+   "prior_weight": -0.5,
+   "shipped_logit": -0.25099957862589267,
+   "shipped_points": -7.242316946975897,
+   "derivation": "expert: foreign content with no own unit (added to c1)",
+   "n_fired_all": 132
+  },
+  {
+   "term": "n1",
+   "family": "N",
+   "prior_weight": -1.67,
+   "shipped_logit": -0.8383385926104815,
+   "shipped_points": -24.189338602899493,
+   "derivation": "claims audit: 6/40 non-offer atoms were support for the service (logit of 6.5/41) relative to even odds",
+   "n_fired_all": 142
+  },
+  {
+   "term": "s1",
+   "family": "S",
+   "prior_weight": -2.6488272028623756,
+   "shipped_logit": -1.3297090235425164,
+   "shipped_points": -38.36729228180189,
+   "derivation": "claim precision at single-focus facilities 67/111 vs own text units 96/100: logit difference; replaces M1 s1 -1.5 and type_dentist -2.0 (v2 S fires for every service outside the focus)",
+   "n_fired_all": 123204
+  },
+  {
+   "term": "p1",
+   "family": "P",
+   "prior_weight": 0.9,
+   "shipped_logit": 0.45179924152660683,
+   "shipped_points": 13.036170504556615,
+   "derivation": "same split as t3 (strong stratum requires a clinical prerequisite); x = value of the strongest distinct cue (1 text cue, specialty evidence weight for a specialty cue)",
+   "n_fired_all": 85976
+  },
+  {
+   "term": "p2",
+   "family": "P",
+   "prior_weight": 0.5,
+   "shipped_logit": 0.25099957862589267,
+   "shipped_points": 7.242316946975897,
+   "derivation": "same split as t3; x = value of the second cue",
+   "n_fired_all": 6880
+  },
+  {
+   "term": "x_erk_prereq",
+   "family": "X",
+   "prior_weight": 0.72,
+   "shipped_logit": 0.36143939322128543,
+   "shipped_points": 10.42893640364529,
+   "derivation": "blood centre on site is a prerequisite: p1 (0.9) x match precision 16/20",
+   "n_fired_all": 1460
+  },
+  {
+   "term": "x_nabh:service_code",
+   "family": "X",
+   "prior_weight": 4.165961539357508,
+   "shipped_logit": 2.0913091819008196,
+   "shipped_points": 60.342427713877356,
+   "derivation": "llr_positive(p = match 39/40 -> 0.963 x meaning 1.0 (the list states this service))",
+   "n_fired_all": 227
+  },
+  {
+   "term": "x_nabh:department",
+   "family": "X",
+   "prior_weight": 2.561204543371584,
+   "shipped_logit": 1.285722522321979,
+   "shipped_points": 37.09811013826337,
+   "derivation": "llr_positive(p = match 39/40 -> 0.963 x meaning 0.5 (a department, not the service (FEATURES.md: NABH codes are departments)))",
+   "n_fired_all": 5018
+  },
+  {
+   "term": "x_nabh:department_proxy",
+   "family": "X",
+   "prior_weight": 1.7148519939973303,
+   "shipped_logit": 0.8608542557982035,
+   "shipped_points": 24.83900331536455,
+   "derivation": "llr_positive(p = match 39/40 -> 0.963 x meaning 0.25 (a proxy department (cardiology for cardiac surgery)))",
+   "n_fired_all": 1593
+  },
+  {
+   "term": "x_nmc:department",
+   "family": "X",
+   "prior_weight": 2.506767599197634,
+   "shipped_logit": 1.2583952222232935,
+   "shipped_points": 36.309610931598215,
+   "derivation": "llr_positive(p = match 19/20 -> 0.929 x meaning 0.5 (a department, not the service (FEATURES.md: NABH codes are departments)))",
+   "n_fired_all": 648
+  },
+  {
+   "term": "x_nmc:department_support",
+   "family": "X",
+   "prior_weight": 1.67778272030552,
+   "shipped_logit": 0.842245511644979,
+   "shipped_points": 24.302068457223978,
+   "derivation": "llr_positive(p = 0.929 x meaning 0.5 x value 0.5)",
+   "n_fired_all": 838
+  },
+  {
+   "term": "x_laqshya:certificate",
+   "family": "X",
+   "prior_weight": 3.661914202821014,
+   "shipped_logit": 1.8382778437444924,
+   "shipped_points": 53.041486578924726,
+   "derivation": "llr_positive(p = match 17/20 -> 0.833 x meaning 1.0 (a dated certificate for the unit that does it))",
+   "n_fired_all": 27
+  },
+  {
+   "term": "x_laqshya:expired",
+   "family": "X",
+   "prior_weight": 2.3547251508734983,
+   "shipped_logit": 1.1820700412980794,
+   "shipped_points": 34.107331731283026,
+   "derivation": "llr_positive(p = 0.833 x value 0.5): certificate expired before 2026-11-21",
+   "n_fired_all": 76
+  },
+  {
+   "term": "x_mohfw_tcf:designation",
+   "family": "X",
+   "prior_weight": 2.506767599197634,
+   "shipped_logit": 1.2583952222232935,
+   "shipped_points": 36.309610931598215,
+   "derivation": "llr_positive(p = match 19/20 -> 0.929 x meaning 0.5 (a scheme designation; README: 12th-plan rows not verified functional))",
+   "n_fired_all": 20
+  },
+  {
+   "term": "x_eraktkosh:service",
+   "family": "X",
+   "prior_weight": 3.5005894352114186,
+   "shipped_logit": 1.7572929463606355,
+   "shipped_points": 50.70475638207288,
+   "derivation": "llr_positive(p = match 16/20 -> 0.786 x meaning 1.0 (the list states this service))",
+   "n_fired_all": 365
+  },
+  {
+   "term": "x_pmndp_goa:service",
+   "family": "X",
+   "prior_weight": 3.384490257229765,
+   "shipped_logit": 1.6990112568562203,
+   "shipped_points": 49.02310229361988,
+   "derivation": "llr_positive(p = match 1/1 -> 0.750 x meaning 1.0 (the list states this service))",
+   "n_fired_all": 1
+  },
+  {
+   "term": "w_cell_A",
+   "family": "W",
+   "prior_weight": 4.16980158765679,
+   "shipped_logit": 2.0932368829108654,
+   "shipped_points": 60.398049407627546,
+   "derivation": "llr_positive(QA cell A 13/13 -> 0.964)",
+   "n_fired_all": 9190
+  },
+  {
+   "term": "w_cell_B",
+   "family": "W",
+   "prior_weight": 3.8112210610758193,
+   "shipped_logit": 1.9132297607603164,
+   "shipped_points": 55.20414175860173,
+   "derivation": "llr_positive(QA cell B 3/3 -> 0.875)",
+   "n_fired_all": 1571
+  },
+  {
+   "term": "w_cell_C",
+   "family": "W",
+   "prior_weight": 2.821127878140166,
+   "shipped_logit": 1.4162038173258809,
+   "shipped_points": 40.86300448288136,
+   "derivation": "llr_positive(QA cell C 8/14 -> 0.567)",
+   "n_fired_all": 3790
+  },
+  {
+   "term": "w_cell_D",
+   "family": "W",
+   "prior_weight": 2.3755170562186527,
+   "shipped_logit": 1.1925075602590056,
+   "shipped_points": 34.408494868165285,
+   "derivation": "llr_positive(QA cell D 5/12 -> 0.423)",
+   "n_fired_all": 1182
+  },
+  {
+   "term": "w_cell_E",
+   "family": "W",
+   "prior_weight": 2.2826858014495954,
+   "shipped_logit": 1.1459063485983132,
+   "shipped_points": 33.063868128919324,
+   "derivation": "llr_positive(QA cell E 7/18 -> 0.395)",
+   "n_fired_all": 4243
+  },
+  {
+   "term": "w_24x7@emergency_24x7",
+   "family": "W",
+   "prior_weight": 3.769608829633704,
+   "shipped_logit": 1.892340455645008,
+   "shipped_points": 54.601403820652294,
+   "derivation": "llr_positive(24x7 emergency fact 9/10 x meaning 1.0)",
+   "n_fired_all": 298
+  },
+  {
+   "term": "w_24x7@trauma_care",
+   "family": "W",
+   "prior_weight": 1.6066199191871242,
+   "shipped_logit": 0.8065218454558678,
+   "shipped_points": 23.27130133615591,
+   "derivation": "llr_positive(24x7 emergency fact 9/10 x meaning 0.25)",
+   "n_fired_all": 562
+  },
+  {
+   "term": "w_24x7@emergency_csection",
+   "family": "W",
+   "prior_weight": 1.6066199191871242,
+   "shipped_logit": 0.8065218454558678,
+   "shipped_points": 23.27130133615591,
+   "derivation": "llr_positive(24x7 emergency fact 9/10 x meaning 0.25)",
+   "n_fired_all": 1231
+  },
+  {
+   "term": "w_overlap",
+   "family": "W",
+   "prior_weight": 1.0,
+   "shipped_logit": 0.5019991572517853,
+   "shipped_points": 14.484633893951793,
+   "derivation": "shared pages counted once: contribution = -min(text points t1..t5, website points), so text and own site together earn max(text, website); the record text was extracted from the same web pages (FEATURES.md finding 5)",
+   "n_fired_all": 10798
+  },
+  {
+   "term": "w_silent",
+   "family": "W",
+   "prior_weight": -1.4660329787804405,
+   "shipped_logit": -0.7359473198511056,
+   "shipped_points": -21.23495097409428,
+   "derivation": "site observable but silent: log(1 - r_W), r_W = P(site mentions s | own text T >= 4, site observable) = 3793/4931 (label-free anchor, as LABELS.md text_T4)",
+   "n_fired_all": 153090
+  },
+  {
+   "term": "o_speciality",
+   "family": "O",
+   "prior_weight": 2.3547251508734983,
+   "shipped_logit": 1.1820700412980794,
+   "shipped_points": 34.107331731283026,
+   "derivation": "llr_positive(OSM match 17/20 x meaning 0.5: speciality map not hand-checked)",
+   "n_fired_all": 511
+  },
+  {
+   "term": "o_emergency",
+   "family": "O",
+   "prior_weight": 3.661914202821014,
+   "shipped_logit": 1.8382778437444924,
+   "shipped_points": 53.041486578924726,
+   "derivation": "llr_positive(OSM match 17/20): emergency=yes, for emergency_24x7 only",
+   "n_fired_all": 162
+  },
+  {
+   "term": "k_iphs",
+   "family": "K",
+   "prior_weight": 0.5,
+   "shipped_logit": 0.25099957862589267,
+   "shipped_points": 7.242316946975897,
+   "derivation": "IPHS 2022 marks dialysis and emergency C-section essential at district hospitals; v2: x = IPHS expectation 0 / 0.5 / 1 for public facilities with a known level, 36 services",
+   "n_fired_all": 4898
+  },
+  {
+   "term": "type_clinic",
+   "family": "context",
+   "prior_weight": -0.5,
+   "shipped_logit": -0.25099957862589267,
+   "shipped_points": -7.242316946975897,
+   "derivation": "expert: inpatient services less often at clinics",
+   "n_fired_all": 92340
+  },
+  {
+   "term": "type_other",
+   "family": "context",
+   "prior_weight": -1.0,
+   "shipped_logit": -0.5019991572517853,
+   "shipped_points": -14.484633893951793,
+   "derivation": "expert",
+   "n_fired_all": 3276
+  },
+  {
+   "term": "level_dh",
+   "family": "context",
+   "prior_weight": 0.5,
+   "shipped_logit": 0.25099957862589267,
+   "shipped_points": 7.242316946975897,
+   "derivation": "expert",
+   "n_fired_all": 2376
+  },
+  {
+   "term": "level_sdh",
+   "family": "context",
+   "prior_weight": 0.3,
+   "shipped_logit": 0.1505997471755356,
+   "shipped_points": 4.345390168185538,
+   "derivation": "expert",
+   "n_fired_all": 684
+  },
+  {
+   "term": "level_chc",
+   "family": "context",
+   "prior_weight": 0.0,
+   "shipped_logit": 0.0,
+   "shipped_points": 0.0,
+   "derivation": "expert",
+   "n_fired_all": 252
+  },
+  {
+   "term": "level_phc",
+   "family": "context",
+   "prior_weight": -1.0,
+   "shipped_logit": -0.5019991572517853,
+   "shipped_points": -14.484633893951793,
+   "derivation": "expert",
+   "n_fired_all": 396
+  },
+  {
+   "term": "level_mc",
+   "family": "context",
+   "prior_weight": 1.0,
+   "shipped_logit": 0.5019991572517853,
+   "shipped_points": 14.484633893951793,
+   "derivation": "expert",
+   "n_fired_all": 6552
+  },
+  {
+   "term": "beds_lt30",
+   "family": "context",
+   "prior_weight": -0.5,
+   "shipped_logit": -0.25099957862589267,
+   "shipped_points": -7.242316946975897,
+   "derivation": "expert",
+   "n_fired_all": 16920
+  },
+  {
+   "term": "beds_100p",
+   "family": "context",
+   "prior_weight": 0.5,
+   "shipped_logit": 0.25099957862589267,
+   "shipped_points": 7.242316946975897,
+   "derivation": "expert",
+   "n_fired_all": 48456
+  },
+  {
+   "term": "breadth_lt5",
+   "family": "context",
+   "prior_weight": -0.3,
+   "shipped_logit": -0.1505997471755356,
+   "shipped_points": -4.345390168185538,
+   "derivation": "expert",
+   "n_fired_all": 81756
+  },
+  {
+   "term": "breadth_20p",
+   "family": "context",
+   "prior_weight": 0.3,
+   "shipped_logit": 0.1505997471755356,
+   "shipped_points": 4.345390168185538,
+   "derivation": "expert",
+   "n_fired_all": 71676
+  },
+  {
+   "term": "scale_contradiction",
+   "family": "context",
+   "prior_weight": -0.5,
+   "shipped_logit": -0.25099957862589267,
+   "shipped_points": -7.242316946975897,
+   "derivation": "expert",
+   "n_fired_all": 540
+  },
+  {
+   "term": "r_reader",
+   "family": "R",
+   "prior_weight": 0.0,
+   "shipped_logit": 0.0,
+   "shipped_points": 0.0,
+   "derivation": "slot for issue #50 reader p_offers (absent: x = 0); weight to be set from the reader's own validation, never from gold",
+   "n_fired_all": 0
+  }
+ ],
+ "per_family_points": [
+  {
+   "family": "C",
+   "count": 2,
+   "min": -7.387,
+   "max": -7.242
+  },
+  {
+   "family": "C_prior",
+   "count": 4,
+   "min": -9.356,
+   "max": 0.0
+  },
+  {
+   "family": "D",
+   "count": 1,
+   "min": 6.663,
+   "max": 6.663
+  },
+  {
+   "family": "K",
+   "count": 1,
+   "min": 7.242,
+   "max": 7.242
+  },
+  {
+   "family": "N",
+   "count": 1,
+   "min": -24.189,
+   "max": -24.189
+  },
+  {
+   "family": "O",
+   "count": 2,
+   "min": 34.107,
+   "max": 53.041
+  },
+  {
+   "family": "P",
+   "count": 2,
+   "min": 7.242,
+   "max": 13.036
+  },
+  {
+   "family": "R",
+   "count": 1,
+   "min": 0.0,
+   "max": 0.0
+  },
+  {
+   "family": "S",
+   "count": 1,
+   "min": -38.367,
+   "max": -38.367
+  },
+  {
+   "family": "T",
+   "count": 6,
+   "min": 0.694,
+   "max": 14.485
+  },
+  {
+   "family": "W",
+   "count": 10,
+   "min": -21.235,
+   "max": 60.398
+  },
+  {
+   "family": "X",
+   "count": 11,
+   "min": 10.429,
+   "max": 60.342
+  },
+  {
+   "family": "base",
+   "count": 36,
+   "min": -42.005,
+   "max": -42.005
+  },
+  {
+   "family": "context",
+   "count": 12,
+   "min": -14.485,
+   "max": 14.485
+  }
+ ],
+ "intervals": "lo/hi = Wilson 95% interval of the observed confirmed rate among decided DEV pairs whose OOF P_S falls in the same score bin (width 0.2, see calibration_by_score_bin) as this row's p. It is the bin's track record, not an interval around p: every row of a bin carries the same lo/hi, and p need not lie inside it.",
+ "field_descriptions": {
+  "lo": "lo/hi = Wilson 95% interval of the observed confirmed rate among decided DEV pairs whose OOF P_S falls in the same score bin (width 0.2, see calibration_by_score_bin) as this row's p. It is the bin's track record, not an interval around p: every row of a bin carries the same lo/hi, and p need not lie inside it.",
+  "hi": "lo/hi = Wilson 95% interval of the observed confirmed rate among decided DEV pairs whose OOF P_S falls in the same score bin (width 0.2, see calibration_by_score_bin) as this row's p. It is the bin's track record, not an interval around p: every row of a bin carries the same lo/hi, and p need not lie inside it."
+ },
+ "bands_all_pairs": {
+  "NO_SERVICE_TEXT": 242131,
+  "UNLIKELY": 94217,
+  "LIKELY": 20073,
+  "CALL_FIRST": 1671
+ },
+ "bands_public": {
+  "NO_SERVICE_TEXT": 14857,
+  "LIKELY": 1325,
+  "UNLIKELY": 441,
+  "CALL_FIRST": 153
+ },
+ "label_provenance": {
+  "wording": "agent-labelled, not human-checked",
+  "gold_primary_pairs": 597,
+  "headline": {
+   "n": 221,
+   "pos": 168,
+   "neg": 53
+  },
+  "sensitivity": {
+   "n": 470,
+   "pos": 168,
+   "neg": 302
+  },
+  "versions": "v3_dev 300 (web-labelled DEV, inclusion probabilities known), v2 140, e2e 121 primary, v1 36",
+  "v3_kish_effective_n": {
+   "n": 134,
+   "pos": 107,
+   "kish_n": 43.2
+  },
+  "trauma": "old trauma_emergency / trauma_care gold relabelled emergency_24x7; trauma_care gold from v3 only; 1441 trauma_care PU list rows dropped from training",
+  "test_exclusion": {
+   "blocked_facilities": 209,
+   "blocked_groups": 150,
+   "note": "TEST facilities and their leakage groups removed from all training rows; TEST labels never opened"
+  },
+  "labels_stats_sha256": "3ba5502144852047e9d365024eded4e90fb0e7e84761d004f4afc9de9c11a156",
+  "second_labeller_agreement_v3": null
+ },
+ "caveats": [
+  "No fairness parity is claimed; public facilities are few and nearly all confirmed in DEV.",
+  "v1 numbers are history and are not comparable with these DEV numbers.",
+  "Not-observable sources contribute 0 by construction.",
+  "Candidate D (reader) was rejected; the reader slot has weight 0 and never fires."
+ ]
+}

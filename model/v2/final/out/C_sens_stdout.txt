@@ -1,0 +1,67 @@
+gold 470 pos 168 PU 19933 terms 26
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+fold5 fold 0: train gold 368, PU 15977, test 102, clamp edits 3, 31s
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+fold5 fold 1: train gold 375, PU 15554, test 95, clamp edits 4, 28s
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+fold5 fold 2: train gold 383, PU 16165, test 87, clamp edits 2, 25s
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+fold5 fold 3: train gold 383, PU 16253, test 87, clamp edits 3, 28s
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:361: RuntimeWarning: All-NaN slice encountered
+  min_feature_val = np.nanmin(X_col)
+/Users/karthikvattem/projects/datathon/.venv-viz/lib/python3.12/site-packages/interpret/utils/_preprocessor.py:362: RuntimeWarning: All-NaN slice encountered
+  max_feature_val = np.nanmax(X_col)
+fold5 fold 4: train gold 371, PU 15783, test 99, clamp edits 3, 29s
+done 140s

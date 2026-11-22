@@ -1,0 +1,1897 @@
+{
+ "1_overlap": {
+  "ok": true,
+  "detail": {
+   "test_pairs": 150,
+   "test_facilities": 150,
+   "test_groups": 150,
+   "blocked_facilities": 209,
+   "blocked_list_matches": true,
+   "total_hits": 0,
+   "tables": {
+    "labels_cc/gold_dev_pairs": {
+     "rows": 597,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels_cc/gold_dev_facility": {
+     "rows": 630,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels_cc/pu_labels": {
+     "rows": 20059,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels_sens/gold_dev_pairs": {
+     "rows": 597,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels_sens/gold_dev_facility": {
+     "rows": 630,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels_sens/pu_labels": {
+     "rows": 20059,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "oof_selected (Platt fit rows)": {
+     "rows": 221,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "PL oof (location EBM rows)": {
+     "rows": 2658,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "B_cc oof": {
+     "rows": 442,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": null
+    },
+    "C_cc oof": {
+     "rows": 1105,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": null
+    },
+    "B_sens oof": {
+     "rows": 940,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": null
+    },
+    "C_sens oof": {
+     "rows": 2350,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": null
+    },
+    "labels/out/gold_dev_pairs (all rows)": {
+     "rows": 601,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    },
+    "labels/out/pu_labels": {
+     "rows": 21500,
+     "test_fac": 0,
+     "test_group": 0,
+     "own_lg_col_hit": 0
+    }
+   }
+  }
+ },
+ "2_no_gold_test_or_dps_score": {
+  "ok": true,
+  "detail": {
+   "overridden_rows": 644,
+   "overridden_by_split": {
+    "NaN": 360,
+    "dev": 143,
+    "test": 141
+   },
+   "separating_or_copied_columns": [],
+   "forbidden_feature_columns": [],
+   "code_refs": [
+    "viz/features/build_features.py"
+   ],
+   "note": "build_features.py reads score_model only; c_location_score_v1 is not copied into derived/v2"
+  }
+ },
+ "3_selection_recomputed": {
+  "ok": true,
+  "detail": {
+   "n": 221,
+   "pos": 168,
+   "table": {
+    "A": {
+     "ll": 0.7228807627657601,
+     "auroc": 0.8041329739442946,
+     "brier": 0.2340012490322089,
+     "ece": 0.22982816189671104,
+     "max_abs_vs_oof_selected": 2.220446049250313e-16
+    },
+    "A_platt": {
+     "ll": 0.42681615459001426,
+     "auroc": 0.7998652291105122,
+     "brier": 0.13243706982444042,
+     "ece": 0.04359028587616676,
+     "max_abs_vs_oof_selected": 0.00015031136133503153
+    },
+    "B": {
+     "ll": 0.450672833504683,
+     "auroc": 0.8125561545372866,
+     "brier": 0.1427005155542806,
+     "ece": 0.07394979993888007,
+     "max_abs_vs_oof_selected": 0.0
+    },
+    "B_platt": {
+     "ll": 0.432025615200102,
+     "auroc": 0.8121069182389937,
+     "brier": 0.13811842398702473,
+     "ece": 0.0526174589572794,
+     "max_abs_vs_oof_selected": 0.0
+    },
+    "C": {
+     "ll": 0.46148186896120946,
+     "auroc": 0.7656109613656783,
+     "brier": 0.14603736338764803,
+     "ece": 0.04284562512066472,
+     "max_abs_vs_oof_selected": 0.0
+    }
+   },
+   "steps": [
+    {
+     "cand": "A_platt",
+     "inc": "A",
+     "diff": -0.29606460817574587,
+     "se": 0.05882414162003645,
+     "replaces": true
+    },
+    {
+     "cand": "B",
+     "inc": "A_platt",
+     "diff": 0.023856678914668788,
+     "se": 0.035046165596166474,
+     "replaces": false
+    },
+    {
+     "cand": "B_platt",
+     "inc": "A_platt",
+     "diff": 0.005209460610087815,
+     "se": 0.02565111338985219,
+     "replaces": false
+    },
+    {
+     "cand": "C",
+     "inc": "A_platt",
+     "diff": 0.034665714371195186,
+     "se": 0.027411274004368245,
+     "replaces": false
+    }
+   ],
+   "selected": "A_platt",
+   "platt_full": {
+    "a": 0.5020047528092241,
+    "c": 1.4983137065332615
+   },
+   "operator": {
+    "public": {
+     "n": 31,
+     "neg": 3,
+     "auroc_A_platt": 0.39285714285714285
+    },
+    "private": {
+     "n": 186,
+     "neg": 49,
+     "auroc_A_platt": 0.8248175182481752
+    }
+   },
+   "ipw_v3_n": 134,
+   "kish": 43.2,
+   "mismatches": []
+  }
+ },
+ "4_contract": {
+  "ok": false,
+  "detail": {
+   "unique_key": true,
+   "n_services": 36,
+   "services_match_taxonomy": true,
+   "eligible_facilities": 9947,
+   "all_eligible_x_36": true,
+   "exclude_review_present": 12,
+   "lo_p_hi_violations": 22370,
+   "lo_p_hi_viol_by_band": {
+    "NO_SERVICE_TEXT": 16463,
+    "LIKELY": 5488,
+    "CALL_FIRST": 400,
+    "UNLIKELY": 19
+   },
+   "p_minus_hi_max": 0.06371175617499991,
+   "lo_minus_p_max": 0.07455634091800278,
+   "additivity_max_err_2000": 7.105427357601002e-15,
+   "evidence_ids": 526348,
+   "evidence_ids_unresolved": 0,
+   "contribution_families": [
+    "C",
+    "C_prior",
+    "D",
+    "K",
+    "N",
+    "O",
+    "P",
+    "S",
+    "T",
+    "W",
+    "X",
+    "context"
+   ],
+   "not_observable_triples": 1467631,
+   "not_observable_items_in_contributions": 0,
+   "not_observable_nonzero": 0,
+   "not_observable_examples": [],
+   "model_version_unique": true,
+   "model_version_matches_card": true,
+   "model_version_matches_test_predictions": true,
+   "test_predictions_match_scores": true,
+   "bands": {
+    "NO_SERVICE_TEXT": 242527,
+    "UNLIKELY": 94250,
+    "LIKELY": 20076,
+    "CALL_FIRST": 1671
+   }
+  }
+ },
+ "5_faithfulness_raw": {
+  "Wockhardt Hospital Nagpur": {
+   "unique_id": "3ac5ae50-9ce2-4de3-a13c-d95a4ef218ee",
+   "bands_all_36": {
+    "NO_SERVICE_TEXT": 22,
+    "LIKELY": 14
+   },
+   "n_likely": 14,
+   "detail": {
+    "emergency_24x7": {
+     "p": 0.878,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       4
+      ],
+      [
+       "t2",
+       12.2,
+       4
+      ],
+      [
+       "t3",
+       11.6,
+       4
+      ],
+      [
+       "t4",
+       14.5,
+       4
+      ],
+      [
+       "t5",
+       8.7,
+       4
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "icu": {
+     "p": 0.919,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       5
+      ],
+      [
+       "t2",
+       12.2,
+       5
+      ],
+      [
+       "t3",
+       11.6,
+       5
+      ],
+      [
+       "t4",
+       14.5,
+       5
+      ],
+      [
+       "t5",
+       8.7,
+       5
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "p1",
+       13.0,
+       1
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "cardiac_surgery": {
+     "p": 0.786,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       3.7,
+       2
+      ],
+      [
+       "trunc0",
+       0.7,
+       2
+      ],
+      [
+       "p1",
+       13.0,
+       3
+      ],
+      [
+       "p2",
+       7.2,
+       3
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "dialysis": {
+     "p": 0.897,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       2
+      ],
+      [
+       "t2",
+       12.2,
+       2
+      ],
+      [
+       "t3",
+       11.6,
+       2
+      ],
+      [
+       "t4",
+       14.5,
+       2
+      ],
+      [
+       "t5",
+       8.7,
+       2
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "c1",
+       -7.4,
+       2
+      ],
+      [
+       "p1",
+       13.0,
+       1
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "cataract_surgery": {
+     "p": 0.685,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       5.4,
+       1
+      ],
+      [
+       "trunc0",
+       0.7,
+       1
+      ],
+      [
+       "p1",
+       3.5,
+       1
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "eye_emergency": {
+     "p": 0.623,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.705,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "trunc0",
+       0.7,
+       0
+      ],
+      [
+       "p1",
+       0.9,
+       1
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "Aravind Eye Hospital Hyderabad": {
+   "unique_id": "b8a5401f-42f1-422a-8cd9-686a15b4cb76",
+   "bands_all_36": {
+    "CALL_FIRST": 17,
+    "UNLIKELY": 14,
+    "NO_SERVICE_TEXT": 5
+   },
+   "n_likely": 0,
+   "detail": {
+    "emergency_24x7": {
+     "p": 0.476,
+     "band": "CALL_FIRST",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       10
+      ],
+      [
+       "t2",
+       12.2,
+       10
+      ],
+      [
+       "t3",
+       11.6,
+       10
+      ],
+      [
+       "t4",
+       14.5,
+       10
+      ],
+      [
+       "t5",
+       8.7,
+       10
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "s1",
+       -38.4,
+       1
+      ],
+      [
+       "w_silent",
+       -21.2,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "icu": {
+     "p": 0.648,
+     "band": "CALL_FIRST",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       4
+      ],
+      [
+       "t2",
+       12.2,
+       4
+      ],
+      [
+       "t3",
+       11.6,
+       4
+      ],
+      [
+       "t4",
+       14.5,
+       4
+      ],
+      [
+       "t5",
+       8.7,
+       4
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "s1",
+       -38.4,
+       1
+      ],
+      [
+       "p1",
+       13.0,
+       2
+      ],
+      [
+       "p2",
+       7.2,
+       2
+      ],
+      [
+       "w_silent",
+       -21.2,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "cardiac_surgery": {
+     "p": 0.25,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "trunc0",
+       0.7,
+       0
+      ],
+      [
+       "s1",
+       -38.4,
+       1
+      ],
+      [
+       "p1",
+       13.0,
+       2
+      ],
+      [
+       "p2",
+       1.4,
+       2
+      ],
+      [
+       "w_silent",
+       -21.2,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "dialysis": {
+     "p": 0.476,
+     "band": "CALL_FIRST",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       8
+      ],
+      [
+       "t2",
+       12.2,
+       8
+      ],
+      [
+       "t3",
+       11.6,
+       8
+      ],
+      [
+       "t4",
+       14.5,
+       8
+      ],
+      [
+       "t5",
+       8.7,
+       8
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "s1",
+       -38.4,
+       1
+      ],
+      [
+       "w_silent",
+       -21.2,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "cataract_surgery": {
+     "p": 0.936,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "trunc0",
+       0.7,
+       0
+      ],
+      [
+       "p1",
+       3.5,
+       1
+      ],
+      [
+       "w_cell_A",
+       60.4,
+       1
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    },
+    "eye_emergency": {
+     "p": 0.441,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.394,
+     "p_exists": 0.909,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "trunc0",
+       0.7,
+       0
+      ],
+      [
+       "p1",
+       0.9,
+       1
+      ],
+      [
+       "w_silent",
+       -21.2,
+       0
+      ],
+      [
+       "beds_100p",
+       7.2,
+       0
+      ],
+      [
+       "breadth_20p",
+       4.3,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "Sadar Hospital Gopalganj, Bihar (public dh)": {
+   "unique_id": "1abd52f3-879a-4c54-aba6-d59043d9f601",
+   "bands_all_36": {
+    "NO_SERVICE_TEXT": 32,
+    "LIKELY": 4
+   },
+   "n_likely": 4,
+   "detail": {
+    "emergency_24x7": {
+     "p": 0.683,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       2
+      ],
+      [
+       "t2",
+       12.2,
+       2
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "tp_public",
+       -2.8,
+       0
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "trauma_care": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "burn_care": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "orthopaedic_trauma_surgery": {
+     "p": 0.763,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       2
+      ],
+      [
+       "t2",
+       12.2,
+       2
+      ],
+      [
+       "t3",
+       11.6,
+       2
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "tp_public",
+       -2.8,
+       0
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "snakebite_antivenom": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "icu": {
+     "p": 0.73,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       13.0,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "picu": {
+     "p": 0.642,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       1.1,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "ventilator_support": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "emergency_csection": {
+     "p": 0.777,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       13.0,
+       2
+      ],
+      [
+       "p2",
+       7.2,
+       2
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "institutional_delivery": {
+     "p": 0.656,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       2.9,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "high_risk_pregnancy": {
+     "p": 0.661,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       2.3,
+       1
+      ],
+      [
+       "p1",
+       1.3,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "nicu": {
+     "p": 0.73,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       13.0,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "safe_abortion_mtp": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "cardiac_surgery": {
+     "p": 0.594,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       2.5,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "cath_lab_angioplasty": {
+     "p": 0.573,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "stemi_thrombolysis": {
+     "p": 0.603,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "stroke_care": {
+     "p": 0.608,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       0.6,
+       1
+      ],
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "neurosurgery": {
+     "p": 0.63,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       2.8,
+       1
+      ],
+      [
+       "p1",
+       4.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "dialysis": {
+     "p": 0.898,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       7
+      ],
+      [
+       "t2",
+       12.2,
+       7
+      ],
+      [
+       "t3",
+       11.6,
+       7
+      ],
+      [
+       "t4",
+       14.5,
+       7
+      ],
+      [
+       "t5",
+       8.7,
+       7
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "tp_public",
+       -2.8,
+       0
+      ],
+      [
+       "c1",
+       -7.4,
+       1
+      ],
+      [
+       "p1",
+       13.0,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "kidney_transplant": {
+     "p": 0.602,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       3.4,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "chemotherapy": {
+     "p": 0.623,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       2.5,
+       1
+      ],
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "radiotherapy": {
+     "p": 0.573,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "surgical_oncology": {
+     "p": 0.583,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       1.1,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "mri": {
+     "p": 0.627,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       2.9,
+       1
+      ],
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "ct_scan": {
+     "p": 0.64,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       4.5,
+       1
+      ],
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "ultrasound": {
+     "p": 0.678,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       5.8,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "blood_bank": {
+     "p": 0.666,
+     "band": "LIKELY",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "t1",
+       6.5,
+       5
+      ],
+      [
+       "t2",
+       12.2,
+       5
+      ],
+      [
+       "t3",
+       11.6,
+       5
+      ],
+      [
+       "t4",
+       14.5,
+       5
+      ],
+      [
+       "tb_high",
+       -9.4,
+       0
+      ],
+      [
+       "tp_public",
+       -2.8,
+       0
+      ],
+      [
+       "c1",
+       -7.4,
+       2
+      ],
+      [
+       "n1",
+       -24.2,
+       1
+      ],
+      [
+       "p1",
+       3.2,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "psychiatric_care": {
+     "p": 0.603,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "de_addiction": {
+     "p": 0.573,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "cataract_surgery": {
+     "p": 0.66,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       3.5,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "eye_emergency": {
+     "p": 0.64,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       0.9,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "tb_care": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "hiv_art": {
+     "p": 0.603,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       3.6,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "anti_rabies": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "paediatric_inpatient": {
+     "p": 0.634,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "p1",
+       0.1,
+       1
+      ],
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    },
+    "nutrition_rehabilitation": {
+     "p": 0.633,
+     "band": "NO_SERVICE_TEXT",
+     "overlays": [
+      "PLACE_UNCLEAR"
+     ],
+     "p_location": 0.716,
+     "p_exists": 0.832,
+     "base_pts": 1.2,
+     "contrib": [
+      [
+       "k_iphs",
+       7.2,
+       1
+      ],
+      [
+       "level_dh",
+       7.2,
+       0
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "6_sha256": {
+  "ok": true,
+  "detail": {
+   "computed": "32fc27c594216143470b3cd1f99fdb2f87930deeffe3872f03875ce473ae8db4",
+   "stored": "32fc27c594216143470b3cd1f99fdb2f87930deeffe3872f03875ce473ae8db4"
+  }
+ }
+}
