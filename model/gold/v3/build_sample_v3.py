@@ -17,13 +17,18 @@ Design
     suspect     a positive claim AND (grade attributed_elsewhere / counter_evidence, or a location, name-collision or
                 service-elsewhere risk, or the map point is more than 50 km from its own PIN)
     no_mention  no claim at all for the service, and a public facility by name (district/civil/government hospital,
-                medical college, CHC ...) - the pairs where a missing mention may still mean the service exists
-- Frame ("a verdict is reachable"): the facility has its own website, or is a public facility. Inclusion
+                medical college, CHC ...) or a large one (6+ services claimed) - the pairs where a missing mention
+                may still mean the service exists
+- Frame ("a verdict is reachable"): the record's own website domain (record_trust.website_class own or government)
+  matches its name (a distinctive name word, or the initials of the name, appears in the domain) and is shared by at
+  most 3 records (chains excluded). A pilot of 20 pairs on a looser frame (any own site or a public name, with the
+  best source URL) gave 60% no_info, 9 of 20 because the URL belonged to another facility or a directory. Inclusion
   probabilities are within this frame; sample_stats.json gives its size.
 - Excluded: every facility in model/gold (any file) or derived/v1/gold_pairs, and their duplicate groups.
 - One pair per facility across DEV and TEST together.
 - Each (service, stratum) cell is split into focus states (Bihar, UP, Jharkhand, Odisha, Assam) and the rest; each
-  sub-cell is a simple random sample, so the inclusion probability is exactly k / N per sub-cell.
+  sub-cell is a simple random sample, so the inclusion probability is k / N per sub-cell (approximate where a facility
+  sits in several pools: one pair per facility, scarcest cells drawn first).
   Half the slots go to the focus sub-cell when it has enough pairs.
 """
 from __future__ import annotations
@@ -52,6 +57,7 @@ DEV_PER_CELL = {"strong": 9, "weak": 8, "suspect": 8, "no_mention": 8}    # x 9 
 TEST_PER_CELL = {"strong": 4, "weak": 4, "suspect": 4, "no_mention": 5}   # x 9 = 153, trimmed to 150
 N_DEV, N_TEST = 300, 150
 OVERLAP = 0.25
+LARGE_N_SERVICES = 6  # "large" for no_mention: the record claims 6+ services (record_trust.n_services_claimed)
 FOCUS = {"BIHAR", "UTTAR PRADESH", "JHARKHAND", "ODISHA", "ASSAM"}
 RISKS = re.compile(r"risk_location|risk_name_collision|risk_service_elsewhere|location|collision|elsewhere")
 
@@ -104,7 +110,8 @@ def extra_cells(fr: pd.DataFrame) -> pd.DataFrame:
 
 
 def no_mention(fr: pd.DataFrame, mentioned: set[str], svc: str) -> pd.DataFrame:
-    pub = fr[fr.public_standard & ~fr.unique_id.isin(mentioned)]
+    big = fr.public_standard | (fr.n_services_claimed.fillna(0) >= LARGE_N_SERVICES)
+    pub = fr[big & ~fr.unique_id.isin(mentioned)]
     return pd.DataFrame({"unique_id": pub.unique_id, "service": svc, "stratum": "no_mention"})
 
 
@@ -114,8 +121,30 @@ def frame() -> pd.DataFrame:
     f = f.merge(loc, on="unique_id", how="left")
     f["far"] = f.raw_coords_to_pin_km.fillna(0) > 50
     f["focus"] = f.state_final.fillna("").str.upper().isin(FOCUS)
-    f["reachable"] = (f.website_class == "own") | f.public_standard
+    dom = pd.read_parquet(V1 / "record_trust.parquet",
+                          columns=["unique_id", "website_domain", "n_services_claimed"])
+    f = f.merge(dom, on="unique_id", how="left")
+    shared = f.website_domain.map(f.website_domain.value_counts()).fillna(0)
+    named = pd.Series([name_in_domain(n, d) for n, d in zip(f.name, f.website_domain, strict=True)], index=f.index)
+    f["reachable"] = f.website_class.isin(["own", "government"]) & (shared <= 3) & named
     return f
+
+
+GENERIC = {"hospital", "hospitals", "clinic", "nursing", "home", "medical", "college", "centre", "center", "care",
+           "multi", "super", "speciality", "specialty", "multispeciality", "health", "institute", "research", "and",
+           "the", "district", "government", "civil", "general", "memorial", "trust", "private", "limited", "india"}
+
+
+def name_in_domain(name: object, domain: object) -> bool:
+    """A distinctive word of the name (4+ letters), or its initials (2+), appears in the domain's first label."""
+    if not isinstance(name, str) or not isinstance(domain, str) or not domain:
+        return False
+    label = re.sub(r"[^a-z]", "", domain.lower().removeprefix("www.").split(".")[0])
+    words = re.findall(r"[a-z]+", name.lower())
+    if any(len(w) >= 4 and w not in GENERIC and w in label for w in words):
+        return True
+    initials = "".join(w[0] for w in words if w not in GENERIC)
+    return len(initials) >= 2 and label.startswith(initials)
 
 
 def draw(cells: pd.DataFrame, fr: pd.DataFrame, rng: random.Random) -> tuple[list[dict], dict]:
@@ -138,12 +167,14 @@ def draw(cells: pd.DataFrame, fr: pd.DataFrame, rng: random.Random) -> tuple[lis
         taken.update(free)
         return len(free)
 
-    for svc in [*CORE, *EXTRA]:
-        for st in STRATA:
-            k = DEV_PER_CELL[st] + TEST_PER_CELL[st]
-            k_focus = take((svc, st, "focus"), k // 2)
-            if take((svc, st, "rest"), k - k_focus) < k - k_focus:
-                take((svc, st, "focus"), k)  # rest ran short: more from focus
+    # scarcest cells first, so a facility shared by several small pools is not used up by a large one
+    by_size = sorted(((svc, st) for svc in [*CORE, *EXTRA] for st in STRATA),
+                     key=lambda c: len(pools[(*c, "focus")]) + len(pools[(*c, "rest")]))
+    for svc, st in by_size:
+        k = DEV_PER_CELL[st] + TEST_PER_CELL[st]
+        k_focus = take((svc, st, "focus"), k // 2)
+        if take((svc, st, "rest"), k - k_focus) < k - k_focus:
+            take((svc, st, "focus"), k)  # rest ran short: more from focus
     order = [(svc, st) for st in ("weak", "strong", "suspect", "no_mention") for svc in [*CORE, *EXTRA]]
     while sum(map(len, got.values())) < N_DEV + N_TEST:
         added = 0
@@ -185,8 +216,8 @@ def main() -> None:
     for k, p in enumerate(sorted(dev, key=lambda x: (x["service"], x["stratum"], x["unique_id"])), 1):
         r = info.loc[p["unique_id"]]
         p.update(pair_id=f"v3d_{k:03d}", name=r["name"], city=r.get("address_city") or None,
-                 district=r.get("district") or None, state=r.get("state_final") or None, website=r.get("url") or None,
-                 public=bool(r["public_standard"]))
+                 district=r.get("district") or None, state=r.get("state_final") or None, website=f"https://{r['website_domain']}/",
+                 public_by_name=bool(r["public_standard"]))
     for k, p in enumerate(sorted(test, key=lambda x: (x["service"], x["stratum"], x["unique_id"])), 1):
         p["pair_id"] = f"v3t_{k:03d}"
     dev.sort(key=lambda p: p["pair_id"])
@@ -194,7 +225,7 @@ def main() -> None:
     overlap = {"dev": sorted(rng.sample([p["pair_id"] for p in dev], round(OVERLAP * len(dev)))),
                "test": sorted(rng.sample([p["pair_id"] for p in test], round(OVERLAP * len(test))))}
     keep_dev = ["pair_id", "unique_id", "service", "stratum", "sub", "inclusion_prob", "name", "city", "district",
-                "state", "website", "public"]
+                "state", "website", "public_by_name"]
     (HERE / "dev_sample.json").write_text(json.dumps([{k: p[k] for k in keep_dev} for p in dev], indent=1,
                                                      ensure_ascii=False))
     (HERE / "test_sample.json").write_text(json.dumps(
