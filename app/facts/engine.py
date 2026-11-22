@@ -708,8 +708,10 @@ class Engine:
         pins = self.pins
         k = min(range(len(pins["pin"])), key=lambda j: (pins["lat"][j] - lat) ** 2 + (pins["lon"][j] - lon) ** 2)
         district, state = self.pin_where[k]  # the district the nearest PIN point lies in, not the one it is filed under
-        all_idx = sorted((j for j in range(len(pins["pin"])) if self.pin_where[j] == (district, state)),
-                         key=lambda j: pins["pin"][j])
+        # PINs the gazetteer files under no district (facts/build.py fill_districts) are not counted as the district's
+        guessed = pins.get("district_from") or [""] * len(pins["pin"])
+        all_idx = sorted((j for j in range(len(pins["pin"]))
+                          if self.pin_where[j] == (district, state) and not guessed[j]), key=lambda j: pins["pin"][j])
         idx = all_idx[:max_pins]
         window = WINDOW[info["profile"]]
         rows, gains, n_now, n_conf = [], {}, 0, 0

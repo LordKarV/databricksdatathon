@@ -489,11 +489,32 @@ def rules() -> dict[str, dict]:
                      "citation": r.citation} for r in e.itertuples(index=False)}
 
 
+def fill_districts(p: pd.DataFrame) -> pd.DataFrame:
+    """Give a district to gazetteer PINs that have a point and a state but none (229 on #134: online they were
+    'not in our PIN list' while the offline packs had them). First the row's own `districts` list, else the
+    district of the nearest PIN of the SAME state that has one (equirectangular, cos(lat) scaled). A PIN whose
+    state has no PIN with a district stays out; no district name is made up. `district_from` says which:
+    "" (filed in the gazetteer), "gazetteer_list" or "nearest_pin"."""
+    p = p.assign(district_from="")
+    own = p.district.isna() & p.districts.map(lambda x: x is not None and len(x) > 0)
+    p.loc[own, "district"] = p.loc[own, "districts"].map(lambda x: x[0])
+    p.loc[own, "district_from"] = "gazetteer_list"
+    for st, miss in p[p.district.isna()].groupby("state").groups.items():
+        known = p[(p.state == st) & p.district.notna()]
+        if known.empty:
+            continue
+        la, lo = p.loc[miss, "lat"].to_numpy()[:, None], p.loc[miss, "lon"].to_numpy()[:, None]
+        d2 = (known.lat.to_numpy() - la) ** 2 + ((known.lon.to_numpy() - lo) * np.cos(np.radians(la))) ** 2
+        p.loc[miss, "district"] = known.district.to_numpy()[d2.argmin(axis=1)]
+        p.loc[miss, "district_from"] = "nearest_pin"
+    return p
+
+
 def pins() -> dict[str, list]:
-    p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "lat", "lon"])
-    p = p.dropna(subset=["lat", "lon", "district"])
+    p = pd.read_parquet(V1 / "pin_gazetteer.parquet", columns=["pin", "state", "district", "districts", "lat", "lon"])
+    p = fill_districts(p.dropna(subset=["lat", "lon", "state"])).dropna(subset=["district"])
     return {"pin": [int(x) for x in p.pin], "lat": col(p.lat, 5), "lon": col(p.lon, 5),
-            "district": list(p.district), "state": list(p.state)}
+            "district": list(p.district), "state": list(p.state), "district_from": list(p.district_from)}
 
 
 # validation C4: many gazetteer PIN points sit in another district (PIN 847428, Darbhanga, is placed in Begusarai).
@@ -606,6 +627,9 @@ def main() -> None:
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
           if moved else f"pin districts: {LGD_REL} not found under DATATHON_ROOT or the repo, area view uses each PIN's own district")
+    guessed = Counter(s for s, how in zip(facts["pins"]["state"], facts["pins"]["district_from"], strict=True) if how)
+    print(f"pins: {sum(guessed.values())} PINs with no district in the gazetteer kept, district from the nearest PIN "
+          f"of the same state ({', '.join(f'{s.title()} {n}' for s, n in guessed.most_common())})")
     pl = places()
     (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")

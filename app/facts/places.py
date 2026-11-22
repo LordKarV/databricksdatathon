@@ -19,12 +19,14 @@ _KIND_ORDER = {"town": 0, "district": 1, "post_office": 2}  # a town centre is m
 _GAZ_KIND = {"city": "town", "office": "post_office"}
 
 
-class Match(TypedDict):
+class Match(TypedDict, total=False):
     lat: float
     lon: float
     label: str
     kind: str  # pin | district | town | post_office
     state: str
+    district: str  # only with district_from
+    district_from: str  # a PIN the gazetteer files under no district: "nearest_pin" or "gazetteer_list"
 
 
 def norm(s: str) -> str:
@@ -45,8 +47,13 @@ class Places:
     def __init__(self, pins: dict[str, list], places: dict | None) -> None:
         self.pins = pins
         self.pin_at = {p: i for i, p in enumerate(pins["pin"])}
+        # facts/build.py fill_districts: "" when the gazetteer files the PIN under its district, else how we chose one
+        self.district_from = pins.get("district_from") or [""] * len(pins["pin"])
         acc: dict[tuple[str, str], list] = {}
-        for d, s, la, lo in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], strict=True):
+        for d, s, la, lo, how in zip(pins["district"], pins["state"], pins["lat"], pins["lon"], self.district_from,
+                                     strict=True):
+            if how:
+                continue  # a district centre is the mean of the PINs filed there, as offline.js districtCentre
             a = acc.setdefault((norm(d), s), [d, 0, 0.0, 0.0])
             a[1] += 1
             a[2] += la
@@ -63,7 +70,8 @@ class Places:
     def _district_of(self, lat: float, lon: float) -> str:
         """District of the nearest PIN centroid, only to tell same-named places apart in a label."""
         p, k = self.pins, math.cos(math.radians(lat))
-        i = min(range(len(p["pin"])), key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
+        i = min((j for j, how in enumerate(self.district_from) if not how),
+                key=lambda j: (p["lat"][j] - lat) ** 2 + ((p["lon"][j] - lon) * k) ** 2)
         return title(p["district"][i])
 
     def lookup(self, q: str) -> list[Match]:
@@ -76,7 +84,11 @@ class Places:
             i = self.pin_at.get(int(q))
             if i is None:
                 return []
-            p = self.pins
+            p, how = self.pins, self.district_from[i]
+            if how:  # the gazetteer files no district here: the label names only the state, the district is a guess
+                return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
+                         "label": f"PIN {q}, {title(p['state'][i])}", "district": title(p["district"][i]),
+                         "district_from": how}]
             return [{"lat": p["lat"][i], "lon": p["lon"][i], "kind": "pin", "state": title(p["state"][i]),
                      "label": f"PIN {q}, {title(p['district'][i])}, {title(p['state'][i])}"}]
         name, _, state_q = q.rpartition(",") if "," in q else (q, "", "")
