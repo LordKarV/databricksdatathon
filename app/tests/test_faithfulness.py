@@ -701,8 +701,17 @@ def check_ledger(o: dict, i: int, shown: set[str], claims: dict[str, str]) -> li
                 errs.append(f"{C}.quotes.{k} not shown with its claim id")
             if claims and q["claim_id"] not in claims:
                 errs.append(f"{C}.quotes.{k}: claim {q['claim_id']} is not a derived/v1 claim")
+        # WS4 4a: every official-list or OpenStreetMap row the term rests on is shown with its source (a NABH row
+        # shows its text in English, its entry number under the Hindi tier wording)
+        for k, x in enumerate(c.get("cites", [])):
+            if not ({f"{C}.cites.{k}.text", f"{C}.cites.{k}.id"} & shown and f"{C}.cites.{k}.source" in shown):
+                errs.append(f"{C}.cites.{k} not shown with its source")
+            if x["precision_n"] and not {f"{C}.cites.{k}.precision_k", f"{C}.cites.{k}.precision_n"} <= shown:
+                errs.append(f"{C}.cites.{k}: hand-check precision not shown")
     errs += [f"options.{i}.not_observed.{j} not shown" for j in range(len(o.get("not_observed", [])))
              if f"options.{i}.not_observed.{j}.label" not in shown]
+    errs += [f"options.{i}.public_lists.{j} not shown" for j in range(len(o.get("public_lists", [])))
+             if not {f"options.{i}.public_lists.{j}.{f}" for f in ("text", "id", "name")} & shown]
     if f"options.{i}.contributions" not in shown:
         errs.append("ledger total not shown")
     return errs
