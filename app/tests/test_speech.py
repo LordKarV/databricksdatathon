@@ -211,3 +211,15 @@ def test_hindi_call_ahead_speaks_the_glossary_term():
     assert "dialysis unit" not in hi["text"] and q in en["text"]
     check_spoken(plan, hi, "hi")
     assert {"path": "options.0.call_ahead.0.question", "value": q, "kind": "template"} in hi["fields"]
+
+
+def test_answer_screen_reads_the_questions_with_option_1():
+    """#140 3d: Listen reads the call-ahead questions (the Ask line by Call) with option 1, before the backup."""
+    cases = [(n, p, lang) for n, p in PAYLOADS if len(p["options"]) > 1 and p["options"][0]["call_ahead"]
+             for lang in ("hi", "en")]
+    assert cases
+    for (n, p, lang), r in zip(cases, build([{"plan": p, "lang": lang, "opts": {}} for _, p, lang in cases]), strict=True):
+        lines, ask = r["text"].split("\n"), TEMPLATES[lang]["ask"].split("{")[0]
+        asked = [k for k, s in enumerate(lines) if s.startswith(ask)]
+        backup = [k for k, s in enumerate(lines) if s.startswith(TEMPLATES[lang]["backup"].split("{")[0])]
+        assert asked and (not backup or asked[0] < backup[0]), (n, lang, lines)

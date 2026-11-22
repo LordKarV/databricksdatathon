@@ -141,7 +141,20 @@ table { border-collapse: collapse; width: 100%; }
 .sos-row p { flex: 1 1 auto; font-weight: 600; margin: 0; }
 .sos-home { display: grid; gap: var(--sp2); }
 .sos-home .btn-hazard { min-width: 5.5rem; }
-.window-miss { border-left: 4px solid var(--hazard); }
+.window-miss { border-left: 4px solid var(--hazard); padding: var(--sp2) var(--sp3); }
+.window-miss p, .window-miss p:lang(hi) { margin: 0 0 var(--sp1); font-size: var(--s16); line-height: 1.5; }
+.window-miss .sos-inline { margin: 0; }
+.window-miss .sos-inline a { flex: 1 1 7rem; padding: var(--sp1) var(--sp3); font-size: var(--s16); }
+.window-public { border-left: 4px solid var(--hazard); font-size: var(--s16); }
+/* The answer's location line is a label (1.4, as for one-line Hindi labels), and the card follows a window-miss
+   panel closely, so Call stays on a 320x568 screen in Hindi. */
+.loc-line, .loc-line:lang(hi) { line-height: 1.4; }
+.window-miss + .section { margin-top: var(--sp3); }
+/* Above the card: top bar, 108 bar, h1, locLine, far-verified note, window-miss panel. Lengthen one: run the fold checks. */
+@media (max-width: 25rem) {
+  .sos a { flex: 1 1 0; padding: var(--sp1) var(--sp3); font-size: var(--s16); }
+  .sos a span span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
 
 /* ---------- home ---------- */
 .where { display: flex; align-items: center; gap: var(--sp3); width: 100%; min-height: var(--target); padding: var(--sp3) var(--sp4);
@@ -173,6 +186,9 @@ details[open] > summary::before { transform: rotate(45deg); }
    is fully visible on a 320x568 phone in either language (a11y_check fold states). */
 body.on-plan .nav { display: none; }
 body.on-plan { padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp4)); }
+.call-bar { position: fixed; inset: auto 0 0 0; z-index: 12; padding: var(--sp2) var(--sp4) calc(var(--sp2) + env(safe-area-inset-bottom));
+  background: var(--surface); border-top: 1px solid var(--line); }
+.call-bar .btn { margin: 0; }
 .answer .call-main { position: sticky; bottom: calc(var(--sp2) + env(safe-area-inset-bottom)); z-index: 5;
   box-shadow: 0 0 0 4px var(--surface); }
 .answer.likely { border-left-color: var(--go); }
@@ -338,25 +354,7 @@ legend { font-size: var(--s21); font-weight: 600; padding: 0; margin-bottom: var
 .nav :lang(hi), .nav a span { line-height: 1.4; }
 @media (min-width: 48rem) { .nav { justify-content: center; } .nav a { flex: 0 1 9rem; } }
 
-/* ---------- referral slip (S8): one A5 page in print; "Show big" for the family to photograph ---------- */
-.slip { border: 2px solid var(--text); border-radius: var(--r2); padding: var(--sp3) var(--sp4); margin: var(--sp3) 0; background: var(--surface); }
-.slip h2 { font-size: var(--s21); margin-top: 0; }
-.slip-table { table-layout: fixed; }
-.slip-table th, .slip-table td { padding: var(--sp2) var(--sp1); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-.slip-table td { overflow-wrap: anywhere; }
-.slip-table th { width: 30%; }
-.slip-table ul { margin: 4px 0; padding-left: 18px; }
-.slip a { overflow-wrap: anywhere; }
-.slip-name { border-top: 1px dashed var(--line-strong); padding-top: var(--sp2); }
-body.slip-big .slip { font-size: 200%; }
-body.slip-big .top, body.slip-big #bar108, body.slip-big .nav { display: none; }
-
-/* ---------- data stories (#53) and community forms ---------- */
-.story { border-top: 1px solid var(--line); padding-top: var(--sp3); margin-top: var(--sp4); }
-.story-chart { margin: var(--sp3) 0; }
-.story-chart img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: var(--r2); }
-.story-toc { padding-left: 20px; }
-.story details a, .story-chart figcaption a { display: inline-block; padding: 6px 0; min-height: 24px; overflow-wrap: anywhere; }
+/* ---------- community forms (slip and data-stories styles load with slip.js and stories.js) ---------- */
 .reason-step legend, #visit-form legend { font-size: var(--s18); }
 #visit-form fieldset { margin-top: var(--sp4); }
 #visit-form fieldset:disabled { opacity: .6; }
