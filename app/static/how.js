@@ -29,6 +29,15 @@
         '\u0906\u0924\u0947 \u0939\u0948\u0902\u0964',
     },
   };
+  // New wording (#121), en and hi, ready for the app-wide language setting; this page shows 'en' today.
+  const HOW_TEXT = {
+    similar_apart: {en: 'Shown separately from it, not as a range around it: how often checked pairs with a similar score were confirmed.',
+      hi: 'सेवा की संभावना से अलग, उसके आसपास का दायरा नहीं: मिलते-जुलते स्कोर वाली जाँची गई जोड़ियों में कितनी पक्की निकलीं।'},
+    rule_lead: {en: "The model's rule, word for word:", hi: 'मॉडल का नियम, शब्दशः:'},
+    rule_terms: {en: 'Here p is the service chance, t_L its Likely threshold, P_L the location check, P_E the existence check and T the level of the listing\'s own text about the service; the location and existence checks shown on each option are these same P_L and P_E.',
+      hi: 'यहाँ p सेवा की संभावना है, t_L संभावना ज़्यादा की सीमा, P_L जगह की जाँच, P_E अस्पताल होने की जाँच और T लिस्टिंग में सेवा के बारे में उसका अपना लिखा; हर विकल्प पर दिखी जगह और अस्पताल होने की जाँच यही P_L और P_E हैं।'},
+  };
+  const HT = k => esc(HOW_TEXT[k].en);
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   }
@@ -96,11 +105,12 @@
         ignored. The sentences are graded with ${n('evidence_rules')} evidence rules, checked by hand on
         ${n('handchecked')} cases ${src('handchecked')}.</li>
       <li><strong>Three questions.</strong> Does the facility exist? Is its map point right? Does it offer the
-        service? Each answer is a chance. The service chance comes from the model described below. The range shown
-        next to it is how often checked pairs with a similar score were confirmed.</li>
+        service? Each answer is a chance. The service chance comes from the model described below.
+        ${HT('similar_apart')}</li>
       <li><strong>Labels.</strong> "Likely" means the model's chance is at least ${d('likely_p', 2)}, the location check
         is at least ${d('likely_p_location', 1)}, the existence check is at least ${d('likely_p_exists', 1)}, and the
-        listing has a sentence about the service as its own unit ${src('likely_p')}. Of the ${n('app_pairs')} facility-service pairs the app serves ${src('app_pairs')}: ${n('app_likely')} Likely,
+        listing has a sentence about the service as its own unit ${src('likely_p')}. ${HT('rule_lead')}
+        "${t('band_rule')}" ${src('band_rule')}. ${HT('rule_terms')} Of the ${n('app_pairs')} facility-service pairs the app serves ${src('app_pairs')}: ${n('app_likely')} Likely,
         ${n('app_not_verified')} "Not verified: call to confirm", ${n('app_no_service_text')} "No service text: call
         to ask" (the listing has no sentence about the service), and ${n('app_unlikely')} Unlikely
         ${src('app_likely')}.</li>

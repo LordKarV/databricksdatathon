@@ -276,8 +276,13 @@ def load_card() -> dict:
     # The page says these in words; stop the build if the card stops saying them.
     if "not human-checked" not in prov["wording"] or "never opened" not in prov["test_exclusion"]["note"]:
         raise SystemExit(f"{V2CARD}: label wording or TEST status changed; update 'How good it is' in how.js")
-    if "T >= 2" not in card["band_thresholds"]["rule"]:
+    bt = card["band_thresholds"]
+    if "T >= 2" not in bt["rule"]:
         raise SystemExit(f"{V2CARD}: the LIKELY rule changed; update the Labels bullet in how.js")
+    # The page quotes the rule word for word and shows the thresholds as numbers: the two must say the same (#121).
+    if f"P_L and P_E >= {bt['likely']['p_location']:g}" not in bt["rule"] or \
+            bt["likely"]["p_location"] != bt["likely"]["p_exists"] or "p >= t_L" not in bt["rule"]:
+        raise SystemExit(f"{V2CARD}: band_thresholds.rule and band_thresholds.likely disagree; update how.js")
     if card["selected"] != SELECTED:
         raise SystemExit(f"{V2CARD}: selected model is {card['selected']!r}; update V2_ROWS and 'How good it is'")
     return card
@@ -313,6 +318,7 @@ def v2_facts(card: dict) -> dict:
         "likely_p": fact(band["p"], src, "band_thresholds.likely.p (t_L)"),
         "likely_p_location": fact(band["p_location"], src, "band_thresholds.likely.p_location"),
         "likely_p_exists": fact(band["p_exists"], src, "band_thresholds.likely.p_exists"),
+        "band_rule": fact(card["band_thresholds"]["rule"], src, "band_thresholds.rule, word for word"),
         "likely_dev": fact(lk["k_correct"], src, "thresholds.likely: LIKELY DEV pairs confirmed", of=lk["n"]),
         "likely_dev_lo": fact(lk["wilson95"][0], src, "thresholds.likely.wilson95 low"),
         "likely_dev_hi": fact(lk["wilson95"][1], src, "thresholds.likely.wilson95 high"),

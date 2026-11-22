@@ -40,10 +40,18 @@ results (Quick depth), abstention (S3x), why / how / call-ahead (S4, S5, S6 on o
 ```
 
 `service` is one of `emergency_csection, nicu, trauma_emergency, burn_care, dialysis, mri, cardiac_surgery`;
-`source` is `gps | last_fix | pin | district | manual`; `depth` is `quick | compare | area`. The point goes in the
+`source` is `gps | last_fix | pin | district | place | manual`; `depth` is `quick | compare | area`. The point goes in the
 body because query strings can land in proxy logs we do not control. The server rounds lat/lon to 0.01 degree
 before use. Unknown keys, unknown fields and points outside India return 422.
 `GET /api/recommend?<same fields>` is a dev alias for curl checks; the page never calls it.
+
+`POST /api/place` with `{"q": "Bahraich"}` turns a typed place into a point for Change location (#121 bug 5): a
+6-digit PIN or a district from the PIN table in `facts.json.gz` (district centre = mean of its PIN centroids, the
+same rule as offline), or a town or post office name from `facts/out/places.json.gz` (`derived/v1`
+`place_gazetteer`, written by `facts/build.py`). No external geocoder. `"Name, State"` narrows to one state. It
+returns `{"matches": [{"lat", "lon", "label", "kind": "pin | district | town | post_office", "state"}]}`, at most
+six, one per state (town, else district centre, else post office), or 404 with `"matches": []`. Offline the page
+falls back to the saved pack (PINs and districts of saved states) and says so when nothing is saved.
 
 Response:
 

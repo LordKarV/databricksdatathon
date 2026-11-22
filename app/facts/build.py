@@ -4,8 +4,9 @@ The app reads only that file at start-up (standard library, no pandas), the same
 website check. Every value is copied from derived/v1 unchanged; the only computed fields are joins (phone shared
 counts, a source URL per record, prerequisites the grader did not find) and the shown name, which is
 common/names.py display_name (no address tail; the raw name stays in derived/v1 and the website check).
-When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi are exported next to each
-pair and engine.score() uses them; nothing else changes. Run from the repo root, after planner/export_v2.py
+When #11 publishes derived/v2/facility_service_scores.parquet, its band / p / lo / hi / p_location / p_exists are
+exported next to each pair and engine.score() uses them; the cards then show the model's own P_L and P_E, not the
+derived/v1 facility trust scores (#121). Run from the repo root, after planner/export_v2.py
 (the claims the planner cites are copied, so route stops show quotes):
     .venv-app/bin/python app/facts/build.py
 """
@@ -251,6 +252,26 @@ def v2_only(m: pd.DataFrame) -> pd.DataFrame:
     return m[m.m_band.notna()]
 
 
+def band_rule_violations(m: pd.DataFrame, card_path: Path | None = None) -> int:
+    """LIKELY pairs whose exported p, P_L or P_E is below the model card's band_thresholds.likely (#121). The T >= 2
+    term is not in the export, so it is not rechecked here."""
+    card_path = card_path or MODEL_CARD
+    if not card_path.is_file():
+        return 0
+    t = json.loads(card_path.read_text())["band_thresholds"]["likely"]
+    lk = m[m.m_band.str.upper() == "LIKELY"]
+    return int(((lk.m_p < t["p"]) | (lk.m_pl < t["p_location"]) | (lk.m_pe < t["p_exists"])).sum())
+
+
+def check_band_rule(m: pd.DataFrame, card_path: Path | None = None) -> None:
+    """Fail when a served LIKELY pair breaks the rule the How page states. The model is frozen, so a failure is a
+    model or export issue to report, never something to re-band here."""
+    n = band_rule_violations(m, card_path)
+    if n:
+        raise SystemExit(f"{n} derived/v2 LIKELY pairs break band_thresholds.likely in model_card.json: report it to "
+                         "the model owner; do not re-band in the app")
+
+
 def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     dps = pd.read_parquet(V1 / "data_point_scores.parquet", columns=[
         "dp_type", "unique_id", "service", "score", "score_lo", "score_hi", "status", "rule", "q_ev", "score_model"])
@@ -271,16 +292,19 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
     m, counts = to_sites(m, sites)
     report("facts.duplicates", counts)
     if V2.is_file():
-        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi"])
+        v2 = pd.read_parquet(V2, columns=["unique_id", "service_id", "band", "p", "lo", "hi", "p_location",
+                                          "p_exists"])
         v2["service"] = v2.service_id.map(TAXONOMY_TO_V1)
         v2 = v2.dropna(subset=["service"])  # the other taxonomy services have no app tile yet
         bad = set(v2.band.str.upper()) - set(V2_BAND)
         if bad:
             raise SystemExit(f"derived/v2 has bands the app does not map: {sorted(bad)}")
         m = m.merge(v2.drop(columns="service_id").rename(columns={"p": "m_p", "lo": "m_lo", "hi": "m_hi",
-                                                                  "band": "m_band"}), on=["unique_id", "service"],
-                    how="left")
+                                                                  "band": "m_band", "p_location": "m_pl",
+                                                                  "p_exists": "m_pe"}),
+                    on=["unique_id", "service"], how="left")
         m = v2_only(m)
+        check_band_rule(m)
     out: dict[str, list] = {k: [] for k in SERVICE_MAP}
     cited: set[str] = set()
     for r in m.itertuples(index=False):
@@ -288,7 +312,9 @@ def pairs(fidx: dict[str, int]) -> tuple[dict[str, list], set[str]]:
         cited.update(ev)
         missing = [c[4:] for c in pre_cols if isinstance(getattr(r, c), (bool,)) and getattr(r, c) is False]
         risks = [c[5:] for c in risk_cols if getattr(r, c) is True] + (["scope"] if r.scope_conflict else [])
-        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper()]
+        # P_L and P_E are the model's own (derived/v2 p_location, p_exists): the values its LIKELY rule tested.
+        model = ([V2_BAND[r.m_band.upper()], r.m_p, r.m_lo, r.m_hi, r.m_band.upper(), round(float(r.m_pl), 3),
+                  round(float(r.m_pe), 3)]
                  if "m_band" in m.columns and isinstance(r.m_band, str) else None)
         out[V1_TO_APP[r.service]].append([
             fidx[r.unique_id], r.grade, r.rule, r.status, round(r.score, 4), round(r.score_lo, 4),
@@ -452,6 +478,26 @@ def pin_districts(p: dict[str, list]) -> dict[str, list[str]]:
     return out
 
 
+PLACE_KINDS = ("city", "office")  # towns, then post office names (most villages have one)
+
+
+def places() -> dict:
+    """Town and post office names from place_gazetteer for the typed-place lookup (#121 bug 5), kept out of facts.
+
+    Districts and PINs come from the PIN table already in facts.json.gz. One row per state and name; a town beats a
+    post office of the same name. 0.001 degree (about 100 m) is finer than the plan's 0.01 degree rounding.
+    """
+    g = pd.read_parquet(V1 / "place_gazetteer.parquet", columns=["state", "name", "lat", "lon", "kind"])
+    g = g[g.kind.isin(PLACE_KINDS)].dropna(subset=["name", "lat", "lon", "state"])
+    g = g.assign(rank=g.kind.map(PLACE_KINDS.index)).sort_values(["state", "name", "rank"])
+    g = g.drop_duplicates(["state", "name"])
+    states = sorted(g.state.unique())
+    s_idx = {s: i for i, s in enumerate(states)}
+    return {"v": 1, "kinds": list(PLACE_KINDS), "states": states, "name": list(g.name),
+            "s": [s_idx[x] for x in g.state], "k": [int(x) for x in g["rank"]],
+            "lat": col(g.lat, 3), "lon": col(g.lon, 3)}
+
+
 def scores_source() -> str:
     """Which scores the app serves, in words a judge reads on the How page and in the build log (#86 item 2)."""
     if not V2.is_file():
@@ -511,10 +557,13 @@ def main() -> None:
     (out / "pin_districts.json").write_text(json.dumps(moved, separators=(",", ":")))
     print(f"pin districts: {len(moved)} PINs filed under another district than the one their point lies in"
           if moved else f"pin districts: {LGD_PINS.relative_to(ROOT)} not found, area view uses each PIN's own district")
+    pl = places()
+    (out / "places.json.gz").write_bytes(gzip.compress(json.dumps(pl, separators=(",", ":")).encode(), 6))
     print(f"scores: {facts['meta']['scores']}")
     print(f"listed websites (#117 A): {facts['site_check']}")
     n_pairs = sum(len(v) for v in pr.values())
-    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs; "
+    print(f"{len(f)} facilities, {n_pairs} pairs, {len(facts['claims'])} claims, {len(facts['pins']['pin'])} PINs, "
+          f"{len(pl['name'])} places (places.json.gz); "
           f"{len(raw) / 1e6:.1f} MB raw, {(out / 'facts.json.gz').stat().st_size / 1e6:.1f} MB gz; "
           f"{time.time() - t0:.1f} s; sha {facts_hash}")
 
