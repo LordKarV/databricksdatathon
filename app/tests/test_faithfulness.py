@@ -801,6 +801,40 @@ def test_location_doubt_line_on_the_readout(base_url, browser):
         assert not errs, errs[:10]
 
 
+NO_DIAL = ("window.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href^=\"tel:\"]');"
+           " if (a) e.preventDefault(); }, true);")
+PHONE_BACK = """() => { Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'visible'});
+  document.dispatchEvent(new Event('visibilitychange')); }"""
+
+
+def check_call_loop(page, payload: dict, plan_shown: set[str], report: dict) -> list[str]:
+    """#140 3d: the Ask line shows options.0.call_ahead.0.question; after "Said no" on option 1, the "Call next" line
+    (name, minutes, band of the next option with a number) equals its fields. The loop is reset afterwards."""
+    opts = payload["options"]
+    if not opts:
+        return []
+    errs = []
+    if opts[0]["call_ahead"] and "options.0.call_ahead.0.question" not in plan_shown:
+        errs.append("the Ask line (options.0.call_ahead.0.question) is not shown")
+    tel = [i for i, o in enumerate(opts) if (o.get("phone") or {}).get("e164")]
+    if not tel or tel[0] != 0 or len(tel) < 2:
+        return errs
+    page.route("**/api/outcome", json_reply({}))
+    page.locator("#main .call-main").click()
+    page.evaluate(PHONE_BACK)
+    page.locator("#call-loop [data-call-out=no]").click()
+    page.wait_for_selector("#call-next-btn")
+    got = page.evaluate(COLLECT_JS)
+    errs += [f"call-next: {e}" for e in check_screen("call-next", payload, got, report)]
+    shown = {it["path"] for it in got["items"]}
+    band = "model_band" if opts[tel[1]].get("model_band") == "NO_SERVICE_TEXT" else "band"  # bandHtml's mark
+    errs += [f"call-next: options.{tel[1]}.{f} not shown" for f in ("name", "travel.minutes", band)
+             if f"options.{tel[1]}.{f}" not in shown]
+    page.evaluate("() => { RSCommunity.dropPending(); state.call = null; state.outcomes = {}; render(); }")
+    page.unroute("**/api/outcome")
+    return errs
+
+
 # ---------- the test ----------
 @pytest.mark.parametrize("name, payload", PAYLOADS, ids=[n for n, _ in PAYLOADS])
 def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browser, claims):
@@ -810,6 +844,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
                               permissions=["geolocation"], service_workers="block")
     page = ctx.new_page()
     page.add_init_script("Object.defineProperty(Navigator.prototype, 'canShare', {value: undefined})")
+    page.add_init_script(NO_DIAL)  # the call loop (#140 3d): tel: links stay on the page
     page.route("**/api/plan", lambda r: r.fulfill(status=200, content_type="application/json",
                                                   body=json.dumps(payload)))
     page.add_init_script(
@@ -863,6 +898,7 @@ def test_every_shown_value_equals_its_stored_row(name, payload, base_url, browse
         text = page.inner_text("#main")
         errs += [f"plan: {e}" for e in check_no_text(payload, re.sub(r"\s+", " ", text))]
         errs += raw_key_errs("plan", payload, text)
+        errs += [f"plan: {e}" for e in check_call_loop(page, payload, plan_shown, report)]
         if (payload.get("time_window") or {}).get("first_outside"):  # the answer's first line (#86)
             first_row = min((text.find(x) for x in [payload["options"][0]["name"], "Suggested route",
                                                      (payload.get("abstain") or {}).get("text") or "\0"]

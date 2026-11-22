@@ -139,6 +139,9 @@ table { border-collapse: collapse; width: 100%; }
 .sos-row { display: flex; align-items: center; gap: var(--sp3); padding: var(--sp2) var(--sp2) var(--sp2) var(--sp4);
   background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hazard); border-radius: var(--r2); }
 .sos-row p { flex: 1 1 auto; font-weight: 600; margin: 0; }
+.ask-line { margin: var(--sp2) 0; font-size: var(--s16); line-height: 1.35; }
+.call-loop { margin-top: var(--sp3); padding-top: var(--sp3); border-top: 1px solid var(--line); }
+.call-loop .outcomes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp2); }
 .window-miss { border-left: 4px solid var(--hazard); }
 
 /* ---------- home ---------- */

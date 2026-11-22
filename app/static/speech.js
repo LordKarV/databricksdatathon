@@ -82,6 +82,18 @@
         add('reason', {quote: a.evidence[0].quote}, [{path: A + '.evidence.0.quote', value: a.evidence[0].quote, kind: 'text'}]);
       }
     }
+    const askLine = () => {
+      if (!a || !a.call_ahead || !a.call_ahead.length) return;
+      const qf = [];
+      const qs = a.call_ahead.map((c, j) => {
+        const path = `${A}.call_ahead.${j}.question`;
+        if (lang === 'hi' && L.questions.length) return questionHi(c.question, L, plan, path, qf);
+        qf.push({path, value: c.question, kind: 'text'});
+        return c.question;
+      });
+      add('ask', {questions: qs.join(' ')}, qf);
+    };
+    if (!one) askLine();  // answer screen: "Ask" is read with option 1, by its Call button (#140 3d)
     if (b) optionLine('backup', b, 'options.1');
 
     const route = !one && plan.itinerary && plan.itinerary.plans && plan.itinerary.plans[0];
@@ -96,16 +108,7 @@
       });
     }
 
-    if (a && a.call_ahead && a.call_ahead.length) {
-      const qf = [];
-      const qs = a.call_ahead.map((c, j) => {
-        const path = `${A}.call_ahead.${j}.question`;
-        if (lang === 'hi' && L.questions.length) return questionHi(c.question, L, plan, path, qf);
-        qf.push({path, value: c.question, kind: 'text'});
-        return c.question;
-      });
-      add('ask', {questions: qs.join(' ')}, qf);
-    }
+    if (one) askLine();
     return {text: lines.join('\n'), fields};
   }
 
