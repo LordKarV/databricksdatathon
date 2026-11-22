@@ -864,35 +864,15 @@ function answerPanel(p, o, i) {
       <p class="note call-note">${th('call.number_note')}</p>`
       : `<p class="note">${th('ans.no_phone')}</p>`}
     ${askLineHtml(o, P)}
-    ${i === 0 ? `<div id="call-loop">${callLoopHtml(p)}</div>` : ''}
+    ${i === 0 ? `<div id="call-loop">${window.RSCommunity?.callLoopHtml(p) || ''}</div>` : ''}
     <div class="pair">${RSInput.speakHtml()}<a class="btn" href="#/why/${o.rank}">${th('ans.why')}<span class="visually-hidden"> ${F(P + '.name', o.name)}</span></a></div>
     <p id="speak-note" class="note" aria-live="polite"></p>
   </article>`;
 }
-// Call loop (#140 3d): the Ask line sits under Call (nothing is added above it: on a window-miss answer Call is
-// already near the fold). A tap on an option's tel: link starts a call; when the page is
-// visible again the outcomes appear under the readout (community.js, loaded on that tap, keeps them off the
-// critical path).
-function askLineHtml(o, P) {
-  if (!o.call_ahead || !o.call_ahead.length) return '';
-  return `<p class="ask-line"><strong>${th('call.ask')}</strong> ${E(P + '.call_ahead.0.question', o.call_ahead[0].question)}</p>`;
-}
-const callLoopHtml = p => (window.RSCommunity && RSCommunity.callLoopHtml ? RSCommunity.callLoopHtml(p) : '');
+// #140 3d: the call loop is in community.js
+const askLineHtml = (o, P) => (o.call_ahead.length ? `<p class="note ask-line"><strong>${th('call.ask')}</strong> ${E(P + '.call_ahead.0.question', o.call_ahead[0].question)}</p>` : '');
 document.addEventListener('click', e => {
-  const out = e.target.closest && e.target.closest('[data-call-out]');
-  if (out) { window.RSCommunity?.callOutcome(out.dataset.callOut); return; }
-  const a = e.target.closest && e.target.closest('a[href^="tel:"]');
-  const p = state.plan;
-  if (!a || location.hash !== '#/plan' || !p || !p.options) return;
-  const o = p.options.find(x => telOf(x) === a.getAttribute('href'));
-  if (!o) return;  // 108 or 102
-  state.call = {plan: p, rank: o.rank, stage: 'dialing'};
-  loadScript('/community.js', 'RSCommunity').catch(() => {});
-});
-document.addEventListener('visibilitychange', () => {
-  const c = state.call;
-  if (document.visibilityState !== 'visible' || !c || c.stage !== 'dialing' || c.plan !== state.plan || location.hash !== '#/plan') return;
-  loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.callBack()).catch(() => {});
+  if (location.hash === '#/plan' && e.target.closest('a[href^="tel:"],[data-call-out]')) loadScript('/community.js', 'RSCommunity').then(() => RSCommunity.onCall(e.target)).catch(() => {});
 });
 function nextRows(p, from) {
   const rows = p.options.slice(from).map((o, j) => {
@@ -1392,7 +1372,7 @@ function bindWhy() {
     const at = Date.now(), said = b.dataset.outcome;
     document.querySelectorAll('[data-outcome]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     (state.outcomes ||= {})[rank] = {said, at};  // for the slip (#24)
-    window.RSCommunity?.callAfter(state.plan, o, said);  // back on the answer: the next option to call (#140 3d)
+    window.RSCommunity?.callAfter(state.plan, o, said);
     window.RSCommunity?.dropPending();  // a corrected tap replaces an unsent "no"
     $('#reason-step').innerHTML = '';
     if (said === 'no' && o && window.RSCommunity) {

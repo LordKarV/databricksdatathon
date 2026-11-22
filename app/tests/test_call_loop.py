@@ -2,7 +2,7 @@
 
 The Ask line sits directly under Call: nothing is added above Call, which is near the fold on a window-miss answer.
 After a tel: tap, when the page is visible again, the four outcomes appear under the
-readout. "Said no" or "No answer" shows "Call next: <name>, <minutes>, <band word>" with a focused Call button and
+readout (community.js, loaded on the tel: tap, so the loop is off the critical path). "Said no" or "No answer" shows "Call next: <name>, <minutes>, <band word>" with a focused Call button and
 Why, announced in #status. After the last option: 108 (102) and the nearest public hospital. tel: links are not
 followed in the browser; the dialler coming and going is a visibilitychange.
 """
@@ -24,7 +24,6 @@ APP = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(APP))
 from stub_data import recommend_stub  # noqa: E402
 
-I18N = {lang: json.loads((APP / "static" / "i18n" / f"{lang}.json").read_text()) for lang in ("en", "hi")}
 PHONES = ["+916212230333", "+919470003549", "+916452239202", "+915222300025"]
 
 
@@ -43,7 +42,7 @@ PLAN = plan()
 # tel: links stay on the page; the click still reaches app.js's listener (preventDefault does not stop propagation)
 NO_DIAL = ("window.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href^=\"tel:\"]');"
            " if (a) e.preventDefault(); }, true);")
-BACK = """() => { Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'hidden'});
+BACK = """async () => { await new Promise(r => { const t = () => (state.call ? r() : setTimeout(t, 20)); t(); }); Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'hidden'});
   document.dispatchEvent(new Event('visibilitychange'));
   Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => 'visible'});
   document.dispatchEvent(new Event('visibilitychange')); }"""
@@ -110,6 +109,9 @@ def test_ask_line_sits_under_call_and_is_marked(browser, base_url):
                               " >= document.querySelector('.call-main').getBoundingClientRect().bottom")
         assert under
         assert page.locator("[data-call-out]").count() == 0  # nothing until a call was made
+        assert not page.evaluate("() => performance.getEntriesByType('resource').some(r => r.name.endsWith('/community.js'))")
+        page.locator(".call-main").click()  # the tap loads the loop
+        page.wait_for_function("() => !!window.RSCommunity")
     finally:
         ctx.close()
 
@@ -134,8 +136,8 @@ def test_said_no_on_option_1_focuses_call_for_option_2(browser, base_url, lang):
         assert page.locator(f".call-next a[href='#/why/{o2['rank']}']").count() == 1
         status = page.locator("#status")
         status.get_by_text(o2["name"]).wait_for()
-        prefix = I18N[lang]["call.next"].split("{")[0].strip()
-        assert status.inner_text().startswith(prefix)
+        prefix = {"en": "Call next:", "hi": "अब यहाँ फ़ोन करें:"}[lang]  # community.js T.callNext
+        assert status.inner_text().startswith(prefix) and str(o2["travel"]["minutes"]) in status.inner_text()
         page.locator("#call-reason [data-reason]").first.wait_for()  # the optional reason step, not focused
         page.locator("#call-reason [data-reason='']").click()  # Skip: the "no" goes now
         page.wait_for_function("() => true")

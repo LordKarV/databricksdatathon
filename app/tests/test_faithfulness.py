@@ -821,6 +821,7 @@ def check_call_loop(page, payload: dict, plan_shown: set[str], report: dict) -> 
         return errs
     page.route("**/api/outcome", json_reply({}))
     page.locator("#main .call-main").click()
+    page.wait_for_function("() => state.call")  # community.js loaded on the tap
     page.evaluate(PHONE_BACK)
     page.locator("#call-loop [data-call-out=no]").click()
     page.wait_for_selector("#call-next-btn")
