@@ -5,6 +5,7 @@ The browser tests run Chromium against a real server with no saved pack, so name
 """
 from __future__ import annotations
 
+import re
 import socket
 import subprocess
 import sys
@@ -165,6 +166,31 @@ def test_api_rejects_bad_bodies_without_echoing_them():
         assert r.status_code == 422 and "x" * 81 not in r.text
 
 
+# ---------- the phone's point in words (#140 3f): POST /api/place/near ----------
+
+def test_near_names_the_nearest_post_office_with_the_district_and_pin(places):
+    assert places.near(25.861, 85.781) == {"district": "Samastipur", "state": "Bihar", "pin": "848125",
+                                           "place": "Pusa", "kind": "post_office", "km": 0.1}
+
+
+def test_near_prefers_a_town_the_point_is_in_and_drops_a_far_place(places):
+    assert places.near(25.62, 85.12)["place"] == "Patna" and places.near(25.62, 85.12)["kind"] == "town"
+    far = places.near(27.8, 81.7)  # over NEAR_KM from every place: district and PIN only
+    assert "place" not in far and far["pin"] == "271802"
+
+
+def test_near_without_places_file_still_gives_district_and_pin():
+    assert Places(PINS, None).near(25.86, 85.78) == {"district": "Samastipur", "state": "Bihar", "pin": "848125"}
+
+
+@needs_data
+def test_api_near_answers_for_a_point_and_refuses_one_outside_india():
+    r = client.post("/api/place/near", json={"lat": 24.79, "lon": 85.0})
+    assert r.status_code == 200 and r.json()["place"] == "Gaya" and r.json()["district"] == "Gaya"
+    for body in ({"lat": 1, "lon": 2}, {"lat": 25.0}, {"lat": 25.0, "lon": 85.0, "q": "Pusa"}):
+        assert client.post("/api/place/near", json=body).status_code == 422
+
+
 def test_plan_accepts_the_place_source():
     # 422 would mean the source was refused; without built facts the server answers 503 instead.
     r = client.post("/api/plan", json={"service": "dialysis", "lat": 25.86, "lon": 85.78, "source": "place"})
@@ -236,9 +262,12 @@ def test_typed_place_works_online_with_no_saved_pack(browser, base_url, q, shown
         assert page.evaluate("localStorage.getItem('rs.pack')") is None
         _type(page, q)
         page.wait_for_function("location.hash === '#/'")
-        page.get_by_text(shown).wait_for()
         loc = page.evaluate("JSON.parse(localStorage.getItem('rs.loc'))")
         assert loc["label"] == shown and loc["source"] in {"pin", "district", "place"}
+        # #140 3f: a typed place keeps the words that were typed; only a GPS fix or coordinates get "Near ..."
+        page.locator("#where-line").get_by_text(shown).wait_for()
+        page.wait_for_timeout(300)
+        assert page.locator("#where-line .coords").count() == 0
     finally:
         ctx.close()
 
@@ -321,5 +350,41 @@ def test_gps_denied_puts_typing_first(browser, base_url):
         first = page.locator("#main section[aria-labelledby=h-where] .btn").first  # UI2: the 108 row sits above it
         assert first.inner_text().strip() == "Type a place"
         page.get_by_role("button", name="Use my location (GPS)").wait_for()
+    finally:
+        ctx.close()
+
+
+# ---------- home (#140 3f): Hindi first in the chooser, 102 on home, the point in words with a 24-hour clock ----------
+
+@pytest.mark.parametrize("locale, ticked", [("en-IN", "hi"), ("hi", "hi"), ("en-US", "en")])
+def test_chooser_lists_hindi_first_and_ticks_it_for_indian_phones(browser, base_url, locale, ticked):
+    ctx = browser.new_context(service_workers="block", locale=locale)
+    page = ctx.new_page()
+    try:
+        page.goto(base_url + "/#/")
+        page.wait_for_selector("input[name=first-lang]")
+        got = page.eval_on_selector_all("input[name=first-lang]", "els => els.map(e => [e.value, e.checked])")
+        assert got == [["hi", ticked == "hi"], ["en", ticked == "en"]]
+    finally:
+        ctx.close()
+
+
+def test_home_in_hindi_names_the_gps_point_and_offers_102(browser, base_url):
+    # no GPS permission, so home does not refresh the saved fix (and its time) on load
+    ctx = browser.new_context(service_workers="block", locale="hi-IN", timezone_id="Asia/Kolkata")
+    page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"hi\"');"
+                         "localStorage.setItem('rs.loc', JSON.stringify({lat: 24.79, lon: 85.0, accuracy_m: 40,"
+                         " source: 'gps', t: new Date('2026-11-22T15:05:00+05:30').getTime(), label: null}))")
+    try:
+        page.goto(base_url + "/#/")
+        page.wait_for_selector("#where-line .coords")
+        line = page.inner_text("#where-line")
+        assert "Gaya \u0915\u0947 \u092a\u093e\u0938, Gaya (823001)" in line and "15:05" in line
+        assert not re.search(r"\b(am|pm)\b", line, re.IGNORECASE)
+        # only real names stay in English inside the line
+        assert page.eval_on_selector_all("#where-line [lang=en]", "els => els.map(e => e.textContent)") == ["Gaya", "Gaya"]
+        assert page.locator(".sos-home a[href='tel:102']").count() == 1
+        assert page.locator(".sos-home a[href='tel:108']").count() == 1
     finally:
         ctx.close()
