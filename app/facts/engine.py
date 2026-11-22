@@ -73,6 +73,7 @@ NEED_PLAIN = {
 }
 LOC_DOUBT = {"LOC_COORDS_FAR", "LOC_CITY_ELSEWHERE", "LOC_DISPUTED_OR_LOW"}
 N_WHY_NOT = 3
+PUBLIC_LABEL = "by public standard, not verified"
 RISK_PLAIN = {
     "location": "Its location is uncertain.",
     "name_collision": "Another listing has a similar name; make sure you have the right one.",
@@ -319,17 +320,23 @@ class Engine:
         unlikely.sort(key=lambda r: r[1])
         return pool, unlikely
 
-    def _outside(self, service: str, lat: float, lon: float) -> dict | None:
+    def _public_near(self, lat: float, lon: float) -> tuple[float, int] | None:
+        """(km, index) of the nearest facility the public standard expects to offer acute care, within RADIUS_KM."""
         best = None
         for i, ok in enumerate(self.fac["public_standard"]):
             if ok:
                 km = haversine_km(lat, lon, self._f("lat", i), self._f("lon", i))
                 if km <= RADIUS_KM and (best is None or km < best[0]):
                     best = (km, i)
+        return best
+
+    def _outside(self, service: str, lat: float, lon: float) -> dict | None:
+        best = self._public_near(lat, lon)
         if best is None:
             return None
         i = best[1]
         return {"facility_id": self._f("id", i), "name": self._f("name", i), "operator": "unknown",
+                "label": PUBLIC_LABEL,
                 "text": "By the public standard a hospital at this level should offer it; not verified in our data.",
                 "travel": self._travel(lat, lon, i, self.origin_state(lat, lon))}
 
@@ -353,19 +360,22 @@ class Engine:
         why_not, change = self._why_not(service, chosen, pool + unlikely, options)
         window = WINDOW[info["profile"]]
         abstain = None
+        public = self._outside(service, lat, lon)
         if not any(o["band"] == "likely" for o in options):
             abstain = {"text": (f"No facility within {RADIUS_KM} km is confirmed for {label}. The listings below say "
                                 "they offer it; call to confirm before going.") if options else
                        f"No facility in our data within {RADIUS_KM} km lists {label}.",
-                       "outside_option": self._outside(service, lat, lon)}
+                       "outside_option": public}
+        first_outside = bool(options) and options[0]["travel"]["minutes"] > window
         return {
             "query": {"service": service, "service_label": {"en": label, "hi": info["label_hi"]}},
             "location": {"lat": lat, "lon": lon, "accuracy_m": accuracy_m, "source": source, "rounded_to_deg": 0.01},
             "as_of": self.meta["as_of"], "profile": info["profile"], "emergency_numbers": emergency_numbers(service),
             "abstain": abstain, "options": options, "why_not": why_not, "what_would_change": change,
-            # The first choice beyond the urgency window (60 min for emergencies) is said plainly on the page (#86).
-            "time_window": {"window_min": window,
-                            "first_outside": bool(options) and options[0]["travel"]["minutes"] > window},
+            # The first choice beyond the urgency window (60 min for emergencies) is the answer's first line, with
+            # 108/102 and the nearest hospital the public standard expects to offer the care (#86, lead's decision).
+            "time_window": {"window_min": window, "first_outside": first_outside},
+            "public_option": public if first_outside else None,
             "meta": self._meta(),
         }
 
@@ -496,6 +506,7 @@ class Engine:
                 "call_first": self._f("name", first[2].fi) if first else None,
                 "nearest_km": None if first else (round(near[3]["km"], 1) if near else None),
                 "gap": gap,
+                "public": self._public_pin(plat, plon) if first is None else None,
             })
         n = len(rows) or 1
         calls = sorted(gains.items(), key=lambda t: (-len(t[1]), self._f("name", t[0])))[:10]
@@ -516,6 +527,11 @@ class Engine:
             "meta": self._meta(),
         }
 
+    def _public_pin(self, lat: float, lon: float) -> dict | None:
+        best = self._public_near(lat, lon)
+        return None if best is None else {"facility_id": self._f("id", best[1]), "name": self._f("name", best[1]),
+                                          "km": round(best[0], 1), "label": PUBLIC_LABEL}
+
     def _gap(self, service: str, district: str, state: str, rows: list[dict], n_total: int) -> dict:
         """Per district: listings in the district that claim the service (and how many are confirmed), and the
         sampled PIN areas split into covered / care gap (not confirmed, or all far) / data gap (no claim)."""
@@ -523,9 +539,13 @@ class Engine:
                 and self._f("state", p.fi) == state]
         bands = [self.score(self._f("id", p.fi), service)[0] for p in mine]
         count = {k: sum(r["gap"] == k for r in rows) for k in ("covered", "not_confirmed", "far", "no_claim")}
+        public = sorted((self._f("name", i), self._f("id", i)) for i, ok in enumerate(self.fac["public_standard"])
+                        if ok and self._f("district", i) == district and self._f("state", i) == state)[:5]
         return {"pins_sampled": len(rows), "pins_in_district": n_total, "radius_km": RADIUS_KM,
                 "district_claiming": sum(b != "unlikely" for b in bands),
-                "district_confirmed": sum(b == "likely" for b in bands), **count}
+                "district_confirmed": sum(b == "likely" for b in bands), **count,
+                # named where the district shows a gap: hospitals the public standard expects to offer acute care
+                "public_standard": [{"facility_id": f, "name": n, "label": PUBLIC_LABEL} for n, f in public]}
 
     def _phone_kind(self, i: int) -> str:
         e = self._f("phone_e164", i)
