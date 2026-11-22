@@ -261,3 +261,23 @@ def test_every_planner_route_type_has_words() -> None:
     import itinerary
     for key in ("direct", "one_stop", "two_stop", "single_site", "two_sites", "three_sites"):
         assert key in itinerary.TYPE and "_" not in itinerary.TYPE[key]
+
+
+def test_call_ahead_never_says_not_mentioned_next_to_a_quote_naming_it():
+    """#121: Pusa dialysis asked "Do you have dialysis unit or machine on site? (our data does not mention it)" next
+    to the quote "Advanced Kidney Dialysis". A quote naming it leaves only today's availability unknown."""
+    from facts.engine import NEED_WORDS
+
+    for svc, la, lo in [("dialysis", 25.6, 85.95), *QUERIES.values()]:
+        for o in ENGINE.plan(svc, la, lo, 40, "gps")["options"]:
+            pr = ENGINE.index[svc][ENGINE.fid[o["facility_id"]]]
+            quotes = [e["quote"] for e in o["evidence"]]
+            for c in o["call_ahead"]:
+                if c["asked_because"] == "our data does not mention it":
+                    words = NEED_WORDS.get(pr.missing[0])
+                    assert not (words and any(words.search(q) for q in quotes)), (o["name"], c, quotes)
+            if svc == "dialysis" and any("dialys" in q.lower() for q in quotes):
+                assert not any("on site" in c["question"] for c in o["call_ahead"]), (o["name"], o["call_ahead"])
+    pusa = ENGINE.plan("dialysis", 25.6, 85.95, 40, "gps")["options"]
+    assert any(c["asked_because"] == "its listing names it, but not whether it is free today"
+               for o in pusa for c in o["call_ahead"])
