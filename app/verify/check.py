@@ -26,6 +26,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
+from facts.redact import redact_names
+
 USER_AGENT = "datathon-facility-check/0.1"
 MAX_PAGES = 4
 BUDGET_S = 8.0
@@ -359,8 +361,9 @@ class Checker:
             identity = identity or looks_like(site["name"], site.get("city"), host, title, text)
             for s in sentences(text):
                 kind = self.lexicon.classify(sid, s)
-                if kind and not any(q["text"] == s for q in yes + no):
-                    (yes if kind == "yes" else no).append({"text": s, "url": fetched[-1], "says": kind})
+                shown = redact_names(s)  # verbatim except a doctor's name, which never reaches the page (#86)
+                if kind and not any(q["text"] == shown for q in yes + no):
+                    (yes if kind == "yes" else no).append({"text": shown, "url": fetched[-1], "says": kind})
             if len(fetched) == 1:  # follow links from the first page only: service words first, then the rest
                 skip = ("#", "mailto:", "tel:", "javascript:")
                 cand = [(_norm(urljoin(fetched[0], h)), t) for h, t in links if h and not h.startswith(skip)]

@@ -49,6 +49,9 @@ from common.eligibility import (  # noqa: E402, RUF100
     to_sites,
 )
 
+sys.path.insert(0, str(ROOT / "app"))  # facts.redact: the same name redaction as the live answer (#86)
+from facts.redact import redact_names  # noqa: E402, RUF100
+
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "out"
 
@@ -162,7 +165,8 @@ def _site_quotes(rep: str, members: list[tuple[str, str | None]], cid: dict[tupl
     for t in sorted(owner, key=lambda t: (len(t), t))[:2]:
         c = cid.get((owner[t], t), "")
         ref = "" if not c else (c.split(":", 1)[1] if owner[t] == rep else "=" + c)
-        out.append((t if len(t) <= QUOTE_MAX else t[:QUOTE_MAX - 3] + "...", ref))
+        shown = redact_names(t)  # never a doctor's name on a phone card (#86)
+        out.append((shown if len(shown) <= QUOTE_MAX else shown[:QUOTE_MAX - 3] + "...", ref))
     return out
 
 
