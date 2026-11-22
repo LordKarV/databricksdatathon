@@ -41,8 +41,12 @@ Method
   only orders plans that arrive in the same minute. The best direct plan, the one the sentence
   compares with, is chosen the same way. When the rule above
   drops every plan through it, the plan with the nearest first stop leads (a direct plan's first stop
-  is its definitive facility). The result's first_stop says whether the caller's choice could give
-  first care and what it lacks.
+  is its definitive facility). Definitive times are total arrival along the route, through stop 1.
+  When going direct reaches a plausible definitive facility within its window and the stop plan
+  would reach definitive care after that window or more than DIRECT_SLACK_MINUTES later, the direct
+  plan leads; the stop plan follows it, and the sentence names stop 1 as first care if the patient
+  needs it sooner. The result's first_stop says whether the caller's choice could give first care
+  and what it lacks.
 - Scheduled pathways (objective fewest_trips): one facility per stage; least travel over
   PLANNING_WEEKS first (one return trip per one-off stage, per_week return trips for the recurring
   stage), then fewer distinct sites. Up to 2 stops before the recurring site. Every plan makes the
@@ -61,6 +65,7 @@ from itertools import groupby, product
 TURNAWAY_MINUTES = 15       # time lost at a facility that cannot deliver the stage
 FAIL_PENALTY_MINUTES = 120  # extra cost of ending untreated, for ordering only
 MARGIN = 0.05               # a stop must raise the objective by this much over the best direct plan
+DIRECT_SLACK_MINUTES = 15   # emergency: a stop may not delay definitive care past going direct by more than this
 MAX_KM = 150.0              # search radius (travel constants are measured up to 150 km)
 MIN_P = 0.05                # facilities below this for a stage are not candidates
 N_DEFINITIVE = 6
@@ -73,6 +78,7 @@ PLANNING_WEEKS = 12
 
 ASSUMPTIONS = {
     "turnaway_minutes": TURNAWAY_MINUTES, "fail_penalty_minutes": FAIL_PENALTY_MINUTES, "margin": MARGIN,
+    "direct_slack_minutes": DIRECT_SLACK_MINUTES,
     "max_km": MAX_KM, "min_p": MIN_P, "detour_factor": DETOUR_FACTOR, "detour_slack_km": DETOUR_SLACK_KM,
     "scheduled_min_p": SCHEDULED_MIN_P, "planning_weeks": PLANNING_WEEKS,
     "independence": "capabilities and facilities are treated as independent",
@@ -426,7 +432,12 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
     if lead is None:
         nearest = min(p["stops"][0]["eta_minutes"] for p in kept)
         lead = next(p for p in kept if p["stops"][0]["eta_minutes"] == nearest)
-    kept = [lead] + [p for p in kept if p is not lead]
+    # direct within the window beats a stop that reaches definitive care after the window or DIRECT_SLACK_MINUTES
+    # later; the stop stays as the next plan, and the sentence names it as first care if the patient needs it sooner
+    first_alt = lead if lead["type"] == "one_stop" and _direct_wins(lead, best_direct, ctx, elapsed) else None
+    if first_alt is not None:
+        lead = best_direct
+    kept = [lead] + ([first_alt] if first_alt else []) + [p for p in kept if p is not lead and p is not first_alt]
     by_sig = {tuple(s["facility_id"] for s in p["stops"]): p for p in plans}
     chosen, seen = [], set()
     for p in kept:
@@ -450,7 +461,8 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
         if best_direct is not None:
             gain = p["p_objective"] - best_direct["p_objective"]
             same_d = by_sig.get((p["stops"][0]["facility_id"], best_direct["stops"][-1]["facility_id"]))
-            text, shown = _vs_direct_text(p, best_direct, ctx["t1"], elapsed, same_d, p is chosen[0])
+            text, shown = _vs_direct_text(p, best_direct, ctx["t1"], elapsed, same_d, p is chosen[0],
+                                          first_alt if p is chosen[0] else None)
             vs = {"direct_facility_id": best_direct["stops"][-1]["facility_id"],
                   "direct_name": best_direct["stops"][-1]["name"],
                   "direct_minutes": best_direct["stops"][-1]["eta_minutes"],
@@ -458,6 +470,10 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
                   "direct_p_first_care": round(best_direct["p_first_care"], 4),
                   "plan_p_objective": round(p["p_objective"], 4), "plan_p_first_care": round(p["p_first_care"], 4),
                   "gain": round(gain, 4), "text": text, "text_numbers": shown}
+            if first_alt is not None and p is chosen[0]:
+                s1 = first_alt["stops"][0]
+                vs["first_care_alternative"] = {"facility_id": s1["facility_id"], "name": s1["name"],
+                                                "eta_minutes": s1["eta_minutes"]}
         out.append({"type": p["type"], "stops": p["stops"],
                     "totals": {"minutes_to_definitive": p["stops"][-1]["eta_minutes"],
                                "low": p["stops"][-1]["eta_low"], "high": p["stops"][-1]["eta_high"],
@@ -469,12 +485,22 @@ def _finish_emergency(plans, ctx, pathway, elapsed):
     return out, dropped
 
 
-def _vs_direct_text(p, best_direct, t1, elapsed, same_d=None, lead=True):
+def _direct_wins(stop_plan, best_direct, ctx, elapsed):
+    """Going direct reaches a plausible definitive facility within its window, and the stop plan reaches definitive
+    care after that window or more than DIRECT_SLACK_MINUTES later than going direct."""
+    w = _def_window(best_direct, ctx) if best_direct is not None else None
+    if w is None:
+        return False
+    d, e = best_direct["stops"][-1]["eta_minutes"], stop_plan["stops"][-1]["eta_minutes"]
+    return d + elapsed <= w and (e + elapsed > w or e > d + DIRECT_SLACK_MINUTES)
+
+
+def _vs_direct_text(p, best_direct, t1, elapsed, same_d=None, lead=True, first_alt=None):
     """One plain sentence against going straight to the best direct facility, and every number it quotes.
     Minutes only: the probabilities stay in the vs_direct fields, not in the sentence (#86 decision 3).
     A stop plan says why it stops when going direct is within the window (first care sooner), and why its
     definitive facility is not the direct one. same_d: the plan with the same first stop and the direct one's
-    definitive facility, when there is one; lead: p is the best plan."""
+    definitive facility, when there is one; lead: p is the best plan; first_alt: the stop plan going direct beat."""
     d = best_direct["stops"][-1]
     shown = {"direct_minutes": d["eta_minutes"]}
     direct = f"Going straight to {d['name']} takes {d['eta_minutes']} min"
@@ -496,6 +522,11 @@ def _vs_direct_text(p, best_direct, t1, elapsed, same_d=None, lead=True):
             why = _why_other(p, d, same_d, lead)
             text += f", and the route then goes on to {e['name']} (about {e['eta_minutes']} min), {why}"
         return f"{text}.", shown
+    if p is best_direct and first_alt is not None:
+        s = first_alt["stops"][0]
+        shown["first_care_minutes"] = s["eta_minutes"]
+        return (f"{direct}: go there directly, and call ahead. If the patient needs care sooner, {s['name']} "
+                f"({s['eta_minutes']} min) can give first care."), shown
     if p is best_direct:
         return f"{direct}.", shown
     shown["plan_minutes"] = p["stops"][-1]["eta_minutes"]

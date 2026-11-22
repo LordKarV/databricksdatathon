@@ -86,8 +86,10 @@ def _stop(eng: Engine, s: dict, question: str | None) -> dict:
 def _vs_direct(v: dict | None, plan_type: str) -> dict | None:
     """The planner's one plain sentence against going direct, plus what would change the answer (#86 decision 3).
     The probabilities ride along for the record but are not in the sentence."""
-    if not v or plan_type in ("direct", "single_site") or v.get("direct_minutes") is None:
+    if not v or v.get("direct_minutes") is None:
         return None
+    if plan_type in ("direct", "single_site") and not v.get("first_care_alternative"):
+        return None  # a direct plan shows its sentence only when it names a first-care stop (#92)
     return {"text": v["text"], "what_would_change": v.get("what_would_change"),
             "direct_p_objective": v["direct_p_objective"], "plan_p_objective": v["plan_p_objective"],
             "direct_p_first_care": v["direct_p_first_care"], "plan_p_first_care": v["plan_p_first_care"]}
@@ -129,6 +131,10 @@ def stop_1_note(route: dict, first_option: dict | None, first_stop: dict | None 
         if not first_stop["first_care"] and first_stop["missing_first_care"]:
             return (f"The route starts at {s['name']}: the best option {y} has no evidence of "
                     f"{_lacks(first_stop['missing_first_care'])} in our data, which first care needs.")
+        alt = (route.get("vs_direct") or {}).get("first_care_alternative") or {}
+        if s is d and alt.get("facility_id") == first_option["facility_id"]:
+            return (f"The route goes straight to {s['name']}, about {s['eta_minutes']} min away, for definitive care "
+                    f"in time; the best option {y} ({alt['eta_minutes']} min) can give first care if it is needed sooner.")
         if s is d and first_stop["missing_definitive"]:
             return (f"The route goes straight to {s['name']}, about {s['eta_minutes']} min away, for definitive care: "
                     f"the best option {y} has no evidence of {_lacks(first_stop['missing_definitive'])} in our data.")

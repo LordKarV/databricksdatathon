@@ -17,21 +17,24 @@ contradicted, 37 no information), with implied capabilities on, the same way `pl
 runs. "Before" is the planner on dev at ce068ae. "Stop 1 nearest" makes stop 1 of an emergency
 route the nearest place that can give first care. "Definitive nearest" also picks the nearest
 plausible definitive facility that can be reached within the window (else the nearest beyond it),
-with p only breaking ties between plans that arrive in the same minute. Planned pathways (dialysis)
-are unchanged in all three.
+with p only breaking ties between plans that arrive in the same minute. "Direct when in time" adds:
+when going direct reaches a plausible definitive facility within the window and stopping first
+would reach definitive care after the window or more than 15 minutes later, the route goes direct
+and names stop 1 as first care if needed sooner. Definitive times are total arrival along the
+route. Planned pathways (dialysis) are unchanged in every column.
 
-| | Before | Stop 1 nearest | Definitive nearest | Nearest mention |
-|---|---|---|---|---|
-| Abstained | 6 | 6 | 6 | 0 |
-| Picked a confirmed facility | 10 | 12 | 11 | 17 |
-| Picked a contradicted facility | 0 | 0 | 0 | 4 |
-| Picked a no-information facility | 10 | 11 | 11 | 25 |
-| Picked a facility with no DEV label | 35 | 32 | 33 | 15 |
-| Picks the gold facility when it is confirmed | 9 of 20 | 11 of 20 | 11 of 20 | 17 of 20 |
-| Picks the gold facility when it is contradicted | 0 of 4 | 0 of 4 | 0 of 4 | 4 of 4 |
-| Picks the gold facility when there is no information | 10 of 37 | 11 of 37 | 11 of 37 | 25 of 37 |
+| | Before | Stop 1 nearest | Definitive nearest | Direct when in time | Nearest mention |
+|---|---|---|---|---|---|
+| Abstained | 6 | 6 | 6 | 6 | 0 |
+| Picked a confirmed facility | 10 | 12 | 11 | 11 | 17 |
+| Picked a contradicted facility | 0 | 0 | 0 | 0 | 4 |
+| Picked a no-information facility | 10 | 11 | 11 | 11 | 25 |
+| Picked a facility with no DEV label | 35 | 32 | 33 | 33 | 15 |
+| Picks the gold facility when it is confirmed | 9 of 20 | 11 of 20 | 11 of 20 | 11 of 20 | 17 of 20 |
+| Picks the gold facility when it is contradicted | 0 of 4 | 0 of 4 | 0 of 4 | 0 of 4 | 4 of 4 |
+| Picks the gold facility when there is no information | 10 of 37 | 11 of 37 | 11 of 37 | 11 of 37 | 25 of 37 |
 
-By pathway, definitive nearest (gold facility picked when confirmed): burns 1 of 1, dialysis 5 of 7,
+By pathway, definitive nearest and direct when in time (the same counts; gold facility picked when confirmed): burns 1 of 1, dialysis 5 of 7,
 trauma 1 of 4, obstetric 1 of 4, newborn 3 of 4. Against before, trauma gains 1 (0 to 1) and newborn
 gains 1 (2 to 3). Between the second and third columns trauma picks one confirmed facility fewer
 (2 to 1, now a facility with no DEV label); the gold-facility counts do not change. 9 confirmed facilities are still not picked: 8 were never candidates (trauma blood
@@ -62,7 +65,7 @@ implied capabilities" adds planner/implied.py on top; it is what `plan_for_servi
 |---|---|---|---|---|
 | Abstained | 4 | 4 | 2 | 0 |
 | Picked a confirmed facility | 6 | 12 | 13 | 17 |
-| Picked a contradicted facility | 0 | 0 | 0 | 4 |
+| Picked a contradicted facility | 0 | 0 | 0 | 0 | 4 |
 | Picked a no-information facility | 8 | 11 | 11 | 27 |
 | Picked a facility with no DEV label | 45 | 36 | 37 | 15 |
 | Confirmed, among picks with a clear label | 6 of 6 | 12 of 12 | 13 of 13 (95% CI 0.77 to 1.00) | 17 of 21, 0.81 (0.60 to 0.92) |

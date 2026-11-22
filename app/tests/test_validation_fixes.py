@@ -115,6 +115,10 @@ def test_stop_1_note_names_what_the_first_option_lacks():
         "The route goes straight to Gamma Hospital, about 45 min away, for definitive care: the best option "
         "Alpha Hospital has no evidence of a CT scanner or an ICU in our data.")
     assert stop_1_note({"stops": [{**stab, "facility_id": "a"}, dfn]}, one, info) is None
+    alt = {"stops": [dfn], "vs_direct": {"first_care_alternative": {"facility_id": "a", "eta_minutes": 9}}}
+    assert stop_1_note(alt, one, {**info, "first_care": True}) == (
+        "The route goes straight to Gamma Hospital, about 45 min away, for definitive care in time; the best option "
+        "Alpha Hospital (9 min) can give first care if it is needed sooner.")
 
 
 def test_quote_choice_is_stable_for_equal_lengths():
