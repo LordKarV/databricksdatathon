@@ -359,6 +359,26 @@ def test_nearest_plausible_ties_have_no_bucket_edge():
     assert [r[2] for r in nearest_plausible([(0.7, 60, "in"), (0.9, 63, "out")], 60)] == ["in", "out"]
 
 
+def test_uncapped_p_breaks_an_equal_capped_tie():
+    """#140 2a: inside the 5-minute tie, rows capped at the same rank_p go by their uncapped p, then nearer first."""
+    from facts.engine import nearest_plausible
+
+    rows = [(0.5, 2, None, None, "not_verified", 0.56, "clinic"), (0.5, 2.4, None, None, "not_verified", 0.98, "hosp")]
+    assert [r[6] for r in nearest_plausible(rows)] == ["hosp", "clinic"]
+    rows = [(0.5, 2, None, None, "not_verified", 0.7, "near"), (0.5, 3, None, None, "not_verified", 0.7, "far")]
+    assert [r[6] for r in nearest_plausible(rows)] == ["near", "far"]
+
+
+def test_gaya_trauma_children_clinic_is_not_an_option():
+    """#140 2a: Baibhav Shishu Care (a children's clinic, p 0.56) led Arsh Superspeciality (p 0.98) as option 2 at
+    Gaya because both NO_SERVICE_TEXT scores were capped at the Likely threshold and the clinic was nearer."""
+    pool, _ = ENGINE._ranked("trauma_emergency", 24.79, 85.0)
+    assert all(len(r) == 6 and r[5] >= r[0] for r in pool)  # the uncapped p rides along and is never below rank_p
+    names = [o["name"] for o in ENGINE.plan("trauma_emergency", 24.79, 85.0, 40, "gps")["options"]]
+    assert names[:2] == ["Dr. A Barkat Multispeciality Hospital", "Arsh Superspeciality Hospital"]
+    assert "Baibhav Shishu Care" not in names
+
+
 def test_toll_free_numbers_are_dialable():
     from facts.build import e164
 
