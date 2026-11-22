@@ -1,0 +1,58 @@
+"""Pre-recording check for the demo (#86 decision 2): run every app service at the demo places, with routes.
+
+    .venv-app/bin/python validation/demo_qa.py      # from the repo root, after app/facts/build.py
+
+Prints counts and examples for: unredacted doctor names in shown quotes, citations flagged as a page about another
+place, option names of an unrelated specialty (eye, dental, IVF ...), and first options outside the time window.
+Exit code 1 when a doctor name or an other-place citation is shown; the rest are for a human to read.
+"""
+import collections
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "app"))
+import itinerary  # noqa: E402
+from facts.engine import Engine  # noqa: E402
+from facts.redact import redact_names  # noqa: E402
+from services import SERVICES  # noqa: E402
+
+e = Engine.load()
+PTS = {"Sitamarhi": (26.5951, 85.4808), "Mohania": (25.15, 83.68), "Pusa": (25.6, 85.95), "Patna": (25.61, 85.14),
+       "Gaya": (24.78, 85.0), "Bahraich": (27.57, 81.6), "Banda": (25.48, 80.33), "Darbhanga": (26.15, 85.9)}
+NAMED = re.compile(r"\b(?:Dr|DR|Prof)\b\.?\s*[A-Z][a-z]+\s+[A-Z][a-z]+")
+MISMATCH = re.compile(r"\b(eye|netra|netralaya|dental|dentist|skin|derma|ayurved|homoeo|homeo|physio|vet|veterinary|ivf|fertility)\b", re.I)
+issues = collections.defaultdict(list)
+for place, (la, lo) in PTS.items():
+    for s in SERVICES:
+        p = itinerary.attach(e.plan(s, la, lo, 40, "gps"), e)
+        for k, o in enumerate(p["options"]):
+            if MISMATCH.search(o["name"]):
+                issues["mismatched specialty option"].append((place, s, k + 1, o["name"], o["band"]))
+            for ev in o["evidence"]:
+                if NAMED.search(ev["quote"]) and redact_names(e.claims[ev["claim_id"]][1]) != ev["quote"]:
+                    issues["unredacted name"].append((place, s, o["name"], ev["claim_id"]))
+                for f in ev.get("flags", []):
+                    if f["code"] == "src_other_place":
+                        issues["other-place source (flagged)"].append((place, s, k + 1, o["name"], f.get("place"), f.get("km")))
+        it = p.get("itinerary") or {}
+        for r in it.get("plans", []):
+            for st in r["stops"]:
+                if MISMATCH.search(st.get("name", "")):
+                    issues["mismatched specialty route stop"].append((place, s, r["rank"], st["name"]))
+                for ev in st.get("evidence", []):
+                    raw = e.claims.get(ev["claim_id"], ["", ""])[1]
+                    if NAMED.search(ev["quote"]) and redact_names(raw) != ev["quote"]:
+                        issues["unredacted name in route"].append((place, s, st["name"]))
+        tw = p.get("time_window") or {}
+        if tw.get("first_outside"):
+            first = p["options"][0]["travel"]["minutes"]
+            issues["first option outside window"].append((place, s, first, tw["window_min"], bool(p.get("public_option"))))
+for k in ("unredacted name", "unredacted name in route", "other-place source (flagged)",
+          "mismatched specialty option", "mismatched specialty route stop", "first option outside window"):
+    print(f"== {k}: {len(issues[k])}")
+    for x in issues[k][:12]:
+        print("  ", x)
+sys.exit(1 if issues["unredacted name"] or issues["unredacted name in route"]
+         or issues["other-place source (flagged)"] else 0)
