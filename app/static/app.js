@@ -522,7 +522,7 @@ function quoteFlagsHtml(e, P) {
 // "61731339:proc:3" means nothing to a family (#121).
 function claimHtml(path, id) { return `<span hidden>${F(path, id)}</span>`; }
 function quoteHtml(e, P) {
-  return `<p lang="en">"${F(P + '.quote', e.quote)}"</p><p class="tags"><span class="tag">${F(P + '.field', e.field)}</span>` +
+  return `<p lang="en">"${F(P + '.quote', e.quote)}"</p><p class="tags"><span class="tag">${E(P + '.field', e.field)}</span>` +
     `${claimHtml(P + '.claim_id', e.claim_id)}</p>${quoteFlagsHtml(e, P)}`;
 }
 // "Why not the nearest?" (#86): the nearest listings other than the first choice, each with one reason from the
@@ -996,7 +996,7 @@ function whyScreen(rank) {
     : `<p>${th('why.no_quote', {label: labelF(p.query)})}</p>`;
   const sure = o.model_band === 'NO_SERVICE_TEXT'
     ? noTextSureHtml(o, P, p.query)
-    : th('why.sure_score', {band: F(P + '.band_word', o.band_word), p: N(P + '.p', o.p.toFixed(2)), similar: similarHtml(o, P)});
+    : th('why.sure_score', {band: E(P + '.band_word', o.band_word), p: N(P + '.p', o.p.toFixed(2)), similar: similarHtml(o, P)});
   const outcomes = ['yes', 'no', 'none', 'wrong'];
   return `<a class="back" href="#/plan">${icon('back')} ${th('why.back')}</a>
     <header class="why-head"><h1 tabindex="-1"><span lang="en">${F(P + '.name', o.name)}</span></h1>
@@ -1088,7 +1088,7 @@ function noTextSureHtml(o, P, q) {
     .sort((a, b) => b[0].points - a[0].points).slice(0, 2)
     .map(([c, j]) => `${rowLabel(c, `${P}.contributions.${j}`)} (${F(`${P}.contributions.${j}.points`, signed(c.points), 'num')})`);
   return th(q.service === 'trauma_emergency' && o.evidence.length ? 'why.no_text_trauma' : 'why.no_text_other',
-    {band: F(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
+    {band: E(P + '.band_word', o.band_word), label: labelF(q), p: N(P + '.p', o.p.toFixed(2))})
     + (top.length ? ' ' + th('why.largest', {rows: top.join('; ')}) : '') + ' ' + th('why.call_to_ask');
 }
 function notFound() {

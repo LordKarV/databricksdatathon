@@ -362,3 +362,21 @@ Files touched: `app/static/index.html`, `app.css`, `app.js`, `input.js`, `voice.
 - axe-core 4.10.2 (WCAG 2.0/2.1/2.2 A and AA, best practice, plus `color-contrast-enhanced`) on every run:
   0 violations. No horizontal scroll on any run. No target under 48 px. Report: `screens/axe_report.json`.
 - Not done: a test on a real Android phone in sunlight, TalkBack, and a native Hindi review of `hi.json`.
+
+## 10. Implementation notes (branch ui2)
+
+What shipped differs from the plan above in these places:
+- "Compare all side by side" is a button at the foot of the answer screen, not only on the Why page; coordinators
+  asked for it next to the options.
+- How it works and Data stories are long pages built from the data in English. In Hindi they show a one-line
+  Hindi notice and keep the English body marked `lang="en"`. Translating them needs a `hi` field from the server.
+- slip.js, journey.js, pulse.js and community.js keep their own en/hi tables. They now follow the app language
+  and show one language only. Moving those tables into the strings files is a follow-up.
+- The route keeps every field. The compact strip and stop list are on the answer screen, and the rest is under
+  "Route details" on the same screen, so `test_every_route_field_is_shown` is unchanged.
+- "Why not the nearest?", field reports, quotes, track record and the ledger are on the Why page. The faithfulness
+  test checks why-not on option 1's Why page and the window line on the answer screen.
+- The witness ledger (#132) shows `label_hi` in Hindi. Engine text without codes uses the `engine` table in hi.json,
+  and the test computes the expected Hindi on its own (`engine_hi`).
+- The critical path is 67.7 KB gzip over 8 requests. That counts input.js, the manifest, en.json and two Barlow
+  weights. Hindi screens add 86.5 KB: hi.json plus the two Hind weights. Both are cached by the service worker.

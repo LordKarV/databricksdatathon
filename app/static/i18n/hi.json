@@ -580,6 +580,14 @@
   "Going straight to {a} takes {m} min, within the {w}-minute window; stopping first at {b} gives first care {s} min sooner, in about {f} min.": "सीधे {a} जाने में {m} मिनट लगते हैं, {w} मिनट की सीमा के अंदर; पहले {b} पर रुकने से पहला इलाज {s} मिनट जल्दी, लगभग {f} मिनट में मिलता है।",
   "A 'yes' from {a} on the phone would change this.": "{a} से फ़ोन पर 'हाँ' मिले तो यह बदल जाएगा।",
   "The route starts at {a} for assessment; the best option {b} is ranked on this service alone.": "रास्ता जाँच के लिए {a} से शुरू होता है; सबसे अच्छा विकल्प {b} सिर्फ़ इस सेवा पर चुना गया है।",
-  "Stop first to stabilise at {a}, which is nearer than the best option {b}.": "हालत संभालने के लिए पहले {a} पर रुकें, जो सबसे अच्छे विकल्प {b} से पास है।"
+  "Stop first to stabilise at {a}, which is nearer than the best option {b}.": "हालत संभालने के लिए पहले {a} पर रुकें, जो सबसे अच्छे विकल्प {b} से पास है।",
+  "Likely": "संभावना ज़्यादा",
+  "Not verified": "पक्का नहीं",
+  "Unlikely": "संभावना कम",
+  "capability": "सुविधा",
+  "procedure": "इलाज",
+  "equipment": "उपकरण",
+  "specialty": "विभाग",
+  "description": "विवरण"
  }
 }

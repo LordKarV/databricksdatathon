@@ -148,6 +148,7 @@ LABEL = "PIN, district, town or post office, or 'lat, lon'"
 def _change(browser, base_url, **ctx_args):
     ctx = browser.new_context(service_workers="block", **ctx_args)
     page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"en\"')")  # UI2 asks for a language on first launch
     page.goto(base_url + "/#/change")
     page.get_by_label(LABEL).wait_for()
     return ctx, page
@@ -212,6 +213,7 @@ def test_offline_without_pack_says_what_is_needed(browser, base_url):
 def test_gps_denied_puts_typing_first(browser, base_url):
     ctx = browser.new_context(service_workers="block")  # no geolocation permission granted
     page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('rs.lang', '\"en\"')")  # UI2 asks for a language on first launch
     try:
         page.add_init_script("""navigator.geolocation.getCurrentPosition = (ok, fail) =>
           setTimeout(() => fail({code: 1, message: 'denied'}), 10);""")
@@ -227,7 +229,7 @@ def test_gps_denied_puts_typing_first(browser, base_url):
         # Back on home with no location: 'Type a place' is the first action, GPS the retry.
         page.get_by_role("link", name="Cancel").click()
         page.get_by_role("link", name="Type a place").wait_for()
-        first = page.locator("#main .btn").first
+        first = page.locator("#main section[aria-labelledby=h-where] .btn").first  # UI2: the 108 row sits above it
         assert first.inner_text().strip() == "Type a place"
         page.get_by_role("button", name="Use my location (GPS)").wait_for()
     finally:
