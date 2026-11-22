@@ -25,6 +25,7 @@ STRINGS = {
                    "hi": "क्या आज इस मरीज़ के लिए {need} की सुविधा मिल पाएगी?"},
     "need_named": {"en": "its listing names it, but not whether it is free today",
                    "hi": "इसकी लिस्टिंग में यह लिखा है, पर यह नहीं कि आज खाली है या नहीं"},
+    "private_cost": {"en": "private hospital, may charge", "hi": "प्राइवेट अस्पताल, पैसे लग सकते हैं"},
 }
 OUT = Path(__file__).resolve().parent / "out"
 RADIUS_KM = 150  # straight-line search radius
@@ -139,7 +140,7 @@ NEED_PLAIN = {
     "burn_unit_or_plastic_surgery": "a burn unit or plastic surgery",
 }
 # Why the call asks about cost, by the operator the card shows; None leaves the question out.
-COST_REASON = {"private": "private hospital, may charge", "public": None,
+COST_REASON = {"private": STRINGS["private_cost"]["en"], "public": None,
                "unknown": "our data does not say if it is public or private"}
 # Words that name each prerequisite in a quote. A call-ahead question never says "our data does not mention it"
 # when a quote on the card names it (#121: "Do you have a dialysis unit?" next to "Advanced Kidney Dialysis").
