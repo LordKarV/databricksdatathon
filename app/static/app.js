@@ -240,7 +240,7 @@ async function offlinePlan(reason, live = () => true) {  // reason: a strings ke
         if (state.plan.pack) state.plan.answer = R.answer(state.plan.pack, fix, state.service);
         announce(ts('gps.updated')); render();
       }
-    });
+    }, () => { state.stopWatch = null; if (state.plan && state.plan.offline) render(); });
   }
   state.plan = p;
   announce(ts('off.h') + '. ' + (p.answer ? ts('off.n_saved', {n: p.answer.options.length}) : ts('off.showing')));
